@@ -1,6 +1,6 @@
 # CrossFit WOD Intelligence
 
-**PhD-level analysis of 25 years of CrossFit programming (2001-2026)**
+**25 years of CrossFit programming analyzed (2001-2026)**
 
 A data science platform that analyzes 6,779 CrossFit.com Workouts of the Day using information theory, network science, statistical testing, and 3D visualization.
 
@@ -12,7 +12,7 @@ A data science platform that analyzes 6,779 CrossFit.com Workouts of the Day usi
 - **Energy Systems** - Phosphagen / Glycolytic / Oxidative classification of every workout
 - **Work Capacity** - Analysis across time and modal domains with statistical testing
 
-### PhD-Level Analysis
+### Advanced Analysis
 - **Variance Analysis** - Shannon entropy, Herfindahl-Hirschman Index, Pareto analysis, autocorrelation, Markov chains
 - **Hopper Readiness** - Modality x Time Domain coverage matrix with gap detection
 - **Network Science** - PageRank, betweenness centrality, community detection on movement co-occurrence graph
