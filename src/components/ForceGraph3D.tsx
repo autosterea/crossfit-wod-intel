@@ -1,8 +1,9 @@
-import { useRef, useCallback, useMemo, useState, useEffect } from 'react'
-import ForceGraph from 'react-force-graph-3d'
-import * as THREE from 'three'
+import { useRef, useCallback, useMemo, useState, useEffect, lazy, Suspense } from 'react'
+import * as d3 from 'd3'
 import type { CrossFitData } from '../types'
 import { MOVEMENT_TAXONOMY, FUNCTIONAL_PATTERN_LABELS, FUNCTIONAL_PATTERN_COLORS, type FunctionalPattern } from '../data/movement-taxonomy'
+
+const ForceGraph3DScene = lazy(() => import('./ForceGraph3DScene'))
 
 function getMovementColor(movId: string): string {
   const tax = MOVEMENT_TAXONOMY[movId]
@@ -22,79 +23,70 @@ function getModalityColor(modality: string): string {
   return '#339af0'
 }
 
+interface SimNode extends d3.SimulationNodeDatum {
+  id: string
+  label: string
+  modality: string
+  count: number
+  pattern: string
+  patternColor: string
+  radius: number
+}
+
+interface SimLink extends d3.SimulationLinkDatum<SimNode> {
+  value: number
+}
+
 export default function ForceGraph3DView({ data }: { data: CrossFitData }) {
-  const fgRef = useRef<any>(null)
+  const svgRef = useRef<SVGSVGElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
   const [selectedNode, setSelectedNode] = useState<string | null>(null)
-  const [hoverNode, setHoverNode] = useState<any>(null)
+  const [hoverNode, setHoverNode] = useState<string | null>(null)
   const [colorMode, setColorMode] = useState<'function' | 'modality'>('function')
+  const [view, setView] = useState<'2d' | '3d'>('2d')
+  const [dimensions, setDimensions] = useState({ width: 900, height: 600 })
 
   const maxCount = Math.max(...data.network.nodes.map((n) => n.count))
   const maxLink = Math.max(...data.network.links.map((l) => l.value))
 
-  // Calculate median count for label visibility threshold
-  const medianCount = useMemo(() => {
-    const sorted = [...data.network.nodes.map((n) => n.count)].sort((a, b) => a - b)
-    const mid = Math.floor(sorted.length / 2)
-    return sorted.length % 2 !== 0 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2
-  }, [data.network.nodes])
-
-  // Calculate link value percentiles for color banding
-  const linkPercentiles = useMemo(() => {
-    const sorted = [...data.network.links.map((l) => l.value)].sort((a, b) => a - b)
-    return {
-      p25: sorted[Math.floor(sorted.length * 0.25)] || 0,
-      p75: sorted[Math.floor(sorted.length * 0.75)] || 0,
-    }
-  }, [data.network.links])
-
-  const graphData = useMemo(() => {
-    const nodes = data.network.nodes.map((n) => ({
+  // Build graph data
+  const { nodes, links } = useMemo(() => {
+    const nodes: SimNode[] = data.network.nodes.map((n) => ({
       id: n.id,
       label: data.movementDisplay[n.id] || n.label,
       modality: n.modality,
       count: n.count,
-      val: (n.count / maxCount) * 30 + 4,
       pattern: getMovementPattern(n.id),
       patternColor: getMovementColor(n.id),
+      radius: Math.max(8, (n.count / maxCount) * 35),
     }))
 
-    let links = data.network.links.map((l) => ({
+    const links: SimLink[] = data.network.links.map((l) => ({
       source: l.source,
       target: l.target,
       value: l.value,
     }))
 
-    if (selectedNode) {
-      links = links.filter((l) => l.source === selectedNode || l.target === selectedNode)
-    }
-
     return { nodes, links }
-  }, [data, selectedNode, maxCount])
+  }, [data, maxCount])
 
-  const handleNodeClick = useCallback((node: any) => {
-    setSelectedNode((prev: string | null) => (prev === node.id ? null : node.id))
-    if (fgRef.current) {
-      const distance = 200
-      const distRatio = 1 + distance / Math.hypot(node.x, node.y, node.z)
-      fgRef.current.cameraPosition(
-        { x: node.x * distRatio, y: node.y * distRatio, z: node.z * distRatio },
-        node,
-        1500
-      )
-    }
-  }, [])
-
+  // Partners for hover panel
   const nodePartners = useMemo(() => {
     if (!hoverNode) return []
     return data.network.links
-      .filter((l) => l.source === hoverNode.id || l.target === hoverNode.id)
+      .filter((l) => l.source === hoverNode || l.target === hoverNode)
       .map((l) => ({
-        partner: l.source === hoverNode.id ? l.target : l.source,
+        partner: l.source === hoverNode ? l.target : l.source,
         value: l.value,
       }))
       .sort((a, b) => b.value - a.value)
-      .slice(0, 8)
+      .slice(0, 10)
   }, [hoverNode, data.network.links])
+
+  const hoveredNodeData = useMemo(() => {
+    if (!hoverNode) return null
+    return nodes.find((n) => n.id === hoverNode) || null
+  }, [hoverNode, nodes])
 
   // Unique patterns for legend
   const patterns = useMemo(() => {
@@ -107,275 +99,323 @@ export default function ForceGraph3DView({ data }: { data: CrossFitData }) {
     return Array.from(seen.entries())
   }, [data])
 
-  // Link color function based on value percentiles and selection
-  const linkColor = useCallback((link: any) => {
-    const sourceId = typeof link.source === 'object' ? link.source.id : link.source
-    const targetId = typeof link.target === 'object' ? link.target.id : link.target
-
-    if (selectedNode && (sourceId === selectedNode || targetId === selectedNode)) {
-      return '#ffffff'
-    }
-
-    if (link.value >= linkPercentiles.p75) return '#60a5fa'
-    if (link.value >= linkPercentiles.p25) return '#3b82f6'
-    return '#1e3a5f'
-  }, [selectedNode, linkPercentiles])
-
-  // Link width scaled from 1 to 10
-  const linkWidth = useCallback((link: any) => {
-    return (link.value / maxLink) * 9 + 1
-  }, [maxLink])
-
-  // Custom node THREE.js objects with glow and labels
-  const nodeThreeObject = useCallback((node: any) => {
-    const group = new THREE.Group()
-
-    const nodeColor = colorMode === 'function'
-      ? node.patternColor
-      : getModalityColor(node.modality)
-
-    // Main sphere
-    const radius = node.val * 0.15
-    const geometry = new THREE.SphereGeometry(radius, 16, 16)
-    const material = new THREE.MeshStandardMaterial({
-      color: nodeColor,
-      emissive: nodeColor,
-      emissiveIntensity: selectedNode === node.id ? 0.8 : 0.3,
-      roughness: 0.3,
-      metalness: 0.1,
-    })
-    const sphere = new THREE.Mesh(geometry, material)
-    group.add(sphere)
-
-    // Glow halo
-    const glowRadius = node.val * 0.25
-    const glowGeo = new THREE.SphereGeometry(glowRadius, 16, 16)
-    const glowMat = new THREE.MeshBasicMaterial({
-      color: nodeColor,
-      transparent: true,
-      opacity: selectedNode === node.id ? 0.25 : 0.1,
-    })
-    const glow = new THREE.Mesh(glowGeo, glowMat)
-    group.add(glow)
-
-    // Text label for nodes above median count
-    if (node.count > medianCount) {
-      const canvas = document.createElement('canvas')
-      const ctx = canvas.getContext('2d')!
-      canvas.width = 256
-      canvas.height = 64
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
-      ctx.font = 'bold 24px Inter, sans-serif'
-      ctx.fillStyle = '#ffffff'
-      ctx.textAlign = 'center'
-      ctx.textBaseline = 'middle'
-      ctx.fillText(node.label.substring(0, 18), 128, 32)
-
-      const texture = new THREE.CanvasTexture(canvas)
-      const spriteMat = new THREE.SpriteMaterial({
-        map: texture,
-        transparent: true,
-        opacity: 0.85,
-        depthWrite: false,
-      })
-      const sprite = new THREE.Sprite(spriteMat)
-      sprite.position.y = node.val * 0.3 + 3
-      sprite.scale.set(12, 3, 1)
-      group.add(sprite)
-    }
-
-    return group
-  }, [colorMode, selectedNode, medianCount])
-
-  // Configure forces + add scene lighting after engine initializes
+  // Resize observer
   useEffect(() => {
-    const fg = fgRef.current
-    if (!fg) return
+    if (!containerRef.current) return
+    const ro = new ResizeObserver((entries) => {
+      const { width, height } = entries[0].contentRect
+      if (width > 0 && height > 0) setDimensions({ width, height })
+    })
+    ro.observe(containerRef.current)
+    return () => ro.disconnect()
+  }, [])
 
-    const tryAddLights = () => {
-      // Tighten the simulation so disconnected nodes stay close
-      try {
-        if (fg.d3Force) {
-          const charge = fg.d3Force('charge')
-          if (charge) charge.strength(-120).distanceMax(250)
-          // Pull all nodes toward center on x/y/z
-          fg.d3Force('x')?.strength(0.12)
-          fg.d3Force('y')?.strength(0.12)
-          fg.d3Force('z')?.strength(0.12)
-        }
-      } catch (_) { /* force API may differ */ }
+  // D3 force simulation
+  useEffect(() => {
+    if (!svgRef.current || view !== '2d') return
+    const { width, height } = dimensions
 
-      const scene = fg.scene?.()
-      if (!scene) return
+    const svg = d3.select(svgRef.current)
+    svg.selectAll('*').remove()
 
-      // Check if we already added lights
-      const existingLight = scene.getObjectByName('custom-ambient')
-      if (existingLight) return
+    // Deep-clone nodes/links so D3 can mutate them
+    const simNodes: SimNode[] = nodes.map((n) => ({ ...n }))
+    const simLinks: SimLink[] = links.map((l) => ({ ...l }))
 
-      // Ambient light for base illumination
-      const ambient = new THREE.AmbientLight(0x4488cc, 0.6)
-      ambient.name = 'custom-ambient'
-      scene.add(ambient)
+    const simulation = d3.forceSimulation(simNodes)
+      .force('link', d3.forceLink<SimNode, SimLink>(simLinks).id((d) => d.id).distance(80).strength((l) => Math.min(0.8, (l as SimLink).value / maxLink)))
+      .force('charge', d3.forceManyBody().strength(-250).distanceMax(400))
+      .force('center', d3.forceCenter(width / 2, height / 2))
+      .force('collision', d3.forceCollide<SimNode>().radius((d) => d.radius + 4))
+      .force('x', d3.forceX(width / 2).strength(0.06))
+      .force('y', d3.forceY(height / 2).strength(0.06))
 
-      // Directional light for depth
-      const dirLight = new THREE.DirectionalLight(0xffffff, 0.8)
-      dirLight.name = 'custom-dir'
-      dirLight.position.set(100, 200, 150)
-      scene.add(dirLight)
+    // Zoom
+    const g = svg.append('g')
+    const zoom = d3.zoom<SVGSVGElement, unknown>()
+      .scaleExtent([0.3, 4])
+      .on('zoom', (event) => g.attr('transform', event.transform))
+    svg.call(zoom)
 
-      // Secondary directional for fill
-      const fillLight = new THREE.DirectionalLight(0x6688cc, 0.4)
-      fillLight.name = 'custom-fill'
-      fillLight.position.set(-100, -50, -100)
-      scene.add(fillLight)
+    // Links
+    const linkG = g.append('g')
+    const link = linkG.selectAll('line')
+      .data(simLinks)
+      .join('line')
+      .attr('stroke-width', (d) => Math.max(1, (d.value / maxLink) * 8))
+      .attr('stroke-linecap', 'round')
 
-      // Point light at center for inner glow
-      const pointLight = new THREE.PointLight(0x3366ff, 0.5, 500)
-      pointLight.name = 'custom-point'
-      pointLight.position.set(0, 0, 0)
-      scene.add(pointLight)
+    // Node groups
+    const nodeG = g.append('g')
+    const node = nodeG.selectAll<SVGGElement, SimNode>('g')
+      .data(simNodes)
+      .join('g')
+      .attr('cursor', 'pointer')
+      .call(d3.drag<SVGGElement, SimNode>()
+        .on('start', (event, d) => {
+          if (!event.active) simulation.alphaTarget(0.3).restart()
+          d.fx = d.x; d.fy = d.y
+        })
+        .on('drag', (event, d) => { d.fx = event.x; d.fy = event.y })
+        .on('end', (event, d) => {
+          if (!event.active) simulation.alphaTarget(0)
+          d.fx = null; d.fy = null
+        })
+      )
+
+    // Glow filter
+    const defs = svg.append('defs')
+    const filter = defs.append('filter').attr('id', 'glow')
+    filter.append('feGaussianBlur').attr('stdDeviation', '3').attr('result', 'coloredBlur')
+    const merge = filter.append('feMerge')
+    merge.append('feMergeNode').attr('in', 'coloredBlur')
+    merge.append('feMergeNode').attr('in', 'SourceGraphic')
+
+    // Halo circle (glow)
+    node.append('circle')
+      .attr('r', (d) => d.radius + 6)
+      .attr('fill', 'none')
+      .attr('stroke', (d) => colorMode === 'function' ? d.patternColor : getModalityColor(d.modality))
+      .attr('stroke-width', 2)
+      .attr('stroke-opacity', 0.15)
+      .attr('filter', 'url(#glow)')
+
+    // Main circle
+    node.append('circle')
+      .attr('r', (d) => d.radius)
+      .attr('fill', (d) => colorMode === 'function' ? d.patternColor : getModalityColor(d.modality))
+      .attr('fill-opacity', 0.85)
+      .attr('stroke', '#ffffff')
+      .attr('stroke-width', 1.5)
+      .attr('stroke-opacity', 0.2)
+
+    // Labels
+    node.append('text')
+      .text((d) => d.label.length > 14 ? d.label.substring(0, 12) + '…' : d.label)
+      .attr('text-anchor', 'middle')
+      .attr('dy', (d) => d.radius + 14)
+      .attr('fill', '#94a3b8')
+      .attr('font-size', 10)
+      .attr('font-family', 'Inter, sans-serif')
+      .attr('font-weight', 500)
+      .attr('pointer-events', 'none')
+
+    // Count label inside node
+    node.append('text')
+      .text((d) => d.count > 99 ? (d.count / 1000).toFixed(1) + 'k' : d.count.toString())
+      .attr('text-anchor', 'middle')
+      .attr('dy', 4)
+      .attr('fill', '#ffffff')
+      .attr('font-size', (d) => Math.max(8, d.radius * 0.45))
+      .attr('font-family', 'JetBrains Mono, monospace')
+      .attr('font-weight', 600)
+      .attr('pointer-events', 'none')
+
+    // Update function for coloring based on state
+    function updateAppearance(hovId: string | null, selId: string | null) {
+      const activeId = selId || hovId
+      const connectedIds = new Set<string>()
+
+      if (activeId) {
+        connectedIds.add(activeId)
+        simLinks.forEach((l) => {
+          const src = typeof l.source === 'object' ? (l.source as SimNode).id : l.source
+          const tgt = typeof l.target === 'object' ? (l.target as SimNode).id : l.target
+          if (src === activeId) connectedIds.add(String(tgt))
+          if (tgt === activeId) connectedIds.add(String(src))
+        })
+      }
+
+      node.select('circle:nth-child(2)')
+        .attr('fill-opacity', (d) => !activeId ? 0.85 : connectedIds.has(d.id) ? 1 : 0.12)
+        .attr('stroke-opacity', (d) => !activeId ? 0.2 : connectedIds.has(d.id) ? 0.6 : 0.05)
+        .attr('stroke-width', (d) => d.id === activeId ? 3 : 1.5)
+
+      node.select('circle:first-child')
+        .attr('stroke-opacity', (d) => !activeId ? 0.15 : connectedIds.has(d.id) ? 0.3 : 0)
+
+      node.selectAll('text')
+        .attr('opacity', (d: any) => !activeId ? 1 : connectedIds.has(d.id) ? 1 : 0.15)
+
+      link
+        .attr('stroke', (d) => {
+          const src = typeof d.source === 'object' ? (d.source as SimNode).id : d.source
+          const tgt = typeof d.target === 'object' ? (d.target as SimNode).id : d.target
+          if (!activeId) {
+            const t = d.value / maxLink
+            return t > 0.6 ? '#60a5fa' : t > 0.3 ? '#3b82f6' : '#1e3a5f'
+          }
+          if (src === activeId || tgt === activeId) return '#60a5fa'
+          return '#1e3a5f'
+        })
+        .attr('stroke-opacity', (d) => {
+          if (!activeId) return 0.5
+          const src = typeof d.source === 'object' ? (d.source as SimNode).id : d.source
+          const tgt = typeof d.target === 'object' ? (d.target as SimNode).id : d.target
+          return (src === activeId || tgt === activeId) ? 0.8 : 0.06
+        })
     }
 
-    // The scene may not be ready immediately, try after a small delay
-    const timer = setTimeout(tryAddLights, 500)
-    return () => clearTimeout(timer)
-  }, [graphData])
+    // Initial appearance
+    updateAppearance(null, null)
+
+    // Interaction
+    node.on('mouseenter', (_, d) => {
+      setHoverNode(d.id)
+      updateAppearance(d.id, selectedNode)
+    })
+    node.on('mouseleave', () => {
+      setHoverNode(null)
+      updateAppearance(null, selectedNode)
+    })
+    node.on('click', (_, d) => {
+      const newSel = selectedNode === d.id ? null : d.id
+      setSelectedNode(newSel)
+      updateAppearance(null, newSel)
+    })
+
+    // Tick
+    simulation.on('tick', () => {
+      link
+        .attr('x1', (d) => (d.source as SimNode).x!)
+        .attr('y1', (d) => (d.source as SimNode).y!)
+        .attr('x2', (d) => (d.target as SimNode).x!)
+        .attr('y2', (d) => (d.target as SimNode).y!)
+
+      node.attr('transform', (d) => `translate(${d.x},${d.y})`)
+    })
+
+    return () => { simulation.stop() }
+  }, [nodes, links, dimensions, colorMode, maxLink, view])
+
+  // Re-run appearance update when selectedNode changes from outside
+  useEffect(() => {
+    // The D3 effect handles this internally via the click handler
+  }, [selectedNode])
+
+  if (view === '3d') {
+    return (
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-2xl font-bold text-white">Movement Force Graph</h2>
+            <p className="text-sm text-slate-400 mt-1">3D view — drag to rotate, scroll to zoom</p>
+          </div>
+          <button onClick={() => setView('2d')} className="px-3 py-1.5 text-xs bg-blue-500/20 text-blue-400 rounded-lg border border-blue-500/30 hover:bg-blue-500/30">
+            Switch to 2D
+          </button>
+        </div>
+        <Suspense fallback={<div className="flex items-center justify-center h-96"><div className="w-8 h-8 border-2 border-blue-400/30 border-t-blue-400 rounded-full animate-spin" /></div>}>
+          <ForceGraph3DScene data={data} colorMode={colorMode} />
+        </Suspense>
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-4">
+      {/* Header */}
       <div className="flex items-start justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-white">3D Movement Relationship Graph</h2>
+          <h2 className="text-2xl font-bold text-white">Movement Force Graph</h2>
           <p className="text-sm text-slate-400 mt-1">
-            Movements in 3D space — colored by functional pattern. Node size = frequency. Links = co-occurrence.
+            How movements connect through co-occurrence. Node size = frequency. Link thickness = how often they appear together.
             {selectedNode && (
               <span className="text-blue-400 ml-2">
-                Filtering: {data.movementDisplay[selectedNode] || selectedNode}
+                Selected: {data.movementDisplay[selectedNode] || selectedNode}
                 <button onClick={() => setSelectedNode(null)} className="ml-2 text-rose-400 hover:text-rose-300">[clear]</button>
               </span>
             )}
           </p>
         </div>
-        <div className="flex gap-1 bg-[#12121a] rounded-lg p-1 border border-[#1e1e3a]">
-          <button onClick={() => setColorMode('function')} className={`px-3 py-1 text-[10px] rounded ${colorMode === 'function' ? 'bg-blue-500/20 text-blue-400' : 'text-slate-400'}`}>
-            Functional Pattern
-          </button>
-          <button onClick={() => setColorMode('modality')} className={`px-3 py-1 text-[10px] rounded ${colorMode === 'modality' ? 'bg-blue-500/20 text-blue-400' : 'text-slate-400'}`}>
-            M / G / W
+        <div className="flex gap-2 shrink-0">
+          <div className="flex gap-1 bg-[#0d0d1a] rounded-lg p-1 border border-[#1e1e3a]">
+            <button onClick={() => setColorMode('function')} className={`px-2.5 py-1 text-[10px] rounded ${colorMode === 'function' ? 'bg-blue-500/20 text-blue-400' : 'text-slate-400'}`}>
+              Functional
+            </button>
+            <button onClick={() => setColorMode('modality')} className={`px-2.5 py-1 text-[10px] rounded ${colorMode === 'modality' ? 'bg-blue-500/20 text-blue-400' : 'text-slate-400'}`}>
+              M / G / W
+            </button>
+          </div>
+          <button onClick={() => setView('3d')} className="px-3 py-1.5 text-xs bg-[#1e1e3a] text-slate-400 rounded-lg border border-[#2a2a5a] hover:text-white">
+            3D View
           </button>
         </div>
       </div>
 
+      {/* Explainer */}
+      <div className="bg-blue-500/5 rounded-lg p-4 border border-blue-500/10">
+        <div className="text-xs font-medium text-blue-400 mb-1">How to read this</div>
+        <p className="text-xs text-slate-400 leading-relaxed">
+          Each circle is a movement. Bigger = appears in more workouts. Lines connect movements that appear in the same workout — thicker lines = stronger pairing.
+          Hover to highlight connections. Click to lock a selection. Drag nodes to rearrange. Scroll to zoom.
+        </p>
+      </div>
+
       <div className="flex gap-4">
-        <div className="flex-1 bg-[#0a1628] rounded-xl border border-[#1e3a5f]/40 overflow-hidden relative" style={{ height: 'calc(100vh - 180px)' }}>
-          <ForceGraph
-            ref={fgRef}
-            graphData={graphData}
-            backgroundColor="#0a1628"
-            nodeThreeObject={nodeThreeObject}
-            nodeThreeObjectExtend={false}
-            nodeLabel={(node: any) => `
-              <div style="background:rgba(15,25,50,0.95);padding:10px 14px;border-radius:10px;border:1px solid rgba(59,130,246,0.3);font-size:12px;max-width:220px;box-shadow:0 8px 32px rgba(0,0,0,0.4)">
-                <div style="font-weight:600;color:#fff;font-size:13px">${node.label}</div>
-                <div style="color:#94a3b8;margin-top:4px">${node.pattern}</div>
-                <div style="color:#60a5fa;margin-top:4px;font-weight:500">${node.count.toLocaleString()} appearances</div>
-              </div>
-            `}
-            linkColor={linkColor}
-            linkOpacity={0.6}
-            linkWidth={linkWidth}
-            onNodeClick={handleNodeClick}
-            onNodeHover={(node: any) => setHoverNode(node)}
-            enableNodeDrag={true}
-            cooldownTicks={200}
-            d3AlphaDecay={0.015}
-            d3VelocityDecay={0.25}
-          />
-
-          {/* Legend */}
-          <div className="absolute bottom-4 left-4 bg-[#0c1a2e]/90 backdrop-blur-sm rounded-lg p-3 border border-[#1e3a5f]/50 max-h-[300px] overflow-y-auto">
-            <div className="text-[9px] text-slate-400 mb-2 uppercase tracking-wider font-semibold">
-              {colorMode === 'function' ? 'Functional Pattern' : 'Modality'}
-            </div>
-            {colorMode === 'function' ? (
-              patterns.map(([label, color]) => (
-                <div key={label} className="flex items-center gap-2 text-[10px] text-slate-300 mb-1">
-                  <div className="w-2.5 h-2.5 rounded-full shrink-0 shadow-sm" style={{ background: color, boxShadow: `0 0 6px ${color}60` }} />
-                  {label}
-                </div>
-              ))
-            ) : (
-              [
-                { label: 'Monostructural', color: '#ff6b6b' },
-                { label: 'Gymnastics', color: '#51cf66' },
-                { label: 'Weightlifting', color: '#339af0' },
-              ].map((m) => (
-                <div key={m.label} className="flex items-center gap-2 text-[10px] text-slate-300 mb-1">
-                  <div className="w-2.5 h-2.5 rounded-full" style={{ background: m.color, boxShadow: `0 0 6px ${m.color}60` }} />
-                  {m.label}
-                </div>
-              ))
-            )}
-          </div>
-
-          {/* Controls hint */}
-          <div className="absolute top-4 right-4 bg-[#0c1a2e]/90 backdrop-blur-sm rounded-lg p-3 border border-[#1e3a5f]/50 text-[10px] text-slate-400">
-            <div>Scroll to zoom</div>
-            <div>Click to isolate</div>
-            <div>Drag to rotate</div>
-          </div>
+        {/* SVG Graph */}
+        <div ref={containerRef} className="flex-1 bg-[#0a1020] rounded-xl border border-[#1e2a4a] overflow-hidden" style={{ height: 'calc(100vh - 260px)', minHeight: 500 }}>
+          <svg ref={svgRef} width={dimensions.width} height={dimensions.height} style={{ width: '100%', height: '100%' }} />
         </div>
 
-        {/* Info panel */}
-        {hoverNode && (
-          <div className="w-72 shrink-0 rounded-xl p-[1px] self-start" style={{ background: 'linear-gradient(135deg, rgba(59,130,246,0.3), rgba(99,102,241,0.15), rgba(30,58,95,0.3))' }}>
-            <div className="bg-[#0c1a2e] rounded-xl p-5">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-4 h-4 rounded-full" style={{ background: hoverNode.patternColor, boxShadow: `0 0 10px ${hoverNode.patternColor}50` }} />
-                <h3 className="text-lg font-bold text-white">{hoverNode.label}</h3>
+        {/* Info Panel */}
+        {hoveredNodeData && (
+          <div className="w-64 shrink-0 bg-[#0c1424] rounded-xl border border-[#1e2a4a] p-5 self-start">
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-4 h-4 rounded-full" style={{ background: colorMode === 'function' ? hoveredNodeData.patternColor : getModalityColor(hoveredNodeData.modality) }} />
+              <h3 className="text-base font-bold text-white">{hoveredNodeData.label}</h3>
+            </div>
+            <div className="space-y-3">
+              <div>
+                <div className="text-[10px] text-slate-500 uppercase tracking-wider">Pattern</div>
+                <div className="text-sm text-slate-300">{hoveredNodeData.pattern}</div>
               </div>
-              <div className="space-y-3">
+              <div>
+                <div className="text-[10px] text-slate-500 uppercase tracking-wider">Appearances</div>
+                <div className="text-2xl font-bold font-mono text-blue-400">{hoveredNodeData.count.toLocaleString()}</div>
+              </div>
+              {MOVEMENT_TAXONOMY[hoveredNodeData.id] && (
                 <div>
-                  <div className="text-[10px] text-slate-500 uppercase tracking-wider">Functional Pattern</div>
-                  <div className="text-sm text-slate-300">{hoverNode.pattern}</div>
-                </div>
-                <div>
-                  <div className="text-[10px] text-slate-500 uppercase tracking-wider">All Patterns</div>
-                  <div className="flex flex-wrap gap-1 mt-1">
-                    {(MOVEMENT_TAXONOMY[hoverNode.id]?.functionalPattern || []).map((p: FunctionalPattern) => (
-                      <span key={p} className="text-[9px] px-1.5 py-0.5 rounded" style={{ background: FUNCTIONAL_PATTERN_COLORS[p] + '20', color: FUNCTIONAL_PATTERN_COLORS[p] }}>
-                        {FUNCTIONAL_PATTERN_LABELS[p]}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-                <div>
-                  <div className="text-[10px] text-slate-500 uppercase tracking-wider">Appearances</div>
-                  <div className="text-2xl font-bold font-mono text-blue-400">{hoverNode.count.toLocaleString()}</div>
-                </div>
-                <div>
-                  <div className="text-[10px] text-slate-500 uppercase tracking-wider">Physical Skills</div>
-                  <div className="flex flex-wrap gap-1 mt-1">
-                    {(MOVEMENT_TAXONOMY[hoverNode.id]?.physicalSkills || []).map((s: string) => (
+                  <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Physical Skills</div>
+                  <div className="flex flex-wrap gap-1">
+                    {MOVEMENT_TAXONOMY[hoveredNodeData.id].physicalSkills.map((s) => (
                       <span key={s} className="text-[9px] px-1.5 py-0.5 rounded bg-[#1a2a4a] text-slate-300">
-                        {s.split('-').map((w: string) => w[0].toUpperCase() + w.slice(1)).join(' ')}
+                        {s.split('-').map((w) => w[0].toUpperCase() + w.slice(1)).join(' ')}
                       </span>
                     ))}
                   </div>
                 </div>
-                <div>
-                  <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-2">Top Partners</div>
-                  {nodePartners.map((p) => (
-                    <div key={p.partner} className="flex justify-between items-center py-1 border-b border-[#1e3a5f]/40 last:border-0">
-                      <span className="text-xs text-slate-300">{data.movementDisplay[p.partner] || p.partner}</span>
-                      <span className="text-xs font-mono text-slate-500">{p.value}</span>
-                    </div>
-                  ))}
-                </div>
+              )}
+              <div>
+                <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-2">Top Partners</div>
+                {nodePartners.map((p) => (
+                  <div key={p.partner} className="flex justify-between items-center py-1 border-b border-[#1e2a4a] last:border-0">
+                    <span className="text-xs text-slate-300">{data.movementDisplay[p.partner] || p.partner}</span>
+                    <span className="text-xs font-mono text-slate-500">{p.value}</span>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
         )}
+      </div>
+
+      {/* Legend */}
+      <div className="flex flex-wrap gap-3 justify-center">
+        {colorMode === 'function' ? (
+          patterns.map(([label, color]) => (
+            <span key={label} className="flex items-center gap-1.5 text-[10px] text-slate-400">
+              <span className="w-2.5 h-2.5 rounded-full" style={{ background: color }} />{label}
+            </span>
+          ))
+        ) : (
+          [{ l: 'Monostructural', c: '#ff6b6b' }, { l: 'Gymnastics', c: '#51cf66' }, { l: 'Weightlifting', c: '#339af0' }].map((m) => (
+            <span key={m.l} className="flex items-center gap-1.5 text-[10px] text-slate-400">
+              <span className="w-2.5 h-2.5 rounded-full" style={{ background: m.c }} />{m.l}
+            </span>
+          ))
+        )}
+        <span className="text-[10px] text-slate-600 ml-4">Scroll to zoom · Drag nodes · Click to isolate</span>
       </div>
     </div>
   )

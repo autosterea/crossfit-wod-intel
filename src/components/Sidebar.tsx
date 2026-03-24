@@ -29,10 +29,10 @@ const sections = [
     ],
   },
   {
-    title: '3D & VISUALS',
+    title: 'VISUALIZATIONS',
     tabs: [
-      { id: 'force3d', label: '3D Force Graph', icon: 'M12 2a10 10 0 100 20 10 10 0 000-20zm0 0v20m10-10H2' },
-      { id: 'heatmap3d', label: '3D Heatmap', icon: 'M4 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1V5zm10 0a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1v-4zm10 0a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z' },
+      { id: 'force3d', label: 'Force Graph', icon: 'M12 2a10 10 0 100 20 10 10 0 000-20zm0 0v20m10-10H2' },
+      { id: 'heatmap3d', label: 'Heatmap', icon: 'M4 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1V5zm10 0a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1v-4zm10 0a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z' },
     ],
   },
   {
