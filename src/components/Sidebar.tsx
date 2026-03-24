@@ -118,14 +118,14 @@ export default function Sidebar({ data }: { data: CrossFitData }) {
         w-56 transition-transform duration-200 ease-in-out
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
-        <div className="p-3 border-b border-[#1a1a2e]">
+        <button onClick={() => { setActiveTab('hero' as any); setSidebarOpen(false) }} className="w-full text-left p-3 border-b border-[#1a1a2e] hover:bg-white/[0.02] transition-colors">
           <h1 className="text-sm font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-rose-400 bg-clip-text text-transparent">
             CrossFit WOD Intel
           </h1>
           <p className="text-[9px] text-slate-500 mt-0.5 font-mono">
             {data.overview.total_workouts.toLocaleString()} WODs | {data.overview.years_covered}y
           </p>
-        </div>
+        </button>
 
         <YearRangeFilter />
 

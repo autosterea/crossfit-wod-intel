@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 
 type Tab =
+  | 'hero'
   | 'overview'
   | 'reportcard'
   | 'force3d'
@@ -38,7 +39,7 @@ interface AppStore {
 }
 
 export const useStore = create<AppStore>((set) => ({
-  activeTab: 'overview',
+  activeTab: 'hero',
   setActiveTab: (tab) => set({ activeTab: tab }),
   selectedMovement: null,
   setSelectedMovement: (m) => set({ selectedMovement: m }),

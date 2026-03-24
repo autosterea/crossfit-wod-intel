@@ -6,6 +6,8 @@ import { analyzeData } from './utils/analysis'
 import { runAdvancedAnalysis } from './utils/advanced-analysis'
 import Sidebar from './components/Sidebar'
 import Overview from './components/Overview'
+import Hero from './components/Hero'
+import ShareButton from './components/ShareButton'
 
 const ForceGraph3D = lazy(() => import('./components/ForceGraph3D'))
 const Heatmap3D = lazy(() => import('./components/Heatmap3D'))
@@ -161,6 +163,10 @@ function App() {
     catch (e) { console.error('runAdvancedAnalysis failed:', e); return null }
   }, [filteredData, yearRange])
 
+  if (activeTab === 'hero') {
+    return <Hero />
+  }
+
   return (
     <div className="flex h-screen">
       <Sidebar data={D} />
@@ -193,6 +199,7 @@ function App() {
           </ErrorBoundary>
         </Suspense>
       </main>
+      <ShareButton />
     </div>
   )
 }
