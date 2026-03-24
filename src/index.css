@@ -1,0 +1,78 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --color-bg-primary: #0a0a0f;
+  --color-bg-secondary: #12121a;
+  --color-bg-card: #16162a;
+  --color-bg-card-hover: #1e1e3a;
+  --color-border: #2a2a4a;
+  --color-accent: #60a5fa;
+  --color-accent-dim: #3b82f680;
+  --color-monostructural: #f43f5e;
+  --color-gymnastics: #10b981;
+  --color-weightlifting: #3b82f6;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh;
+  background: var(--color-bg-primary);
+  color: #e2e8f0;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* Glow effects for 3D elements */
+.glow-blue { filter: drop-shadow(0 0 20px rgba(96, 165, 250, 0.3)); }
+.glow-rose { filter: drop-shadow(0 0 20px rgba(244, 63, 94, 0.3)); }
+.glow-emerald { filter: drop-shadow(0 0 20px rgba(16, 185, 129, 0.3)); }
+
+/* Animated gradient border */
+.gradient-border {
+  position: relative;
+}
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, #60a5fa, #a855f7, #f43f5e);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Force graph container */
+.force-graph-container canvas {
+  border-radius: 12px;
+}
+
+/* Responsive chart sizing */
+.recharts-responsive-container {
+  min-height: 0;
+}
