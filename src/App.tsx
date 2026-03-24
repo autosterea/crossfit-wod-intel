@@ -208,7 +208,7 @@ function App() {
           <div className="text-center space-y-3">
             <div>
               <p className="text-sm text-slate-300 font-medium">Created by Ravikant Dewangan</p>
-              <p className="text-xs text-slate-500">MS S&C | CCFT | MetFix Coach | Persistence Athletics, Seattle</p>
+              <p className="text-xs text-slate-500">MS S&C | CCFT | Persistence Athletics, Seattle</p>
             </div>
             <div className="flex items-center justify-center gap-2 text-[10px] text-slate-600">
               <span>Site by</span>
