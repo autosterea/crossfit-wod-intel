@@ -382,7 +382,7 @@ export default function Hero() {
 
       {/* Footer */}
       <div className="absolute bottom-4 left-0 right-0 text-center space-y-1">
-        <p className="text-[11px] text-slate-500">Created by <span className="text-slate-400">Ravikant Dewangan</span> | MS S&C | CCFT | Persistence Athletics, Seattle</p>
+        <p className="text-[11px] text-slate-500">Created by <span className="text-slate-400">Ravikant Dewangan</span> | MS S&C | CCFT | Head Coach, Persistence Athletics, Seattle</p>
         <p className="text-[10px] text-slate-600">
           Site by <a href="https://autosterea.com" target="_blank" rel="noopener noreferrer" className="text-blue-400/60 hover:text-blue-400">autosterea.com</a>
           <span className="mx-2">|</span>
