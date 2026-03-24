@@ -187,12 +187,24 @@ export default function ForceGraph3DView({ data }: { data: CrossFitData }) {
     return group
   }, [colorMode, selectedNode, medianCount])
 
-  // Add scene lighting after engine initializes
+  // Configure forces + add scene lighting after engine initializes
   useEffect(() => {
     const fg = fgRef.current
     if (!fg) return
 
     const tryAddLights = () => {
+      // Tighten the simulation so disconnected nodes stay close
+      try {
+        if (fg.d3Force) {
+          const charge = fg.d3Force('charge')
+          if (charge) charge.strength(-120).distanceMax(250)
+          // Pull all nodes toward center on x/y/z
+          fg.d3Force('x')?.strength(0.12)
+          fg.d3Force('y')?.strength(0.12)
+          fg.d3Force('z')?.strength(0.12)
+        }
+      } catch (_) { /* force API may differ */ }
+
       const scene = fg.scene?.()
       if (!scene) return
 
@@ -275,9 +287,9 @@ export default function ForceGraph3DView({ data }: { data: CrossFitData }) {
             onNodeClick={handleNodeClick}
             onNodeHover={(node: any) => setHoverNode(node)}
             enableNodeDrag={true}
-            cooldownTicks={100}
-            d3AlphaDecay={0.02}
-            d3VelocityDecay={0.3}
+            cooldownTicks={200}
+            d3AlphaDecay={0.015}
+            d3VelocityDecay={0.25}
           />
 
           {/* Legend */}

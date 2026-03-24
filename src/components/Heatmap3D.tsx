@@ -7,13 +7,15 @@ import type { CrossFitData } from '../types'
 // ── Heatmap color gradient based on normalized value ──
 function getHeatmapColor(value: number, maxValue: number): THREE.Color {
   const t = value / maxValue
-  if (t < 0.1) return new THREE.Color('#1e3a5f')
-  if (t < 0.25) return new THREE.Color('#2563eb')
-  if (t < 0.4) return new THREE.Color('#06b6d4')
-  if (t < 0.6) return new THREE.Color('#22c55e')
-  if (t < 0.75) return new THREE.Color('#eab308')
-  if (t < 0.9) return new THREE.Color('#f97316')
-  return new THREE.Color('#ef4444')
+  // Vibrant, saturated gradient — visually distinct at every level
+  if (t < 0.05) return new THREE.Color('#2a4a8f')
+  if (t < 0.15) return new THREE.Color('#3b6fe0')
+  if (t < 0.3) return new THREE.Color('#00c2ff')
+  if (t < 0.45) return new THREE.Color('#00e5a0')
+  if (t < 0.6) return new THREE.Color('#a0ff00')
+  if (t < 0.75) return new THREE.Color('#ffe600')
+  if (t < 0.88) return new THREE.Color('#ff8c00')
+  return new THREE.Color('#ff2d55')
 }
 
 // ── Camera presets ──
@@ -212,10 +214,10 @@ function InstancedBars({ data }: { data: CrossFitData }) {
         <meshStandardMaterial
           vertexColors
           toneMapped={false}
-          metalness={0.15}
-          roughness={0.55}
+          metalness={0.3}
+          roughness={0.35}
           emissive={new THREE.Color('#ffffff')}
-          emissiveIntensity={0.1}
+          emissiveIntensity={0.35}
         />
       </instancedMesh>
 
@@ -320,10 +322,11 @@ function Scene({
   return (
     <>
       {/* Dramatic multi-light setup */}
-      <ambientLight intensity={0.25} />
-      <pointLight position={[20, 35, 20]} intensity={1.5} color="#ffffff" />
-      <pointLight position={[-15, 20, -15]} intensity={0.6} color="#3b82f6" />
-      <pointLight position={[15, 15, -20]} intensity={0.4} color="#8b5cf6" />
+      <ambientLight intensity={0.5} />
+      <pointLight position={[20, 35, 20]} intensity={2.5} color="#ffffff" />
+      <pointLight position={[-15, 25, -15]} intensity={1.0} color="#60a5fa" />
+      <pointLight position={[15, 20, -20]} intensity={0.8} color="#a78bfa" />
+      <pointLight position={[0, 30, 0]} intensity={0.6} color="#ffffff" />
 
       <InstancedBars data={data} />
       <GridFloor />
