@@ -25,6 +25,7 @@ const HeadToHead = lazy(() => import('./components/HeadToHead'))
 const WorkoutDecoder = lazy(() => import('./components/WorkoutDecoder'))
 const ReportCard = lazy(() => import('./components/ReportCard'))
 const WhatsGaps = lazy(() => import('./components/WhatsGaps'))
+const MovementEncyclopedia = lazy(() => import('./components/MovementEncyclopedia'))
 const Catalog = lazy(() => import('./components/Catalog'))
 const NamedWods = lazy(() => import('./components/NamedWods'))
 
@@ -186,7 +187,8 @@ function App() {
             {activeTab === 'headtohead' && <HeadToHead data={D} />}
             {activeTab === 'patterns' && <PatternInsights data={filteredData} />}
             {activeTab === 'decoder' && <WorkoutDecoder data={filteredData} />}
-            {activeTab === 'catalog' && <Catalog data={filteredData} />}
+            {activeTab === 'encyclopedia' && <MovementEncyclopedia data={filteredData} />}
+          {activeTab === 'catalog' && <Catalog data={filteredData} />}
             {activeTab === 'named' && <NamedWods data={filteredData} />}
           </ErrorBoundary>
         </Suspense>

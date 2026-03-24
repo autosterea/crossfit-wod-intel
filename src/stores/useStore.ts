@@ -20,6 +20,7 @@ type Tab =
   | 'headtohead'
   | 'decoder'
   | 'gaps'
+  | 'encyclopedia'
   | 'catalog'
   | 'named'
 
