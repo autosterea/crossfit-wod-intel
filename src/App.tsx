@@ -9,6 +9,8 @@ import Overview from './components/Overview'
 import Hero from './components/Hero'
 import ShareButton from './components/ShareButton'
 
+const MovementMap = lazy(() => import('./components/MovementMap'))
+const MovementPairs = lazy(() => import('./components/MovementPairs'))
 const ForceGraph3D = lazy(() => import('./components/ForceGraph3D'))
 const Heatmap3D = lazy(() => import('./components/Heatmap3D'))
 const PhysicalSkills = lazy(() => import('./components/PhysicalSkills'))
@@ -177,8 +179,10 @@ function App() {
             {activeTab === 'overview' && <Overview data={filteredData} />}
             {activeTab === 'reportcard' && analysis && advancedAnalysis && <ReportCard data={filteredData} analysis={analysis} advancedAnalysis={advancedAnalysis} />}
             {activeTab === 'calendar' && <CalendarHeatmap data={filteredData} />}
+            {activeTab === 'movmap' && <MovementMap data={filteredData} />}
+            {activeTab === 'movpairs' && <MovementPairs data={filteredData} />}
             {activeTab === 'force3d' && <ForceGraph3D data={D} />}
-            {activeTab === 'heatmap3d' && <Heatmap3D data={D} />}
+            {activeTab === 'heatmap3d' && <Heatmap3D data={filteredData} />}
             {activeTab === 'skills' && analysis && <PhysicalSkills data={filteredData} analysis={analysis} />}
             {activeTab === 'functional' && analysis && <FunctionalBalance data={filteredData} analysis={analysis} />}
             {activeTab === 'energy' && analysis && <EnergySystems data={filteredData} analysis={analysis} />}

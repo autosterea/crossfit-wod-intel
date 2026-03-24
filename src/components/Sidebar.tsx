@@ -31,8 +31,9 @@ const sections = [
   {
     title: 'VISUALIZATIONS',
     tabs: [
-      { id: 'force3d', label: 'Force Graph', icon: 'M12 2a10 10 0 100 20 10 10 0 000-20zm0 0v20m10-10H2' },
-      { id: 'heatmap3d', label: 'Heatmap', icon: 'M4 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1V5zm10 0a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1v-4zm10 0a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z' },
+      { id: 'movmap', label: 'Movement Map', icon: 'M4 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1V5zm10 0a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1v-4zm10 0a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z' },
+      { id: 'movpairs', label: 'Movement Pairs', icon: 'M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4' },
+      { id: 'heatmap3d', label: 'Co-occurrence Grid', icon: 'M4 6h16M4 10h16M4 14h16M4 18h16' },
     ],
   },
   {

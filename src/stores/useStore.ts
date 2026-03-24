@@ -4,6 +4,8 @@ type Tab =
   | 'hero'
   | 'overview'
   | 'reportcard'
+  | 'movmap'
+  | 'movpairs'
   | 'force3d'
   | 'heatmap3d'
   | 'skills'
