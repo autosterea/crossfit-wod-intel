@@ -32,6 +32,7 @@ const WhatsGaps = lazy(() => import('./components/WhatsGaps'))
 const MovementEncyclopedia = lazy(() => import('./components/MovementEncyclopedia'))
 const Catalog = lazy(() => import('./components/Catalog'))
 const NamedWods = lazy(() => import('./components/NamedWods'))
+const RepsAndLoading = lazy(() => import('./components/RepsAndLoading'))
 
 // Handle both parsed object and stringified JSON (vite json.stringify)
 const D: CrossFitData = (typeof rawData === 'string' ? JSON.parse(rawData) : rawData) as CrossFitData
@@ -200,6 +201,7 @@ function App() {
             {activeTab === 'encyclopedia' && <MovementEncyclopedia data={filteredData} />}
           {activeTab === 'catalog' && <Catalog data={filteredData} />}
             {activeTab === 'named' && <NamedWods data={filteredData} />}
+            {activeTab === 'repsloading' && <RepsAndLoading data={filteredData} />}
           </ErrorBoundary>
         </Suspense>
 

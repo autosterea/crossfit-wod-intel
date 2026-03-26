@@ -156,8 +156,18 @@ if (!html || html.length < 200) {
 // 2. Parse workout text from HTML
 // ---------------------------------------------------------------------------
 
+// Extract content from <article> tag first (clean, no comments)
+let articleHtml = ''
+const articleMatch = html.match(/<article[^>]*>([\s\S]*?)<\/article>/i)
+if (articleMatch) {
+  articleHtml = articleMatch[1]
+}
+
+// Use article content if found, otherwise fall back to full page
+let sourceHtml = articleHtml || html
+
 // Strip script / style blocks
-let cleaned = html
+let cleaned = sourceHtml
   .replace(/<script[\s\S]*?<\/script>/gi, '')
   .replace(/<style[\s\S]*?<\/style>/gi, '')
 
@@ -177,6 +187,12 @@ let plainText = cleaned
   .replace(/&nbsp;/g, ' ')
   .replace(/\n{3,}/g, '\n\n')
   .trim()
+
+// Check for rest day
+if (/rest\s*day/i.test(plainText) && plainText.length < 300) {
+  console.log(`[fetch-daily-wod] ${dateStr} is a Rest Day. Skipping.`)
+  process.exit(0)
+}
 
 /**
  * Try to isolate the actual workout section from the full-page text.
@@ -199,11 +215,25 @@ function extractWorkoutSection(text) {
     /complete as many/i,
   ]
 
-  // Markers that signal the end of the workout / start of footer
+  // Markers that signal the end of the workout / start of comments/footer
   const endPatterns = [
     /©/i, /copyright/i, /all rights reserved/i,
     /privacy policy/i, /terms of use/i, /cookie/i,
     /sign up/i, /subscribe/i,
+    /comments? on \d/i,         // "Comments on 260325"
+    /log in to comment/i,
+    /\d+ comments?$/i,          // "2 Comments"
+    /^comment$/i,
+    /sharecomment/i,
+    /comment thread url/i,
+    /comment url copied/i,
+    /^about crossfit$/i,
+    /find a gym/i,
+    /what is crossfit/i,
+    /get started/i,
+    /open a crossfit gym/i,
+    /the crossfit games/i,
+    /learn the movement/i,
   ]
 
   let startIdx = -1
