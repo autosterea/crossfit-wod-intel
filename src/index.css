@@ -76,3 +76,14 @@ html, body, #root {
 .recharts-responsive-container {
   min-height: 0;
 }
+
+/* Mobile touch targets */
+@media (max-width: 640px) {
+  button, select, input[type="number"] {
+    min-height: 36px;
+  }
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+}

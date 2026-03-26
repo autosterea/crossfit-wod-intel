@@ -48,6 +48,7 @@ const INTENSITY_LABELS: Record<string, string> = {
 }
 
 const WEIGHT_BAR_COLORS = ['#6b7280', '#06b6d4', '#10b981', '#3b82f6', '#f59e0b', '#f43f5e']
+const WEIGHT_BAR_COLORS_FEMALE = ['#6b7280', '#fda4af', '#fb7185', '#f43f5e', '#e11d48', '#be123c']
 
 const TOP_SCHEME_COLORS = [
   '#f43f5e', '#3b82f6', '#10b981', '#f59e0b', '#a855f7',
@@ -102,18 +103,25 @@ export default function RepsAndLoading({ data }: { data: CrossFitData }) {
       </div>
 
       {/* Stats cards */}
-      <div className="grid grid-cols-4 gap-3">
+      <div className="grid grid-cols-5 gap-3">
         <div className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 rounded-xl p-5 border border-blue-500/20">
           <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Avg Reps / Workout</div>
           <div className="text-3xl font-bold font-mono text-blue-400">{analysis.avgTotalReps.toLocaleString()}</div>
           <div className="text-[10px] text-slate-400 mt-1">Estimated total reps per WOD</div>
         </div>
-        <div className="bg-gradient-to-br from-rose-500/10 to-orange-500/10 rounded-xl p-5 border border-rose-500/20">
-          <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Avg Prescribed Weight</div>
-          <div className="text-3xl font-bold font-mono text-rose-400">
+        <div className="bg-gradient-to-br from-blue-500/10 to-indigo-500/10 rounded-xl p-5 border border-blue-500/20">
+          <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Avg Weight — Men (Rx)</div>
+          <div className="text-3xl font-bold font-mono text-blue-400">
             {analysis.avgWeight > 0 ? `${analysis.avgWeight} lb` : 'N/A'}
           </div>
-          <div className="text-[10px] text-slate-400 mt-1">Average load across all WODs with Rx weights</div>
+          <div className="text-[10px] text-slate-400 mt-1">Average men's prescribed load</div>
+        </div>
+        <div className="bg-gradient-to-br from-rose-500/10 to-pink-500/10 rounded-xl p-5 border border-rose-500/20">
+          <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Avg Weight — Women (Rx)</div>
+          <div className="text-3xl font-bold font-mono text-rose-400">
+            {analysis.avgWeightFemale > 0 ? `${analysis.avgWeightFemale} lb` : 'N/A'}
+          </div>
+          <div className="text-[10px] text-slate-400 mt-1">Average women's prescribed load</div>
         </div>
         <div className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 rounded-xl p-5 border border-purple-500/20">
           <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Most Common Scheme</div>
@@ -228,26 +236,50 @@ export default function RepsAndLoading({ data }: { data: CrossFitData }) {
         </div>
       </div>
 
-      {/* Weight Distribution */}
+      {/* Weight Distribution — Men & Women side by side */}
       <div className="bg-[#12121a] rounded-xl p-5 border border-[#1e1e3a]">
-        <h3 className="text-xs font-medium text-slate-400 mb-1">Weight Distribution</h3>
         <p className="text-[10px] text-slate-500 mb-4">
-          How many workouts prescribe each weight range. Includes men's Rx weight from M/F prescriptions (e.g., 135/95).
+          CrossFit prescribes different weights for men and women. The format &quot;135/95&quot; means 135 lbs for men, 95 lbs for women. This analysis tracks both.
         </p>
-        <div style={{ width: '100%', height: 300 }}>
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={analysis.weightDistribution}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#1e1e3a" />
-              <XAxis dataKey="range" tick={{ fontSize: 10, fill: '#64748b' }} />
-              <YAxis tick={{ fontSize: 10, fill: '#64748b' }} />
-              <Tooltip contentStyle={tooltipStyle} />
-              <Bar dataKey="count" radius={[4, 4, 0, 0]}>
-                {analysis.weightDistribution.map((_, i) => (
-                  <Cell key={i} fill={WEIGHT_BAR_COLORS[i % WEIGHT_BAR_COLORS.length]} fillOpacity={0.75} />
-                ))}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
+        <div className="grid grid-cols-2 gap-4">
+          {/* Men's weight distribution */}
+          <div>
+            <h3 className="text-xs font-medium text-blue-400 mb-3">Prescribed Weight — Men (Rx)</h3>
+            <div style={{ width: '100%', height: 300 }}>
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={analysis.weightDistribution}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#1e1e3a" />
+                  <XAxis dataKey="range" tick={{ fontSize: 9, fill: '#64748b' }} />
+                  <YAxis tick={{ fontSize: 10, fill: '#64748b' }} />
+                  <Tooltip contentStyle={tooltipStyle} />
+                  <Bar dataKey="count" radius={[4, 4, 0, 0]}>
+                    {analysis.weightDistribution.map((_, i) => (
+                      <Cell key={i} fill={WEIGHT_BAR_COLORS[i % WEIGHT_BAR_COLORS.length]} fillOpacity={0.75} />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+          {/* Women's weight distribution */}
+          <div>
+            <h3 className="text-xs font-medium text-rose-400 mb-3">Prescribed Weight — Women (Rx)</h3>
+            <div style={{ width: '100%', height: 300 }}>
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={analysis.weightDistributionFemale}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#1e1e3a" />
+                  <XAxis dataKey="range" tick={{ fontSize: 9, fill: '#64748b' }} />
+                  <YAxis tick={{ fontSize: 10, fill: '#64748b' }} />
+                  <Tooltip contentStyle={tooltipStyle} />
+                  <Bar dataKey="count" radius={[4, 4, 0, 0]}>
+                    {analysis.weightDistributionFemale.map((_, i) => (
+                      <Cell key={i} fill={WEIGHT_BAR_COLORS_FEMALE[i % WEIGHT_BAR_COLORS_FEMALE.length]} fillOpacity={0.75} />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -274,6 +306,15 @@ export default function RepsAndLoading({ data }: { data: CrossFitData }) {
                 type="monotone"
                 dataKey="avgReps"
                 name="Avg Reps"
+                stroke="#a855f7"
+                strokeWidth={2}
+                dot={{ r: 3, fill: '#a855f7' }}
+              />
+              <Line
+                yAxisId="weight"
+                type="monotone"
+                dataKey="avgWeight"
+                name="Avg Weight — Men (lb)"
                 stroke="#3b82f6"
                 strokeWidth={2}
                 dot={{ r: 3, fill: '#3b82f6' }}
@@ -281,8 +322,8 @@ export default function RepsAndLoading({ data }: { data: CrossFitData }) {
               <Line
                 yAxisId="weight"
                 type="monotone"
-                dataKey="avgWeight"
-                name="Avg Weight (lb)"
+                dataKey="avgWeightFemale"
+                name="Avg Weight — Women (lb)"
                 stroke="#f43f5e"
                 strokeWidth={2}
                 dot={{ r: 3, fill: '#f43f5e' }}
@@ -292,12 +333,16 @@ export default function RepsAndLoading({ data }: { data: CrossFitData }) {
         </div>
         <div className="flex gap-6 mt-2 justify-center">
           <span className="flex items-center gap-1.5 text-[10px] text-slate-500">
-            <span className="w-3 h-0.5 rounded" style={{ background: '#3b82f6', display: 'inline-block' }} />
+            <span className="w-3 h-0.5 rounded" style={{ background: '#a855f7', display: 'inline-block' }} />
             Avg Reps per Workout (left axis)
           </span>
           <span className="flex items-center gap-1.5 text-[10px] text-slate-500">
+            <span className="w-3 h-0.5 rounded" style={{ background: '#3b82f6', display: 'inline-block' }} />
+            Avg Weight — Men in lbs (right axis)
+          </span>
+          <span className="flex items-center gap-1.5 text-[10px] text-slate-500">
             <span className="w-3 h-0.5 rounded" style={{ background: '#f43f5e', display: 'inline-block' }} />
-            Avg Prescribed Weight in lbs (right axis)
+            Avg Weight — Women in lbs (right axis)
           </span>
         </div>
       </div>

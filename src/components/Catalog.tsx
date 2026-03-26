@@ -46,13 +46,13 @@ export default function Catalog({ data }: { data: CrossFitData }) {
       </div>
 
       {/* Search and filters */}
-      <div className="flex flex-wrap gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:flex gap-2 sm:gap-3">
         <input
           type="text"
           placeholder="Search workouts..."
           value={search}
           onChange={(e) => { setSearch(e.target.value); setPage(0) }}
-          className="flex-1 min-w-[200px] bg-[#12121a] border border-[#1e1e3a] rounded-lg px-4 py-2 text-sm text-white placeholder-slate-500 focus:border-blue-500/50 focus:outline-none"
+          className="w-full sm:min-w-[200px] lg:flex-1 bg-[#12121a] border border-[#1e1e3a] rounded-lg px-4 py-2 text-sm text-white placeholder-slate-500 focus:border-blue-500/50 focus:outline-none"
         />
         <select value={modFilter} onChange={(e) => { setModFilter(e.target.value); setPage(0) }} className="bg-[#12121a] border border-[#1e1e3a] rounded-lg px-3 py-2 text-xs text-slate-300 focus:outline-none">
           <option value="all">All Modalities</option>
@@ -143,7 +143,7 @@ export default function Catalog({ data }: { data: CrossFitData }) {
         <button
           onClick={() => setPage(Math.max(0, page - 1))}
           disabled={page === 0}
-          className="px-3 py-1.5 text-xs rounded-lg bg-[#12121a] border border-[#1e1e3a] text-slate-400 disabled:opacity-30 hover:border-[#2a2a5a]"
+          className="px-3 py-1.5 min-w-[40px] min-h-[40px] text-xs rounded-lg bg-[#12121a] border border-[#1e1e3a] text-slate-400 disabled:opacity-30 hover:border-[#2a2a5a]"
         >
           Prev
         </button>
@@ -154,7 +154,7 @@ export default function Catalog({ data }: { data: CrossFitData }) {
             <button
               key={p}
               onClick={() => setPage(p)}
-              className={`w-8 h-8 text-xs rounded-lg ${
+              className={`min-w-[40px] min-h-[40px] text-xs rounded-lg ${
                 p === page ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30' : 'bg-[#12121a] text-slate-400 border border-[#1e1e3a]'
               }`}
             >
@@ -165,7 +165,7 @@ export default function Catalog({ data }: { data: CrossFitData }) {
         <button
           onClick={() => setPage(Math.min(totalPages - 1, page + 1))}
           disabled={page >= totalPages - 1}
-          className="px-3 py-1.5 text-xs rounded-lg bg-[#12121a] border border-[#1e1e3a] text-slate-400 disabled:opacity-30 hover:border-[#2a2a5a]"
+          className="px-3 py-1.5 min-w-[40px] min-h-[40px] text-xs rounded-lg bg-[#12121a] border border-[#1e1e3a] text-slate-400 disabled:opacity-30 hover:border-[#2a2a5a]"
         >
           Next
         </button>

@@ -35,6 +35,7 @@ export default function Heatmap3D({ data }: { data: CrossFitData }) {
   const [sortMode, setSortMode] = useState<SortMode>('frequency')
   const [showValues, setShowValues] = useState(false)
   const [view, setView] = useState<'2d' | '3d'>('2d')
+  const [mobileMode] = useState(typeof window !== 'undefined' && window.innerWidth < 768)
 
   const { movements, matrix } = data.cooccurMatrix
 
@@ -56,6 +57,17 @@ export default function Heatmap3D({ data }: { data: CrossFitData }) {
     }
     return indices
   }, [movements, matrix, sortMode, data])
+
+  // On mobile, show only top 15 movements by frequency to fit the screen
+  const displayIndices = useMemo(() => {
+    if (!mobileMode) return sortedIndices
+    const byFreq = [...sortedIndices].sort((a, b) => matrix[b][b] - matrix[a][a])
+    const top15Set = new Set(byFreq.slice(0, 15))
+    return sortedIndices.filter((i) => top15Set.has(i))
+  }, [sortedIndices, mobileMode, matrix])
+
+  const cellSize = mobileMode ? 22 : 27
+  const labelWidth = mobileMode ? 90 : 130
 
   const maxVal = useMemo(() => Math.max(...matrix.flat()), [matrix])
   const n = movements.length
@@ -139,21 +151,21 @@ export default function Heatmap3D({ data }: { data: CrossFitData }) {
         </label>
         {selectedMov !== null && (
           <button onClick={() => setSelectedMov(null)} className="px-2.5 py-1 text-[10px] bg-rose-500/20 text-rose-400 rounded-lg border border-rose-500/30">
-            Clear selection: {getName(sortedIndices[selectedMov])}
+            Clear selection: {getName(displayIndices[selectedMov])}
           </button>
         )}
       </div>
 
       {/* Heatmap grid */}
       <div className="bg-[#0a0a14] rounded-xl border border-[#1e1e3a] p-2 overflow-x-auto">
-        <div style={{ minWidth: n * 28 + 130 }}>
+        <div style={{ minWidth: displayIndices.length * (cellSize + 1) + labelWidth }}>
           {/* Top labels (rotated) */}
-          <div className="flex" style={{ marginLeft: 130 }}>
-            {sortedIndices.map((si, j) => (
+          <div className="flex" style={{ marginLeft: labelWidth }}>
+            {displayIndices.map((si, j) => (
               <div
                 key={si}
                 className="flex items-end justify-start cursor-pointer"
-                style={{ width: 28, height: 90 }}
+                style={{ width: cellSize + 1, height: 90 }}
                 onClick={() => setSelectedMov(selectedMov === j ? null : j)}
               >
                 <div
@@ -172,14 +184,14 @@ export default function Heatmap3D({ data }: { data: CrossFitData }) {
           </div>
 
           {/* Grid rows */}
-          {sortedIndices.map((si, i) => (
-            <div key={si} className="flex items-center" style={{ height: 28 }}>
+          {displayIndices.map((si, i) => (
+            <div key={si} className="flex items-center" style={{ height: cellSize + 1 }}>
               {/* Left label */}
               <div
                 className="shrink-0 text-right pr-2 cursor-pointer transition-colors truncate"
                 style={{
-                  width: 130,
-                  fontSize: 10,
+                  width: labelWidth,
+                  fontSize: mobileMode ? 9 : 10,
                   color: selectedMov === i ? '#60a5fa' : (hoveredCell?.i === i ? '#e2e8f0' : '#94a3b8'),
                   fontWeight: selectedMov === i ? 600 : 400,
                 }}
@@ -190,7 +202,7 @@ export default function Heatmap3D({ data }: { data: CrossFitData }) {
               </div>
 
               {/* Cells */}
-              {sortedIndices.map((sj, j) => {
+              {displayIndices.map((sj, j) => {
                 const val = matrix[si][sj]
                 const isDiag = si === sj
                 const highlighted = isHighlighted(i, j)
@@ -202,8 +214,8 @@ export default function Heatmap3D({ data }: { data: CrossFitData }) {
                     key={sj}
                     className="shrink-0 relative group"
                     style={{
-                      width: 27,
-                      height: 27,
+                      width: cellSize,
+                      height: cellSize,
                       margin: 0.5,
                       background: cellColor,
                       borderRadius: 3,
@@ -278,11 +290,11 @@ export default function Heatmap3D({ data }: { data: CrossFitData }) {
       {selectedMov !== null && (
         <div className="bg-[#12121a] rounded-xl p-5 border border-blue-500/20">
           <h3 className="text-sm font-bold text-white mb-3">
-            {getName(sortedIndices[selectedMov])} — Top Co-occurrences
+            {getName(displayIndices[selectedMov])} — Top Co-occurrences
           </h3>
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2">
-            {sortedIndices
-              .map((sj, j) => ({ name: getName(sj), val: matrix[sortedIndices[selectedMov]][sj], mod: getMod(sj), j }))
+            {displayIndices
+              .map((sj, j) => ({ name: getName(sj), val: matrix[displayIndices[selectedMov]][sj], mod: getMod(sj), j }))
               .filter((x) => x.val > 0 && x.j !== selectedMov)
               .sort((a, b) => b.val - a.val)
               .slice(0, 12)

@@ -87,7 +87,7 @@ export default function Overview({ data }: { data: CrossFitData }) {
       </div>
 
       {/* Stat cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
         <StatCard value={overview.total_workouts.toLocaleString()} label="Total Workouts" accent="text-blue-400" />
         <StatCard value={overview.years_covered.toString()} label="Years Covered" accent="text-purple-400" />
         <StatCard value={overview.hero_wod_count.toLocaleString()} label="Hero WODs" accent="text-rose-400" />
@@ -116,7 +116,7 @@ export default function Overview({ data }: { data: CrossFitData }) {
       )}
 
       {/* Pie charts */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
         <MiniPie data={overview.modality} colors={MODALITY_COLORS} title="Modality Distribution" />
         <MiniPie data={overview.structure} colors={STRUCTURE_COLORS} title="Workout Structure" />
         <MiniPie data={overview.time_domain} colors={TIME_DOMAIN_COLORS} title="Time Domain" />
@@ -147,7 +147,7 @@ export default function Overview({ data }: { data: CrossFitData }) {
       <div className="bg-[#12121a] rounded-xl p-5 border border-[#1e1e3a]">
         <h3 className="text-sm font-medium text-slate-300 mb-4">Top 20 Movements</h3>
         <div style={{width:"100%",height:500}}><ResponsiveContainer width="100%" height="100%">
-          <BarChart data={movementData} layout="vertical" margin={{ left: 120 }}>
+          <BarChart data={movementData} layout="vertical" margin={{ left: 90 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#1e1e3a" horizontal={false} />
             <XAxis type="number" tick={{ fontSize: 10, fill: '#64748b' }} />
             <YAxis type="category" dataKey="name" tick={{ fontSize: 11, fill: '#94a3b8' }} width={115} />

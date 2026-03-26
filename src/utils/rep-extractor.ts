@@ -9,7 +9,8 @@ export interface RepScheme {
 }
 
 export interface LoadingPrescription {
-  weight: number         // in lbs (convert kg if needed)
+  weight: number         // in lbs (convert kg if needed) — male Rx when men/women pair
+  weightFemale?: number  // in lbs — female Rx when men/women pair (e.g., 95 from "135/95")
   unit: 'lb' | 'kg' | 'pood'
   context: string        // the text around the weight mention
   intensity: 'light' | 'moderate' | 'heavy' | 'very-heavy'
@@ -28,15 +29,19 @@ export interface RepLoadingAnalysis {
   topSchemes: { pattern: string; count: number }[]
   avgTotalReps: number
 
-  // Loading distribution
+  // Loading distribution — Men (Rx)
   avgWeight: number
   weightDistribution: { range: string; count: number }[]
+
+  // Loading distribution — Women (Rx)
+  avgWeightFemale: number
+  weightDistributionFemale: { range: string; count: number }[]
 
   // Intensity zones
   intensityZones: Record<string, number>
 
   // Trends
-  repsByYear: { year: string; avgReps: number; avgWeight: number }[]
+  repsByYear: { year: string; avgReps: number; avgWeight: number; avgWeightFemale: number }[]
 }
 
 // ── Weight intensity classification ─────────────────────────────────────────
@@ -253,7 +258,7 @@ function extractLoading(text: string): LoadingPrescription[] {
     }
   }
 
-  // XXX/YYY (men/women weights like 135/95) — take the first (men's)
+  // XXX/YYY (men/women weights like 135/95) — first is men's, second is women's
   const slashMatches = [...text.matchAll(/\b(\d{2,3})\s*\/\s*(\d{2,3})\b/g)]
   for (const m of slashMatches) {
     const w1 = parseInt(m[1])
@@ -264,6 +269,7 @@ function extractLoading(text: string): LoadingPrescription[] {
         seen.add(w1)
         loads.push({
           weight: w1,
+          weightFemale: w2,
           unit: 'lb',
           context: getContext(text, m.index!, m.index! + m[0].length),
           intensity: classifyWeightIntensity(w1),
@@ -455,14 +461,24 @@ export function analyzeAllRepsAndLoading(workouts: { d: string; s: string }[]): 
     '185-225 lbs': 0,
     '225+ lbs': 0,
   }
+  const weightBucketsFemale: Record<string, number> = {
+    'Bodyweight': 0,
+    '<95 lbs': 0,
+    '95-135 lbs': 0,
+    '135-185 lbs': 0,
+    '185-225 lbs': 0,
+    '225+ lbs': 0,
+  }
 
   let totalRepsSum = 0
   let workoutsWithReps = 0
   let totalWeightSum = 0
   let workoutsWithWeight = 0
+  let totalWeightFemaleSum = 0
+  let workoutsWithWeightFemale = 0
 
   // Year-level aggregation
-  const yearAgg: Record<string, { repsSum: number; repsCount: number; weightSum: number; weightCount: number }> = {}
+  const yearAgg: Record<string, { repsSum: number; repsCount: number; weightSum: number; weightCount: number; weightFemaleSum: number; weightFemaleCount: number }> = {}
 
   for (const workout of workouts) {
     const analysis = analyzeWorkoutReps(workout.s || '')
@@ -470,7 +486,7 @@ export function analyzeAllRepsAndLoading(workouts: { d: string; s: string }[]): 
 
     // Init year bucket
     if (!yearAgg[year]) {
-      yearAgg[year] = { repsSum: 0, repsCount: 0, weightSum: 0, weightCount: 0 }
+      yearAgg[year] = { repsSum: 0, repsCount: 0, weightSum: 0, weightCount: 0, weightFemaleSum: 0, weightFemaleCount: 0 }
     }
 
     // Scheme types
@@ -489,6 +505,7 @@ export function analyzeAllRepsAndLoading(workouts: { d: string; s: string }[]): 
 
     // Loading
     let workoutHasWeight = false
+    let workoutHasWeightFemale = false
     for (const load of analysis.loading) {
       const bucket = weightRangeBucket(load.weight)
       weightBuckets[bucket] = (weightBuckets[bucket] || 0) + 1
@@ -501,8 +518,21 @@ export function analyzeAllRepsAndLoading(workouts: { d: string; s: string }[]): 
         // bodyweight
         weightBuckets['Bodyweight']++
       }
+      // Female weight tracking
+      if (load.weightFemale !== undefined && load.weightFemale > 0) {
+        const femaleBucket = weightRangeBucket(load.weightFemale)
+        weightBucketsFemale[femaleBucket] = (weightBucketsFemale[femaleBucket] || 0) + 1
+        totalWeightFemaleSum += load.weightFemale
+        workoutHasWeightFemale = true
+        yearAgg[year].weightFemaleSum += load.weightFemale
+        yearAgg[year].weightFemaleCount++
+      } else if (load.weight === 0) {
+        // bodyweight applies to both
+        weightBucketsFemale['Bodyweight']++
+      }
     }
     if (workoutHasWeight) workoutsWithWeight++
+    if (workoutHasWeightFemale) workoutsWithWeightFemale++
 
     // Intensity zones
     intensityZones[analysis.intensityZone] = (intensityZones[analysis.intensityZone] || 0) + 1
@@ -515,9 +545,11 @@ export function analyzeAllRepsAndLoading(workouts: { d: string; s: string }[]): 
     .slice(0, 15)
 
   // Weight distribution
-  const weightDistribution = [
-    'Bodyweight', '<95 lbs', '95-135 lbs', '135-185 lbs', '185-225 lbs', '225+ lbs',
-  ].map((range) => ({ range, count: weightBuckets[range] || 0 }))
+  const weightRangeOrder = ['Bodyweight', '<95 lbs', '95-135 lbs', '135-185 lbs', '185-225 lbs', '225+ lbs']
+  const weightDistribution = weightRangeOrder
+    .map((range) => ({ range, count: weightBuckets[range] || 0 }))
+  const weightDistributionFemale = weightRangeOrder
+    .map((range) => ({ range, count: weightBucketsFemale[range] || 0 }))
 
   // Trends by year
   const repsByYear = Object.entries(yearAgg)
@@ -527,6 +559,7 @@ export function analyzeAllRepsAndLoading(workouts: { d: string; s: string }[]): 
       year,
       avgReps: agg.repsCount > 0 ? Math.round(agg.repsSum / agg.repsCount) : 0,
       avgWeight: agg.weightCount > 0 ? Math.round(agg.weightSum / agg.weightCount) : 0,
+      avgWeightFemale: agg.weightFemaleCount > 0 ? Math.round(agg.weightFemaleSum / agg.weightFemaleCount) : 0,
     }))
 
   return {
@@ -535,6 +568,8 @@ export function analyzeAllRepsAndLoading(workouts: { d: string; s: string }[]): 
     avgTotalReps: workoutsWithReps > 0 ? Math.round(totalRepsSum / workoutsWithReps) : 0,
     avgWeight: workoutsWithWeight > 0 ? Math.round(totalWeightSum / workoutsWithWeight) : 0,
     weightDistribution,
+    avgWeightFemale: workoutsWithWeightFemale > 0 ? Math.round(totalWeightFemaleSum / workoutsWithWeightFemale) : 0,
+    weightDistributionFemale,
     intensityZones,
     repsByYear,
   }

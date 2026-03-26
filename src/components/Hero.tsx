@@ -58,7 +58,7 @@ export default function Hero() {
         </div>
 
         {/* Title */}
-        <h1 className="text-4xl md:text-5xl font-bold mb-3 bg-gradient-to-r from-blue-400 via-purple-400 to-rose-400 bg-clip-text text-transparent leading-tight">
+        <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold mb-3 bg-gradient-to-r from-blue-400 via-purple-400 to-rose-400 bg-clip-text text-transparent leading-tight">
           CrossFit WOD Intelligence
         </h1>
         <p className="text-slate-400 text-sm md:text-base mb-8 leading-relaxed">
@@ -74,7 +74,7 @@ export default function Hero() {
             { value: '22', label: 'Analysis Tools', color: '#f43f5e' },
           ].map((s) => (
             <div key={s.label} className="bg-[#12121a] border border-[#1e1e3a] rounded-lg p-3">
-              <div className="text-2xl md:text-3xl font-bold font-mono" style={{ color: s.color }}>{s.value}</div>
+              <div className="text-xl sm:text-2xl md:text-3xl font-bold font-mono" style={{ color: s.color }}>{s.value}</div>
               <div className="text-[10px] text-slate-500 mt-0.5">{s.label}</div>
             </div>
           ))}
@@ -88,7 +88,7 @@ export default function Hero() {
             'Movement Map', 'Reps & Loading', 'Workout Decoder',
             'Year vs Year', 'Calendar Heatmap', '80 Movement Encyclopedia',
           ].map((f) => (
-            <span key={f} className="px-2.5 py-1 text-[10px] text-slate-400 bg-[#12121a] border border-[#1e1e3a] rounded-md">
+            <span key={f} className="px-2.5 py-1 text-[9px] sm:text-[10px] text-slate-400 bg-[#12121a] border border-[#1e1e3a] rounded-md">
               {f}
             </span>
           ))}
@@ -103,11 +103,11 @@ export default function Hero() {
         </button>
 
         {/* Creator */}
-        <div className="mt-10 space-y-1">
-          <p className="text-[11px] text-slate-500">
+        <div className="mt-10 space-y-1 px-4">
+          <p className="text-xs sm:text-[11px] text-slate-500">
             Created by <span className="text-slate-400">Ravikant Dewangan</span> | MS S&C | CCFT | Head Coach, Persistence Athletics, Seattle
           </p>
-          <p className="text-[10px] text-slate-600">
+          <p className="text-xs sm:text-[11px] text-slate-600">
             Site by <a href="https://autosterea.com" target="_blank" rel="noopener noreferrer" className="text-blue-400/60 hover:text-blue-400">autosterea.com</a>
             <span className="mx-2">|</span>
             Data from <a href="https://www.crossfit.com" target="_blank" rel="noopener noreferrer" className="text-slate-500 hover:text-slate-400">crossfit.com</a>

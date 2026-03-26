@@ -173,7 +173,7 @@ function App() {
   return (
     <div className="flex h-screen">
       <Sidebar data={D} />
-      <main className="flex-1 overflow-y-auto p-4 lg:p-6 pt-14 lg:pt-6">
+      <main className="flex-1 overflow-y-auto p-3 sm:p-4 lg:p-6 pt-14 lg:pt-6">
         <YearRangeBadge />
         <Suspense fallback={<LoadingFallback />}>
           <ErrorBoundary name={activeTab} key={activeTab}>
@@ -206,7 +206,7 @@ function App() {
         </Suspense>
 
         {/* Footer */}
-        <footer className="mt-12 mb-6 pt-6 border-t border-[#1e1e3a]">
+        <footer className="mt-12 mb-6 pt-6 border-t border-[#1e1e3a] px-4">
           <div className="text-center space-y-3">
             <div>
               <p className="text-sm text-slate-300 font-medium">Created by Ravikant Dewangan</p>
@@ -216,7 +216,7 @@ function App() {
               <span>Site by</span>
               <a href="https://autosterea.com" target="_blank" rel="noopener noreferrer" className="text-blue-400/70 hover:text-blue-400 transition-colors">autosterea.com</a>
             </div>
-            <div className="text-[10px] text-slate-600 leading-relaxed max-w-xl mx-auto">
+            <div className="text-[11px] sm:text-[10px] text-slate-600 leading-relaxed max-w-xl mx-auto">
               <p>Workout data sourced from <a href="https://www.crossfit.com" target="_blank" rel="noopener noreferrer" className="text-slate-500 hover:text-slate-400">crossfit.com</a>. CrossFit is a registered trademark of CrossFit, LLC. This project is not affiliated with, endorsed by, or sponsored by CrossFit, LLC. All workout data is publicly available and used for educational and analytical purposes only.</p>
             </div>
           </div>

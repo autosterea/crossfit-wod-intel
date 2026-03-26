@@ -100,9 +100,9 @@ export default function Sidebar({ data }: { data: CrossFitData }) {
       {/* Mobile hamburger */}
       <button
         onClick={() => setSidebarOpen(!sidebarOpen)}
-        className="fixed top-3 left-3 z-50 lg:hidden w-9 h-9 flex items-center justify-center bg-[#12121a] border border-[#1e1e3a] rounded-lg"
+        className="fixed top-3 left-3 z-50 lg:hidden w-11 h-11 flex items-center justify-center bg-[#12121a] border border-[#1e1e3a] rounded-lg"
       >
-        <svg className="w-5 h-5 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <svg className="w-6 h-6 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
           {sidebarOpen
             ? <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
             : <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
@@ -117,7 +117,7 @@ export default function Sidebar({ data }: { data: CrossFitData }) {
 
       <aside className={`
         fixed lg:static z-40 h-screen bg-[#0a0a14] border-r border-[#1a1a2e] flex flex-col shrink-0 overflow-y-auto
-        w-56 transition-transform duration-200 ease-in-out
+        w-64 sm:w-56 transition-transform duration-200 ease-in-out
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
         <button onClick={() => { setActiveTab('hero' as any); setSidebarOpen(false) }} className="w-full text-left p-3 border-b border-[#1a1a2e] hover:bg-white/[0.02] transition-colors">

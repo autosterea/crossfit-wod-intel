@@ -266,14 +266,14 @@ export default function MovementPairs({ data }: { data: CrossFitData }) {
         <h3 className="text-sm font-medium text-white mb-4">Top Movement Pairs</h3>
 
         {/* Filters row */}
-        <div className="flex flex-wrap items-center gap-3 mb-4">
+        <div className="flex flex-wrap gap-2 mb-4">
           {/* Search */}
           <input
             type="text"
             placeholder="Search movements..."
             value={search}
             onChange={(e) => { setSearch(e.target.value); setPage(0) }}
-            className="bg-[#0a0a14] text-sm text-white placeholder-slate-600 border border-[#2a2a5a] rounded-lg px-3 py-1.5 outline-none focus:border-blue-500/50 w-52"
+            className="bg-[#0a0a14] text-sm text-white placeholder-slate-600 border border-[#2a2a5a] rounded-lg px-3 py-1.5 outline-none focus:border-blue-500/50 w-full sm:w-52"
           />
 
           {/* Modality filter */}
@@ -428,7 +428,7 @@ export default function MovementPairs({ data }: { data: CrossFitData }) {
         {selectedMovement && explorerData && (
           <div className="space-y-4 mt-2">
             {/* Stats row */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3">
               <div className="bg-gradient-to-br from-cyan-500/10 to-blue-500/10 rounded-xl p-4 border border-cyan-500/20">
                 <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">
                   Total Appearances

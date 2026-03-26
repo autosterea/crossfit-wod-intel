@@ -250,27 +250,26 @@ function SubjectRow({ result }: { result: GradeResult }) {
 
   return (
     <div
+      className="grid gap-3 sm:gap-4 items-center py-3 sm:py-3.5 border-b border-[#1e1e3a]"
       style={{
-        display: 'grid',
-        gridTemplateColumns: '160px 52px 1fr',
-        gap: 16,
-        alignItems: 'center',
-        padding: '14px 0',
-        borderBottom: '1px solid #1e1e3a',
+        gridTemplateColumns: 'minmax(0, 1fr)',
       }}
     >
-      {/* Subject Name */}
-      <div>
-        <div style={{ fontSize: 14, fontWeight: 600, color: '#e2e8f0' }}>
-          {result.subject}
-        </div>
-        <div style={{ fontSize: 11, color: '#94a3b8', marginTop: 2 }}>
-          {result.rawValue}
+      {/* Mobile: stacked layout; Desktop: inline */}
+      <div className="flex items-center gap-3 sm:gap-4">
+        {/* Grade Badge */}
+        <GradeBadge grade={result.grade} size="sm" />
+
+        {/* Subject Name */}
+        <div className="min-w-0 flex-1">
+          <div style={{ fontSize: 14, fontWeight: 600, color: '#e2e8f0' }}>
+            {result.subject}
+          </div>
+          <div style={{ fontSize: 11, color: '#94a3b8', marginTop: 2 }}>
+            {result.rawValue}
+          </div>
         </div>
       </div>
-
-      {/* Grade Badge */}
-      <GradeBadge grade={result.grade} size="sm" />
 
       {/* Score Bar + Comment */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 6, minWidth: 0 }}>
@@ -393,7 +392,7 @@ export default function ReportCard({
         style={{
           background: 'linear-gradient(135deg, #12121a 0%, #1a1a2e 100%)',
           borderRadius: 16,
-          padding: 32,
+          padding: '24px 16px',
           border: '1px solid #1e1e3a',
           display: 'flex',
           flexDirection: 'column',
@@ -409,8 +408,8 @@ export default function ReportCard({
 
         <div style={{ textAlign: 'center' }}>
           <div
+            className="text-3xl sm:text-4xl"
             style={{
-              fontSize: 36,
               fontWeight: 800,
               color: overallColor,
               fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
@@ -444,7 +443,7 @@ export default function ReportCard({
         style={{
           background: '#12121a',
           borderRadius: 16,
-          padding: '8px 24px 16px',
+          padding: '8px 12px 16px',
           border: '1px solid #1e1e3a',
         }}
       >
