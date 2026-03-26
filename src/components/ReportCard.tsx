@@ -43,10 +43,12 @@ function calcBalanceGrade(functionalBalance: number): { grade: LetterGrade; scor
 }
 
 function calcCoverageGrade(hopperScore: number): { grade: LetterGrade; score: number } {
-  const grade = gradeFromThresholds(hopperScore, [
+  // hopperScore is 0-1 from the analysis engine, convert to 0-100 for grading
+  const pct = hopperScore * 100
+  const grade = gradeFromThresholds(pct, [
     [90, 'A+'], [80, 'A'], [70, 'B'], [60, 'C'], [50, 'D'],
   ])
-  return { grade, score: Math.min(hopperScore / 100, 1) }
+  return { grade, score: Math.min(hopperScore, 1) }
 }
 
 function calcPushPullGrade(ratio: number): { grade: LetterGrade; score: number } {
