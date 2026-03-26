@@ -112,6 +112,8 @@ export default function Hero() {
             <span className="mx-2">|</span>
             Data from <a href="https://www.crossfit.com" target="_blank" rel="noopener noreferrer" className="text-slate-500 hover:text-slate-400">crossfit.com</a>
             <span className="mx-2">|</span>
+            <button onClick={() => setActiveTab('methodology')} className="text-slate-500 hover:text-slate-400 transition-colors cursor-pointer">Methodology &amp; Sources</button>
+            <span className="mx-2">|</span>
             CrossFit is a registered trademark of CrossFit, LLC
           </p>
         </div>

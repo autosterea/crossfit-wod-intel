@@ -33,6 +33,7 @@ const MovementEncyclopedia = lazy(() => import('./components/MovementEncyclopedi
 const Catalog = lazy(() => import('./components/Catalog'))
 const NamedWods = lazy(() => import('./components/NamedWods'))
 const RepsAndLoading = lazy(() => import('./components/RepsAndLoading'))
+const Methodology = lazy(() => import('./components/Methodology'))
 
 // Handle both parsed object and stringified JSON (vite json.stringify)
 const D: CrossFitData = (typeof rawData === 'string' ? JSON.parse(rawData) : rawData) as CrossFitData
@@ -202,6 +203,7 @@ function App() {
           {activeTab === 'catalog' && <Catalog data={filteredData} />}
             {activeTab === 'named' && <NamedWods data={filteredData} />}
             {activeTab === 'repsloading' && <RepsAndLoading data={filteredData} />}
+            {activeTab === 'methodology' && <Methodology data={filteredData} />}
           </ErrorBoundary>
         </Suspense>
 
@@ -215,6 +217,8 @@ function App() {
             <div className="flex items-center justify-center gap-2 text-[10px] text-slate-600">
               <span>Site by</span>
               <a href="https://autosterea.com" target="_blank" rel="noopener noreferrer" className="text-blue-400/70 hover:text-blue-400 transition-colors">autosterea.com</a>
+              <span className="text-slate-700">|</span>
+              <button onClick={() => useStore.getState().setActiveTab('methodology')} className="text-slate-500 hover:text-slate-400 transition-colors cursor-pointer">Methodology</button>
             </div>
             <div className="text-[11px] sm:text-[10px] text-slate-600 leading-relaxed max-w-xl mx-auto">
               <p>Workout data sourced from <a href="https://www.crossfit.com" target="_blank" rel="noopener noreferrer" className="text-slate-500 hover:text-slate-400">crossfit.com</a>. CrossFit is a registered trademark of CrossFit, LLC. This project is not affiliated with, endorsed by, or sponsored by CrossFit, LLC. All workout data is publicly available and used for educational and analytical purposes only.</p>

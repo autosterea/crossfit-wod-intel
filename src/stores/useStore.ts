@@ -27,6 +27,7 @@ type Tab =
   | 'catalog'
   | 'named'
   | 'repsloading'
+  | 'methodology'
 
 interface AppStore {
   activeTab: Tab
