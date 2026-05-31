@@ -55,7 +55,7 @@ export default function PhysicalSkills({ data, analysis }: { data: CrossFitData;
     <div className="space-y-4">
       <div>
         <h2 className="text-2xl font-bold text-white">10 General Physical Skills</h2>
-        <p className="text-sm text-slate-400 mt-1">
+        <p className="text-sm text-[var(--text-tertiary)] mt-1">
           CrossFit defines fitness as competence across all 10 general physical skills.
           This analysis maps every workout to the skills it develops.
         </p>
@@ -64,34 +64,34 @@ export default function PhysicalSkills({ data, analysis }: { data: CrossFitData;
       {/* Skill balance score */}
       <div className="grid grid-cols-3 gap-3">
         <div className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-xl p-5 border border-blue-500/20">
-          <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Skill Balance Score</div>
+          <div className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">Skill Balance Score</div>
           <div className="text-3xl font-bold font-mono text-blue-400">
             {((1 - analysis.skillBalance) * 100).toFixed(0)}%
           </div>
-          <div className="text-xs text-slate-400 mt-1">100% = perfectly balanced across all 10 skills</div>
+          <div className="text-xs text-[var(--text-tertiary)] mt-1">100% = perfectly balanced across all 10 skills</div>
         </div>
-        <div className="bg-[#12121a] rounded-xl p-5 border border-[#1e1e3a]">
-          <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Organic Skills Avg</div>
+        <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-[var(--panel-border)]">
+          <div className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">Organic Skills Avg</div>
           <div className="text-2xl font-bold font-mono text-emerald-400">{organicAvg.toFixed(0)}</div>
-          <div className="text-[10px] text-slate-500 mt-1">Endurance, Stamina, Strength, Flexibility</div>
-          <div className="text-[10px] text-slate-400 mt-0.5">Improved by training (doing)</div>
+          <div className="text-[10px] text-[var(--text-muted)] mt-1">Endurance, Stamina, Strength, Flexibility</div>
+          <div className="text-[10px] text-[var(--text-tertiary)] mt-0.5">Improved by training (doing)</div>
         </div>
-        <div className="bg-[#12121a] rounded-xl p-5 border border-[#1e1e3a]">
-          <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Neurological Skills Avg</div>
+        <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-[var(--panel-border)]">
+          <div className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">Neurological Skills Avg</div>
           <div className="text-2xl font-bold font-mono text-amber-400">{neuroAvg.toFixed(0)}</div>
-          <div className="text-[10px] text-slate-500 mt-1">Coordination, Agility, Balance, Accuracy</div>
-          <div className="text-[10px] text-slate-400 mt-0.5">Improved by practice</div>
+          <div className="text-[10px] text-[var(--text-muted)] mt-1">Coordination, Agility, Balance, Accuracy</div>
+          <div className="text-[10px] text-[var(--text-tertiary)] mt-0.5">Improved by practice</div>
         </div>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         {/* Radar */}
-        <div className="bg-[#12121a] rounded-xl p-5 border border-[#1e1e3a]">
-          <h3 className="text-xs font-medium text-slate-400 mb-3">Skill Radar — Overall Programming</h3>
+        <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-[var(--panel-border)]">
+          <h3 className="text-xs font-medium text-[var(--text-tertiary)] mb-3">Skill Radar — Overall Programming</h3>
           <div style={{width:"100%",height:380}}><ResponsiveContainer width="100%" height="100%">
             <RadarChart data={radarData}>
-              <PolarGrid stroke="#1e1e3a" />
-              <PolarAngleAxis dataKey="skill" tick={{ fontSize: 9, fill: '#94a3b8' }} />
+              <PolarGrid stroke="var(--chart-grid)" />
+              <PolarAngleAxis dataKey="skill" tick={{ fontSize: 9, fill: 'var(--chart-axis)' }} />
               <PolarRadiusAxis tick={false} domain={[0, 100]} axisLine={false} />
               <Radar dataKey="value" stroke="#60a5fa" fill="#60a5fa" fillOpacity={0.15} strokeWidth={2} />
             </RadarChart>
@@ -99,14 +99,14 @@ export default function PhysicalSkills({ data, analysis }: { data: CrossFitData;
         </div>
 
         {/* Bar chart */}
-        <div className="bg-[#12121a] rounded-xl p-5 border border-[#1e1e3a]">
-          <h3 className="text-xs font-medium text-slate-400 mb-3">Skill Emphasis Ranking</h3>
+        <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-[var(--panel-border)]">
+          <h3 className="text-xs font-medium text-[var(--text-tertiary)] mb-3">Skill Emphasis Ranking</h3>
           <div style={{width:"100%",height:380}}><ResponsiveContainer width="100%" height="100%">
             <BarChart data={barData} layout="vertical" margin={{ left: 120 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#1e1e3a" horizontal={false} />
-              <XAxis type="number" tick={{ fontSize: 10, fill: '#64748b' }} domain={[0, 100]} />
-              <YAxis type="category" dataKey="name" tick={{ fontSize: 10, fill: '#94a3b8' }} width={115} />
-              <Tooltip contentStyle={{ background: '#1e1e3a', border: '1px solid #2a2a5a', borderRadius: 8, fontSize: 12 }} />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" horizontal={false} />
+              <XAxis type="number" tick={{ fontSize: 10, fill: 'var(--chart-axis)' }} domain={[0, 100]} />
+              <YAxis type="category" dataKey="name" tick={{ fontSize: 10, fill: 'var(--chart-axis)' }} width={115} />
+              <Tooltip contentStyle={{ background: 'var(--chart-tooltip-bg)', border: '1px solid var(--chart-tooltip-border)', borderRadius: 8, fontSize: 12 }} />
               <Bar dataKey="value" radius={[0, 4, 4, 0]}>
                 {barData.map((e) => (
                   <Cell key={e.id} fill={SKILL_COLORS[e.id] || '#6b7280'} fillOpacity={0.7} />
@@ -118,19 +118,19 @@ export default function PhysicalSkills({ data, analysis }: { data: CrossFitData;
       </div>
 
       {/* Skill category breakdown */}
-      <div className="bg-[#12121a] rounded-xl p-5 border border-[#1e1e3a]">
-        <h3 className="text-xs font-medium text-slate-400 mb-4">Skill Classification (per CrossFit's Model)</h3>
+      <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-[var(--panel-border)]">
+        <h3 className="text-xs font-medium text-[var(--text-tertiary)] mb-4">Skill Classification (per CrossFit's Model)</h3>
         <div className="grid grid-cols-3 gap-6">
           <div>
             <div className="text-xs font-medium text-emerald-400 mb-2">Organic Adaptations (Train by Doing)</div>
             {organic.map((s) => (
-              <div key={s} className="flex items-center justify-between py-1.5 border-b border-[#1e1e3a] last:border-0">
-                <span className="text-xs text-slate-300">{PHYSICAL_SKILL_LABELS[s as keyof typeof PHYSICAL_SKILL_LABELS]}</span>
+              <div key={s} className="flex items-center justify-between py-1.5 border-b border-[var(--panel-border)] last:border-0">
+                <span className="text-xs text-[var(--text-secondary)]">{PHYSICAL_SKILL_LABELS[s as keyof typeof PHYSICAL_SKILL_LABELS]}</span>
                 <div className="flex items-center gap-2">
-                  <div className="w-24 h-1.5 rounded bg-[#1e1e3a]">
+                  <div className="w-24 h-1.5 rounded bg-[var(--panel-bg-hover)]">
                     <div className="h-full rounded bg-emerald-400/70" style={{ width: `${analysis.aggregateSkills[s as keyof typeof analysis.aggregateSkills]}%` }} />
                   </div>
-                  <span className="text-[10px] font-mono text-slate-500 w-8 text-right">{analysis.aggregateSkills[s as keyof typeof analysis.aggregateSkills].toFixed(0)}</span>
+                  <span className="text-[10px] font-mono text-[var(--text-muted)] w-8 text-right">{analysis.aggregateSkills[s as keyof typeof analysis.aggregateSkills].toFixed(0)}</span>
                 </div>
               </div>
             ))}
@@ -138,13 +138,13 @@ export default function PhysicalSkills({ data, analysis }: { data: CrossFitData;
           <div>
             <div className="text-xs font-medium text-amber-400 mb-2">Neurological Adaptations (Train by Practice)</div>
             {neurological.map((s) => (
-              <div key={s} className="flex items-center justify-between py-1.5 border-b border-[#1e1e3a] last:border-0">
-                <span className="text-xs text-slate-300">{PHYSICAL_SKILL_LABELS[s as keyof typeof PHYSICAL_SKILL_LABELS]}</span>
+              <div key={s} className="flex items-center justify-between py-1.5 border-b border-[var(--panel-border)] last:border-0">
+                <span className="text-xs text-[var(--text-secondary)]">{PHYSICAL_SKILL_LABELS[s as keyof typeof PHYSICAL_SKILL_LABELS]}</span>
                 <div className="flex items-center gap-2">
-                  <div className="w-24 h-1.5 rounded bg-[#1e1e3a]">
+                  <div className="w-24 h-1.5 rounded bg-[var(--panel-bg-hover)]">
                     <div className="h-full rounded bg-amber-400/70" style={{ width: `${analysis.aggregateSkills[s as keyof typeof analysis.aggregateSkills]}%` }} />
                   </div>
-                  <span className="text-[10px] font-mono text-slate-500 w-8 text-right">{analysis.aggregateSkills[s as keyof typeof analysis.aggregateSkills].toFixed(0)}</span>
+                  <span className="text-[10px] font-mono text-[var(--text-muted)] w-8 text-right">{analysis.aggregateSkills[s as keyof typeof analysis.aggregateSkills].toFixed(0)}</span>
                 </div>
               </div>
             ))}
@@ -152,13 +152,13 @@ export default function PhysicalSkills({ data, analysis }: { data: CrossFitData;
           <div>
             <div className="text-xs font-medium text-rose-400 mb-2">Both Organic & Neurological</div>
             {both.map((s) => (
-              <div key={s} className="flex items-center justify-between py-1.5 border-b border-[#1e1e3a] last:border-0">
-                <span className="text-xs text-slate-300">{PHYSICAL_SKILL_LABELS[s as keyof typeof PHYSICAL_SKILL_LABELS]}</span>
+              <div key={s} className="flex items-center justify-between py-1.5 border-b border-[var(--panel-border)] last:border-0">
+                <span className="text-xs text-[var(--text-secondary)]">{PHYSICAL_SKILL_LABELS[s as keyof typeof PHYSICAL_SKILL_LABELS]}</span>
                 <div className="flex items-center gap-2">
-                  <div className="w-24 h-1.5 rounded bg-[#1e1e3a]">
+                  <div className="w-24 h-1.5 rounded bg-[var(--panel-bg-hover)]">
                     <div className="h-full rounded bg-rose-400/70" style={{ width: `${analysis.aggregateSkills[s as keyof typeof analysis.aggregateSkills]}%` }} />
                   </div>
-                  <span className="text-[10px] font-mono text-slate-500 w-8 text-right">{analysis.aggregateSkills[s as keyof typeof analysis.aggregateSkills].toFixed(0)}</span>
+                  <span className="text-[10px] font-mono text-[var(--text-muted)] w-8 text-right">{analysis.aggregateSkills[s as keyof typeof analysis.aggregateSkills].toFixed(0)}</span>
                 </div>
               </div>
             ))}
@@ -167,14 +167,14 @@ export default function PhysicalSkills({ data, analysis }: { data: CrossFitData;
       </div>
 
       {/* Skills over time */}
-      <div className="bg-[#12121a] rounded-xl p-5 border border-[#1e1e3a]">
-        <h3 className="text-xs font-medium text-slate-400 mb-3">Skill Emphasis Evolution Over Time</h3>
+      <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-[var(--panel-border)]">
+        <h3 className="text-xs font-medium text-[var(--text-tertiary)] mb-3">Skill Emphasis Evolution Over Time</h3>
         <div style={{width:"100%",height:300}}><ResponsiveContainer width="100%" height="100%">
           <AreaChart data={analysis.skillsByYear}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#1e1e3a" />
-            <XAxis dataKey="year" tick={{ fontSize: 9, fill: '#64748b' }} interval={3} />
-            <YAxis tick={{ fontSize: 9, fill: '#64748b' }} />
-            <Tooltip contentStyle={{ background: '#1e1e3a', border: '1px solid #2a2a5a', borderRadius: 8, fontSize: 11 }} />
+            <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" />
+            <XAxis dataKey="year" tick={{ fontSize: 9, fill: 'var(--chart-axis)' }} interval={3} />
+            <YAxis tick={{ fontSize: 9, fill: 'var(--chart-axis)' }} />
+            <Tooltip contentStyle={{ background: 'var(--chart-tooltip-bg)', border: '1px solid var(--chart-tooltip-border)', borderRadius: 8, fontSize: 11 }} />
             {Object.entries(SKILL_COLORS).map(([key, color]) => (
               <Area key={key} type="monotone" dataKey={key} stackId="1" stroke={color} fill={color} fillOpacity={0.5} />
             ))}
@@ -182,7 +182,7 @@ export default function PhysicalSkills({ data, analysis }: { data: CrossFitData;
         </ResponsiveContainer></div>
         <div className="flex flex-wrap gap-3 mt-3 justify-center">
           {Object.entries(SKILL_COLORS).map(([key, color]) => (
-            <span key={key} className="flex items-center gap-1.5 text-[9px] text-slate-500">
+            <span key={key} className="flex items-center gap-1.5 text-[9px] text-[var(--text-muted)]">
               <span className="w-2 h-2 rounded-full" style={{ background: color }} />
               {PHYSICAL_SKILL_LABELS[key as keyof typeof PHYSICAL_SKILL_LABELS]?.split('/')[0] || key}
             </span>

@@ -16,8 +16,8 @@ function DNACard({ movement, data, isSelected, onClick }: {
       onClick={onClick}
       className={`text-left p-4 rounded-xl border transition-all duration-200 ${
         isSelected
-          ? 'bg-[#1a1a3a] border-blue-500/50 ring-1 ring-blue-500/20'
-          : 'bg-[#12121a] border-[#1e1e3a] hover:border-[#2a2a5a]'
+          ? 'bg-[var(--panel-bg-hover)] border-blue-500/50 ring-1 ring-blue-500/20'
+          : 'bg-[var(--panel-bg)] border-[var(--panel-border)] hover:border-[var(--panel-border-strong)]'
       }`}
     >
       <div className="flex items-center gap-2 mb-2">
@@ -26,9 +26,9 @@ function DNACard({ movement, data, isSelected, onClick }: {
       </div>
       <div className="flex items-baseline gap-2">
         <span className="text-2xl font-bold font-mono" style={{ color }}>{movement.total_count.toLocaleString()}</span>
-        <span className="text-[10px] text-slate-500">{movement.pct}% of all WODs</span>
+        <span className="text-[10px] text-[var(--text-muted)]">{movement.pct}% of all WODs</span>
       </div>
-      <div className="text-[10px] text-slate-500 mt-1">{movement.first_seen} — {movement.last_seen}</div>
+      <div className="text-[10px] text-[var(--text-muted)] mt-1">{movement.first_seen} — {movement.last_seen}</div>
     </button>
   )
 }
@@ -80,7 +80,7 @@ export default function MovementDNA({ data }: { data: CrossFitData }) {
     <div className="space-y-4">
       <div>
         <h2 className="text-2xl font-bold text-white">Movement DNA Profiles</h2>
-        <p className="text-sm text-slate-400 mt-1">Deep analysis of every movement — frequency, trends, partners, and DNA fingerprint</p>
+        <p className="text-sm text-[var(--text-tertiary)] mt-1">Deep analysis of every movement — frequency, trends, partners, and DNA fingerprint</p>
       </div>
 
       {/* Filter */}
@@ -92,7 +92,7 @@ export default function MovementDNA({ data }: { data: CrossFitData }) {
             className={`px-3 py-1.5 text-xs rounded-lg transition-colors ${
               modalityFilter === f
                 ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
-                : 'bg-[#12121a] text-slate-400 border border-[#1e1e3a] hover:border-[#2a2a5a]'
+                : 'bg-[var(--panel-bg)] text-[var(--text-tertiary)] border border-[var(--panel-border)] hover:border-[var(--panel-border-strong)]'
             }`}
           >
             {f === 'all' ? 'All' : MODALITY_LABELS[f] || f}
@@ -117,39 +117,39 @@ export default function MovementDNA({ data }: { data: CrossFitData }) {
         {/* Detail panel */}
         <div className="flex-1 overflow-y-auto space-y-4">
           {/* Header */}
-          <div className="bg-[#12121a] rounded-xl p-6 border border-[#1e1e3a]">
+          <div className="bg-[var(--panel-bg)] rounded-xl p-6 border border-[var(--panel-border)]">
             <div className="flex items-center gap-4 mb-4">
               <div className="w-12 h-12 rounded-xl flex items-center justify-center text-xl font-bold" style={{ background: color + '20', color }}>
                 {selected.name.charAt(0)}
               </div>
               <div>
                 <h3 className="text-xl font-bold text-white">{selected.name}</h3>
-                <p className="text-xs text-slate-400">{MODALITY_LABELS[selected.modality]} | Since {selected.first_seen}</p>
+                <p className="text-xs text-[var(--text-tertiary)]">{MODALITY_LABELS[selected.modality]} | Since {selected.first_seen}</p>
               </div>
               <div className="ml-auto text-right">
                 <div className="text-3xl font-bold font-mono" style={{ color }}>{selected.total_count.toLocaleString()}</div>
-                <div className="text-xs text-slate-500">appearances ({selected.pct}%)</div>
+                <div className="text-xs text-[var(--text-muted)]">appearances ({selected.pct}%)</div>
               </div>
             </div>
 
             <div className="grid grid-cols-4 gap-4">
               <div className="text-center">
                 <div className="text-lg font-bold font-mono text-white">{selected.top_partners.length}</div>
-                <div className="text-[10px] text-slate-500">Top Partners</div>
+                <div className="text-[10px] text-[var(--text-muted)]">Top Partners</div>
               </div>
               <div className="text-center">
                 <div className="text-lg font-bold font-mono text-white">{selected.featured_in_wods.length}</div>
-                <div className="text-[10px] text-slate-500">Named WODs</div>
+                <div className="text-[10px] text-[var(--text-muted)]">Named WODs</div>
               </div>
               <div className="text-center">
                 <div className="text-lg font-bold font-mono text-white">{Object.keys(selected.year_pct).length}</div>
-                <div className="text-[10px] text-slate-500">Active Years</div>
+                <div className="text-[10px] text-[var(--text-muted)]">Active Years</div>
               </div>
               <div className="text-center">
                 <div className="text-lg font-bold font-mono text-white">
                   {(Object.values(selected.year_pct).reduce((a, b) => a + b, 0) / Object.keys(selected.year_pct).length).toFixed(1)}%
                 </div>
-                <div className="text-[10px] text-slate-500">Avg. Frequency</div>
+                <div className="text-[10px] text-[var(--text-muted)]">Avg. Frequency</div>
               </div>
             </div>
           </div>
@@ -157,12 +157,12 @@ export default function MovementDNA({ data }: { data: CrossFitData }) {
           {/* DNA Radar + Timeline side by side */}
           <div className="grid grid-cols-2 gap-4">
             {/* Radar */}
-            <div className="bg-[#12121a] rounded-xl p-5 border border-[#1e1e3a]">
-              <h4 className="text-xs font-medium text-slate-400 mb-3">DNA Fingerprint</h4>
+            <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-[var(--panel-border)]">
+              <h4 className="text-xs font-medium text-[var(--text-tertiary)] mb-3">DNA Fingerprint</h4>
               <div style={{width:"100%",height:250}}><ResponsiveContainer width="100%" height="100%">
                 <RadarChart data={radarData}>
-                  <PolarGrid stroke="#1e1e3a" />
-                  <PolarAngleAxis dataKey="axis" tick={{ fontSize: 10, fill: '#64748b' }} />
+                  <PolarGrid stroke="var(--chart-grid)" />
+                  <PolarAngleAxis dataKey="axis" tick={{ fontSize: 10, fill: 'var(--chart-axis)' }} />
                   <PolarRadiusAxis tick={false} domain={[0, 100]} axisLine={false} />
                   <Radar dataKey="value" stroke={color} fill={color} fillOpacity={0.2} strokeWidth={2} />
                 </RadarChart>
@@ -170,8 +170,8 @@ export default function MovementDNA({ data }: { data: CrossFitData }) {
             </div>
 
             {/* Timeline */}
-            <div className="bg-[#12121a] rounded-xl p-5 border border-[#1e1e3a]">
-              <h4 className="text-xs font-medium text-slate-400 mb-3">Usage Over Time (%)</h4>
+            <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-[var(--panel-border)]">
+              <h4 className="text-xs font-medium text-[var(--text-tertiary)] mb-3">Usage Over Time (%)</h4>
               <div style={{width:"100%",height:250}}><ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={timelineData}>
                   <defs>
@@ -180,10 +180,10 @@ export default function MovementDNA({ data }: { data: CrossFitData }) {
                       <stop offset="100%" stopColor={color} stopOpacity={0} />
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#1e1e3a" />
-                  <XAxis dataKey="year" tick={{ fontSize: 9, fill: '#64748b' }} interval={3} />
-                  <YAxis tick={{ fontSize: 9, fill: '#64748b' }} />
-                  <Tooltip contentStyle={{ background: '#1e1e3a', border: '1px solid #2a2a5a', borderRadius: 8, fontSize: 12 }} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" />
+                  <XAxis dataKey="year" tick={{ fontSize: 9, fill: 'var(--chart-axis)' }} interval={3} />
+                  <YAxis tick={{ fontSize: 9, fill: 'var(--chart-axis)' }} />
+                  <Tooltip contentStyle={{ background: 'var(--chart-tooltip-bg)', border: '1px solid var(--chart-tooltip-border)', borderRadius: 8, fontSize: 12, color: 'var(--text-primary)' }} />
                   <Area type="monotone" dataKey="pct" stroke={color} fill="url(#dnaGrad)" strokeWidth={2} />
                 </AreaChart>
               </ResponsiveContainer></div>
@@ -192,27 +192,27 @@ export default function MovementDNA({ data }: { data: CrossFitData }) {
 
           {/* Partners & Named WODs */}
           <div className="grid grid-cols-2 gap-4">
-            <div className="bg-[#12121a] rounded-xl p-5 border border-[#1e1e3a]">
-              <h4 className="text-xs font-medium text-slate-400 mb-3">Top Partners</h4>
+            <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-[var(--panel-border)]">
+              <h4 className="text-xs font-medium text-[var(--text-tertiary)] mb-3">Top Partners</h4>
               <div className="space-y-2">
                 {selected.top_partners.map((p, i) => {
                   const pColor = getNodeColor(data.movementModality[p] || 'G')
                   return (
                     <div key={p} className="flex items-center gap-3 py-1.5">
-                      <span className="text-xs font-mono text-slate-600 w-4">{i + 1}</span>
+                      <span className="text-xs font-mono text-[var(--text-muted)] w-4">{i + 1}</span>
                       <div className="w-2 h-2 rounded-full" style={{ background: pColor }} />
-                      <span className="text-sm text-slate-300">{data.movementDisplay[p] || p}</span>
+                      <span className="text-sm text-[var(--text-secondary)]">{data.movementDisplay[p] || p}</span>
                     </div>
                   )
                 })}
               </div>
             </div>
 
-            <div className="bg-[#12121a] rounded-xl p-5 border border-[#1e1e3a]">
-              <h4 className="text-xs font-medium text-slate-400 mb-3">Featured In Named WODs</h4>
+            <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-[var(--panel-border)]">
+              <h4 className="text-xs font-medium text-[var(--text-tertiary)] mb-3">Featured In Named WODs</h4>
               <div className="flex flex-wrap gap-1.5">
                 {selected.featured_in_wods.map((w) => (
-                  <span key={w} className="px-2 py-1 text-[10px] rounded bg-[#1a1a3a] text-slate-300 border border-[#2a2a4a]">
+                  <span key={w} className="px-2 py-1 text-[10px] rounded bg-[var(--panel-bg-hover)] text-[var(--text-secondary)] border border-[var(--panel-border-strong)]">
                     {w}
                   </span>
                 ))}

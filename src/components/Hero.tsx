@@ -58,7 +58,7 @@ export default function Hero() {
           </div>
           <div className="text-left">
             <div className="text-[9px] uppercase tracking-[0.18em] text-[#91C640] font-semibold">A tool by</div>
-            <div className="text-xs font-semibold text-slate-200 leading-tight">Persistence Athletics</div>
+            <div className="text-xs font-semibold text-[var(--text-primary)] leading-tight">Persistence Athletics</div>
           </div>
         </div>
 
@@ -72,7 +72,7 @@ export default function Hero() {
         <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold mb-3 bg-gradient-to-r from-[#91C640] via-[#019644] to-[#91C640] bg-clip-text text-transparent leading-tight">
           CrossFit WOD Intelligence
         </h1>
-        <p className="text-slate-400 text-sm md:text-base mb-8 leading-relaxed">
+        <p className="text-[var(--text-tertiary)] text-sm md:text-base mb-8 leading-relaxed">
           Every workout from crossfit.com — 2001 to today — analyzed
         </p>
 
@@ -84,9 +84,9 @@ export default function Hero() {
             { value: '25', label: 'Years', color: '#a855f7' },
             { value: '22', label: 'Analysis Tools', color: '#f43f5e' },
           ].map((s) => (
-            <div key={s.label} className="bg-[#12121a] border border-[#1e1e3a] rounded-lg p-3">
+            <div key={s.label} className="bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg p-3">
               <div className="text-xl sm:text-2xl md:text-3xl font-bold font-mono" style={{ color: s.color }}>{s.value}</div>
-              <div className="text-[10px] text-slate-500 mt-0.5">{s.label}</div>
+              <div className="text-[10px] text-[var(--text-muted)] mt-0.5">{s.label}</div>
             </div>
           ))}
         </div>
@@ -99,7 +99,7 @@ export default function Hero() {
             'Movement Map', 'Reps & Loading', 'Workout Decoder',
             'Year vs Year', 'Calendar Heatmap', '80 Movement Encyclopedia',
           ].map((f) => (
-            <span key={f} className="px-2.5 py-1 text-[9px] sm:text-[10px] text-slate-400 bg-[#12121a] border border-[#1e1e3a] rounded-md">
+            <span key={f} className="px-2.5 py-1 text-[9px] sm:text-[10px] text-[var(--text-tertiary)] bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-md">
               {f}
             </span>
           ))}
@@ -123,15 +123,15 @@ export default function Hero() {
 
         {/* Creator */}
         <div className="mt-10 space-y-1 px-4">
-          <p className="text-xs sm:text-[11px] text-slate-500">
-            Built at <a href="https://persistenceathletics.com" target="_blank" rel="noopener noreferrer" className="text-[#91C640] hover:text-[#a8d35e]">Persistence Athletics</a> by <span className="text-slate-400">Ravikant Dewangan</span> | MS S&C | CCFT | Head Coach
+          <p className="text-xs sm:text-[11px] text-[var(--text-muted)]">
+            Built at <a href="https://persistenceathletics.com" target="_blank" rel="noopener noreferrer" className="text-[#91C640] hover:text-[#a8d35e]">Persistence Athletics</a> by <span className="text-[var(--text-tertiary)]">Ravikant Dewangan</span> | MS S&C | CCFT | Head Coach
           </p>
-          <p className="text-xs sm:text-[11px] text-slate-600">
-            Platform by <a href="https://autosterea.com" target="_blank" rel="noopener noreferrer" className="text-slate-500 hover:text-slate-400">Autosterea</a>
+          <p className="text-xs sm:text-[11px] text-[var(--text-muted)]">
+            Platform by <a href="https://autosterea.com" target="_blank" rel="noopener noreferrer" className="text-[var(--text-muted)] hover:text-[var(--text-tertiary)]">Autosterea</a>
             <span className="mx-2">|</span>
-            Data from <a href="https://www.crossfit.com" target="_blank" rel="noopener noreferrer" className="text-slate-500 hover:text-slate-400">crossfit.com</a>
+            Data from <a href="https://www.crossfit.com" target="_blank" rel="noopener noreferrer" className="text-[var(--text-muted)] hover:text-[var(--text-tertiary)]">crossfit.com</a>
             <span className="mx-2">|</span>
-            <button onClick={() => setActiveTab('methodology')} className="text-slate-500 hover:text-slate-400 transition-colors cursor-pointer">Methodology &amp; Sources</button>
+            <button onClick={() => setActiveTab('methodology')} className="text-[var(--text-muted)] hover:text-[var(--text-tertiary)] transition-colors cursor-pointer">Methodology &amp; Sources</button>
             <span className="mx-2">|</span>
             CrossFit is a registered trademark of CrossFit, LLC
           </p>

@@ -64,7 +64,7 @@ function ExplainerBox({ children }: { children: React.ReactNode }) {
   return (
     <div className="bg-blue-500/5 rounded-lg p-4 border border-blue-500/10 mb-4">
       <div className="text-xs font-medium text-blue-400 mb-1">What is this?</div>
-      <p className="text-xs text-slate-400 leading-relaxed">{children}</p>
+      <p className="text-xs text-[var(--text-tertiary)] leading-relaxed">{children}</p>
     </div>
   )
 }
@@ -81,21 +81,21 @@ function ScoreCard({
   color: string
 }) {
   return (
-    <div className="bg-[#12121a] rounded-xl p-6 border border-[#1e1e3a] hover:border-[#2a2a5a] transition-colors flex flex-col">
+    <div className="bg-[var(--panel-bg)] rounded-xl p-6 border border-[var(--panel-border)] hover:border-[var(--panel-border-strong)] transition-colors flex flex-col">
       <div className={`text-4xl font-bold font-mono ${color}`}>{value}</div>
-      <div className="text-sm font-medium text-white mt-2">{label}</div>
-      <div className="text-xs text-slate-400 mt-1 leading-relaxed">{subtitle}</div>
+      <div className="text-sm font-medium text-[var(--text-primary)] mt-2">{label}</div>
+      <div className="text-xs text-[var(--text-tertiary)] mt-1 leading-relaxed">{subtitle}</div>
     </div>
   )
 }
 
 function SectionTitle({ children }: { children: React.ReactNode }) {
-  return <h3 className="text-lg font-semibold text-white mb-3">{children}</h3>
+  return <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">{children}</h3>
 }
 
 const TOOLTIP_STYLE = {
-  background: '#1e1e3a',
-  border: '1px solid #2a2a5a',
+  background: 'var(--chart-tooltip-bg)',
+  border: '1px solid var(--chart-tooltip-border)',
   borderRadius: 8,
   fontSize: 12,
 }
@@ -216,17 +216,17 @@ export default function VarianceAnalysis({
     if (prob >= 0.3) return '#34d399'
     if (prob >= 0.2) return '#6ee7b7'
     if (prob >= 0.1) return '#a7f3d0'
-    return '#1e1e3a'
+    return 'var(--panel-bg-hover)'
   }
 
   return (
     <div className="space-y-8">
       {/* ========== HEADER ========== */}
       <div>
-        <h2 className="text-2xl font-bold text-white mb-2">
+        <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-2">
           Is CrossFit Really "Constantly Varied"?
         </h2>
-        <p className="text-sm text-slate-400 leading-relaxed max-w-3xl">
+        <p className="text-sm text-[var(--text-tertiary)] leading-relaxed max-w-3xl">
           Greg Glassman says CrossFit is "constantly varied functional movements at high intensity."
           Let's test the "varied" part with math. We'll use information theory, concentration
           indices, and sequence analysis to measure just how random (or not) the programming really is.
@@ -271,7 +271,7 @@ export default function VarianceAnalysis({
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="bg-blue-500/5 rounded-lg p-4 border border-blue-500/10">
           <div className="text-xs font-medium text-blue-400 mb-1">What is this?</div>
-          <p className="text-xs text-slate-400 leading-relaxed">
+          <p className="text-xs text-[var(--text-tertiary)] leading-relaxed">
             If CrossFit picked movements completely randomly out of a hat, this would be 100%.
             The actual score tells us how close to perfectly random the programming is.
             This uses Shannon entropy — the same math that measures how unpredictable a message is.
@@ -279,7 +279,7 @@ export default function VarianceAnalysis({
         </div>
         <div className="bg-blue-500/5 rounded-lg p-4 border border-blue-500/10">
           <div className="text-xs font-medium text-blue-400 mb-1">What is this?</div>
-          <p className="text-xs text-slate-400 leading-relaxed">
+          <p className="text-xs text-[var(--text-tertiary)] leading-relaxed">
             Are a few movements hogging all the attention, or is the love spread around? This is
             the inverse of the Herfindahl-Hirschman Index (HHI) — the same tool economists use
             to measure if a market is dominated by monopolies. 100% means perfectly even.
@@ -287,7 +287,7 @@ export default function VarianceAnalysis({
         </div>
         <div className="bg-blue-500/5 rounded-lg p-4 border border-blue-500/10">
           <div className="text-xs font-medium text-blue-400 mb-1">What is this?</div>
-          <p className="text-xs text-slate-400 leading-relaxed">
+          <p className="text-xs text-[var(--text-tertiary)] leading-relaxed">
             This is the Pareto Principle or "80/20 Rule." In most systems, a small number of
             things do most of the work. Here we see how many movements account for 80% of all
             CrossFit.com programming.
@@ -296,7 +296,7 @@ export default function VarianceAnalysis({
       </div>
 
       {/* ========== PARETO CHART ========== */}
-      <div className="bg-[#12121a] rounded-xl p-6 border border-[#1e1e3a]">
+      <div className="bg-[var(--panel-bg)] rounded-xl p-6 border border-[var(--panel-border)]">
         <SectionTitle>Movement Frequency — Pareto Analysis</SectionTitle>
         <ExplainerBox>
           Each bar shows how often a movement appears. The orange line shows the running
@@ -310,18 +310,18 @@ export default function VarianceAnalysis({
             data={paretoChartData}
             margin={{ top: 10, right: 40, left: 10, bottom: 10 }}
           >
-            <CartesianGrid strokeDasharray="3 3" stroke="#1e1e3a" horizontal={false} />
+            <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" horizontal={false} />
             <XAxis
               type="number"
-              tick={{ fill: '#64748b', fontSize: 10 }}
-              axisLine={{ stroke: '#1e1e3a' }}
+              tick={{ fill: 'var(--chart-axis)', fontSize: 10 }}
+              axisLine={{ stroke: 'var(--chart-grid)' }}
               tickLine={false}
             />
             <YAxis
               type="category"
               dataKey="name"
               width={120}
-              tick={{ fill: '#94a3b8', fontSize: 10 }}
+              tick={{ fill: 'var(--chart-axis)', fontSize: 10 }}
               axisLine={false}
               tickLine={false}
             />
@@ -354,7 +354,7 @@ export default function VarianceAnalysis({
           </ComposedChart>
         </ResponsiveContainer></div>
 
-        <div className="flex items-center gap-4 mt-3 text-[10px] text-slate-500">
+        <div className="flex items-center gap-4 mt-3 text-[10px] text-[var(--text-muted)]">
           <div className="flex items-center gap-1.5">
             <div className="w-3 h-2 rounded-sm bg-indigo-500" />
             Top 80% (vital few)
@@ -367,12 +367,12 @@ export default function VarianceAnalysis({
             <div className="w-3 h-0.5 bg-orange-500" />
             Cumulative % line
           </div>
-          <div className="text-slate-500">— — 80% threshold</div>
+          <div className="text-[var(--text-muted)]">— — 80% threshold</div>
         </div>
       </div>
 
       {/* ========== AUTOCORRELATION CHART ========== */}
-      <div className="bg-[#12121a] rounded-xl p-6 border border-[#1e1e3a]">
+      <div className="bg-[var(--panel-bg)] rounded-xl p-6 border border-[var(--panel-border)]">
         <SectionTitle>Autocorrelation — Does CrossFit Repeat Patterns?</SectionTitle>
         <ExplainerBox>
           Does CrossFit repeat patterns on a cycle? Each bar shows how similar today's workout is
@@ -383,15 +383,15 @@ export default function VarianceAnalysis({
 
         <div style={{width:"100%",height:280}}><ResponsiveContainer width="100%" height="100%">
           <BarChart data={autocorrData} margin={{ top: 10, right: 20, left: 0, bottom: 10 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#1e1e3a" vertical={false} />
+            <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" vertical={false} />
             <XAxis
               dataKey="lag"
-              tick={{ fill: '#64748b', fontSize: 10 }}
-              axisLine={{ stroke: '#1e1e3a' }}
+              tick={{ fill: 'var(--chart-axis)', fontSize: 10 }}
+              axisLine={{ stroke: 'var(--chart-grid)' }}
               tickLine={false}
             />
             <YAxis
-              tick={{ fill: '#64748b', fontSize: 10 }}
+              tick={{ fill: 'var(--chart-axis)', fontSize: 10 }}
               axisLine={false}
               tickLine={false}
               domain={[-0.3, 0.5]}
@@ -417,8 +417,8 @@ export default function VarianceAnalysis({
 
         {/* Periodicity verdict */}
         <div className="mt-4 flex flex-wrap gap-4">
-          <div className="bg-[#1a1a2e] rounded-lg px-4 py-3 border border-[#1e1e3a]">
-            <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">
+          <div className="bg-[var(--panel-bg-hover)] rounded-lg px-4 py-3 border border-[var(--panel-border)]">
+            <div className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">
               Periodicity Detected?
             </div>
             <div
@@ -430,8 +430,8 @@ export default function VarianceAnalysis({
             </div>
           </div>
           {autocorrelation.dominantPeriod !== null && (
-            <div className="bg-[#1a1a2e] rounded-lg px-4 py-3 border border-[#1e1e3a]">
-              <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">
+            <div className="bg-[var(--panel-bg-hover)] rounded-lg px-4 py-3 border border-[var(--panel-border)]">
+              <div className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">
                 Dominant Period
               </div>
               <div className="text-sm font-semibold font-mono text-amber-400">
@@ -439,11 +439,11 @@ export default function VarianceAnalysis({
               </div>
             </div>
           )}
-          <div className="bg-[#1a1a2e] rounded-lg px-4 py-3 border border-[#1e1e3a]">
-            <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">
+          <div className="bg-[var(--panel-bg-hover)] rounded-lg px-4 py-3 border border-[var(--panel-border)]">
+            <div className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">
               Verdict
             </div>
-            <div className="text-xs text-slate-300 max-w-xs">
+            <div className="text-xs text-[var(--text-secondary)] max-w-xs">
               {autocorrelation.hasPeriodicity
                 ? `Programming shows a repeating cycle every ~${autocorrelation.dominantPeriod} days. This means CrossFit.com follows a structured pattern, not pure randomness.`
                 : 'No significant repeating cycle detected. The programming does not follow an obvious periodic schedule — it looks genuinely aperiodic.'}
@@ -451,7 +451,7 @@ export default function VarianceAnalysis({
           </div>
         </div>
 
-        <div className="flex items-center gap-4 mt-3 text-[10px] text-slate-500">
+        <div className="flex items-center gap-4 mt-3 text-[10px] text-[var(--text-muted)]">
           <div className="flex items-center gap-1.5">
             <div className="w-3 h-2 rounded-sm bg-amber-500" />
             Statistically significant
@@ -464,7 +464,7 @@ export default function VarianceAnalysis({
       </div>
 
       {/* ========== MARKOV TRANSITION HEATMAP ========== */}
-      <div className="bg-[#12121a] rounded-xl p-6 border border-[#1e1e3a]">
+      <div className="bg-[var(--panel-bg)] rounded-xl p-6 border border-[var(--panel-border)]">
         <SectionTitle>Markov Transition Matrix — What Follows What?</SectionTitle>
         <ExplainerBox>
           If today's workout is Gymnastics, what's tomorrow most likely to be? This table shows
@@ -478,9 +478,9 @@ export default function VarianceAnalysis({
           <table className="mx-auto border-collapse">
             <thead>
               <tr>
-                <th className="p-2 text-[10px] text-slate-500 font-medium">Today \ Tomorrow</th>
+                <th className="p-2 text-[10px] text-[var(--text-muted)] font-medium">Today \ Tomorrow</th>
                 {markov.states.map((s) => (
-                  <th key={s} className="p-2 text-[10px] text-slate-400 font-medium text-center">
+                  <th key={s} className="p-2 text-[10px] text-[var(--text-tertiary)] font-medium text-center">
                     {s}
                   </th>
                 ))}
@@ -489,7 +489,7 @@ export default function VarianceAnalysis({
             <tbody>
               {markov.states.map((fromState, rowIdx) => (
                 <tr key={fromState}>
-                  <td className="p-2 text-[10px] text-slate-400 font-medium">{fromState}</td>
+                  <td className="p-2 text-[10px] text-[var(--text-tertiary)] font-medium">{fromState}</td>
                   {markov.states.map((toState, colIdx) => {
                     const prob = markov.matrix[rowIdx]?.[colIdx] ?? 0
                     return (
@@ -518,7 +518,7 @@ export default function VarianceAnalysis({
 
         {/* Color legend */}
         <div className="flex items-center justify-center gap-1 mt-4">
-          <span className="text-[10px] text-slate-500 mr-2">Low</span>
+          <span className="text-[10px] text-[var(--text-muted)] mr-2">Low</span>
           {[0.05, 0.1, 0.2, 0.3, 0.4].map((p) => (
             <div
               key={p}
@@ -526,17 +526,17 @@ export default function VarianceAnalysis({
               style={{ backgroundColor: getProbColor(p) }}
             />
           ))}
-          <span className="text-[10px] text-slate-500 ml-2">High</span>
+          <span className="text-[10px] text-[var(--text-muted)] ml-2">High</span>
         </div>
 
         {/* Steady-state distribution */}
         <div className="mt-6">
-          <h4 className="text-sm font-medium text-slate-300 mb-2">
+          <h4 className="text-sm font-medium text-[var(--text-secondary)] mb-2">
             Steady-State Distribution
           </h4>
           <div className="bg-blue-500/5 rounded-lg p-4 border border-blue-500/10 mb-4">
             <div className="text-xs font-medium text-blue-400 mb-1">What is this?</div>
-            <p className="text-xs text-slate-400 leading-relaxed">
+            <p className="text-xs text-[var(--text-tertiary)] leading-relaxed">
               If CrossFit.com kept programming forever following these same transition patterns,
               this is what the long-run mix would settle into. It's the mathematical equilibrium
               — like asking "what does the river look like after all the eddies smooth out?"
@@ -547,7 +547,7 @@ export default function VarianceAnalysis({
             {steadyStateData.map((s) => (
               <div
                 key={s.name}
-                className="bg-[#1a1a2e] rounded-lg px-4 py-3 border border-[#1e1e3a] flex flex-col items-center min-w-[100px]"
+                className="bg-[var(--panel-bg-hover)] rounded-lg px-4 py-3 border border-[var(--panel-border)] flex flex-col items-center min-w-[100px]"
               >
                 <div
                   className="text-lg font-bold font-mono"
@@ -555,7 +555,7 @@ export default function VarianceAnalysis({
                 >
                   {s.pct}%
                 </div>
-                <div className="text-[10px] text-slate-400 mt-1">{s.name}</div>
+                <div className="text-[10px] text-[var(--text-tertiary)] mt-1">{s.name}</div>
               </div>
             ))}
           </div>
@@ -590,7 +590,7 @@ export default function VarianceAnalysis({
       </div>
 
       {/* ========== REST DAY INTELLIGENCE ========== */}
-      <div className="bg-[#12121a] rounded-xl p-6 border border-[#1e1e3a]">
+      <div className="bg-[var(--panel-bg)] rounded-xl p-6 border border-[var(--panel-border)]">
         <SectionTitle>Rest Day Intelligence</SectionTitle>
         <ExplainerBox>
           Are rest days random, or does CrossFit.com give you rest after harder days? Smart coaches
@@ -600,15 +600,15 @@ export default function VarianceAnalysis({
 
         {/* Before/After stats */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-          <div className="bg-[#1a1a2e] rounded-xl p-5 border border-[#1e1e3a]">
-            <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-2">
+          <div className="bg-[var(--panel-bg-hover)] rounded-xl p-5 border border-[var(--panel-border)]">
+            <div className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-2">
               Day Before Rest
             </div>
             <div className="flex items-baseline gap-2">
               <span className="text-2xl font-bold font-mono text-orange-400">
                 {restDay.avgMovementsBeforeRest.toFixed(1)}
               </span>
-              <span className="text-xs text-slate-400">avg movements</span>
+              <span className="text-xs text-[var(--text-tertiary)]">avg movements</span>
             </div>
             <div className="mt-3 space-y-1.5">
               {modalityBeforeData.map((m) => (
@@ -617,8 +617,8 @@ export default function VarianceAnalysis({
                     className="w-2 h-2 rounded-full flex-shrink-0"
                     style={{ backgroundColor: getModalityColor(m.name) }}
                   />
-                  <span className="text-[10px] text-slate-400 w-24">{m.name}</span>
-                  <div className="flex-1 h-1.5 bg-[#12121a] rounded-full overflow-hidden">
+                  <span className="text-[10px] text-[var(--text-tertiary)] w-24">{m.name}</span>
+                  <div className="flex-1 h-1.5 bg-[var(--panel-bg)] rounded-full overflow-hidden">
                     <div
                       className="h-full rounded-full"
                       style={{
@@ -628,7 +628,7 @@ export default function VarianceAnalysis({
                       }}
                     />
                   </div>
-                  <span className="text-[10px] font-mono text-slate-500 w-10 text-right">
+                  <span className="text-[10px] font-mono text-[var(--text-muted)] w-10 text-right">
                     {m.value}%
                   </span>
                 </div>
@@ -636,15 +636,15 @@ export default function VarianceAnalysis({
             </div>
           </div>
 
-          <div className="bg-[#1a1a2e] rounded-xl p-5 border border-[#1e1e3a]">
-            <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-2">
+          <div className="bg-[var(--panel-bg-hover)] rounded-xl p-5 border border-[var(--panel-border)]">
+            <div className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-2">
               Day After Rest
             </div>
             <div className="flex items-baseline gap-2">
               <span className="text-2xl font-bold font-mono text-cyan-400">
                 {restDay.avgMovementsAfterRest.toFixed(1)}
               </span>
-              <span className="text-xs text-slate-400">avg movements</span>
+              <span className="text-xs text-[var(--text-tertiary)]">avg movements</span>
             </div>
             <div className="mt-3 space-y-1.5">
               {modalityAfterData.map((m) => (
@@ -653,8 +653,8 @@ export default function VarianceAnalysis({
                     className="w-2 h-2 rounded-full flex-shrink-0"
                     style={{ backgroundColor: getModalityColor(m.name) }}
                   />
-                  <span className="text-[10px] text-slate-400 w-24">{m.name}</span>
-                  <div className="flex-1 h-1.5 bg-[#12121a] rounded-full overflow-hidden">
+                  <span className="text-[10px] text-[var(--text-tertiary)] w-24">{m.name}</span>
+                  <div className="flex-1 h-1.5 bg-[var(--panel-bg)] rounded-full overflow-hidden">
                     <div
                       className="h-full rounded-full"
                       style={{
@@ -664,7 +664,7 @@ export default function VarianceAnalysis({
                       }}
                     />
                   </div>
-                  <span className="text-[10px] font-mono text-slate-500 w-10 text-right">
+                  <span className="text-[10px] font-mono text-[var(--text-muted)] w-10 text-right">
                     {m.value}%
                   </span>
                 </div>
@@ -674,8 +674,8 @@ export default function VarianceAnalysis({
         </div>
 
         {/* Movement count comparison */}
-        <div className="bg-[#1a1a2e] rounded-xl p-5 border border-[#1e1e3a]">
-          <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-3">
+        <div className="bg-[var(--panel-bg-hover)] rounded-xl p-5 border border-[var(--panel-border)]">
+          <div className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-3">
             Movement Volume Comparison
           </div>
           <div className="flex items-center gap-4">
@@ -686,7 +686,7 @@ export default function VarianceAnalysis({
                   {restDay.avgMovementsBeforeRest.toFixed(1)}
                 </span>
               </div>
-              <div className="h-3 bg-[#12121a] rounded-full overflow-hidden">
+              <div className="h-3 bg-[var(--panel-bg)] rounded-full overflow-hidden">
                 <div
                   className="h-full rounded-full bg-orange-500/70 transition-all"
                   style={{
@@ -699,7 +699,7 @@ export default function VarianceAnalysis({
                 />
               </div>
             </div>
-            <div className="text-xs text-slate-500 font-mono">vs</div>
+            <div className="text-xs text-[var(--text-muted)] font-mono">vs</div>
             <div className="flex-1">
               <div className="flex items-center justify-between mb-1">
                 <span className="text-[10px] text-cyan-400">After Rest</span>
@@ -707,7 +707,7 @@ export default function VarianceAnalysis({
                   {restDay.avgMovementsAfterRest.toFixed(1)}
                 </span>
               </div>
-              <div className="h-3 bg-[#12121a] rounded-full overflow-hidden">
+              <div className="h-3 bg-[var(--panel-bg)] rounded-full overflow-hidden">
                 <div
                   className="h-full rounded-full bg-cyan-500/70 transition-all"
                   style={{
@@ -732,12 +732,12 @@ export default function VarianceAnalysis({
             <div>
               <div
                 className={`text-sm font-semibold ${
-                  restDay.isStrategic ? 'text-emerald-400' : 'text-slate-400'
+                  restDay.isStrategic ? 'text-emerald-400' : 'text-[var(--text-tertiary)]'
                 }`}
               >
                 {restDay.isStrategic ? 'Strategic Rest Days Detected' : 'Rest Days Appear Random'}
               </div>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <p className="text-xs text-[var(--text-muted)] mt-0.5">
                 {restDay.isStrategic
                   ? `The data shows ${
                       restDay.avgMovementsBeforeRest > restDay.avgMovementsAfterRest
@@ -752,7 +752,7 @@ export default function VarianceAnalysis({
       </div>
 
       {/* ========== FINAL VERDICT ========== */}
-      <div className="bg-[#12121a] rounded-xl p-6 border border-[#1e1e3a]">
+      <div className="bg-[var(--panel-bg)] rounded-xl p-6 border border-[var(--panel-border)]">
         <SectionTitle>The Verdict</SectionTitle>
         <div className="space-y-3">
           <div className="flex items-start gap-3">
@@ -762,8 +762,8 @@ export default function VarianceAnalysis({
               }`}
             />
             <div>
-              <span className="text-sm text-white font-medium">Entropy: </span>
-              <span className="text-sm text-slate-400">
+              <span className="text-sm text-[var(--text-primary)] font-medium">Entropy: </span>
+              <span className="text-sm text-[var(--text-tertiary)]">
                 {variancePct >= 80
                   ? `At ${variancePct}% variance, CrossFit.com programming is impressively close to truly random movement selection. The "constantly varied" claim holds up well.`
                   : variancePct >= 60
@@ -779,8 +779,8 @@ export default function VarianceAnalysis({
               }`}
             />
             <div>
-              <span className="text-sm text-white font-medium">Concentration: </span>
-              <span className="text-sm text-slate-400">
+              <span className="text-sm text-[var(--text-primary)] font-medium">Concentration: </span>
+              <span className="text-sm text-[var(--text-tertiary)]">
                 {hhi.interpretation}. The HHI of {hhi.hhi.toFixed(4)} (normalized: {hhi.normalizedHHI.toFixed(4)})
                 {hhi.normalizedHHI < 0.15
                   ? ' indicates a competitive, well-distributed movement selection.'
@@ -795,8 +795,8 @@ export default function VarianceAnalysis({
               }`}
             />
             <div>
-              <span className="text-sm text-white font-medium">Periodicity: </span>
-              <span className="text-sm text-slate-400">
+              <span className="text-sm text-[var(--text-primary)] font-medium">Periodicity: </span>
+              <span className="text-sm text-[var(--text-tertiary)]">
                 {autocorrelation.hasPeriodicity
                   ? `A repeating cycle of ~${autocorrelation.dominantPeriod} days was detected, meaning programming follows a structured template rather than being purely spontaneous.`
                   : 'No significant repeating cycles were found. Day-to-day programming appears genuinely non-periodic — a point in favor of "constantly varied."'}
@@ -810,8 +810,8 @@ export default function VarianceAnalysis({
               }`}
             />
             <div>
-              <span className="text-sm text-white font-medium">Rest Days: </span>
-              <span className="text-sm text-slate-400">
+              <span className="text-sm text-[var(--text-primary)] font-medium">Rest Days: </span>
+              <span className="text-sm text-[var(--text-tertiary)]">
                 {restDay.isStrategic
                   ? 'Rest days show signs of strategic placement, suggesting an intelligent hand behind the programming — not just a random number generator.'
                   : 'Rest days appear to follow a fixed schedule rather than responding to training load. This is neither good nor bad — just a scheduling choice.'}

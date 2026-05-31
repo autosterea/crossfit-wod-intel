@@ -102,14 +102,14 @@ export default function ShareButton() {
     <div ref={containerRef} className="fixed bottom-6 right-6 z-50">
       {/* Popup */}
       {open && (
-        <div className="absolute bottom-14 right-0 mb-2 w-48 rounded-lg border border-[#2a2a5a] bg-[#1e1e3a] p-2 shadow-xl shadow-black/40">
+        <div className="absolute bottom-14 right-0 mb-2 w-48 rounded-lg border border-[var(--panel-border-strong)] bg-[var(--panel-bg-hover)] p-2 shadow-xl shadow-black/40">
           {shareLinks.map((link) => (
             <button
               key={link.name}
               onClick={link.onClick}
-              className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm text-slate-300 transition-colors hover:bg-[#2a2a5a] hover:text-white"
+              className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm text-[var(--text-secondary)] transition-colors hover:bg-[var(--panel-border-strong)] hover:text-white"
             >
-              <span className="flex-shrink-0 text-slate-400">{link.icon}</span>
+              <span className="flex-shrink-0 text-[var(--text-tertiary)]">{link.icon}</span>
               {link.name}
             </button>
           ))}
@@ -119,7 +119,7 @@ export default function ShareButton() {
       {/* Floating button */}
       <button
         onClick={() => setOpen((v) => !v)}
-        className="flex h-12 w-12 items-center justify-center rounded-full border border-[#2a2a5a] bg-[#1e1e3a] text-slate-300 shadow-lg shadow-black/30 transition-all hover:border-blue-500/50 hover:text-white hover:shadow-blue-500/10"
+        className="flex h-12 w-12 items-center justify-center rounded-full border border-[var(--panel-border-strong)] bg-[var(--panel-bg-hover)] text-[var(--text-secondary)] shadow-lg shadow-black/30 transition-all hover:border-blue-500/50 hover:text-white hover:shadow-blue-500/10"
         aria-label="Share"
       >
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

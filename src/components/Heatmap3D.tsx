@@ -95,7 +95,7 @@ export default function Heatmap3D({ data }: { data: CrossFitData }) {
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-2xl font-bold text-white">Movement Co-occurrence</h2>
-            <p className="text-sm text-slate-400 mt-1">3D terrain view</p>
+            <p className="text-sm text-[var(--text-tertiary)] mt-1">3D terrain view</p>
           </div>
           <button onClick={() => setView('2d')} className="px-3 py-1.5 text-xs bg-blue-500/20 text-blue-400 rounded-lg border border-blue-500/30 hover:bg-blue-500/30">
             Switch to 2D Grid
@@ -114,11 +114,11 @@ export default function Heatmap3D({ data }: { data: CrossFitData }) {
       <div className="flex items-start justify-between">
         <div>
           <h2 className="text-2xl font-bold text-white">Movement Co-occurrence Heatmap</h2>
-          <p className="text-sm text-slate-400 mt-1">
+          <p className="text-sm text-[var(--text-tertiary)] mt-1">
             How often do movements appear together? Brighter = more co-occurrences. Click any movement to isolate its relationships.
           </p>
         </div>
-        <button onClick={() => setView('3d')} className="px-3 py-1.5 text-xs bg-[#1e1e3a] text-slate-400 rounded-lg border border-[#2a2a5a] hover:text-white shrink-0">
+        <button onClick={() => setView('3d')} className="px-3 py-1.5 text-xs bg-[var(--panel-bg-hover)] text-[var(--text-tertiary)] rounded-lg border border-[var(--panel-border-strong)] hover:text-white shrink-0">
           3D View
         </button>
       </div>
@@ -126,7 +126,7 @@ export default function Heatmap3D({ data }: { data: CrossFitData }) {
       {/* Explainer */}
       <div className="bg-blue-500/5 rounded-lg p-4 border border-blue-500/10">
         <div className="text-xs font-medium text-blue-400 mb-1">How to read this</div>
-        <p className="text-xs text-slate-400 leading-relaxed">
+        <p className="text-xs text-[var(--text-tertiary)] leading-relaxed">
           Each cell shows how many workouts contain BOTH movements. The diagonal (top-left to bottom-right) shows how often each movement appears total.
           Hover over any cell to highlight its row and column. Click a movement name to lock the highlight. Bright colors = frequent pairing.
         </p>
@@ -134,19 +134,19 @@ export default function Heatmap3D({ data }: { data: CrossFitData }) {
 
       {/* Controls */}
       <div className="flex flex-wrap items-center gap-3">
-        <div className="flex gap-1 bg-[#0d0d1a] rounded-lg p-1 border border-[#1e1e3a]">
+        <div className="flex gap-1 bg-[var(--code-bg)] rounded-lg p-1 border border-[var(--panel-border)]">
           {([['frequency', 'By Frequency'], ['modality', 'By Modality'], ['alpha', 'A-Z'], ['original', 'Original']] as const).map(([key, label]) => (
             <button
               key={key}
               onClick={() => setSortMode(key)}
-              className={`px-2.5 py-1 text-[10px] rounded transition-colors ${sortMode === key ? 'bg-blue-500/20 text-blue-400' : 'text-slate-500 hover:text-slate-300'}`}
+              className={`px-2.5 py-1 text-[10px] rounded transition-colors ${sortMode === key ? 'bg-blue-500/20 text-blue-400' : 'text-[var(--text-muted)] hover:text-[var(--text-secondary)]'}`}
             >
               {label}
             </button>
           ))}
         </div>
-        <label className="flex items-center gap-1.5 text-[10px] text-slate-400 cursor-pointer">
-          <input type="checkbox" checked={showValues} onChange={(e) => setShowValues(e.target.checked)} className="rounded border-slate-600 bg-[#1e1e3a]" />
+        <label className="flex items-center gap-1.5 text-[10px] text-[var(--text-tertiary)] cursor-pointer">
+          <input type="checkbox" checked={showValues} onChange={(e) => setShowValues(e.target.checked)} className="rounded border-[var(--panel-border-strong)] bg-[var(--panel-bg-hover)]" />
           Show values
         </label>
         {selectedMov !== null && (
@@ -157,7 +157,7 @@ export default function Heatmap3D({ data }: { data: CrossFitData }) {
       </div>
 
       {/* Heatmap grid */}
-      <div className="bg-[#0a0a14] rounded-xl border border-[#1e1e3a] p-2 overflow-x-auto">
+      <div className="bg-[var(--app-bg)] rounded-xl border border-[var(--panel-border)] p-2 overflow-x-auto">
         <div style={{ minWidth: displayIndices.length * (cellSize + 1) + labelWidth }}>
           {/* Top labels (rotated) */}
           <div className="flex" style={{ marginLeft: labelWidth }}>
@@ -238,7 +238,7 @@ export default function Heatmap3D({ data }: { data: CrossFitData }) {
                     {/* Tooltip */}
                     {hoveredCell?.i === i && hoveredCell?.j === j && (
                       <div className="absolute z-50 pointer-events-none" style={{ bottom: '110%', left: '50%', transform: 'translateX(-50%)' }}>
-                        <div className="bg-[#1a1a2e] border border-[#2a2a5a] rounded-lg px-3 py-2 text-xs whitespace-nowrap shadow-xl">
+                        <div className="bg-[var(--chart-tooltip-bg)] border border-[var(--chart-tooltip-border)] rounded-lg px-3 py-2 text-xs whitespace-nowrap shadow-xl">
                           <div className="font-medium text-white">
                             {isDiag ? getName(si) : `${getName(si)} × ${getName(sj)}`}
                           </div>
@@ -246,7 +246,7 @@ export default function Heatmap3D({ data }: { data: CrossFitData }) {
                             {val.toLocaleString()} {isDiag ? 'total appearances' : 'co-occurrences'}
                           </div>
                           {!isDiag && val > 0 && (
-                            <div className="text-slate-500 mt-0.5">
+                            <div className="text-[var(--text-muted)] mt-0.5">
                               {((val / Math.min(matrix[si][si], matrix[sj][sj])) * 100).toFixed(1)}% of the less common movement
                             </div>
                           )}
@@ -259,7 +259,7 @@ export default function Heatmap3D({ data }: { data: CrossFitData }) {
 
               {/* Row total */}
               <div className="shrink-0 text-right pl-2" style={{ width: 45 }}>
-                <span className="text-[9px] font-mono text-slate-600">{matrix[si][si].toLocaleString()}</span>
+                <span className="text-[9px] font-mono text-[var(--text-muted)]">{matrix[si][si].toLocaleString()}</span>
               </div>
             </div>
           ))}
@@ -269,17 +269,17 @@ export default function Heatmap3D({ data }: { data: CrossFitData }) {
       {/* Legend */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <span className="text-[10px] text-slate-500">Low</span>
+          <span className="text-[10px] text-[var(--text-muted)]">Low</span>
           <div className="flex h-3 rounded overflow-hidden" style={{ width: 200 }}>
             {['#0d0d1a', '#1a2744', '#1e3a6e', '#2563eb', '#0891b2', '#10b981', '#84cc16', '#eab308', '#f97316', '#ef4444'].map((c) => (
               <div key={c} className="flex-1" style={{ background: c }} />
             ))}
           </div>
-          <span className="text-[10px] text-slate-500">High</span>
+          <span className="text-[10px] text-[var(--text-muted)]">High</span>
         </div>
         <div className="flex gap-3">
           {[['M', 'Mono'], ['G', 'Gym'], ['W', 'Weight']].map(([k, l]) => (
-            <span key={k} className="flex items-center gap-1 text-[10px] text-slate-500">
+            <span key={k} className="flex items-center gap-1 text-[10px] text-[var(--text-muted)]">
               <span className="w-2 h-2 rounded-full" style={{ background: modColor(k) }} />{l}
             </span>
           ))}
@@ -288,7 +288,7 @@ export default function Heatmap3D({ data }: { data: CrossFitData }) {
 
       {/* Selected movement detail */}
       {selectedMov !== null && (
-        <div className="bg-[#12121a] rounded-xl p-5 border border-blue-500/20">
+        <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-blue-500/20">
           <h3 className="text-sm font-bold text-white mb-3">
             {getName(displayIndices[selectedMov])} — Top Co-occurrences
           </h3>
@@ -299,13 +299,13 @@ export default function Heatmap3D({ data }: { data: CrossFitData }) {
               .sort((a, b) => b.val - a.val)
               .slice(0, 12)
               .map((x) => (
-                <div key={x.name} className="bg-[#0d0d1a] rounded-lg p-3 border border-[#1e1e3a]">
+                <div key={x.name} className="bg-[var(--code-bg)] rounded-lg p-3 border border-[var(--panel-border)]">
                   <div className="flex items-center gap-1.5 mb-1">
                     <span className="w-2 h-2 rounded-full" style={{ background: modColor(x.mod) }} />
-                    <span className="text-xs text-slate-300">{x.name}</span>
+                    <span className="text-xs text-[var(--text-secondary)]">{x.name}</span>
                   </div>
                   <div className="text-lg font-bold font-mono text-blue-400">{x.val}</div>
-                  <div className="text-[9px] text-slate-500">co-occurrences</div>
+                  <div className="text-[9px] text-[var(--text-muted)]">co-occurrences</div>
                 </div>
               ))}
           </div>

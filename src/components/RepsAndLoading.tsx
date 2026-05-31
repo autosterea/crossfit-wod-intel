@@ -57,8 +57,8 @@ const TOP_SCHEME_COLORS = [
 ]
 
 const tooltipStyle = {
-  background: '#1e1e3a',
-  border: '1px solid #2a2a5a',
+  background: 'var(--chart-tooltip-bg)',
+  border: '1px solid var(--chart-tooltip-border)',
   borderRadius: 8,
   fontSize: 12,
 }
@@ -96,7 +96,7 @@ export default function RepsAndLoading({ data }: { data: CrossFitData }) {
       {/* Header */}
       <div>
         <h2 className="text-2xl font-bold text-white">Reps & Loading Prescription Analysis</h2>
-        <p className="text-sm text-slate-400 mt-1">
+        <p className="text-sm text-[var(--text-tertiary)] mt-1">
           We scanned every workout description to extract rep schemes (21-15-9, 5x5, etc.) and loading
           prescriptions (135 lbs, 95/65, etc.). This shows how CrossFit programs volume and intensity.
         </p>
@@ -105,53 +105,53 @@ export default function RepsAndLoading({ data }: { data: CrossFitData }) {
       {/* Stats cards */}
       <div className="grid grid-cols-5 gap-3">
         <div className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 rounded-xl p-5 border border-blue-500/20">
-          <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Avg Reps / Workout</div>
+          <div className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">Avg Reps / Workout</div>
           <div className="text-3xl font-bold font-mono text-blue-400">{analysis.avgTotalReps.toLocaleString()}</div>
-          <div className="text-[10px] text-slate-400 mt-1">Estimated total reps per WOD</div>
+          <div className="text-[10px] text-[var(--text-tertiary)] mt-1">Estimated total reps per WOD</div>
         </div>
         <div className="bg-gradient-to-br from-blue-500/10 to-indigo-500/10 rounded-xl p-5 border border-blue-500/20">
-          <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Avg Weight — Men (Rx)</div>
+          <div className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">Avg Weight — Men (Rx)</div>
           <div className="text-3xl font-bold font-mono text-blue-400">
             {analysis.avgWeight > 0 ? `${analysis.avgWeight} lb` : 'N/A'}
           </div>
-          <div className="text-[10px] text-slate-400 mt-1">Average men's prescribed load</div>
+          <div className="text-[10px] text-[var(--text-tertiary)] mt-1">Average men's prescribed load</div>
         </div>
         <div className="bg-gradient-to-br from-rose-500/10 to-pink-500/10 rounded-xl p-5 border border-rose-500/20">
-          <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Avg Weight — Women (Rx)</div>
+          <div className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">Avg Weight — Women (Rx)</div>
           <div className="text-3xl font-bold font-mono text-rose-400">
             {analysis.avgWeightFemale > 0 ? `${analysis.avgWeightFemale} lb` : 'N/A'}
           </div>
-          <div className="text-[10px] text-slate-400 mt-1">Average women's prescribed load</div>
+          <div className="text-[10px] text-[var(--text-tertiary)] mt-1">Average women's prescribed load</div>
         </div>
         <div className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 rounded-xl p-5 border border-purple-500/20">
-          <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Most Common Scheme</div>
+          <div className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">Most Common Scheme</div>
           <div className="text-2xl font-bold font-mono text-purple-400">{topSchemeLabel}</div>
-          <div className="text-[10px] text-slate-400 mt-1">
+          <div className="text-[10px] text-[var(--text-tertiary)] mt-1">
             {analysis.topSchemes[0] ? `${analysis.topSchemes[0].count} appearances` : ''}
           </div>
         </div>
         <div className="bg-gradient-to-br from-emerald-500/10 to-teal-500/10 rounded-xl p-5 border border-emerald-500/20">
-          <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Most Common Weight</div>
+          <div className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">Most Common Weight</div>
           <div className="text-2xl font-bold font-mono text-emerald-400">{topWeightRange}</div>
-          <div className="text-[10px] text-slate-400 mt-1">Most frequently prescribed load range</div>
+          <div className="text-[10px] text-[var(--text-tertiary)] mt-1">Most frequently prescribed load range</div>
         </div>
       </div>
 
       {/* Top Rep Schemes bar chart */}
-      <div className="bg-[#12121a] rounded-xl p-5 border border-[#1e1e3a]">
-        <h3 className="text-xs font-medium text-slate-400 mb-1">Top 15 Rep Schemes</h3>
-        <p className="text-[10px] text-slate-500 mb-4">
+      <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-[var(--panel-border)]">
+        <h3 className="text-xs font-medium text-[var(--text-tertiary)] mb-1">Top 15 Rep Schemes</h3>
+        <p className="text-[10px] text-[var(--text-muted)] mb-4">
           The most frequently appearing rep patterns across all workout descriptions.
         </p>
         <div style={{ width: '100%', height: 400 }}>
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={analysis.topSchemes} layout="vertical" margin={{ left: 20 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#1e1e3a" horizontal={false} />
-              <XAxis type="number" tick={{ fontSize: 10, fill: '#64748b' }} />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" horizontal={false} />
+              <XAxis type="number" tick={{ fontSize: 10, fill: 'var(--chart-axis)' }} />
               <YAxis
                 dataKey="pattern"
                 type="category"
-                tick={{ fontSize: 10, fill: '#94a3b8', fontFamily: 'monospace' }}
+                tick={{ fontSize: 10, fill: 'var(--chart-axis)', fontFamily: 'monospace' }}
                 width={100}
               />
               <Tooltip contentStyle={tooltipStyle} />
@@ -168,8 +168,8 @@ export default function RepsAndLoading({ data }: { data: CrossFitData }) {
       {/* Rep Scheme Types + Intensity Zones — side by side donut charts */}
       <div className="grid grid-cols-2 gap-4">
         {/* Scheme Types Pie */}
-        <div className="bg-[#12121a] rounded-xl p-5 border border-[#1e1e3a]">
-          <h3 className="text-xs font-medium text-slate-400 mb-3">Rep Scheme Types</h3>
+        <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-[var(--panel-border)]">
+          <h3 className="text-xs font-medium text-[var(--text-tertiary)] mb-3">Rep Scheme Types</h3>
           <div style={{ width: '100%', height: 300 }}>
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
@@ -193,7 +193,7 @@ export default function RepsAndLoading({ data }: { data: CrossFitData }) {
           </div>
           <div className="flex flex-wrap gap-3 mt-3 justify-center">
             {schemeTypePieData.map((e) => (
-              <span key={e.id} className="flex items-center gap-1.5 text-[10px] text-slate-500">
+              <span key={e.id} className="flex items-center gap-1.5 text-[10px] text-[var(--text-muted)]">
                 <span className="w-2 h-2 rounded-full" style={{ background: SCHEME_TYPE_COLORS[e.id] || '#6b7280' }} />
                 {e.name}
               </span>
@@ -202,8 +202,8 @@ export default function RepsAndLoading({ data }: { data: CrossFitData }) {
         </div>
 
         {/* Intensity Zones Pie */}
-        <div className="bg-[#12121a] rounded-xl p-5 border border-[#1e1e3a]">
-          <h3 className="text-xs font-medium text-slate-400 mb-3">Intensity Zones</h3>
+        <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-[var(--panel-border)]">
+          <h3 className="text-xs font-medium text-[var(--text-tertiary)] mb-3">Intensity Zones</h3>
           <div style={{ width: '100%', height: 300 }}>
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
@@ -227,7 +227,7 @@ export default function RepsAndLoading({ data }: { data: CrossFitData }) {
           </div>
           <div className="flex flex-wrap gap-3 mt-3 justify-center">
             {intensityPieData.map((e) => (
-              <span key={e.id} className="flex items-center gap-1.5 text-[10px] text-slate-500">
+              <span key={e.id} className="flex items-center gap-1.5 text-[10px] text-[var(--text-muted)]">
                 <span className="w-2 h-2 rounded-full" style={{ background: INTENSITY_COLORS[e.id] || '#6b7280' }} />
                 {e.name}
               </span>
@@ -237,8 +237,8 @@ export default function RepsAndLoading({ data }: { data: CrossFitData }) {
       </div>
 
       {/* Weight Distribution — Men & Women side by side */}
-      <div className="bg-[#12121a] rounded-xl p-5 border border-[#1e1e3a]">
-        <p className="text-[10px] text-slate-500 mb-4">
+      <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-[var(--panel-border)]">
+        <p className="text-[10px] text-[var(--text-muted)] mb-4">
           CrossFit prescribes different weights for men and women. The format &quot;135/95&quot; means 135 lbs for men, 95 lbs for women. This analysis tracks both.
         </p>
         <div className="grid grid-cols-2 gap-4">
@@ -248,9 +248,9 @@ export default function RepsAndLoading({ data }: { data: CrossFitData }) {
             <div style={{ width: '100%', height: 300 }}>
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={analysis.weightDistribution}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#1e1e3a" />
-                  <XAxis dataKey="range" tick={{ fontSize: 9, fill: '#64748b' }} />
-                  <YAxis tick={{ fontSize: 10, fill: '#64748b' }} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" />
+                  <XAxis dataKey="range" tick={{ fontSize: 9, fill: 'var(--chart-axis)' }} />
+                  <YAxis tick={{ fontSize: 10, fill: 'var(--chart-axis)' }} />
                   <Tooltip contentStyle={tooltipStyle} />
                   <Bar dataKey="count" radius={[4, 4, 0, 0]}>
                     {analysis.weightDistribution.map((_, i) => (
@@ -267,9 +267,9 @@ export default function RepsAndLoading({ data }: { data: CrossFitData }) {
             <div style={{ width: '100%', height: 300 }}>
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={analysis.weightDistributionFemale}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#1e1e3a" />
-                  <XAxis dataKey="range" tick={{ fontSize: 9, fill: '#64748b' }} />
-                  <YAxis tick={{ fontSize: 10, fill: '#64748b' }} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" />
+                  <XAxis dataKey="range" tick={{ fontSize: 9, fill: 'var(--chart-axis)' }} />
+                  <YAxis tick={{ fontSize: 10, fill: 'var(--chart-axis)' }} />
                   <Tooltip contentStyle={tooltipStyle} />
                   <Bar dataKey="count" radius={[4, 4, 0, 0]}>
                     {analysis.weightDistributionFemale.map((_, i) => (
@@ -284,22 +284,22 @@ export default function RepsAndLoading({ data }: { data: CrossFitData }) {
       </div>
 
       {/* Trends Over Time */}
-      <div className="bg-[#12121a] rounded-xl p-5 border border-[#1e1e3a]">
-        <h3 className="text-xs font-medium text-slate-400 mb-1">Trends Over Time</h3>
-        <p className="text-[10px] text-slate-500 mb-4">
+      <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-[var(--panel-border)]">
+        <h3 className="text-xs font-medium text-[var(--text-tertiary)] mb-1">Trends Over Time</h3>
+        <p className="text-[10px] text-[var(--text-muted)] mb-4">
           How average reps per workout and average prescribed weight have changed year to year.
         </p>
         <div style={{ width: '100%', height: 350 }}>
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={analysis.repsByYear}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#1e1e3a" />
-              <XAxis dataKey="year" tick={{ fontSize: 9, fill: '#64748b' }} interval={2} />
-              <YAxis yAxisId="reps" tick={{ fontSize: 9, fill: '#64748b' }} />
-              <YAxis yAxisId="weight" orientation="right" tick={{ fontSize: 9, fill: '#64748b' }} />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" />
+              <XAxis dataKey="year" tick={{ fontSize: 9, fill: 'var(--chart-axis)' }} interval={2} />
+              <YAxis yAxisId="reps" tick={{ fontSize: 9, fill: 'var(--chart-axis)' }} />
+              <YAxis yAxisId="weight" orientation="right" tick={{ fontSize: 9, fill: 'var(--chart-axis)' }} />
               <Tooltip contentStyle={tooltipStyle} />
               <Legend
                 wrapperStyle={{ fontSize: 11 }}
-                formatter={(value: string) => <span style={{ color: '#94a3b8' }}>{value}</span>}
+                formatter={(value: string) => <span style={{ color: 'var(--chart-axis)' }}>{value}</span>}
               />
               <Line
                 yAxisId="reps"
@@ -332,15 +332,15 @@ export default function RepsAndLoading({ data }: { data: CrossFitData }) {
           </ResponsiveContainer>
         </div>
         <div className="flex gap-6 mt-2 justify-center">
-          <span className="flex items-center gap-1.5 text-[10px] text-slate-500">
+          <span className="flex items-center gap-1.5 text-[10px] text-[var(--text-muted)]">
             <span className="w-3 h-0.5 rounded" style={{ background: '#a855f7', display: 'inline-block' }} />
             Avg Reps per Workout (left axis)
           </span>
-          <span className="flex items-center gap-1.5 text-[10px] text-slate-500">
+          <span className="flex items-center gap-1.5 text-[10px] text-[var(--text-muted)]">
             <span className="w-3 h-0.5 rounded" style={{ background: '#3b82f6', display: 'inline-block' }} />
             Avg Weight — Men in lbs (right axis)
           </span>
-          <span className="flex items-center gap-1.5 text-[10px] text-slate-500">
+          <span className="flex items-center gap-1.5 text-[10px] text-[var(--text-muted)]">
             <span className="w-3 h-0.5 rounded" style={{ background: '#f43f5e', display: 'inline-block' }} />
             Avg Weight — Women in lbs (right axis)
           </span>
@@ -348,9 +348,9 @@ export default function RepsAndLoading({ data }: { data: CrossFitData }) {
       </div>
 
       {/* Explainer section */}
-      <div className="bg-gradient-to-r from-[#12121a] to-[#16162a] rounded-xl p-6 border border-[#1e1e3a]">
+      <div className="bg-gradient-to-r from-[var(--panel-bg)] to-[var(--panel-bg-2)] rounded-xl p-6 border border-[var(--panel-border)]">
         <h3 className="text-sm font-bold text-white mb-3">Understanding Intensity Zones</h3>
-        <div className="grid grid-cols-3 gap-6 text-xs text-slate-400 leading-relaxed">
+        <div className="grid grid-cols-3 gap-6 text-xs text-[var(--text-tertiary)] leading-relaxed">
           <div>
             <div className="font-medium text-rose-400 mb-1">Strength (1-5 reps, heavy)</div>
             <p>
@@ -376,7 +376,7 @@ export default function RepsAndLoading({ data }: { data: CrossFitData }) {
             </p>
           </div>
         </div>
-        <div className="grid grid-cols-3 gap-6 text-xs text-slate-400 leading-relaxed mt-4">
+        <div className="grid grid-cols-3 gap-6 text-xs text-[var(--text-tertiary)] leading-relaxed mt-4">
           <div>
             <div className="font-medium text-emerald-400 mb-1">Endurance (12-20 reps)</div>
             <p>
@@ -394,7 +394,7 @@ export default function RepsAndLoading({ data }: { data: CrossFitData }) {
             </p>
           </div>
           <div>
-            <div className="font-medium text-slate-400 mb-1">Mixed</div>
+            <div className="font-medium text-[var(--text-tertiary)] mb-1">Mixed</div>
             <p>
               Workouts that blend multiple intensity zones or don't fit neatly into one category.
               EMOMs with varying rep schemes, complexes that mix heavy and light work, or

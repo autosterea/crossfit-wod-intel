@@ -74,9 +74,9 @@ function YearRangeFilter() {
   const isFullRange = from === MIN_YEAR && to === MAX_YEAR
 
   return (
-    <div className="px-3 py-2 border-b border-[#1a1a2e]">
+    <div className="px-3 py-2 border-b border-[var(--panel-border-subtle)]">
       <div className="flex items-center justify-between mb-1.5">
-        <span className="text-[8px] font-semibold text-slate-600 tracking-wider">YEAR RANGE</span>
+        <span className="text-[8px] font-semibold text-[var(--text-muted)] tracking-wider">YEAR RANGE</span>
         {!isFullRange && (
           <button onClick={() => setYearRange([MIN_YEAR, MAX_YEAR])} className="text-[8px] text-[#91C640] hover:text-[#a8d35e]">Reset</button>
         )}
@@ -84,12 +84,12 @@ function YearRangeFilter() {
       <div className="flex items-center gap-1.5">
         <input type="number" min={MIN_YEAR} max={to} value={from}
           onChange={(e) => setYearRange([Math.max(MIN_YEAR, Math.min(parseInt(e.target.value) || MIN_YEAR, to)), to])}
-          className="w-14 bg-[#12121a] border border-[#1e1e3a] rounded px-1.5 py-0.5 text-[10px] text-slate-300 font-mono text-center focus:border-[#019644]/50 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+          className="w-14 bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded px-1.5 py-0.5 text-[10px] text-[var(--text-secondary)] font-mono text-center focus:border-[#019644]/50 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
         />
-        <span className="text-slate-600 text-[10px]">—</span>
+        <span className="text-[var(--text-muted)] text-[10px]">—</span>
         <input type="number" min={from} max={MAX_YEAR} value={to}
           onChange={(e) => setYearRange([from, Math.min(MAX_YEAR, Math.max(parseInt(e.target.value) || MAX_YEAR, from))])}
-          className="w-14 bg-[#12121a] border border-[#1e1e3a] rounded px-1.5 py-0.5 text-[10px] text-slate-300 font-mono text-center focus:border-[#019644]/50 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+          className="w-14 bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded px-1.5 py-0.5 text-[10px] text-[var(--text-secondary)] font-mono text-center focus:border-[#019644]/50 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
         />
       </div>
       {!isFullRange && (
@@ -107,9 +107,9 @@ export default function Sidebar({ data }: { data: CrossFitData }) {
       {/* Mobile hamburger */}
       <button
         onClick={() => setSidebarOpen(!sidebarOpen)}
-        className="fixed top-3 left-3 z-50 lg:hidden w-11 h-11 flex items-center justify-center bg-[#12121a] border border-[#1e1e3a] rounded-lg"
+        className="fixed top-3 left-3 z-50 lg:hidden w-11 h-11 flex items-center justify-center bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg"
       >
-        <svg className="w-6 h-6 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <svg className="w-6 h-6 text-[var(--text-secondary)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
           {sidebarOpen
             ? <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
             : <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
@@ -129,7 +129,7 @@ export default function Sidebar({ data }: { data: CrossFitData }) {
         w-64 sm:w-56 transition-transform duration-200 ease-in-out
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
-        <button onClick={() => { setActiveTab('hero' as any); setSidebarOpen(false) }} className="w-full text-left p-3 border-b border-[#1a1a2e] hover:bg-white/[0.02] transition-colors">
+        <button onClick={() => { setActiveTab('hero' as any); setSidebarOpen(false) }} className="w-full text-left p-3 border-b border-[var(--panel-border-subtle)] hover:bg-white/[0.02] transition-colors">
           <div className="flex items-center gap-2">
             <div className="w-6 h-6 rounded-full bg-white p-0.5 shrink-0">
               <img src="/pa-logo.png" alt="Persistence Athletics" className="w-full h-full object-contain rounded-full" />
@@ -138,10 +138,10 @@ export default function Sidebar({ data }: { data: CrossFitData }) {
               <h1 className="text-sm font-bold bg-gradient-to-r from-[#91C640] to-[#019644] bg-clip-text text-transparent truncate">
                 CrossFit WOD Intel
               </h1>
-              <p className="text-[8px] text-slate-500 leading-tight uppercase tracking-wider">by Persistence Athletics</p>
+              <p className="text-[8px] text-[var(--text-muted)] leading-tight uppercase tracking-wider">by Persistence Athletics</p>
             </div>
           </div>
-          <p className="text-[9px] text-slate-500 mt-1.5 font-mono">
+          <p className="text-[9px] text-[var(--text-muted)] mt-1.5 font-mono">
             {data.overview.total_workouts.toLocaleString()} WODs | {data.overview.years_covered}y
           </p>
         </button>
@@ -151,7 +151,7 @@ export default function Sidebar({ data }: { data: CrossFitData }) {
         <nav className="flex-1 py-1">
           {sections.map((section) => (
             <div key={section.title}>
-              <div className="px-3 pt-3 pb-0.5 text-[8px] font-semibold text-slate-600 tracking-wider">
+              <div className="px-3 pt-3 pb-0.5 text-[8px] font-semibold text-[var(--text-muted)] tracking-wider">
                 {section.title}
               </div>
               {section.tabs.map((tab) => (
@@ -161,7 +161,7 @@ export default function Sidebar({ data }: { data: CrossFitData }) {
                   className={`w-full flex items-center gap-2 px-3 py-1.5 text-[11px] transition-all duration-150 ${
                     activeTab === tab.id
                       ? 'bg-[#91C640]/10 text-[#91C640] border-r-2 border-[#91C640]'
-                      : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.02]'
+                      : 'text-[var(--text-tertiary)] hover:text-[var(--text-primary)] hover:bg-white/[0.02]'
                   }`}
                 >
                   <svg className="w-3 h-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -174,11 +174,11 @@ export default function Sidebar({ data }: { data: CrossFitData }) {
           ))}
         </nav>
 
-        <div className="p-2 border-t border-[#1a1a2e] flex items-center justify-between gap-2">
-          <div className="text-[8px] text-slate-600 truncate">{data.overview.date_range}</div>
+        <div className="p-2 border-t border-[var(--panel-border-subtle)] flex items-center justify-between gap-2">
+          <div className="text-[8px] text-[var(--text-muted)] truncate">{data.overview.date_range}</div>
           <button
             onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-            className="shrink-0 w-7 h-7 rounded-md bg-[#12121a] border border-[#1e1e3a] flex items-center justify-center text-slate-400 hover:text-[#91C640] hover:border-[#91C640]/40 transition-colors"
+            className="shrink-0 w-7 h-7 rounded-md bg-[var(--panel-bg)] border border-[var(--panel-border)] flex items-center justify-center text-[var(--text-tertiary)] hover:text-[#91C640] hover:border-[#91C640]/40 transition-colors"
             aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
             title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
           >

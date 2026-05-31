@@ -209,11 +209,11 @@ export default function CalendarHeatmap({ data }: { data: CrossFitData }) {
   const dayLabelRows = [1, 3, 5]
 
   return (
-    <div className="bg-[#12121a] rounded-2xl border border-[#1e1e3a] p-6 space-y-6">
+    <div className="bg-[var(--panel-bg)] rounded-2xl border border-[var(--panel-border)] p-6 space-y-6">
       {/* ── Explainer ─────────────────────────────────────── */}
-      <div className="bg-[#0a0a14] rounded-xl border border-[#1e1e3a] p-4">
-        <p className="text-sm text-slate-400 leading-relaxed">
-          Every square is one day. <span className="text-[#39d353] font-medium">Green = workout day</span> (brighter = more complex). <span className="text-slate-500">Dark = rest day</span>. This is 25 years of CrossFit programming at a glance — like a GitHub contribution chart for fitness.
+      <div className="bg-[var(--app-bg)] rounded-xl border border-[var(--panel-border)] p-4">
+        <p className="text-sm text-[var(--text-tertiary)] leading-relaxed">
+          Every square is one day. <span className="text-[#39d353] font-medium">Green = workout day</span> (brighter = more complex). <span className="text-[var(--text-muted)]">Dark = rest day</span>. This is 25 years of CrossFit programming at a glance — like a GitHub contribution chart for fitness.
         </p>
       </div>
 
@@ -226,7 +226,7 @@ export default function CalendarHeatmap({ data }: { data: CrossFitData }) {
             className={`px-2.5 py-1 text-xs font-mono rounded-md transition-all ${
               y === selectedYear
                 ? 'bg-[#39d353] text-[#0a0a14] font-bold'
-                : 'bg-[#1e1e3a] text-slate-400 hover:bg-[#2a2a5a] hover:text-slate-200'
+                : 'bg-[var(--panel-bg-hover)] text-[var(--text-tertiary)] hover:bg-[var(--panel-border-strong)] hover:text-[var(--text-primary)]'
             }`}
           >
             {y}
@@ -239,7 +239,7 @@ export default function CalendarHeatmap({ data }: { data: CrossFitData }) {
         {/* Tooltip */}
         {tooltip && (
           <div
-            className="absolute z-50 pointer-events-none bg-[#1a1a2e] border border-[#2a2a5a] rounded-lg px-3 py-2 text-xs shadow-xl"
+            className="absolute z-50 pointer-events-none bg-[var(--panel-bg-hover)] border border-[var(--panel-border-strong)] rounded-lg px-3 py-2 text-xs shadow-xl"
             style={{
               left: tooltip.x,
               top: tooltip.y,
@@ -249,17 +249,17 @@ export default function CalendarHeatmap({ data }: { data: CrossFitData }) {
             <div className="text-white font-medium">{readableDate(tooltip.cell.date)}</div>
             {tooltip.cell.workout ? (
               <>
-                <div className="text-slate-300 mt-0.5 max-w-[220px] truncate">
+                <div className="text-[var(--text-secondary)] mt-0.5 max-w-[220px] truncate">
                   {tooltip.cell.workout.t}
                 </div>
                 <div className="flex gap-2 mt-1">
                   <span className="text-[#39d353]">{tooltip.cell.workout.mo}</span>
-                  <span className="text-slate-500">|</span>
-                  <span className="text-slate-400">{tooltip.cell.movementCount} movement{tooltip.cell.movementCount !== 1 ? 's' : ''}</span>
+                  <span className="text-[var(--text-muted)]">|</span>
+                  <span className="text-[var(--text-tertiary)]">{tooltip.cell.movementCount} movement{tooltip.cell.movementCount !== 1 ? 's' : ''}</span>
                 </div>
               </>
             ) : (
-              <div className="text-slate-500 mt-0.5">Rest day</div>
+              <div className="text-[var(--text-muted)] mt-0.5">Rest day</div>
             )}
           </div>
         )}
@@ -272,7 +272,7 @@ export default function CalendarHeatmap({ data }: { data: CrossFitData }) {
             {DAY_LABELS.map((label, rowIdx) => (
               <div
                 key={label}
-                className="flex items-center justify-end text-[10px] text-slate-500 select-none"
+                className="flex items-center justify-end text-[10px] text-[var(--text-muted)] select-none"
                 style={{ height: 12, width: 28 }}
               >
                 {dayLabelRows.includes(rowIdx) ? label : ''}
@@ -290,7 +290,7 @@ export default function CalendarHeatmap({ data }: { data: CrossFitData }) {
                 return (
                   <div
                     key={label}
-                    className="text-[10px] text-slate-500 select-none"
+                    className="text-[10px] text-[var(--text-muted)] select-none"
                     style={{
                       position: 'absolute',
                       left: col * (12 + 2),
@@ -349,7 +349,7 @@ export default function CalendarHeatmap({ data }: { data: CrossFitData }) {
         </div>
 
         {/* Legend */}
-        <div className="flex items-center gap-2 mt-4 text-[10px] text-slate-500">
+        <div className="flex items-center gap-2 mt-4 text-[10px] text-[var(--text-muted)]">
           <span>Less</span>
           <div className="rounded-[2px]" style={{ width: 12, height: 12, backgroundColor: REST_COLOR }} />
           {GREEN_SHADES.map((c) => (
@@ -361,29 +361,29 @@ export default function CalendarHeatmap({ data }: { data: CrossFitData }) {
 
       {/* ── Year Summary Stats ────────────────────────────── */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <div className="bg-[#0a0a14] rounded-xl border border-[#1e1e3a] p-4">
+        <div className="bg-[var(--app-bg)] rounded-xl border border-[var(--panel-border)] p-4">
           <div className="text-2xl font-bold font-mono text-[#39d353]">
             {stats.totalWorkouts.toLocaleString()}
           </div>
-          <div className="text-[11px] text-slate-500 mt-1">Total Workouts</div>
+          <div className="text-[11px] text-[var(--text-muted)] mt-1">Total Workouts</div>
         </div>
-        <div className="bg-[#0a0a14] rounded-xl border border-[#1e1e3a] p-4">
-          <div className="text-2xl font-bold font-mono text-slate-300">
+        <div className="bg-[var(--app-bg)] rounded-xl border border-[var(--panel-border)] p-4">
+          <div className="text-2xl font-bold font-mono text-[var(--text-secondary)]">
             {stats.restDays.toLocaleString()}
           </div>
-          <div className="text-[11px] text-slate-500 mt-1">Rest Days</div>
+          <div className="text-[11px] text-[var(--text-muted)] mt-1">Rest Days</div>
         </div>
-        <div className="bg-[#0a0a14] rounded-xl border border-[#1e1e3a] p-4">
+        <div className="bg-[var(--app-bg)] rounded-xl border border-[var(--panel-border)] p-4">
           <div className="text-2xl font-bold font-mono text-[#26a641]">
             {stats.longestStreak}
           </div>
-          <div className="text-[11px] text-slate-500 mt-1">Longest Streak (days)</div>
+          <div className="text-[11px] text-[var(--text-muted)] mt-1">Longest Streak (days)</div>
         </div>
-        <div className="bg-[#0a0a14] rounded-xl border border-[#1e1e3a] p-4">
+        <div className="bg-[var(--app-bg)] rounded-xl border border-[var(--panel-border)] p-4">
           <div className="text-2xl font-bold font-mono text-[#006d32]">
             {stats.mostCommonDay}
           </div>
-          <div className="text-[11px] text-slate-500 mt-1">
+          <div className="text-[11px] text-[var(--text-muted)] mt-1">
             Most Common Day ({stats.mostCommonDayCount} workouts)
           </div>
         </div>

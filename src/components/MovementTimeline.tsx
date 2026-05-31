@@ -91,7 +91,7 @@ export default function MovementTimeline({ data }: { data: CrossFitData }) {
       {/* Header */}
       <div>
         <h2 className="text-2xl font-bold text-white">Movement Timeline</h2>
-        <p className="text-sm text-slate-400 mt-1 max-w-3xl">
+        <p className="text-sm text-[var(--text-tertiary)] mt-1 max-w-3xl">
           This timeline shows when each movement entered CrossFit's programming.
           The OGs have been here since 2001. Newer additions like Ski Erg and
           Handstand Walk arrived later. The bar length shows how long each movement
@@ -101,20 +101,20 @@ export default function MovementTimeline({ data }: { data: CrossFitData }) {
 
       {/* Stats row */}
       <div className="grid grid-cols-4 gap-3">
-        <div className="bg-[#12121a] rounded-xl p-4 border border-[#1e1e3a]">
-          <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Total Movements</div>
+        <div className="bg-[var(--panel-bg)] rounded-xl p-4 border border-[var(--panel-border)]">
+          <div className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">Total Movements</div>
           <div className="text-2xl font-bold font-mono text-white">{movements.length}</div>
         </div>
-        <div className="bg-[#12121a] rounded-xl p-4 border border-[#1e1e3a]">
-          <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">OG Movements (2001)</div>
+        <div className="bg-[var(--panel-bg)] rounded-xl p-4 border border-[var(--panel-border)]">
+          <div className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">OG Movements (2001)</div>
           <div className="text-2xl font-bold font-mono text-amber-400">{ogCount}</div>
         </div>
-        <div className="bg-[#12121a] rounded-xl p-4 border border-[#1e1e3a]">
-          <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Newcomers (post-2010)</div>
+        <div className="bg-[var(--panel-bg)] rounded-xl p-4 border border-[var(--panel-border)]">
+          <div className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">Newcomers (post-2010)</div>
           <div className="text-2xl font-bold font-mono text-cyan-400">{newcomerCount}</div>
         </div>
-        <div className="bg-[#12121a] rounded-xl p-4 border border-[#1e1e3a]">
-          <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Years Spanned</div>
+        <div className="bg-[var(--panel-bg)] rounded-xl p-4 border border-[var(--panel-border)]">
+          <div className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">Years Spanned</div>
           <div className="text-2xl font-bold font-mono text-white">{TOTAL_YEARS}</div>
         </div>
       </div>
@@ -122,13 +122,13 @@ export default function MovementTimeline({ data }: { data: CrossFitData }) {
       {/* Filters */}
       <div className="flex items-center gap-4 flex-wrap">
         <div className="flex items-center gap-2">
-          <span className="text-[10px] text-slate-500 uppercase tracking-wider">Modality:</span>
+          <span className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider">Modality:</span>
           <button
             onClick={() => setFilterModality(null)}
             className={`px-2.5 py-1 rounded text-xs transition-colors ${
               filterModality === null
                 ? 'bg-white/10 text-white'
-                : 'text-slate-500 hover:text-slate-300'
+                : 'text-[var(--text-muted)] hover:text-[var(--text-secondary)]'
             }`}
           >
             All
@@ -140,7 +140,7 @@ export default function MovementTimeline({ data }: { data: CrossFitData }) {
               className={`px-2.5 py-1 rounded text-xs transition-colors flex items-center gap-1.5 ${
                 filterModality === key
                   ? 'bg-white/10 text-white'
-                  : 'text-slate-500 hover:text-slate-300'
+                  : 'text-[var(--text-muted)] hover:text-[var(--text-secondary)]'
               }`}
             >
               <span
@@ -151,9 +151,9 @@ export default function MovementTimeline({ data }: { data: CrossFitData }) {
             </button>
           ))}
         </div>
-        <div className="w-px h-5 bg-[#1e1e3a]" />
+        <div className="w-px h-5 bg-[var(--panel-border)]" />
         <div className="flex items-center gap-2">
-          <span className="text-[10px] text-slate-500 uppercase tracking-wider">Show:</span>
+          <span className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider">Show:</span>
           {(['all', 'og', 'newcomer'] as const).map((mode) => (
             <button
               key={mode}
@@ -161,34 +161,34 @@ export default function MovementTimeline({ data }: { data: CrossFitData }) {
               className={`px-2.5 py-1 rounded text-xs transition-colors ${
                 highlightMode === mode
                   ? 'bg-white/10 text-white'
-                  : 'text-slate-500 hover:text-slate-300'
+                  : 'text-[var(--text-muted)] hover:text-[var(--text-secondary)]'
               }`}
             >
               {mode === 'all' ? 'All' : mode === 'og' ? 'OGs (2001)' : 'Newcomers (post-2010)'}
             </button>
           ))}
         </div>
-        <div className="ml-auto text-xs text-slate-500">
+        <div className="ml-auto text-xs text-[var(--text-muted)]">
           Showing {filteredMovements.length} of {movements.length} movements
         </div>
       </div>
 
       {/* Timeline chart */}
-      <div className="bg-[#12121a] rounded-xl border border-[#1e1e3a] overflow-hidden relative">
+      <div className="bg-[var(--panel-bg)] rounded-xl border border-[var(--panel-border)] overflow-hidden relative">
         {/* Year axis header */}
-        <div className="sticky top-0 z-10 bg-[#12121a] border-b border-[#1e1e3a]">
+        <div className="sticky top-0 z-10 bg-[var(--panel-bg)] border-b border-[var(--panel-border)]">
           <div className="flex">
             <div className="w-44 min-w-[176px] shrink-0 px-3 py-2">
-              <span className="text-[10px] text-slate-500 uppercase tracking-wider">Movement</span>
+              <span className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider">Movement</span>
             </div>
             <div className="flex-1 flex">
               {Array.from({ length: TOTAL_YEARS }, (_, i) => START_YEAR + i).map((year) => (
                 <div
                   key={year}
-                  className="flex-1 text-center py-2 border-l border-[#1e1e3a]/50"
+                  className="flex-1 text-center py-2 border-l border-[var(--panel-border)]/50"
                   style={{ minWidth: 0 }}
                 >
-                  <span className="text-[9px] font-mono text-slate-600">
+                  <span className="text-[9px] font-mono text-[var(--text-muted)]">
                     {year % 5 === 0 || year === START_YEAR ? year : ''}
                   </span>
                 </div>
@@ -231,7 +231,7 @@ export default function MovementTimeline({ data }: { data: CrossFitData }) {
                       title="Newcomer (post-2010)"
                     />
                   )}
-                  <span className="text-[10px] text-slate-400 truncate group-hover:text-slate-200 transition-colors">
+                  <span className="text-[10px] text-[var(--text-tertiary)] truncate group-hover:text-[var(--text-primary)] transition-colors">
                     {m.name}
                   </span>
                 </div>
@@ -258,7 +258,7 @@ export default function MovementTimeline({ data }: { data: CrossFitData }) {
                   {Array.from({ length: TOTAL_YEARS }, (_, i) => (
                     <div
                       key={i}
-                      className="absolute top-0 bottom-0 border-l border-[#1e1e3a]/30"
+                      className="absolute top-0 bottom-0 border-l border-[var(--panel-border)]/30"
                       style={{ left: `${(i / TOTAL_YEARS) * 100}%` }}
                     />
                   ))}
@@ -280,7 +280,7 @@ export default function MovementTimeline({ data }: { data: CrossFitData }) {
           })}
 
           {filteredMovements.length === 0 && (
-            <div className="flex items-center justify-center py-16 text-slate-500 text-sm">
+            <div className="flex items-center justify-center py-16 text-[var(--text-muted)] text-sm">
               No movements match the current filters.
             </div>
           )}
@@ -296,28 +296,28 @@ export default function MovementTimeline({ data }: { data: CrossFitData }) {
               transform: 'translate(-50%, -100%)',
             }}
           >
-            <div className="bg-[#1e1e3a] border border-[#2a2a5a] rounded-lg px-3 py-2.5 shadow-xl text-left min-w-[200px]">
+            <div className="bg-[var(--chart-tooltip-bg)] border border-[var(--chart-tooltip-border)] rounded-lg px-3 py-2.5 shadow-xl text-left min-w-[200px]">
               <div className="text-xs font-medium text-white mb-1.5">{tooltip.name}</div>
               <div className="space-y-0.5">
                 <div className="flex justify-between text-[10px]">
-                  <span className="text-slate-500">Modality</span>
-                  <span className="text-slate-300">{tooltip.modality}</span>
+                  <span className="text-[var(--text-muted)]">Modality</span>
+                  <span className="text-[var(--text-secondary)]">{tooltip.modality}</span>
                 </div>
                 <div className="flex justify-between text-[10px]">
-                  <span className="text-slate-500">First Seen</span>
-                  <span className="text-slate-300">{tooltip.firstSeen}</span>
+                  <span className="text-[var(--text-muted)]">First Seen</span>
+                  <span className="text-[var(--text-secondary)]">{tooltip.firstSeen}</span>
                 </div>
                 <div className="flex justify-between text-[10px]">
-                  <span className="text-slate-500">Last Seen</span>
-                  <span className="text-slate-300">{tooltip.lastSeen}</span>
+                  <span className="text-[var(--text-muted)]">Last Seen</span>
+                  <span className="text-[var(--text-secondary)]">{tooltip.lastSeen}</span>
                 </div>
                 <div className="flex justify-between text-[10px]">
-                  <span className="text-slate-500">Total Count</span>
-                  <span className="text-slate-300 font-mono">{tooltip.totalCount}</span>
+                  <span className="text-[var(--text-muted)]">Total Count</span>
+                  <span className="text-[var(--text-secondary)] font-mono">{tooltip.totalCount}</span>
                 </div>
                 <div className="flex justify-between text-[10px]">
-                  <span className="text-slate-500">Peak Year</span>
-                  <span className="text-slate-300 font-mono">{tooltip.peakYear}</span>
+                  <span className="text-[var(--text-muted)]">Peak Year</span>
+                  <span className="text-[var(--text-secondary)] font-mono">{tooltip.peakYear}</span>
                 </div>
               </div>
             </div>
@@ -329,7 +329,7 @@ export default function MovementTimeline({ data }: { data: CrossFitData }) {
       <div className="flex items-center gap-6 justify-center">
         <div className="flex items-center gap-4">
           {Object.entries(MODALITY_LABELS).map(([key, label]) => (
-            <span key={key} className="flex items-center gap-1.5 text-[10px] text-slate-500">
+            <span key={key} className="flex items-center gap-1.5 text-[10px] text-[var(--text-muted)]">
               <span
                 className="w-3 h-2 rounded-sm"
                 style={{ background: MODALITY_COLORS[key] }}
@@ -338,17 +338,17 @@ export default function MovementTimeline({ data }: { data: CrossFitData }) {
             </span>
           ))}
         </div>
-        <div className="w-px h-3 bg-[#1e1e3a]" />
-        <span className="flex items-center gap-1.5 text-[10px] text-slate-500">
+        <div className="w-px h-3 bg-[var(--panel-border)]" />
+        <span className="flex items-center gap-1.5 text-[10px] text-[var(--text-muted)]">
           <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#eab308' }} />
           OG (since 2001)
         </span>
-        <span className="flex items-center gap-1.5 text-[10px] text-slate-500">
+        <span className="flex items-center gap-1.5 text-[10px] text-[var(--text-muted)]">
           <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#06b6d4' }} />
           Newcomer (post-2010)
         </span>
-        <div className="w-px h-3 bg-[#1e1e3a]" />
-        <span className="text-[10px] text-slate-600">
+        <div className="w-px h-3 bg-[var(--panel-border)]" />
+        <span className="text-[10px] text-[var(--text-muted)]">
           Bar brightness = frequency (brighter = more common)
         </span>
       </div>

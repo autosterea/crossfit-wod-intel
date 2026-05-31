@@ -43,7 +43,7 @@ function YearSelect({
     <select
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      className="bg-[#12121a] text-white text-lg font-bold font-mono rounded-lg px-4 py-2.5 border border-[#2a2a5a] focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 outline-none cursor-pointer appearance-none min-w-[100px] text-center"
+      className="bg-[var(--panel-bg)] text-[var(--text-primary)] text-lg font-bold font-mono rounded-lg px-4 py-2.5 border border-[var(--panel-border-strong)] focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 outline-none cursor-pointer appearance-none min-w-[100px] text-center"
     >
       {years.map((y) => (
         <option key={y} value={y}>
@@ -55,7 +55,7 @@ function YearSelect({
 }
 
 function DiffArrow({ diff, suffix = '' }: { diff: number; suffix?: string }) {
-  if (diff === 0) return <span className="text-slate-500 text-xs font-mono">--</span>
+  if (diff === 0) return <span className="text-[var(--text-muted)] text-xs font-mono">--</span>
   const positive = diff > 0
   return (
     <span
@@ -75,8 +75,8 @@ function SectionCard({
   children: React.ReactNode
 }) {
   return (
-    <div className="bg-[#12121a] rounded-xl p-5 border border-[#1e1e3a]">
-      <h3 className="text-xs font-medium text-slate-400 uppercase tracking-wider mb-4">
+    <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-[var(--panel-border)]">
+      <h3 className="text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider mb-4">
         {title}
       </h3>
       {children}
@@ -128,10 +128,11 @@ function ComparisonPie({
           </Pie>
           <Tooltip
             contentStyle={{
-              background: '#1e1e3a',
-              border: '1px solid #2a2a5a',
+              background: 'var(--chart-tooltip-bg)',
+              border: '1px solid var(--chart-tooltip-border)',
               borderRadius: 8,
               fontSize: 12,
+              color: 'var(--text-primary)',
             }}
             formatter={(value: any, name: any) => {
               const pct = ((Number(value) / total) * 100).toFixed(1)
@@ -144,7 +145,7 @@ function ComparisonPie({
         {entries.slice(0, 6).map((e) => {
           const pct = ((e.value / total) * 100).toFixed(0)
           return (
-            <div key={e.name} className="flex items-center gap-1 text-[10px] text-slate-400">
+            <div key={e.name} className="flex items-center gap-1 text-[10px] text-[var(--text-tertiary)]">
               <div
                 className="w-2 h-2 rounded-full flex-shrink-0"
                 style={{ background: colors[e.name] || '#6b7280' }}
@@ -189,7 +190,7 @@ function StackedBar({
                 minWidth: pct > 0 ? 2 : 0,
               }}
             >
-              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 px-2 py-1 text-[10px] bg-[#1e1e3a] border border-[#2a2a5a] rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 px-2 py-1 text-[10px] bg-[var(--chart-tooltip-bg)] border border-[var(--chart-tooltip-border)] rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
                 {name}: {pct.toFixed(1)}%
               </div>
             </div>
@@ -200,7 +201,7 @@ function StackedBar({
         {entries.slice(0, 5).map(([name, count]) => {
           const pct = ((count / total) * 100).toFixed(0)
           return (
-            <div key={name} className="flex items-center gap-1 text-[10px] text-slate-500">
+            <div key={name} className="flex items-center gap-1 text-[10px] text-[var(--text-muted)]">
               <div
                 className="w-2 h-2 rounded-full flex-shrink-0"
                 style={{ background: colors[name] || '#6b7280' }}
@@ -315,7 +316,7 @@ export default function HeadToHead({ data }: { data: CrossFitData }) {
 
   if (!snapA || !snapB) {
     return (
-      <div className="flex items-center justify-center h-64 text-slate-400 text-sm">
+      <div className="flex items-center justify-center h-64 text-[var(--text-tertiary)] text-sm">
         Select two valid years to compare.
       </div>
     )
@@ -329,7 +330,7 @@ export default function HeadToHead({ data }: { data: CrossFitData }) {
       {/* Header */}
       <div>
         <h2 className="text-2xl font-bold text-white">Head-to-Head Comparison</h2>
-        <p className="text-sm text-slate-400 mt-1">
+        <p className="text-sm text-[var(--text-tertiary)] mt-1">
           Pick any two years and see exactly how CrossFit's programming changed. This shows what
           got more popular, what faded away, and how the overall philosophy shifted.
         </p>
@@ -338,7 +339,7 @@ export default function HeadToHead({ data }: { data: CrossFitData }) {
       {/* Year selectors */}
       <div className="flex items-center justify-center gap-4 py-4">
         <YearSelect value={yearA} onChange={setYearA} years={years} />
-        <div className="flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-blue-500/20 via-purple-500/20 to-rose-500/20 border border-[#2a2a5a]">
+        <div className="flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-blue-500/20 via-purple-500/20 to-rose-500/20 border border-[var(--panel-border-strong)]">
           <span className="text-base font-black text-white tracking-wider">VS</span>
         </div>
         <YearSelect value={yearB} onChange={setYearB} years={years} />
@@ -353,17 +354,17 @@ export default function HeadToHead({ data }: { data: CrossFitData }) {
               <div className="text-3xl font-bold font-mono text-blue-400">
                 {snapA.workout_count.toLocaleString()}
               </div>
-              <div className="text-[10px] text-slate-500 mt-0.5">workouts</div>
+              <div className="text-[10px] text-[var(--text-muted)] mt-0.5">workouts</div>
             </div>
             <div className="flex flex-col items-center px-4">
-              <div className="text-[10px] text-slate-500 mb-0.5">Workouts</div>
+              <div className="text-[10px] text-[var(--text-muted)] mb-0.5">Workouts</div>
               <DiffArrow diff={workoutDiff} />
             </div>
             <div className="text-center flex-1">
               <div className="text-3xl font-bold font-mono text-purple-400">
                 {snapB.workout_count.toLocaleString()}
               </div>
-              <div className="text-[10px] text-slate-500 mt-0.5">workouts</div>
+              <div className="text-[10px] text-[var(--text-muted)] mt-0.5">workouts</div>
             </div>
           </div>
 
@@ -373,17 +374,17 @@ export default function HeadToHead({ data }: { data: CrossFitData }) {
               <div className="text-3xl font-bold font-mono text-blue-400">
                 {snapA.rest_count.toLocaleString()}
               </div>
-              <div className="text-[10px] text-slate-500 mt-0.5">rest days</div>
+              <div className="text-[10px] text-[var(--text-muted)] mt-0.5">rest days</div>
             </div>
             <div className="flex flex-col items-center px-4">
-              <div className="text-[10px] text-slate-500 mb-0.5">Rest Days</div>
+              <div className="text-[10px] text-[var(--text-muted)] mb-0.5">Rest Days</div>
               <DiffArrow diff={restDiff} />
             </div>
             <div className="text-center flex-1">
               <div className="text-3xl font-bold font-mono text-purple-400">
                 {snapB.rest_count.toLocaleString()}
               </div>
-              <div className="text-[10px] text-slate-500 mt-0.5">rest days</div>
+              <div className="text-[10px] text-[var(--text-muted)] mt-0.5">rest days</div>
             </div>
           </div>
         </div>
@@ -398,7 +399,7 @@ export default function HeadToHead({ data }: { data: CrossFitData }) {
             year={yearA}
             colorSide="text-blue-400"
           />
-          <div className="w-px bg-[#1e1e3a] self-stretch" />
+          <div className="w-px bg-[var(--panel-border)] self-stretch" />
           <ComparisonPie
             data={snapB.modality}
             colors={MODALITY_COLORS}
@@ -425,16 +426,16 @@ export default function HeadToHead({ data }: { data: CrossFitData }) {
                     className={`flex items-center gap-2 px-3 py-1.5 rounded-lg ${
                       isUnique
                         ? 'bg-blue-500/10 border border-blue-500/20'
-                        : 'bg-[#0a0a14]'
+                        : 'bg-[var(--app-bg)]'
                     }`}
                   >
-                    <span className="text-[10px] text-slate-500 w-4 font-mono">{i + 1}</span>
+                    <span className="text-[10px] text-[var(--text-muted)] w-4 font-mono">{i + 1}</span>
                     <div
                       className="w-2 h-2 rounded-full flex-shrink-0"
                       style={{ background: modalityColor }}
                     />
-                    <span className="text-sm text-slate-200 flex-1 truncate">{m.name}</span>
-                    <span className="text-xs text-slate-400 font-mono">{m.count}</span>
+                    <span className="text-sm text-[var(--text-primary)] flex-1 truncate">{m.name}</span>
+                    <span className="text-xs text-[var(--text-tertiary)] font-mono">{m.count}</span>
                     {isUnique && (
                       <span className="text-[9px] font-medium text-blue-400 px-1.5 py-0.5 rounded bg-blue-500/10">
                         UNIQUE
@@ -460,16 +461,16 @@ export default function HeadToHead({ data }: { data: CrossFitData }) {
                     className={`flex items-center gap-2 px-3 py-1.5 rounded-lg ${
                       isUnique
                         ? 'bg-purple-500/10 border border-purple-500/20'
-                        : 'bg-[#0a0a14]'
+                        : 'bg-[var(--app-bg)]'
                     }`}
                   >
-                    <span className="text-[10px] text-slate-500 w-4 font-mono">{i + 1}</span>
+                    <span className="text-[10px] text-[var(--text-muted)] w-4 font-mono">{i + 1}</span>
                     <div
                       className="w-2 h-2 rounded-full flex-shrink-0"
                       style={{ background: modalityColor }}
                     />
-                    <span className="text-sm text-slate-200 flex-1 truncate">{m.name}</span>
-                    <span className="text-xs text-slate-400 font-mono">{m.count}</span>
+                    <span className="text-sm text-[var(--text-primary)] flex-1 truncate">{m.name}</span>
+                    <span className="text-xs text-[var(--text-tertiary)] font-mono">{m.count}</span>
                     {isUnique && (
                       <span className="text-[9px] font-medium text-purple-400 px-1.5 py-0.5 rounded bg-purple-500/10">
                         UNIQUE
@@ -530,7 +531,7 @@ export default function HeadToHead({ data }: { data: CrossFitData }) {
       {/* 5. Key Differences */}
       <SectionCard title="Key Differences">
         {keyDiffs.length === 0 ? (
-          <p className="text-sm text-slate-500">
+          <p className="text-sm text-[var(--text-muted)]">
             No significant differences found. Try comparing years that are farther apart.
           </p>
         ) : (
@@ -546,7 +547,7 @@ export default function HeadToHead({ data }: { data: CrossFitData }) {
               return (
                 <div
                   key={i}
-                  className="flex items-start gap-3 px-4 py-2.5 rounded-lg bg-[#0a0a14]"
+                  className="flex items-start gap-3 px-4 py-2.5 rounded-lg bg-[var(--app-bg)]"
                 >
                   <span
                     className={`text-base mt-0.5 ${isUp ? 'text-emerald-400' : 'text-rose-400'}`}
@@ -554,7 +555,7 @@ export default function HeadToHead({ data }: { data: CrossFitData }) {
                     {isUp ? '\u25B2' : '\u25BC'}
                   </span>
                   <div className="flex-1 min-w-0">
-                    <div className="text-sm text-slate-200">
+                    <div className="text-sm text-[var(--text-primary)]">
                       <span className="font-semibold">{d.label}</span>{' '}
                       {isUp ? 'rose' : 'dropped'} from{' '}
                       <span className="font-mono text-blue-400">{d.pctA.toFixed(1)}%</span> to{' '}
@@ -568,17 +569,17 @@ export default function HeadToHead({ data }: { data: CrossFitData }) {
                         </span>
                       )}
                     </div>
-                    <div className="text-[10px] text-slate-500 mt-0.5">{d.category}</div>
+                    <div className="text-[10px] text-[var(--text-muted)] mt-0.5">{d.category}</div>
                   </div>
                   {/* mini bar comparison */}
                   <div className="flex items-center gap-1.5 flex-shrink-0">
-                    <div className="w-16 h-1.5 rounded-full bg-[#1e1e3a] overflow-hidden">
+                    <div className="w-16 h-1.5 rounded-full bg-[var(--panel-border)] overflow-hidden">
                       <div
                         className="h-full rounded-full bg-blue-400/60"
                         style={{ width: `${Math.min(d.pctA, 100)}%` }}
                       />
                     </div>
-                    <div className="w-16 h-1.5 rounded-full bg-[#1e1e3a] overflow-hidden">
+                    <div className="w-16 h-1.5 rounded-full bg-[var(--panel-border)] overflow-hidden">
                       <div
                         className="h-full rounded-full bg-purple-400/60"
                         style={{ width: `${Math.min(d.pctB, 100)}%` }}

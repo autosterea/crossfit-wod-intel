@@ -227,7 +227,7 @@ function ScoreBar({ score, grade }: { score: number; grade: LetterGrade }) {
         flex: 1,
         height: 8,
         borderRadius: 4,
-        background: '#1e1e3a',
+        background: 'var(--panel-bg-hover)',
         overflow: 'hidden',
         position: 'relative',
       }}
@@ -250,7 +250,7 @@ function SubjectRow({ result }: { result: GradeResult }) {
 
   return (
     <div
-      className="grid gap-3 sm:gap-4 items-center py-3 sm:py-3.5 border-b border-[#1e1e3a]"
+      className="grid gap-3 sm:gap-4 items-center py-3 sm:py-3.5 border-b border-[var(--panel-border)]"
       style={{
         gridTemplateColumns: 'minmax(0, 1fr)',
       }}
@@ -262,10 +262,10 @@ function SubjectRow({ result }: { result: GradeResult }) {
 
         {/* Subject Name */}
         <div className="min-w-0 flex-1">
-          <div style={{ fontSize: 14, fontWeight: 600, color: '#e2e8f0' }}>
+          <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-primary)' }}>
             {result.subject}
           </div>
-          <div style={{ fontSize: 11, color: '#94a3b8', marginTop: 2 }}>
+          <div style={{ fontSize: 11, color: 'var(--text-secondary)', marginTop: 2 }}>
             {result.rawValue}
           </div>
         </div>
@@ -375,13 +375,13 @@ export default function ReportCard({
       {/* Header Explainer */}
       <div
         style={{
-          background: '#12121a',
+          background: 'var(--panel-bg)',
           borderRadius: 12,
           padding: '16px 20px',
-          border: '1px solid #1e1e3a',
+          border: '1px solid var(--panel-border)',
         }}
       >
-        <p style={{ fontSize: 13, color: '#94a3b8', lineHeight: 1.6, margin: 0 }}>
+        <p style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.6, margin: 0 }}>
           We graded CrossFit's programming like a school report card. Each category tests a different
           aspect of good programming. A+ means world-class. F means there's serious work to do.
         </p>
@@ -390,17 +390,17 @@ export default function ReportCard({
       {/* Overall GPA Card */}
       <div
         style={{
-          background: 'linear-gradient(135deg, #12121a 0%, #1a1a2e 100%)',
+          background: 'linear-gradient(135deg, var(--panel-bg) 0%, var(--panel-bg-hover) 100%)',
           borderRadius: 16,
           padding: '24px 16px',
-          border: '1px solid #1e1e3a',
+          border: '1px solid var(--panel-border)',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           gap: 16,
         }}
       >
-        <div style={{ fontSize: 12, fontWeight: 600, color: '#64748b', textTransform: 'uppercase', letterSpacing: 2 }}>
+        <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: 2 }}>
           Overall GPA
         </div>
 
@@ -418,7 +418,7 @@ export default function ReportCard({
           >
             {gpa.toFixed(2)}
           </div>
-          <div style={{ fontSize: 13, color: '#94a3b8', marginTop: 4 }}>
+          <div style={{ fontSize: 13, color: 'var(--text-secondary)', marginTop: 4 }}>
             out of 4.30
           </div>
         </div>
@@ -429,33 +429,33 @@ export default function ReportCard({
             gap: 16,
             marginTop: 8,
             fontSize: 12,
-            color: '#64748b',
+            color: 'var(--text-tertiary)',
           }}
         >
-          <span>Based on <strong style={{ color: '#e2e8f0' }}>{data.overview.total_workouts.toLocaleString()}</strong> workouts</span>
-          <span style={{ color: '#2a2a4a' }}>|</span>
-          <span><strong style={{ color: '#e2e8f0' }}>{Object.keys(data.overview.movement_frequency).length}</strong> unique movements</span>
+          <span>Based on <strong style={{ color: 'var(--text-primary)' }}>{data.overview.total_workouts.toLocaleString()}</strong> workouts</span>
+          <span style={{ color: 'var(--panel-border-strong)' }}>|</span>
+          <span><strong style={{ color: 'var(--text-primary)' }}>{Object.keys(data.overview.movement_frequency).length}</strong> unique movements</span>
         </div>
       </div>
 
       {/* Subject Grades */}
       <div
         style={{
-          background: '#12121a',
+          background: 'var(--panel-bg)',
           borderRadius: 16,
           padding: '8px 12px 16px',
-          border: '1px solid #1e1e3a',
+          border: '1px solid var(--panel-border)',
         }}
       >
         <div
           style={{
             fontSize: 12,
             fontWeight: 600,
-            color: '#64748b',
+            color: 'var(--text-tertiary)',
             textTransform: 'uppercase',
             letterSpacing: 2,
             padding: '16px 0 8px',
-            borderBottom: '1px solid #1e1e3a',
+            borderBottom: '1px solid var(--panel-border)',
           }}
         >
           Subject Grades
@@ -469,10 +469,10 @@ export default function ReportCard({
       {/* Teacher's Notes */}
       <div
         style={{
-          background: '#12121a',
+          background: 'var(--panel-bg)',
           borderRadius: 16,
           padding: 24,
-          border: '1px solid #1e1e3a',
+          border: '1px solid var(--panel-border)',
           position: 'relative',
         }}
       >
@@ -480,7 +480,7 @@ export default function ReportCard({
           style={{
             fontSize: 12,
             fontWeight: 600,
-            color: '#64748b',
+            color: 'var(--text-tertiary)',
             textTransform: 'uppercase',
             letterSpacing: 2,
             marginBottom: 16,
@@ -491,13 +491,13 @@ export default function ReportCard({
 
         <div
           style={{
-            background: '#0c0c14',
+            background: 'var(--code-bg)',
             borderRadius: 12,
             padding: 20,
             borderLeft: `4px solid ${overallColor}`,
           }}
         >
-          <p style={{ fontSize: 14, color: '#cbd5e1', lineHeight: 1.75, margin: 0 }}>
+          <p style={{ fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.75, margin: 0 }}>
             {teacherNotes}
           </p>
         </div>
@@ -520,7 +520,7 @@ export default function ReportCard({
                 alignItems: 'center',
                 gap: 6,
                 fontSize: 11,
-                color: '#64748b',
+                color: 'var(--text-tertiary)',
               }}
             >
               <span

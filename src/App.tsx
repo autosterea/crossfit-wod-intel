@@ -72,7 +72,7 @@ function LoadingFallback() {
     <div className="flex items-center justify-center h-full min-h-[400px]">
       <div className="flex flex-col items-center gap-4">
         <div className="w-12 h-12 border-2 border-blue-400/30 border-t-blue-400 rounded-full animate-spin" />
-        <p className="text-slate-400 text-sm">Loading...</p>
+        <p className="text-[var(--text-tertiary)] text-sm">Loading...</p>
       </div>
     </div>
   )
@@ -210,25 +210,25 @@ function App() {
         </Suspense>
 
         {/* Footer */}
-        <footer className="mt-12 mb-6 pt-6 border-t border-[#1e1e3a] px-4">
+        <footer className="mt-12 mb-6 pt-6 border-t border-[var(--panel-border)] px-4">
           <div className="text-center space-y-3">
             <div className="flex items-center justify-center gap-2.5">
               <div className="w-8 h-8 rounded-full bg-white p-1 shrink-0">
                 <img src="/pa-logo.png" alt="Persistence Athletics" className="w-full h-full object-contain rounded-full" />
               </div>
               <div className="text-left">
-                <p className="text-sm font-semibold text-slate-200">A <a href="https://persistenceathletics.com" target="_blank" rel="noopener noreferrer" className="text-[#91C640] hover:text-[#a8d35e]">Persistence Athletics</a> tool</p>
-                <p className="text-[10px] text-slate-500">Built by Ravikant Dewangan, Head Coach (MS S&C, CCFT)</p>
+                <p className="text-sm font-semibold text-[var(--text-primary)]">A <a href="https://persistenceathletics.com" target="_blank" rel="noopener noreferrer" className="text-[#91C640] hover:text-[#a8d35e]">Persistence Athletics</a> tool</p>
+                <p className="text-[10px] text-[var(--text-muted)]">Built by Ravikant Dewangan, Head Coach (MS S&C, CCFT)</p>
               </div>
             </div>
-            <div className="flex items-center justify-center gap-2 text-[10px] text-slate-600">
+            <div className="flex items-center justify-center gap-2 text-[10px] text-[var(--text-muted)]">
               <span>Platform by</span>
-              <a href="https://autosterea.com" target="_blank" rel="noopener noreferrer" className="text-slate-500 hover:text-slate-400 transition-colors">Autosterea</a>
-              <span className="text-slate-700">|</span>
-              <button onClick={() => useStore.getState().setActiveTab('methodology')} className="text-slate-500 hover:text-slate-400 transition-colors cursor-pointer">Methodology</button>
+              <a href="https://autosterea.com" target="_blank" rel="noopener noreferrer" className="text-[var(--text-muted)] hover:text-[var(--text-tertiary)] transition-colors">Autosterea</a>
+              <span className="text-[var(--text-muted)]">|</span>
+              <button onClick={() => useStore.getState().setActiveTab('methodology')} className="text-[var(--text-muted)] hover:text-[var(--text-tertiary)] transition-colors cursor-pointer">Methodology</button>
             </div>
-            <div className="text-[11px] sm:text-[10px] text-slate-600 leading-relaxed max-w-xl mx-auto">
-              <p>Workout data sourced from <a href="https://www.crossfit.com" target="_blank" rel="noopener noreferrer" className="text-slate-500 hover:text-slate-400">crossfit.com</a>. CrossFit is a registered trademark of CrossFit, LLC. This project is not affiliated with, endorsed by, or sponsored by CrossFit, LLC. All workout data is publicly available and used for educational and analytical purposes only.</p>
+            <div className="text-[11px] sm:text-[10px] text-[var(--text-muted)] leading-relaxed max-w-xl mx-auto">
+              <p>Workout data sourced from <a href="https://www.crossfit.com" target="_blank" rel="noopener noreferrer" className="text-[var(--text-muted)] hover:text-[var(--text-tertiary)]">crossfit.com</a>. CrossFit is a registered trademark of CrossFit, LLC. This project is not affiliated with, endorsed by, or sponsored by CrossFit, LLC. All workout data is publicly available and used for educational and analytical purposes only.</p>
             </div>
           </div>
         </footer>

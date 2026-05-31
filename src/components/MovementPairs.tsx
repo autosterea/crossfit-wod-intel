@@ -55,7 +55,7 @@ function ExplainerBox({ children }: { children: React.ReactNode }) {
   return (
     <div className="bg-blue-500/5 rounded-lg p-4 border border-blue-500/10 mb-4">
       <div className="text-xs font-medium text-blue-400 mb-1">What is this?</div>
-      <p className="text-xs text-slate-400 leading-relaxed">{children}</p>
+      <p className="text-xs text-[var(--text-tertiary)] leading-relaxed">{children}</p>
     </div>
   )
 }
@@ -66,12 +66,12 @@ function PartnerTooltip({ active, payload }: any) {
   if (!active || !payload?.length) return null
   const d = payload[0].payload
   return (
-    <div className="bg-[#1e1e3a] border border-[#2a2a5a] rounded-lg p-3 text-xs shadow-xl">
-      <div className="font-medium text-white mb-1">{d.name}</div>
-      <div className="text-slate-400">
-        Co-occurrences: <span className="text-white font-mono">{d.count.toLocaleString()}</span>
+    <div className="bg-[var(--panel-bg-hover)] border border-[var(--panel-border-strong)] rounded-lg p-3 text-xs shadow-xl">
+      <div className="font-medium text-[var(--text-primary)] mb-1">{d.name}</div>
+      <div className="text-[var(--text-tertiary)]">
+        Co-occurrences: <span className="text-[var(--text-primary)] font-mono">{d.count.toLocaleString()}</span>
       </div>
-      <div className="text-slate-400">
+      <div className="text-[var(--text-tertiary)]">
         Modality:{' '}
         <span
           style={{ color: MODALITY_DOT_COLORS[d.modality] || '#6b7280' }}
@@ -246,8 +246,8 @@ export default function MovementPairs({ data }: { data: CrossFitData }) {
     <div className="space-y-4">
       {/* Header */}
       <div>
-        <h2 className="text-2xl font-bold text-white">Movement Pairs</h2>
-        <p className="text-sm text-slate-400 mt-1">
+        <h2 className="text-2xl font-bold text-[var(--text-primary)]">Movement Pairs</h2>
+        <p className="text-sm text-[var(--text-tertiary)] mt-1">
           Co-occurrence analysis of every movement pairing across the entire CrossFit.com programming history.
         </p>
       </div>
@@ -262,8 +262,8 @@ export default function MovementPairs({ data }: { data: CrossFitData }) {
       {/* ══════════════════════════════════════════════════════════════
           SECTION 1: Top Movement Pairs Table
           ════════════════════════════════════════════════════════════ */}
-      <div className="bg-[#12121a] rounded-xl p-5 border border-[#1e1e3a]">
-        <h3 className="text-sm font-medium text-white mb-4">Top Movement Pairs</h3>
+      <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-[var(--panel-border)]">
+        <h3 className="text-sm font-medium text-[var(--text-primary)] mb-4">Top Movement Pairs</h3>
 
         {/* Filters row */}
         <div className="flex flex-wrap gap-2 mb-4">
@@ -273,14 +273,14 @@ export default function MovementPairs({ data }: { data: CrossFitData }) {
             placeholder="Search movements..."
             value={search}
             onChange={(e) => { setSearch(e.target.value); setPage(0) }}
-            className="bg-[#0a0a14] text-sm text-white placeholder-slate-600 border border-[#2a2a5a] rounded-lg px-3 py-1.5 outline-none focus:border-blue-500/50 w-full sm:w-52"
+            className="bg-[var(--app-bg)] text-sm text-[var(--text-primary)] placeholder-slate-600 border border-[var(--panel-border-strong)] rounded-lg px-3 py-1.5 outline-none focus:border-blue-500/50 w-full sm:w-52"
           />
 
           {/* Modality filter */}
           <select
             value={modalityFilter}
             onChange={(e) => { setModalityFilter(e.target.value as ModalityFilter); setPage(0) }}
-            className="bg-[#0a0a14] text-sm text-white border border-[#2a2a5a] rounded-lg px-3 py-1.5 outline-none focus:border-blue-500/50 cursor-pointer appearance-none"
+            className="bg-[var(--app-bg)] text-sm text-[var(--text-primary)] border border-[var(--panel-border-strong)] rounded-lg px-3 py-1.5 outline-none focus:border-blue-500/50 cursor-pointer appearance-none"
           >
             <option value="all">All Modalities</option>
             <option value="MM">Mono-Mono</option>
@@ -293,7 +293,7 @@ export default function MovementPairs({ data }: { data: CrossFitData }) {
           <select
             value={sortBy}
             onChange={(e) => { setSortBy(e.target.value as PairSortKey); setPage(0) }}
-            className="bg-[#0a0a14] text-sm text-white border border-[#2a2a5a] rounded-lg px-3 py-1.5 outline-none focus:border-blue-500/50 cursor-pointer appearance-none"
+            className="bg-[var(--app-bg)] text-sm text-[var(--text-primary)] border border-[var(--panel-border-strong)] rounded-lg px-3 py-1.5 outline-none focus:border-blue-500/50 cursor-pointer appearance-none"
           >
             <option value="count">Sort: Co-occurrences</option>
             <option value="pctA">Sort: % of A</option>
@@ -301,7 +301,7 @@ export default function MovementPairs({ data }: { data: CrossFitData }) {
             <option value="alpha">Sort: Alphabetical</option>
           </select>
 
-          <span className="text-[10px] text-slate-500 ml-auto">
+          <span className="text-[10px] text-[var(--text-muted)] ml-auto">
             {filteredPairs.length} pair{filteredPairs.length !== 1 ? 's' : ''}
           </span>
         </div>
@@ -311,7 +311,7 @@ export default function MovementPairs({ data }: { data: CrossFitData }) {
           {Object.entries(MODALITY_DOT_COLORS).map(([key, color]) => (
             <div key={key} className="flex items-center gap-1.5">
               <div className="w-2.5 h-2.5 rounded-full" style={{ background: color }} />
-              <span className="text-[10px] text-slate-400">{MODALITY_LABELS[key]} ({key})</span>
+              <span className="text-[10px] text-[var(--text-tertiary)]">{MODALITY_LABELS[key]} ({key})</span>
             </div>
           ))}
         </div>
@@ -320,13 +320,13 @@ export default function MovementPairs({ data }: { data: CrossFitData }) {
         <div className="overflow-x-auto">
           <table className="w-full text-xs">
             <thead>
-              <tr className="bg-[#0a0a14] border-b border-[#1e1e3a]">
-                <th className="text-left py-2 px-3 text-slate-500 font-medium w-10">#</th>
-                <th className="text-left py-2 px-3 text-slate-400 font-medium">Movement A</th>
-                <th className="text-left py-2 px-3 text-slate-400 font-medium">Movement B</th>
-                <th className="text-right py-2 px-3 text-slate-400 font-medium">Co-occurrences</th>
-                <th className="text-right py-2 px-3 text-slate-400 font-medium">% of A&apos;s WODs</th>
-                <th className="text-right py-2 px-3 text-slate-400 font-medium">% of B&apos;s WODs</th>
+              <tr className="bg-[var(--app-bg)] border-b border-[var(--panel-border)]">
+                <th className="text-left py-2 px-3 text-[var(--text-muted)] font-medium w-10">#</th>
+                <th className="text-left py-2 px-3 text-[var(--text-tertiary)] font-medium">Movement A</th>
+                <th className="text-left py-2 px-3 text-[var(--text-tertiary)] font-medium">Movement B</th>
+                <th className="text-right py-2 px-3 text-[var(--text-tertiary)] font-medium">Co-occurrences</th>
+                <th className="text-right py-2 px-3 text-[var(--text-tertiary)] font-medium">% of A&apos;s WODs</th>
+                <th className="text-right py-2 px-3 text-[var(--text-tertiary)] font-medium">% of B&apos;s WODs</th>
               </tr>
             </thead>
             <tbody>
@@ -335,30 +335,30 @@ export default function MovementPairs({ data }: { data: CrossFitData }) {
                 return (
                   <tr
                     key={`${row.movA}-${row.movB}`}
-                    className={`border-b border-[#1e1e3a]/50 hover:bg-white/[0.02] transition-colors ${
+                    className={`border-b border-[var(--panel-border)]/50 hover:bg-white/[0.02] transition-colors ${
                       i % 2 === 0 ? 'bg-white/[0.01]' : ''
                     }`}
                   >
-                    <td className="py-1.5 px-3 text-slate-600 font-mono">{rank}</td>
-                    <td className="py-1.5 px-3 text-slate-300">
+                    <td className="py-1.5 px-3 text-[var(--text-muted)] font-mono">{rank}</td>
+                    <td className="py-1.5 px-3 text-[var(--text-secondary)]">
                       <span className="inline-flex items-center">
                         <ModalityDot modality={row.modA} />
                         {row.nameA}
                       </span>
                     </td>
-                    <td className="py-1.5 px-3 text-slate-300">
+                    <td className="py-1.5 px-3 text-[var(--text-secondary)]">
                       <span className="inline-flex items-center">
                         <ModalityDot modality={row.modB} />
                         {row.nameB}
                       </span>
                     </td>
-                    <td className="py-1.5 px-3 text-right font-mono text-slate-300">
+                    <td className="py-1.5 px-3 text-right font-mono text-[var(--text-secondary)]">
                       {row.count.toLocaleString()}
                     </td>
-                    <td className="py-1.5 px-3 text-right font-mono text-slate-400">
+                    <td className="py-1.5 px-3 text-right font-mono text-[var(--text-tertiary)]">
                       {row.pctA}%
                     </td>
-                    <td className="py-1.5 px-3 text-right font-mono text-slate-400">
+                    <td className="py-1.5 px-3 text-right font-mono text-[var(--text-tertiary)]">
                       {row.pctB}%
                     </td>
                   </tr>
@@ -366,7 +366,7 @@ export default function MovementPairs({ data }: { data: CrossFitData }) {
               })}
               {pagedPairs.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="py-8 text-center text-slate-600">
+                  <td colSpan={6} className="py-8 text-center text-[var(--text-muted)]">
                     No pairs match the current filters.
                   </td>
                 </tr>
@@ -381,17 +381,17 @@ export default function MovementPairs({ data }: { data: CrossFitData }) {
             <button
               onClick={() => setPage((p) => Math.max(0, p - 1))}
               disabled={safePage === 0}
-              className="px-3 py-1 text-xs rounded-lg border border-[#2a2a5a] text-slate-400 hover:text-white hover:border-blue-500/50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+              className="px-3 py-1 text-xs rounded-lg border border-[var(--panel-border-strong)] text-[var(--text-tertiary)] hover:text-[var(--text-primary)] hover:border-blue-500/50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
             >
               Previous
             </button>
-            <span className="text-[10px] text-slate-500 font-mono">
+            <span className="text-[10px] text-[var(--text-muted)] font-mono">
               Page {safePage + 1} of {totalPages}
             </span>
             <button
               onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
               disabled={safePage >= totalPages - 1}
-              className="px-3 py-1 text-xs rounded-lg border border-[#2a2a5a] text-slate-400 hover:text-white hover:border-blue-500/50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+              className="px-3 py-1 text-xs rounded-lg border border-[var(--panel-border-strong)] text-[var(--text-tertiary)] hover:text-[var(--text-primary)] hover:border-blue-500/50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
             >
               Next
             </button>
@@ -402,14 +402,14 @@ export default function MovementPairs({ data }: { data: CrossFitData }) {
       {/* ══════════════════════════════════════════════════════════════
           SECTION 2: Movement Relationship Explorer
           ════════════════════════════════════════════════════════════ */}
-      <div className="bg-[#12121a] rounded-xl p-5 border border-[#1e1e3a]">
-        <h3 className="text-sm font-medium text-white mb-4">Movement Relationship Explorer</h3>
+      <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-[var(--panel-border)]">
+        <h3 className="text-sm font-medium text-[var(--text-primary)] mb-4">Movement Relationship Explorer</h3>
 
         {/* Dropdown */}
         <select
           value={selectedMovement}
           onChange={(e) => setSelectedMovement(e.target.value)}
-          className="bg-[#0a0a14] text-sm text-white border border-[#2a2a5a] rounded-lg px-4 py-2 outline-none focus:border-blue-500/50 cursor-pointer appearance-none min-w-[240px] mb-4"
+          className="bg-[var(--app-bg)] text-sm text-[var(--text-primary)] border border-[var(--panel-border-strong)] rounded-lg px-4 py-2 outline-none focus:border-blue-500/50 cursor-pointer appearance-none min-w-[240px] mb-4"
         >
           <option value="">Select a movement...</option>
           {movementOptions.map((m) => (
@@ -420,7 +420,7 @@ export default function MovementPairs({ data }: { data: CrossFitData }) {
         </select>
 
         {!selectedMovement && (
-          <p className="text-xs text-slate-600 italic">
+          <p className="text-xs text-[var(--text-muted)] italic">
             Choose a movement above to explore its relationships.
           </p>
         )}
@@ -430,7 +430,7 @@ export default function MovementPairs({ data }: { data: CrossFitData }) {
             {/* Stats row */}
             <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3">
               <div className="bg-gradient-to-br from-cyan-500/10 to-blue-500/10 rounded-xl p-4 border border-cyan-500/20">
-                <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">
+                <div className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">
                   Total Appearances
                 </div>
                 <div className="text-2xl font-bold font-mono text-cyan-400">
@@ -439,19 +439,19 @@ export default function MovementPairs({ data }: { data: CrossFitData }) {
               </div>
 
               <div className="bg-gradient-to-br from-emerald-500/10 to-green-500/10 rounded-xl p-4 border border-emerald-500/20">
-                <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">
+                <div className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">
                   Partners
                 </div>
                 <div className="text-2xl font-bold font-mono text-emerald-400">
                   {explorerData.partnerCount}
                 </div>
-                <div className="text-[10px] text-slate-400 mt-0.5">
+                <div className="text-[10px] text-[var(--text-tertiary)] mt-0.5">
                   of {movements.length - 1} possible
                 </div>
               </div>
 
               <div className="bg-gradient-to-br from-amber-500/10 to-yellow-500/10 rounded-xl p-4 border border-amber-500/20">
-                <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">
+                <div className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">
                   Most Common Partner
                 </div>
                 <div
@@ -461,14 +461,14 @@ export default function MovementPairs({ data }: { data: CrossFitData }) {
                   {explorerData.mostCommon?.name || 'None'}
                 </div>
                 {explorerData.mostCommon && (
-                  <div className="text-[10px] text-slate-400 mt-0.5 font-mono">
+                  <div className="text-[10px] text-[var(--text-tertiary)] mt-0.5 font-mono">
                     {explorerData.mostCommon.count.toLocaleString()} co-occurrences
                   </div>
                 )}
               </div>
 
               <div className="bg-gradient-to-br from-purple-500/10 to-violet-500/10 rounded-xl p-4 border border-purple-500/20">
-                <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">
+                <div className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">
                   Rarest Partner
                 </div>
                 <div
@@ -478,7 +478,7 @@ export default function MovementPairs({ data }: { data: CrossFitData }) {
                   {explorerData.rarest?.name || 'None'}
                 </div>
                 {explorerData.rarest && (
-                  <div className="text-[10px] text-slate-400 mt-0.5 font-mono">
+                  <div className="text-[10px] text-[var(--text-tertiary)] mt-0.5 font-mono">
                     {explorerData.rarest.count.toLocaleString()} co-occurrence{explorerData.rarest.count !== 1 ? 's' : ''}
                   </div>
                 )}
@@ -488,7 +488,7 @@ export default function MovementPairs({ data }: { data: CrossFitData }) {
             {/* Top Partners bar chart */}
             {explorerData.top15.length > 0 && (
               <div>
-                <h4 className="text-xs font-medium text-slate-400 uppercase tracking-wider mb-2">
+                <h4 className="text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider mb-2">
                   Top {explorerData.top15.length} Partners by Co-occurrence
                 </h4>
                 {/* Modality Legend */}
@@ -496,7 +496,7 @@ export default function MovementPairs({ data }: { data: CrossFitData }) {
                   {Object.entries(MODALITY_DOT_COLORS).map(([key, color]) => (
                     <div key={key} className="flex items-center gap-1.5">
                       <div className="w-2.5 h-2.5 rounded-sm" style={{ background: color }} />
-                      <span className="text-[10px] text-slate-400">{MODALITY_LABELS[key]} ({key})</span>
+                      <span className="text-[10px] text-[var(--text-tertiary)]">{MODALITY_LABELS[key]} ({key})</span>
                     </div>
                   ))}
                 </div>
@@ -507,16 +507,16 @@ export default function MovementPairs({ data }: { data: CrossFitData }) {
                       layout="vertical"
                       margin={{ left: 10, right: 20, top: 5, bottom: 5 }}
                     >
-                      <CartesianGrid strokeDasharray="3 3" stroke="#1e1e3a" horizontal={false} />
+                      <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" horizontal={false} />
                       <XAxis
                         type="number"
-                        tick={{ fontSize: 9, fill: '#64748b' }}
+                        tick={{ fontSize: 9, fill: 'var(--chart-axis)' }}
                         tickFormatter={(v: number) => v.toLocaleString()}
                       />
                       <YAxis
                         type="category"
                         dataKey="name"
-                        tick={{ fontSize: 10, fill: '#94a3b8' }}
+                        tick={{ fontSize: 10, fill: 'var(--chart-axis)' }}
                         width={130}
                       />
                       <Tooltip content={<PartnerTooltip />} />
@@ -538,7 +538,7 @@ export default function MovementPairs({ data }: { data: CrossFitData }) {
             {/* Never Paired With */}
             {explorerData.neverPaired.length > 0 && (
               <div>
-                <h4 className="text-xs font-medium text-slate-400 uppercase tracking-wider mb-2">
+                <h4 className="text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider mb-2">
                   Never Paired With ({explorerData.neverPaired.length})
                 </h4>
                 <div className="flex flex-wrap gap-1.5">
@@ -560,7 +560,7 @@ export default function MovementPairs({ data }: { data: CrossFitData }) {
 
             {explorerData.neverPaired.length === 0 && (
               <div>
-                <h4 className="text-xs font-medium text-slate-400 uppercase tracking-wider mb-2">
+                <h4 className="text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider mb-2">
                   Never Paired With
                 </h4>
                 <p className="text-[10px] text-emerald-400 italic">
@@ -572,7 +572,7 @@ export default function MovementPairs({ data }: { data: CrossFitData }) {
             {/* Featured In (from encyclopedia) */}
             {explorerData.encycEntry && explorerData.encycEntry.featured_in_wods.length > 0 && (
               <div>
-                <h4 className="text-xs font-medium text-slate-400 uppercase tracking-wider mb-2">
+                <h4 className="text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider mb-2">
                   Featured In ({explorerData.encycEntry.featured_in_wods.length} named WODs)
                 </h4>
                 <div className="flex flex-wrap gap-1.5">

@@ -90,7 +90,7 @@ export default function MovementEncyclopedia({ data }: { data: CrossFitData }) {
         <h2 className="text-2xl font-bold text-white">
           Movement Encyclopedia — Every Exercise in 25 Years
         </h2>
-        <p className="text-sm text-slate-400 mt-2 max-w-3xl leading-relaxed">
+        <p className="text-sm text-[var(--text-tertiary)] mt-2 max-w-3xl leading-relaxed">
           We scanned every workout description from 2001 to 2026 and found {allMovements.length} distinct
           exercises. The original data tracked 30 — this is the complete list.
           {mostCommon && rarest && (
@@ -101,25 +101,25 @@ export default function MovementEncyclopedia({ data }: { data: CrossFitData }) {
 
       {/* Stats bar */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <div className="bg-[#12121a] rounded-xl p-4 border border-[#1e1e3a]">
+        <div className="bg-[var(--panel-bg)] rounded-xl p-4 border border-[var(--panel-border)]">
           <div className="text-2xl font-bold font-mono text-blue-400">{allMovements.length}</div>
-          <div className="text-xs text-slate-400 mt-1">Total Movements Found</div>
+          <div className="text-xs text-[var(--text-tertiary)] mt-1">Total Movements Found</div>
         </div>
-        <div className="bg-[#12121a] rounded-xl p-4 border border-[#1e1e3a]">
+        <div className="bg-[var(--panel-bg)] rounded-xl p-4 border border-[var(--panel-border)]">
           <div className="text-2xl font-bold font-mono text-emerald-400">{mostCommon?.name || '--'}</div>
-          <div className="text-xs text-slate-400 mt-1">
+          <div className="text-xs text-[var(--text-tertiary)] mt-1">
             Most Common ({mostCommon?.count.toLocaleString() || 0} WODs)
           </div>
         </div>
-        <div className="bg-[#12121a] rounded-xl p-4 border border-[#1e1e3a]">
+        <div className="bg-[var(--panel-bg)] rounded-xl p-4 border border-[var(--panel-border)]">
           <div className="text-2xl font-bold font-mono text-rose-400">{rarest?.name || '--'}</div>
-          <div className="text-xs text-slate-400 mt-1">
+          <div className="text-xs text-[var(--text-tertiary)] mt-1">
             Rarest ({rarest?.count || 0} {rarest?.count === 1 ? 'WOD' : 'WODs'})
           </div>
         </div>
-        <div className="bg-[#12121a] rounded-xl p-4 border border-[#1e1e3a]">
+        <div className="bg-[var(--panel-bg)] rounded-xl p-4 border border-[var(--panel-border)]">
           <div className="text-2xl font-bold font-mono text-purple-400">{newest?.name || '--'}</div>
-          <div className="text-xs text-slate-400 mt-1">
+          <div className="text-xs text-[var(--text-tertiary)] mt-1">
             Newest Addition ({newest ? formatDate(newest.firstSeen) : '--'})
           </div>
         </div>
@@ -128,13 +128,13 @@ export default function MovementEncyclopedia({ data }: { data: CrossFitData }) {
       {/* Filter / Search / Sort controls */}
       <div className="flex flex-wrap items-center gap-3">
         {/* Category filter */}
-        <div className="flex gap-1 bg-[#12121a] rounded-lg p-1 border border-[#1e1e3a] flex-wrap">
+        <div className="flex gap-1 bg-[var(--panel-bg)] rounded-lg p-1 border border-[var(--panel-border)] flex-wrap">
           <button
             onClick={() => setCategoryFilter('All')}
             className={`px-3 py-1.5 text-xs rounded-md transition-colors ${
               categoryFilter === 'All'
                 ? 'bg-blue-500/20 text-blue-400'
-                : 'text-slate-400 hover:text-slate-300'
+                : 'text-[var(--text-tertiary)] hover:text-[var(--text-secondary)]'
             }`}
           >
             All ({allMovements.length})
@@ -146,7 +146,7 @@ export default function MovementEncyclopedia({ data }: { data: CrossFitData }) {
               className={`px-3 py-1.5 text-xs rounded-md transition-colors whitespace-nowrap ${
                 categoryFilter === cat
                   ? 'text-white'
-                  : 'text-slate-400 hover:text-slate-300'
+                  : 'text-[var(--text-tertiary)] hover:text-[var(--text-secondary)]'
               }`}
               style={
                 categoryFilter === cat
@@ -165,14 +165,14 @@ export default function MovementEncyclopedia({ data }: { data: CrossFitData }) {
           placeholder="Search movements..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="bg-[#12121a] border border-[#1e1e3a] rounded-lg px-4 py-2 text-sm text-white placeholder-slate-500 focus:border-blue-500/50 focus:outline-none"
+          className="bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg px-4 py-2 text-sm text-white placeholder-[var(--text-muted)] focus:border-blue-500/50 focus:outline-none"
         />
 
         {/* Sort */}
         <select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value as SortKey)}
-          className="bg-[#12121a] border border-[#1e1e3a] rounded-lg px-3 py-2 text-xs text-slate-300 focus:outline-none"
+          className="bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg px-3 py-2 text-xs text-[var(--text-secondary)] focus:outline-none"
         >
           <option value="count">Most Frequent</option>
           <option value="name">Alphabetical</option>
@@ -181,7 +181,7 @@ export default function MovementEncyclopedia({ data }: { data: CrossFitData }) {
         </select>
       </div>
 
-      <div className="text-xs text-slate-500">{filtered.length} movements</div>
+      <div className="text-xs text-[var(--text-muted)]">{filtered.length} movements</div>
 
       {/* Movement cards grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
@@ -192,7 +192,7 @@ export default function MovementEncyclopedia({ data }: { data: CrossFitData }) {
           return (
             <div
               key={movement.name}
-              className="bg-[#12121a] rounded-xl p-4 border border-[#1e1e3a] hover:border-[#2a2a5a] transition-colors group"
+              className="bg-[var(--panel-bg)] rounded-xl p-4 border border-[var(--panel-border)] hover:border-[var(--panel-border-strong)] transition-colors group"
             >
               {/* Top row: name + count */}
               <div className="flex items-start justify-between mb-2">
@@ -214,12 +214,12 @@ export default function MovementEncyclopedia({ data }: { data: CrossFitData }) {
                   <div className="text-xl font-bold font-mono" style={{ color }}>
                     {movement.count.toLocaleString()}
                   </div>
-                  <div className="text-[9px] text-slate-500">WODs</div>
+                  <div className="text-[9px] text-[var(--text-muted)]">WODs</div>
                 </div>
               </div>
 
               {/* Frequency bar */}
-              <div className="w-full h-1.5 bg-[#1e1e3a] rounded-full mt-3 mb-3 overflow-hidden">
+              <div className="w-full h-1.5 bg-[var(--panel-bg-hover)] rounded-full mt-3 mb-3 overflow-hidden">
                 <div
                   className="h-full rounded-full transition-all"
                   style={{
@@ -230,13 +230,13 @@ export default function MovementEncyclopedia({ data }: { data: CrossFitData }) {
               </div>
 
               {/* Date range */}
-              <div className="flex justify-between text-[10px] text-slate-500">
+              <div className="flex justify-between text-[10px] text-[var(--text-muted)]">
                 <div>
-                  <span className="text-slate-600">First: </span>
+                  <span className="text-[var(--text-muted)]">First: </span>
                   {formatDate(movement.firstSeen)}
                 </div>
                 <div>
-                  <span className="text-slate-600">Last: </span>
+                  <span className="text-[var(--text-muted)]">Last: </span>
                   {formatDate(movement.lastSeen)}
                 </div>
               </div>
@@ -246,7 +246,7 @@ export default function MovementEncyclopedia({ data }: { data: CrossFitData }) {
       </div>
 
       {filtered.length === 0 && (
-        <div className="text-center py-12 text-slate-500 text-sm">
+        <div className="text-center py-12 text-[var(--text-muted)] text-sm">
           No movements match your filters.
         </div>
       )}

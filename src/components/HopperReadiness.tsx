@@ -126,7 +126,7 @@ function getGapSeverity(modality: string, timeDomain: string): 'critical' | 'mod
 const SEVERITY_COLORS = {
   critical: { bg: 'bg-red-500/10', border: 'border-red-500/20', text: 'text-red-400', badge: 'bg-red-500/20 text-red-300' },
   moderate: { bg: 'bg-amber-500/10', border: 'border-amber-500/20', text: 'text-amber-400', badge: 'bg-amber-500/20 text-amber-300' },
-  minor: { bg: 'bg-slate-500/10', border: 'border-slate-500/20', text: 'text-slate-400', badge: 'bg-slate-500/20 text-slate-300' },
+  minor: { bg: 'bg-slate-500/10', border: 'border-slate-500/20', text: 'text-[var(--text-tertiary)]', badge: 'bg-slate-500/20 text-[var(--text-secondary)]' },
 }
 
 export default function HopperReadiness({ data, advancedAnalysis }: { data: CrossFitData; advancedAnalysis: AdvancedAnalysis }) {
@@ -194,14 +194,14 @@ export default function HopperReadiness({ data, advancedAnalysis }: { data: Cros
       {/* ── HEADER ── */}
       <div>
         <h2 className="text-2xl font-bold text-white">The Hopper Model — Are You Ready for Anything?</h2>
-        <p className="text-sm text-slate-400 mt-1">
+        <p className="text-sm text-[var(--text-tertiary)] mt-1">
           CrossFit's ultimate test of fitness: pull a random workout from a hopper — could you do it well?
         </p>
       </div>
 
       <div className="bg-blue-500/5 rounded-lg p-4 border border-blue-500/10 mb-4">
         <div className="text-xs font-medium text-blue-400 mb-1">What is this?</div>
-        <p className="text-xs text-slate-400 leading-relaxed">
+        <p className="text-xs text-[var(--text-tertiary)] leading-relaxed">
           Imagine writing every possible workout on a piece of paper and throwing them in a hat. You pull one out at random.
           Could you do it? CrossFit says true fitness means being ready for whatever you pull. Let's see how well the
           programming covers all possibilities.
@@ -211,55 +211,55 @@ export default function HopperReadiness({ data, advancedAnalysis }: { data: Cros
       {/* ── BIG SCORE CARDS ── */}
       <div className="grid grid-cols-3 gap-3">
         <div className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 rounded-xl p-5 border border-blue-500/20">
-          <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Hopper Readiness</div>
+          <div className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">Hopper Readiness</div>
           <div className="text-4xl font-bold font-mono text-blue-400">
             {(hopper.score * 100).toFixed(0)}%
           </div>
-          <div className="text-xs text-slate-400 mt-2">
+          <div className="text-xs text-[var(--text-tertiary)] mt-2">
             {hopper.filledCells} of {hopper.totalCells} modality x time domain cells covered
           </div>
-          <div className="text-[10px] text-slate-500 mt-1">
+          <div className="text-[10px] text-[var(--text-muted)] mt-1">
             {(hopper.score * 100).toFixed(0)}% of all possible modality x time domain combinations have been programmed.
           </div>
         </div>
 
         <div className="bg-gradient-to-br from-emerald-500/10 to-teal-500/10 rounded-xl p-5 border border-emerald-500/20">
-          <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Movement Pair Coverage</div>
+          <div className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">Movement Pair Coverage</div>
           <div className="text-4xl font-bold font-mono text-emerald-400">
             {combinationCoverage.observedPairs}
           </div>
-          <div className="text-xs text-slate-400 mt-2">
+          <div className="text-xs text-[var(--text-tertiary)] mt-2">
             out of {combinationCoverage.possiblePairs} possible pairs ({coveragePct.toFixed(1)}%)
           </div>
-          <div className="text-[10px] text-slate-500 mt-1">
+          <div className="text-[10px] text-[var(--text-muted)] mt-1">
             {combinationCoverage.observedPairs} out of {combinationCoverage.possiblePairs} possible movement pairs have appeared in the same workout.
           </div>
         </div>
 
         <div className={`bg-gradient-to-br ${hopper.gaps.length > 5 ? 'from-red-500/10 to-orange-500/10 border-red-500/20' : 'from-amber-500/10 to-yellow-500/10 border-amber-500/20'} rounded-xl p-5 border`}>
-          <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Programming Gaps</div>
+          <div className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">Programming Gaps</div>
           <div className={`text-4xl font-bold font-mono ${hopper.gaps.length > 5 ? 'text-red-400' : hopper.gaps.length > 0 ? 'text-amber-400' : 'text-emerald-400'}`}>
             {hopper.gaps.length}
           </div>
-          <div className="text-xs text-slate-400 mt-2">
+          <div className="text-xs text-[var(--text-tertiary)] mt-2">
             combinations never programmed
           </div>
-          <div className="text-[10px] text-slate-500 mt-1">
+          <div className="text-[10px] text-[var(--text-muted)] mt-1">
             These are the blind spots — combinations never programmed.
           </div>
         </div>
       </div>
 
       {/* ── COVERAGE HEATMAP ── */}
-      <div className="bg-[#12121a] rounded-xl p-5 border border-[#1e1e3a]">
+      <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-[var(--panel-border)]">
         <h3 className="text-sm font-semibold text-white mb-1">Modality x Time Domain Coverage Heatmap</h3>
-        <p className="text-[10px] text-slate-500 mb-4">
+        <p className="text-[10px] text-[var(--text-muted)] mb-4">
           The Glassman Fitness Matrix — work capacity across broad time and modal domains
         </p>
 
         <div className="bg-blue-500/5 rounded-lg p-4 border border-blue-500/10 mb-4">
           <div className="text-xs font-medium text-blue-400 mb-1">What is this?</div>
-          <p className="text-xs text-slate-400 leading-relaxed">
+          <p className="text-xs text-[var(--text-tertiary)] leading-relaxed">
             This is THE CrossFit fitness chart. Greg Glassman defined fitness as "work capacity across broad time and modal
             domains." Each cell is a combination of a modality type (what you're doing) and a time domain (how long you're
             doing it). Bright blue = lots of workouts. Red = a gap in the programming — something that was never trained.
@@ -271,14 +271,14 @@ export default function HopperReadiness({ data, advancedAnalysis }: { data: Cros
           <table className="w-full border-collapse">
             <thead>
               <tr>
-                <th className="p-2 text-left text-[10px] text-slate-500 font-medium w-36">Modality</th>
+                <th className="p-2 text-left text-[10px] text-[var(--text-muted)] font-medium w-36">Modality</th>
                 {TIME_DOMAINS.map((td) => (
-                  <th key={td} className="p-2 text-center text-[10px] text-slate-500 font-medium">
+                  <th key={td} className="p-2 text-center text-[10px] text-[var(--text-muted)] font-medium">
                     <div>{td}</div>
-                    <div className="text-[9px] text-slate-600 font-normal">{TIME_DOMAIN_LABELS[td]}</div>
+                    <div className="text-[9px] text-[var(--text-muted)] font-normal">{TIME_DOMAIN_LABELS[td]}</div>
                   </th>
                 ))}
-                <th className="p-2 text-center text-[10px] text-slate-500 font-medium">Total</th>
+                <th className="p-2 text-center text-[10px] text-[var(--text-muted)] font-medium">Total</th>
               </tr>
             </thead>
             <tbody>
@@ -286,9 +286,9 @@ export default function HopperReadiness({ data, advancedAnalysis }: { data: Cros
                 const rowTotal = TIME_DOMAINS.reduce((sum, td) => sum + (cellLookup[`${mod}-${td}`] || 0), 0)
                 return (
                   <tr key={mod} className="group">
-                    <td className="p-2 text-xs text-slate-300 font-medium">
+                    <td className="p-2 text-xs text-[var(--text-secondary)] font-medium">
                       <div>{mod}</div>
-                      <div className="text-[9px] text-slate-600 font-normal">{MODALITY_LABELS[mod]?.replace(` (${mod})`, '')}</div>
+                      <div className="text-[9px] text-[var(--text-muted)] font-normal">{MODALITY_LABELS[mod]?.replace(` (${mod})`, '')}</div>
                     </td>
                     {TIME_DOMAINS.map((td) => {
                       const count = cellLookup[`${mod}-${td}`] || 0
@@ -310,7 +310,7 @@ export default function HopperReadiness({ data, advancedAnalysis }: { data: Cros
                               <div className="text-[9px] text-red-300/70 mt-0.5">GAP</div>
                             )}
                             {/* Tooltip on hover */}
-                            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-[10px] text-slate-300 whitespace-nowrap opacity-0 group-hover/cell:opacity-100 transition-opacity pointer-events-none z-10 shadow-xl">
+                            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-[10px] text-[var(--text-secondary)] whitespace-nowrap opacity-0 group-hover/cell:opacity-100 transition-opacity pointer-events-none z-10 shadow-xl">
                               <div className="font-medium text-white">{MODALITY_LABELS[mod]} + {td}</div>
                               <div className="mt-1">{count} workout{count !== 1 ? 's' : ''} programmed</div>
                               {count === 0 && <div className="text-red-400 mt-0.5">Programming gap!</div>}
@@ -319,7 +319,7 @@ export default function HopperReadiness({ data, advancedAnalysis }: { data: Cros
                         </td>
                       )
                     })}
-                    <td className="p-2 text-center text-xs font-mono text-slate-400">{rowTotal}</td>
+                    <td className="p-2 text-center text-xs font-mono text-[var(--text-tertiary)]">{rowTotal}</td>
                   </tr>
                 )
               })}
@@ -328,23 +328,23 @@ export default function HopperReadiness({ data, advancedAnalysis }: { data: Cros
         </div>
 
         {/* Legend */}
-        <div className="flex items-center gap-4 mt-4 pt-3 border-t border-[#1e1e3a]">
-          <span className="text-[10px] text-slate-500">Legend:</span>
+        <div className="flex items-center gap-4 mt-4 pt-3 border-t border-[var(--panel-border)]">
+          <span className="text-[10px] text-[var(--text-muted)]">Legend:</span>
           <div className="flex items-center gap-1">
             <div className="w-4 h-4 rounded" style={{ backgroundColor: '#dc2626' }} />
-            <span className="text-[10px] text-slate-500">0 (Gap)</span>
+            <span className="text-[10px] text-[var(--text-muted)]">0 (Gap)</span>
           </div>
           <div className="flex items-center gap-1">
             <div className="w-4 h-4 rounded" style={{ backgroundColor: getCellColor(1, maxCount) }} />
-            <span className="text-[10px] text-slate-500">Low</span>
+            <span className="text-[10px] text-[var(--text-muted)]">Low</span>
           </div>
           <div className="flex items-center gap-1">
             <div className="w-4 h-4 rounded" style={{ backgroundColor: getCellColor(Math.floor(maxCount / 2), maxCount) }} />
-            <span className="text-[10px] text-slate-500">Medium</span>
+            <span className="text-[10px] text-[var(--text-muted)]">Medium</span>
           </div>
           <div className="flex items-center gap-1">
             <div className="w-4 h-4 rounded" style={{ backgroundColor: getCellColor(maxCount, maxCount) }} />
-            <span className="text-[10px] text-slate-500">High ({maxCount})</span>
+            <span className="text-[10px] text-[var(--text-muted)]">High ({maxCount})</span>
           </div>
         </div>
       </div>
@@ -352,15 +352,15 @@ export default function HopperReadiness({ data, advancedAnalysis }: { data: Cros
       {/* ── DISTRIBUTION BAR CHARTS ── */}
       <div className="grid grid-cols-2 gap-4">
         {/* By Modality */}
-        <div className="bg-[#12121a] rounded-xl p-5 border border-[#1e1e3a]">
-          <h3 className="text-xs font-medium text-slate-400 mb-3">WODs by Modality Type</h3>
+        <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-[var(--panel-border)]">
+          <h3 className="text-xs font-medium text-[var(--text-tertiary)] mb-3">WODs by Modality Type</h3>
           <div style={{width:"100%",height:260}}><ResponsiveContainer width="100%" height="100%">
             <BarChart data={modalityTotals} layout="vertical">
-              <CartesianGrid strokeDasharray="3 3" stroke="#1e1e3a" horizontal={false} />
-              <XAxis type="number" tick={{ fontSize: 9, fill: '#64748b' }} />
-              <YAxis dataKey="name" type="category" tick={{ fontSize: 10, fill: '#94a3b8' }} width={50} />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" horizontal={false} />
+              <XAxis type="number" tick={{ fontSize: 9, fill: 'var(--chart-axis)' }} />
+              <YAxis dataKey="name" type="category" tick={{ fontSize: 10, fill: 'var(--chart-axis)' }} width={50} />
               <Tooltip
-                contentStyle={{ background: '#1e1e3a', border: '1px solid #2a2a5a', borderRadius: 8, fontSize: 12 }}
+                contentStyle={{ background: 'var(--chart-tooltip-bg)', border: '1px solid var(--chart-tooltip-border)', borderRadius: 8, fontSize: 12 }}
                 formatter={(value: any) => [`${value} WODs`, 'Count']}
                 labelFormatter={(label: any) => MODALITY_LABELS[String(label)] || label}
               />
@@ -374,15 +374,15 @@ export default function HopperReadiness({ data, advancedAnalysis }: { data: Cros
         </div>
 
         {/* By Time Domain */}
-        <div className="bg-[#12121a] rounded-xl p-5 border border-[#1e1e3a]">
-          <h3 className="text-xs font-medium text-slate-400 mb-3">WODs by Time Domain</h3>
+        <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-[var(--panel-border)]">
+          <h3 className="text-xs font-medium text-[var(--text-tertiary)] mb-3">WODs by Time Domain</h3>
           <div style={{width:"100%",height:260}}><ResponsiveContainer width="100%" height="100%">
             <BarChart data={timeDomainTotals}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#1e1e3a" vertical={false} />
-              <XAxis dataKey="label" tick={{ fontSize: 9, fill: '#94a3b8' }} />
-              <YAxis tick={{ fontSize: 9, fill: '#64748b' }} />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" vertical={false} />
+              <XAxis dataKey="label" tick={{ fontSize: 9, fill: 'var(--chart-axis)' }} />
+              <YAxis tick={{ fontSize: 9, fill: 'var(--chart-axis)' }} />
               <Tooltip
-                contentStyle={{ background: '#1e1e3a', border: '1px solid #2a2a5a', borderRadius: 8, fontSize: 12 }}
+                contentStyle={{ background: 'var(--chart-tooltip-bg)', border: '1px solid var(--chart-tooltip-border)', borderRadius: 8, fontSize: 12 }}
                 formatter={(value: any) => [`${value} WODs`, 'Count']}
               />
               <Bar dataKey="count" radius={[4, 4, 0, 0]}>
@@ -397,15 +397,15 @@ export default function HopperReadiness({ data, advancedAnalysis }: { data: Cros
 
       {/* ── PROGRAMMING GAPS ── */}
       {sortedGaps.length > 0 && (
-        <div className="bg-[#12121a] rounded-xl p-5 border border-[#1e1e3a]">
+        <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-[var(--panel-border)]">
           <h3 className="text-sm font-semibold text-white mb-1">Programming Gaps</h3>
-          <p className="text-[10px] text-slate-500 mb-3">
+          <p className="text-[10px] text-[var(--text-muted)] mb-3">
             Modality x Time Domain combinations with zero or near-zero workouts
           </p>
 
           <div className="bg-blue-500/5 rounded-lg p-4 border border-blue-500/10 mb-4">
             <div className="text-xs font-medium text-blue-400 mb-1">What is this?</div>
-            <p className="text-xs text-slate-400 leading-relaxed">
+            <p className="text-xs text-[var(--text-tertiary)] leading-relaxed">
               Every empty cell in the heatmap above represents a "blind spot" in the programming. True hopper-readiness means
               filling ALL cells. These gaps tell us exactly what types of workouts are missing. The more gaps, the more
               predictable the programming is — and predictability is the enemy of broad fitness.
@@ -426,7 +426,7 @@ export default function HopperReadiness({ data, advancedAnalysis }: { data: Cros
                       {severity}
                     </span>
                   </div>
-                  <p className="text-[10px] text-slate-400 leading-relaxed">
+                  <p className="text-[10px] text-[var(--text-tertiary)] leading-relaxed">
                     No workouts {TIME_DOMAIN_DESCRIPTIONS[gap.timeDomain] ? `lasting ${TIME_DOMAIN_DESCRIPTIONS[gap.timeDomain]}` : `in the ${gap.timeDomain} time domain`}
                     {' '}that use {GAP_DESCRIPTIONS[gap.modality] || gap.modality}.
                   </p>
@@ -445,15 +445,15 @@ export default function HopperReadiness({ data, advancedAnalysis }: { data: Cros
       )}
 
       {/* ── MOVEMENT PAIR COVERAGE ── */}
-      <div className="bg-[#12121a] rounded-xl p-5 border border-[#1e1e3a]">
+      <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-[var(--panel-border)]">
         <h3 className="text-sm font-semibold text-white mb-1">Movement Pair Coverage</h3>
-        <p className="text-[10px] text-slate-500 mb-3">
+        <p className="text-[10px] text-[var(--text-muted)] mb-3">
           How many unique movement pairings have appeared in the same workout?
         </p>
 
         <div className="bg-blue-500/5 rounded-lg p-4 border border-blue-500/10 mb-4">
           <div className="text-xs font-medium text-blue-400 mb-1">What is this?</div>
-          <p className="text-xs text-slate-400 leading-relaxed">
+          <p className="text-xs text-[var(--text-tertiary)] leading-relaxed">
             With {combinationCoverage.possiblePairs > 0 ? Math.round((-1 + Math.sqrt(1 + 8 * combinationCoverage.possiblePairs)) / 2) : 'many'} movements,
             there are {combinationCoverage.possiblePairs.toLocaleString()} possible pairs. These are the ones CrossFit has never combined
             in the same workout. Unseen pairs represent untested movement interactions — your body has never had to transition
@@ -464,36 +464,36 @@ export default function HopperReadiness({ data, advancedAnalysis }: { data: Cros
         {/* Coverage Progress Bar */}
         <div className="mb-4">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs text-slate-400">
+            <span className="text-xs text-[var(--text-tertiary)]">
               {combinationCoverage.observedPairs.toLocaleString()} of {combinationCoverage.possiblePairs.toLocaleString()} pairs observed
             </span>
             <span className="text-sm font-bold font-mono text-emerald-400">{coveragePct.toFixed(1)}%</span>
           </div>
-          <div className="h-4 bg-[#1e1e3a] rounded-full overflow-hidden">
+          <div className="h-4 bg-[var(--panel-bg-hover)] rounded-full overflow-hidden">
             <div
               className="h-full rounded-full bg-gradient-to-r from-emerald-600 to-cyan-500 transition-all duration-700"
               style={{ width: `${Math.min(coveragePct, 100)}%` }}
             />
           </div>
           <div className="flex justify-between mt-1">
-            <span className="text-[9px] text-slate-600">0%</span>
-            <span className="text-[9px] text-slate-600">50%</span>
-            <span className="text-[9px] text-slate-600">100%</span>
+            <span className="text-[9px] text-[var(--text-muted)]">0%</span>
+            <span className="text-[9px] text-[var(--text-muted)]">50%</span>
+            <span className="text-[9px] text-[var(--text-muted)]">100%</span>
           </div>
         </div>
 
         {/* Observed vs Missing visual blocks */}
         <div className="mb-4">
-          <div className="text-[10px] text-slate-500 mb-2">Visual representation (each block = ~1% of total pairs)</div>
+          <div className="text-[10px] text-[var(--text-muted)] mb-2">Visual representation (each block = ~1% of total pairs)</div>
           <div className="flex flex-wrap gap-[2px]">
             {Array.from({ length: 100 }, (_, i) => (
               <div
                 key={i}
                 className="w-2 h-2 rounded-[2px]"
                 style={{
-                  backgroundColor: i < Math.round(coveragePct) ? '#10b981' : '#1e1e3a',
+                  backgroundColor: i < Math.round(coveragePct) ? '#10b981' : 'var(--panel-bg-hover)',
                   border: '1px solid',
-                  borderColor: i < Math.round(coveragePct) ? '#10b98133' : '#2a2a5a',
+                  borderColor: i < Math.round(coveragePct) ? '#10b98133' : 'var(--panel-border-strong)',
                 }}
               />
             ))}
@@ -501,11 +501,11 @@ export default function HopperReadiness({ data, advancedAnalysis }: { data: Cros
           <div className="flex items-center gap-4 mt-2">
             <div className="flex items-center gap-1">
               <div className="w-2 h-2 rounded-[2px] bg-emerald-500" />
-              <span className="text-[9px] text-slate-500">Observed</span>
+              <span className="text-[9px] text-[var(--text-muted)]">Observed</span>
             </div>
             <div className="flex items-center gap-1">
-              <div className="w-2 h-2 rounded-[2px] bg-[#1e1e3a] border border-[#2a2a5a]" />
-              <span className="text-[9px] text-slate-500">Unseen</span>
+              <div className="w-2 h-2 rounded-[2px] bg-[var(--panel-bg-hover)] border border-[var(--panel-border-strong)]" />
+              <span className="text-[9px] text-[var(--text-muted)]">Unseen</span>
             </div>
           </div>
         </div>
@@ -513,17 +513,17 @@ export default function HopperReadiness({ data, advancedAnalysis }: { data: Cros
         {/* Unseen Pairs List */}
         {unseenToShow.length > 0 && (
           <div>
-            <h4 className="text-xs font-medium text-slate-400 mb-2">
+            <h4 className="text-xs font-medium text-[var(--text-tertiary)] mb-2">
               Unseen Movement Pairs
               {combinationCoverage.unseenPairs.length > 30 && (
-                <span className="text-[10px] text-slate-600 ml-2">(showing first 30 of {combinationCoverage.unseenPairs.length})</span>
+                <span className="text-[10px] text-[var(--text-muted)] ml-2">(showing first 30 of {combinationCoverage.unseenPairs.length})</span>
               )}
             </h4>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-1.5">
               {unseenToShow.map(([a, b], i) => (
-                <div key={i} className="bg-[#1a1a2e] rounded px-2.5 py-1.5 border border-[#2a2a4a] flex items-center gap-1.5">
+                <div key={i} className="bg-[var(--panel-bg-hover)] rounded px-2.5 py-1.5 border border-[var(--panel-border-strong)] flex items-center gap-1.5">
                   <span className="text-[10px] text-orange-400 font-medium truncate">{resolveMovement(a)}</span>
-                  <span className="text-[9px] text-slate-600">+</span>
+                  <span className="text-[9px] text-[var(--text-muted)]">+</span>
                   <span className="text-[10px] text-cyan-400 font-medium truncate">{resolveMovement(b)}</span>
                 </div>
               ))}
@@ -534,15 +534,15 @@ export default function HopperReadiness({ data, advancedAnalysis }: { data: Cros
 
       {/* ── WHAT WOULD FILL THE GAPS? ── */}
       {sortedGaps.length > 0 && (
-        <div className="bg-[#12121a] rounded-xl p-5 border border-[#1e1e3a]">
+        <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-[var(--panel-border)]">
           <h3 className="text-sm font-semibold text-white mb-1">What Would Fill the Gaps?</h3>
-          <p className="text-[10px] text-slate-500 mb-3">
+          <p className="text-[10px] text-[var(--text-muted)] mb-3">
             Suggested workouts to address each programming blind spot
           </p>
 
           <div className="bg-blue-500/5 rounded-lg p-4 border border-blue-500/10 mb-4">
             <div className="text-xs font-medium text-blue-400 mb-1">What is this?</div>
-            <p className="text-xs text-slate-400 leading-relaxed">
+            <p className="text-xs text-[var(--text-tertiary)] leading-relaxed">
               For each gap in the heatmap, here is a sample workout that would fill it. A good programmer would cycle these
               in to round out the programming and improve hopper readiness. Think of these as "patches" for the holes in
               your fitness armor.
@@ -564,18 +564,18 @@ export default function HopperReadiness({ data, advancedAnalysis }: { data: Cros
                       </span>
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="text-[10px] text-slate-500 mb-1">
+                      <div className="text-[10px] text-[var(--text-muted)] mb-1">
                         Gap: No {GAP_DESCRIPTIONS[gap.modality] || gap.modality} workouts {TIME_DOMAIN_DESCRIPTIONS[gap.timeDomain] ? `lasting ${TIME_DOMAIN_DESCRIPTIONS[gap.timeDomain]}` : ''}.
                       </div>
                       {suggestion ? (
                         <div className="bg-black/20 rounded-md px-3 py-2 mt-1.5">
-                          <div className="text-[10px] text-slate-500 mb-0.5">Suggested WOD:</div>
-                          <div className="text-xs text-slate-300 font-mono">{suggestion}</div>
+                          <div className="text-[10px] text-[var(--text-muted)] mb-0.5">Suggested WOD:</div>
+                          <div className="text-xs text-[var(--text-secondary)] font-mono">{suggestion}</div>
                         </div>
                       ) : (
                         <div className="bg-black/20 rounded-md px-3 py-2 mt-1.5">
-                          <div className="text-[10px] text-slate-500 mb-0.5">Suggested WOD:</div>
-                          <div className="text-xs text-slate-300 font-mono italic">
+                          <div className="text-[10px] text-[var(--text-muted)] mb-0.5">Suggested WOD:</div>
+                          <div className="text-xs text-[var(--text-secondary)] font-mono italic">
                             Program a {gap.timeDomain.toLowerCase()} workout using {GAP_DESCRIPTIONS[gap.modality] || gap.modality} movements.
                           </div>
                         </div>
@@ -597,7 +597,7 @@ export default function HopperReadiness({ data, advancedAnalysis }: { data: Cros
             {(hopper.score * 100).toFixed(0)}%
           </div>
           <div className="flex-1">
-            <div className="text-xs text-slate-300 leading-relaxed">
+            <div className="text-xs text-[var(--text-secondary)] leading-relaxed">
               {hopper.score >= 0.9 ? (
                 <>
                   Outstanding hopper readiness. The programming covers nearly every modality and time domain combination.
@@ -624,13 +624,13 @@ export default function HopperReadiness({ data, advancedAnalysis }: { data: Cros
               )}
             </div>
             <div className="flex items-center gap-4 mt-3">
-              <div className="text-[10px] text-slate-500">
+              <div className="text-[10px] text-[var(--text-muted)]">
                 <span className="text-emerald-400 font-mono font-bold">{hopper.filledCells}</span> filled cells
               </div>
-              <div className="text-[10px] text-slate-500">
+              <div className="text-[10px] text-[var(--text-muted)]">
                 <span className="text-red-400 font-mono font-bold">{hopper.gaps.length}</span> gaps
               </div>
-              <div className="text-[10px] text-slate-500">
+              <div className="text-[10px] text-[var(--text-muted)]">
                 <span className="text-cyan-400 font-mono font-bold">{coveragePct.toFixed(1)}%</span> pair coverage
               </div>
             </div>

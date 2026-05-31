@@ -299,7 +299,7 @@ export default function ForceGraph3DView({ data }: { data: CrossFitData }) {
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-2xl font-bold text-white">Movement Force Graph</h2>
-            <p className="text-sm text-slate-400 mt-1">3D view — drag to rotate, scroll to zoom</p>
+            <p className="text-sm text-[var(--text-tertiary)] mt-1">3D view — drag to rotate, scroll to zoom</p>
           </div>
           <button onClick={() => setView('2d')} className="px-3 py-1.5 text-xs bg-blue-500/20 text-blue-400 rounded-lg border border-blue-500/30 hover:bg-blue-500/30">
             Switch to 2D
@@ -318,7 +318,7 @@ export default function ForceGraph3DView({ data }: { data: CrossFitData }) {
       <div className="flex items-start justify-between">
         <div>
           <h2 className="text-2xl font-bold text-white">Movement Force Graph</h2>
-          <p className="text-sm text-slate-400 mt-1">
+          <p className="text-sm text-[var(--text-tertiary)] mt-1">
             How movements connect through co-occurrence. Node size = frequency. Link thickness = how often they appear together.
             {selectedNode && (
               <span className="text-blue-400 ml-2">
@@ -329,15 +329,15 @@ export default function ForceGraph3DView({ data }: { data: CrossFitData }) {
           </p>
         </div>
         <div className="flex gap-2 shrink-0">
-          <div className="flex gap-1 bg-[#0d0d1a] rounded-lg p-1 border border-[#1e1e3a]">
-            <button onClick={() => setColorMode('function')} className={`px-2.5 py-1 text-[10px] rounded ${colorMode === 'function' ? 'bg-blue-500/20 text-blue-400' : 'text-slate-400'}`}>
+          <div className="flex gap-1 bg-[var(--code-bg)] rounded-lg p-1 border border-[var(--panel-border)]">
+            <button onClick={() => setColorMode('function')} className={`px-2.5 py-1 text-[10px] rounded ${colorMode === 'function' ? 'bg-blue-500/20 text-blue-400' : 'text-[var(--text-tertiary)]'}`}>
               Functional
             </button>
-            <button onClick={() => setColorMode('modality')} className={`px-2.5 py-1 text-[10px] rounded ${colorMode === 'modality' ? 'bg-blue-500/20 text-blue-400' : 'text-slate-400'}`}>
+            <button onClick={() => setColorMode('modality')} className={`px-2.5 py-1 text-[10px] rounded ${colorMode === 'modality' ? 'bg-blue-500/20 text-blue-400' : 'text-[var(--text-tertiary)]'}`}>
               M / G / W
             </button>
           </div>
-          <button onClick={() => setView('3d')} className="px-3 py-1.5 text-xs bg-[#1e1e3a] text-slate-400 rounded-lg border border-[#2a2a5a] hover:text-white">
+          <button onClick={() => setView('3d')} className="px-3 py-1.5 text-xs bg-[var(--panel-bg-hover)] text-[var(--text-tertiary)] rounded-lg border border-[var(--panel-border-strong)] hover:text-white">
             3D View
           </button>
         </div>
@@ -346,7 +346,7 @@ export default function ForceGraph3DView({ data }: { data: CrossFitData }) {
       {/* Explainer */}
       <div className="bg-blue-500/5 rounded-lg p-4 border border-blue-500/10">
         <div className="text-xs font-medium text-blue-400 mb-1">How to read this</div>
-        <p className="text-xs text-slate-400 leading-relaxed">
+        <p className="text-xs text-[var(--text-tertiary)] leading-relaxed">
           Each circle is a movement. Bigger = appears in more workouts. Lines connect movements that appear in the same workout — thicker lines = stronger pairing.
           Hover to highlight connections. Click to lock a selection. Drag nodes to rearrange. Scroll to zoom.
         </p>
@@ -360,26 +360,26 @@ export default function ForceGraph3DView({ data }: { data: CrossFitData }) {
 
         {/* Info Panel */}
         {hoveredNodeData && (
-          <div className="w-64 shrink-0 bg-[#0c1424] rounded-xl border border-[#1e2a4a] p-5 self-start">
+          <div className="w-64 shrink-0 bg-[var(--panel-bg)] rounded-xl border border-[var(--panel-border)] p-5 self-start">
             <div className="flex items-center gap-2 mb-4">
               <div className="w-4 h-4 rounded-full" style={{ background: colorMode === 'function' ? hoveredNodeData.patternColor : getModalityColor(hoveredNodeData.modality) }} />
               <h3 className="text-base font-bold text-white">{hoveredNodeData.label}</h3>
             </div>
             <div className="space-y-3">
               <div>
-                <div className="text-[10px] text-slate-500 uppercase tracking-wider">Pattern</div>
-                <div className="text-sm text-slate-300">{hoveredNodeData.pattern}</div>
+                <div className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider">Pattern</div>
+                <div className="text-sm text-[var(--text-secondary)]">{hoveredNodeData.pattern}</div>
               </div>
               <div>
-                <div className="text-[10px] text-slate-500 uppercase tracking-wider">Appearances</div>
+                <div className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider">Appearances</div>
                 <div className="text-2xl font-bold font-mono text-blue-400">{hoveredNodeData.count.toLocaleString()}</div>
               </div>
               {MOVEMENT_TAXONOMY[hoveredNodeData.id] && (
                 <div>
-                  <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Physical Skills</div>
+                  <div className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">Physical Skills</div>
                   <div className="flex flex-wrap gap-1">
                     {MOVEMENT_TAXONOMY[hoveredNodeData.id].physicalSkills.map((s) => (
-                      <span key={s} className="text-[9px] px-1.5 py-0.5 rounded bg-[#1a2a4a] text-slate-300">
+                      <span key={s} className="text-[9px] px-1.5 py-0.5 rounded bg-[var(--panel-bg-hover)] text-[var(--text-secondary)]">
                         {s.split('-').map((w) => w[0].toUpperCase() + w.slice(1)).join(' ')}
                       </span>
                     ))}
@@ -387,11 +387,11 @@ export default function ForceGraph3DView({ data }: { data: CrossFitData }) {
                 </div>
               )}
               <div>
-                <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-2">Top Partners</div>
+                <div className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-2">Top Partners</div>
                 {nodePartners.map((p) => (
-                  <div key={p.partner} className="flex justify-between items-center py-1 border-b border-[#1e2a4a] last:border-0">
-                    <span className="text-xs text-slate-300">{data.movementDisplay[p.partner] || p.partner}</span>
-                    <span className="text-xs font-mono text-slate-500">{p.value}</span>
+                  <div key={p.partner} className="flex justify-between items-center py-1 border-b border-[var(--panel-border)] last:border-0">
+                    <span className="text-xs text-[var(--text-secondary)]">{data.movementDisplay[p.partner] || p.partner}</span>
+                    <span className="text-xs font-mono text-[var(--text-muted)]">{p.value}</span>
                   </div>
                 ))}
               </div>
@@ -404,18 +404,18 @@ export default function ForceGraph3DView({ data }: { data: CrossFitData }) {
       <div className="flex flex-wrap gap-3 justify-center">
         {colorMode === 'function' ? (
           patterns.map(([label, color]) => (
-            <span key={label} className="flex items-center gap-1.5 text-[10px] text-slate-400">
+            <span key={label} className="flex items-center gap-1.5 text-[10px] text-[var(--text-tertiary)]">
               <span className="w-2.5 h-2.5 rounded-full" style={{ background: color }} />{label}
             </span>
           ))
         ) : (
           [{ l: 'Monostructural', c: '#ff6b6b' }, { l: 'Gymnastics', c: '#51cf66' }, { l: 'Weightlifting', c: '#339af0' }].map((m) => (
-            <span key={m.l} className="flex items-center gap-1.5 text-[10px] text-slate-400">
+            <span key={m.l} className="flex items-center gap-1.5 text-[10px] text-[var(--text-tertiary)]">
               <span className="w-2.5 h-2.5 rounded-full" style={{ background: m.c }} />{m.l}
             </span>
           ))
         )}
-        <span className="text-[10px] text-slate-600 ml-4">Scroll to zoom · Drag nodes · Click to isolate</span>
+        <span className="text-[10px] text-[var(--text-muted)] ml-4">Scroll to zoom · Drag nodes · Click to isolate</span>
       </div>
     </div>
   )

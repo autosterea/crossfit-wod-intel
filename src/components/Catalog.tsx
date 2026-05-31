@@ -40,7 +40,7 @@ export default function Catalog({ data }: { data: CrossFitData }) {
     <div className="space-y-4">
       <div>
         <h2 className="text-2xl font-bold text-white">Workout Catalog</h2>
-        <p className="text-sm text-slate-400 mt-1">
+        <p className="text-sm text-[var(--text-tertiary)] mt-1">
           Search and filter all {data.overview.total_workouts.toLocaleString()} workouts
         </p>
       </div>
@@ -52,36 +52,36 @@ export default function Catalog({ data }: { data: CrossFitData }) {
           placeholder="Search workouts..."
           value={search}
           onChange={(e) => { setSearch(e.target.value); setPage(0) }}
-          className="w-full sm:min-w-[200px] lg:flex-1 bg-[#12121a] border border-[#1e1e3a] rounded-lg px-4 py-2 text-sm text-white placeholder-slate-500 focus:border-blue-500/50 focus:outline-none"
+          className="w-full sm:min-w-[200px] lg:flex-1 bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg px-4 py-2 text-sm text-white placeholder-[var(--text-muted)] focus:border-blue-500/50 focus:outline-none"
         />
-        <select value={modFilter} onChange={(e) => { setModFilter(e.target.value); setPage(0) }} className="bg-[#12121a] border border-[#1e1e3a] rounded-lg px-3 py-2 text-xs text-slate-300 focus:outline-none">
+        <select value={modFilter} onChange={(e) => { setModFilter(e.target.value); setPage(0) }} className="bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg px-3 py-2 text-xs text-[var(--text-secondary)] focus:outline-none">
           <option value="all">All Modalities</option>
           {modalities.map((m) => <option key={m} value={m}>{m}</option>)}
         </select>
-        <select value={structFilter} onChange={(e) => { setStructFilter(e.target.value); setPage(0) }} className="bg-[#12121a] border border-[#1e1e3a] rounded-lg px-3 py-2 text-xs text-slate-300 focus:outline-none">
+        <select value={structFilter} onChange={(e) => { setStructFilter(e.target.value); setPage(0) }} className="bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg px-3 py-2 text-xs text-[var(--text-secondary)] focus:outline-none">
           <option value="all">All Structures</option>
           {structures.map((s) => <option key={s} value={s}>{s}</option>)}
         </select>
-        <select value={tdFilter} onChange={(e) => { setTdFilter(e.target.value); setPage(0) }} className="bg-[#12121a] border border-[#1e1e3a] rounded-lg px-3 py-2 text-xs text-slate-300 focus:outline-none">
+        <select value={tdFilter} onChange={(e) => { setTdFilter(e.target.value); setPage(0) }} className="bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg px-3 py-2 text-xs text-[var(--text-secondary)] focus:outline-none">
           <option value="all">All Time Domains</option>
           {timeDomains.map((t) => <option key={t} value={t}>{t}</option>)}
         </select>
-        <select value={movFilter} onChange={(e) => { setMovFilter(e.target.value); setPage(0) }} className="bg-[#12121a] border border-[#1e1e3a] rounded-lg px-3 py-2 text-xs text-slate-300 focus:outline-none">
+        <select value={movFilter} onChange={(e) => { setMovFilter(e.target.value); setPage(0) }} className="bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg px-3 py-2 text-xs text-[var(--text-secondary)] focus:outline-none">
           <option value="all">All Movements</option>
           {movements.map((m) => <option key={m} value={m}>{data.movementDisplay[m]}</option>)}
         </select>
       </div>
 
       {/* Results count */}
-      <div className="text-xs text-slate-500">
+      <div className="text-xs text-[var(--text-muted)]">
         {filtered.length.toLocaleString()} workouts found | Page {page + 1} of {totalPages}
       </div>
 
       {/* Table */}
-      <div className="bg-[#12121a] rounded-xl border border-[#1e1e3a] overflow-hidden">
+      <div className="bg-[var(--panel-bg)] rounded-xl border border-[var(--panel-border)] overflow-hidden">
         <table className="w-full">
           <thead>
-            <tr className="border-b border-[#1e1e3a] text-[10px] text-slate-500 uppercase tracking-wider">
+            <tr className="border-b border-[var(--panel-border)] text-[10px] text-[var(--text-muted)] uppercase tracking-wider">
               <th className="text-left px-4 py-3">Date</th>
               <th className="text-left px-4 py-3">Title</th>
               <th className="text-left px-4 py-3">Modality</th>
@@ -96,9 +96,9 @@ export default function Catalog({ data }: { data: CrossFitData }) {
                 <tr
                   key={w.d + idx}
                   onClick={() => setExpandedIdx(expandedIdx === idx ? null : idx)}
-                  className="border-b border-[#1e1e3a]/50 hover:bg-[#1a1a2a] cursor-pointer transition-colors"
+                  className="border-b border-[var(--panel-border)]/50 hover:bg-[var(--panel-bg-hover)] cursor-pointer transition-colors"
                 >
-                  <td className="px-4 py-2.5 text-xs font-mono text-slate-400">{w.d}</td>
+                  <td className="px-4 py-2.5 text-xs font-mono text-[var(--text-tertiary)]">{w.d}</td>
                   <td className="px-4 py-2.5 text-xs text-white">
                     {w.nw && <span className="text-amber-400 mr-1">{w.nw}</span>}
                     {w.ih && <span className="text-rose-400 text-[9px] mr-1">HERO</span>}
@@ -110,23 +110,23 @@ export default function Catalog({ data }: { data: CrossFitData }) {
                       {w.mo}
                     </span>
                   </td>
-                  <td className="px-4 py-2.5 text-xs text-slate-400">{w.st}</td>
-                  <td className="px-4 py-2.5 text-xs text-slate-400">{w.td}</td>
+                  <td className="px-4 py-2.5 text-xs text-[var(--text-tertiary)]">{w.st}</td>
+                  <td className="px-4 py-2.5 text-xs text-[var(--text-tertiary)]">{w.td}</td>
                   <td className="px-4 py-2.5">
                     <div className="flex flex-wrap gap-1">
                       {w.mv.slice(0, 4).map((m) => (
-                        <span key={m} className="text-[9px] px-1.5 py-0.5 rounded bg-[#1e1e3a] text-slate-400">
+                        <span key={m} className="text-[9px] px-1.5 py-0.5 rounded bg-[var(--panel-bg-hover)] text-[var(--text-tertiary)]">
                           {data.movementDisplay[m] || m}
                         </span>
                       ))}
-                      {w.mv.length > 4 && <span className="text-[9px] text-slate-600">+{w.mv.length - 4}</span>}
+                      {w.mv.length > 4 && <span className="text-[9px] text-[var(--text-muted)]">+{w.mv.length - 4}</span>}
                     </div>
                   </td>
                 </tr>
                 {expandedIdx === idx && (
-                  <tr key={w.d + 'exp'} className="bg-[#0d0d1a]">
+                  <tr key={w.d + 'exp'} className="bg-[var(--panel-bg-2)]">
                     <td colSpan={6} className="px-6 py-4">
-                      <pre className="text-xs text-slate-300 whitespace-pre-wrap leading-relaxed font-sans max-h-48 overflow-y-auto">
+                      <pre className="text-xs text-[var(--text-secondary)] whitespace-pre-wrap leading-relaxed font-sans max-h-48 overflow-y-auto">
                         {w.s}
                       </pre>
                     </td>
@@ -143,7 +143,7 @@ export default function Catalog({ data }: { data: CrossFitData }) {
         <button
           onClick={() => setPage(Math.max(0, page - 1))}
           disabled={page === 0}
-          className="px-3 py-1.5 min-w-[40px] min-h-[40px] text-xs rounded-lg bg-[#12121a] border border-[#1e1e3a] text-slate-400 disabled:opacity-30 hover:border-[#2a2a5a]"
+          className="px-3 py-1.5 min-w-[40px] min-h-[40px] text-xs rounded-lg bg-[var(--panel-bg)] border border-[var(--panel-border)] text-[var(--text-tertiary)] disabled:opacity-30 hover:border-[var(--panel-border-strong)]"
         >
           Prev
         </button>
@@ -155,7 +155,7 @@ export default function Catalog({ data }: { data: CrossFitData }) {
               key={p}
               onClick={() => setPage(p)}
               className={`min-w-[40px] min-h-[40px] text-xs rounded-lg ${
-                p === page ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30' : 'bg-[#12121a] text-slate-400 border border-[#1e1e3a]'
+                p === page ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30' : 'bg-[var(--panel-bg)] text-[var(--text-tertiary)] border border-[var(--panel-border)]'
               }`}
             >
               {p + 1}
@@ -165,7 +165,7 @@ export default function Catalog({ data }: { data: CrossFitData }) {
         <button
           onClick={() => setPage(Math.min(totalPages - 1, page + 1))}
           disabled={page >= totalPages - 1}
-          className="px-3 py-1.5 min-w-[40px] min-h-[40px] text-xs rounded-lg bg-[#12121a] border border-[#1e1e3a] text-slate-400 disabled:opacity-30 hover:border-[#2a2a5a]"
+          className="px-3 py-1.5 min-w-[40px] min-h-[40px] text-xs rounded-lg bg-[var(--panel-bg)] border border-[var(--panel-border)] text-[var(--text-tertiary)] disabled:opacity-30 hover:border-[var(--panel-border-strong)]"
         >
           Next
         </button>

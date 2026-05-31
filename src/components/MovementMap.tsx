@@ -168,8 +168,8 @@ export default function MovementMap({ data }: { data: CrossFitData }) {
     <div className="space-y-4">
       {/* Header */}
       <div>
-        <h2 className="text-2xl font-bold text-white">Movement Map — Where the Volume Goes</h2>
-        <p className="text-sm text-slate-400 mt-1">
+        <h2 className="text-2xl font-bold text-[var(--text-primary)]">Movement Map — Where the Volume Goes</h2>
+        <p className="text-sm text-[var(--text-tertiary)] mt-1">
           Each rectangle represents a movement. The bigger the rectangle, the more workouts include that movement.
           Color shows the category: <span style={{ color: '#f43f5e' }}>red = Monostructural (cardio)</span>,{' '}
           <span style={{ color: '#10b981' }}>green = Gymnastics (bodyweight)</span>,{' '}
@@ -187,7 +187,7 @@ export default function MovementMap({ data }: { data: CrossFitData }) {
             className={`px-3 py-1.5 text-xs rounded-lg transition-colors ${
               view === v
                 ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
-                : 'bg-[#12121a] text-slate-400 border border-[#1e1e3a] hover:border-[#2a2a5a]'
+                : 'bg-[var(--panel-bg)] text-[var(--text-tertiary)] border border-[var(--panel-border)] hover:border-[var(--panel-border-strong)]'
             }`}
           >
             {v === 'treemap' ? 'Treemap' : 'Bubble'}
@@ -197,7 +197,7 @@ export default function MovementMap({ data }: { data: CrossFitData }) {
         {/* Legend */}
         <div className="flex items-center gap-4 ml-auto">
           {Object.entries(MODALITY_FULL).map(([key, label]) => (
-            <div key={key} className="flex items-center gap-1.5 text-[10px] text-slate-400">
+            <div key={key} className="flex items-center gap-1.5 text-[10px] text-[var(--text-tertiary)]">
               <div className="w-2.5 h-2.5 rounded-sm" style={{ background: MODALITY_COLORS[key] }} />
               {label}
             </div>
@@ -226,7 +226,7 @@ export default function MovementMap({ data }: { data: CrossFitData }) {
 
       {/* Hover / Selection tooltip */}
       {(hovered || selected) && (
-        <div className="bg-[#12121a] rounded-xl p-4 border border-[#1e1e3a]">
+        <div className="bg-[var(--panel-bg)] rounded-xl p-4 border border-[var(--panel-border)]">
           <MovementDetail
             movement={(hovered || selected)!}
             totalWorkouts={data.overview.total_workouts}
@@ -236,27 +236,27 @@ export default function MovementMap({ data }: { data: CrossFitData }) {
 
       {/* Stats summary */}
       <div className="grid grid-cols-4 gap-3">
-        <div className="bg-[#12121a] rounded-xl p-5 border border-[#1e1e3a]">
-          <div className="text-3xl font-bold font-mono text-white">{movements.length}</div>
-          <div className="text-xs text-slate-400 mt-1">Total tracked movements</div>
+        <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-[var(--panel-border)]">
+          <div className="text-3xl font-bold font-mono text-[var(--text-primary)]">{movements.length}</div>
+          <div className="text-xs text-[var(--text-tertiary)] mt-1">Total tracked movements</div>
         </div>
-        <div className="bg-[#12121a] rounded-xl p-5 border border-[#1e1e3a]">
-          <div className="text-lg font-bold font-mono text-white">
+        <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-[var(--panel-border)]">
+          <div className="text-lg font-bold font-mono text-[var(--text-primary)]">
             <span style={{ color: '#f43f5e' }}>{modalityStats.M.count}</span>{' / '}
             <span style={{ color: '#10b981' }}>{modalityStats.G.count}</span>{' / '}
             <span style={{ color: '#3b82f6' }}>{modalityStats.W.count}</span>
           </div>
-          <div className="text-xs text-slate-400 mt-1">Movements per modality (M / G / W)</div>
+          <div className="text-xs text-[var(--text-tertiary)] mt-1">Movements per modality (M / G / W)</div>
         </div>
-        <div className="bg-[#12121a] rounded-xl p-5 border border-[#1e1e3a]">
+        <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-[var(--panel-border)]">
           <div className="text-3xl font-bold font-mono text-amber-400">{top5Pct}%</div>
-          <div className="text-xs text-slate-400 mt-1">Top 5 movements share of programming</div>
+          <div className="text-xs text-[var(--text-tertiary)] mt-1">Top 5 movements share of programming</div>
         </div>
-        <div className="bg-[#12121a] rounded-xl p-5 border border-[#1e1e3a]">
+        <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-[var(--panel-border)]">
           <div className="text-xl font-bold font-mono" style={{ color: movements[0]?.color }}>
             {movements[0]?.name}
           </div>
-          <div className="text-xs text-slate-400 mt-1">
+          <div className="text-xs text-[var(--text-tertiary)] mt-1">
             Most dominant at {movements[0]?.pct}% ({movements[0]?.count.toLocaleString()} WODs)
           </div>
         </div>
@@ -279,21 +279,21 @@ export default function MovementMap({ data }: { data: CrossFitData }) {
             >
               <div className="flex items-center gap-2 mb-3">
                 <div className="w-3 h-3 rounded-full" style={{ background: color }} />
-                <span className="text-sm font-bold text-white">{MODALITY_FULL[mod]}</span>
+                <span className="text-sm font-bold text-[var(--text-primary)]">{MODALITY_FULL[mod]}</span>
               </div>
 
               <div className="grid grid-cols-3 gap-3 mb-4">
                 <div>
                   <div className="text-xl font-bold font-mono" style={{ color }}>{stats.count}</div>
-                  <div className="text-[10px] text-slate-500">Movements</div>
+                  <div className="text-[10px] text-[var(--text-muted)]">Movements</div>
                 </div>
                 <div>
                   <div className="text-xl font-bold font-mono" style={{ color }}>{stats.appearances.toLocaleString()}</div>
-                  <div className="text-[10px] text-slate-500">Appearances</div>
+                  <div className="text-[10px] text-[var(--text-muted)]">Appearances</div>
                 </div>
                 <div>
                   <div className="text-xl font-bold font-mono" style={{ color }}>{pctOfAll}%</div>
-                  <div className="text-[10px] text-slate-500">Of all programming</div>
+                  <div className="text-[10px] text-[var(--text-muted)]">Of all programming</div>
                 </div>
               </div>
 
@@ -302,14 +302,14 @@ export default function MovementMap({ data }: { data: CrossFitData }) {
                   const barW = movements[0] ? (m.count / movements[0].count) * 100 : 0
                   return (
                     <div key={m.id} className="flex items-center gap-2">
-                      <div className="w-24 text-[10px] text-slate-400 truncate shrink-0">{m.name}</div>
-                      <div className="flex-1 h-3 bg-[#0a0a14] rounded-full overflow-hidden">
+                      <div className="w-24 text-[10px] text-[var(--text-tertiary)] truncate shrink-0">{m.name}</div>
+                      <div className="flex-1 h-3 bg-[var(--app-bg)] rounded-full overflow-hidden">
                         <div
                           className="h-full rounded-full transition-all"
                           style={{ width: `${barW}%`, background: color, opacity: 0.7 }}
                         />
                       </div>
-                      <div className="text-[10px] font-mono text-slate-500 w-10 text-right shrink-0">
+                      <div className="text-[10px] font-mono text-[var(--text-muted)] w-10 text-right shrink-0">
                         {m.count.toLocaleString()}
                       </div>
                     </div>
@@ -344,7 +344,7 @@ function TreemapView({
 
   return (
     <div
-      className="flex flex-wrap rounded-xl overflow-hidden border border-[#1e1e3a]"
+      className="flex flex-wrap rounded-xl overflow-hidden border border-[var(--panel-border)]"
       style={{ height: 500 }}
     >
       {movements.map((m) => {
@@ -391,7 +391,7 @@ function TreemapView({
           >
             <div className="absolute inset-0 flex flex-col items-center justify-center p-1 text-center">
               <span
-                className="font-semibold text-white leading-tight"
+                className="font-semibold text-[var(--text-primary)] leading-tight"
                 style={{
                   fontSize: m.pct >= maxPct * 0.5 ? 14 : m.pct >= maxPct * 0.2 ? 12 : 10,
                   textShadow: '0 1px 3px rgba(0,0,0,0.5)',
@@ -401,7 +401,7 @@ function TreemapView({
               </span>
               {showCount && (
                 <span
-                  className="font-mono text-white/80"
+                  className="font-mono text-[var(--text-primary)]/80"
                   style={{
                     fontSize: m.pct >= maxPct * 0.5 ? 12 : 9,
                     textShadow: '0 1px 2px rgba(0,0,0,0.4)',
@@ -437,7 +437,7 @@ function BubbleView({
   onClick: (id: string) => void
 }) {
   return (
-    <div className="bg-[#0a0a14] rounded-xl border border-[#1e1e3a] overflow-hidden" style={{ height: 500 }}>
+    <div className="bg-[var(--app-bg)] rounded-xl border border-[var(--panel-border)] overflow-hidden" style={{ height: 500 }}>
       <svg width="100%" height="100%" viewBox="0 0 900 500" preserveAspectRatio="xMidYMid meet">
         {bubbles.map((b) => {
           const isSelected = b.id === selectedId
@@ -521,8 +521,8 @@ function MovementDetail({
         {movement.name.charAt(0)}
       </div>
       <div>
-        <div className="text-lg font-bold text-white">{movement.name}</div>
-        <div className="text-xs text-slate-400">
+        <div className="text-lg font-bold text-[var(--text-primary)]">{movement.name}</div>
+        <div className="text-xs text-[var(--text-tertiary)]">
           {MODALITY_FULL[movement.modality] || movement.modality}
         </div>
       </div>
@@ -531,13 +531,13 @@ function MovementDetail({
           <div className="text-xl font-bold font-mono" style={{ color: movement.color }}>
             {movement.count.toLocaleString()}
           </div>
-          <div className="text-[10px] text-slate-500">Total appearances</div>
+          <div className="text-[10px] text-[var(--text-muted)]">Total appearances</div>
         </div>
         <div className="text-right">
           <div className="text-xl font-bold font-mono" style={{ color: movement.color }}>
             {pctOfTotal}%
           </div>
-          <div className="text-[10px] text-slate-500">Of all workouts</div>
+          <div className="text-[10px] text-[var(--text-muted)]">Of all workouts</div>
         </div>
       </div>
     </div>

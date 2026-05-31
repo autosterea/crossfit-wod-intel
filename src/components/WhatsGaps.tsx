@@ -55,8 +55,8 @@ function GapCard({ item }: { item: GapItem }) {
         <SeverityBadge severity={item.severity} />
         <div className="flex-1 min-w-0">
           <div className={`text-sm font-medium ${s.text}`}>{item.title}</div>
-          <div className="text-xs text-slate-400 mt-1">{item.description}</div>
-          <div className="text-[10px] text-slate-500 mt-1.5 italic">Why it matters: {item.why}</div>
+          <div className="text-xs text-[var(--text-tertiary)] mt-1">{item.description}</div>
+          <div className="text-[10px] text-[var(--text-muted)] mt-1.5 italic">Why it matters: {item.why}</div>
           <div className="mt-2 flex items-start gap-1.5">
             <span className="text-[10px] text-emerald-500 font-medium uppercase tracking-wider shrink-0 mt-px">Fix:</span>
             <span className="text-[10px] text-emerald-400/80">{item.fix}</span>
@@ -276,8 +276,8 @@ export default function WhatsGaps({
     <div className="space-y-4">
       {/* Header */}
       <div>
-        <h2 className="text-2xl font-bold text-white">What's Missing? — Programming Gap Analysis</h2>
-        <p className="text-sm text-slate-400 mt-1 max-w-3xl">
+        <h2 className="text-2xl font-bold text-[var(--text-primary)]">What's Missing? — Programming Gap Analysis</h2>
+        <p className="text-sm text-[var(--text-tertiary)] mt-1 max-w-3xl">
           No program is perfect. This page identifies the blind spots in CrossFit's
           programming — the movements, skills, and combinations that are undertrained
           or completely absent. Think of it as a doctor's checkup for the programming.
@@ -287,18 +287,18 @@ export default function WhatsGaps({
       {/* Summary stats */}
       <div className="grid grid-cols-4 gap-3">
         <div className="bg-gradient-to-br from-red-500/10 to-red-900/5 rounded-xl p-4 border border-red-500/20">
-          <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Total Issues Found</div>
-          <div className="text-3xl font-bold font-mono text-white">{totalIssues}</div>
+          <div className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">Total Issues Found</div>
+          <div className="text-3xl font-bold font-mono text-[var(--text-primary)]">{totalIssues}</div>
         </div>
-        <div className="bg-[#12121a] rounded-xl p-4 border border-red-500/20">
+        <div className="bg-[var(--panel-bg)] rounded-xl p-4 border border-red-500/20">
           <div className="text-[10px] text-red-400 uppercase tracking-wider mb-1">Critical</div>
           <div className="text-2xl font-bold font-mono text-red-400">{critCount}</div>
         </div>
-        <div className="bg-[#12121a] rounded-xl p-4 border border-amber-500/20">
+        <div className="bg-[var(--panel-bg)] rounded-xl p-4 border border-amber-500/20">
           <div className="text-[10px] text-amber-400 uppercase tracking-wider mb-1">Warning</div>
           <div className="text-2xl font-bold font-mono text-amber-400">{warnCount}</div>
         </div>
-        <div className="bg-[#12121a] rounded-xl p-4 border border-blue-500/20">
+        <div className="bg-[var(--panel-bg)] rounded-xl p-4 border border-blue-500/20">
           <div className="text-[10px] text-blue-400 uppercase tracking-wider mb-1">Info</div>
           <div className="text-2xl font-bold font-mono text-blue-400">{infoCount}</div>
         </div>
@@ -306,9 +306,9 @@ export default function WhatsGaps({
 
       {/* Section 1: Critical Gaps */}
       {criticalGaps.length > 0 && (
-        <div className="bg-[#12121a] rounded-xl p-5 border border-[#1e1e3a]">
+        <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-[var(--panel-border)]">
           <SectionHeader title="Critical Gaps — Modality x Time Domain Holes" count={criticalGaps.length} severity="critical" />
-          <p className="text-[10px] text-slate-500 mb-3">
+          <p className="text-[10px] text-[var(--text-muted)] mb-3">
             These modality/time-domain combinations have zero workouts in the entire dataset. Each is a blind spot in hopper readiness.
           </p>
           <div className="space-y-2">
@@ -321,9 +321,9 @@ export default function WhatsGaps({
 
       {/* Section 2: Undertrained Patterns */}
       {undertrainedPatterns.length > 0 && (
-        <div className="bg-[#12121a] rounded-xl p-5 border border-[#1e1e3a]">
+        <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-[var(--panel-border)]">
           <SectionHeader title="Undertrained Functional Patterns" count={undertrainedPatterns.length} severity="warning" />
-          <p className="text-[10px] text-slate-500 mb-3">
+          <p className="text-[10px] text-[var(--text-muted)] mb-3">
             These movement patterns appear far less frequently than the average, creating functional gaps.
           </p>
           <div className="space-y-2">
@@ -336,9 +336,9 @@ export default function WhatsGaps({
 
       {/* Section 3: Muscle Imbalances */}
       {muscleImbalances.length > 0 && (
-        <div className="bg-[#12121a] rounded-xl p-5 border border-[#1e1e3a]">
+        <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-[var(--panel-border)]">
           <SectionHeader title="Muscle Group Imbalances" count={muscleImbalances.length} severity="warning" />
-          <p className="text-[10px] text-slate-500 mb-3">
+          <p className="text-[10px] text-[var(--text-muted)] mb-3">
             These muscle groups receive significantly less attention than the average, which may lead to compensatory patterns.
           </p>
           <div className="space-y-2">
@@ -351,9 +351,9 @@ export default function WhatsGaps({
 
       {/* Section 4: Neglected Skills */}
       {neglectedSkills.length > 0 && (
-        <div className="bg-[#12121a] rounded-xl p-5 border border-[#1e1e3a]">
+        <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-[var(--panel-border)]">
           <SectionHeader title="Neglected Physical Skills" count={neglectedSkills.length} severity="warning" />
-          <p className="text-[10px] text-slate-500 mb-3">
+          <p className="text-[10px] text-[var(--text-muted)] mb-3">
             These physical skills score below 30/100, meaning they are rarely developed by the current programming.
           </p>
           <div className="space-y-2">
@@ -366,9 +366,9 @@ export default function WhatsGaps({
 
       {/* Section 5: Missing Pairs */}
       {missingPairs.length > 0 && (
-        <div className="bg-[#12121a] rounded-xl p-5 border border-[#1e1e3a]">
+        <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-[var(--panel-border)]">
           <SectionHeader title="Missing Movement Pairs" count={advancedAnalysis.combinationCoverage?.unseenPairs?.length || missingPairs.length} severity="info" />
-          <p className="text-[10px] text-slate-500 mb-3">
+          <p className="text-[10px] text-[var(--text-muted)] mb-3">
             These movement combinations have never appeared together in any workout.
             {(advancedAnalysis.combinationCoverage?.unseenPairs?.length || 0) > 15 && (
               <span> Showing 15 of {advancedAnalysis.combinationCoverage.unseenPairs.length} unseen pairs.</span>
@@ -391,7 +391,7 @@ export default function WhatsGaps({
               {recommendations.length} {recommendations.length === 1 ? 'recommendation' : 'recommendations'}
             </span>
           </div>
-          <p className="text-[10px] text-slate-500 mb-3">
+          <p className="text-[10px] text-[var(--text-muted)] mb-3">
             High-level programming adjustments that would address the largest gaps identified above.
           </p>
           <div className="space-y-2">
@@ -404,9 +404,9 @@ export default function WhatsGaps({
 
       {/* All clear message */}
       {totalIssues === 0 && recommendations.length === 0 && (
-        <div className="bg-[#12121a] rounded-xl p-8 border border-emerald-500/20 text-center">
+        <div className="bg-[var(--panel-bg)] rounded-xl p-8 border border-emerald-500/20 text-center">
           <div className="text-2xl mb-2 text-emerald-400">All Clear</div>
-          <p className="text-sm text-slate-400">
+          <p className="text-sm text-[var(--text-tertiary)]">
             No significant programming gaps detected. The programming covers all major
             modality/time-domain combinations, functional patterns, muscle groups, and physical skills.
           </p>

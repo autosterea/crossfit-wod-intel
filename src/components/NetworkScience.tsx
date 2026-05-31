@@ -40,7 +40,7 @@ function ExplainerBox({ children }: { children: React.ReactNode }) {
   return (
     <div className="bg-blue-500/5 rounded-lg p-4 border border-blue-500/10 mb-4">
       <div className="text-xs font-medium text-blue-400 mb-1">What is this?</div>
-      <p className="text-xs text-slate-400 leading-relaxed">{children}</p>
+      <p className="text-xs text-[var(--text-tertiary)] leading-relaxed">{children}</p>
     </div>
   )
 }
@@ -199,15 +199,15 @@ export default function NetworkScience({ data, advancedAnalysis }: { data: Cross
     if (!active || !payload?.length) return null
     const d = payload[0].payload
     return (
-      <div className="bg-[#1e1e3a] border border-[#2a2a5a] rounded-lg p-3 text-xs shadow-xl">
-        <div className="font-medium text-white mb-1">{d.name}</div>
-        <div className="text-slate-400">
-          Score: <span className="text-white font-mono">{d.score?.toFixed(6) ?? d.pct}</span>
+      <div className="bg-[var(--panel-bg-hover)] border border-[var(--panel-border-strong)] rounded-lg p-3 text-xs shadow-xl">
+        <div className="font-medium text-[var(--text-primary)] mb-1">{d.name}</div>
+        <div className="text-[var(--text-tertiary)]">
+          Score: <span className="text-[var(--text-primary)] font-mono">{d.score?.toFixed(6) ?? d.pct}</span>
         </div>
-        <div className="text-slate-400">
-          Relative: <span className="text-white font-mono">{d.pct}%</span>
+        <div className="text-[var(--text-tertiary)]">
+          Relative: <span className="text-[var(--text-primary)] font-mono">{d.pct}%</span>
         </div>
-        <div className="text-slate-400">
+        <div className="text-[var(--text-tertiary)]">
           Modality: <span style={{ color: getModalityBarColor(d.modality) }} className="font-medium">{MODALITY_LABELS[d.modality] || d.modality}</span>
         </div>
       </div>
@@ -218,8 +218,8 @@ export default function NetworkScience({ data, advancedAnalysis }: { data: Cross
     <div className="space-y-4">
       {/* 1. Header */}
       <div>
-        <h2 className="text-2xl font-bold text-white">Movement Network Science</h2>
-        <p className="text-sm text-slate-400 mt-1">
+        <h2 className="text-2xl font-bold text-[var(--text-primary)]">Movement Network Science</h2>
+        <p className="text-sm text-[var(--text-tertiary)] mt-1">
           Graph theory analysis of movement co-occurrence patterns across the entire CrossFit.com programming history.
         </p>
       </div>
@@ -234,49 +234,49 @@ export default function NetworkScience({ data, advancedAnalysis }: { data: Cross
       {/* 2. Score Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         <div className="bg-gradient-to-br from-cyan-500/10 to-blue-500/10 rounded-xl p-5 border border-cyan-500/20">
-          <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Clustering Coefficient</div>
+          <div className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">Clustering Coefficient</div>
           <div className="text-3xl font-bold font-mono text-cyan-400">
             {centrality.clusteringCoefficient.toFixed(3)}
           </div>
-          <div className="text-[10px] text-slate-400 mt-1">
+          <div className="text-[10px] text-[var(--text-tertiary)] mt-1">
             How tightly connected is the movement network? 1.0 = everything connects to everything. Shows if CrossFit uses movements in tight groups or freely mixes them.
           </div>
         </div>
 
         <div className="bg-gradient-to-br from-amber-500/10 to-yellow-500/10 rounded-xl p-5 border border-amber-500/20">
-          <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Top PageRank Movement</div>
+          <div className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">Top PageRank Movement</div>
           <div className="text-xl font-bold font-mono text-amber-400 truncate" title={topPR?.name}>
             {topPR?.name || 'N/A'}
           </div>
-          <div className="text-xs text-slate-400 mt-0.5 font-mono">{topPR ? `${topPR.pct}% relative score` : ''}</div>
-          <div className="text-[10px] text-slate-400 mt-1">
+          <div className="text-xs text-[var(--text-tertiary)] mt-0.5 font-mono">{topPR ? `${topPR.pct}% relative score` : ''}</div>
+          <div className="text-[10px] text-[var(--text-tertiary)] mt-1">
             Like Google ranks websites, PageRank finds movements that are connected to other important movements.
           </div>
         </div>
 
         <div className="bg-gradient-to-br from-emerald-500/10 to-green-500/10 rounded-xl p-5 border border-emerald-500/20">
-          <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Top Bridge Movement</div>
+          <div className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">Top Bridge Movement</div>
           <div className="text-xl font-bold font-mono text-emerald-400 truncate" title={topBridge?.name}>
             {topBridge?.name || 'N/A'}
           </div>
-          <div className="text-xs text-slate-400 mt-0.5 font-mono">{topBridge ? `${topBridge.pct}% relative score` : ''}</div>
-          <div className="text-[10px] text-slate-400 mt-1">
+          <div className="text-xs text-[var(--text-tertiary)] mt-0.5 font-mono">{topBridge ? `${topBridge.pct}% relative score` : ''}</div>
+          <div className="text-[10px] text-[var(--text-tertiary)] mt-1">
             Bridge movements connect different types of fitness. They appear in workouts across all modalities.
           </div>
         </div>
 
         <div className="bg-gradient-to-br from-purple-500/10 to-violet-500/10 rounded-xl p-5 border border-purple-500/20">
-          <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Communities Found</div>
+          <div className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">Communities Found</div>
           <div className="text-3xl font-bold font-mono text-purple-400">{numCommunities}</div>
-          <div className="text-[10px] text-slate-400 mt-1">
+          <div className="text-[10px] text-[var(--text-tertiary)] mt-1">
             Distinct clusters of movements detected by community detection algorithm.
           </div>
         </div>
       </div>
 
       {/* 3. PageRank vs Betweenness Side-by-Side Bar Charts */}
-      <div className="bg-[#12121a] rounded-xl p-5 border border-[#1e1e3a]">
-        <h3 className="text-sm font-medium text-white mb-2">PageRank vs Betweenness Centrality — Top 15</h3>
+      <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-[var(--panel-border)]">
+        <h3 className="text-sm font-medium text-[var(--text-primary)] mb-2">PageRank vs Betweenness Centrality — Top 15</h3>
         <ExplainerBox>
           <strong>PageRank</strong> = importance (connected to other important movements). <strong>Betweenness</strong> = bridging power (connecting different groups). A movement high in both is a cornerstone of CrossFit programming.
         </ExplainerBox>
@@ -286,27 +286,27 @@ export default function NetworkScience({ data, advancedAnalysis }: { data: Cross
           {Object.entries(MODALITY_BAR_COLORS).map(([key, color]) => (
             <div key={key} className="flex items-center gap-1.5">
               <div className="w-2.5 h-2.5 rounded-sm" style={{ background: color }} />
-              <span className="text-[10px] text-slate-400">{MODALITY_LABELS[key]} ({key})</span>
+              <span className="text-[10px] text-[var(--text-tertiary)]">{MODALITY_LABELS[key]} ({key})</span>
             </div>
           ))}
           <div className="flex items-center gap-1.5">
             <div className="w-2.5 h-2.5 rounded-sm" style={{ background: '#6b7280' }} />
-            <span className="text-[10px] text-slate-400">Other</span>
+            <span className="text-[10px] text-[var(--text-tertiary)]">Other</span>
           </div>
         </div>
 
         <div className="grid grid-cols-2 gap-4">
           {/* PageRank Chart */}
           <div>
-            <h4 className="text-xs font-medium text-slate-400 mb-2">PageRank (Importance)</h4>
+            <h4 className="text-xs font-medium text-[var(--text-tertiary)] mb-2">PageRank (Importance)</h4>
             <div style={{width:"100%",height:420}}><ResponsiveContainer width="100%" height="100%">
               <BarChart data={topPageRank} layout="vertical" margin={{ left: 10, right: 20, top: 5, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#1e1e3a" horizontal={false} />
-                <XAxis type="number" tick={{ fontSize: 9, fill: '#64748b' }} domain={[0, 100]} tickFormatter={(v) => `${v}%`} />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" horizontal={false} />
+                <XAxis type="number" tick={{ fontSize: 9, fill: 'var(--chart-axis)' }} domain={[0, 100]} tickFormatter={(v) => `${v}%`} />
                 <YAxis
                   type="category"
                   dataKey="name"
-                  tick={{ fontSize: 10, fill: '#94a3b8' }}
+                  tick={{ fontSize: 10, fill: 'var(--chart-axis)' }}
                   width={120}
                 />
                 <Tooltip content={<CustomTooltip />} />
@@ -321,15 +321,15 @@ export default function NetworkScience({ data, advancedAnalysis }: { data: Cross
 
           {/* Betweenness Chart */}
           <div>
-            <h4 className="text-xs font-medium text-slate-400 mb-2">Betweenness Centrality (Bridging)</h4>
+            <h4 className="text-xs font-medium text-[var(--text-tertiary)] mb-2">Betweenness Centrality (Bridging)</h4>
             <div style={{width:"100%",height:420}}><ResponsiveContainer width="100%" height="100%">
               <BarChart data={topBetweenness} layout="vertical" margin={{ left: 10, right: 20, top: 5, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#1e1e3a" horizontal={false} />
-                <XAxis type="number" tick={{ fontSize: 9, fill: '#64748b' }} domain={[0, 100]} tickFormatter={(v) => `${v}%`} />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" horizontal={false} />
+                <XAxis type="number" tick={{ fontSize: 9, fill: 'var(--chart-axis)' }} domain={[0, 100]} tickFormatter={(v) => `${v}%`} />
                 <YAxis
                   type="category"
                   dataKey="name"
-                  tick={{ fontSize: 10, fill: '#94a3b8' }}
+                  tick={{ fontSize: 10, fill: 'var(--chart-axis)' }}
                   width={120}
                 />
                 <Tooltip content={<CustomTooltip />} />
@@ -345,8 +345,8 @@ export default function NetworkScience({ data, advancedAnalysis }: { data: Cross
       </div>
 
       {/* 4. Community Detection */}
-      <div className="bg-[#12121a] rounded-xl p-5 border border-[#1e1e3a]">
-        <h3 className="text-sm font-medium text-white mb-2">Community Detection</h3>
+      <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-[var(--panel-border)]">
+        <h3 className="text-sm font-medium text-[var(--text-primary)] mb-2">Community Detection</h3>
         <ExplainerBox>
           Communities are groups of movements that tend to appear together more often than with outsiders. Think of them
           as &ldquo;workout families.&rdquo; The algorithm finds these automatically — no human told it about M/G/W categories.
@@ -369,10 +369,10 @@ export default function NetworkScience({ data, advancedAnalysis }: { data: Cross
                 >
                   <div className="flex items-center gap-2 mb-2">
                     <div className="w-3 h-3 rounded-full" style={{ background: color }} />
-                    <span className="text-xs font-bold text-white">Community {comm + 1}</span>
-                    <span className="text-[10px] text-slate-500 ml-auto">{members.length} movements</span>
+                    <span className="text-xs font-bold text-[var(--text-primary)]">Community {comm + 1}</span>
+                    <span className="text-[10px] text-[var(--text-muted)] ml-auto">{members.length} movements</span>
                   </div>
-                  <div className="text-[10px] text-slate-400 mb-2 italic">
+                  <div className="text-[10px] text-[var(--text-tertiary)] mb-2 italic">
                     {communityDescriptions[comm]}
                   </div>
                   <div className="flex flex-wrap gap-1.5">
@@ -401,8 +401,8 @@ export default function NetworkScience({ data, advancedAnalysis }: { data: Cross
       </div>
 
       {/* 5. Movement Importance Table */}
-      <div className="bg-[#12121a] rounded-xl p-5 border border-[#1e1e3a]">
-        <h3 className="text-sm font-medium text-white mb-2">Movement Importance Table</h3>
+      <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-[var(--panel-border)]">
+        <h3 className="text-sm font-medium text-[var(--text-primary)] mb-2">Movement Importance Table</h3>
         <ExplainerBox>
           Full ranking of all movements by network importance metrics. Click column headers to sort. Scores are
           normalized as percentages relative to the top-scoring movement in each metric.
@@ -411,41 +411,41 @@ export default function NetworkScience({ data, advancedAnalysis }: { data: Cross
         <div className="overflow-x-auto max-h-[500px] overflow-y-auto">
           <table className="w-full text-xs">
             <thead className="sticky top-0 z-10">
-              <tr className="bg-[#0a0a14] border-b border-[#1e1e3a]">
+              <tr className="bg-[var(--app-bg)] border-b border-[var(--panel-border)]">
                 <th
-                  className="text-left py-2 px-3 text-slate-400 font-medium cursor-pointer hover:text-white select-none"
+                  className="text-left py-2 px-3 text-[var(--text-tertiary)] font-medium cursor-pointer hover:text-[var(--text-primary)] select-none"
                   onClick={() => handleSort('name')}
                 >
                   Movement{sortIndicator('name')}
-                  <div className="text-[9px] text-slate-600 font-normal mt-0.5">Display name</div>
+                  <div className="text-[9px] text-[var(--text-muted)] font-normal mt-0.5">Display name</div>
                 </th>
                 <th
-                  className="text-right py-2 px-3 text-slate-400 font-medium cursor-pointer hover:text-white select-none"
+                  className="text-right py-2 px-3 text-[var(--text-tertiary)] font-medium cursor-pointer hover:text-[var(--text-primary)] select-none"
                   onClick={() => handleSort('pageRank')}
                 >
                   PageRank{sortIndicator('pageRank')}
-                  <div className="text-[9px] text-slate-600 font-normal mt-0.5">Importance via connections</div>
+                  <div className="text-[9px] text-[var(--text-muted)] font-normal mt-0.5">Importance via connections</div>
                 </th>
                 <th
-                  className="text-right py-2 px-3 text-slate-400 font-medium cursor-pointer hover:text-white select-none"
+                  className="text-right py-2 px-3 text-[var(--text-tertiary)] font-medium cursor-pointer hover:text-[var(--text-primary)] select-none"
                   onClick={() => handleSort('betweenness')}
                 >
                   Betweenness{sortIndicator('betweenness')}
-                  <div className="text-[9px] text-slate-600 font-normal mt-0.5">Bridging power</div>
+                  <div className="text-[9px] text-[var(--text-muted)] font-normal mt-0.5">Bridging power</div>
                 </th>
                 <th
-                  className="text-center py-2 px-3 text-slate-400 font-medium cursor-pointer hover:text-white select-none"
+                  className="text-center py-2 px-3 text-[var(--text-tertiary)] font-medium cursor-pointer hover:text-[var(--text-primary)] select-none"
                   onClick={() => handleSort('community')}
                 >
                   Community{sortIndicator('community')}
-                  <div className="text-[9px] text-slate-600 font-normal mt-0.5">Detected cluster</div>
+                  <div className="text-[9px] text-[var(--text-muted)] font-normal mt-0.5">Detected cluster</div>
                 </th>
                 <th
-                  className="text-center py-2 px-3 text-slate-400 font-medium cursor-pointer hover:text-white select-none"
+                  className="text-center py-2 px-3 text-[var(--text-tertiary)] font-medium cursor-pointer hover:text-[var(--text-primary)] select-none"
                   onClick={() => handleSort('modality')}
                 >
                   Modality{sortIndicator('modality')}
-                  <div className="text-[9px] text-slate-600 font-normal mt-0.5">M / G / W</div>
+                  <div className="text-[9px] text-[var(--text-muted)] font-normal mt-0.5">M / G / W</div>
                 </th>
               </tr>
             </thead>
@@ -455,29 +455,29 @@ export default function NetworkScience({ data, advancedAnalysis }: { data: Cross
                 return (
                   <tr
                     key={row.id}
-                    className={`border-b border-[#1e1e3a]/50 hover:bg-white/[0.02] transition-colors ${i % 2 === 0 ? 'bg-white/[0.01]' : ''}`}
+                    className={`border-b border-[var(--panel-border)]/50 hover:bg-white/[0.02] transition-colors ${i % 2 === 0 ? 'bg-white/[0.01]' : ''}`}
                   >
-                    <td className="py-1.5 px-3 text-slate-300 font-medium">{row.name}</td>
+                    <td className="py-1.5 px-3 text-[var(--text-secondary)] font-medium">{row.name}</td>
                     <td className="py-1.5 px-3 text-right font-mono">
                       <div className="flex items-center justify-end gap-2">
-                        <div className="w-16 h-1.5 bg-[#1e1e3a] rounded-full overflow-hidden">
+                        <div className="w-16 h-1.5 bg-[var(--panel-bg-hover)] rounded-full overflow-hidden">
                           <div
                             className="h-full rounded-full bg-amber-400/70"
                             style={{ width: `${row.pageRankPct}%` }}
                           />
                         </div>
-                        <span className="text-slate-400 w-12 text-right">{row.pageRankPct}%</span>
+                        <span className="text-[var(--text-tertiary)] w-12 text-right">{row.pageRankPct}%</span>
                       </div>
                     </td>
                     <td className="py-1.5 px-3 text-right font-mono">
                       <div className="flex items-center justify-end gap-2">
-                        <div className="w-16 h-1.5 bg-[#1e1e3a] rounded-full overflow-hidden">
+                        <div className="w-16 h-1.5 bg-[var(--panel-bg-hover)] rounded-full overflow-hidden">
                           <div
                             className="h-full rounded-full bg-emerald-400/70"
                             style={{ width: `${row.betweennessPct}%` }}
                           />
                         </div>
-                        <span className="text-slate-400 w-12 text-right">{row.betweennessPct}%</span>
+                        <span className="text-[var(--text-tertiary)] w-12 text-right">{row.betweennessPct}%</span>
                       </div>
                     </td>
                     <td className="py-1.5 px-3 text-center">

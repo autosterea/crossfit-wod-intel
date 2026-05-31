@@ -142,21 +142,21 @@ export default function PatternInsights({ data }: { data: CrossFitData }) {
   return (
     <div className="space-y-4">
       <div>
-        <h2 className="text-2xl font-bold text-white">Pattern Detection & Insights</h2>
-        <p className="text-sm text-slate-400 mt-1">Automatically discovered patterns, anomalies, and non-obvious relationships in 25 years of data</p>
+        <h2 className="text-2xl font-bold text-[var(--text-primary)]">Pattern Detection & Insights</h2>
+        <p className="text-sm text-[var(--text-tertiary)] mt-1">Automatically discovered patterns, anomalies, and non-obvious relationships in 25 years of data</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {insights.map((insight, idx) => (
-          <div key={idx} className="bg-[#12121a] rounded-xl p-5 border border-[#1e1e3a]">
+          <div key={idx} className="bg-[var(--panel-bg)] rounded-xl p-5 border border-[var(--panel-border)]">
             <div className="flex items-start gap-3 mb-3">
               <div className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${
                 insight.severity === 'high' ? 'bg-rose-400' :
                 insight.severity === 'medium' ? 'bg-amber-400' : 'bg-blue-400'
               }`} />
               <div>
-                <h3 className="text-sm font-semibold text-white">{insight.title}</h3>
-                <p className="text-xs text-slate-400 mt-1 leading-relaxed">{insight.description}</p>
+                <h3 className="text-sm font-semibold text-[var(--text-primary)]">{insight.title}</h3>
+                <p className="text-xs text-[var(--text-tertiary)] mt-1 leading-relaxed">{insight.description}</p>
               </div>
             </div>
 
@@ -166,10 +166,10 @@ export default function PatternInsights({ data }: { data: CrossFitData }) {
                 {insight.data[0]?.ratio !== undefined ? (
                   <div style={{width:"100%",height:200}}><ResponsiveContainer width="100%" height="100%">
                     <BarChart data={insight.data} layout="vertical" margin={{ left: 140 }}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#1e1e3a" horizontal={false} />
-                      <XAxis type="number" tick={{ fontSize: 9, fill: '#64748b' }} />
-                      <YAxis type="category" dataKey="name" tick={{ fontSize: 9, fill: '#94a3b8' }} width={135} />
-                      <Tooltip contentStyle={{ background: '#1e1e3a', border: '1px solid #2a2a5a', borderRadius: 8, fontSize: 11 }} />
+                      <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" horizontal={false} />
+                      <XAxis type="number" tick={{ fontSize: 9, fill: 'var(--chart-axis)' }} />
+                      <YAxis type="category" dataKey="name" tick={{ fontSize: 9, fill: 'var(--chart-axis)' }} width={135} />
+                      <Tooltip contentStyle={{ background: 'var(--chart-tooltip-bg)', border: '1px solid var(--chart-tooltip-border)', borderRadius: 8, fontSize: 11 }} />
                       <Bar dataKey="ratio" radius={[0, 4, 4, 0]}>
                         {insight.data.map((e: any, i: number) => (
                           <Cell key={i} fill={e.ratio > 1 ? '#10b981' : '#f43f5e'} fillOpacity={0.7} />
@@ -180,20 +180,20 @@ export default function PatternInsights({ data }: { data: CrossFitData }) {
                 ) : insight.data[0]?.avg !== undefined ? (
                   <div style={{width:"100%",height:150}}><ResponsiveContainer width="100%" height="100%">
                     <LineChart data={insight.data}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#1e1e3a" />
-                      <XAxis dataKey="year" tick={{ fontSize: 9, fill: '#64748b' }} interval={3} />
-                      <YAxis tick={{ fontSize: 9, fill: '#64748b' }} domain={['auto', 'auto']} />
-                      <Tooltip contentStyle={{ background: '#1e1e3a', border: '1px solid #2a2a5a', borderRadius: 8, fontSize: 11 }} />
+                      <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" />
+                      <XAxis dataKey="year" tick={{ fontSize: 9, fill: 'var(--chart-axis)' }} interval={3} />
+                      <YAxis tick={{ fontSize: 9, fill: 'var(--chart-axis)' }} domain={['auto', 'auto']} />
+                      <Tooltip contentStyle={{ background: 'var(--chart-tooltip-bg)', border: '1px solid var(--chart-tooltip-border)', borderRadius: 8, fontSize: 11 }} />
                       <Line type="monotone" dataKey="avg" stroke="#a855f7" strokeWidth={2} dot={false} />
                     </LineChart>
                   </ResponsiveContainer></div>
                 ) : (
                   <div style={{width:"100%",height:150}}><ResponsiveContainer width="100%" height="100%">
                     <BarChart data={insight.data}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#1e1e3a" />
-                      <XAxis dataKey={insight.data[0]?.day ? 'day' : 'name'} tick={{ fontSize: 9, fill: '#64748b' }} />
-                      <YAxis tick={{ fontSize: 9, fill: '#64748b' }} />
-                      <Tooltip contentStyle={{ background: '#1e1e3a', border: '1px solid #2a2a5a', borderRadius: 8, fontSize: 11 }} />
+                      <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" />
+                      <XAxis dataKey={insight.data[0]?.day ? 'day' : 'name'} tick={{ fontSize: 9, fill: 'var(--chart-axis)' }} />
+                      <YAxis tick={{ fontSize: 9, fill: 'var(--chart-axis)' }} />
+                      <Tooltip contentStyle={{ background: 'var(--chart-tooltip-bg)', border: '1px solid var(--chart-tooltip-border)', borderRadius: 8, fontSize: 11 }} />
                       <Bar dataKey={insight.data[0]?.total ? 'total' : insight.data[0]?.count ? 'count' : 'workouts'} radius={[4, 4, 0, 0]}>
                         {insight.data.map((_: any, i: number) => (
                           <Cell key={i} fill={['#60a5fa', '#a855f7', '#f43f5e', '#10b981', '#f59e0b', '#06b6d4', '#ec4899'][i % 7]} fillOpacity={0.7} />

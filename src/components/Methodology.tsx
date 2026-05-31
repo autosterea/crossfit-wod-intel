@@ -14,12 +14,12 @@ function SectionBadge({ num }: { num: number }) {
 
 function SectionCard({ num, title, children }: { num: number; title: string; children: React.ReactNode }) {
   return (
-    <section className="border border-[#1e1e3a] rounded-xl bg-[#0c0c18] overflow-hidden">
-      <div className="flex items-center gap-3 px-6 py-4 border-b border-[#1e1e3a] bg-[#0a0a14]">
+    <section className="border border-[var(--panel-border)] rounded-xl bg-[var(--panel-bg)] overflow-hidden">
+      <div className="flex items-center gap-3 px-6 py-4 border-b border-[var(--panel-border)] bg-[var(--app-bg)]">
         <SectionBadge num={num} />
-        <h2 className="text-lg font-bold text-slate-200">{title}</h2>
+        <h2 className="text-lg font-bold text-[var(--text-primary)]">{title}</h2>
       </div>
-      <div className="px-6 py-5 space-y-4 text-sm text-slate-300 leading-relaxed">
+      <div className="px-6 py-5 space-y-4 text-sm text-[var(--text-secondary)] leading-relaxed">
         {children}
       </div>
     </section>
@@ -28,7 +28,7 @@ function SectionCard({ num, title, children }: { num: number; title: string; chi
 
 function Citation({ children }: { children: React.ReactNode }) {
   return (
-    <p className="font-mono text-xs text-slate-500 leading-relaxed pl-4 border-l-2 border-[#1e1e3a]">
+    <p className="font-mono text-xs text-[var(--text-muted)] leading-relaxed pl-4 border-l-2 border-[var(--panel-border)]">
       {children}
     </p>
   )
@@ -48,20 +48,20 @@ function WarningItem({ children }: { children: React.ReactNode }) {
 }
 
 function SubHeading({ children }: { children: React.ReactNode }) {
-  return <h3 className="text-base font-semibold text-slate-200 pt-2">{children}</h3>
+  return <h3 className="text-base font-semibold text-[var(--text-primary)] pt-2">{children}</h3>
 }
 
 function StatMethod({ name, what, howUsed, citation }: { name: string; what: string; howUsed: string; citation: string }) {
   return (
-    <div className="border border-[#1e1e3a] rounded-lg bg-[#0a0a14] p-4 space-y-2">
+    <div className="border border-[var(--panel-border)] rounded-lg bg-[var(--app-bg)] p-4 space-y-2">
       <h4 className="text-sm font-bold text-blue-400">{name}</h4>
       <div>
-        <span className="text-xs font-semibold text-slate-400">What it measures: </span>
-        <span className="text-xs text-slate-300">{what}</span>
+        <span className="text-xs font-semibold text-[var(--text-tertiary)]">What it measures: </span>
+        <span className="text-xs text-[var(--text-secondary)]">{what}</span>
       </div>
       <div>
-        <span className="text-xs font-semibold text-slate-400">How we use it: </span>
-        <span className="text-xs text-slate-300">{howUsed}</span>
+        <span className="text-xs font-semibold text-[var(--text-tertiary)]">How we use it: </span>
+        <span className="text-xs text-[var(--text-secondary)]">{howUsed}</span>
       </div>
       <Citation>{citation}</Citation>
     </div>
@@ -78,7 +78,7 @@ export default function Methodology({ data }: Props) {
         <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-rose-400 bg-clip-text text-transparent">
           Methodology, Sources &amp; Limitations
         </h1>
-        <p className="text-sm text-slate-400 max-w-2xl mx-auto leading-relaxed">
+        <p className="text-sm text-[var(--text-tertiary)] max-w-2xl mx-auto leading-relaxed">
           Full transparency on how this analysis was built, what assumptions were made, and where the limitations are.
         </p>
       </div>
@@ -86,16 +86,16 @@ export default function Methodology({ data }: Props) {
       {/* Section 1: Data Source & Collection */}
       <SectionCard num={1} title="Data Source & Collection">
         <SubHeading>Data Source</SubHeading>
-        <ul className="list-disc list-outside pl-5 space-y-1.5 text-sm text-slate-300">
+        <ul className="list-disc list-outside pl-5 space-y-1.5 text-sm text-[var(--text-secondary)]">
           <li>All workout data was collected from <a href="https://www.crossfit.com" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 underline decoration-blue-400/30">crossfit.com</a>, the official CrossFit website</li>
           <li>CrossFit.com has published a Workout of the Day (WOD) nearly every day since February 10, 2001</li>
           <li>This dataset contains <span className="text-blue-400 font-mono font-bold">{total_workouts.toLocaleString()}</span> workouts spanning <span className="text-blue-400 font-mono font-bold">{date_range}</span></li>
           <li>Data was initially compiled into a structured dataset through web scraping of publicly available workout pages</li>
-          <li>Daily updates are automated via a GitHub Actions workflow that fetches the latest WOD from <span className="font-mono text-xs text-slate-400">crossfit.com/workout/YYYY/MM/DD</span></li>
+          <li>Daily updates are automated via a GitHub Actions workflow that fetches the latest WOD from <span className="font-mono text-xs text-[var(--text-tertiary)]">crossfit.com/workout/YYYY/MM/DD</span></li>
         </ul>
 
         <SubHeading>What's Included</SubHeading>
-        <ul className="list-disc list-outside pl-5 space-y-1.5 text-sm text-slate-300">
+        <ul className="list-disc list-outside pl-5 space-y-1.5 text-sm text-[var(--text-secondary)]">
           <li>Workout date, title, and full description text</li>
           <li>Movement classification (30 primary categories, 80 when text-parsed)</li>
           <li>Modality tagging (Monostructural, Gymnastics, Weightlifting, combinations)</li>
@@ -106,7 +106,7 @@ export default function Methodology({ data }: Props) {
         </ul>
 
         <SubHeading>What's NOT Included</SubHeading>
-        <ul className="list-disc list-outside pl-5 space-y-1.5 text-sm text-slate-400">
+        <ul className="list-disc list-outside pl-5 space-y-1.5 text-sm text-[var(--text-tertiary)]">
           <li>Athlete performance data (times, scores, weights lifted)</li>
           <li>Scaling options (only Rx'd prescription is tracked)</li>
           <li>Warm-up or cool-down programming</li>
@@ -119,22 +119,22 @@ export default function Methodology({ data }: Props) {
       <SectionCard num={2} title="Movement Classification Methodology">
         <SubHeading>Two Layers of Movement Tracking</SubHeading>
 
-        <div className="border border-[#1e1e3a] rounded-lg bg-[#0a0a14] p-4 space-y-2">
+        <div className="border border-[var(--panel-border)] rounded-lg bg-[var(--app-bg)] p-4 space-y-2">
           <h4 className="text-sm font-bold text-emerald-400">Layer 1 — Structured Classification (30 movements)</h4>
-          <p className="text-sm text-slate-300">
+          <p className="text-sm text-[var(--text-secondary)]">
             The original dataset classifies each workout into 30 canonical movement categories. This was done during initial data processing by mapping exercise descriptions to standardized names. For example, "Strict Pull-ups," "Kipping Pull-ups," and "Butterfly Pull-ups" all map to "PullUp." This provides consistent tracking but loses granularity.
           </p>
         </div>
 
-        <div className="border border-[#1e1e3a] rounded-lg bg-[#0a0a14] p-4 space-y-2">
+        <div className="border border-[var(--panel-border)] rounded-lg bg-[var(--app-bg)] p-4 space-y-2">
           <h4 className="text-sm font-bold text-purple-400">Layer 2 — Text-Parsed Extraction (80 movements)</h4>
-          <p className="text-sm text-slate-300">
+          <p className="text-sm text-[var(--text-secondary)]">
             We additionally scan every workout description using keyword dictionary matching to identify 80 distinct exercises. This catches movements the 30-category system groups together (e.g., "Ring Dip" vs "Bar Dip" vs generic "Dip") and movements it misses entirely (e.g., "Turkish Get-up," "Bear Crawl," "Pegboard").
           </p>
         </div>
 
         <SubHeading>Limitations of Text Parsing</SubHeading>
-        <ul className="list-disc list-outside pl-5 space-y-1.5 text-sm text-slate-300">
+        <ul className="list-disc list-outside pl-5 space-y-1.5 text-sm text-[var(--text-secondary)]">
           <li>Keyword matching is not perfect — if a workout describes a movement using unusual phrasing, it may be missed</li>
           <li>Some movements share keywords (e.g., "clean" appears in "Clean," "Clean and Jerk," "Squat Clean") — we use longest-match-first to minimize false positives</li>
           <li>Workout descriptions are sometimes truncated in the source data (limited to ~500 characters), which may cut off movements listed at the end</li>
@@ -147,14 +147,14 @@ export default function Methodology({ data }: Props) {
       {/* Section 3: Functional Movement Taxonomy */}
       <SectionCard num={3} title="Functional Movement Taxonomy">
         <SubHeading>Movement-to-Pattern Mapping</SubHeading>
-        <p className="text-sm text-slate-300">
+        <p className="text-sm text-[var(--text-secondary)]">
           Each of the 30 tracked movements is manually mapped to:
         </p>
-        <ul className="list-disc list-outside pl-5 space-y-1.5 text-sm text-slate-300">
-          <li><span className="text-slate-200 font-medium">Functional patterns:</span> Vertical Push, Vertical Pull, Horizontal Push, Horizontal Pull, Squat, Hinge, Lunge, Locomotion, Plyometric, Core, Olympic Lift, Overhead Stability</li>
-          <li><span className="text-slate-200 font-medium">Muscle groups:</span> Based on primary movers for each exercise</li>
-          <li><span className="text-slate-200 font-medium">Physical skills:</span> Which of CrossFit's 10 General Physical Skills each movement primarily develops</li>
-          <li><span className="text-slate-200 font-medium">Complexity score:</span> 1-5 scale based on technical difficulty and learning curve</li>
+        <ul className="list-disc list-outside pl-5 space-y-1.5 text-sm text-[var(--text-secondary)]">
+          <li><span className="text-[var(--text-primary)] font-medium">Functional patterns:</span> Vertical Push, Vertical Pull, Horizontal Push, Horizontal Pull, Squat, Hinge, Lunge, Locomotion, Plyometric, Core, Olympic Lift, Overhead Stability</li>
+          <li><span className="text-[var(--text-primary)] font-medium">Muscle groups:</span> Based on primary movers for each exercise</li>
+          <li><span className="text-[var(--text-primary)] font-medium">Physical skills:</span> Which of CrossFit's 10 General Physical Skills each movement primarily develops</li>
+          <li><span className="text-[var(--text-primary)] font-medium">Complexity score:</span> 1-5 scale based on technical difficulty and learning curve</li>
         </ul>
         <div className="bg-amber-500/5 border border-amber-500/20 rounded-lg p-3 mt-2">
           <p className="text-xs text-amber-300/80">
@@ -165,7 +165,7 @@ export default function Methodology({ data }: Props) {
 
       {/* Section 4: Statistical Methods & Citations */}
       <SectionCard num={4} title="Statistical Methods & Citations">
-        <p className="text-sm text-slate-400 mb-2">
+        <p className="text-sm text-[var(--text-tertiary)] mb-2">
           Each statistical method used in this analysis is documented below with its purpose, application, and original academic citation.
         </p>
 
@@ -258,21 +258,21 @@ export default function Methodology({ data }: Props) {
         </div>
 
         <SubHeading>10 General Physical Skills</SubHeading>
-        <p className="text-sm text-slate-300">
+        <p className="text-sm text-[var(--text-secondary)]">
           Originally defined by Jim Cawley and Bruce Evans of Dynamax. Categorizes fitness into:
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
           <div className="bg-emerald-500/5 border border-emerald-500/20 rounded-lg p-3">
             <p className="text-emerald-400 font-semibold mb-1">Organic adaptations (training)</p>
-            <p className="text-slate-400">Cardiovascular Endurance, Stamina, Strength, Flexibility</p>
+            <p className="text-[var(--text-tertiary)]">Cardiovascular Endurance, Stamina, Strength, Flexibility</p>
           </div>
           <div className="bg-purple-500/5 border border-purple-500/20 rounded-lg p-3">
             <p className="text-purple-400 font-semibold mb-1">Neurological adaptations (practice)</p>
-            <p className="text-slate-400">Coordination, Agility, Balance, Accuracy</p>
+            <p className="text-[var(--text-tertiary)]">Coordination, Agility, Balance, Accuracy</p>
           </div>
           <div className="bg-blue-500/5 border border-blue-500/20 rounded-lg p-3">
             <p className="text-blue-400 font-semibold mb-1">Both</p>
-            <p className="text-slate-400">Power, Speed</p>
+            <p className="text-[var(--text-tertiary)]">Power, Speed</p>
           </div>
         </div>
         <Citation>
@@ -280,8 +280,8 @@ export default function Methodology({ data }: Props) {
         </Citation>
 
         <SubHeading>Energy Systems</SubHeading>
-        <p className="text-sm text-slate-300">Based on standard exercise physiology:</p>
-        <ul className="list-disc list-outside pl-5 space-y-1 text-sm text-slate-300">
+        <p className="text-sm text-[var(--text-secondary)]">Based on standard exercise physiology:</p>
+        <ul className="list-disc list-outside pl-5 space-y-1 text-sm text-[var(--text-secondary)]">
           <li><span className="text-rose-400 font-medium">Phosphagen (ATP-CP):</span> 0-10 seconds, max effort</li>
           <li><span className="text-amber-400 font-medium">Glycolytic:</span> 10 seconds to ~2 minutes, high intensity</li>
           <li><span className="text-emerald-400 font-medium">Oxidative:</span> 2+ minutes, sustained effort</li>
@@ -291,7 +291,7 @@ export default function Methodology({ data }: Props) {
         </Citation>
 
         <SubHeading>The Hopper Model</SubHeading>
-        <p className="text-sm text-slate-300">
+        <p className="text-sm text-[var(--text-secondary)]">
           Glassman's concept that true fitness means readiness for any random physical task.
         </p>
         <Citation>
@@ -302,7 +302,7 @@ export default function Methodology({ data }: Props) {
       {/* Section 6: Assumptions & Known Limitations */}
       <SectionCard num={6} title="Assumptions & Known Limitations">
         <SubHeading>Data Completeness</SubHeading>
-        <ul className="space-y-2 text-sm text-slate-300">
+        <ul className="space-y-2 text-sm text-[var(--text-secondary)]">
           <WarningItem>~16% of workouts have "Unknown" time domain classification</WarningItem>
           <WarningItem>~37% have "Unknown" load profile</WarningItem>
           <WarningItem>Workout descriptions are truncated at ~500 characters in some cases</WarningItem>
@@ -310,14 +310,14 @@ export default function Methodology({ data }: Props) {
         </ul>
 
         <SubHeading>Classification Subjectivity</SubHeading>
-        <ul className="space-y-2 text-sm text-slate-300">
+        <ul className="space-y-2 text-sm text-[var(--text-secondary)]">
           <WarningItem>Movement-to-modality mapping follows CrossFit's standard M/G/W classification, but edge cases exist (e.g., Wall Balls could be argued as Gymnastics or Weightlifting)</WarningItem>
           <WarningItem>Functional pattern mapping (Push/Pull/Squat/Hinge) is one interpretation — other strength coaches may classify differently</WarningItem>
           <WarningItem>Time domain boundaries (Sprint &lt; 5min, Short 5-10min, etc.) are approximate and may not match every coach's definition</WarningItem>
         </ul>
 
         <SubHeading>Statistical Caveats</SubHeading>
-        <ul className="space-y-2 text-sm text-slate-300">
+        <ul className="space-y-2 text-sm text-[var(--text-secondary)]">
           <WarningItem>Co-occurrence analysis assumes that movements listed in the same workout description are programmed together, which is true for most but not all cases (some descriptions include warm-up movements)</WarningItem>
           <WarningItem>Trend analysis over {years_covered} years assumes the data collection methodology was consistent throughout, which may not be perfectly true for the earliest years</WarningItem>
           <WarningItem>The 30-movement classification system groups many exercises together, potentially masking variation within categories</WarningItem>
@@ -325,7 +325,7 @@ export default function Methodology({ data }: Props) {
         </ul>
 
         <SubHeading>Not Analyzed</SubHeading>
-        <ul className="space-y-2 text-sm text-slate-300">
+        <ul className="space-y-2 text-sm text-[var(--text-secondary)]">
           <WarningItem>We do not analyze athlete outcomes or performance improvements</WarningItem>
           <WarningItem>No comparison with other programming methodologies (CompTrain, HWPO, Mayhem, etc.)</WarningItem>
           <WarningItem>No analysis of competition (CrossFit Games) programming</WarningItem>
@@ -337,13 +337,13 @@ export default function Methodology({ data }: Props) {
       {/* Section 7: Reproducibility */}
       <SectionCard num={7} title="Reproducibility">
         <SubHeading>Open Source</SubHeading>
-        <p className="text-sm text-slate-300">
+        <p className="text-sm text-[var(--text-secondary)]">
           This project is fully open source. All code, data, and methodology are available for review, replication, and critique.
         </p>
 
-        <div className="bg-[#0a0a14] border border-[#1e1e3a] rounded-lg p-4 space-y-3">
+        <div className="bg-[var(--app-bg)] border border-[var(--panel-border)] rounded-lg p-4 space-y-3">
           <div>
-            <span className="text-xs font-semibold text-slate-400">GitHub Repository: </span>
+            <span className="text-xs font-semibold text-[var(--text-tertiary)]">GitHub Repository: </span>
             <a href="https://github.com/autosterea/crossfit-wod-intel" target="_blank" rel="noopener noreferrer" className="text-sm text-blue-400 hover:text-blue-300 underline decoration-blue-400/30 font-mono">
               github.com/autosterea/crossfit-wod-intel
             </a>
@@ -351,7 +351,7 @@ export default function Methodology({ data }: Props) {
         </div>
 
         <SubHeading>Key Source Files</SubHeading>
-        <div className="bg-[#0a0a14] border border-[#1e1e3a] rounded-lg overflow-hidden">
+        <div className="bg-[var(--app-bg)] border border-[var(--panel-border)] rounded-lg overflow-hidden">
           <table className="w-full text-xs">
             <tbody>
               {[
@@ -363,10 +363,10 @@ export default function Methodology({ data }: Props) {
                 ['Movement text extraction', 'src/utils/movement-extractor.ts', 'Keyword-based movement detection'],
                 ['Daily updater', 'scripts/fetch-daily-wod.mjs', 'GitHub Actions auto-update script'],
               ].map(([label, path, desc], i) => (
-                <tr key={i} className={i % 2 === 0 ? 'bg-[#0c0c18]' : ''}>
-                  <td className="px-3 py-2 text-slate-400 font-medium whitespace-nowrap">{label}</td>
+                <tr key={i} className={i % 2 === 0 ? 'bg-[var(--panel-bg)]' : ''}>
+                  <td className="px-3 py-2 text-[var(--text-tertiary)] font-medium whitespace-nowrap">{label}</td>
                   <td className="px-3 py-2 font-mono text-blue-400/80">{path}</td>
-                  <td className="px-3 py-2 text-slate-500 hidden sm:table-cell">{desc}</td>
+                  <td className="px-3 py-2 text-[var(--text-muted)] hidden sm:table-cell">{desc}</td>
                 </tr>
               ))}
             </tbody>
@@ -374,11 +374,11 @@ export default function Methodology({ data }: Props) {
         </div>
 
         <SubHeading>To Run Locally</SubHeading>
-        <div className="bg-[#0a0a14] border border-[#1e1e3a] rounded-lg p-3">
+        <div className="bg-[var(--app-bg)] border border-[var(--panel-border)] rounded-lg p-3">
           <code className="text-xs font-mono text-emerald-400">npm install && npm run dev</code>
         </div>
 
-        <p className="text-sm text-slate-400">
+        <p className="text-sm text-[var(--text-tertiary)]">
           Contributions, corrections, and critiques are welcome via{' '}
           <a href="https://github.com/autosterea/crossfit-wod-intel/issues" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 underline decoration-blue-400/30">
             GitHub Issues
@@ -388,22 +388,22 @@ export default function Methodology({ data }: Props) {
 
       {/* Section 8: Contact & Citation */}
       <SectionCard num={8} title="Contact & Citation">
-        <p className="text-sm text-slate-300">
+        <p className="text-sm text-[var(--text-secondary)]">
           If you use this analysis in academic work, coaching materials, or media, please cite as:
         </p>
 
-        <div className="bg-[#0a0a14] border border-[#1e1e3a] rounded-lg p-4">
-          <p className="font-mono text-xs text-slate-300 leading-relaxed">
+        <div className="bg-[var(--app-bg)] border border-[var(--panel-border)] rounded-lg p-4">
+          <p className="font-mono text-xs text-[var(--text-secondary)] leading-relaxed">
             Dewangan, R. (2026). CrossFit WOD Intelligence: Analysis of {years_covered} Years of CrossFit Programming.<br />
             Available at: <a href="https://wod.persistenceathletics.com/" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300">https://wod.persistenceathletics.com/</a><br />
             GitHub: <a href="https://github.com/autosterea/crossfit-wod-intel" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300">https://github.com/autosterea/crossfit-wod-intel</a>
           </p>
         </div>
 
-        <div className="border-t border-[#1e1e3a] pt-4 mt-2">
-          <p className="text-sm text-slate-300">For questions, corrections, or collaboration:</p>
-          <p className="text-sm text-slate-200 font-medium mt-1">
-            Created by Ravikant Dewangan <span className="text-slate-500">|</span> MS S&amp;C <span className="text-slate-500">|</span> CCFT <span className="text-slate-500">|</span> Head Coach, Persistence Athletics, Seattle
+        <div className="border-t border-[var(--panel-border)] pt-4 mt-2">
+          <p className="text-sm text-[var(--text-secondary)]">For questions, corrections, or collaboration:</p>
+          <p className="text-sm text-[var(--text-primary)] font-medium mt-1">
+            Created by Ravikant Dewangan <span className="text-[var(--text-muted)]">|</span> MS S&amp;C <span className="text-[var(--text-muted)]">|</span> CCFT <span className="text-[var(--text-muted)]">|</span> Head Coach, Persistence Athletics, Seattle
           </p>
         </div>
       </SectionCard>

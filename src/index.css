@@ -25,29 +25,47 @@
   --sidebar-bg: #0a0a14;
   --panel-bg: #12121a;
   --panel-bg-2: #16162a;
+  --panel-bg-hover: #1e1e3a;
   --panel-border: #1e1e3a;
   --panel-border-subtle: #1a1a2e;
+  --panel-border-strong: #2a2a4a;
   --text-primary: #e2e8f0;
   --text-secondary: #94a3b8;
   --text-tertiary: #64748b;
   --text-muted: #475569;
   --scrollbar-thumb: #334155;
   --scrollbar-thumb-hover: #475569;
+  --chart-grid: #1e1e3a;
+  --chart-axis: #64748b;
+  --chart-tooltip-bg: #1e1e3a;
+  --chart-tooltip-border: #2a2a5a;
+  --input-bg: #12121a;
+  --input-border: #1e1e3a;
+  --code-bg: #0a0a14;
 }
 
 :root[data-theme="light"] {
   --app-bg: #f8fafc;
   --sidebar-bg: #ffffff;
   --panel-bg: #ffffff;
-  --panel-bg-2: #f1f5f9;
+  --panel-bg-2: #f8fafc;
+  --panel-bg-hover: #f1f5f9;
   --panel-border: #e2e8f0;
   --panel-border-subtle: #f1f5f9;
+  --panel-border-strong: #cbd5e1;
   --text-primary: #0f172a;
-  --text-secondary: #475569;
-  --text-tertiary: #64748b;
-  --text-muted: #94a3b8;
+  --text-secondary: #334155;
+  --text-tertiary: #475569;
+  --text-muted: #64748b;
   --scrollbar-thumb: #cbd5e1;
   --scrollbar-thumb-hover: #94a3b8;
+  --chart-grid: #e2e8f0;
+  --chart-axis: #64748b;
+  --chart-tooltip-bg: #ffffff;
+  --chart-tooltip-border: #cbd5e1;
+  --input-bg: #ffffff;
+  --input-border: #cbd5e1;
+  --code-bg: #f1f5f9;
 }
 
 * {

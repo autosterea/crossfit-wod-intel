@@ -41,20 +41,20 @@ export default function NamedWods({ data }: { data: CrossFitData }) {
     <div className="space-y-4">
       <div>
         <h2 className="text-2xl font-bold text-white">Named WODs Directory</h2>
-        <p className="text-sm text-slate-400 mt-1">
+        <p className="text-sm text-[var(--text-tertiary)] mt-1">
           {data.namedWods.length} named workouts — heroes, benchmarks, and classics
         </p>
       </div>
 
       {/* Filters */}
       <div className="flex flex-wrap items-center gap-3">
-        <div className="flex gap-1 bg-[#12121a] rounded-lg p-1 border border-[#1e1e3a]">
+        <div className="flex gap-1 bg-[var(--panel-bg)] rounded-lg p-1 border border-[var(--panel-border)]">
           {(['all', 'hero', 'benchmark'] as const).map((f) => (
             <button
               key={f}
               onClick={() => setFilter(f)}
               className={`px-3 py-1.5 text-xs rounded-md transition-colors ${
-                filter === f ? 'bg-blue-500/20 text-blue-400' : 'text-slate-400 hover:text-slate-300'
+                filter === f ? 'bg-blue-500/20 text-blue-400' : 'text-[var(--text-tertiary)] hover:text-[var(--text-secondary)]'
               }`}
             >
               {f === 'all' ? `All (${data.namedWods.length})` : f === 'hero' ? `Heroes (${data.namedWods.filter((w) => w.is_hero).length})` : `Benchmarks (${data.namedWods.filter((w) => w.is_benchmark).length})`}
@@ -67,17 +67,17 @@ export default function NamedWods({ data }: { data: CrossFitData }) {
           placeholder="Search by name..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="bg-[#12121a] border border-[#1e1e3a] rounded-lg px-4 py-2 text-sm text-white placeholder-slate-500 focus:border-blue-500/50 focus:outline-none"
+          className="bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg px-4 py-2 text-sm text-white placeholder-[var(--text-muted)] focus:border-blue-500/50 focus:outline-none"
         />
 
-        <select value={sortBy} onChange={(e) => setSortBy(e.target.value as any)} className="bg-[#12121a] border border-[#1e1e3a] rounded-lg px-3 py-2 text-xs text-slate-300 focus:outline-none">
+        <select value={sortBy} onChange={(e) => setSortBy(e.target.value as any)} className="bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg px-3 py-2 text-xs text-[var(--text-secondary)] focus:outline-none">
           <option value="count">Most Programmed</option>
           <option value="name">Alphabetical</option>
           <option value="recent">Most Recent</option>
         </select>
       </div>
 
-      <div className="text-xs text-slate-500">{filtered.length} results</div>
+      <div className="text-xs text-[var(--text-muted)]">{filtered.length} results</div>
 
       {/* Cards grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -88,10 +88,10 @@ export default function NamedWods({ data }: { data: CrossFitData }) {
           return (
             <div
               key={wod.name}
-              className={`bg-[#12121a] rounded-xl border transition-all group cursor-pointer ${
+              className={`bg-[var(--panel-bg)] rounded-xl border transition-all group cursor-pointer ${
                 isExpanded
                   ? 'border-blue-500/40 ring-1 ring-blue-500/20'
-                  : 'border-[#1e1e3a] hover:border-[#2a2a5a]'
+                  : 'border-[var(--panel-border)] hover:border-[var(--panel-border-strong)]'
               }`}
               onClick={() => toggleExpand(wod.name)}
             >
@@ -101,7 +101,7 @@ export default function NamedWods({ data }: { data: CrossFitData }) {
                     <div className="flex items-center gap-2">
                       <h3 className="text-sm font-bold text-white group-hover:text-blue-400 transition-colors">{wod.name}</h3>
                       <svg
-                        className={`w-3.5 h-3.5 text-slate-500 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`}
+                        className={`w-3.5 h-3.5 text-[var(--text-muted)] transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`}
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
@@ -117,7 +117,7 @@ export default function NamedWods({ data }: { data: CrossFitData }) {
                   </div>
                   <div className="text-right">
                     <div className="text-lg font-bold font-mono text-blue-400">{wod.count}</div>
-                    <div className="text-[9px] text-slate-500">times</div>
+                    <div className="text-[9px] text-[var(--text-muted)]">times</div>
                   </div>
                 </div>
 
@@ -125,19 +125,19 @@ export default function NamedWods({ data }: { data: CrossFitData }) {
                   <span className="px-2 py-0.5 text-[10px] rounded-full" style={{ background: color + '20', color }}>
                     {wod.primary_modality}
                   </span>
-                  <span className="px-2 py-0.5 text-[10px] rounded-full bg-[#1e1e3a] text-slate-400">{wod.primary_structure}</span>
-                  <span className="px-2 py-0.5 text-[10px] rounded-full bg-[#1e1e3a] text-slate-400">{wod.primary_time_domain}</span>
+                  <span className="px-2 py-0.5 text-[10px] rounded-full bg-[var(--panel-bg-hover)] text-[var(--text-tertiary)]">{wod.primary_structure}</span>
+                  <span className="px-2 py-0.5 text-[10px] rounded-full bg-[var(--panel-bg-hover)] text-[var(--text-tertiary)]">{wod.primary_time_domain}</span>
                 </div>
 
                 <div className="flex flex-wrap gap-1 mb-3">
                   {wod.movements.map((m) => (
-                    <span key={m} className="text-[9px] px-1.5 py-0.5 rounded bg-[#0d0d1a] text-slate-400 border border-[#1e1e3a]">
+                    <span key={m} className="text-[9px] px-1.5 py-0.5 rounded bg-[var(--panel-bg-2)] text-[var(--text-tertiary)] border border-[var(--panel-border)]">
                       {data.movementDisplay[m] || m}
                     </span>
                   ))}
                 </div>
 
-                <div className="flex justify-between text-[10px] text-slate-500">
+                <div className="flex justify-between text-[10px] text-[var(--text-muted)]">
                   <span>First: {wod.first_seen}</span>
                   <span>Last: {wod.last_seen}</span>
                 </div>
@@ -145,7 +145,7 @@ export default function NamedWods({ data }: { data: CrossFitData }) {
 
               {/* Expanded workout description */}
               {isExpanded && (
-                <div className="border-t border-[#1e1e3a] px-4 py-3">
+                <div className="border-t border-[var(--panel-border)] px-4 py-3">
                   {description ? (
                     <div>
                       <div className="flex items-center gap-1.5 mb-2">
@@ -154,8 +154,8 @@ export default function NamedWods({ data }: { data: CrossFitData }) {
                         </svg>
                         <span className="text-[10px] font-semibold text-blue-400 uppercase tracking-wider">Workout Description</span>
                       </div>
-                      <div className="bg-[#0a0a14] rounded-lg p-3 border border-[#1a1a2e]">
-                        <pre className="text-xs text-slate-300 whitespace-pre-wrap font-mono leading-relaxed">
+                      <div className="bg-[var(--app-bg)] rounded-lg p-3 border border-[var(--panel-border-subtle)]">
+                        <pre className="text-xs text-[var(--text-secondary)] whitespace-pre-wrap font-mono leading-relaxed">
                           {description.split(/\s{2,}\n|\n/).map((line, i) => {
                             const trimmed = line.trim()
                             if (!trimmed) return null
@@ -169,7 +169,7 @@ export default function NamedWods({ data }: { data: CrossFitData }) {
                       </div>
                     </div>
                   ) : (
-                    <p className="text-xs text-slate-500 italic">No workout description available for this WOD.</p>
+                    <p className="text-xs text-[var(--text-muted)] italic">No workout description available for this WOD.</p>
                   )}
                 </div>
               )}
