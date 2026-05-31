@@ -17,7 +17,7 @@ export default function ShareButton() {
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [open])
 
-  const siteUrl = 'https://autosterea.github.io/crossfit-wod-intel/'
+  const siteUrl = 'https://wod.persistenceathletics.com/'
 
   const handleCopyLink = async () => {
     try {

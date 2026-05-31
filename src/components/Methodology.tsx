@@ -395,7 +395,7 @@ export default function Methodology({ data }: Props) {
         <div className="bg-[#0a0a14] border border-[#1e1e3a] rounded-lg p-4">
           <p className="font-mono text-xs text-slate-300 leading-relaxed">
             Dewangan, R. (2026). CrossFit WOD Intelligence: Analysis of {years_covered} Years of CrossFit Programming.<br />
-            Available at: <a href="https://autosterea.github.io/crossfit-wod-intel/" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300">https://autosterea.github.io/crossfit-wod-intel/</a><br />
+            Available at: <a href="https://wod.persistenceathletics.com/" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300">https://wod.persistenceathletics.com/</a><br />
             GitHub: <a href="https://github.com/autosterea/crossfit-wod-intel" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300">https://github.com/autosterea/crossfit-wod-intel</a>
           </p>
         </div>

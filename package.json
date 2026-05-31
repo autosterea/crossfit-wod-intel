@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "description": "25 years of CrossFit WOD programming analyzed (2001-2026). 3D visualizations, network science, Shannon entropy, and more.",
   "license": "MIT",
-  "homepage": "https://ravikavya.github.io/crossfit-wod-intel/",
+  "homepage": "https://wod.persistenceathletics.com/",
   "type": "module",
   "scripts": {
     "dev": "vite",

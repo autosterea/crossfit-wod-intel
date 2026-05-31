@@ -2,7 +2,7 @@
   "name": "CrossFit WOD Intelligence",
   "short_name": "CF WOD Intel",
   "description": "25 years of CrossFit programming analyzed",
-  "start_url": "/crossfit-wod-intel/",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#0a0a0f",
   "theme_color": "#60a5fa",
