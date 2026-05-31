@@ -2,6 +2,7 @@ import { create } from 'zustand'
 
 type Tab =
   | 'hero'
+  | 'daily'
   | 'overview'
   | 'reportcard'
   | 'movmap'
@@ -29,6 +30,8 @@ type Tab =
   | 'repsloading'
   | 'methodology'
 
+type Theme = 'dark' | 'light'
+
 interface AppStore {
   activeTab: Tab
   setActiveTab: (tab: Tab) => void
@@ -40,6 +43,19 @@ interface AppStore {
   setYearRange: (range: [number, number]) => void
   sidebarOpen: boolean
   setSidebarOpen: (open: boolean) => void
+  theme: Theme
+  setTheme: (t: Theme) => void
+}
+
+const initialTheme: Theme = (() => {
+  if (typeof window === 'undefined') return 'dark'
+  const saved = localStorage.getItem('theme')
+  if (saved === 'light' || saved === 'dark') return saved
+  return 'dark'
+})()
+
+if (typeof document !== 'undefined') {
+  document.documentElement.setAttribute('data-theme', initialTheme)
 }
 
 export const useStore = create<AppStore>((set) => ({
@@ -53,4 +69,12 @@ export const useStore = create<AppStore>((set) => ({
   setYearRange: (range) => set({ yearRange: range }),
   sidebarOpen: false,
   setSidebarOpen: (open) => set({ sidebarOpen: open }),
+  theme: initialTheme,
+  setTheme: (t) => {
+    if (typeof document !== 'undefined') {
+      document.documentElement.setAttribute('data-theme', t)
+      localStorage.setItem('theme', t)
+    }
+    set({ theme: t })
+  },
 }))

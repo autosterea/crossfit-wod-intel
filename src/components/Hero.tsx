@@ -26,7 +26,7 @@ export default function Hero() {
   return (
     <div
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
-      style={{ background: '#0a0a14' }}
+      style={{ background: 'var(--sidebar-bg)' }}
     >
       {/* Scrolling data lines — CSS only */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none select-none" style={{ opacity: 0.08 }}>
@@ -46,7 +46,7 @@ export default function Hero() {
 
       {/* Subtle gradient overlay to fade edges */}
       <div className="absolute inset-0 pointer-events-none" style={{
-        background: 'radial-gradient(ellipse at center, transparent 30%, #0a0a14 75%)',
+        background: 'radial-gradient(ellipse at center, transparent 30%, var(--sidebar-bg) 75%)',
       }} />
 
       {/* Main content */}
@@ -105,13 +105,21 @@ export default function Hero() {
           ))}
         </div>
 
-        {/* CTA */}
-        <button
-          onClick={() => setActiveTab('overview')}
-          className="px-6 py-2.5 text-sm font-medium text-white bg-[#019644] hover:bg-[#01b350] rounded-lg transition-colors shadow-lg shadow-[#019644]/20"
-        >
-          Enter Dashboard
-        </button>
+        {/* CTAs */}
+        <div className="flex flex-wrap items-center justify-center gap-2">
+          <button
+            onClick={() => setActiveTab('daily')}
+            className="px-6 py-2.5 text-sm font-semibold text-white bg-[#019644] hover:bg-[#01b350] rounded-lg transition-colors shadow-lg shadow-[#019644]/20"
+          >
+            Today's WOD →
+          </button>
+          <button
+            onClick={() => setActiveTab('overview')}
+            className="px-6 py-2.5 text-sm font-medium text-[#91C640] bg-[#91C640]/10 hover:bg-[#91C640]/20 border border-[#91C640]/30 rounded-lg transition-colors"
+          >
+            Enter Dashboard
+          </button>
+        </div>
 
         {/* Creator */}
         <div className="mt-10 space-y-1 px-4">

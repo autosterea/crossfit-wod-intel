@@ -9,6 +9,7 @@ import Overview from './components/Overview'
 import Hero from './components/Hero'
 import ShareButton from './components/ShareButton'
 
+const DailyWod = lazy(() => import('./components/DailyWod'))
 const MovementMap = lazy(() => import('./components/MovementMap'))
 const MovementPairs = lazy(() => import('./components/MovementPairs'))
 const ForceGraph3D = lazy(() => import('./components/ForceGraph3D'))
@@ -178,6 +179,7 @@ function App() {
         <YearRangeBadge />
         <Suspense fallback={<LoadingFallback />}>
           <ErrorBoundary name={activeTab} key={activeTab}>
+            {activeTab === 'daily' && <DailyWod data={D} />}
             {activeTab === 'overview' && <Overview data={filteredData} />}
             {activeTab === 'reportcard' && analysis && advancedAnalysis && <ReportCard data={filteredData} analysis={analysis} advancedAnalysis={advancedAnalysis} />}
             {activeTab === 'calendar' && <CalendarHeatmap data={filteredData} />}

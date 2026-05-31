@@ -5,6 +5,7 @@ const sections = [
   {
     title: 'OVERVIEW',
     tabs: [
+      { id: 'daily', label: "Today's WOD", icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' },
       { id: 'overview', label: 'Dashboard', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0h4' },
       { id: 'reportcard', label: 'Report Card', icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2' },
       { id: 'calendar', label: 'Calendar Heatmap', icon: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z' },
@@ -99,7 +100,7 @@ function YearRangeFilter() {
 }
 
 export default function Sidebar({ data }: { data: CrossFitData }) {
-  const { activeTab, setActiveTab, sidebarOpen, setSidebarOpen } = useStore()
+  const { activeTab, setActiveTab, sidebarOpen, setSidebarOpen, theme, setTheme } = useStore()
 
   return (
     <>
@@ -121,8 +122,10 @@ export default function Sidebar({ data }: { data: CrossFitData }) {
         <div className="fixed inset-0 bg-black/60 z-30 lg:hidden" onClick={() => setSidebarOpen(false)} />
       )}
 
-      <aside className={`
-        fixed lg:static z-40 h-screen bg-[#0a0a14] border-r border-[#1a1a2e] flex flex-col shrink-0 overflow-y-auto
+      <aside
+        style={{ background: 'var(--sidebar-bg)', borderColor: 'var(--panel-border-subtle)' }}
+        className={`
+        fixed lg:static z-40 h-screen border-r flex flex-col shrink-0 overflow-y-auto
         w-64 sm:w-56 transition-transform duration-200 ease-in-out
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
@@ -171,8 +174,25 @@ export default function Sidebar({ data }: { data: CrossFitData }) {
           ))}
         </nav>
 
-        <div className="p-2 border-t border-[#1a1a2e]">
-          <div className="text-[8px] text-slate-600">{data.overview.date_range}</div>
+        <div className="p-2 border-t border-[#1a1a2e] flex items-center justify-between gap-2">
+          <div className="text-[8px] text-slate-600 truncate">{data.overview.date_range}</div>
+          <button
+            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+            className="shrink-0 w-7 h-7 rounded-md bg-[#12121a] border border-[#1e1e3a] flex items-center justify-center text-slate-400 hover:text-[#91C640] hover:border-[#91C640]/40 transition-colors"
+            aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+            title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+          >
+            {theme === 'dark' ? (
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+                <circle cx="12" cy="12" r="4" />
+                <path strokeLinecap="round" d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+              </svg>
+            ) : (
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
+              </svg>
+            )}
+          </button>
         </div>
       </aside>
     </>
