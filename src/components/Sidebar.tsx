@@ -77,22 +77,22 @@ function YearRangeFilter() {
       <div className="flex items-center justify-between mb-1.5">
         <span className="text-[8px] font-semibold text-slate-600 tracking-wider">YEAR RANGE</span>
         {!isFullRange && (
-          <button onClick={() => setYearRange([MIN_YEAR, MAX_YEAR])} className="text-[8px] text-blue-400 hover:text-blue-300">Reset</button>
+          <button onClick={() => setYearRange([MIN_YEAR, MAX_YEAR])} className="text-[8px] text-[#91C640] hover:text-[#a8d35e]">Reset</button>
         )}
       </div>
       <div className="flex items-center gap-1.5">
         <input type="number" min={MIN_YEAR} max={to} value={from}
           onChange={(e) => setYearRange([Math.max(MIN_YEAR, Math.min(parseInt(e.target.value) || MIN_YEAR, to)), to])}
-          className="w-14 bg-[#12121a] border border-[#1e1e3a] rounded px-1.5 py-0.5 text-[10px] text-slate-300 font-mono text-center focus:border-blue-500/50 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+          className="w-14 bg-[#12121a] border border-[#1e1e3a] rounded px-1.5 py-0.5 text-[10px] text-slate-300 font-mono text-center focus:border-[#019644]/50 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
         />
         <span className="text-slate-600 text-[10px]">—</span>
         <input type="number" min={from} max={MAX_YEAR} value={to}
           onChange={(e) => setYearRange([from, Math.min(MAX_YEAR, Math.max(parseInt(e.target.value) || MAX_YEAR, from))])}
-          className="w-14 bg-[#12121a] border border-[#1e1e3a] rounded px-1.5 py-0.5 text-[10px] text-slate-300 font-mono text-center focus:border-blue-500/50 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+          className="w-14 bg-[#12121a] border border-[#1e1e3a] rounded px-1.5 py-0.5 text-[10px] text-slate-300 font-mono text-center focus:border-[#019644]/50 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
         />
       </div>
       {!isFullRange && (
-        <div className="text-center mt-1"><span className="text-[9px] text-blue-400 font-mono">{to - from + 1}y selected</span></div>
+        <div className="text-center mt-1"><span className="text-[9px] text-[#91C640] font-mono">{to - from + 1}y selected</span></div>
       )}
     </div>
   )
@@ -127,10 +127,18 @@ export default function Sidebar({ data }: { data: CrossFitData }) {
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
         <button onClick={() => { setActiveTab('hero' as any); setSidebarOpen(false) }} className="w-full text-left p-3 border-b border-[#1a1a2e] hover:bg-white/[0.02] transition-colors">
-          <h1 className="text-sm font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-rose-400 bg-clip-text text-transparent">
-            CrossFit WOD Intel
-          </h1>
-          <p className="text-[9px] text-slate-500 mt-0.5 font-mono">
+          <div className="flex items-center gap-2">
+            <div className="w-6 h-6 rounded-full bg-white p-0.5 shrink-0">
+              <img src="/pa-logo.png" alt="Persistence Athletics" className="w-full h-full object-contain rounded-full" />
+            </div>
+            <div className="min-w-0">
+              <h1 className="text-sm font-bold bg-gradient-to-r from-[#91C640] to-[#019644] bg-clip-text text-transparent truncate">
+                CrossFit WOD Intel
+              </h1>
+              <p className="text-[8px] text-slate-500 leading-tight uppercase tracking-wider">by Persistence Athletics</p>
+            </div>
+          </div>
+          <p className="text-[9px] text-slate-500 mt-1.5 font-mono">
             {data.overview.total_workouts.toLocaleString()} WODs | {data.overview.years_covered}y
           </p>
         </button>
@@ -149,7 +157,7 @@ export default function Sidebar({ data }: { data: CrossFitData }) {
                   onClick={() => { setActiveTab(tab.id as any); setSidebarOpen(false) }}
                   className={`w-full flex items-center gap-2 px-3 py-1.5 text-[11px] transition-all duration-150 ${
                     activeTab === tab.id
-                      ? 'bg-blue-500/10 text-blue-400 border-r-2 border-blue-400'
+                      ? 'bg-[#91C640]/10 text-[#91C640] border-r-2 border-[#91C640]'
                       : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.02]'
                   }`}
                 >

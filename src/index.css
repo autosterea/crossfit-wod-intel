@@ -1,18 +1,21 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-sans: 'Poppins', 'Inter', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
   --color-bg-primary: #0a0a0f;
   --color-bg-secondary: #12121a;
   --color-bg-card: #16162a;
   --color-bg-card-hover: #1e1e3a;
   --color-border: #2a2a4a;
-  --color-accent: #60a5fa;
-  --color-accent-dim: #3b82f680;
+  --color-pa-sea-green: #019644;
+  --color-pa-yellow-green: #91C640;
+  --color-pa-darkest-grey: #121212;
+  --color-accent: #91C640;
+  --color-accent-dim: #019644aa;
   --color-monostructural: #f43f5e;
-  --color-gymnastics: #10b981;
-  --color-weightlifting: #3b82f6;
+  --color-gymnastics: #91C640;
+  --color-weightlifting: #019644;
 }
 
 * {

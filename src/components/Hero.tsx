@@ -29,15 +29,15 @@ export default function Hero() {
       style={{ background: '#0a0a14' }}
     >
       {/* Scrolling data lines — CSS only */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none select-none" style={{ opacity: 0.07 }}>
-        <div className="animate-scroll-up" style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 11, lineHeight: '22px', color: '#60a5fa', whiteSpace: 'pre' }}>
+      <div className="absolute inset-0 overflow-hidden pointer-events-none select-none" style={{ opacity: 0.08 }}>
+        <div className="animate-scroll-up" style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 11, lineHeight: '22px', color: '#91C640', whiteSpace: 'pre' }}>
           {[...DATA_LINES, ...DATA_LINES, ...DATA_LINES, ...DATA_LINES].map((line, i) => (
             <div key={i} style={{ paddingLeft: (i % 5) * 60 }}>{line}</div>
           ))}
         </div>
       </div>
       <div className="absolute inset-0 overflow-hidden pointer-events-none select-none" style={{ opacity: 0.05, left: '40%' }}>
-        <div className="animate-scroll-down" style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, lineHeight: '20px', color: '#a855f7', whiteSpace: 'pre' }}>
+        <div className="animate-scroll-down" style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, lineHeight: '20px', color: '#019644', whiteSpace: 'pre' }}>
           {[...DATA_LINES].reverse().concat(DATA_LINES, DATA_LINES).map((line, i) => (
             <div key={i} style={{ paddingLeft: (i % 7) * 40 }}>{line}</div>
           ))}
@@ -51,14 +51,25 @@ export default function Hero() {
 
       {/* Main content */}
       <div className="relative z-10 text-center px-6 max-w-3xl">
+        {/* PA wordmark */}
+        <div className="inline-flex items-center gap-2.5 mb-5">
+          <div className="w-9 h-9 rounded-full bg-white p-1 flex items-center justify-center">
+            <img src="/pa-logo.png" alt="Persistence Athletics" className="w-full h-full object-contain rounded-full" />
+          </div>
+          <div className="text-left">
+            <div className="text-[9px] uppercase tracking-[0.18em] text-[#91C640] font-semibold">A tool by</div>
+            <div className="text-xs font-semibold text-slate-200 leading-tight">Persistence Athletics</div>
+          </div>
+        </div>
+
         {/* Badge */}
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#1e1e3a] bg-[#12121a] mb-6">
-          <div className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-          <span className="text-[10px] text-slate-400 font-mono">Open Source | Auto-updates daily</span>
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#019644]/30 bg-[#019644]/10 mb-6">
+          <div className="w-1.5 h-1.5 rounded-full bg-[#91C640] animate-pulse" />
+          <span className="text-[10px] text-[#91C640] font-mono">Open Source | Auto-updates daily</span>
         </div>
 
         {/* Title */}
-        <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold mb-3 bg-gradient-to-r from-blue-400 via-purple-400 to-rose-400 bg-clip-text text-transparent leading-tight">
+        <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold mb-3 bg-gradient-to-r from-[#91C640] via-[#019644] to-[#91C640] bg-clip-text text-transparent leading-tight">
           CrossFit WOD Intelligence
         </h1>
         <p className="text-slate-400 text-sm md:text-base mb-8 leading-relaxed">
@@ -68,8 +79,8 @@ export default function Hero() {
         {/* Stats — instant, no animation */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
           {[
-            { value: '6,781', label: 'Workouts', color: '#60a5fa' },
-            { value: '80', label: 'Movements', color: '#10b981' },
+            { value: '6,781', label: 'Workouts', color: '#91C640' },
+            { value: '80', label: 'Movements', color: '#019644' },
             { value: '25', label: 'Years', color: '#a855f7' },
             { value: '22', label: 'Analysis Tools', color: '#f43f5e' },
           ].map((s) => (
@@ -97,7 +108,7 @@ export default function Hero() {
         {/* CTA */}
         <button
           onClick={() => setActiveTab('overview')}
-          className="px-6 py-2.5 text-sm font-medium text-white bg-blue-600 hover:bg-blue-500 rounded-lg transition-colors"
+          className="px-6 py-2.5 text-sm font-medium text-white bg-[#019644] hover:bg-[#01b350] rounded-lg transition-colors shadow-lg shadow-[#019644]/20"
         >
           Enter Dashboard
         </button>
@@ -105,10 +116,10 @@ export default function Hero() {
         {/* Creator */}
         <div className="mt-10 space-y-1 px-4">
           <p className="text-xs sm:text-[11px] text-slate-500">
-            Created by <span className="text-slate-400">Ravikant Dewangan</span> | MS S&C | CCFT | Head Coach, Persistence Athletics, Seattle
+            Built at <a href="https://persistenceathletics.com" target="_blank" rel="noopener noreferrer" className="text-[#91C640] hover:text-[#a8d35e]">Persistence Athletics</a> by <span className="text-slate-400">Ravikant Dewangan</span> | MS S&C | CCFT | Head Coach
           </p>
           <p className="text-xs sm:text-[11px] text-slate-600">
-            Site by <a href="https://autosterea.com" target="_blank" rel="noopener noreferrer" className="text-blue-400/60 hover:text-blue-400">autosterea.com</a>
+            Platform by <a href="https://autosterea.com" target="_blank" rel="noopener noreferrer" className="text-slate-500 hover:text-slate-400">Autosterea</a>
             <span className="mx-2">|</span>
             Data from <a href="https://www.crossfit.com" target="_blank" rel="noopener noreferrer" className="text-slate-500 hover:text-slate-400">crossfit.com</a>
             <span className="mx-2">|</span>

@@ -144,9 +144,9 @@ function YearRangeBadge() {
   const yr = useStore((s) => s.yearRange)
   if (yr[0] <= 2001 && yr[1] >= 2026) return null
   return (
-    <div className="mb-3 flex items-center gap-2 px-3 py-1.5 rounded-lg bg-blue-500/10 border border-blue-500/20">
-      <div className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
-      <span className="text-[11px] text-blue-400">Filtered: {yr[0]}–{yr[1]} ({yr[1] - yr[0] + 1} years)</span>
+    <div className="mb-3 flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#91C640]/10 border border-[#91C640]/20">
+      <div className="w-1.5 h-1.5 rounded-full bg-[#91C640] animate-pulse" />
+      <span className="text-[11px] text-[#91C640]">Filtered: {yr[0]}–{yr[1]} ({yr[1] - yr[0] + 1} years)</span>
     </div>
   )
 }
@@ -210,13 +210,18 @@ function App() {
         {/* Footer */}
         <footer className="mt-12 mb-6 pt-6 border-t border-[#1e1e3a] px-4">
           <div className="text-center space-y-3">
-            <div>
-              <p className="text-sm text-slate-300 font-medium">Created by Ravikant Dewangan</p>
-              <p className="text-xs text-slate-500">MS S&C | CCFT | Head Coach, Persistence Athletics, Seattle</p>
+            <div className="flex items-center justify-center gap-2.5">
+              <div className="w-8 h-8 rounded-full bg-white p-1 shrink-0">
+                <img src="/pa-logo.png" alt="Persistence Athletics" className="w-full h-full object-contain rounded-full" />
+              </div>
+              <div className="text-left">
+                <p className="text-sm font-semibold text-slate-200">A <a href="https://persistenceathletics.com" target="_blank" rel="noopener noreferrer" className="text-[#91C640] hover:text-[#a8d35e]">Persistence Athletics</a> tool</p>
+                <p className="text-[10px] text-slate-500">Built by Ravikant Dewangan, Head Coach (MS S&C, CCFT)</p>
+              </div>
             </div>
             <div className="flex items-center justify-center gap-2 text-[10px] text-slate-600">
-              <span>Site by</span>
-              <a href="https://autosterea.com" target="_blank" rel="noopener noreferrer" className="text-blue-400/70 hover:text-blue-400 transition-colors">autosterea.com</a>
+              <span>Platform by</span>
+              <a href="https://autosterea.com" target="_blank" rel="noopener noreferrer" className="text-slate-500 hover:text-slate-400 transition-colors">Autosterea</a>
               <span className="text-slate-700">|</span>
               <button onClick={() => useStore.getState().setActiveTab('methodology')} className="text-slate-500 hover:text-slate-400 transition-colors cursor-pointer">Methodology</button>
             </div>
