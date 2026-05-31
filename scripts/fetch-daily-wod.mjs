@@ -215,7 +215,7 @@ function extractWorkoutSection(text) {
     /complete as many/i,
   ]
 
-  // Markers that signal the end of the workout / start of comments/footer
+  // Markers that signal the end of the workout / start of comments/footer/article body
   const endPatterns = [
     /©/i, /copyright/i, /all rights reserved/i,
     /privacy policy/i, /terms of use/i, /cookie/i,
@@ -234,6 +234,13 @@ function extractWorkoutSection(text) {
     /open a crossfit gym/i,
     /the crossfit games/i,
     /learn the movement/i,
+    // Article-body markers (anything after these is commentary, not the workout)
+    /^compare to/i,
+    /^post (?:time|your|results|score|rounds)/i,
+    /^stimulus and strategy/i,
+    /^scaling:/i,
+    /today'?s? hero workout/i,
+    /today'?s? notes/i,
   ]
 
   let startIdx = -1
@@ -339,7 +346,10 @@ function classifyStructure(text, namedWod) {
 
   // Check for hero WOD first
   if (namedWod && HERO_NAMES.has(namedWod)) return 'Hero WOD'
-  if (lower.includes('hero wod') || lower.includes('in honor of')) return 'Hero WOD'
+  if (lower.includes('hero wod') ||
+      lower.includes('in honor of') ||
+      /today'?s? hero workout/i.test(lower) ||
+      /honors\s+[a-z]+/i.test(lower)) return 'Hero WOD'
 
   // Benchmark
   if (namedWod && BENCHMARK_NAMES.has(namedWod)) return 'Benchmark'
@@ -358,10 +368,35 @@ function classifyStructure(text, namedWod) {
 
 // ---------------------------------------------------------------------------
 // 6. Detect named WOD
+// Only check the first few lines \u2014 names mentioned in article body /
+// commentary (e.g. "Compare to 120515", "Today's Hero workout honors Brian
+// R. Bill") shouldn't classify the workout as that named WOD.
+// Falls back to movement-signature recognition for the famous ones.
 // ---------------------------------------------------------------------------
+function detectBySignature(text) {
+  const lower = text.toLowerCase()
+  if (/1[- ]?mile run/.test(lower) &&
+      /100\s*pull[\s-]?ups?/.test(lower) &&
+      /200\s*push[\s-]?ups?/.test(lower) &&
+      /300\s*(?:air )?squats?/.test(lower)) return 'Murph'
+  if (/21[-\u2013]15[-\u2013]9/.test(lower) && /thruster/.test(lower) && /pull[\s-]?up/.test(lower)) return 'Fran'
+  if (/3 rounds/.test(lower) && /400[ -]?m(?:eter)? run/.test(lower) && /(?:21|twenty[- ]one)\s*(?:kb|kettlebell)/.test(lower) && /12\s*pull/.test(lower)) return 'Helen'
+  if (/30\s*clean(?:\s*(?:and|&)\s*jerk)?/.test(lower) && /for time/.test(lower)) return 'Grace'
+  if (/21[-\u2013]15[-\u2013]9/.test(lower) && /deadlift/.test(lower) && /(?:handstand push|hspu)/.test(lower)) return 'Diane'
+  if (/50[-\u2013]40[-\u2013]30[-\u2013]20[-\u2013]10/.test(lower) && /(?:double[- ]?unders|sit[- ]?ups)/.test(lower)) return 'Annie'
+  if (/5 rounds/.test(lower) && /12\s*deadlift/.test(lower) && /9\s*hang power clean/.test(lower) && /6\s*push jerk/.test(lower)) return 'DT'
+  if (/20[- ]?min(?:ute)?/.test(lower) && /amrap/.test(lower) && /5\s*pull[\s-]?ups?/.test(lower) && /10\s*push[\s-]?ups?/.test(lower) && /15\s*(?:air )?squats?/.test(lower)) return 'Cindy'
+  return ''
+}
+
 function detectNamedWod(text) {
-  // Check for quoted names first (e.g. "Fran")
-  const quoted = text.match(/[""\u201C\u201D]([A-Z][a-zA-Z\s]+?)[""\u201C\u201D]/g)
+  // Restrict to the workout header \u2014 first ~5 lines or first 250 chars,
+  // whichever is shorter. Real workout titles / quoted names live here.
+  const headerLines = text.split('\n').slice(0, 5).join('\n')
+  const header = (headerLines.length < 250 ? headerLines : text.slice(0, 250))
+
+  // 1. Quoted names in the header (e.g. "Fran")
+  const quoted = header.match(/[""\u201C\u201D]([A-Z][a-zA-Z\s]+?)[""\u201C\u201D]/g)
   if (quoted) {
     for (const q of quoted) {
       const name = q.replace(/[""\u201C\u201D]/g, '').trim()
@@ -370,25 +405,19 @@ function detectNamedWod(text) {
       }
     }
   }
-
-  // Check if any known name appears prominently (usually in a heading or bold)
-  const lower = text.toLowerCase()
+  // 2. Name appears standalone in the header
   for (const name of NAMED_WODS) {
-    // Look for the name as a standalone word
     const regex = new RegExp(`\\b${name.replace(/\s+/g, '\\s+')}\\b`, 'i')
-    if (regex.test(text)) {
-      return name
-    }
+    if (regex.test(header)) return name
   }
-
-  return ''
+  // 3. Signature-based fallback for famous WODs
+  return detectBySignature(text)
 }
 
 const namedWod = detectNamedWod(workoutText)
-const isHero = namedWod ? HERO_NAMES.has(namedWod) : false
-const isBenchmark = namedWod ? BENCHMARK_NAMES.has(namedWod) : false
-
 const structure = classifyStructure(workoutText, namedWod)
+const isHero = (namedWod ? HERO_NAMES.has(namedWod) : false) || structure === 'Hero WOD'
+const isBenchmark = namedWod ? BENCHMARK_NAMES.has(namedWod) : false
 console.log(`[fetch-daily-wod] Structure: ${structure}`)
 if (namedWod) console.log(`[fetch-daily-wod] Named WOD: ${namedWod} (hero=${isHero}, benchmark=${isBenchmark})`)
 
@@ -479,9 +508,9 @@ function classifyLoadProfile(text, movements) {
 
   if (!hasWeighted) return 'Bodyweight Only'
 
-  // Look for weight numbers to judge heaviness
-  const weightMatches = lower.match(/(\d{2,3})\s*(?:lb|pound|#)/g)
-    || lower.match(/(\d{2,3})\s*(?:kg|kilo)/g)
+  // Look for weight numbers to judge heaviness — accept hyphens (e.g. "105-lb")
+  const weightMatches = lower.match(/(\d{2,3})[-\s]*(?:lb|pound|#)/g)
+    || lower.match(/(\d{2,3})[-\s]*(?:kg|kilo)/g)
 
   if (weightMatches) {
     const weights = weightMatches.map(w => parseInt(w, 10)).filter(n => n > 0)
