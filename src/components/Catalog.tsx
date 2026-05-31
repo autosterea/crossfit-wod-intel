@@ -39,7 +39,7 @@ export default function Catalog({ data }: { data: CrossFitData }) {
   return (
     <div className="space-y-4">
       <div>
-        <h2 className="text-2xl font-bold text-white">Workout Catalog</h2>
+        <h2 className="text-2xl font-bold text-[var(--text-primary)]">Workout Catalog</h2>
         <p className="text-sm text-[var(--text-tertiary)] mt-1">
           Search and filter all {data.overview.total_workouts.toLocaleString()} workouts
         </p>
@@ -52,7 +52,7 @@ export default function Catalog({ data }: { data: CrossFitData }) {
           placeholder="Search workouts..."
           value={search}
           onChange={(e) => { setSearch(e.target.value); setPage(0) }}
-          className="w-full sm:min-w-[200px] lg:flex-1 bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg px-4 py-2 text-sm text-white placeholder-[var(--text-muted)] focus:border-blue-500/50 focus:outline-none"
+          className="w-full sm:min-w-[200px] lg:flex-1 bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg px-4 py-2 text-sm text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:border-blue-500/50 focus:outline-none"
         />
         <select value={modFilter} onChange={(e) => { setModFilter(e.target.value); setPage(0) }} className="bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg px-3 py-2 text-xs text-[var(--text-secondary)] focus:outline-none">
           <option value="all">All Modalities</option>
@@ -99,7 +99,7 @@ export default function Catalog({ data }: { data: CrossFitData }) {
                   className="border-b border-[var(--panel-border)]/50 hover:bg-[var(--panel-bg-hover)] cursor-pointer transition-colors"
                 >
                   <td className="px-4 py-2.5 text-xs font-mono text-[var(--text-tertiary)]">{w.d}</td>
-                  <td className="px-4 py-2.5 text-xs text-white">
+                  <td className="px-4 py-2.5 text-xs text-[var(--text-primary)]">
                     {w.nw && <span className="text-amber-400 mr-1">{w.nw}</span>}
                     {w.ih && <span className="text-rose-400 text-[9px] mr-1">HERO</span>}
                     {w.ib && <span className="text-purple-400 text-[9px] mr-1">BM</span>}

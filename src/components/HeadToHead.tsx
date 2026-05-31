@@ -329,7 +329,7 @@ export default function HeadToHead({ data }: { data: CrossFitData }) {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h2 className="text-2xl font-bold text-white">Head-to-Head Comparison</h2>
+        <h2 className="text-2xl font-bold text-[var(--text-primary)]">Head-to-Head Comparison</h2>
         <p className="text-sm text-[var(--text-tertiary)] mt-1">
           Pick any two years and see exactly how CrossFit's programming changed. This shows what
           got more popular, what faded away, and how the overall philosophy shifted.
@@ -340,7 +340,7 @@ export default function HeadToHead({ data }: { data: CrossFitData }) {
       <div className="flex items-center justify-center gap-4 py-4">
         <YearSelect value={yearA} onChange={setYearA} years={years} />
         <div className="flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-blue-500/20 via-purple-500/20 to-rose-500/20 border border-[var(--panel-border-strong)]">
-          <span className="text-base font-black text-white tracking-wider">VS</span>
+          <span className="text-base font-black text-[var(--text-primary)] tracking-wider">VS</span>
         </div>
         <YearSelect value={yearB} onChange={setYearB} years={years} />
       </div>

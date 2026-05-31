@@ -129,7 +129,7 @@ export default function Sidebar({ data }: { data: CrossFitData }) {
         w-64 sm:w-56 transition-transform duration-200 ease-in-out
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
-        <button onClick={() => { setActiveTab('hero' as any); setSidebarOpen(false) }} className="w-full text-left p-3 border-b border-[var(--panel-border-subtle)] hover:bg-white/[0.02] transition-colors">
+        <button onClick={() => { setActiveTab('hero' as any); setSidebarOpen(false) }} className="w-full text-left p-3 border-b border-[var(--panel-border-subtle)] hover:bg-[var(--panel-bg-hover)] transition-colors">
           <div className="flex items-center gap-2">
             <div className="w-6 h-6 rounded-full bg-white p-0.5 shrink-0">
               <img src="/pa-logo.png" alt="Persistence Athletics" className="w-full h-full object-contain rounded-full" />
@@ -161,7 +161,7 @@ export default function Sidebar({ data }: { data: CrossFitData }) {
                   className={`w-full flex items-center gap-2 px-3 py-1.5 text-[11px] transition-all duration-150 ${
                     activeTab === tab.id
                       ? 'bg-[#91C640]/10 text-[#91C640] border-r-2 border-[#91C640]'
-                      : 'text-[var(--text-tertiary)] hover:text-[var(--text-primary)] hover:bg-white/[0.02]'
+                      : 'text-[var(--text-tertiary)] hover:text-[var(--text-primary)] hover:bg-[var(--panel-bg-hover)]'
                   }`}
                 >
                   <svg className="w-3 h-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>

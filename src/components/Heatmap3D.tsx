@@ -94,7 +94,7 @@ export default function Heatmap3D({ data }: { data: CrossFitData }) {
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-bold text-white">Movement Co-occurrence</h2>
+            <h2 className="text-2xl font-bold text-[var(--text-primary)]">Movement Co-occurrence</h2>
             <p className="text-sm text-[var(--text-tertiary)] mt-1">3D terrain view</p>
           </div>
           <button onClick={() => setView('2d')} className="px-3 py-1.5 text-xs bg-blue-500/20 text-blue-400 rounded-lg border border-blue-500/30 hover:bg-blue-500/30">
@@ -113,12 +113,12 @@ export default function Heatmap3D({ data }: { data: CrossFitData }) {
       {/* Header */}
       <div className="flex items-start justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-white">Movement Co-occurrence Heatmap</h2>
+          <h2 className="text-2xl font-bold text-[var(--text-primary)]">Movement Co-occurrence Heatmap</h2>
           <p className="text-sm text-[var(--text-tertiary)] mt-1">
             How often do movements appear together? Brighter = more co-occurrences. Click any movement to isolate its relationships.
           </p>
         </div>
-        <button onClick={() => setView('3d')} className="px-3 py-1.5 text-xs bg-[var(--panel-bg-hover)] text-[var(--text-tertiary)] rounded-lg border border-[var(--panel-border-strong)] hover:text-white shrink-0">
+        <button onClick={() => setView('3d')} className="px-3 py-1.5 text-xs bg-[var(--panel-bg-hover)] text-[var(--text-tertiary)] rounded-lg border border-[var(--panel-border-strong)] hover:text-[var(--text-primary)] shrink-0">
           3D View
         </button>
       </div>
@@ -239,7 +239,7 @@ export default function Heatmap3D({ data }: { data: CrossFitData }) {
                     {hoveredCell?.i === i && hoveredCell?.j === j && (
                       <div className="absolute z-50 pointer-events-none" style={{ bottom: '110%', left: '50%', transform: 'translateX(-50%)' }}>
                         <div className="bg-[var(--chart-tooltip-bg)] border border-[var(--chart-tooltip-border)] rounded-lg px-3 py-2 text-xs whitespace-nowrap shadow-xl">
-                          <div className="font-medium text-white">
+                          <div className="font-medium text-[var(--text-primary)]">
                             {isDiag ? getName(si) : `${getName(si)} × ${getName(sj)}`}
                           </div>
                           <div className="text-blue-400 font-mono mt-0.5">
@@ -289,7 +289,7 @@ export default function Heatmap3D({ data }: { data: CrossFitData }) {
       {/* Selected movement detail */}
       {selectedMov !== null && (
         <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-blue-500/20">
-          <h3 className="text-sm font-bold text-white mb-3">
+          <h3 className="text-sm font-bold text-[var(--text-primary)] mb-3">
             {getName(displayIndices[selectedMov])} — Top Co-occurrences
           </h3>
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2">

@@ -39,7 +39,7 @@ export default function EraTimeline({ data }: { data: CrossFitData }) {
   return (
     <div className="space-y-4">
       <div>
-        <h2 className="text-2xl font-bold text-white">CrossFit Era Evolution</h2>
+        <h2 className="text-2xl font-bold text-[var(--text-primary)]">CrossFit Era Evolution</h2>
         <p className="text-sm text-[var(--text-tertiary)] mt-1">How CrossFit programming has evolved across distinct eras</p>
       </div>
 
@@ -56,7 +56,7 @@ export default function EraTimeline({ data }: { data: CrossFitData }) {
             }`}
             style={{ background: selectedEra === i ? ERA_COLORS[i] + '15' : 'var(--panel-bg)' }}
           >
-            <div className="text-sm font-bold text-white">{e.name}</div>
+            <div className="text-sm font-bold text-[var(--text-primary)]">{e.name}</div>
             <div className="text-xs text-[var(--text-tertiary)] mt-0.5">{e.range}</div>
             <div className="text-lg font-bold font-mono mt-2" style={{ color: ERA_COLORS[i] }}>
               {e.workout_count.toLocaleString()}
@@ -68,7 +68,7 @@ export default function EraTimeline({ data }: { data: CrossFitData }) {
 
       {/* Era detail */}
       <div className="bg-gradient-to-r from-[var(--panel-bg)] to-[var(--panel-bg-2)] rounded-xl p-6 border border-[var(--panel-border)]">
-        <h3 className="text-lg font-bold text-white mb-1">{era.name} <span className="text-sm text-[var(--text-tertiary)] font-normal">({era.range})</span></h3>
+        <h3 className="text-lg font-bold text-[var(--text-primary)] mb-1">{era.name} <span className="text-sm text-[var(--text-tertiary)] font-normal">({era.range})</span></h3>
         <p className="text-sm text-[var(--text-tertiary)] leading-relaxed">{era.desc}</p>
       </div>
 

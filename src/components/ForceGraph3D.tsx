@@ -298,7 +298,7 @@ export default function ForceGraph3DView({ data }: { data: CrossFitData }) {
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-bold text-white">Movement Force Graph</h2>
+            <h2 className="text-2xl font-bold text-[var(--text-primary)]">Movement Force Graph</h2>
             <p className="text-sm text-[var(--text-tertiary)] mt-1">3D view — drag to rotate, scroll to zoom</p>
           </div>
           <button onClick={() => setView('2d')} className="px-3 py-1.5 text-xs bg-blue-500/20 text-blue-400 rounded-lg border border-blue-500/30 hover:bg-blue-500/30">
@@ -317,7 +317,7 @@ export default function ForceGraph3DView({ data }: { data: CrossFitData }) {
       {/* Header */}
       <div className="flex items-start justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-white">Movement Force Graph</h2>
+          <h2 className="text-2xl font-bold text-[var(--text-primary)]">Movement Force Graph</h2>
           <p className="text-sm text-[var(--text-tertiary)] mt-1">
             How movements connect through co-occurrence. Node size = frequency. Link thickness = how often they appear together.
             {selectedNode && (
@@ -337,7 +337,7 @@ export default function ForceGraph3DView({ data }: { data: CrossFitData }) {
               M / G / W
             </button>
           </div>
-          <button onClick={() => setView('3d')} className="px-3 py-1.5 text-xs bg-[var(--panel-bg-hover)] text-[var(--text-tertiary)] rounded-lg border border-[var(--panel-border-strong)] hover:text-white">
+          <button onClick={() => setView('3d')} className="px-3 py-1.5 text-xs bg-[var(--panel-bg-hover)] text-[var(--text-tertiary)] rounded-lg border border-[var(--panel-border-strong)] hover:text-[var(--text-primary)]">
             3D View
           </button>
         </div>
@@ -363,7 +363,7 @@ export default function ForceGraph3DView({ data }: { data: CrossFitData }) {
           <div className="w-64 shrink-0 bg-[var(--panel-bg)] rounded-xl border border-[var(--panel-border)] p-5 self-start">
             <div className="flex items-center gap-2 mb-4">
               <div className="w-4 h-4 rounded-full" style={{ background: colorMode === 'function' ? hoveredNodeData.patternColor : getModalityColor(hoveredNodeData.modality) }} />
-              <h3 className="text-base font-bold text-white">{hoveredNodeData.label}</h3>
+              <h3 className="text-base font-bold text-[var(--text-primary)]">{hoveredNodeData.label}</h3>
             </div>
             <div className="space-y-3">
               <div>

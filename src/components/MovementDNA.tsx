@@ -22,7 +22,7 @@ function DNACard({ movement, data, isSelected, onClick }: {
     >
       <div className="flex items-center gap-2 mb-2">
         <div className="w-3 h-3 rounded-full" style={{ background: color }} />
-        <span className="text-sm font-medium text-white">{movement.name}</span>
+        <span className="text-sm font-medium text-[var(--text-primary)]">{movement.name}</span>
       </div>
       <div className="flex items-baseline gap-2">
         <span className="text-2xl font-bold font-mono" style={{ color }}>{movement.total_count.toLocaleString()}</span>
@@ -79,7 +79,7 @@ export default function MovementDNA({ data }: { data: CrossFitData }) {
   return (
     <div className="space-y-4">
       <div>
-        <h2 className="text-2xl font-bold text-white">Movement DNA Profiles</h2>
+        <h2 className="text-2xl font-bold text-[var(--text-primary)]">Movement DNA Profiles</h2>
         <p className="text-sm text-[var(--text-tertiary)] mt-1">Deep analysis of every movement — frequency, trends, partners, and DNA fingerprint</p>
       </div>
 
@@ -123,7 +123,7 @@ export default function MovementDNA({ data }: { data: CrossFitData }) {
                 {selected.name.charAt(0)}
               </div>
               <div>
-                <h3 className="text-xl font-bold text-white">{selected.name}</h3>
+                <h3 className="text-xl font-bold text-[var(--text-primary)]">{selected.name}</h3>
                 <p className="text-xs text-[var(--text-tertiary)]">{MODALITY_LABELS[selected.modality]} | Since {selected.first_seen}</p>
               </div>
               <div className="ml-auto text-right">
@@ -134,19 +134,19 @@ export default function MovementDNA({ data }: { data: CrossFitData }) {
 
             <div className="grid grid-cols-4 gap-4">
               <div className="text-center">
-                <div className="text-lg font-bold font-mono text-white">{selected.top_partners.length}</div>
+                <div className="text-lg font-bold font-mono text-[var(--text-primary)]">{selected.top_partners.length}</div>
                 <div className="text-[10px] text-[var(--text-muted)]">Top Partners</div>
               </div>
               <div className="text-center">
-                <div className="text-lg font-bold font-mono text-white">{selected.featured_in_wods.length}</div>
+                <div className="text-lg font-bold font-mono text-[var(--text-primary)]">{selected.featured_in_wods.length}</div>
                 <div className="text-[10px] text-[var(--text-muted)]">Named WODs</div>
               </div>
               <div className="text-center">
-                <div className="text-lg font-bold font-mono text-white">{Object.keys(selected.year_pct).length}</div>
+                <div className="text-lg font-bold font-mono text-[var(--text-primary)]">{Object.keys(selected.year_pct).length}</div>
                 <div className="text-[10px] text-[var(--text-muted)]">Active Years</div>
               </div>
               <div className="text-center">
-                <div className="text-lg font-bold font-mono text-white">
+                <div className="text-lg font-bold font-mono text-[var(--text-primary)]">
                   {(Object.values(selected.year_pct).reduce((a, b) => a + b, 0) / Object.keys(selected.year_pct).length).toFixed(1)}%
                 </div>
                 <div className="text-[10px] text-[var(--text-muted)]">Avg. Frequency</div>

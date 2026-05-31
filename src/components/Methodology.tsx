@@ -157,7 +157,7 @@ export default function Methodology({ data }: Props) {
           <li><span className="text-[var(--text-primary)] font-medium">Complexity score:</span> 1-5 scale based on technical difficulty and learning curve</li>
         </ul>
         <div className="bg-amber-500/5 border border-amber-500/20 rounded-lg p-3 mt-2">
-          <p className="text-xs text-amber-300/80">
+          <p className="text-xs text-amber-700/80">
             These mappings are subjective and represent one coach's classification. Different coaches may reasonably disagree on specific mappings (e.g., whether a Thruster is primarily a "Squat" or a "Vertical Push"). The taxonomy is available in the source code for review: <span className="font-mono text-amber-400">src/data/movement-taxonomy.ts</span>
           </p>
         </div>

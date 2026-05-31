@@ -124,8 +124,8 @@ function getGapSeverity(modality: string, timeDomain: string): 'critical' | 'mod
 }
 
 const SEVERITY_COLORS = {
-  critical: { bg: 'bg-red-500/10', border: 'border-red-500/20', text: 'text-red-400', badge: 'bg-red-500/20 text-red-300' },
-  moderate: { bg: 'bg-amber-500/10', border: 'border-amber-500/20', text: 'text-amber-400', badge: 'bg-amber-500/20 text-amber-300' },
+  critical: { bg: 'bg-red-500/10', border: 'border-red-500/20', text: 'text-red-400', badge: 'bg-red-500/20 text-red-700' },
+  moderate: { bg: 'bg-amber-500/10', border: 'border-amber-500/20', text: 'text-amber-400', badge: 'bg-amber-500/20 text-amber-700' },
   minor: { bg: 'bg-slate-500/10', border: 'border-slate-500/20', text: 'text-[var(--text-tertiary)]', badge: 'bg-slate-500/20 text-[var(--text-secondary)]' },
 }
 
@@ -193,7 +193,7 @@ export default function HopperReadiness({ data, advancedAnalysis }: { data: Cros
     <div className="space-y-4">
       {/* ── HEADER ── */}
       <div>
-        <h2 className="text-2xl font-bold text-white">The Hopper Model — Are You Ready for Anything?</h2>
+        <h2 className="text-2xl font-bold text-[var(--text-primary)]">The Hopper Model — Are You Ready for Anything?</h2>
         <p className="text-sm text-[var(--text-tertiary)] mt-1">
           CrossFit's ultimate test of fitness: pull a random workout from a hopper — could you do it well?
         </p>
@@ -252,7 +252,7 @@ export default function HopperReadiness({ data, advancedAnalysis }: { data: Cros
 
       {/* ── COVERAGE HEATMAP ── */}
       <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-[var(--panel-border)]">
-        <h3 className="text-sm font-semibold text-white mb-1">Modality x Time Domain Coverage Heatmap</h3>
+        <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-1">Modality x Time Domain Coverage Heatmap</h3>
         <p className="text-[10px] text-[var(--text-muted)] mb-4">
           The Glassman Fitness Matrix — work capacity across broad time and modal domains
         </p>
@@ -307,7 +307,7 @@ export default function HopperReadiness({ data, advancedAnalysis }: { data: Cros
                               {count}
                             </div>
                             {count === 0 && (
-                              <div className="text-[9px] text-red-300/70 mt-0.5">GAP</div>
+                              <div className="text-[9px] text-red-600/80 mt-0.5">GAP</div>
                             )}
                             {/* Tooltip on hover */}
                             <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-[10px] text-[var(--text-secondary)] whitespace-nowrap opacity-0 group-hover/cell:opacity-100 transition-opacity pointer-events-none z-10 shadow-xl">
@@ -398,7 +398,7 @@ export default function HopperReadiness({ data, advancedAnalysis }: { data: Cros
       {/* ── PROGRAMMING GAPS ── */}
       {sortedGaps.length > 0 && (
         <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-[var(--panel-border)]">
-          <h3 className="text-sm font-semibold text-white mb-1">Programming Gaps</h3>
+          <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-1">Programming Gaps</h3>
           <p className="text-[10px] text-[var(--text-muted)] mb-3">
             Modality x Time Domain combinations with zero or near-zero workouts
           </p>
@@ -446,7 +446,7 @@ export default function HopperReadiness({ data, advancedAnalysis }: { data: Cros
 
       {/* ── MOVEMENT PAIR COVERAGE ── */}
       <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-[var(--panel-border)]">
-        <h3 className="text-sm font-semibold text-white mb-1">Movement Pair Coverage</h3>
+        <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-1">Movement Pair Coverage</h3>
         <p className="text-[10px] text-[var(--text-muted)] mb-3">
           How many unique movement pairings have appeared in the same workout?
         </p>
@@ -535,7 +535,7 @@ export default function HopperReadiness({ data, advancedAnalysis }: { data: Cros
       {/* ── WHAT WOULD FILL THE GAPS? ── */}
       {sortedGaps.length > 0 && (
         <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-[var(--panel-border)]">
-          <h3 className="text-sm font-semibold text-white mb-1">What Would Fill the Gaps?</h3>
+          <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-1">What Would Fill the Gaps?</h3>
           <p className="text-[10px] text-[var(--text-muted)] mb-3">
             Suggested workouts to address each programming blind spot
           </p>
@@ -591,7 +591,7 @@ export default function HopperReadiness({ data, advancedAnalysis }: { data: Cros
 
       {/* ── HOPPER READINESS SUMMARY ── */}
       <div className="bg-gradient-to-br from-blue-500/5 to-purple-500/5 rounded-xl p-5 border border-blue-500/10">
-        <h3 className="text-sm font-semibold text-white mb-3">Hopper Readiness Verdict</h3>
+        <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-3">Hopper Readiness Verdict</h3>
         <div className="flex items-center gap-6">
           <div className="text-5xl font-bold font-mono text-blue-400">
             {(hopper.score * 100).toFixed(0)}%

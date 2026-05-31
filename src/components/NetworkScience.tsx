@@ -455,7 +455,7 @@ export default function NetworkScience({ data, advancedAnalysis }: { data: Cross
                 return (
                   <tr
                     key={row.id}
-                    className={`border-b border-[var(--panel-border)]/50 hover:bg-white/[0.02] transition-colors ${i % 2 === 0 ? 'bg-white/[0.01]' : ''}`}
+                    className={`border-b border-[var(--panel-border)]/50 hover:bg-[var(--panel-bg-hover)] transition-colors ${i % 2 === 0 ? 'bg-[var(--panel-bg-2)]' : ''}`}
                   >
                     <td className="py-1.5 px-3 text-[var(--text-secondary)] font-medium">{row.name}</td>
                     <td className="py-1.5 px-3 text-right font-mono">

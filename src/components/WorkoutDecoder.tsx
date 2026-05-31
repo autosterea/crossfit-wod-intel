@@ -163,7 +163,7 @@ export default function WorkoutDecoder({ data }: { data: CrossFitData }) {
     <div className="space-y-4">
       {/* Header */}
       <div>
-        <h2 className="text-2xl font-bold text-white">Workout Decoder</h2>
+        <h2 className="text-2xl font-bold text-[var(--text-primary)]">Workout Decoder</h2>
         <p className="text-sm text-[var(--text-tertiary)] mt-1">
           Pick any workout and get a full nutritional-label-style breakdown of what's inside it.
         </p>
@@ -178,7 +178,7 @@ export default function WorkoutDecoder({ data }: { data: CrossFitData }) {
           value={query}
           onChange={(e) => { setQuery(e.target.value); setShowDropdown(true) }}
           onFocus={() => { if (query.trim()) setShowDropdown(true) }}
-          className="w-full bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg px-4 py-3 text-sm text-white placeholder-slate-500 focus:border-blue-500/50 focus:outline-none"
+          className="w-full bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg px-4 py-3 text-sm text-[var(--text-primary)] placeholder-slate-500 focus:border-blue-500/50 focus:outline-none"
         />
         <svg className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -198,7 +198,7 @@ export default function WorkoutDecoder({ data }: { data: CrossFitData }) {
               >
                 <span className="text-[10px] font-mono text-[var(--text-muted)] whitespace-nowrap pt-0.5">{w.d}</span>
                 <div className="flex-1 min-w-0">
-                  <div className="text-xs text-white truncate">
+                  <div className="text-xs text-[var(--text-primary)] truncate">
                     {w.nw ? <span className="text-amber-400 font-medium">{w.nw} — </span> : null}
                     {w.t}
                   </div>
@@ -245,11 +245,11 @@ export default function WorkoutDecoder({ data }: { data: CrossFitData }) {
                     {selected.ib && <span className="ml-2 text-[10px] bg-blue-500/20 text-blue-400 px-1.5 py-0.5 rounded-full font-normal">Benchmark</span>}
                   </div>
                 )}
-                <div className="text-sm text-white font-medium">{selected.t}</div>
+                <div className="text-sm text-[var(--text-primary)] font-medium">{selected.t}</div>
               </div>
               <button
                 onClick={() => setSelected(null)}
-                className="text-[var(--text-muted)] hover:text-white transition-colors text-lg leading-none px-2"
+                className="text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors text-lg leading-none px-2"
                 title="Clear selection"
               >
                 &times;
@@ -441,7 +441,7 @@ export default function WorkoutDecoder({ data }: { data: CrossFitData }) {
 
           {/* ─── SIMILAR WORKOUTS ─── */}
           <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-[var(--panel-border)]">
-            <h3 className="text-sm font-medium text-white mb-1">Similar Workouts</h3>
+            <h3 className="text-sm font-medium text-[var(--text-primary)] mb-1">Similar Workouts</h3>
             <p className="text-[10px] text-[var(--text-muted)] mb-4">
               Top 5 most similar WODs by movement overlap (Jaccard similarity) with bonuses for matching modality and time domain.
             </p>
@@ -469,7 +469,7 @@ export default function WorkoutDecoder({ data }: { data: CrossFitData }) {
                             <span className="text-[9px] text-[var(--text-muted)]">{sw.td}</span>
                             <span className="text-[9px] text-[var(--text-muted)]">{sw.st}</span>
                           </div>
-                          <div className="text-xs text-[var(--text-secondary)] truncate group-hover:text-white transition-colors">
+                          <div className="text-xs text-[var(--text-secondary)] truncate group-hover:text-[var(--text-primary)] transition-colors">
                             {sw.t}
                           </div>
                           <div className="flex flex-wrap gap-1 mt-1.5">

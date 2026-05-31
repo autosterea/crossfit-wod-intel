@@ -107,7 +107,7 @@ export default function ShareButton() {
             <button
               key={link.name}
               onClick={link.onClick}
-              className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm text-[var(--text-secondary)] transition-colors hover:bg-[var(--panel-border-strong)] hover:text-white"
+              className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm text-[var(--text-secondary)] transition-colors hover:bg-[var(--panel-border-strong)] hover:text-[var(--text-primary)]"
             >
               <span className="flex-shrink-0 text-[var(--text-tertiary)]">{link.icon}</span>
               {link.name}
@@ -119,7 +119,7 @@ export default function ShareButton() {
       {/* Floating button */}
       <button
         onClick={() => setOpen((v) => !v)}
-        className="flex h-12 w-12 items-center justify-center rounded-full border border-[var(--panel-border-strong)] bg-[var(--panel-bg-hover)] text-[var(--text-secondary)] shadow-lg shadow-black/30 transition-all hover:border-blue-500/50 hover:text-white hover:shadow-blue-500/10"
+        className="flex h-12 w-12 items-center justify-center rounded-full border border-[var(--panel-border-strong)] bg-[var(--panel-bg-hover)] text-[var(--text-secondary)] shadow-lg shadow-black/30 transition-all hover:border-blue-500/50 hover:text-[var(--text-primary)] hover:shadow-blue-500/10"
         aria-label="Share"
       >
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

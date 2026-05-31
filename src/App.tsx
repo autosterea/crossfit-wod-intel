@@ -58,7 +58,7 @@ class ErrorBoundary extends Component<{ children: ReactNode; name: string }, { e
       return (
         <div className="p-6 bg-red-500/10 border border-red-500/30 rounded-xl">
           <h3 className="text-red-400 font-bold text-sm mb-2">Error in {this.props.name}</h3>
-          <pre className="text-xs text-red-300/70 whitespace-pre-wrap">{this.state.error.message}</pre>
+          <pre className="text-xs text-red-600/80 whitespace-pre-wrap">{this.state.error.message}</pre>
           <button onClick={() => this.setState({ error: null })} className="mt-3 px-3 py-1 text-xs bg-red-500/20 text-red-400 rounded hover:bg-red-500/30">Retry</button>
         </div>
       )

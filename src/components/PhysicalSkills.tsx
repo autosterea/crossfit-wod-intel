@@ -54,7 +54,7 @@ export default function PhysicalSkills({ data, analysis }: { data: CrossFitData;
   return (
     <div className="space-y-4">
       <div>
-        <h2 className="text-2xl font-bold text-white">10 General Physical Skills</h2>
+        <h2 className="text-2xl font-bold text-[var(--text-primary)]">10 General Physical Skills</h2>
         <p className="text-sm text-[var(--text-tertiary)] mt-1">
           CrossFit defines fitness as competence across all 10 general physical skills.
           This analysis maps every workout to the skills it develops.

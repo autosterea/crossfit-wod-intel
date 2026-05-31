@@ -45,7 +45,7 @@ export default function WorkCapacity({ data, analysis }: { data: CrossFitData; a
   return (
     <div className="space-y-4">
       <div>
-        <h2 className="text-2xl font-bold text-white">Work Capacity & Statistical Analysis</h2>
+        <h2 className="text-2xl font-bold text-[var(--text-primary)]">Work Capacity & Statistical Analysis</h2>
         <p className="text-sm text-[var(--text-tertiary)] mt-1">
           CrossFit defines fitness as "increased work capacity across broad time and modal domains."
           Here's how the programming measures up — with real statistics.
@@ -188,7 +188,7 @@ export default function WorkCapacity({ data, analysis }: { data: CrossFitData; a
               <div key={a.date} className="flex items-center justify-between py-2 px-3 rounded-lg bg-[var(--app-bg)] border border-[var(--panel-border)]">
                 <div className="flex items-center gap-3">
                   <span className="text-xs font-mono text-[var(--text-muted)]">{a.date}</span>
-                  <span className="text-xs text-white">{a.title}</span>
+                  <span className="text-xs text-[var(--text-primary)]">{a.title}</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <span className="text-[10px] text-[var(--text-tertiary)]">{a.reason}</span>

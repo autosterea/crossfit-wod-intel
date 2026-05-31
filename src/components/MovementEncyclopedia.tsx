@@ -87,7 +87,7 @@ export default function MovementEncyclopedia({ data }: { data: CrossFitData }) {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h2 className="text-2xl font-bold text-white">
+        <h2 className="text-2xl font-bold text-[var(--text-primary)]">
           Movement Encyclopedia — Every Exercise in 25 Years
         </h2>
         <p className="text-sm text-[var(--text-tertiary)] mt-2 max-w-3xl leading-relaxed">
@@ -145,7 +145,7 @@ export default function MovementEncyclopedia({ data }: { data: CrossFitData }) {
               onClick={() => setCategoryFilter(cat)}
               className={`px-3 py-1.5 text-xs rounded-md transition-colors whitespace-nowrap ${
                 categoryFilter === cat
-                  ? 'text-white'
+                  ? 'text-[var(--text-primary)]'
                   : 'text-[var(--text-tertiary)] hover:text-[var(--text-secondary)]'
               }`}
               style={
@@ -165,7 +165,7 @@ export default function MovementEncyclopedia({ data }: { data: CrossFitData }) {
           placeholder="Search movements..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg px-4 py-2 text-sm text-white placeholder-[var(--text-muted)] focus:border-blue-500/50 focus:outline-none"
+          className="bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg px-4 py-2 text-sm text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:border-blue-500/50 focus:outline-none"
         />
 
         {/* Sort */}
@@ -197,7 +197,7 @@ export default function MovementEncyclopedia({ data }: { data: CrossFitData }) {
               {/* Top row: name + count */}
               <div className="flex items-start justify-between mb-2">
                 <div className="flex-1 min-w-0 mr-3">
-                  <h3 className="text-sm font-bold text-white group-hover:text-blue-400 transition-colors truncate">
+                  <h3 className="text-sm font-bold text-[var(--text-primary)] group-hover:text-blue-400 transition-colors truncate">
                     {movement.name}
                   </h3>
                   <span

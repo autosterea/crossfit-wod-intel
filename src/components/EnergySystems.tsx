@@ -26,7 +26,7 @@ export default function EnergySystems({ data, analysis }: { data: CrossFitData; 
   return (
     <div className="space-y-4">
       <div>
-        <h2 className="text-2xl font-bold text-white">Energy Systems & Work Capacity</h2>
+        <h2 className="text-2xl font-bold text-[var(--text-primary)]">Energy Systems & Work Capacity</h2>
         <p className="text-sm text-[var(--text-tertiary)] mt-1">
           CrossFit targets all three metabolic pathways. This analysis classifies every workout by the dominant energy system it demands.
         </p>
@@ -38,7 +38,7 @@ export default function EnergySystems({ data, analysis }: { data: CrossFitData; 
           <div key={es.id} className="rounded-xl p-5 border" style={{ background: ENERGY_SYSTEM_COLORS[es.id as EnergySystem] + '10', borderColor: ENERGY_SYSTEM_COLORS[es.id as EnergySystem] + '30' }}>
             <div className="flex items-center gap-2 mb-2">
               <div className="w-3 h-3 rounded-full" style={{ background: ENERGY_SYSTEM_COLORS[es.id as EnergySystem] }} />
-              <span className="text-xs font-medium text-white">{es.name}</span>
+              <span className="text-xs font-medium text-[var(--text-primary)]">{es.name}</span>
             </div>
             <div className="text-2xl font-bold font-mono" style={{ color: ENERGY_SYSTEM_COLORS[es.id as EnergySystem] }}>
               {es.value.toLocaleString()}
@@ -121,7 +121,7 @@ export default function EnergySystems({ data, analysis }: { data: CrossFitData; 
 
       {/* Explanation panel */}
       <div className="bg-gradient-to-r from-[var(--panel-bg)] to-[var(--panel-bg-2)] rounded-xl p-6 border border-[var(--panel-border)]">
-        <h3 className="text-sm font-bold text-white mb-3">Understanding Energy Systems</h3>
+        <h3 className="text-sm font-bold text-[var(--text-primary)] mb-3">Understanding Energy Systems</h3>
         <div className="grid grid-cols-3 gap-6 text-xs text-[var(--text-tertiary)] leading-relaxed">
           <div>
             <div className="font-medium text-rose-400 mb-1">Phosphagen (ATP-CP)</div>

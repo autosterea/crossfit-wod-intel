@@ -95,7 +95,7 @@ export default function RepsAndLoading({ data }: { data: CrossFitData }) {
     <div className="space-y-4">
       {/* Header */}
       <div>
-        <h2 className="text-2xl font-bold text-white">Reps & Loading Prescription Analysis</h2>
+        <h2 className="text-2xl font-bold text-[var(--text-primary)]">Reps & Loading Prescription Analysis</h2>
         <p className="text-sm text-[var(--text-tertiary)] mt-1">
           We scanned every workout description to extract rep schemes (21-15-9, 5x5, etc.) and loading
           prescriptions (135 lbs, 95/65, etc.). This shows how CrossFit programs volume and intensity.
@@ -349,7 +349,7 @@ export default function RepsAndLoading({ data }: { data: CrossFitData }) {
 
       {/* Explainer section */}
       <div className="bg-gradient-to-r from-[var(--panel-bg)] to-[var(--panel-bg-2)] rounded-xl p-6 border border-[var(--panel-border)]">
-        <h3 className="text-sm font-bold text-white mb-3">Understanding Intensity Zones</h3>
+        <h3 className="text-sm font-bold text-[var(--text-primary)] mb-3">Understanding Intensity Zones</h3>
         <div className="grid grid-cols-3 gap-6 text-xs text-[var(--text-tertiary)] leading-relaxed">
           <div>
             <div className="font-medium text-rose-400 mb-1">Strength (1-5 reps, heavy)</div>

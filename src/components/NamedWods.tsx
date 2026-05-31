@@ -40,7 +40,7 @@ export default function NamedWods({ data }: { data: CrossFitData }) {
   return (
     <div className="space-y-4">
       <div>
-        <h2 className="text-2xl font-bold text-white">Named WODs Directory</h2>
+        <h2 className="text-2xl font-bold text-[var(--text-primary)]">Named WODs Directory</h2>
         <p className="text-sm text-[var(--text-tertiary)] mt-1">
           {data.namedWods.length} named workouts — heroes, benchmarks, and classics
         </p>
@@ -67,7 +67,7 @@ export default function NamedWods({ data }: { data: CrossFitData }) {
           placeholder="Search by name..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg px-4 py-2 text-sm text-white placeholder-[var(--text-muted)] focus:border-blue-500/50 focus:outline-none"
+          className="bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg px-4 py-2 text-sm text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:border-blue-500/50 focus:outline-none"
         />
 
         <select value={sortBy} onChange={(e) => setSortBy(e.target.value as any)} className="bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg px-3 py-2 text-xs text-[var(--text-secondary)] focus:outline-none">
@@ -99,7 +99,7 @@ export default function NamedWods({ data }: { data: CrossFitData }) {
                 <div className="flex items-start justify-between mb-3">
                   <div>
                     <div className="flex items-center gap-2">
-                      <h3 className="text-sm font-bold text-white group-hover:text-blue-400 transition-colors">{wod.name}</h3>
+                      <h3 className="text-sm font-bold text-[var(--text-primary)] group-hover:text-blue-400 transition-colors">{wod.name}</h3>
                       <svg
                         className={`w-3.5 h-3.5 text-[var(--text-muted)] transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`}
                         fill="none"

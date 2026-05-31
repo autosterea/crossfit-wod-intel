@@ -246,7 +246,7 @@ export default function CalendarHeatmap({ data }: { data: CrossFitData }) {
               transform: 'translate(-50%, -100%)',
             }}
           >
-            <div className="text-white font-medium">{readableDate(tooltip.cell.date)}</div>
+            <div className="text-[var(--text-primary)] font-medium">{readableDate(tooltip.cell.date)}</div>
             {tooltip.cell.workout ? (
               <>
                 <div className="text-[var(--text-secondary)] mt-0.5 max-w-[220px] truncate">

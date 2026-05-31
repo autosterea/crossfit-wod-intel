@@ -10,7 +10,7 @@ import { MODALITY_COLORS, STRUCTURE_COLORS, TIME_DOMAIN_COLORS } from '../utils/
 function StatCard({ value, label, accent }: { value: string; label: string; accent?: string }) {
   return (
     <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-[var(--panel-border)] hover:border-[var(--panel-border-strong)] transition-colors">
-      <div className={`text-3xl font-bold font-mono ${accent || 'text-white'}`}>{value}</div>
+      <div className={`text-3xl font-bold font-mono ${accent || 'text-[var(--text-primary)]'}`}>{value}</div>
       <div className="text-xs text-[var(--text-tertiary)] mt-1">{label}</div>
     </div>
   )
@@ -82,7 +82,7 @@ export default function Overview({ data }: { data: CrossFitData }) {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h2 className="text-2xl font-bold text-white">CrossFit WOD Intelligence</h2>
+        <h2 className="text-2xl font-bold text-[var(--text-primary)]">CrossFit WOD Intelligence</h2>
         <p className="text-sm text-[var(--text-tertiary)] mt-1">25 years of programming data — analyzed and visualized</p>
       </div>
 

@@ -19,14 +19,14 @@ const SEVERITY_STYLES: Record<Severity, { bg: string; border: string; badge: str
     border: 'border-red-500/20',
     badge: 'bg-red-500/20',
     badgeText: 'text-red-400',
-    text: 'text-red-300',
+    text: 'text-red-600',
   },
   warning: {
     bg: 'bg-amber-500/5',
     border: 'border-amber-500/20',
     badge: 'bg-amber-500/20',
     badgeText: 'text-amber-400',
-    text: 'text-amber-300',
+    text: 'text-amber-600',
   },
   info: {
     bg: 'bg-blue-500/5',
