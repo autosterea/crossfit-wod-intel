@@ -26,7 +26,7 @@ and 3D visualization.
                         ┌──────────────────────────────┐
                         │ crossfit.com/workout/Y/M/D   │
                         └──────────────┬───────────────┘
-                                       │ scrape (06:00 PT / 14:00 UTC daily)
+                                       │ scrape (~06:00 PT / ~14:00 UTC, +/- 2h jitter)
                                        ▼
                 ┌──────────────────────────────────────────┐
                 │ GitHub Action: .github/workflows/daily-wod.yml │
@@ -38,14 +38,14 @@ and 3D visualization.
                 ┌──────────────────────────────────┐
                 │ origin/main on GitHub             │
                 └──────────────┬───────────────────┘
-                               │ pull (08:30 PT / 15:30 UTC daily)
+                               │ polled every 30 min, 14:00-22:00 UTC
                                ▼
-                ┌──────────────────────────────────────┐
-                │ VPS cron: /etc/cron.d/crossfit-wod-rebuild │
-                │ as user `autosterea`                  │
-                │ git pull --ff-only && npm ci && npm run build │
-                │ logs to /var/log/crossfit-wod-rebuild.log │
-                └──────────────┬───────────────────────┘
+                ┌─────────────────────────────────────────────────┐
+                │ VPS cron: /etc/cron.d/crossfit-wod-rebuild       │
+                │ runs scripts/vps-rebuild-if-changed.sh as `autosterea` │
+                │ git fetch; if HEAD advanced: pull + build        │
+                │ logs to /var/log/crossfit-wod-rebuild.log        │
+                └──────────────┬──────────────────────────────────┘
                                │ writes dist/
                                ▼
                 ┌──────────────────────────────────┐
@@ -58,6 +58,15 @@ and 3D visualization.
 **No manual intervention required.** The fetcher script is defensive: if
 crossfit.com is down, returns non-200, or posts a rest-day/journal article
 instead of a workout, the script exits cleanly without breaking the data.
+
+**Why poll-based rebuild instead of a single fixed cron time?** GitHub
+Actions cron is notoriously jittery — the daily-wod action is scheduled
+for 14:00 UTC but can fire anywhere from on-time to 2+ hours late. A
+fixed-time VPS rebuild risks pulling before the new commit lands. The
+polling script (`scripts/vps-rebuild-if-changed.sh`) runs every 30 min
+during the morning window, `git fetch`es, and only triggers `npm run
+build` when origin/main has actually advanced — cheap to call frequently
+and resilient to upstream timing.
 
 ## Hosting
 
