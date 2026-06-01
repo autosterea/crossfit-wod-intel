@@ -2,7 +2,9 @@
 
 **25 years of CrossFit programming analyzed (2001-2026)**
 
-A data science platform that analyzes 6,779 CrossFit.com Workouts of the Day using information theory, network science, statistical testing, and 3D visualization.
+A data science platform that analyzes 6,800+ CrossFit.com Workouts of the Day using information theory, network science, statistical testing, and 3D visualization. A [Persistence Athletics](https://persistenceathletics.com) tool, built by Ravikant Dewangan.
+
+**Live:** [wod.persistenceathletics.com](https://wod.persistenceathletics.com/)
 
 ## Features
 
@@ -23,11 +25,13 @@ A data science platform that analyzes 6,779 CrossFit.com Workouts of the Day usi
 - **3D Co-occurrence Terrain** - Movement pairings as a 3D landscape with instanced rendering
 
 ### Tools
+- **Today's WOD** - Live daily workout from crossfit.com with classification + date picker to browse any day's analysis
 - **Report Card** - Letter grades (A+ to F) for programming quality
 - **Calendar Heatmap** - GitHub-style 25-year workout density visualization
 - **Workout Decoder** - Nutrition label for any workout with similarity finder
 - **Year vs Year** - Side-by-side comparison of any two years
 - **Global Year Filter** - Filter all analysis by any year range
+- **Light / dark mode** - Theme toggle, persisted in localStorage
 
 ## Tech Stack
 
@@ -40,13 +44,20 @@ npm install
 npm run dev
 ```
 
-## Deploy
+## Hosting
 
-Push to main branch - GitHub Actions deploys to GitHub Pages automatically.
+Live site is hosted on a DigitalOcean VPS, served by Caddy as a static `file_server` (no Node runtime, no API). Daily updates are fully automated:
+
+- **GitHub Action** (`.github/workflows/daily-wod.yml`) runs at 14:00 UTC, scrapes the latest WOD from crossfit.com and commits the new data to `main`.
+- **VPS cron** (`/etc/cron.d/crossfit-wod-rebuild`) runs at 15:30 UTC, pulls the latest `main` and rebuilds `dist/`. Caddy serves the new files immediately.
+
+The old GH Pages URL (`autosterea.github.io/crossfit-wod-intel/`) now redirects to the VPS via a workflow that publishes only `gh-pages-redirect/index.html`.
+
+See [`CLAUDE.md`](./CLAUDE.md) for full architecture and operational details.
 
 ## Data
 
-6,779 workouts from crossfit.com (Feb 2001 - Mar 2026). 30 movements tracked, co-occurrence network, named WOD directory, era analysis.
+6,800+ workouts from crossfit.com (Feb 2001 - present). 30 movements tracked, co-occurrence network, named WOD directory, era analysis. Updated daily, automatically.
 
 ## License
 
