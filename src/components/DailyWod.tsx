@@ -81,6 +81,16 @@ export default function DailyWod({ data }: { data: CrossFitData }) {
   }, [workout, data])
 
   const looksLikeWorkout = !!workout && (workout.mv.length > 0 || workout.mo !== 'Unknown' || /\b(amrap|emom|for time|rounds|reps|tabata)\b/i.test(workout.raw || ''))
+  const isRestDay = !!workout && !looksLikeWorkout
+
+  // Find the most recent date with an actual workout — for the "View most recent workout" CTA on rest days
+  const mostRecentWorkoutDate = useMemo(() => {
+    for (let i = sortedDates.length - 1; i >= 0; i--) {
+      const w = datedIndex.get(sortedDates[i])
+      if (w && w.mv.length > 0 && w.d < selected) return sortedDates[i]
+    }
+    return null
+  }, [sortedDates, datedIndex, selected])
 
   const stepDay = (delta: number) => {
     if (selected === today) {
@@ -147,22 +157,45 @@ export default function DailyWod({ data }: { data: CrossFitData }) {
           <p className="text-sm text-[var(--text-tertiary)]">No workout posted for {selected}.</p>
           <p className="text-xs text-[var(--text-muted)] mt-2">Try a different date — use the date picker or the navigation arrows.</p>
         </div>
+      ) : isRestDay ? (
+        // ─── Rest day / article day presentation ──────────────────────────
+        <>
+          <div className="bg-[var(--panel-bg)] border-2 border-amber-500/30 rounded-xl overflow-hidden">
+            <div className="bg-amber-500/10 px-5 py-3 flex items-center gap-2 border-b border-amber-500/30">
+              <svg className="w-4 h-4 text-amber-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4m0 4h.01M3 12a9 9 0 1118 0 9 9 0 01-18 0z" />
+              </svg>
+              <h2 className="text-sm font-semibold text-amber-700">Rest Day — No Workout Posted</h2>
+            </div>
+            <div className="px-5 py-4">
+              <p className="text-sm text-[var(--text-secondary)] mb-2">
+                crossfit.com didn't program a workout for <span className="font-medium">{formatDate(workout.d)}</span>.
+                {workout.raw && workout.raw !== 'Rest Day' && ' They posted the article below instead.'}
+              </p>
+              {workout.raw && workout.raw !== 'Rest Day' && (
+                <details className="mt-3">
+                  <summary className="text-xs text-[var(--text-tertiary)] cursor-pointer hover:text-[var(--text-secondary)]">
+                    Show what crossfit.com posted
+                  </summary>
+                  <pre className="mt-2 px-3 py-3 text-xs text-[var(--text-tertiary)] bg-[var(--panel-bg-2)] border border-[var(--panel-border)] rounded-md whitespace-pre-wrap font-sans leading-relaxed max-h-48 overflow-y-auto">
+                    {workout.raw}
+                  </pre>
+                </details>
+              )}
+              {mostRecentWorkoutDate && (
+                <button
+                  onClick={() => setSelected(mostRecentWorkoutDate)}
+                  className="mt-4 inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-[#019644] hover:bg-[#01b350] rounded-lg transition-colors"
+                >
+                  ← View most recent workout ({formatDate(mostRecentWorkoutDate)})
+                </button>
+              )}
+            </div>
+          </div>
+        </>
       ) : (
         <>
-          {/* Type banner — clear about journal/rest/workout */}
-          {!looksLikeWorkout && workout.isLive && (
-            <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg px-4 py-3 flex items-start gap-3">
-              <svg className="w-4 h-4 text-amber-400 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-              </svg>
-              <div>
-                <p className="text-xs text-amber-600 font-medium">Article / Rest Day</p>
-                <p className="text-[11px] text-amber-700 mt-0.5">crossfit.com posted a journal article or rest day today instead of a workout. The content below is what they published.</p>
-              </div>
-            </div>
-          )}
-
-          {/* Main card */}
+          {/* Main workout card */}
           <div className="bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-xl overflow-hidden">
             <div className="px-5 py-3 border-b border-[var(--panel-border)] flex items-center justify-between flex-wrap gap-2">
               <h2 className="text-base font-semibold text-[var(--text-primary)] font-mono">{workout.t}</h2>

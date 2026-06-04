@@ -33,8 +33,8 @@ const sinceDate = sinceIdx >= 0 ? args[sinceIdx + 1] : null
 
 // Same dictionaries as fetch-daily-wod.mjs (copied so this is standalone).
 const MOVEMENT_DICT = {
-  Run: ['run ', 'running', 'mile', '400m', '800m', '200m', '1,600m', '1600m', '400-m', '800-m', '200-m'],
-  Row: ['row', 'rowing', 'rower'],
+  Run: ['running', '-mile run', ' mile run', '400m', '800m', '200m', '1,600m', '1600m', '400-m', '800-m', '200-m', '100-meter sprint', '400-meter run'],
+  Row: ['rowing', 'rower', '-calorie row', 'cal row', 'meter row', '-m row', '500m row'],
   Bike: ['bike', 'assault bike', 'echo bike'],
   PullUp: ['pull-up', 'pullup', 'pull up', 'chest-to-bar', 'chest to bar', 'c2b'],
   MuscleUp: ['muscle-up', 'muscle up', 'bar muscle', 'ring muscle'],
@@ -47,6 +47,10 @@ const MOVEMENT_DICT = {
   Burpee: ['burpee'],
   GHD: ['ghd'],
   DoubleUnders: ['double-under', 'double under', 'dbl under'],
+  PushUp: ['push-up', 'pushup', ' push up', 'push ups'],
+  AirSquat: ['air squat', 'air-squat', 'bodyweight squat'],
+  SitUp: ['sit-up', 'situp', ' sit up', 'sit ups', 'abmat sit-up'],
+  Lunge: ['walking lunge', 'forward lunge', 'reverse lunge', ' lunge', 'lunges'],
   Clean: ['clean'],
   Snatch: ['snatch'],
   Deadlift: ['deadlift', 'dead lift'],
@@ -223,7 +227,31 @@ function classifyLoadProfile(text, movements) {
 
 const data = JSON.parse(readFileSync(dataPath, 'utf8'))
 
-let lpFixed = 0, nwCleared = 0, ihFixed = 0, structFixed = 0
+function classifyModality(movements) {
+  const MONO_M = new Set(['Run','Row','Bike','Swim','SkiErg','DoubleUnders'])
+  const MONO_G = new Set(['PullUp','MuscleUp','HSPU','HandstandWalk','ToesToBar','RopeClimb','PistolSquat','BoxJump','Burpee','GHD','PushUp','AirSquat','SitUp','Lunge'])
+  let hasM=false,hasG=false,hasW=false
+  for (const mv of movements) {
+    if (MONO_M.has(mv)) hasM=true
+    else if (MONO_G.has(mv)) hasG=true
+    else hasW=true
+  }
+  if (hasM&&hasG&&hasW) return 'MGW'
+  if (hasM&&hasG) return 'MG'
+  if (hasM&&hasW) return 'MW'
+  if (hasG&&hasW) return 'GW'
+  if (hasM) return 'M'
+  if (hasG) return 'G'
+  if (hasW) return 'W'
+  return 'Unknown'
+}
+
+function looksLikeArticleText(s) {
+  return /\b(tickets now available|crossfit games|workout of the day\s+\d{6}\d*\s*crossfit)\b/i.test(s) &&
+         !/\b(amrap|emom|tabata|for time|for reps|rounds for time|complete as many|every\s+\d+\s*min|max\s*(?:effort|load|reps)|rest day)\b/i.test(s)
+}
+
+let lpFixed=0, nwCleared=0, ihFixed=0, mvFixed=0, moFixed=0, garbageCleared=0
 let total = 0
 const changes = []
 
@@ -232,14 +260,48 @@ for (const w of data.searchIndex) {
   if (!w.s) continue
   total++
 
+  // Detect garbage entries (scraper grabbed nav/ad text instead of a workout)
+  if (looksLikeArticleText(w.s) && w.mv.length === 0) {
+    if (w.s !== 'Rest Day') {
+      changes.push(`${w.d} | ${w.t}: GARBAGE → "Rest Day"`)
+      if (!dryRun) {
+        w.s = 'Rest Day'
+        w.mo = 'Unknown'
+        w.st = 'Other'
+        w.td = 'Medium'
+        w.lp = 'Bodyweight Only'
+        w.mv = []
+      }
+      garbageCleared++
+    }
+    continue
+  }
+
   const newMovements = detectMovements(w.s)
   const newNamed = detectNamedWod(w.s)
   const newStruct = classifyStructure(w.s, newNamed)
   const newLoad = classifyLoadProfile(w.s, newMovements.length ? newMovements : w.mv)
+  const newModality = classifyModality(newMovements.length ? newMovements : w.mv)
   const newIsHero = newNamed ? HERO_NAMES.has(newNamed) : (newStruct === 'Hero WOD')
-  const newIsBench = newNamed ? BENCHMARK_NAMES.has(newNamed) : false
 
   const delta = []
+
+  // 0. Re-detect movements if old was empty and new finds some
+  if (w.mv.length === 0 && newMovements.length > 0) {
+    delta.push(`mv: [] → [${newMovements.join(',')}]`)
+    if (!dryRun) w.mv = newMovements
+    mvFixed++
+    // Also update modality + structure when we now find movements
+    if (w.mo === 'Unknown' && newModality !== 'Unknown') {
+      delta.push(`mo: Unknown → ${newModality}`)
+      if (!dryRun) w.mo = newModality
+      moFixed++
+    }
+    if (w.st === 'Other' && newStruct !== 'Other') {
+      delta.push(`st: Other → ${newStruct}`)
+      if (!dryRun) w.st = newStruct
+    }
+  }
 
   // 1. Fix load when old was Unknown and we now resolve a value
   if (w.lp === 'Unknown' && newLoad !== 'Unknown' && newLoad !== 'Bodyweight Only') {
@@ -253,13 +315,11 @@ for (const w of data.searchIndex) {
     delta.push(`nw: "${w.nw}" → "${newNamed}"`)
     if (!dryRun) {
       w.nw = newNamed
-      // also re-derive hero/benchmark flags
       w.ih = newNamed ? HERO_NAMES.has(newNamed) : (w.s.toLowerCase().match(/today'?s? hero workout|in honor of|honors\s+[a-z]+/i) ? true : false)
       w.ib = newNamed ? BENCHMARK_NAMES.has(newNamed) : false
     }
     nwCleared++
   } else if (!w.ih && newIsHero && newStruct === 'Hero WOD') {
-    // 3. Promote to Hero when text clearly says it but no name matched
     delta.push(`ih: false → true (via "in honor of" / "today's hero workout")`)
     if (!dryRun) {
       w.ih = true
@@ -272,9 +332,12 @@ for (const w of data.searchIndex) {
 }
 
 console.log(`Scanned ${total} entries${sinceDate ? ` (since ${sinceDate})` : ''}.`)
-console.log(`  lp fixed:   ${lpFixed}`)
-console.log(`  nw cleared: ${nwCleared}`)
-console.log(`  ih fixed:   ${ihFixed}`)
+console.log(`  mv added:        ${mvFixed}`)
+console.log(`  modality fixed:  ${moFixed}`)
+console.log(`  lp fixed:        ${lpFixed}`)
+console.log(`  nw cleared:      ${nwCleared}`)
+console.log(`  ih fixed:        ${ihFixed}`)
+console.log(`  garbage cleared: ${garbageCleared}`)
 console.log()
 if (changes.length) {
   console.log('Changes:')

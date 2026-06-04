@@ -45,8 +45,8 @@ console.log(`[fetch-daily-wod] Target date: ${dateStr} (${dayName})`)
 // Movement dictionary
 // ---------------------------------------------------------------------------
 const MOVEMENT_DICT = {
-  Run:            ['run ', 'running', 'mile', '400m', '800m', '200m', '1,600m', '1600m', '400-m', '800-m', '200-m'],
-  Row:            ['row', 'rowing', 'rower'],
+  Run:            ['run ', 'running', '-mile run', ' mile run', '400m', '800m', '200m', '1,600m', '1600m', '400-m', '800-m', '200-m', '100-meter sprint', '400-meter run'],
+  Row:            ['rowing', 'rower', '-calorie row', 'cal row', 'meter row', '-m row', '500m row'],
   Bike:           ['bike', 'assault bike', 'echo bike'],
   PullUp:         ['pull-up', 'pullup', 'pull up', 'chest-to-bar', 'chest to bar', 'c2b'],
   MuscleUp:       ['muscle-up', 'muscle up', 'bar muscle', 'ring muscle'],
@@ -59,6 +59,11 @@ const MOVEMENT_DICT = {
   Burpee:         ['burpee'],
   GHD:            ['ghd'],
   DoubleUnders:   ['double-under', 'double under', 'dbl under'],
+  // Bodyweight basics — often appear in Tabata / Murph / Cindy / hero WODs
+  PushUp:         ['push-up', 'pushup', ' push up', 'push ups'],
+  AirSquat:       ['air squat', 'air-squat', 'bodyweight squat'],
+  SitUp:          ['sit-up', 'situp', ' sit up', 'sit ups', 'abmat sit-up'],
+  Lunge:          ['walking lunge', 'forward lunge', 'reverse lunge', ' lunge', 'lunges'],
   Clean:          ['clean'],
   Snatch:         ['snatch'],
   Deadlift:       ['deadlift', 'dead lift'],
@@ -288,6 +293,19 @@ let workoutText = extractWorkoutSection(plainText)
 if (!workoutText || workoutText.length < 10) {
   console.log('[fetch-daily-wod] Could not extract workout text – possibly a rest day. Exiting.')
   process.exit(0)
+}
+
+// Validate the extracted text actually looks like a workout. crossfit.com
+// sometimes serves a page with no workout content (e.g. Thursday/Sunday rest
+// days with only an article); without this check, extractWorkoutSection's
+// fallback returns navigation / ad text ("CROSSFIT GAMES TICKETS NOW AVAILABLE").
+const hasWorkoutMarker = /\b(amrap|emom|tabata|for time|for reps|rounds for time|complete as many|every\s+\d+\s*min|max\s*(?:effort|load|reps)|1[- ]?rm|rest day)\b/i.test(workoutText)
+const looksLikeArticle = /\b(tickets now available|crossfit games|sign\s*up|subscribe|workout of the day\s+\d{6}\d*\s*crossfit)\b/i.test(workoutText) && !hasWorkoutMarker
+
+if (looksLikeArticle) {
+  console.log('[fetch-daily-wod] Extracted text looks like article/nav content, not a workout. Treating as rest day.')
+  // Fall through to save a clean rest-day entry rather than garbage
+  workoutText = 'Rest Day'
 }
 
 // Cap at a reasonable length for storage (matching existing data ~500 chars for `s`)
