@@ -61,9 +61,21 @@ const MOVEMENT_DICT = {
   DoubleUnders:   ['double-under', 'double under', 'dbl under'],
   // Bodyweight basics — often appear in Tabata / Murph / Cindy / hero WODs
   PushUp:         ['push-up', 'pushup', ' push up', 'push ups'],
-  AirSquat:       ['air squat', 'air-squat', 'bodyweight squat'],
+  AirSquat:       ['air squat', 'air-squat', 'bodyweight squat', ' squats', 'tabata squat'],
   SitUp:          ['sit-up', 'situp', ' sit up', 'sit ups', 'abmat sit-up'],
   Lunge:          ['walking lunge', 'forward lunge', 'reverse lunge', ' lunge', 'lunges'],
+  // Gymnastics / bodyweight extras found by audit across 2001-2025
+  LSit:           ['l-sit', 'l sit', 'l-hold'],
+  HandstandHold:  ['handstand hold', 'handstand practice', 'press to handstand'],
+  Dip:            ['ring dip', 'bar dip', 'weighted dip', ' dips'],
+  WallWalk:       ['wall walk', 'wall-walk', 'wall climb'],
+  KneesToElbows:  ['knees-to-elbow', 'knees to elbow', 'k2e'],
+  BackExtension:  ['back extension', 'back ext', 'reverse hyper'],
+  Plank:          ['plank'],
+  JumpRope:       ['jump rope', 'rope jump'],
+  GoodMorning:    ['good morning', 'good-morning'],
+  // Catch-all for ground-to-overhead movements not specifically named
+  GroundToOverhead:['ground-to-overhead', 'ground to overhead'],
   Clean:          ['clean'],
   Snatch:         ['snatch'],
   Deadlift:       ['deadlift', 'dead lift'],
@@ -411,7 +423,15 @@ function detectNamedWod(text) {
   // Restrict to the workout header \u2014 first ~5 lines or first 250 chars,
   // whichever is shorter. Real workout titles / quoted names live here.
   const headerLines = text.split('\n').slice(0, 5).join('\n')
-  const header = (headerLines.length < 250 ? headerLines : text.slice(0, 250))
+  let header = (headerLines.length < 250 ? headerLines : text.slice(0, 250))
+
+  // Strip markdown decoration ([Name](link), **Name**, _Name_, smart-quotes)
+  // before regex matching \u2014 otherwise `\b` fails across these characters and
+  // legitimate named WODs go undetected.
+  const cleanHeader = header
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // [Name](link) -> Name
+    .replace(/[*_]+/g, ' ')                   // **bold**, _italic_ -> space
+    .replace(/[""\u201C\u201D'']/g, ' ')                // quotes -> space
 
   // 1. Quoted names in the header (e.g. "Fran")
   const quoted = header.match(/[""\u201C\u201D]([A-Z][a-zA-Z\s]+?)[""\u201C\u201D]/g)
@@ -423,10 +443,10 @@ function detectNamedWod(text) {
       }
     }
   }
-  // 2. Name appears standalone in the header
+  // 2. Name appears standalone in the header (using markdown-stripped version)
   for (const name of NAMED_WODS) {
     const regex = new RegExp(`\\b${name.replace(/\s+/g, '\\s+')}\\b`, 'i')
-    if (regex.test(header)) return name
+    if (regex.test(cleanHeader)) return name
   }
   // 3. Signature-based fallback for famous WODs
   return detectBySignature(text)
@@ -526,20 +546,39 @@ function classifyLoadProfile(text, movements) {
 
   if (!hasWeighted) return 'Bodyweight Only'
 
-  // Look for weight numbers to judge heaviness — accept hyphens (e.g. "105-lb")
-  const weightMatches = lower.match(/(\d{2,3})[-\s]*(?:lb|pound|#)/g)
-    || lower.match(/(\d{2,3})[-\s]*(?:kg|kilo)/g)
+  const collectedWeights = []
 
-  if (weightMatches) {
-    const weights = weightMatches.map(w => parseInt(w, 10)).filter(n => n > 0)
-    const maxWeight = Math.max(...weights)
+  // 1. Standard pound notation — accept hyphens (e.g. "105-lb", "105 lb", "95#")
+  const lbMatches = lower.match(/(\d{2,3})[-\s]*(?:lb|pound|#)/g)
+  if (lbMatches) for (const m of lbMatches) collectedWeights.push(parseInt(m, 10))
 
+  // 2. Kilogram notation
+  const kgMatches = lower.match(/(\d{2,3})[-\s]*(?:kg|kilo)/g)
+  if (kgMatches) for (const m of kgMatches) collectedWeights.push(parseInt(m, 10) * 2.2)
+
+  // 3. Pood notation (Russian kettlebells — 1 pood ~= 16 kg / 35 lb)
+  // Catches "2-pood KB swing" (classic Nate) and "1.5 pood" variants
+  const poodMatches = lower.match(/(\d+(?:\.\d+)?)[-\s]*pood/g)
+  if (poodMatches) for (const m of poodMatches) {
+    const n = parseFloat(m)
+    if (n > 0) collectedWeights.push(n * 35)
+  }
+
+  // 4. Lift name followed by bare number (early CrossFit notation)
+  // e.g. "Deadlift 225", "Thruster 85", "Snatch 95 x 21"
+  const liftBareMatches = lower.match(/(?:deadlift|clean|snatch|squat|press|jerk|thruster)\s+(\d{2,3})\b(?!\s*(?:rep|round|sec|min|meter|m\b|cal|x\s*\d+\s*reps))/g)
+  if (liftBareMatches) for (const m of liftBareMatches) {
+    const n = parseInt(m.match(/\d{2,3}/)?.[0] || '0', 10)
+    if (n > 0) collectedWeights.push(n)
+  }
+
+  if (collectedWeights.length > 0) {
+    const maxWeight = Math.max(...collectedWeights)
     if (hasBarbell) {
       if (maxWeight >= 225) return 'Heavy'
       if (maxWeight >= 135) return 'Moderate'
       if (maxWeight > 0) return 'Light'
     } else {
-      // Dumbbell / KB
       if (maxWeight >= 70) return 'Heavy'
       if (maxWeight >= 35) return 'Moderate'
       if (maxWeight > 0) return 'Light'

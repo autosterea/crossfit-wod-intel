@@ -30,6 +30,11 @@ const args = process.argv.slice(2)
 const dryRun = args.includes('--dry-run')
 const sinceIdx = args.indexOf('--since')
 const sinceDate = sinceIdx >= 0 ? args[sinceIdx + 1] : null
+// --conservative: only apply additive fixes (add missing movements, resolve
+// Unknown modality/load). Skip nw clearing and ih promotion since those can
+// regress historical entries set by an earlier ingestion pipeline that saw
+// cleaner workout text.
+const conservative = args.includes('--conservative')
 
 // Same dictionaries as fetch-daily-wod.mjs (copied so this is standalone).
 const MOVEMENT_DICT = {
@@ -48,9 +53,19 @@ const MOVEMENT_DICT = {
   GHD: ['ghd'],
   DoubleUnders: ['double-under', 'double under', 'dbl under'],
   PushUp: ['push-up', 'pushup', ' push up', 'push ups'],
-  AirSquat: ['air squat', 'air-squat', 'bodyweight squat'],
+  AirSquat: ['air squat', 'air-squat', 'bodyweight squat', ' squats', 'tabata squat'],
   SitUp: ['sit-up', 'situp', ' sit up', 'sit ups', 'abmat sit-up'],
   Lunge: ['walking lunge', 'forward lunge', 'reverse lunge', ' lunge', 'lunges'],
+  LSit: ['l-sit', 'l sit', 'l-hold'],
+  HandstandHold: ['handstand hold', 'handstand practice', 'press to handstand'],
+  Dip: ['ring dip', 'bar dip', 'weighted dip', ' dips'],
+  WallWalk: ['wall walk', 'wall-walk', 'wall climb'],
+  KneesToElbows: ['knees-to-elbow', 'knees to elbow', 'k2e'],
+  BackExtension: ['back extension', 'back ext', 'reverse hyper'],
+  Plank: ['plank'],
+  JumpRope: ['jump rope', 'rope jump'],
+  GoodMorning: ['good morning', 'good-morning'],
+  GroundToOverhead: ['ground-to-overhead', 'ground to overhead'],
   Clean: ['clean'],
   Snatch: ['snatch'],
   Deadlift: ['deadlift', 'dead lift'],
@@ -162,10 +177,16 @@ function detectNamedWod(text) {
       }
     }
   }
-  // 2. Name appears standalone in the header (workout title)
+  // Strip markdown decoration so \b regex works across **Bold**, [Name](link)
+  const cleanHeader = header
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    .replace(/[*_]+/g, ' ')
+    .replace(/[""“”'']/g, ' ')
+
+  // 2. Name appears standalone in the cleaned header (workout title)
   for (const name of NAMED_WODS) {
     const regex = new RegExp(`\\b${name.replace(/\s+/g, '\\s+')}\\b`, 'i')
-    if (regex.test(header)) return name
+    if (regex.test(cleanHeader)) return name
   }
   // 3. Signature-based recognition for the famous ones (catches Murph etc.
   //    when the name only appears in article body)
@@ -204,12 +225,22 @@ function classifyLoadProfile(text, movements) {
   const hasBarbell = movements.some(m => barbellMovements.has(m))
   if (!hasWeighted) return 'Bodyweight Only'
 
-  const weightMatches = lower.match(/(\d{2,3})[-\s]*(?:lb|pound|#)/g)
-    || lower.match(/(\d{2,3})[-\s]*(?:kg|kilo)/g)
+  const collected = []
+  const lb = lower.match(/(\d{2,3})[-\s]*(?:lb|pound|#)/g)
+  if (lb) for (const m of lb) collected.push(parseInt(m, 10))
+  const kg = lower.match(/(\d{2,3})[-\s]*(?:kg|kilo)/g)
+  if (kg) for (const m of kg) collected.push(parseInt(m, 10) * 2.2)
+  const pood = lower.match(/(\d+(?:\.\d+)?)[-\s]*pood/g)
+  if (pood) for (const m of pood) {
+    const n = parseFloat(m); if (n > 0) collected.push(n * 35)
+  }
+  const liftBare = lower.match(/(?:deadlift|clean|snatch|squat|press|jerk|thruster)\s+(\d{2,3})\b(?!\s*(?:rep|round|sec|min|meter|m\b|cal|x\s*\d+\s*reps))/g)
+  if (liftBare) for (const m of liftBare) {
+    const n = parseInt(m.match(/\d{2,3}/)?.[0] || '0', 10); if (n > 0) collected.push(n)
+  }
 
-  if (weightMatches) {
-    const weights = weightMatches.map(w => parseInt(w, 10)).filter(n => n > 0)
-    const maxWeight = Math.max(...weights)
+  if (collected.length > 0) {
+    const maxWeight = Math.max(...collected)
     if (hasBarbell) {
       if (maxWeight >= 225) return 'Heavy'
       if (maxWeight >= 135) return 'Moderate'
@@ -310,8 +341,8 @@ for (const w of data.searchIndex) {
     lpFixed++
   }
 
-  // 2. Clear named WOD if it no longer matches in header
-  if (w.nw && w.nw !== newNamed) {
+  // 2. Clear named WOD if it no longer matches in header (skipped in --conservative)
+  if (!conservative && w.nw && w.nw !== newNamed) {
     delta.push(`nw: "${w.nw}" → "${newNamed}"`)
     if (!dryRun) {
       w.nw = newNamed
@@ -319,7 +350,7 @@ for (const w of data.searchIndex) {
       w.ib = newNamed ? BENCHMARK_NAMES.has(newNamed) : false
     }
     nwCleared++
-  } else if (!w.ih && newIsHero && newStruct === 'Hero WOD') {
+  } else if (!conservative && !w.ih && newIsHero && newStruct === 'Hero WOD') {
     delta.push(`ih: false → true (via "in honor of" / "today's hero workout")`)
     if (!dryRun) {
       w.ih = true
