@@ -791,7 +791,20 @@ if (problems.length) {
   process.exit(1)
 }
 
-const json = JSON.stringify(bundle)
+// Typography rule: no em/en dashes in user-visible text — normalize every
+// string in the bundle to plain hyphens (spaced em-dash → " - ").
+const deDash = (v) => {
+  if (typeof v === 'string') return v.replace(/\s*—\s*/g, ' - ').replace(/–/g, '-')
+  if (Array.isArray(v)) return v.map(deDash)
+  if (v && typeof v === 'object') {
+    const out = {}
+    for (const [k, val] of Object.entries(v)) out[k] = deDash(val)
+    return out
+  }
+  return v
+}
+
+const json = JSON.stringify(deDash(bundle))
 writeFileSync(OUT_FILE, json)
 console.log(`\n✓ Wrote ${OUT_FILE} (${Math.round(Buffer.byteLength(json) / 1024)} KB)`)
 process.exit(0)

@@ -40,7 +40,7 @@ export default function GamesHero() {
             className="games-rise games-rise-3 mt-5 max-w-xl text-[15px] leading-relaxed"
             style={{ color: 'rgba(244,246,242,0.72)' }}
           >
-            Every individual event in CrossFit Games history — {FIRST_YEAR} to {LAST_YEAR}.
+            Every individual event in CrossFit Games history, {FIRST_YEAR} to {LAST_YEAR}.
             From a dirt hillside in Aromas to stadium floodlights: researched, verified,
             categorized, and analyzed, year by year.
           </p>

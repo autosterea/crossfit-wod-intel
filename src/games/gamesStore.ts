@@ -8,12 +8,12 @@ export interface GamesRoute {
 }
 
 const TITLES: Record<GamesView, string> = {
-  home: 'CrossFit Games Almanac — by Persistence Athletics',
+  home: 'CrossFit Games Almanac - by Persistence Athletics',
   year: 'CrossFit Games Almanac',
-  evolution: 'Evolution — CrossFit Games Almanac',
-  movements: 'Movements — CrossFit Games Almanac',
-  lore: 'Records & Lore — CrossFit Games Almanac',
-  capacity: 'Capacity Lab — CrossFit Games Almanac',
+  evolution: 'Evolution - CrossFit Games Almanac',
+  movements: 'Movements - CrossFit Games Almanac',
+  lore: 'Records & Lore - CrossFit Games Almanac',
+  capacity: 'Capacity Lab - CrossFit Games Almanac',
 }
 
 export function parseGamesPath(pathname: string): GamesRoute {
@@ -44,7 +44,7 @@ interface GamesStore {
 const applyTitle = (route: GamesRoute) => {
   document.title =
     route.view === 'year' && route.year
-      ? `${route.year} CrossFit Games — Almanac by Persistence Athletics`
+      ? `${route.year} CrossFit Games - Almanac by Persistence Athletics`
       : TITLES[route.view]
 }
 

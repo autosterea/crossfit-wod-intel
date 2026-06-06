@@ -62,7 +62,7 @@ function EventList({ stat }: { stat: GamesMovementStat }) {
             Event {String(ev.order).padStart(2, '0')}
           </span>
           <span className="text-[var(--text-primary)] truncate group-hover:text-[#91C640] transition-colors">
-            — {ev.name}
+            - {ev.name}
           </span>
         </button>
       ))}
@@ -86,7 +86,7 @@ const MovementCard = memo(function MovementCard({
 }) {
   const exclusive = stat.wodId === null
   const yearRange =
-    stat.firstYear === stat.lastYear ? `${stat.firstYear} only` : `${stat.firstYear}–${stat.lastYear}`
+    stat.firstYear === stat.lastYear ? `${stat.firstYear} only` : `${stat.firstYear}-${stat.lastYear}`
 
   return (
     <div

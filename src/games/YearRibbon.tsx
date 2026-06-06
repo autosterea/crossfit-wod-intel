@@ -32,7 +32,7 @@ export default function YearRibbon() {
               onClick={() => navigate({ view: 'year', year: y.year })}
               className="games-ribbon-year shrink-0 px-3 sm:px-3.5 py-2.5 text-[14px]"
               style={{ color: active ? '#91C640' : 'var(--text-tertiary)' }}
-              title={`${y.year} — ${y.venue ?? ''}`}
+              title={`${y.year} - ${y.venue ?? ''}`}
             >
               {String(y.year).slice(2) === '07' || y.year % 5 === 0 ? y.year : `'${String(y.year).slice(2)}`}
             </button>

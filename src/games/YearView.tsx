@@ -69,8 +69,8 @@ function EventCard({ ev, index }: { ev: GamesEvent; index: number }) {
                   {ev.loads.map((l, i) => (
                     <tr key={i} className="border-t border-[var(--panel-border-subtle)]">
                       <td className="py-1.5 pr-4 text-[var(--text-secondary)]">{l.item}</td>
-                      <td className="py-1.5 pr-4 font-medium text-[var(--text-primary)]">{l.men ?? '—'}</td>
-                      <td className="py-1.5 font-medium text-[var(--text-primary)]">{l.women ?? '—'}</td>
+                      <td className="py-1.5 pr-4 font-medium text-[var(--text-primary)]">{l.men ?? '-'}</td>
+                      <td className="py-1.5 font-medium text-[var(--text-primary)]">{l.women ?? '-'}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -113,7 +113,7 @@ function EventCard({ ev, index }: { ev: GamesEvent; index: number }) {
                 <span className="games-condensed uppercase tracking-[0.1em] text-[10.5px] text-[var(--text-muted)] font-semibold">
                   Men&nbsp;
                 </span>
-                <span className="text-[var(--text-primary)] font-medium">{ev.winnerMen ?? '—'}</span>
+                <span className="text-[var(--text-primary)] font-medium">{ev.winnerMen ?? '-'}</span>
                 {ev.winningScoreMen && (
                   <span className="text-[#91C640] font-mono text-[12px]"> · {ev.winningScoreMen}</span>
                 )}
@@ -122,7 +122,7 @@ function EventCard({ ev, index }: { ev: GamesEvent; index: number }) {
                 <span className="games-condensed uppercase tracking-[0.1em] text-[10.5px] text-[var(--text-muted)] font-semibold">
                   Women&nbsp;
                 </span>
-                <span className="text-[var(--text-primary)] font-medium">{ev.winnerWomen ?? '—'}</span>
+                <span className="text-[var(--text-primary)] font-medium">{ev.winnerWomen ?? '-'}</span>
                 {ev.winningScoreWomen && (
                   <span className="text-[#91C640] font-mono text-[12px]"> · {ev.winningScoreWomen}</span>
                 )}
@@ -159,7 +159,7 @@ function YearHeader({ y }: { y: GamesYear }) {
       <div className="relative">
         {era && (
           <div className="games-condensed uppercase tracking-[0.25em] text-[12px] font-semibold text-[#91C640]">
-            {era.name} · {era.range[0]}–{era.range[1]}
+            {era.name} · {era.range[0]}-{era.range[1]}
           </div>
         )}
         <h1 className="games-display text-5xl sm:text-7xl text-[var(--text-primary)] mt-2">
@@ -167,14 +167,14 @@ function YearHeader({ y }: { y: GamesYear }) {
         </h1>
         <div className="mt-3 text-[14px] text-[var(--text-secondary)]">
           {y.venue}
-          {y.city ? ` — ${y.city}${y.region ? `, ${y.region}` : ''}${y.country && y.country !== 'USA' ? `, ${y.country}` : ''}` : ''}
+          {y.city ? ` - ${y.city}${y.region ? `, ${y.region}` : ''}${y.country && y.country !== 'USA' ? `, ${y.country}` : ''}` : ''}
           {y.dates ? ` · ${y.dates}` : ''}
         </div>
 
         <div className="mt-5 flex flex-wrap gap-x-8 gap-y-3">
           <div>
             <div className="games-condensed uppercase tracking-[0.14em] text-[11px] text-[var(--text-muted)] font-semibold">
-              Champion — Men
+              Champion - Men
             </div>
             <div className="games-display text-xl text-[var(--text-primary)] mt-0.5">
               🏆 {y.championMen ?? 'Unknown'}
@@ -182,7 +182,7 @@ function YearHeader({ y }: { y: GamesYear }) {
           </div>
           <div>
             <div className="games-condensed uppercase tracking-[0.14em] text-[11px] text-[var(--text-muted)] font-semibold">
-              Champion — Women
+              Champion - Women
             </div>
             <div className="games-display text-xl text-[var(--text-primary)] mt-0.5">
               👑 {y.championWomen ?? 'Unknown'}
@@ -282,7 +282,7 @@ export default function YearView() {
       {online.length > 0 && (
         <section className="mb-10">
           <div className="games-condensed uppercase tracking-[0.2em] text-[13px] font-semibold text-[#60a5fa] mb-4">
-            Stage 1 — Online ({online.length} events)
+            Stage 1 - Online ({online.length} events)
           </div>
           <div className="space-y-4">
             {online.map((ev, i) => (

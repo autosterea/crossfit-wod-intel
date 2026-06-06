@@ -46,13 +46,13 @@ function YearCard({ y, index }: { y: GamesYear; index: number }) {
 
       <div className="mt-2 text-[12.5px] text-[var(--text-secondary)] leading-snug">
         {y.venue}
-        {y.city ? ` — ${y.city}${y.region ? `, ${y.region}` : ''}` : ''}
+        {y.city ? ` - ${y.city}${y.region ? `, ${y.region}` : ''}` : ''}
       </div>
 
       <div className="mt-3 flex items-center gap-2 text-[12px]">
-        <span className="text-[#f59e0b]" title="Men's champion">🏆 {y.championMen ?? '—'}</span>
+        <span className="text-[#f59e0b]" title="Men's champion">🏆 {y.championMen ?? '-'}</span>
         <span className="text-[var(--text-muted)]">·</span>
-        <span className="text-[#91C640]" title="Women's champion">👑 {y.championWomen ?? '—'}</span>
+        <span className="text-[#91C640]" title="Women's champion">👑 {y.championWomen ?? '-'}</span>
       </div>
 
       {y.yearSummary && (
@@ -82,7 +82,7 @@ export default function TimelineView() {
                   {era.name}
                 </h2>
                 <span className="games-condensed uppercase tracking-[0.15em] text-[13px] font-semibold text-[#91C640]">
-                  {era.range[0]}–{era.range[1]}
+                  {era.range[0]}-{era.range[1]}
                 </span>
               </div>
               <div className="games-era-rule mt-3 mb-4 max-w-md" />

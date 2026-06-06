@@ -1376,5 +1376,66 @@
         ]
       }
     ]
+  },
+  "workModel": {
+    "assumptions": [
+      "Reference body mass: men 195 lb (88.5 kg), women 145 lb (65.8 kg); identical within a division, so athlete comparisons inside an event depend only on time.",
+      "Lifts and gymnastics: external mechanical work (load and/or body mass x displacement) at 20% mechanical efficiency.",
+      "Running: 1.0 kcal per kg per km. Erg calories: displayed cal = kcal (the Concept2 calorie display is itself a metabolic estimate). Rowing: 70/60 J per m mechanical at 21% efficiency.",
+      "Loaded carries: load x distance x 0.04 horizontal-cost proxy. Yoke load (unpublished) estimated at 600/400 lb.",
+      "Event 5 (1RM Back Squat) is excluded from the power curve: no time component. Shown as peak strength.",
+      "The external-work method under-measures high-turnover gymnastics and jump-rope (double-under crossovers, fast toes-to-bars, wall walks) and grip/balance/isometric work. So \"All Crossed Up\" and \"Climbing Couplet\" read low in absolute watts despite being hard, fast efforts. That gap is a known limit of the model, not a fitness gap; those events are marked under-measured.",
+      "Capped scores (CAP+n): work scaled by completed fraction, time set to the estimated cap; flagged as estimates.",
+      "Erg devices (ski, bike, echo) use different internal calorie algorithms, so cross-device absolute comparisons are looser than within-event comparisons."
+    ],
+    "underMeasured": [
+      "2025-02",
+      "2025-03"
+    ],
+    "capEstimates": {
+      "2025-03": {
+        "capSecMen": 600,
+        "capSecWomen": 780,
+        "totalUnits": 20
+      }
+    },
+    "events": {
+      "2025-01": {
+        "workKjMen": 4575,
+        "workKjWomen": 3516
+      },
+      "2025-02": {
+        "workKjMen": 243,
+        "workKjWomen": 177
+      },
+      "2025-03": {
+        "workKjMen": 215,
+        "workKjWomen": 150
+      },
+      "2025-04": {
+        "workKjMen": 922,
+        "workKjWomen": 658
+      },
+      "2025-06": {
+        "workKjMen": 364,
+        "workKjWomen": 299
+      },
+      "2025-07": {
+        "workKjMen": 409,
+        "workKjWomen": 334
+      },
+      "2025-08": {
+        "workKjMen": 482,
+        "workKjWomen": 379
+      },
+      "2025-09": {
+        "workKjMen": 281,
+        "workKjWomen": 190
+      },
+      "2025-10": {
+        "workKjMen": 565,
+        "workKjWomen": 404
+      }
+    }
   }
 }

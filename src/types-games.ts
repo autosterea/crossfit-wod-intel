@@ -147,6 +147,17 @@ export interface GamesAthleteResult {
   events: GamesAthleteEventResult[]
 }
 
+export interface GamesWorkModel {
+  /** Documented accounting assumptions shown in the methodology */
+  assumptions: string[]
+  /** Event ids whose ABSOLUTE watts under-count (high-turnover gymnastics/rope) */
+  underMeasured?: string[]
+  /** Events with unpublished caps: estimated cap seconds + total work units */
+  capEstimates?: Record<string, { capSecMen: number; capSecWomen: number; totalUnits: number }>
+  /** Estimated total energy demand per event (kJ, metabolic-equivalent) */
+  events: Record<string, { workKjMen: number; workKjWomen: number }>
+}
+
 export interface GamesYearResults {
   year: number
   pointsSystem: string
@@ -155,6 +166,7 @@ export interface GamesYearResults {
     men: GamesAthleteResult[]
     women: GamesAthleteResult[]
   }
+  workModel?: GamesWorkModel
 }
 
 export interface GamesData {

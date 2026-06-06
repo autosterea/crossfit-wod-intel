@@ -37,9 +37,9 @@ export const MODALITY_LABELS: Record<string, string> = {
 
 export const TD_LABELS: Record<string, string> = {
   sprint: 'Sprint <5:00',
-  short: 'Short 5–10',
-  medium: 'Medium 10–20',
-  long: 'Long 20–40',
+  short: 'Short 5-10',
+  medium: 'Medium 10-20',
+  long: 'Long 20-40',
   endurance: 'Endurance 40+',
 }
 
