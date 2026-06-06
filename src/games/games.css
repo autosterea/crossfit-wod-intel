@@ -178,3 +178,126 @@
 
 /* ---------- Scroll margin for anchored year sections ---------- */
 .games-anchor { scroll-margin-top: 110px; }
+
+/* ================= Capacity Lab (premium) ================= */
+
+/* Hero: dark broadcast panel, stays dark in both themes */
+.cap-hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+  background:
+    radial-gradient(120% 120% at 88% -20%, rgba(1, 150, 68, 0.34) 0%, transparent 52%),
+    radial-gradient(90% 90% at 8% 120%, rgba(145, 198, 64, 0.16) 0%, transparent 58%),
+    linear-gradient(160deg, #0b0e10 0%, #07090b 100%);
+  border: 1px solid rgba(145, 198, 64, 0.22);
+}
+.cap-hero-ink { color: #f4f6f2; }
+.cap-hero-dim { color: rgba(244, 246, 242, 0.66); }
+.cap-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+
+/* Big score numeral */
+.cap-bignum {
+  font-family: var(--games-display);
+  line-height: 0.86;
+  letter-spacing: 0.01em;
+  background: linear-gradient(180deg, #b6e36a 0%, #91c640 55%, #019644 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Premium analytic card */
+.cap-card {
+  position: relative;
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 16px;
+  transition: border-color 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+}
+.cap-card:hover {
+  border-color: color-mix(in srgb, #91c640 40%, var(--panel-border));
+  box-shadow: 0 10px 34px -18px rgba(1, 150, 68, 0.5);
+}
+
+/* Leaderboard row */
+.cap-rank-row {
+  position: relative;
+  display: grid;
+  align-items: center;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
+  cursor: pointer;
+}
+.cap-rank-row:hover {
+  background: var(--panel-bg-2);
+  border-color: var(--panel-border);
+}
+.cap-rank-row[data-on='true'] {
+  background: color-mix(in srgb, #91c640 8%, var(--panel-bg));
+  border-color: color-mix(in srgb, #91c640 35%, transparent);
+}
+
+/* Score track + fill */
+.cap-track {
+  position: relative;
+  height: 26px;
+  border-radius: 8px;
+  background: var(--panel-bg-2);
+  overflow: hidden;
+}
+.cap-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 8px;
+  transform-origin: left;
+  animation: cap-grow 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes cap-grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@media (prefers-reduced-motion: reduce) { .cap-fill { animation: none; } }
+
+/* Head-to-head vs token */
+.cap-vs {
+  font-family: var(--games-display);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #0c2e1c, #07090b);
+  border: 1px solid rgba(145, 198, 64, 0.4);
+  color: #91c640;
+}
+
+/* Quadrant labels */
+.cap-quad-label {
+  font-family: var(--games-condensed);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 10.5px;
+  font-weight: 600;
+  opacity: 0.55;
+}
+
+/* Metabolic-pathway band tint behind the power curve legend */
+.cap-energy-band { font-family: var(--games-condensed); letter-spacing: 0.08em; text-transform: uppercase; }
+
+/* Section number tag */
+.cap-sec-no {
+  font-family: var(--games-display);
+  color: transparent;
+  -webkit-text-stroke: 1px color-mix(in srgb, #91c640 55%, transparent);
+}
