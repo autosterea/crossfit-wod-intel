@@ -1,7 +1,7 @@
 {
   "year": 2026,
   "status": "open-qf",
-  "note": "Top 30 of the 2026 Open per division, analyzed across the Open (3 tests) and Quarterfinals (4 tests). Placements are re-ranked within this 30-athlete cohort. Projected Form combines all 7 tests as a data-driven proxy for Games form. Semifinals (decentralized + online June 11-15) and the actual Games (July 24-26, San Jose) follow as live releases.",
+  "note": "Top 30 of the 2026 Open per division, analyzed across the Open (3 tests) and Quarterfinals (4 tests). Placements are re-ranked within this 30-athlete cohort. Projected Form combines all 7 tests as a data-driven proxy for Games form. The in-person Semifinals (~10 licensed events, Apr 17 - Jun 1) qualified 23 per division; the online Individual Semifinal (Jun 11-15) decides the final 7 (field locks ~Jun 16). The actual Games (July 24-26, San Jose) follow as live releases.",
   "stages": {
     "open": {
       "label": "Open",
