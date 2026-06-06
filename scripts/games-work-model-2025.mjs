@@ -116,7 +116,13 @@ const workModel = {
   ],
   // Events whose ABSOLUTE watts under-count real metabolic cost (see assumption
   // above). Within-event athlete comparisons stay valid; the bars are marked.
+  // These are skill/grip-limited, not engine-limited, so they are shown as dots
+  // but excluded from the Critical Power fit.
   underMeasured: ['2025-02', '2025-03'],
+  // The Critical Power model (P = CP + W'/t) is only valid for all-out efforts
+  // of roughly 2-20 min. Events outside this window (a 46-min endurance piece,
+  // or sub-2-min) are plotted as dots but excluded from each athlete's fit.
+  cpFitWindowSec: [120, 1800],
   capEstimates: {
     // E3 had an unpublished running cap; estimated from slowest finishers
     '2025-03': { capSecMen: 600, capSecWomen: 780, totalUnits: 20 },

@@ -152,6 +152,8 @@ export interface GamesWorkModel {
   assumptions: string[]
   /** Event ids whose ABSOLUTE watts under-count (high-turnover gymnastics/rope) */
   underMeasured?: string[]
+  /** [min, max] seconds: Critical Power fit only uses events in this window */
+  cpFitWindowSec?: [number, number]
   /** Events with unpublished caps: estimated cap seconds + total work units */
   capEstimates?: Record<string, { capSecMen: number; capSecWomen: number; totalUnits: number }>
   /** Estimated total energy demand per event (kJ, metabolic-equivalent) */
