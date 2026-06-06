@@ -81,7 +81,9 @@ html, body, #root {
   color: var(--text-primary);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+  /* clip (not hidden): hidden creates a scroll container on html/body which
+     silently disables position:sticky for the whole page (Games top bar/ribbon) */
+  overflow-x: clip;
   transition: background-color 200ms ease, color 200ms ease;
 }
 

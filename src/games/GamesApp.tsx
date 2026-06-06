@@ -1,0 +1,199 @@
+import { Suspense, lazy, useEffect, Component, type ReactNode } from 'react'
+import './games.css'
+import ThemeToggle from '../components/ThemeToggle'
+import { useGamesStore } from './gamesStore'
+import { G } from './gamesData'
+import YearRibbon from './YearRibbon'
+import GamesHero from './GamesHero'
+import TimelineView from './TimelineView'
+
+const YearView = lazy(() => import('./YearView'))
+const EvolutionView = lazy(() => import('./EvolutionView'))
+const MovementsView = lazy(() => import('./MovementsView'))
+const LoreView = lazy(() => import('./LoreView'))
+
+class ViewErrorBoundary extends Component<{ children: ReactNode; name: string }, { error: Error | null }> {
+  state = { error: null as Error | null }
+  static getDerivedStateFromError(error: Error) {
+    return { error }
+  }
+  render() {
+    if (this.state.error) {
+      return (
+        <div className="p-6 my-8 bg-red-500/10 border border-red-500/30 rounded-xl">
+          <h3 className="text-red-400 font-bold text-sm mb-2">Error in {this.props.name}</h3>
+          <pre className="text-xs text-red-600/80 whitespace-pre-wrap">{this.state.error.message}</pre>
+          <button
+            onClick={() => this.setState({ error: null })}
+            className="mt-3 px-3 py-1 text-xs bg-red-500/20 text-red-400 rounded hover:bg-red-500/30"
+          >
+            Retry
+          </button>
+        </div>
+      )
+    }
+    return this.props.children
+  }
+}
+
+const NAV: { view: 'home' | 'evolution' | 'movements' | 'lore'; label: string }[] = [
+  { view: 'home', label: 'Timeline' },
+  { view: 'evolution', label: 'Evolution' },
+  { view: 'movements', label: 'Movements' },
+  { view: 'lore', label: 'Records & Lore' },
+]
+
+function TopBar() {
+  const route = useGamesStore((s) => s.route)
+  const navigate = useGamesStore((s) => s.navigate)
+  return (
+    <header className="games-topbar sticky top-0 z-40">
+      <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between gap-3">
+        <button
+          onClick={() => navigate({ view: 'home', year: null })}
+          className="flex items-center gap-2.5 shrink-0"
+          aria-label="Games Almanac home"
+        >
+          <div className="w-8 h-8 rounded-full bg-white p-0.5 shrink-0">
+            <img src="/pa-logo.png" alt="Persistence Athletics" className="w-full h-full object-contain rounded-full" />
+          </div>
+          <div className="games-display text-lg text-[var(--text-primary)] leading-none mt-0.5">
+            Games <span className="text-[#91C640]">Almanac</span>
+          </div>
+        </button>
+
+        <nav className="hidden md:flex items-center gap-1">
+          {NAV.map((n) => (
+            <button
+              key={n.view}
+              onClick={() => navigate({ view: n.view, year: null })}
+              className="games-condensed uppercase tracking-[0.1em] text-[13px] font-semibold px-3 py-1.5 rounded-lg transition-colors"
+              style={{
+                color: route.view === n.view ? '#91C640' : 'var(--text-secondary)',
+                background: route.view === n.view ? 'rgba(145,198,64,0.1)' : 'transparent',
+              }}
+            >
+              {n.label}
+            </button>
+          ))}
+        </nav>
+
+        <div className="flex items-center gap-2 shrink-0">
+          <a
+            href="/"
+            className="games-condensed hidden sm:block uppercase tracking-[0.1em] text-[12px] font-semibold px-3 py-1.5 rounded-lg border border-[var(--panel-border)] text-[var(--text-secondary)] hover:border-[#91C640]/50 hover:text-[#91C640] transition-colors"
+          >
+            Daily WOD Intel →
+          </a>
+          <ThemeToggle size="md" />
+        </div>
+      </div>
+
+      {/* Mobile nav row */}
+      <div className="md:hidden border-t border-[var(--panel-border-subtle)]">
+        <div className="flex items-center justify-around h-10">
+          {NAV.map((n) => (
+            <button
+              key={n.view}
+              onClick={() => navigate({ view: n.view, year: null })}
+              className="games-condensed uppercase tracking-[0.08em] text-[12px] font-semibold px-2"
+              style={{ color: route.view === n.view ? '#91C640' : 'var(--text-secondary)' }}
+            >
+              {n.label}
+            </button>
+          ))}
+        </div>
+      </div>
+    </header>
+  )
+}
+
+function GamesFooter() {
+  return (
+    <footer className="mt-16 mb-8 pt-6 border-t border-[var(--panel-border)] px-4">
+      <div className="max-w-6xl mx-auto text-center space-y-3">
+        <div className="flex items-center justify-center gap-2.5">
+          <div className="w-8 h-8 rounded-full bg-white p-1 shrink-0">
+            <img src="/pa-logo.png" alt="Persistence Athletics" className="w-full h-full object-contain rounded-full" />
+          </div>
+          <div className="text-left">
+            <p className="text-sm font-semibold text-[var(--text-primary)]">
+              A <a href="https://persistenceathletics.com" target="_blank" rel="noopener noreferrer" className="text-[#91C640] hover:text-[#a8d35e]">Persistence Athletics</a> tool
+            </p>
+            <p className="text-[10px] text-[var(--text-muted)]">Built by Ravikant Dewangan, Head Coach (MS S&C, CCFT)</p>
+          </div>
+        </div>
+        <div className="flex items-center justify-center gap-2 text-[10px] text-[var(--text-muted)]">
+          <span>Platform by</span>
+          <a href="https://autosterea.com" target="_blank" rel="noopener noreferrer" className="hover:text-[var(--text-tertiary)] transition-colors">Autosterea</a>
+          <span>|</span>
+          <a href="/" className="hover:text-[var(--text-tertiary)] transition-colors">Daily WOD Intelligence</a>
+        </div>
+        <div className="text-[11px] sm:text-[10px] text-[var(--text-muted)] leading-relaxed max-w-xl mx-auto">
+          <p>
+            Event data researched from public archives (games.crossfit.com, Wikipedia, contemporary reporting). CrossFit and the CrossFit Games are registered trademarks of CrossFit, LLC. This project is not affiliated with, endorsed by, or sponsored by CrossFit, LLC. Data is presented for educational and analytical purposes only.
+          </p>
+        </div>
+      </div>
+    </footer>
+  )
+}
+
+function ViewLoading() {
+  return (
+    <div className="flex items-center justify-center min-h-[40vh]">
+      <div className="w-10 h-10 border-2 border-[#91C640]/30 border-t-[#91C640] rounded-full animate-spin" />
+    </div>
+  )
+}
+
+function EmptyDataset() {
+  return (
+    <div className="max-w-xl mx-auto text-center py-24 px-4">
+      <div className="games-display text-3xl text-[var(--text-primary)] mb-3">Dataset building</div>
+      <p className="text-sm text-[var(--text-secondary)]">
+        The Games archive is being compiled. Check back shortly.
+      </p>
+    </div>
+  )
+}
+
+export default function GamesApp() {
+  const route = useGamesStore((s) => s.route)
+  const syncFromLocation = useGamesStore((s) => s.syncFromLocation)
+
+  useEffect(() => {
+    const onPop = () => syncFromLocation()
+    window.addEventListener('popstate', onPop)
+    syncFromLocation()
+    return () => window.removeEventListener('popstate', onPop)
+  }, [syncFromLocation])
+
+  const empty = G.years.length === 0
+
+  return (
+    <div className="min-h-screen bg-[var(--app-bg)]">
+      <TopBar />
+      {empty ? (
+        <EmptyDataset />
+      ) : (
+        <>
+          {route.view === 'home' && <GamesHero />}
+          <YearRibbon />
+          <main className="max-w-6xl mx-auto px-4 pb-8">
+            <Suspense fallback={<ViewLoading />}>
+              <ViewErrorBoundary name={route.view} key={route.view === 'year' ? `year-${route.year}` : route.view}>
+                {route.view === 'home' && <TimelineView />}
+                {route.view === 'year' && <YearView key={route.year} />}
+                {route.view === 'evolution' && <EvolutionView />}
+                {route.view === 'movements' && <MovementsView />}
+                {route.view === 'lore' && <LoreView />}
+              </ViewErrorBoundary>
+            </Suspense>
+          </main>
+        </>
+      )}
+      <GamesFooter />
+    </div>
+  )
+}

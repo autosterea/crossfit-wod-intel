@@ -182,6 +182,37 @@ The **Today's WOD** tab (`DailyWod.tsx`) is the primary daily entry point:
 - Similar workouts via Jaccard similarity
 - Named WOD / Hero / Benchmark badges
 
+## Games Almanac (`/games`)
+
+A standalone page (CrossFit Games history 2007–2025, individual elite
+division) served by the same SPA bundle. `src/main.tsx` branches on
+`location.pathname` — `/games`* renders the lazy `src/games/GamesApp.tsx`
+(its own chunk; Anton/Barlow Condensed fonts and `games-data.json` load
+only on that route). Caddy's existing `try_files {path} /index.html`
+covers the routing — no server config needed.
+
+Data pipeline (one-time research, manually re-runnable):
+- **Raw research files:** `src/data/games/raw/<year>.json` — one per Games
+  year, schema documented in `src/data/games/SCHEMA.md`. Produced by a
+  multi-agent research workflow (researcher → adversarial verifier → fixer
+  per year, 2026-06); source conflicts are recorded in each event's
+  `notes` rather than guessed. 221 events total.
+- **Bundle:** `npm run build:games` runs `scripts/build-games-data.mjs`,
+  which validates raw files, normalizes movement names via a synonym
+  table (≈100 canonical Games movements, each mapped to a daily-WOD
+  `wodId` where one exists), assigns eras (ranch/carson/madison/touring),
+  computes per-year + per-era aggregates, named-WOD crossovers, champions
+  and records, and writes `src/data/games-data.json`. Unmapped movement
+  names are printed — extend SYNONYMS in the script, never edit the
+  bundle by hand. `--check` validates without writing.
+- **Views:** `src/games/` — TimelineView (era-chaptered year cards),
+  YearView (almanac event cards), EvolutionView (Recharts trends),
+  MovementsView (index + sparklines), LoreView (records, champions wall,
+  benchmark crossovers). Routing state in `gamesStore.ts` (real paths via
+  pushState: `/games/2014`, `/games/evolution`…).
+- To add the 2026 Games later: write `raw/2026.json` per SCHEMA.md, run
+  `npm run build:games`, commit both files.
+
 ## Classification (scraper)
 
 `scripts/fetch-daily-wod.mjs` extracts a workout from the crossfit.com page

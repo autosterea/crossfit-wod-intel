@@ -11,7 +11,8 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "deploy": "npm run build && npx gh-pages -d dist"
+    "deploy": "npm run build && npx gh-pages -d dist",
+    "build:games": "node scripts/build-games-data.mjs"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.7",

@@ -1,0 +1,180 @@
+/* CrossFit Games almanac — design system. Loaded only with the /games chunk. */
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@400;500;600;700&display=swap');
+
+:root {
+  --games-display: 'Anton', 'Poppins', sans-serif;
+  --games-condensed: 'Barlow Condensed', 'Poppins', sans-serif;
+  /* Hero stays dark in both themes — deliberate broadcast-floodlight look */
+  --games-hero-bg: #07090b;
+  --games-hero-ink: #f4f6f2;
+}
+
+/* ---------- Display type ---------- */
+.games-display {
+  font-family: var(--games-display);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  line-height: 0.92;
+  text-transform: uppercase;
+}
+.games-condensed {
+  font-family: var(--games-condensed);
+  letter-spacing: 0.04em;
+}
+
+/* Giant outlined year numerals */
+.games-year-ghost {
+  font-family: var(--games-display);
+  -webkit-text-stroke: 1.5px color-mix(in srgb, var(--text-primary) 22%, transparent);
+  color: transparent;
+  user-select: none;
+}
+
+/* ---------- Hero atmosphere ---------- */
+.games-hero {
+  background:
+    radial-gradient(120% 90% at 75% -10%, rgba(1, 150, 68, 0.32) 0%, transparent 55%),
+    radial-gradient(80% 70% at 15% 110%, rgba(145, 198, 64, 0.16) 0%, transparent 60%),
+    var(--games-hero-bg);
+  position: relative;
+  overflow: hidden;
+}
+.games-hero::before {
+  /* floodlight beams */
+  content: '';
+  position: absolute;
+  inset: -20% -10%;
+  background:
+    linear-gradient(115deg, transparent 42%, rgba(145, 198, 64, 0.07) 46%, transparent 52%),
+    linear-gradient(65deg, transparent 55%, rgba(244, 246, 242, 0.05) 60%, transparent 67%);
+  pointer-events: none;
+}
+.games-grain::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+  pointer-events: none;
+  mix-blend-mode: overlay;
+}
+
+/* ---------- Entrance choreography ---------- */
+@keyframes games-rise {
+  from { opacity: 0; transform: translateY(22px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.games-rise {
+  opacity: 0;
+  animation: games-rise 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.games-rise-1 { animation-delay: 0.05s; }
+.games-rise-2 { animation-delay: 0.16s; }
+.games-rise-3 { animation-delay: 0.27s; }
+.games-rise-4 { animation-delay: 0.38s; }
+.games-rise-5 { animation-delay: 0.5s; }
+
+@keyframes games-banner-drop {
+  from { opacity: 0; transform: translateY(-14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.games-banner-drop { animation: games-banner-drop 0.5s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .games-rise, .games-banner-drop { animation: none; opacity: 1; transform: none; }
+}
+
+/* ---------- Year ribbon ---------- */
+.games-ribbon {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.games-ribbon::-webkit-scrollbar { display: none; }
+
+.games-ribbon-year {
+  font-family: var(--games-condensed);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  position: relative;
+  transition: color 160ms ease, background 160ms ease;
+}
+.games-ribbon-year[data-active='true']::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -1px;
+  width: 70%;
+  height: 2px;
+  background: #91c640;
+  box-shadow: 0 0 10px rgba(145, 198, 64, 0.7);
+}
+
+/* ---------- Almanac event card ---------- */
+.games-event-card {
+  position: relative;
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 14px;
+  overflow: hidden;
+  transition: border-color 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+}
+.games-event-card:hover {
+  border-color: color-mix(in srgb, #91c640 45%, var(--panel-border));
+  box-shadow: 0 8px 28px -14px rgba(1, 150, 68, 0.4);
+}
+.games-event-order {
+  font-family: var(--games-display);
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1.2px color-mix(in srgb, var(--text-primary) 30%, transparent);
+}
+
+/* Workout description card — official-card monospace look */
+.games-workout-sheet {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 12.5px;
+  line-height: 1.75;
+  white-space: pre-wrap;
+  background: var(--code-bg);
+  border-left: 3px solid #019644;
+  border-radius: 0 10px 10px 0;
+}
+
+/* ---------- Era chapter dividers ---------- */
+.games-era-rule {
+  background: linear-gradient(90deg, #019644, #91c640 45%, transparent);
+  height: 2px;
+}
+
+/* ---------- Champion banner (pennant) ---------- */
+.games-banner {
+  clip-path: polygon(0 0, 100% 0, 100% 82%, 50% 100%, 0 82%);
+  background: linear-gradient(180deg, #0c2e1c 0%, #07090b 100%);
+  border-top: 3px solid #91c640;
+}
+:root[data-theme='light'] .games-banner {
+  background: linear-gradient(180deg, #0b3d24 0%, #123524 100%);
+}
+
+/* ---------- Sticky top bar ---------- */
+.games-topbar {
+  backdrop-filter: blur(14px);
+  background: color-mix(in srgb, var(--app-bg) 82%, transparent);
+  border-bottom: 1px solid var(--panel-border-subtle);
+}
+
+/* ---------- Chips ---------- */
+.games-chip {
+  font-family: var(--games-condensed);
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  font-size: 11px;
+  line-height: 1;
+  padding: 5px 9px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+/* ---------- Scroll margin for anchored year sections ---------- */
+.games-anchor { scroll-margin-top: 110px; }

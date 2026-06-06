@@ -1,0 +1,727 @@
+{
+  "year": 2022,
+  "venue": "Alliant Energy Center",
+  "city": "Madison",
+  "region": "Wisconsin",
+  "country": "USA",
+  "dates": "August 3-7, 2022",
+  "championMen": "Justin Medeiros",
+  "championWomen": "Tia-Clair Toomey",
+  "fieldMen": 40,
+  "fieldWomen": 40,
+  "formatNotes": "40 men and 40 women qualified through the Open, Quarterfinals, and Semifinals (plus the Last-Chance Qualifier); there were no mid-competition cuts. The 2022 NOBULL CrossFit Games were Adrian Bozman's first as Director of Competition after Dave Castro's removal. Thirteen named tests produced FOURTEEN scored events: Shuttle to Overhead was scored as two separate 100-point events (2A = total running time, 2B = total jerks), so the official event numbering runs 1, 2A, 2B, 3-13 and the maximum possible score was 1,400 points on the standard 100-point Games table. Severe storms on Wednesday, Aug. 3 forced an evacuation of the outdoor venues and pushed Shuttle to Overhead from Wednesday afternoon to Thursday, so the chronological order of contest differs from the official event numbers (Events 3 and 4 were contested Wednesday night before Event 2). Rain on the final morning also forced the legless rope climbs to be cut from The Alpaca. Justin Medeiros (1,184 points) repeated without winning a single event, the first male champion to do so since 2007, ahead of Roman Khrennikov (1,157) and Ricky Garard (1,068). Tia-Clair Toomey (1,158) won a record sixth consecutive title ahead of 18-year-old Mal O'Brien (1,045), the youngest individual podium finisher ever, and Laura Horvath (981).",
+  "yearSummary": "Adrian Bozman's first Games as competition director leaned hard into novelty and strongman flavor: pig flips, a 1-rep-max sandbag-to-shoulder ladder, jerry-bag and Husafell carries, a kettlebell-loaded sled, parallel-bar traverse dips, block deficit handstand push-ups, and the brutal double-under crossovers that wrecked the Skill Speed Medley final all appeared, and The Capitol sent athletes on a point-to-point road race that finished on the steps of the Wisconsin State Capitol. Weather repeatedly intervened, postponing Shuttle to Overhead by a day and stripping the rope climbs out of The Alpaca. Justin Medeiros defended his title on pure consistency, becoming the first men's champion since James FitzGerald in 2007 to win without taking a single event, while Roman Khrennikov, finally able to enter the U.S., pushed him to the final day. Tia-Clair Toomey claimed a record sixth straight title, with teenage phenom Mal O'Brien second and Laura Horvath winning back-to-back events on the final day to grab third. Nick Mathew and Emma Lawson were named the Games' first co-Rookies of the Year.",
+  "sources": [
+    "https://games.crossfit.com/workouts/games/2022",
+    "https://games.crossfit.com/workouts/games/2022?division=1",
+    "https://en.wikipedia.org/wiki/2022_CrossFit_Games",
+    "https://breakingmuscle.com/2022-crossfit-games-results/",
+    "https://fitnessvolt.com/2022-crossfit-games-results-day-one/",
+    "https://www.boxrox.com/crossfit-games-individual-event-10-results/",
+    "https://wodwell.com/wod/back-nine/",
+    "https://wodwell.com/wod/hat-trick/",
+    "https://wodwell.com/wod/up-and-over/"
+  ],
+  "events": [
+    {
+      "id": "2022-01",
+      "order": 1,
+      "stage": "games",
+      "name": "Bike to Work",
+      "aka": "Event 1",
+      "day": "Wednesday",
+      "description": "For time:\n75 toes-to-bars\n5-mile bike (5 laps of a 1-mile course)\n75 chest-to-bar pull-ups\n5-mile bike (5 laps of a 1-mile course)\n\nThe bike course looped around the North Park grounds over grass, gravel, and concrete sections.\nTime cap: 50 minutes.",
+      "format": "for-time",
+      "scoring": "time",
+      "timeCapMin": 50,
+      "winnerMen": "Ricky Garard",
+      "winnerWomen": "Haley Adams",
+      "winningScoreMen": "36:47.61",
+      "winningScoreWomen": "38:23.74",
+      "movements": [
+        "Toes-to-Bar",
+        "Bike",
+        "Chest-to-Bar Pull-up"
+      ],
+      "loads": [],
+      "equipment": [
+        "pull-up bar",
+        "bike"
+      ],
+      "eventTypes": [
+        "bike",
+        "endurance",
+        "gymnastics"
+      ],
+      "modality": "MG",
+      "timeDomain": "long",
+      "loadLevel": "none",
+      "environment": "stadium",
+      "namedWod": null,
+      "firstAtGames": [],
+      "notes": "Opening event of the Games, contested at North Park before storms shut down the outdoor venues for the afternoon. Haley Adams took her first career Games event win, edging Tia-Clair Toomey by about 3 seconds; Jonne Koski was second to Garard by under 2 seconds in the men's race.",
+      "sources": [
+        "https://games.crossfit.com/workouts/games/2022",
+        "https://en.wikipedia.org/wiki/2022_CrossFit_Games",
+        "https://breakingmuscle.com/2022-crossfit-games-results/",
+        "https://fitnessvolt.com/2022-crossfit-games-results-day-one/"
+      ]
+    },
+    {
+      "id": "2022-02",
+      "order": 2,
+      "stage": "games",
+      "name": "Skill Speed Medley",
+      "aka": "Event 3",
+      "day": "Wednesday",
+      "description": "Three-round elimination race, 3-minute cap per round (3-3-3 minutes on the official card).\n\nOpening round (all 40 athletes, in heats):\n3 pegboard ascents (men) / 2 pegboard ascents (women)\n75 unbroken single-unders\n10 unbroken single-leg squats, left leg\n10 unbroken single-leg squats, right leg\nHandstand-walk obstacle course\nTop 20 advance.\n\nSemifinal round:\n2 strict pegboard ascents (men) / 1 strict pegboard ascent (women)\n50 unbroken double-unders\n10 unbroken single-leg squats, left leg\n10 unbroken single-leg squats, right leg\nHandstand-walk obstacle course with pirouette start\nTop 5 advance.\n\nFinal round:\n1 strict pegboard ascent\n25 double-under crossovers\n10 unbroken single-leg squats, left leg\n10 unbroken single-leg squats, right leg\nHandstand-walk obstacle course with low start\n\nFinal placement determined overall event ranking (placement points).",
+      "format": "other",
+      "scoring": "points",
+      "timeCapMin": 9,
+      "winnerMen": "Nick Mathew",
+      "winnerWomen": "Danielle Brandon",
+      "winningScoreMen": "1st (won 5-man final)",
+      "winningScoreWomen": "1st (won 5-woman final)",
+      "movements": [
+        "Pegboard Ascent",
+        "Single-Under",
+        "Double-Under",
+        "Double-Under Crossover",
+        "Pistol Squat",
+        "Handstand Walk"
+      ],
+      "loads": [],
+      "equipment": [
+        "pegboard",
+        "jump rope"
+      ],
+      "eventTypes": [
+        "skill",
+        "gymnastics",
+        "sprint"
+      ],
+      "modality": "MG",
+      "timeDomain": "short",
+      "loadLevel": "none",
+      "environment": "arena",
+      "namedWod": null,
+      "firstAtGames": [
+        "double-under crossover"
+      ],
+      "notes": "timeCapMin is the 9-minute total of the three round caps (3-3-3 minutes per round on the official card); rounds were separately clocked elimination heats, each an under-3-minute sprint effort. Contested Wednesday night in the Coliseum as official Event 3, before Event 2 (Shuttle to Overhead), which the storms had pushed to Thursday. The double-under crossovers in the final proved disastrous for most finalists: only two men completed the final-round course, and no woman got through the closing movements; Danielle Brandon won the women's final on furthest progression.",
+      "sources": [
+        "https://games.crossfit.com/workouts/games/2022",
+        "https://en.wikipedia.org/wiki/2022_CrossFit_Games",
+        "https://fitnessvolt.com/2022-crossfit-games-results-day-one/"
+      ]
+    },
+    {
+      "id": "2022-03",
+      "order": 3,
+      "stage": "games",
+      "name": "Elizabeth Elevated",
+      "aka": "Event 4",
+      "day": "Wednesday",
+      "description": "21-15-9-9-9 reps for time of:\nSquat cleans (135 lb men / 95 lb women)\nDips, with parallel-bar traverses\n\nEach round's dips had to be split into 3 unbroken sets, each set beginning with a traverse down the parallel bars (round of 21 = traverse + 7 dips, three times; round of 15 = 3 x 5; rounds of 9 = 3 x 3).\nTime cap: 10 minutes men / 12 minutes women.",
+      "format": "for-time",
+      "scoring": "time",
+      "timeCapMin": 12,
+      "winnerMen": "Patrick Vellner",
+      "winnerWomen": "Arielle Loewen",
+      "winningScoreMen": "8:42.16",
+      "winningScoreWomen": "10:17.06",
+      "movements": [
+        "Squat Clean",
+        "Dip",
+        "Parallel Bar Traverse"
+      ],
+      "loads": [
+        {
+          "item": "Squat clean",
+          "men": "135 lb",
+          "women": "95 lb"
+        }
+      ],
+      "equipment": [
+        "barbell",
+        "parallel bars"
+      ],
+      "eventTypes": [
+        "couplet",
+        "gymnastics"
+      ],
+      "modality": "GW",
+      "timeDomain": "short",
+      "loadLevel": "light",
+      "environment": "arena",
+      "namedWod": null,
+      "firstAtGames": [
+        "parallel bar traverse"
+      ],
+      "notes": "A twist on the classic benchmark Elizabeth (21-15-9 squat cleans and ring dips), swapping ring dips for parallel-bar dips broken up by bar traverses and extending the rep scheme. Time cap differed by division (men 10:00, women 12:00). Arielle Loewen took her first career Games event win. Closed out day 1 in the Coliseum.",
+      "sources": [
+        "https://games.crossfit.com/workouts/games/2022",
+        "https://en.wikipedia.org/wiki/2022_CrossFit_Games",
+        "https://fitnessvolt.com/2022-crossfit-games-results-day-one/"
+      ]
+    },
+    {
+      "id": "2022-04",
+      "order": 4,
+      "stage": "games",
+      "name": "Shuttle to Overhead A",
+      "aka": "Event 2A (run)",
+      "day": "Thursday",
+      "description": "On a 12-minute running clock, three rounds of shuttle runs plus max jerks (300 lb men / 200 lb women):\n0:00-2:00 - 400-m shuttle run, then max jerks in the remaining time\nRest 1 minute\n3:00-6:00 - 600-m shuttle run, then max jerks in the remaining time\nRest 2 minutes\n8:00-12:00 - 800-m shuttle run, then max jerks in the remaining time\n\nScored as two separate 100-point events. Event 2A score: the sum of the three shuttle-run times.",
+      "format": "interval",
+      "scoring": "time",
+      "timeCapMin": 12,
+      "winnerMen": "Uldis Upenieks",
+      "winnerWomen": "Haley Adams",
+      "winningScoreMen": "6:51.06",
+      "winningScoreWomen": "6:59.46",
+      "movements": [
+        "Shuttle Run"
+      ],
+      "loads": [
+        {
+          "item": "Jerk",
+          "men": "300 lb",
+          "women": "200 lb"
+        }
+      ],
+      "equipment": [],
+      "eventTypes": [
+        "run",
+        "interval",
+        "sprint"
+      ],
+      "modality": "M",
+      "timeDomain": "short",
+      "loadLevel": "none",
+      "environment": "stadium",
+      "namedWod": null,
+      "firstAtGames": [],
+      "notes": "Originally scheduled for Wednesday afternoon; severe storms forced an evacuation of North Park and moved the event to Thursday, Aug. 4, the individuals' only test that day. One test, two scores: 2A ranked total running time, 2B (separate entry) ranked total jerks. Haley Adams won her second running-based score of the Games.",
+      "sources": [
+        "https://games.crossfit.com/workouts/games/2022",
+        "https://en.wikipedia.org/wiki/2022_CrossFit_Games",
+        "https://breakingmuscle.com/2022-crossfit-games-results/",
+        "https://fitnessvolt.com/2022-crossfit-games-results-day-one/"
+      ]
+    },
+    {
+      "id": "2022-05",
+      "order": 5,
+      "stage": "games",
+      "name": "Shuttle to Overhead B",
+      "aka": "Event 2B (max jerks)",
+      "day": "Thursday",
+      "description": "Same test as Shuttle to Overhead A (one 12-minute running clock):\n0:00-2:00 - 400-m shuttle run, then max jerks (300 lb men / 200 lb women)\nRest 1 minute\n3:00-6:00 - 600-m shuttle run, then max jerks\nRest 2 minutes\n8:00-12:00 - 800-m shuttle run, then max jerks\n\nEvent 2B score: total jerks completed across all three rounds.",
+      "format": "interval",
+      "scoring": "reps",
+      "timeCapMin": 12,
+      "winnerMen": "Jeffrey Adler",
+      "winnerWomen": "Tia-Clair Toomey",
+      "winningScoreMen": "19 reps",
+      "winningScoreWomen": "18 reps",
+      "movements": [
+        "Shuttle Run",
+        "Jerk"
+      ],
+      "loads": [
+        {
+          "item": "Jerk",
+          "men": "300 lb",
+          "women": "200 lb"
+        }
+      ],
+      "equipment": [
+        "barbell"
+      ],
+      "eventTypes": [
+        "interval"
+      ],
+      "modality": "MW",
+      "timeDomain": "medium",
+      "loadLevel": "heavy",
+      "environment": "stadium",
+      "namedWod": null,
+      "firstAtGames": [],
+      "notes": "The faster the runs, the more time remained to accumulate jerks at a very heavy load (300/200 lb); the barbell was pre-loaded at the jerk station so athletes did not have to clean it from the floor each round (setup detail reported from broadcast, not on the official card). Adler's 19 reps at 300 lb and Toomey's 18 at 200 lb won the B scores.",
+      "sources": [
+        "https://games.crossfit.com/workouts/games/2022",
+        "https://en.wikipedia.org/wiki/2022_CrossFit_Games",
+        "https://breakingmuscle.com/2022-crossfit-games-results/"
+      ]
+    },
+    {
+      "id": "2022-06",
+      "order": 6,
+      "stage": "games",
+      "name": "The Capitol",
+      "aka": "Event 5",
+      "day": "Friday",
+      "description": "For time, point to point:\n20 Pig flips (510-lb Pig men / 350-lb Pig women)\nRun approx. 3.5 miles from North Park through downtown Madison\n200-m jerry-bag carry (two 100-lb bags men / two 70-lb bags women)\n200-m Husafell-bag carry (200 lb men / 150 lb women)\n\nFinish at the steps of the Wisconsin State Capitol. No time cap.",
+      "format": "for-time",
+      "scoring": "time",
+      "timeCapMin": null,
+      "winnerMen": "Ricky Garard",
+      "winnerWomen": "Gabriela Migała",
+      "winningScoreMen": "31:54.47",
+      "winningScoreWomen": "33:34.67",
+      "movements": [
+        "Pig Flip",
+        "Run",
+        "Jerry Bag Carry",
+        "Husafell Carry"
+      ],
+      "loads": [
+        {
+          "item": "Pig flip",
+          "men": "510 lb",
+          "women": "350 lb"
+        },
+        {
+          "item": "Jerry bags (pair)",
+          "men": "two 100 lb",
+          "women": "two 70 lb"
+        },
+        {
+          "item": "Husafell bag",
+          "men": "200 lb",
+          "women": "150 lb"
+        }
+      ],
+      "equipment": [
+        "pig",
+        "jerry bags",
+        "husafell bag"
+      ],
+      "eventTypes": [
+        "run",
+        "odd-object",
+        "strongman"
+      ],
+      "modality": "MW",
+      "timeDomain": "long",
+      "loadLevel": "heavy",
+      "environment": "road",
+      "namedWod": null,
+      "firstAtGames": [
+        "pig flip"
+      ],
+      "notes": "Point-to-point road event starting at North Park on the Alliant Energy Center campus and finishing on the Wisconsin State Capitol steps, with spectators lining the route through downtown Madison. Garard's second event win of the Games; Migała's win was her first of the week.",
+      "sources": [
+        "https://games.crossfit.com/workouts/games/2022",
+        "https://en.wikipedia.org/wiki/2022_CrossFit_Games",
+        "https://breakingmuscle.com/2022-crossfit-games-results/"
+      ]
+    },
+    {
+      "id": "2022-07",
+      "order": 7,
+      "stage": "games",
+      "name": "Up and Over",
+      "aka": "Event 6",
+      "day": "Friday",
+      "description": "3 rounds for time of:\n12 muscle-ups\n25 jump-overs (the obstacle changes each round: 50-in log; 42-in box men / 30-in box women; 20-in Pig)\n30 GHD sit-ups\n\nThen:\n84-ft weighted walking lunge with an axle bar (185 lb men / 125 lb women)\n\nHands were not allowed on the boxes for the jump-overs.\nTime cap: 18 minutes.",
+      "format": "for-time",
+      "scoring": "time",
+      "timeCapMin": 18,
+      "winnerMen": "Saxon Panchik",
+      "winnerWomen": "Tia-Clair Toomey",
+      "winningScoreMen": "12:40.00",
+      "winningScoreWomen": "11:58.92",
+      "movements": [
+        "Muscle-up",
+        "Jump Over",
+        "GHD Sit-up",
+        "Weighted Lunge"
+      ],
+      "loads": [
+        {
+          "item": "Axle-bar lunge",
+          "men": "185 lb",
+          "women": "125 lb"
+        }
+      ],
+      "equipment": [
+        "rings",
+        "log",
+        "box",
+        "pig",
+        "axle bar",
+        "ghd"
+      ],
+      "eventTypes": [
+        "gymnastics",
+        "obstacle",
+        "triplet"
+      ],
+      "modality": "GW",
+      "timeDomain": "medium",
+      "loadLevel": "moderate",
+      "environment": "stadium",
+      "namedWod": null,
+      "firstAtGames": [],
+      "notes": "The official card lists simply 'muscle-ups' (36 total); the event was contested on rings at North Park per broadcast footage, but no written source specifies ring vs. bar, so treat that detail with caution. The no-hands rule on the 42/30-in box jump-overs proved much harder than expected. Saxon Panchik led wire to wire for his second career event win; Toomey's win was the 35th Games event win of her career and extended her overall lead.",
+      "sources": [
+        "https://games.crossfit.com/workouts/games/2022",
+        "https://wodwell.com/wod/up-and-over/",
+        "https://www.boxrox.com/crossfit-games-2022-individual-event-6-results/",
+        "https://breakingmuscle.com/2022-crossfit-games-results/"
+      ]
+    },
+    {
+      "id": "2022-08",
+      "order": 8,
+      "stage": "games",
+      "name": "Echo Press",
+      "aka": "Event 7",
+      "day": "Friday",
+      "description": "For time:\n30-cal Echo bike (men) / 25-cal (women)\n10 block handstand push-ups\n20-cal Echo bike (men) / 15-cal (women)\n10 block handstand push-ups\n20-cal Echo bike (men) / 15-cal (women)\n10 block handstand push-ups\n30-cal Echo bike (men) / 25-cal (women)\n\nThe handstand push-ups were performed on raised blocks: athletes walked up the wall onto the block, lowered the head below the level of the block (3.5-in deficit men / 2-in deficit women), and pressed back to a handstand.\nTime cap: 10 minutes men / 12 minutes women.",
+      "format": "for-time",
+      "scoring": "time",
+      "timeCapMin": 12,
+      "winnerMen": "Will Moorad",
+      "winnerWomen": "Alexis Raptis",
+      "winningScoreMen": "6:30.15",
+      "winningScoreWomen": "6:41.18",
+      "movements": [
+        "Echo Bike",
+        "Deficit Handstand Push-up"
+      ],
+      "loads": [],
+      "equipment": [
+        "echo bike",
+        "blocks"
+      ],
+      "eventTypes": [
+        "couplet",
+        "bike",
+        "gymnastics"
+      ],
+      "modality": "MG",
+      "timeDomain": "short",
+      "loadLevel": "none",
+      "environment": "arena",
+      "namedWod": null,
+      "firstAtGames": [],
+      "notes": "Friday night in the Coliseum (100 total calories for men, 80 for women, plus 30 block HSPUs). The block setup for the handstand push-ups was a new Games implement. First career event wins for both Will Moorad and Alexis Raptis. Ricky Garard struggled badly here, beginning his slide from the overall lead.",
+      "sources": [
+        "https://games.crossfit.com/workouts/games/2022",
+        "https://en.wikipedia.org/wiki/2022_CrossFit_Games",
+        "https://breakingmuscle.com/2022-crossfit-games-results/"
+      ]
+    },
+    {
+      "id": "2022-09",
+      "order": 9,
+      "stage": "games",
+      "name": "Rinse 'N' Repeat",
+      "aka": "Event 8",
+      "day": "Saturday",
+      "description": "8 rounds, every 2 minutes:\n50-yd swim (25 yd down and back)\nSkiErg calories\n\nRounds 1-6: the required SkiErg calories increase each round - 8, 10, 12, 14, 16, 18. Athletes who fail to finish the swim and the required calories inside the 2-minute window are eliminated.\nRounds 7-8: athletes who complete round 6 swim, then accumulate max calories in the remaining time.\n\nScore: total calories completed.",
+      "format": "interval",
+      "scoring": "reps",
+      "timeCapMin": 16,
+      "winnerMen": "Roman Khrennikov",
+      "winnerWomen": "Lucy Campbell",
+      "winningScoreMen": "160 cal",
+      "winningScoreWomen": "137 cal",
+      "movements": [
+        "Swim",
+        "Ski Erg"
+      ],
+      "loads": [],
+      "equipment": [
+        "ski erg"
+      ],
+      "eventTypes": [
+        "swim",
+        "ski",
+        "interval"
+      ],
+      "modality": "M",
+      "timeDomain": "medium",
+      "loadLevel": "none",
+      "environment": "offsite",
+      "namedWod": null,
+      "firstAtGames": [],
+      "notes": "Held off campus at the Soderholm Family Aquatic Center pool (Nicholas Recreation Center, University of Wisconsin-Madison). Rounds 1-6 totaled 78 fixed calories; the winners added 82 (Khrennikov) and 59 (Campbell) in the two max-effort rounds. Former competitive swimmer Lucy Campbell took her first Games event win; Khrennikov's win was his first ever at the Games.",
+      "sources": [
+        "https://games.crossfit.com/workouts/games/2022",
+        "https://games.crossfit.com/leaderboard/games/2022",
+        "https://en.wikipedia.org/wiki/2022_CrossFit_Games",
+        "https://breakingmuscle.com/2022-crossfit-games-results/"
+      ]
+    },
+    {
+      "id": "2022-10",
+      "order": 10,
+      "stage": "games",
+      "name": "Hat Trick",
+      "aka": "Event 9",
+      "day": "Saturday",
+      "description": "3 rounds, each for time, of:\nSprint (down the North Park floor)\n20 wall-ball shots (20-lb ball to 12-ft target men / 14-lb ball to 11-ft target women)\n6 dumbbell snatches (100 lb men / 70 lb women, alternating arms each rep)\n\nTime cap: 2 minutes per round. Rest 4 minutes between rounds (two heats alternated on the floor during the rest windows).\nScore: sum of the three round times.",
+      "format": "interval",
+      "scoring": "time",
+      "timeCapMin": 14,
+      "winnerMen": "Guilherme Malheiros",
+      "winnerWomen": "Ellie Turner",
+      "winningScoreMen": "3:44.18",
+      "winningScoreWomen": "3:55.94",
+      "movements": [
+        "Sprint",
+        "Wall Ball",
+        "Dumbbell Snatch"
+      ],
+      "loads": [
+        {
+          "item": "Wall ball",
+          "men": "20 lb (12-ft target)",
+          "women": "14 lb (11-ft target)"
+        },
+        {
+          "item": "Dumbbell snatch",
+          "men": "100 lb",
+          "women": "70 lb"
+        }
+      ],
+      "equipment": [
+        "medicine ball",
+        "dumbbell"
+      ],
+      "eventTypes": [
+        "sprint",
+        "triplet",
+        "interval"
+      ],
+      "modality": "MW",
+      "timeDomain": "sprint",
+      "loadLevel": "heavy",
+      "environment": "stadium",
+      "namedWod": null,
+      "firstAtGames": [],
+      "notes": "timeCapMin is the 14-minute overall window (3 x 2:00 work intervals, each round capped at 2:00, with 4 minutes rest between rounds). The sprint distance was never published on the official card. First career Games event wins for Guilherme Malheiros and Ellie Turner. Justin Medeiros moved into the overall lead after this event, overtaking Ricky Garard, and never relinquished it.",
+      "sources": [
+        "https://games.crossfit.com/workouts/games/2022",
+        "https://wodwell.com/wod/hat-trick/",
+        "https://en.wikipedia.org/wiki/2022_CrossFit_Games",
+        "https://breakingmuscle.com/2022-crossfit-games-results/"
+      ]
+    },
+    {
+      "id": "2022-11",
+      "order": 11,
+      "stage": "games",
+      "name": "Sandbag Ladder",
+      "aka": "Event 10",
+      "day": "Saturday",
+      "description": "1-rep-max sandbag-to-shoulder.\n\nAthletes worked through a ladder of progressively heavier sandbags, from 240 lb up to 340 lb (men) and 160 lb up to 250 lb (women), with 2 attempts per bag. A successful rep required getting the bag to one shoulder, stabilizing it, and extending the free arm to show control.\n\nAthletes who failed (or topped out) at the same bag were separated by a tiebreak race: 3 progressively heavier sandbags (100, 150, 200 lb men / 50, 100, 150 lb women) lifted over a yoke crossbar for time.",
+      "format": "max-load",
+      "scoring": "load",
+      "timeCapMin": null,
+      "winnerMen": "Guilherme Malheiros & Nick Mathew (tie)",
+      "winnerWomen": "Dani Speegle",
+      "winningScoreMen": "340 lb",
+      "winningScoreWomen": "250 lb",
+      "movements": [
+        "Sandbag-to-Shoulder"
+      ],
+      "loads": [
+        {
+          "item": "Sandbag ladder",
+          "men": "240-340 lb",
+          "women": "160-250 lb"
+        }
+      ],
+      "equipment": [
+        "sandbag",
+        "yoke"
+      ],
+      "eventTypes": [
+        "max-lift",
+        "strongman",
+        "odd-object"
+      ],
+      "modality": "W",
+      "timeDomain": "sprint",
+      "loadLevel": "max",
+      "environment": "arena",
+      "namedWod": null,
+      "firstAtGames": [],
+      "notes": "Four men (Malheiros, Mathew, Fikowski, Hopper) shouldered the heaviest 340-lb bag, so organizers rolled out a surprise bag listed around 350 lb; nobody lifted it and all four went to the tiebreak, where Malheiros and Mathew clocked identical times and shared the event win. Speegle was the only woman to shoulder the 250-lb bag. Medeiros topped out at 330 lb. Exact intermediate bag weights in the ladder were not published.",
+      "sources": [
+        "https://games.crossfit.com/workouts/games/2022",
+        "https://www.boxrox.com/crossfit-games-individual-event-10-results/",
+        "https://en.wikipedia.org/wiki/2022_CrossFit_Games",
+        "https://breakingmuscle.com/2022-crossfit-games-results/"
+      ]
+    },
+    {
+      "id": "2022-12",
+      "order": 12,
+      "stage": "games",
+      "name": "The Alpaca",
+      "aka": "Event 11",
+      "day": "Sunday",
+      "description": "For time (as published):\n126-ft sled push, decreasing in load (sled starts loaded with all 6 kettlebells; pairs are unloaded along the way)\n2 legless rope climbs\n20 kettlebell clean and jerks\n42-ft sled push with 2 kettlebells\n2 legless rope climbs\n15 kettlebell clean and jerks\n42-ft sled push with 4 kettlebells\n2 legless rope climbs\n10 kettlebell clean and jerks\n42-ft sled push with 6 kettlebells\n\nKettlebells: six 32-kg bells (men) / six 24-kg bells (women); clean and jerks performed with a pair.\nTime cap: 18 minutes.\n\nAs contested: overnight rain left the ropes unsafe, and all legless rope climbs were removed from the event on the morning of competition.",
+      "format": "for-time",
+      "scoring": "time",
+      "timeCapMin": 18,
+      "winnerMen": "Roman Khrennikov",
+      "winnerWomen": "Laura Horvath",
+      "winningScoreMen": "6:23.92",
+      "winningScoreWomen": "6:46.96",
+      "movements": [
+        "Sled Push",
+        "Kettlebell Clean and Jerk"
+      ],
+      "loads": [
+        {
+          "item": "Kettlebell clean and jerk (pair)",
+          "men": "2 x 32 kg",
+          "women": "2 x 24 kg"
+        },
+        {
+          "item": "Sled (kettlebell-loaded)",
+          "men": "up to six 32-kg bells",
+          "women": "up to six 24-kg bells"
+        }
+      ],
+      "equipment": [
+        "sled",
+        "kettlebells",
+        "climbing rope"
+      ],
+      "eventTypes": [
+        "strongman",
+        "couplet"
+      ],
+      "modality": "W",
+      "timeDomain": "short",
+      "loadLevel": "heavy",
+      "environment": "stadium",
+      "namedWod": null,
+      "firstAtGames": [],
+      "notes": "The published workout included 6 legless rope climbs, but they were cut due to wet ropes from weather, turning the test into a sled-push/kettlebell couplet (movements listed as contested; winning times reflect the modified event). Khrennikov's second event win of the Games kept his title challenge alive; Horvath began her back-to-back final-day wins.",
+      "sources": [
+        "https://games.crossfit.com/workouts/games/2022",
+        "https://games.crossfit.com/announcement/13808/games",
+        "https://en.wikipedia.org/wiki/2022_CrossFit_Games",
+        "https://breakingmuscle.com/2022-crossfit-games-results/"
+      ]
+    },
+    {
+      "id": "2022-13",
+      "order": 13,
+      "stage": "games",
+      "name": "Back Nine",
+      "aka": "Event 12",
+      "day": "Sunday",
+      "description": "For time:\n54-ft yoke carry (665 lb men / 485 lb women)\n2 front squats (315 lb men / 215 lb women)\n3 deadlifts (475 lb men / 315 lb women)\n2 front squats (315 lb men / 215 lb women)\n54-ft yoke carry (665 lb men / 485 lb women)\n\nBarbell work from the floor.\nTime cap: 4 minutes.",
+      "format": "for-time",
+      "scoring": "time",
+      "timeCapMin": 4,
+      "winnerMen": "Jeffrey Adler",
+      "winnerWomen": "Laura Horvath",
+      "winningScoreMen": "1:17.40",
+      "winningScoreWomen": "1:13.11",
+      "movements": [
+        "Yoke Carry",
+        "Front Squat",
+        "Deadlift"
+      ],
+      "loads": [
+        {
+          "item": "Yoke",
+          "men": "665 lb",
+          "women": "485 lb"
+        },
+        {
+          "item": "Front squat",
+          "men": "315 lb",
+          "women": "215 lb"
+        },
+        {
+          "item": "Deadlift",
+          "men": "475 lb",
+          "women": "315 lb"
+        }
+      ],
+      "equipment": [
+        "yoke",
+        "barbell"
+      ],
+      "eventTypes": [
+        "sprint",
+        "strongman"
+      ],
+      "modality": "W",
+      "timeDomain": "sprint",
+      "loadLevel": "max",
+      "environment": "arena",
+      "namedWod": null,
+      "firstAtGames": [],
+      "notes": "Featured the heaviest yoke (665 lb) and heaviest deadlift (475 lb) programmed at the Games to that point. Horvath won her second straight event of the final day; Adler took his second score win of the week (after Shuttle to Overhead B).",
+      "sources": [
+        "https://games.crossfit.com/workouts/games/2022",
+        "https://wodwell.com/wod/back-nine/",
+        "https://en.wikipedia.org/wiki/2022_CrossFit_Games",
+        "https://breakingmuscle.com/2022-crossfit-games-results/"
+      ]
+    },
+    {
+      "id": "2022-14",
+      "order": 14,
+      "stage": "games",
+      "name": "Jackie Pro",
+      "aka": "Event 13",
+      "day": "Sunday",
+      "description": "For time:\n1,000-m row\n50 thrusters (95 lb men / 65 lb women)\n30 bar muscle-ups\n\nThe 1,000-m row had to be completed in under 3:15 (men) / 3:40 (women).\nTime cap: 10 minutes men / 11 minutes women.",
+      "format": "for-time",
+      "scoring": "time",
+      "timeCapMin": 11,
+      "winnerMen": "Lazar Đukić",
+      "winnerWomen": "Lucy Campbell",
+      "winningScoreMen": "7:59.70",
+      "winningScoreWomen": "8:29.53",
+      "movements": [
+        "Row",
+        "Thruster",
+        "Bar Muscle-up"
+      ],
+      "loads": [
+        {
+          "item": "Thruster",
+          "men": "95 lb",
+          "women": "65 lb"
+        }
+      ],
+      "equipment": [
+        "rower",
+        "barbell",
+        "pull-up bar"
+      ],
+      "eventTypes": [
+        "triplet",
+        "row"
+      ],
+      "modality": "MGW",
+      "timeDomain": "short",
+      "loadLevel": "light",
+      "environment": "arena",
+      "namedWod": null,
+      "firstAtGames": [],
+      "notes": "Final event of the Games, a heavier-skill 'pro' version of the benchmark Jackie (1,000-m row, 50 x 45/35-lb thrusters, 30 pull-ups) with Jackie's pull-ups upgraded to bar muscle-ups. Time cap differed by division (men 10:00, women 11:00). Lucy Campbell won her second event of the weekend; Medeiros and Toomey crossed as champions moments later.",
+      "sources": [
+        "https://games.crossfit.com/workouts/games/2022",
+        "https://wodwell.com/wod/jackie-pro/",
+        "https://en.wikipedia.org/wiki/2022_CrossFit_Games",
+        "https://breakingmuscle.com/2022-crossfit-games-results/"
+      ]
+    }
+  ]
+}

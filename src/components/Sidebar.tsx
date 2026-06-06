@@ -1,5 +1,6 @@
 import { useStore } from '../stores/useStore'
 import type { CrossFitData } from '../types'
+import ThemeToggle from './ThemeToggle'
 
 const sections = [
   {
@@ -100,7 +101,7 @@ function YearRangeFilter() {
 }
 
 export default function Sidebar({ data }: { data: CrossFitData }) {
-  const { activeTab, setActiveTab, sidebarOpen, setSidebarOpen, theme, setTheme } = useStore()
+  const { activeTab, setActiveTab, sidebarOpen, setSidebarOpen } = useStore()
 
   return (
     <>
@@ -148,6 +149,20 @@ export default function Sidebar({ data }: { data: CrossFitData }) {
 
         <YearRangeFilter />
 
+        {/* Games Almanac cross-link — standalone page at /games */}
+        <a
+          href="/games"
+          className="mx-2 mt-2 px-3 py-2 rounded-lg border border-[#019644]/40 bg-gradient-to-r from-[#019644]/15 to-[#91C640]/10 hover:from-[#019644]/25 hover:to-[#91C640]/20 transition-colors group block"
+        >
+          <div className="flex items-center justify-between gap-2">
+            <div className="min-w-0">
+              <div className="text-[11px] font-bold text-[#91C640] truncate">CrossFit Games Almanac</div>
+              <div className="text-[8px] text-[var(--text-muted)] uppercase tracking-wider">Every event since 2007 →</div>
+            </div>
+            <span className="shrink-0 text-[8px] font-bold px-1.5 py-0.5 rounded bg-[#91C640]/20 text-[#91C640] group-hover:bg-[#91C640]/30">NEW</span>
+          </div>
+        </a>
+
         <nav className="flex-1 py-1">
           {sections.map((section) => (
             <div key={section.title}>
@@ -176,23 +191,7 @@ export default function Sidebar({ data }: { data: CrossFitData }) {
 
         <div className="p-2 border-t border-[var(--panel-border-subtle)] flex items-center justify-between gap-2">
           <div className="text-[8px] text-[var(--text-muted)] truncate">{data.overview.date_range}</div>
-          <button
-            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-            className="shrink-0 w-7 h-7 rounded-md bg-[var(--panel-bg)] border border-[var(--panel-border)] flex items-center justify-center text-[var(--text-tertiary)] hover:text-[#91C640] hover:border-[#91C640]/40 transition-colors"
-            aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-            title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-          >
-            {theme === 'dark' ? (
-              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
-                <circle cx="12" cy="12" r="4" />
-                <path strokeLinecap="round" d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
-              </svg>
-            ) : (
-              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
-              </svg>
-            )}
-          </button>
+          <ThemeToggle size="sm" />
         </div>
       </aside>
     </>
