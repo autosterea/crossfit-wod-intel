@@ -19,7 +19,7 @@ import {
 import { CHART_TOOLTIP_STYLE, G, yearByNum } from './gamesData'
 import { useGamesStore } from './gamesStore'
 import { Chip, Panel } from './ui'
-import type { GamesAthleteResult, GamesEvent, GamesYearResults } from '../types-games'
+import type { GamesAthleteResult, GamesYearResults } from '../types-games'
 
 type Division = 'men' | 'women'
 type CurveMode = 'power' | 'relative'
@@ -78,7 +78,7 @@ function fitCriticalPower(pts: { tSec: number; workKj: number }[]) {
 }
 
 // The three modal domains of CrossFit, plus loading and the metabolic engine.
-const MODAL_BUCKETS: { key: string; label: string; test: (e: GamesEvent) => boolean }[] = [
+const MODAL_BUCKETS: { key: string; label: string; test: (e: CapEvent) => boolean }[] = [
   { key: 'mono', label: 'Metabolic', test: (e) => e.modality.includes('M') },
   { key: 'gym', label: 'Gymnastics', test: (e) => e.modality.includes('G') },
   { key: 'weight', label: 'Weightlifting', test: (e) => e.modality.includes('W') },
@@ -120,24 +120,47 @@ interface AthleteRow {
   cumPoints: number[] // cumulative points after each event (chronological)
 }
 
-function useCapacityModel(yearResults: GamesYearResults | null, division: Division) {
+interface CapEvent {
+  id: string
+  order: number
+  name: string
+  format: string
+  modality: string
+  loadLevel: string
+  timeDomain: string | null
+  winningScoreMen: string | null
+  winningScoreWomen: string | null
+}
+interface CapContext {
+  events: CapEvent[]
+  divisions: { men: GamesAthleteResult[]; women: GamesAthleteResult[] }
+  fieldMen: number
+  fieldWomen: number
+  workModel: GamesYearResults['workModel'] | null
+}
+
+function useCapacityModel(ctx: CapContext | null, division: Division) {
   return useMemo(() => {
-    if (!yearResults) return null
-    const yearData = yearByNum.get(yearResults.year)
-    if (!yearData) return null
-    const field = (division === 'men' ? yearData.fieldMen : yearData.fieldWomen) ?? 30
-    const athletes = yearResults.divisions[division]
+    if (!ctx) return null
+    const field = (division === 'men' ? ctx.fieldMen : ctx.fieldWomen) ?? 30
+    const athletes = ctx.divisions[division]
     if (!athletes?.length) return null
-    const wm = yearResults.workModel ?? null // optional: only 2025 has one so far
+    const wm = ctx.workModel ?? null // optional: only 2025 has one so far
 
     const underMeasured = new Set(wm?.underMeasured ?? [])
     const [fitLo, fitHi] = wm?.cpFitWindowSec ?? [120, 1800]
 
-    const orderedEvents = [...yearData.events].sort((a, b) => a.order - b.order)
+    // Cohort-derived best score per event (used when a stage has no published winner score)
+    const cohortBest = (evId: string): string | null => {
+      const at = athletes.find((a) => a.events.find((e) => e.eventId === evId)?.place === 1)
+      return at?.events.find((e) => e.eventId === evId)?.score ?? null
+    }
+
+    const orderedEvents = [...ctx.events].sort((a, b) => a.order - b.order)
     const eventInfo = new Map(
       orderedEvents.map((ev) => {
         const isMax = ev.format === 'max-load'
-        const winning = division === 'men' ? ev.winningScoreMen : ev.winningScoreWomen
+        const winning = (division === 'men' ? ev.winningScoreMen : ev.winningScoreWomen) ?? cohortBest(ev.id)
         const winSec = isMax ? null : parseSeconds(winning)
         const w = wm?.events?.[ev.id]
         const workKj = w ? (division === 'men' ? w.workKjMen : w.workKjWomen) : null
@@ -148,7 +171,7 @@ function useCapacityModel(yearResults: GamesYearResults | null, division: Divisi
     )
     const maxEvents = orderedEvents.filter((e) => e.format === 'max-load')
     const bestMaxLb = new Map(
-      maxEvents.map((m) => [m.id, parseLoadLb(division === 'men' ? m.winningScoreMen : m.winningScoreWomen)])
+      maxEvents.map((m) => [m.id, parseLoadLb((division === 'men' ? m.winningScoreMen : m.winningScoreWomen) ?? cohortBest(m.id))])
     )
 
     const relOutput = (cell: GamesAthleteResult['events'][number], info: ReturnType<typeof eventInfo.get>): number => {
@@ -315,7 +338,7 @@ function useCapacityModel(yearResults: GamesYearResults | null, division: Divisi
       raceRows, decisive, maxSpread, curveLo, curveHi, underMeasuredNames, beyondNames,
       capMin, capMax, conMin, conMax, orderedEvents, hasPowerModel, outputBased,
     }
-  }, [yearResults, division])
+  }, [ctx, division])
 }
 
 type Model = NonNullable<ReturnType<typeof useCapacityModel>>
@@ -467,12 +490,37 @@ export default function CapacityView() {
   const year = route.year && G.results[route.year] ? route.year : availableYears[0] ?? null
   const yearResults = year ? G.results[year] : null
 
+  const stageKeys = yearResults?.stages ? Object.keys(yearResults.stages) : []
   const [division, setDivision] = useState<Division>('men')
   const [mode, setMode] = useState<CurveMode>('power')
-  const model = useCapacityModel(yearResults ?? null, division)
+  const [stageKey, setStageKey] = useState<string | null>(null)
+  const activeStage = stageKeys.length ? (stageKey && yearResults!.stages![stageKey] ? stageKey : stageKeys[0]) : null
+
+  // Build a source-agnostic context: a Games year (raw events + results) or a 2026 stage.
+  const ctx: CapContext | null = useMemo(() => {
+    if (!yearResults) return null
+    if (activeStage && yearResults.stages) {
+      const st = yearResults.stages[activeStage]
+      return { events: st.events as CapEvent[], divisions: st.divisions, fieldMen: 30, fieldWomen: 30, workModel: null }
+    }
+    if (!yearResults.divisions) return null
+    const yd = year ? yearByNum.get(year) : undefined
+    if (!yd) return null
+    return {
+      events: yd.events as CapEvent[],
+      divisions: yearResults.divisions,
+      fieldMen: yd.fieldMen ?? 30,
+      fieldWomen: yd.fieldWomen ?? 30,
+      workModel: yearResults.workModel ?? null,
+    }
+  }, [yearResults, activeStage, year])
+
+  const periodLabel = activeStage && yearResults?.stages ? `${year} ${yearResults.stages[activeStage].label}` : `${year} Games`
+
+  const model = useCapacityModel(ctx, division)
   const [selected, setSelectedState] = useState<Set<string>>(() => new Set())
 
-  const selectionKey = `${year}-${division}`
+  const selectionKey = `${year}-${activeStage ?? ''}-${division}`
   const [lastKey, setLastKey] = useState(selectionKey)
   if (model && (lastKey !== selectionKey || selected.size === 0)) {
     setLastKey(selectionKey)
@@ -531,20 +579,20 @@ export default function CapacityView() {
             <p className="games-display text-xl sm:text-2xl text-[#91C640] mt-1">Across Broad Time &amp; Modal Domains</p>
             <p className="mt-4 max-w-xl text-[13.5px] leading-relaxed cap-hero-dim">
               CrossFit defines fitness as work capacity across broad time and modal domains, the area under an
-              athlete's power-time curve. This lab operationalizes that definition for the top 10 of the {year}
-              Games: a single Capacity Score for overall output, the fitted power-duration curve, the three modal
-              domains, and the hopper model of readiness, all from real competition data.
+              athlete's power-time curve. This lab operationalizes that definition for {activeStage ? `the top 30 of the ${periodLabel}` : `the top 10 of the ${periodLabel}`}:
+              a single Capacity Score for overall output, the power-duration curve, the three modal domains, and
+              the hopper model of readiness, all from real competition data.
             </p>
             <div className="mt-5 flex flex-wrap items-center gap-3">
               {availableYears.length > 1 ? (
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-1 flex-wrap">
                   {availableYears.map((y) => (
                     <button key={y} onClick={() => navigate({ view: 'capacity', year: y })}
                       className="games-condensed px-3 py-1.5 rounded-lg text-[13px] font-semibold border transition-colors"
                       style={{ borderColor: y === year ? '#91C640' : 'rgba(244,246,242,0.18)', color: y === year ? '#91C640' : 'rgba(244,246,242,0.7)' }}>{y}</button>
                   ))}
                 </div>
-              ) : <Chip color="#91C640" outline>{year} Games &middot; pilot year</Chip>}
+              ) : <Chip color="#91C640" outline>{periodLabel} &middot; pilot year</Chip>}
               <div className="flex items-center rounded-lg overflow-hidden border" style={{ borderColor: 'rgba(244,246,242,0.18)' }}>
                 {(['men', 'women'] as const).map((d) => (
                   <button key={d} onClick={() => setDivision(d)}
@@ -553,6 +601,21 @@ export default function CapacityView() {
                 ))}
               </div>
             </div>
+            {stageKeys.length > 0 && (
+              <div className="mt-3 flex items-center gap-1 flex-wrap">
+                {stageKeys.map((sk) => {
+                  const st = yearResults!.stages![sk]
+                  const on = sk === activeStage
+                  return (
+                    <button key={sk} onClick={() => setStageKey(sk)}
+                      className="games-condensed px-3 py-1.5 rounded-lg text-[12px] font-semibold uppercase tracking-[0.08em] border transition-colors"
+                      style={{ borderColor: on ? '#91C640' : 'rgba(244,246,242,0.18)', background: on ? 'rgba(145,198,64,0.15)' : 'transparent', color: on ? '#91C640' : 'rgba(244,246,242,0.7)' }}>
+                      {st.label}{st.projected ? ' (proj.)' : ''}
+                    </button>
+                  )
+                })}
+              </div>
+            )}
           </div>
 
           {/* Fittest spotlight */}
@@ -562,7 +625,9 @@ export default function CapacityView() {
               <div className="min-w-0">
                 <div className="games-display text-2xl sm:text-3xl cap-hero-ink truncate">{champKing.athlete.name}</div>
                 <div className="games-condensed text-[12px] uppercase tracking-[0.1em] cap-hero-dim mt-0.5">
-                  finished {champKing.athlete.rank}{ord(champKing.athlete.rank)} overall
+                  {activeStage
+                    ? `${periodLabel.split(' ').slice(1).join(' ')} rank ${champKing.athlete.officialRank ?? champKing.athlete.rank}`
+                    : `finished ${champKing.athlete.rank}${ord(champKing.athlete.rank)} overall`}
                 </div>
               </div>
               <div className="text-right shrink-0">
@@ -586,6 +651,15 @@ export default function CapacityView() {
           </div>
         </div>
       </section>
+
+      {activeStage && yearResults?.stages?.[activeStage]?.projected && (
+        <div className="mb-5 rounded-xl px-4 py-3 text-[12.5px] leading-relaxed" style={{ background: 'rgba(245,158,11,0.1)', border: '1px solid rgba(245,158,11,0.3)', color: 'var(--text-secondary)' }}>
+          <span className="games-condensed uppercase tracking-[0.1em] font-semibold text-[#f59e0b]">Projection &middot; </span>
+          This is 2026 season form, all 7 Open and Quarterfinal tests combined, for the 30 Open standouts, a data-driven
+          proxy for Games form. It is not the official Games field: the 30+30 field locks after the online Semifinal
+          (June 11-15), and the Games run July 24-26 in San Jose. Live event-by-event data will replace this as scores are posted.
+        </div>
+      )}
 
       <AthleteLegend rows={model.rows} selected={selected} toggle={toggle} setSelected={setSelectedState} />
 

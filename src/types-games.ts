@@ -144,6 +144,8 @@ export interface GamesAthleteResult {
   name: string
   country: string | null
   totalPoints: number
+  /** Real overall finish at the stage (e.g. global QF rank), when different from cohort rank */
+  officialRank?: number | null
   events: GamesAthleteEventResult[]
 }
 
@@ -160,14 +162,45 @@ export interface GamesWorkModel {
   events: Record<string, { workKjMen: number; workKjWomen: number }>
 }
 
-export interface GamesYearResults {
-  year: number
-  pointsSystem: string
-  sources: string[]
+/** A stage event (Open/QF/etc.) — structural subset of GamesEvent the Capacity Lab needs. */
+export interface GamesStageEvent {
+  id: string
+  order: number
+  name: string
+  description?: string
+  format: string
+  scoring?: string
+  modality: string
+  loadLevel: string
+  timeDomain: GamesTimeDomain | null
+  timeCapMin: number | null
+  winningScoreMen: string | null
+  winningScoreWomen: string | null
+}
+
+export interface GamesStageResult {
+  label: string
+  projected?: boolean
+  events: GamesStageEvent[]
   divisions: {
     men: GamesAthleteResult[]
     women: GamesAthleteResult[]
   }
+  sources?: string[]
+}
+
+export interface GamesYearResults {
+  year: number
+  pointsSystem?: string
+  sources?: string[]
+  status?: string
+  note?: string
+  divisions?: {
+    men: GamesAthleteResult[]
+    women: GamesAthleteResult[]
+  }
+  /** 2026+: multi-stage (Open, Quarterfinals, Semifinals, Games) */
+  stages?: Record<string, GamesStageResult>
   workModel?: GamesWorkModel
 }
 

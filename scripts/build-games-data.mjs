@@ -689,6 +689,26 @@ if (existsSync(RESULTS_DIR)) {
       problem(`results/${year}: JSON parse error — ${e.message}`)
       continue
     }
+    // Multi-stage years (2026+): no raw Games file; validate stages lightly and pass through.
+    if (res.stages) {
+      for (const [skey, stage] of Object.entries(res.stages)) {
+        const stEventIds = new Set((stage.events ?? []).map((e) => e.id))
+        for (const division of ['men', 'women']) {
+          const athletes = stage.divisions?.[division] ?? []
+          if (athletes.length === 0) problem(`results/${year}/${skey}/${division}: no athletes`)
+          athletes.forEach((a) => {
+            const sum = a.events.reduce((acc, e) => acc + e.points, 0)
+            if (sum !== a.totalPoints) problem(`results/${year}/${skey}/${division}/${a.name}: points sum ${sum} ≠ ${a.totalPoints}`)
+            a.events.forEach((e) => {
+              if (!stEventIds.has(e.eventId)) problem(`results/${year}/${skey}/${division}/${a.name}: unknown eventId ${e.eventId}`)
+            })
+          })
+        }
+      }
+      results[year] = res
+      continue
+    }
+
     const yearData = years.find((y) => y.year === year)
     if (!yearData) {
       problem(`results/${year}: no matching raw year file`)
