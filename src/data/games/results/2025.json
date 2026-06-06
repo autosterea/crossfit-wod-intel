@@ -1,0 +1,1380 @@
+{
+  "year": 2025,
+  "pointsSystem": "2025 CrossFit Games 100-point scoring table (30 athletes per division, 10 events, 1000 max): event winner earns 100 points, descending by placement as 100, 96, 92, 88, 84, 80, 76, 72, 68, 64, 60, 56, 52, 48, 45, 42, 39, 36, 33, 30, 27, 24, 21, 18, 15, 12, 9, 6, 3, 0 for places 1-30. Tied athletes receive the same placement and points (e.g., Austin Hatfield and Jack Rozema both placed 3rd in Event 5 at 515 lb, each earning 92 points).",
+  "sources": [
+    "https://c3po.crossfit.com/api/leaderboards/v2/competitions/games/2025/leaderboards?division=1&page=1 (official CrossFit Games leaderboard API - per-event rank, points, and score display for all 30 men; primary source for all cells)",
+    "https://games.crossfit.com/leaderboard/finals/2025?final=245&division=1&sort=0 (official leaderboard UI referenced by Wikipedia)",
+    "https://en.wikipedia.org/wiki/2025_CrossFit_Games (per-event results tables and final standings; cross-check)",
+    "https://en.wikipedia.org/wiki/2025_CrossFit_Games (full per-event results tables and final standings; parsed programmatically from raw wikitext)",
+    "https://games.crossfit.com/leaderboard/finals/2025?final=245&division=2&sort=0 (official CrossFit Games women's leaderboard, cited as the underlying source by Wikipedia)",
+    "https://fitnessvolt.com/2025-crossfit-games-results-leaderboards/ (independent cross-check of Events 3, 5, 7, 9, 10 top-5 results — all matched)",
+    "https://barbend.com/news/tia-clair-toomey-orr-wins-2025-crossfit-games/ (confirms final podium, 902/720/678 totals, and that Toomey-Orr won four events: 1, 2, 8, 9)",
+    "https://thebarbellspin.com/crossfit-games/2025-crossfit-games-results/ (final overall standings cross-check)"
+  ],
+  "divisions": {
+    "men": [
+      {
+        "rank": 1,
+        "name": "Jayson Hopper",
+        "country": "United States",
+        "totalPoints": 787,
+        "events": [
+          {
+            "eventId": "2025-01",
+            "place": 8,
+            "score": "48:54.00",
+            "points": 72
+          },
+          {
+            "eventId": "2025-02",
+            "place": 4,
+            "score": "6:33.43",
+            "points": 88
+          },
+          {
+            "eventId": "2025-03",
+            "place": 1,
+            "score": "5:34.90",
+            "points": 100
+          },
+          {
+            "eventId": "2025-04",
+            "place": 4,
+            "score": "17:22.91",
+            "points": 88
+          },
+          {
+            "eventId": "2025-05",
+            "place": 6,
+            "score": "500 lb",
+            "points": 80
+          },
+          {
+            "eventId": "2025-06",
+            "place": 17,
+            "score": "3:24.78",
+            "points": 39
+          },
+          {
+            "eventId": "2025-07",
+            "place": 8,
+            "score": "4:42.05",
+            "points": 72
+          },
+          {
+            "eventId": "2025-08",
+            "place": 2,
+            "score": "8:26.17",
+            "points": 96
+          },
+          {
+            "eventId": "2025-09",
+            "place": 11,
+            "score": "2:50.72",
+            "points": 60
+          },
+          {
+            "eventId": "2025-10",
+            "place": 3,
+            "score": "7:57.48",
+            "points": 92
+          }
+        ]
+      },
+      {
+        "rank": 2,
+        "name": "Ricky Garard",
+        "country": "Australia",
+        "totalPoints": 773,
+        "events": [
+          {
+            "eventId": "2025-01",
+            "place": 3,
+            "score": "46:45.00",
+            "points": 92
+          },
+          {
+            "eventId": "2025-02",
+            "place": 1,
+            "score": "6:06.46",
+            "points": 100
+          },
+          {
+            "eventId": "2025-03",
+            "place": 14,
+            "score": "7:20.67",
+            "points": 48
+          },
+          {
+            "eventId": "2025-04",
+            "place": 8,
+            "score": "18:03.94",
+            "points": 72
+          },
+          {
+            "eventId": "2025-05",
+            "place": 23,
+            "score": "455 lb",
+            "points": 21
+          },
+          {
+            "eventId": "2025-06",
+            "place": 2,
+            "score": "3:14.21",
+            "points": 96
+          },
+          {
+            "eventId": "2025-07",
+            "place": 1,
+            "score": "4:17.54",
+            "points": 100
+          },
+          {
+            "eventId": "2025-08",
+            "place": 4,
+            "score": "8:33.19",
+            "points": 88
+          },
+          {
+            "eventId": "2025-09",
+            "place": 8,
+            "score": "2:48.11",
+            "points": 72
+          },
+          {
+            "eventId": "2025-10",
+            "place": 5,
+            "score": "8:14.05",
+            "points": 84
+          }
+        ]
+      },
+      {
+        "rank": 3,
+        "name": "James Sprague",
+        "country": "United States",
+        "totalPoints": 772,
+        "events": [
+          {
+            "eventId": "2025-01",
+            "place": 7,
+            "score": "48:24.00",
+            "points": 76
+          },
+          {
+            "eventId": "2025-02",
+            "place": 14,
+            "score": "7:11.79",
+            "points": 48
+          },
+          {
+            "eventId": "2025-03",
+            "place": 8,
+            "score": "6:11.92",
+            "points": 72
+          },
+          {
+            "eventId": "2025-04",
+            "place": 3,
+            "score": "17:01.62",
+            "points": 92
+          },
+          {
+            "eventId": "2025-05",
+            "place": 18,
+            "score": "465 lb",
+            "points": 36
+          },
+          {
+            "eventId": "2025-06",
+            "place": 1,
+            "score": "3:10.72",
+            "points": 100
+          },
+          {
+            "eventId": "2025-07",
+            "place": 3,
+            "score": "4:38.85",
+            "points": 92
+          },
+          {
+            "eventId": "2025-08",
+            "place": 7,
+            "score": "9:00.22",
+            "points": 76
+          },
+          {
+            "eventId": "2025-09",
+            "place": 5,
+            "score": "2:42.78",
+            "points": 84
+          },
+          {
+            "eventId": "2025-10",
+            "place": 2,
+            "score": "7:53.90",
+            "points": 96
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "name": "Dallin Pepper",
+        "country": "United States",
+        "totalPoints": 757,
+        "events": [
+          {
+            "eventId": "2025-01",
+            "place": 15,
+            "score": "51:15.00",
+            "points": 45
+          },
+          {
+            "eventId": "2025-02",
+            "place": 6,
+            "score": "6:45.85",
+            "points": 80
+          },
+          {
+            "eventId": "2025-03",
+            "place": 11,
+            "score": "7:14.57",
+            "points": 60
+          },
+          {
+            "eventId": "2025-04",
+            "place": 6,
+            "score": "17:41.29",
+            "points": 80
+          },
+          {
+            "eventId": "2025-05",
+            "place": 8,
+            "score": "495 lb",
+            "points": 72
+          },
+          {
+            "eventId": "2025-06",
+            "place": 4,
+            "score": "3:17.56",
+            "points": 88
+          },
+          {
+            "eventId": "2025-07",
+            "place": 7,
+            "score": "4:41.68",
+            "points": 76
+          },
+          {
+            "eventId": "2025-08",
+            "place": 5,
+            "score": "8:36.50",
+            "points": 84
+          },
+          {
+            "eventId": "2025-09",
+            "place": 3,
+            "score": "2:39.98",
+            "points": 92
+          },
+          {
+            "eventId": "2025-10",
+            "place": 6,
+            "score": "8:21.31",
+            "points": 80
+          }
+        ]
+      },
+      {
+        "rank": 5,
+        "name": "Austin Hatfield",
+        "country": "United States",
+        "totalPoints": 746,
+        "events": [
+          {
+            "eventId": "2025-01",
+            "place": 4,
+            "score": "47:41.00",
+            "points": 88
+          },
+          {
+            "eventId": "2025-02",
+            "place": 9,
+            "score": "6:49.48",
+            "points": 68
+          },
+          {
+            "eventId": "2025-03",
+            "place": 28,
+            "score": "CAP+6",
+            "points": 6
+          },
+          {
+            "eventId": "2025-04",
+            "place": 5,
+            "score": "17:27.08",
+            "points": 84
+          },
+          {
+            "eventId": "2025-05",
+            "place": 3,
+            "score": "515 lb",
+            "points": 92
+          },
+          {
+            "eventId": "2025-06",
+            "place": 5,
+            "score": "3:17.81",
+            "points": 84
+          },
+          {
+            "eventId": "2025-07",
+            "place": 11,
+            "score": "4:45.81",
+            "points": 60
+          },
+          {
+            "eventId": "2025-08",
+            "place": 1,
+            "score": "8:16.43",
+            "points": 100
+          },
+          {
+            "eventId": "2025-09",
+            "place": 1,
+            "score": "2:35.00",
+            "points": 100
+          },
+          {
+            "eventId": "2025-10",
+            "place": 10,
+            "score": "9:07.75",
+            "points": 64
+          }
+        ]
+      },
+      {
+        "rank": 6,
+        "name": "Jay Crouch",
+        "country": "Australia",
+        "totalPoints": 738,
+        "events": [
+          {
+            "eventId": "2025-01",
+            "place": 5,
+            "score": "47:50.00",
+            "points": 84
+          },
+          {
+            "eventId": "2025-02",
+            "place": 3,
+            "score": "6:15.59",
+            "points": 92
+          },
+          {
+            "eventId": "2025-03",
+            "place": 5,
+            "score": "5:53.23",
+            "points": 84
+          },
+          {
+            "eventId": "2025-04",
+            "place": 1,
+            "score": "16:28.57",
+            "points": 100
+          },
+          {
+            "eventId": "2025-05",
+            "place": 14,
+            "score": "485 lb",
+            "points": 48
+          },
+          {
+            "eventId": "2025-06",
+            "place": 16,
+            "score": "3:24.32",
+            "points": 42
+          },
+          {
+            "eventId": "2025-07",
+            "place": 12,
+            "score": "4:49.66",
+            "points": 56
+          },
+          {
+            "eventId": "2025-08",
+            "place": 6,
+            "score": "8:38.88",
+            "points": 80
+          },
+          {
+            "eventId": "2025-09",
+            "place": 7,
+            "score": "2:44.44",
+            "points": 76
+          },
+          {
+            "eventId": "2025-10",
+            "place": 7,
+            "score": "8:27.94",
+            "points": 76
+          }
+        ]
+      },
+      {
+        "rank": 7,
+        "name": "Justin Medeiros",
+        "country": "United States",
+        "totalPoints": 685,
+        "events": [
+          {
+            "eventId": "2025-01",
+            "place": 12,
+            "score": "50:05.00",
+            "points": 56
+          },
+          {
+            "eventId": "2025-02",
+            "place": 2,
+            "score": "6:06.81",
+            "points": 96
+          },
+          {
+            "eventId": "2025-03",
+            "place": 4,
+            "score": "5:41.58",
+            "points": 88
+          },
+          {
+            "eventId": "2025-04",
+            "place": 9,
+            "score": "18:08.40",
+            "points": 68
+          },
+          {
+            "eventId": "2025-05",
+            "place": 5,
+            "score": "505 lb",
+            "points": 84
+          },
+          {
+            "eventId": "2025-06",
+            "place": 13,
+            "score": "3:23.16",
+            "points": 52
+          },
+          {
+            "eventId": "2025-07",
+            "place": 10,
+            "score": "4:45.51",
+            "points": 64
+          },
+          {
+            "eventId": "2025-08",
+            "place": 23,
+            "score": "11:28.96",
+            "points": 21
+          },
+          {
+            "eventId": "2025-09",
+            "place": 12,
+            "score": "2:53.26",
+            "points": 56
+          },
+          {
+            "eventId": "2025-10",
+            "place": 1,
+            "score": "7:53.42",
+            "points": 100
+          }
+        ]
+      },
+      {
+        "rank": 8,
+        "name": "Jeffrey Adler",
+        "country": "Canada",
+        "totalPoints": 675,
+        "events": [
+          {
+            "eventId": "2025-01",
+            "place": 1,
+            "score": "46:16.00",
+            "points": 100
+          },
+          {
+            "eventId": "2025-02",
+            "place": 11,
+            "score": "6:58.32",
+            "points": 60
+          },
+          {
+            "eventId": "2025-03",
+            "place": 6,
+            "score": "5:57.38",
+            "points": 80
+          },
+          {
+            "eventId": "2025-04",
+            "place": 7,
+            "score": "17:42.92",
+            "points": 76
+          },
+          {
+            "eventId": "2025-05",
+            "place": 17,
+            "score": "470 lb",
+            "points": 39
+          },
+          {
+            "eventId": "2025-06",
+            "place": 9,
+            "score": "3:19.20",
+            "points": 68
+          },
+          {
+            "eventId": "2025-07",
+            "place": 14,
+            "score": "4:58.32",
+            "points": 48
+          },
+          {
+            "eventId": "2025-08",
+            "place": 13,
+            "score": "9:46.70",
+            "points": 52
+          },
+          {
+            "eventId": "2025-09",
+            "place": 6,
+            "score": "2:43.76",
+            "points": 80
+          },
+          {
+            "eventId": "2025-10",
+            "place": 8,
+            "score": "8:38.42",
+            "points": 72
+          }
+        ]
+      },
+      {
+        "rank": 9,
+        "name": "Roman Khrennikov",
+        "country": "United States",
+        "totalPoints": 660,
+        "events": [
+          {
+            "eventId": "2025-01",
+            "place": 2,
+            "score": "46:26.00",
+            "points": 96
+          },
+          {
+            "eventId": "2025-02",
+            "place": 10,
+            "score": "6:54.37",
+            "points": 64
+          },
+          {
+            "eventId": "2025-03",
+            "place": 2,
+            "score": "5:38.67",
+            "points": 96
+          },
+          {
+            "eventId": "2025-04",
+            "place": 15,
+            "score": "18:42.22",
+            "points": 45
+          },
+          {
+            "eventId": "2025-05",
+            "place": 10,
+            "score": "485 lb",
+            "points": 64
+          },
+          {
+            "eventId": "2025-06",
+            "place": 15,
+            "score": "3:23.74",
+            "points": 45
+          },
+          {
+            "eventId": "2025-07",
+            "place": 4,
+            "score": "4:39.20",
+            "points": 88
+          },
+          {
+            "eventId": "2025-08",
+            "place": 9,
+            "score": "9:23.00",
+            "points": 68
+          },
+          {
+            "eventId": "2025-09",
+            "place": 28,
+            "score": "3:14.09",
+            "points": 6
+          },
+          {
+            "eventId": "2025-10",
+            "place": 4,
+            "score": "8:09.43",
+            "points": 88
+          }
+        ]
+      },
+      {
+        "rank": 10,
+        "name": "Tudor Magda",
+        "country": "United States",
+        "totalPoints": 565,
+        "events": [
+          {
+            "eventId": "2025-01",
+            "place": 20,
+            "score": "51:59.00",
+            "points": 30
+          },
+          {
+            "eventId": "2025-02",
+            "place": 8,
+            "score": "6:47.43",
+            "points": 72
+          },
+          {
+            "eventId": "2025-03",
+            "place": 9,
+            "score": "6:38.05",
+            "points": 68
+          },
+          {
+            "eventId": "2025-04",
+            "place": 10,
+            "score": "18:11.84",
+            "points": 64
+          },
+          {
+            "eventId": "2025-05",
+            "place": 21,
+            "score": "460 lb",
+            "points": 27
+          },
+          {
+            "eventId": "2025-06",
+            "place": 14,
+            "score": "3:23.65",
+            "points": 48
+          },
+          {
+            "eventId": "2025-07",
+            "place": 26,
+            "score": "5:26.50",
+            "points": 12
+          },
+          {
+            "eventId": "2025-08",
+            "place": 3,
+            "score": "8:27.34",
+            "points": 92
+          },
+          {
+            "eventId": "2025-09",
+            "place": 2,
+            "score": "2:36.02",
+            "points": 96
+          },
+          {
+            "eventId": "2025-10",
+            "place": 12,
+            "score": "9:16.42",
+            "points": 56
+          }
+        ]
+      }
+    ],
+    "women": [
+      {
+        "rank": 1,
+        "name": "Tia-Clair Toomey-Orr",
+        "country": "Australia",
+        "totalPoints": 902,
+        "events": [
+          {
+            "eventId": "2025-01",
+            "place": 1,
+            "score": "49:49.00",
+            "points": 100
+          },
+          {
+            "eventId": "2025-02",
+            "place": 1,
+            "score": "6:23.98",
+            "points": 100
+          },
+          {
+            "eventId": "2025-03",
+            "place": 16,
+            "score": "12:05.52",
+            "points": 42
+          },
+          {
+            "eventId": "2025-04",
+            "place": 3,
+            "score": "17:37.63",
+            "points": 92
+          },
+          {
+            "eventId": "2025-05",
+            "place": 4,
+            "score": "335 lb",
+            "points": 88
+          },
+          {
+            "eventId": "2025-06",
+            "place": 3,
+            "score": "3:56.12",
+            "points": 92
+          },
+          {
+            "eventId": "2025-07",
+            "place": 2,
+            "score": "5:26.50",
+            "points": 96
+          },
+          {
+            "eventId": "2025-08",
+            "place": 1,
+            "score": "8:51.66",
+            "points": 100
+          },
+          {
+            "eventId": "2025-09",
+            "place": 1,
+            "score": "2:37.83",
+            "points": 100
+          },
+          {
+            "eventId": "2025-10",
+            "place": 3,
+            "score": "9:46.38",
+            "points": 92
+          }
+        ]
+      },
+      {
+        "rank": 2,
+        "name": "Lucy Campbell",
+        "country": "United Kingdom",
+        "totalPoints": 720,
+        "events": [
+          {
+            "eventId": "2025-01",
+            "place": 3,
+            "score": "51:36",
+            "points": 92
+          },
+          {
+            "eventId": "2025-02",
+            "place": 10,
+            "score": "7:22.74",
+            "points": 64
+          },
+          {
+            "eventId": "2025-03",
+            "place": 6,
+            "score": "10:32.11",
+            "points": 80
+          },
+          {
+            "eventId": "2025-04",
+            "place": 1,
+            "score": "16:33.05",
+            "points": 100
+          },
+          {
+            "eventId": "2025-05",
+            "place": 23,
+            "score": "295 lb",
+            "points": 21
+          },
+          {
+            "eventId": "2025-06",
+            "place": 5,
+            "score": "4:00.11",
+            "points": 84
+          },
+          {
+            "eventId": "2025-07",
+            "place": 1,
+            "score": "5:09.60",
+            "points": 100
+          },
+          {
+            "eventId": "2025-08",
+            "place": 17,
+            "score": "12:24.06",
+            "points": 39
+          },
+          {
+            "eventId": "2025-09",
+            "place": 12,
+            "score": "3:01.65",
+            "points": 56
+          },
+          {
+            "eventId": "2025-10",
+            "place": 5,
+            "score": "9:54.16",
+            "points": 84
+          }
+        ]
+      },
+      {
+        "rank": 3,
+        "name": "Olivia Kerstetter",
+        "country": "United States",
+        "totalPoints": 678,
+        "events": [
+          {
+            "eventId": "2025-01",
+            "place": 28,
+            "score": "59:02",
+            "points": 6
+          },
+          {
+            "eventId": "2025-02",
+            "place": 11,
+            "score": "7:30.68",
+            "points": 60
+          },
+          {
+            "eventId": "2025-03",
+            "place": 4,
+            "score": "9:55.15",
+            "points": 88
+          },
+          {
+            "eventId": "2025-04",
+            "place": 4,
+            "score": "17:49.24",
+            "points": 88
+          },
+          {
+            "eventId": "2025-05",
+            "place": 6,
+            "score": "325 lb",
+            "points": 80
+          },
+          {
+            "eventId": "2025-06",
+            "place": 6,
+            "score": "4:02.59",
+            "points": 80
+          },
+          {
+            "eventId": "2025-07",
+            "place": 22,
+            "score": "6:27.59",
+            "points": 24
+          },
+          {
+            "eventId": "2025-08",
+            "place": 9,
+            "score": "10:36.28",
+            "points": 68
+          },
+          {
+            "eventId": "2025-09",
+            "place": 5,
+            "score": "2:50.00",
+            "points": 84
+          },
+          {
+            "eventId": "2025-10",
+            "place": 1,
+            "score": "9:00.75",
+            "points": 100
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "name": "Danielle Brandon",
+        "country": "United States",
+        "totalPoints": 662,
+        "events": [
+          {
+            "eventId": "2025-01",
+            "place": 8,
+            "score": "53:34",
+            "points": 72
+          },
+          {
+            "eventId": "2025-02",
+            "place": 2,
+            "score": "6:28.63",
+            "points": 96
+          },
+          {
+            "eventId": "2025-03",
+            "place": 24,
+            "score": "CAP+5",
+            "points": 18
+          },
+          {
+            "eventId": "2025-04",
+            "place": 8,
+            "score": "18:27.85",
+            "points": 72
+          },
+          {
+            "eventId": "2025-05",
+            "place": 30,
+            "score": "265 lb",
+            "points": 0
+          },
+          {
+            "eventId": "2025-06",
+            "place": 4,
+            "score": "3:58.11",
+            "points": 88
+          },
+          {
+            "eventId": "2025-07",
+            "place": 12,
+            "score": "6:07.18",
+            "points": 56
+          },
+          {
+            "eventId": "2025-08",
+            "place": 8,
+            "score": "10:30.13",
+            "points": 72
+          },
+          {
+            "eventId": "2025-09",
+            "place": 3,
+            "score": "2:42.32",
+            "points": 92
+          },
+          {
+            "eventId": "2025-10",
+            "place": 2,
+            "score": "9:13.77",
+            "points": 96
+          }
+        ]
+      },
+      {
+        "rank": 5,
+        "name": "Arielle Loewen",
+        "country": "United States",
+        "totalPoints": 631,
+        "events": [
+          {
+            "eventId": "2025-01",
+            "place": 5,
+            "score": "52:16",
+            "points": 84
+          },
+          {
+            "eventId": "2025-02",
+            "place": 12,
+            "score": "7:31.14",
+            "points": 56
+          },
+          {
+            "eventId": "2025-03",
+            "place": 15,
+            "score": "11:41.85",
+            "points": 45
+          },
+          {
+            "eventId": "2025-04",
+            "place": 7,
+            "score": "18:27.51",
+            "points": 76
+          },
+          {
+            "eventId": "2025-05",
+            "place": 25,
+            "score": "290 lb",
+            "points": 15
+          },
+          {
+            "eventId": "2025-06",
+            "place": 1,
+            "score": "3:52.00",
+            "points": 100
+          },
+          {
+            "eventId": "2025-07",
+            "place": 6,
+            "score": "5:41.45",
+            "points": 80
+          },
+          {
+            "eventId": "2025-08",
+            "place": 12,
+            "score": "11:34.13",
+            "points": 56
+          },
+          {
+            "eventId": "2025-09",
+            "place": 6,
+            "score": "2:54.39",
+            "points": 80
+          },
+          {
+            "eventId": "2025-10",
+            "place": 17,
+            "score": "11:08.04",
+            "points": 39
+          }
+        ]
+      },
+      {
+        "rank": 6,
+        "name": "Madeline Sturt",
+        "country": "Australia",
+        "totalPoints": 631,
+        "events": [
+          {
+            "eventId": "2025-01",
+            "place": 7,
+            "score": "53:27",
+            "points": 76
+          },
+          {
+            "eventId": "2025-02",
+            "place": 9,
+            "score": "7:20.19",
+            "points": 68
+          },
+          {
+            "eventId": "2025-03",
+            "place": 14,
+            "score": "11:25.78",
+            "points": 48
+          },
+          {
+            "eventId": "2025-04",
+            "place": 10,
+            "score": "18:35.93",
+            "points": 64
+          },
+          {
+            "eventId": "2025-05",
+            "place": 7,
+            "score": "325 lb",
+            "points": 76
+          },
+          {
+            "eventId": "2025-06",
+            "place": 17,
+            "score": "4:18.46",
+            "points": 39
+          },
+          {
+            "eventId": "2025-07",
+            "place": 8,
+            "score": "5:56.89",
+            "points": 72
+          },
+          {
+            "eventId": "2025-08",
+            "place": 10,
+            "score": "11:08.53",
+            "points": 64
+          },
+          {
+            "eventId": "2025-09",
+            "place": 7,
+            "score": "2:54.96",
+            "points": 76
+          },
+          {
+            "eventId": "2025-10",
+            "place": 14,
+            "score": "10:53.32",
+            "points": 48
+          }
+        ]
+      },
+      {
+        "rank": 7,
+        "name": "Mirjam von Rohr",
+        "country": "Switzerland",
+        "totalPoints": 594,
+        "events": [
+          {
+            "eventId": "2025-01",
+            "place": 6,
+            "score": "52:58",
+            "points": 80
+          },
+          {
+            "eventId": "2025-02",
+            "place": 8,
+            "score": "7:19.56",
+            "points": 72
+          },
+          {
+            "eventId": "2025-03",
+            "place": 20,
+            "score": "CAP+1",
+            "points": 30
+          },
+          {
+            "eventId": "2025-04",
+            "place": 15,
+            "score": "19:48.17",
+            "points": 45
+          },
+          {
+            "eventId": "2025-05",
+            "place": 1,
+            "score": "360 lb",
+            "points": 100
+          },
+          {
+            "eventId": "2025-06",
+            "place": 15,
+            "score": "4:14.66",
+            "points": 45
+          },
+          {
+            "eventId": "2025-07",
+            "place": 7,
+            "score": "5:47.35",
+            "points": 76
+          },
+          {
+            "eventId": "2025-08",
+            "place": 14,
+            "score": "11:56.70",
+            "points": 48
+          },
+          {
+            "eventId": "2025-09",
+            "place": 9,
+            "score": "3:00.41",
+            "points": 68
+          },
+          {
+            "eventId": "2025-10",
+            "place": 20,
+            "score": "11:19.96",
+            "points": 30
+          }
+        ]
+      },
+      {
+        "rank": 8,
+        "name": "Aimee Cringle",
+        "country": "United Kingdom",
+        "totalPoints": 586,
+        "events": [
+          {
+            "eventId": "2025-01",
+            "place": 2,
+            "score": "50:16",
+            "points": 96
+          },
+          {
+            "eventId": "2025-02",
+            "place": 3,
+            "score": "6:38.19",
+            "points": 92
+          },
+          {
+            "eventId": "2025-03",
+            "place": 29,
+            "score": "CAP+11",
+            "points": 3
+          },
+          {
+            "eventId": "2025-04",
+            "place": 9,
+            "score": "18:28.81",
+            "points": 68
+          },
+          {
+            "eventId": "2025-05",
+            "place": 18,
+            "score": "300 lb",
+            "points": 36
+          },
+          {
+            "eventId": "2025-06",
+            "place": 9,
+            "score": "4:06.04",
+            "points": 68
+          },
+          {
+            "eventId": "2025-07",
+            "place": 5,
+            "score": "5:39.63",
+            "points": 84
+          },
+          {
+            "eventId": "2025-08",
+            "place": 4,
+            "score": "10:08.00",
+            "points": 88
+          },
+          {
+            "eventId": "2025-09",
+            "place": 16,
+            "score": "3:06.65",
+            "points": 42
+          },
+          {
+            "eventId": "2025-10",
+            "place": 27,
+            "score": "12:52.90",
+            "points": 9
+          }
+        ]
+      },
+      {
+        "rank": 9,
+        "name": "Anikha Greer",
+        "country": "Canada",
+        "totalPoints": 559,
+        "events": [
+          {
+            "eventId": "2025-01",
+            "place": 27,
+            "score": "58:59",
+            "points": 9
+          },
+          {
+            "eventId": "2025-02",
+            "place": 7,
+            "score": "7:14.07",
+            "points": 76
+          },
+          {
+            "eventId": "2025-03",
+            "place": 10,
+            "score": "10:52.26",
+            "points": 64
+          },
+          {
+            "eventId": "2025-04",
+            "place": 20,
+            "score": "20:43.21",
+            "points": 30
+          },
+          {
+            "eventId": "2025-05",
+            "place": 2,
+            "score": "355 lb",
+            "points": 96
+          },
+          {
+            "eventId": "2025-06",
+            "place": 16,
+            "score": "4:18.05",
+            "points": 42
+          },
+          {
+            "eventId": "2025-07",
+            "place": 13,
+            "score": "6:08.70",
+            "points": 52
+          },
+          {
+            "eventId": "2025-08",
+            "place": 20,
+            "score": "13:15.03",
+            "points": 30
+          },
+          {
+            "eventId": "2025-09",
+            "place": 8,
+            "score": "2:59.25",
+            "points": 72
+          },
+          {
+            "eventId": "2025-10",
+            "place": 4,
+            "score": "9:48.58",
+            "points": 88
+          }
+        ]
+      },
+      {
+        "rank": 10,
+        "name": "Alexis Raptis",
+        "country": "United States",
+        "totalPoints": 555,
+        "events": [
+          {
+            "eventId": "2025-01",
+            "place": 14,
+            "score": "55:39",
+            "points": 48
+          },
+          {
+            "eventId": "2025-02",
+            "place": 23,
+            "score": "9:09.22",
+            "points": 21
+          },
+          {
+            "eventId": "2025-03",
+            "place": 9,
+            "score": "10:48.79",
+            "points": 68
+          },
+          {
+            "eventId": "2025-04",
+            "place": 14,
+            "score": "19:41.44",
+            "points": 48
+          },
+          {
+            "eventId": "2025-05",
+            "place": 28,
+            "score": "280 lb",
+            "points": 6
+          },
+          {
+            "eventId": "2025-06",
+            "place": 8,
+            "score": "4:05.33",
+            "points": 72
+          },
+          {
+            "eventId": "2025-07",
+            "place": 11,
+            "score": "6:00.39",
+            "points": 60
+          },
+          {
+            "eventId": "2025-08",
+            "place": 3,
+            "score": "10:03.48",
+            "points": 92
+          },
+          {
+            "eventId": "2025-09",
+            "place": 10,
+            "score": "3:00.47",
+            "points": 64
+          },
+          {
+            "eventId": "2025-10",
+            "place": 7,
+            "score": "10:10.85",
+            "points": 76
+          }
+        ]
+      }
+    ]
+  }
+}

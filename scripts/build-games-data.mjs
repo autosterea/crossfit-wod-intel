@@ -671,6 +671,72 @@ const records = [
 ]
 
 // ---------------------------------------------------------------------------
+// Athlete results (top-10 per division) — src/data/games/results/<year>.json
+// Validated hard against the events data: points must sum to totals, the
+// documented event winner must place 1st when they appear in the top 10,
+// every eventId must exist, places must fit the field.
+// ---------------------------------------------------------------------------
+
+const RESULTS_DIR = join(__dirname, '..', 'src', 'data', 'games', 'results')
+const results = {}
+if (existsSync(RESULTS_DIR)) {
+  for (const f of readdirSync(RESULTS_DIR).filter((x) => /^\d{4}\.json$/.test(x)).sort()) {
+    const year = Number(f.slice(0, 4))
+    let res
+    try {
+      res = JSON.parse(readFileSync(join(RESULTS_DIR, f), 'utf8'))
+    } catch (e) {
+      problem(`results/${year}: JSON parse error — ${e.message}`)
+      continue
+    }
+    const yearData = years.find((y) => y.year === year)
+    if (!yearData) {
+      problem(`results/${year}: no matching raw year file`)
+      continue
+    }
+    const eventIds = new Set(yearData.events.map((e) => e.id))
+    for (const division of ['men', 'women']) {
+      const field = division === 'men' ? yearData.fieldMen : yearData.fieldWomen
+      const athletes = res.divisions?.[division] ?? []
+      if (athletes.length !== 10) problem(`results/${year}/${division}: expected 10 athletes, got ${athletes.length}`)
+      athletes.forEach((a) => {
+        const sum = a.events.reduce((acc, e) => acc + e.points, 0)
+        if (sum !== a.totalPoints) problem(`results/${year}/${division}/${a.name}: event points sum ${sum} ≠ totalPoints ${a.totalPoints}`)
+        a.events.forEach((e) => {
+          if (!eventIds.has(e.eventId)) problem(`results/${year}/${division}/${a.name}: unknown eventId ${e.eventId}`)
+          if (!Number.isInteger(e.place) || e.place < 1 || (field && e.place > field)) {
+            problem(`results/${year}/${division}/${a.name}: place ${e.place} out of range for ${e.eventId}`)
+          }
+        })
+      })
+      // Documented event winners must place 1st when they're in the top 10
+      const byName = new Map(athletes.map((a) => [a.name, a]))
+      yearData.events.forEach((ev) => {
+        const winner = division === 'men' ? ev.winnerMen : ev.winnerWomen
+        const a = winner ? byName.get(winner) : null
+        if (a) {
+          const cell = a.events.find((e) => e.eventId === ev.id)
+          if (cell && cell.place !== 1) {
+            problem(`results/${year}/${division}: ${winner} won ${ev.id} per events data but results give place ${cell.place}`)
+          }
+        }
+      })
+      // Final order must be strictly by rank with descending points
+      for (let i = 1; i < athletes.length; i++) {
+        if (athletes[i].rank !== athletes[i - 1].rank + 1) problem(`results/${year}/${division}: ranks not sequential at index ${i}`)
+        if (athletes[i].totalPoints > athletes[i - 1].totalPoints) {
+          problem(`results/${year}/${division}: ${athletes[i].name} has more points than the athlete ranked above`)
+        }
+      }
+    }
+    results[year] = res
+  }
+  if (Object.keys(results).length) {
+    console.log(`Athlete results: ${Object.keys(results).join(', ')}`)
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Emit
 // ---------------------------------------------------------------------------
 
@@ -694,6 +760,7 @@ const bundle = {
   namedWods,
   champions,
   records,
+  results,
 }
 
 console.log(`\nYears: ${years.length}  Events: ${allEvents.length} (${bundle.meta.totalGamesEvents} games + ${bundle.meta.totalOnlineEvents} online)`)

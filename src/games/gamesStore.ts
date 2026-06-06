@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-export type GamesView = 'home' | 'year' | 'evolution' | 'movements' | 'lore'
+export type GamesView = 'home' | 'year' | 'evolution' | 'movements' | 'lore' | 'capacity'
 
 export interface GamesRoute {
   view: GamesView
@@ -13,11 +13,15 @@ const TITLES: Record<GamesView, string> = {
   evolution: 'Evolution — CrossFit Games Almanac',
   movements: 'Movements — CrossFit Games Almanac',
   lore: 'Records & Lore — CrossFit Games Almanac',
+  capacity: 'Capacity Lab — CrossFit Games Almanac',
 }
 
 export function parseGamesPath(pathname: string): GamesRoute {
   const seg = pathname.replace(/^\/games\/?/, '').replace(/\/+$/, '')
   if (/^\d{4}$/.test(seg)) return { view: 'year', year: Number(seg) }
+  const capacityYear = seg.match(/^capacity\/(\d{4})$/)
+  if (capacityYear) return { view: 'capacity', year: Number(capacityYear[1]) }
+  if (seg === 'capacity') return { view: 'capacity', year: null }
   if (seg === 'evolution' || seg === 'movements' || seg === 'lore') {
     return { view: seg, year: null }
   }
@@ -26,6 +30,7 @@ export function parseGamesPath(pathname: string): GamesRoute {
 
 export function routeToPath(route: GamesRoute): string {
   if (route.view === 'year') return route.year ? `/games/${route.year}` : '/games'
+  if (route.view === 'capacity') return route.year ? `/games/capacity/${route.year}` : '/games/capacity'
   if (route.view === 'home') return '/games'
   return `/games/${route.view}`
 }

@@ -11,6 +11,7 @@ const YearView = lazy(() => import('./YearView'))
 const EvolutionView = lazy(() => import('./EvolutionView'))
 const MovementsView = lazy(() => import('./MovementsView'))
 const LoreView = lazy(() => import('./LoreView'))
+const CapacityView = lazy(() => import('./CapacityView'))
 
 class ViewErrorBoundary extends Component<{ children: ReactNode; name: string }, { error: Error | null }> {
   state = { error: null as Error | null }
@@ -36,11 +37,12 @@ class ViewErrorBoundary extends Component<{ children: ReactNode; name: string },
   }
 }
 
-const NAV: { view: 'home' | 'evolution' | 'movements' | 'lore'; label: string }[] = [
+const NAV: { view: 'home' | 'evolution' | 'movements' | 'lore' | 'capacity'; label: string; mobileLabel?: string }[] = [
   { view: 'home', label: 'Timeline' },
   { view: 'evolution', label: 'Evolution' },
   { view: 'movements', label: 'Movements' },
-  { view: 'lore', label: 'Records & Lore' },
+  { view: 'lore', label: 'Records & Lore', mobileLabel: 'Lore' },
+  { view: 'capacity', label: 'Capacity Lab', mobileLabel: 'Capacity' },
 ]
 
 function TopBar() {
@@ -96,10 +98,10 @@ function TopBar() {
             <button
               key={n.view}
               onClick={() => navigate({ view: n.view, year: null })}
-              className="games-condensed uppercase tracking-[0.08em] text-[12px] font-semibold px-2"
+              className="games-condensed uppercase tracking-[0.08em] text-[12px] font-semibold px-1.5"
               style={{ color: route.view === n.view ? '#91C640' : 'var(--text-secondary)' }}
             >
-              {n.label}
+              {n.mobileLabel ?? n.label}
             </button>
           ))}
         </div>
@@ -188,6 +190,7 @@ export default function GamesApp() {
                 {route.view === 'evolution' && <EvolutionView />}
                 {route.view === 'movements' && <MovementsView />}
                 {route.view === 'lore' && <LoreView />}
+                {route.view === 'capacity' && <CapacityView />}
               </ViewErrorBoundary>
             </Suspense>
           </main>

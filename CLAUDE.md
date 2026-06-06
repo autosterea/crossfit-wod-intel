@@ -212,6 +212,17 @@ Data pipeline (one-time research, manually re-runnable):
   pushState: `/games/2014`, `/games/evolution`…).
 - To add the 2026 Games later: write `raw/2026.json` per SCHEMA.md, run
   `npm run build:games`, commit both files.
+- **Capacity Lab** (`/games/capacity`, `src/games/CapacityView.tsx`):
+  top-10 athlete analysis — work capacity across time domains (capacity
+  curve on log duration), modal domains (radar), fingerprint heatmap,
+  breadth index. Data: `src/data/games/results/<year>.json` (top-10 per
+  division, per-event place/score/points). The build script validates:
+  points must sum to totals, documented event winners must place 1st,
+  places within field size, sequential ranks. Pilot year 2025; to add a
+  year, research a results file (official leaderboard API
+  `c3po.crossfit.com/api/leaderboards/v2/competitions/games/<year>/leaderboards?division=1|2`
+  is the best source) and rebuild. Performance metric = placement
+  percentile (field−place+1)/field; event duration = division winning time.
 
 ## Classification (scraper)
 

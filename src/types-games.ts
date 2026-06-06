@@ -129,6 +129,34 @@ export interface GamesRecord {
   detail: string
 }
 
+// ---- Athlete results (top-10 per division, per year — Capacity Lab) ----
+
+export interface GamesAthleteEventResult {
+  eventId: string
+  place: number
+  /** Leaderboard score display ("8:23.45", "545 lb", "CAP+12"), null if undocumented */
+  score: string | null
+  points: number
+}
+
+export interface GamesAthleteResult {
+  rank: number
+  name: string
+  country: string | null
+  totalPoints: number
+  events: GamesAthleteEventResult[]
+}
+
+export interface GamesYearResults {
+  year: number
+  pointsSystem: string
+  sources: string[]
+  divisions: {
+    men: GamesAthleteResult[]
+    women: GamesAthleteResult[]
+  }
+}
+
 export interface GamesData {
   meta: {
     generated: string
@@ -146,4 +174,6 @@ export interface GamesData {
   namedWods: GamesNamedWodCrossover[]
   champions: { year: number; men: string | null; women: string | null }[]
   records: GamesRecord[]
+  /** Top-10 athlete results keyed by year (only years with researched data) */
+  results: Record<string, GamesYearResults>
 }
