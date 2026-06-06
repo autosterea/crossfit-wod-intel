@@ -1,0 +1,358 @@
+{
+  "year": 2010,
+  "pointsSystem": "Placement-equals-points (no points table). Each athlete's finish position in an event equals the points earned for that event (1st = 1 point, 2nd = 2, etc.); totalPoints is the sum across all nine events and the lowest total wins. Ties shared the better place value (e.g., two athletes tied for 1st each scored 1, and the next athlete scored 3). totalPoints equals the official leaderboard overall score for each athlete; points equal the per-event rank exactly.",
+  "sources": [
+    "https://c3po.crossfit.com/api/leaderboards/v2/competitions/games/2010/leaderboards?division=1",
+    "https://c3po.crossfit.com/api/leaderboards/v2/competitions/games/2010/leaderboards?division=2",
+    "https://games.crossfit.com/leaderboard/games/2010",
+    "https://en.wikipedia.org/wiki/2010_CrossFit_Games",
+    "https://www.crossfit.com/workout/2010/07/23",
+    "Scoring is placement-equals-points; ranks and points are taken directly from the official c3po leaderboard archive and reconcile exactly to each athlete's overall score. Score displays are the official leaderboard values normalized ('rep' -> 'reps'). For the three-part Sunday final, leaderboard rep figures for athletes who FINISHED an event are encoded values (reps plus an unpublished time-remaining bonus), not literal reps, per the raw anchor file. For those events the place-1 winner's score uses the documented finishing time (Event 2010-07 men Froning 6:55; Event 2010-09 men Spealler 8:32; Event 2010-09 women Thorisdottir 7:34). Patrick Burke's Event 2010-09 finish (10:41) is documented and used; other finishers' encoded rep artifacts with no published time are set to null. Capped athletes' literal rep counts are kept as shown."
+  ],
+  "divisions": {
+    "men": [
+      {
+        "rank": 1,
+        "name": "Graham Holmberg",
+        "country": "USA",
+        "totalPoints": 48,
+        "events": [
+          { "eventId": "2010-01", "place": 11, "score": "4:33", "points": 11 },
+          { "eventId": "2010-02", "place": 1, "score": "16:59", "points": 1 },
+          { "eventId": "2010-03", "place": 3, "score": "285 lb", "points": 3 },
+          { "eventId": "2010-04", "place": 3, "score": "237 reps", "points": 3 },
+          { "eventId": "2010-05", "place": 16, "score": "9:09", "points": 16 },
+          { "eventId": "2010-06", "place": 1, "score": "4:26", "points": 1 },
+          { "eventId": "2010-07", "place": 6, "score": "137 reps", "points": 6 },
+          { "eventId": "2010-08", "place": 2, "score": "96 reps", "points": 2 },
+          { "eventId": "2010-09", "place": 5, "score": null, "points": 5 }
+        ]
+      },
+      {
+        "rank": 2,
+        "name": "Rich Froning Jr.",
+        "country": "USA",
+        "totalPoints": 51,
+        "events": [
+          { "eventId": "2010-01", "place": 3, "score": "3:47", "points": 3 },
+          { "eventId": "2010-02", "place": 6, "score": "18:10", "points": 6 },
+          { "eventId": "2010-03", "place": 13, "score": "245 lb", "points": 13 },
+          { "eventId": "2010-04", "place": 1, "score": "242 reps", "points": 1 },
+          { "eventId": "2010-05", "place": 2, "score": "7:14", "points": 2 },
+          { "eventId": "2010-06", "place": 4, "score": "5:21", "points": 4 },
+          { "eventId": "2010-07", "place": 1, "score": "6:55", "points": 1 },
+          { "eventId": "2010-08", "place": 9, "score": "86 reps", "points": 9 },
+          { "eventId": "2010-09", "place": 12, "score": "9 reps", "points": 12 }
+        ]
+      },
+      {
+        "rank": 3,
+        "name": "Chris Spealler",
+        "country": "USA",
+        "totalPoints": 69,
+        "events": [
+          { "eventId": "2010-01", "place": 1, "score": "3:29", "points": 1 },
+          { "eventId": "2010-02", "place": 2, "score": "17:02", "points": 2 },
+          { "eventId": "2010-03", "place": 26, "score": "225 lb", "points": 26 },
+          { "eventId": "2010-04", "place": 8, "score": "225 reps", "points": 8 },
+          { "eventId": "2010-05", "place": 22, "score": "10:21", "points": 22 },
+          { "eventId": "2010-06", "place": 2, "score": "4:27", "points": 2 },
+          { "eventId": "2010-07", "place": 2, "score": "156 reps", "points": 2 },
+          { "eventId": "2010-08", "place": 5, "score": "91 reps", "points": 5 },
+          { "eventId": "2010-09", "place": 1, "score": "8:32", "points": 1 }
+        ]
+      },
+      {
+        "rank": 4,
+        "name": "Matt Chan",
+        "country": "USA",
+        "totalPoints": 73,
+        "events": [
+          { "eventId": "2010-01", "place": 4, "score": "3:50", "points": 4 },
+          { "eventId": "2010-02", "place": 11, "score": "18:40", "points": 11 },
+          { "eventId": "2010-03", "place": 4, "score": "275 lb", "points": 4 },
+          { "eventId": "2010-04", "place": 5, "score": "236 reps", "points": 5 },
+          { "eventId": "2010-05", "place": 21, "score": "10:08", "points": 21 },
+          { "eventId": "2010-06", "place": 9, "score": "8:09", "points": 9 },
+          { "eventId": "2010-07", "place": 3, "score": "152 reps", "points": 3 },
+          { "eventId": "2010-08", "place": 7, "score": "90 reps", "points": 7 },
+          { "eventId": "2010-09", "place": 9, "score": "19 reps", "points": 9 }
+        ]
+      },
+      {
+        "rank": 5,
+        "name": "Mikko Salo",
+        "country": "Finland",
+        "totalPoints": 77,
+        "events": [
+          { "eventId": "2010-01", "place": 15, "score": "5:17", "points": 15 },
+          { "eventId": "2010-02", "place": 4, "score": "17:35", "points": 4 },
+          { "eventId": "2010-03", "place": 10, "score": "255 lb", "points": 10 },
+          { "eventId": "2010-04", "place": 16, "score": "219 reps", "points": 16 },
+          { "eventId": "2010-05", "place": 3, "score": "7:24", "points": 3 },
+          { "eventId": "2010-06", "place": 7, "score": "6:04", "points": 7 },
+          { "eventId": "2010-07", "place": 4, "score": "151 reps", "points": 4 },
+          { "eventId": "2010-08", "place": 5, "score": "91 reps", "points": 5 },
+          { "eventId": "2010-09", "place": 13, "score": "7 reps", "points": 13 }
+        ]
+      },
+      {
+        "rank": 6,
+        "name": "Austin Malleolo",
+        "country": "USA",
+        "totalPoints": 84,
+        "events": [
+          { "eventId": "2010-01", "place": 7, "score": "4:14", "points": 7 },
+          { "eventId": "2010-02", "place": 9, "score": "18:39", "points": 9 },
+          { "eventId": "2010-03", "place": 37, "score": "205 lb", "points": 37 },
+          { "eventId": "2010-04", "place": 1, "score": "242 reps", "points": 1 },
+          { "eventId": "2010-05", "place": 10, "score": "8:24", "points": 10 },
+          { "eventId": "2010-06", "place": 6, "score": "6:01", "points": 6 },
+          { "eventId": "2010-07", "place": 5, "score": "140 reps", "points": 5 },
+          { "eventId": "2010-08", "place": 3, "score": "93 reps", "points": 3 },
+          { "eventId": "2010-09", "place": 6, "score": "23 reps", "points": 6 }
+        ]
+      },
+      {
+        "rank": 7,
+        "name": "Patrick Burke",
+        "country": "USA",
+        "totalPoints": 91,
+        "events": [
+          { "eventId": "2010-01", "place": 10, "score": "4:31", "points": 10 },
+          { "eventId": "2010-02", "place": 9, "score": "18:39", "points": 9 },
+          { "eventId": "2010-03", "place": 23, "score": "235 lb", "points": 23 },
+          { "eventId": "2010-04", "place": 12, "score": "222 reps", "points": 12 },
+          { "eventId": "2010-05", "place": 4, "score": "7:32", "points": 4 },
+          { "eventId": "2010-06", "place": 15, "score": "10:10", "points": 15 },
+          { "eventId": "2010-07", "place": 7, "score": "136 reps", "points": 7 },
+          { "eventId": "2010-08", "place": 9, "score": "86 reps", "points": 9 },
+          { "eventId": "2010-09", "place": 2, "score": "10:41", "points": 2 }
+        ]
+      },
+      {
+        "rank": 8,
+        "name": "Ben Smith",
+        "country": "USA",
+        "totalPoints": 93,
+        "events": [
+          { "eventId": "2010-01", "place": 5, "score": "4:01", "points": 5 },
+          { "eventId": "2010-02", "place": 35, "score": "21:29", "points": 35 },
+          { "eventId": "2010-03", "place": 2, "score": "295 lb", "points": 2 },
+          { "eventId": "2010-04", "place": 13, "score": "221 reps", "points": 13 },
+          { "eventId": "2010-05", "place": 15, "score": "9:08", "points": 15 },
+          { "eventId": "2010-06", "place": 3, "score": "4:57", "points": 3 },
+          { "eventId": "2010-07", "place": 12, "score": "123 reps", "points": 12 },
+          { "eventId": "2010-08", "place": 1, "score": "99 reps", "points": 1 },
+          { "eventId": "2010-09", "place": 7, "score": "21 reps", "points": 7 }
+        ]
+      },
+      {
+        "rank": 9,
+        "name": "Tommy Hackenbruck",
+        "country": "USA",
+        "totalPoints": 111,
+        "events": [
+          { "eventId": "2010-01", "place": 30, "score": "6:49", "points": 30 },
+          { "eventId": "2010-02", "place": 5, "score": "18:07", "points": 5 },
+          { "eventId": "2010-03", "place": 13, "score": "245 lb", "points": 13 },
+          { "eventId": "2010-04", "place": 26, "score": "188 reps", "points": 26 },
+          { "eventId": "2010-05", "place": 1, "score": "6:57", "points": 1 },
+          { "eventId": "2010-06", "place": 14, "score": "9:42", "points": 14 },
+          { "eventId": "2010-07", "place": 15, "score": "111 reps", "points": 15 },
+          { "eventId": "2010-08", "place": 4, "score": "92 reps", "points": 4 },
+          { "eventId": "2010-09", "place": 3, "score": null, "points": 3 }
+        ]
+      },
+      {
+        "rank": 10,
+        "name": "Peter Egyed",
+        "country": "USA",
+        "totalPoints": 117,
+        "events": [
+          { "eventId": "2010-01", "place": 6, "score": "4:04", "points": 6 },
+          { "eventId": "2010-02", "place": 3, "score": "17:34", "points": 3 },
+          { "eventId": "2010-03", "place": 37, "score": "205 lb", "points": 37 },
+          { "eventId": "2010-04", "place": 27, "score": "187 reps", "points": 27 },
+          { "eventId": "2010-05", "place": 9, "score": "8:17", "points": 9 },
+          { "eventId": "2010-06", "place": 10, "score": "8:14", "points": 10 },
+          { "eventId": "2010-07", "place": 10, "score": "125 reps", "points": 10 },
+          { "eventId": "2010-08", "place": 11, "score": "84 reps", "points": 11 },
+          { "eventId": "2010-09", "place": 4, "score": null, "points": 4 }
+        ]
+      }
+    ],
+    "women": [
+      {
+        "rank": 1,
+        "name": "Kristan Clever",
+        "country": "USA",
+        "totalPoints": 31,
+        "events": [
+          { "eventId": "2010-01", "place": 1, "score": "5:04", "points": 1 },
+          { "eventId": "2010-02", "place": 2, "score": "18:23", "points": 2 },
+          { "eventId": "2010-03", "place": 1, "score": "205 lb", "points": 1 },
+          { "eventId": "2010-04", "place": 2, "score": "227 reps", "points": 2 },
+          { "eventId": "2010-05", "place": 20, "score": "11:20", "points": 20 },
+          { "eventId": "2010-06", "place": 1, "score": "3:37", "points": 1 },
+          { "eventId": "2010-07", "place": 1, "score": "138 reps", "points": 1 },
+          { "eventId": "2010-08", "place": 1, "score": "106 reps", "points": 1 },
+          { "eventId": "2010-09", "place": 2, "score": null, "points": 2 }
+        ]
+      },
+      {
+        "rank": 2,
+        "name": "Annie Thorisdottir",
+        "country": "Iceland",
+        "totalPoints": 43,
+        "events": [
+          { "eventId": "2010-01", "place": 12, "score": "12:07", "points": 12 },
+          { "eventId": "2010-02", "place": 1, "score": "17:53", "points": 1 },
+          { "eventId": "2010-03", "place": 8, "score": "165 lb", "points": 8 },
+          { "eventId": "2010-04", "place": 1, "score": "234 reps", "points": 1 },
+          { "eventId": "2010-05", "place": 1, "score": "8:04", "points": 1 },
+          { "eventId": "2010-06", "place": 14, "score": "12:03", "points": 14 },
+          { "eventId": "2010-07", "place": 2, "score": "136 reps", "points": 2 },
+          { "eventId": "2010-08", "place": 3, "score": "96 reps", "points": 3 },
+          { "eventId": "2010-09", "place": 1, "score": "7:34", "points": 1 }
+        ]
+      },
+      {
+        "rank": 3,
+        "name": "Valerie Voboril",
+        "country": "USA",
+        "totalPoints": 51,
+        "events": [
+          { "eventId": "2010-01", "place": 6, "score": "8:15", "points": 6 },
+          { "eventId": "2010-02", "place": 5, "score": "19:12", "points": 5 },
+          { "eventId": "2010-03", "place": 20, "score": "135 lb", "points": 20 },
+          { "eventId": "2010-04", "place": 4, "score": "225 reps", "points": 4 },
+          { "eventId": "2010-05", "place": 6, "score": "9:11", "points": 6 },
+          { "eventId": "2010-06", "place": 2, "score": "4:09", "points": 2 },
+          { "eventId": "2010-07", "place": 3, "score": "129 reps", "points": 3 },
+          { "eventId": "2010-08", "place": 1, "score": "106 reps", "points": 1 },
+          { "eventId": "2010-09", "place": 4, "score": null, "points": 4 }
+        ]
+      },
+      {
+        "rank": 4,
+        "name": "Jessica Pamanian",
+        "country": "USA",
+        "totalPoints": 72,
+        "events": [
+          { "eventId": "2010-01", "place": 12, "score": "12:07", "points": 12 },
+          { "eventId": "2010-02", "place": 19, "score": "21:51", "points": 19 },
+          { "eventId": "2010-03", "place": 2, "score": "195 lb", "points": 2 },
+          { "eventId": "2010-04", "place": 5, "score": "221 reps", "points": 5 },
+          { "eventId": "2010-05", "place": 9, "score": "9:47", "points": 9 },
+          { "eventId": "2010-06", "place": 7, "score": "7:45", "points": 7 },
+          { "eventId": "2010-07", "place": 5, "score": "115 reps", "points": 5 },
+          { "eventId": "2010-08", "place": 8, "score": "76 reps", "points": 8 },
+          { "eventId": "2010-09", "place": 5, "score": "20 reps", "points": 5 }
+        ]
+      },
+      {
+        "rank": 5,
+        "name": "Julie Foucher",
+        "country": "USA",
+        "totalPoints": 72,
+        "events": [
+          { "eventId": "2010-01", "place": 5, "score": "8:06", "points": 5 },
+          { "eventId": "2010-02", "place": 12, "score": "21:23", "points": 12 },
+          { "eventId": "2010-03", "place": 3, "score": "185 lb", "points": 3 },
+          { "eventId": "2010-04", "place": 10, "score": "194 reps", "points": 10 },
+          { "eventId": "2010-05", "place": 8, "score": "9:37", "points": 8 },
+          { "eventId": "2010-06", "place": 13, "score": "11:09", "points": 13 },
+          { "eventId": "2010-07", "place": 7, "score": "109 reps", "points": 7 },
+          { "eventId": "2010-08", "place": 11, "score": "71 reps", "points": 11 },
+          { "eventId": "2010-09", "place": 3, "score": null, "points": 3 }
+        ]
+      },
+      {
+        "rank": 6,
+        "name": "Christy Phillips",
+        "country": "USA",
+        "totalPoints": 75,
+        "events": [
+          { "eventId": "2010-01", "place": 3, "score": "7:04", "points": 3 },
+          { "eventId": "2010-02", "place": 9, "score": "20:02", "points": 9 },
+          { "eventId": "2010-03", "place": 20, "score": "135 lb", "points": 20 },
+          { "eventId": "2010-04", "place": 2, "score": "227 reps", "points": 2 },
+          { "eventId": "2010-05", "place": 2, "score": "8:38", "points": 2 },
+          { "eventId": "2010-06", "place": 8, "score": "8:08", "points": 8 },
+          { "eventId": "2010-07", "place": 4, "score": "118 reps", "points": 4 },
+          { "eventId": "2010-08", "place": 16, "score": "53 reps", "points": 16 },
+          { "eventId": "2010-09", "place": 11, "score": "13 reps", "points": 11 }
+        ]
+      },
+      {
+        "rank": 7,
+        "name": "Rebecca Voigt",
+        "country": "USA",
+        "totalPoints": 77,
+        "events": [
+          { "eventId": "2010-01", "place": 11, "score": "11:21", "points": 11 },
+          { "eventId": "2010-02", "place": 14, "score": "21:29", "points": 14 },
+          { "eventId": "2010-03", "place": 3, "score": "185 lb", "points": 3 },
+          { "eventId": "2010-04", "place": 12, "score": "188 reps", "points": 12 },
+          { "eventId": "2010-05", "place": 3, "score": "8:59", "points": 3 },
+          { "eventId": "2010-06", "place": 17, "score": "12:24", "points": 17 },
+          { "eventId": "2010-07", "place": 6, "score": "110 reps", "points": 6 },
+          { "eventId": "2010-08", "place": 6, "score": "79 reps", "points": 6 },
+          { "eventId": "2010-09", "place": 5, "score": "20 reps", "points": 5 }
+        ]
+      },
+      {
+        "rank": 8,
+        "name": "Heather Bergeron",
+        "country": "USA",
+        "totalPoints": 84,
+        "events": [
+          { "eventId": "2010-01", "place": 7, "score": "8:34", "points": 7 },
+          { "eventId": "2010-02", "place": 10, "score": "20:08", "points": 10 },
+          { "eventId": "2010-03", "place": 20, "score": "135 lb", "points": 20 },
+          { "eventId": "2010-04", "place": 16, "score": "183 reps", "points": 16 },
+          { "eventId": "2010-05", "place": 3, "score": "8:59", "points": 3 },
+          { "eventId": "2010-06", "place": 3, "score": "5:01", "points": 3 },
+          { "eventId": "2010-07", "place": 8, "score": "105 reps", "points": 8 },
+          { "eventId": "2010-08", "place": 8, "score": "76 reps", "points": 8 },
+          { "eventId": "2010-09", "place": 9, "score": "19 reps", "points": 9 }
+        ]
+      },
+      {
+        "rank": 9,
+        "name": "Camille Leblanc-Bazinet",
+        "country": "Canada",
+        "totalPoints": 94,
+        "events": [
+          { "eventId": "2010-01", "place": 2, "score": "7:02", "points": 2 },
+          { "eventId": "2010-02", "place": 6, "score": "19:38", "points": 6 },
+          { "eventId": "2010-03", "place": 29, "score": "125 lb", "points": 29 },
+          { "eventId": "2010-04", "place": 6, "score": "217 reps", "points": 6 },
+          { "eventId": "2010-05", "place": 22, "score": "14:25", "points": 22 },
+          { "eventId": "2010-06", "place": 4, "score": "6:30", "points": 4 },
+          { "eventId": "2010-07", "place": 11, "score": "99 reps", "points": 11 },
+          { "eventId": "2010-08", "place": 5, "score": "91 reps", "points": 5 },
+          { "eventId": "2010-09", "place": 9, "score": "19 reps", "points": 9 }
+        ]
+      },
+      {
+        "rank": 10,
+        "name": "Michelle Kinney",
+        "country": "USA",
+        "totalPoints": 99,
+        "events": [
+          { "eventId": "2010-01", "place": 8, "score": "9:43", "points": 8 },
+          { "eventId": "2010-02", "place": 11, "score": "21:02", "points": 11 },
+          { "eventId": "2010-03", "place": 10, "score": "155 lb", "points": 10 },
+          { "eventId": "2010-04", "place": 18, "score": "181 reps", "points": 18 },
+          { "eventId": "2010-05", "place": 11, "score": "10:17", "points": 11 },
+          { "eventId": "2010-06", "place": 16, "score": "12:22", "points": 16 },
+          { "eventId": "2010-07", "place": 13, "score": "97 reps", "points": 13 },
+          { "eventId": "2010-08", "place": 7, "score": "78 reps", "points": 7 },
+          { "eventId": "2010-09", "place": 5, "score": "20 reps", "points": 5 }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,2457 @@
+{
+  "year": 2020,
+  "pointsSystem": "Two-stage pandemic format with scores RESET between stages, so the official overall standing is decided by the FINALS only. Stage 1 (online, Sept 18-19): 30 athletes per division, 7 events scored on the standard 30-athlete Games table (100, 96, 92, 88, 84, 80, 76, 72, 68, 64, 60, 56, 52, 49, 46, 43, 40, 37, 34, 31, 28, 25, 22, 19, 16, 13, 10, 7, 4, 0 for places 1-30); only the top 5 per division advanced. Stage 2 finals (Oct 23-25, The Ranch): 5 athletes per division, 12 events scored 100-75-55-35-15 for places 1-5. totalPoints here is the official FINAL total = the sum of an athlete's finals event points (max 1200). To make per-athlete event points sum to that official total, the 7 Stage-1 events carry points:0 in this file (their points were reset and do NOT count toward the final standing); the real Stage-1 place and score are preserved for analysis. Overall ranks 1-5 are the five finalists ordered by finals points; ranks 6-10 are the next-best Stage-1 finishers, who were eliminated after Stage 1 (0 finals points). For ranks 6-10 the 12 finals events (2020-08..2020-19), which they did not contest, are recorded as place 6 (first position outside the 5-athlete final), score null, points 0.",
+  "sources": [
+    "https://c3po.crossfit.com/api/leaderboards/v2/competitions/games/2020/leaderboards?division=1 (official CrossFit Games leaderboard API, men - per-event rank, points, scoreDisplay; primary source). Note: the API lists 20 'events' where ordinal 8 is a Stage-1 cumulative pseudo-event (score = sum of events 1-7 points); ordinals 1-7 map to raw 2020-01..2020-07 and ordinals 9-20 map to raw 2020-08..2020-19.",
+    "https://c3po.crossfit.com/api/leaderboards/v2/competitions/games/2020/leaderboards?division=2 (official CrossFit Games leaderboard API, women - same structure)",
+    "https://en.wikipedia.org/wiki/2020_CrossFit_Games (final standings and per-event results cross-check)",
+    "https://barbend.com/news/2020-crossfit-games-results/ (recap cross-check)",
+    "Reconciliation verified: Fraser finals total 1150 and Toomey 1025 match the API overall; men's margin 1150-605=545 and women's 1025-665=360 match the documented record finals margins. Every event's documented winner (raw file) places 1st where in the top 10."
+  ],
+  "divisions": {
+    "men": [
+      {
+        "rank": 1,
+        "name": "Mat Fraser",
+        "country": "United States",
+        "totalPoints": 1150,
+        "events": [
+          {
+            "eventId": "2020-01",
+            "place": 1,
+            "score": "3:08",
+            "points": 0
+          },
+          {
+            "eventId": "2020-02",
+            "place": 4,
+            "score": "425 lb",
+            "points": 0
+          },
+          {
+            "eventId": "2020-03",
+            "place": 1,
+            "score": "2:44",
+            "points": 0
+          },
+          {
+            "eventId": "2020-04",
+            "place": 8,
+            "score": "2:55.20",
+            "points": 0
+          },
+          {
+            "eventId": "2020-05",
+            "place": 1,
+            "score": "17:50",
+            "points": 0
+          },
+          {
+            "eventId": "2020-06",
+            "place": 2,
+            "score": "1:35",
+            "points": 0
+          },
+          {
+            "eventId": "2020-07",
+            "place": 1,
+            "score": "8:46",
+            "points": 0
+          },
+          {
+            "eventId": "2020-08",
+            "place": 1,
+            "score": "13:07.02",
+            "points": 100
+          },
+          {
+            "eventId": "2020-09",
+            "place": 1,
+            "score": "2:51.54",
+            "points": 100
+          },
+          {
+            "eventId": "2020-10",
+            "place": 2,
+            "score": "1237 lb",
+            "points": 75
+          },
+          {
+            "eventId": "2020-11",
+            "place": 1,
+            "score": "1:20.85",
+            "points": 100
+          },
+          {
+            "eventId": "2020-12",
+            "place": 1,
+            "score": "57:47.45",
+            "points": 100
+          },
+          {
+            "eventId": "2020-13",
+            "place": 1,
+            "score": "3:04.77",
+            "points": 100
+          },
+          {
+            "eventId": "2020-14",
+            "place": 1,
+            "score": "100 pts",
+            "points": 100
+          },
+          {
+            "eventId": "2020-15",
+            "place": 1,
+            "score": "12:54.76",
+            "points": 100
+          },
+          {
+            "eventId": "2020-16",
+            "place": 1,
+            "score": "8:18.21",
+            "points": 100
+          },
+          {
+            "eventId": "2020-17",
+            "place": 2,
+            "score": "8:38.14",
+            "points": 75
+          },
+          {
+            "eventId": "2020-18",
+            "place": 1,
+            "score": "0:56.08",
+            "points": 100
+          },
+          {
+            "eventId": "2020-19",
+            "place": 1,
+            "score": "51:46.66",
+            "points": 100
+          }
+        ]
+      },
+      {
+        "rank": 2,
+        "name": "Samuel Kwant",
+        "country": "United States",
+        "totalPoints": 605,
+        "events": [
+          {
+            "eventId": "2020-01",
+            "place": 18,
+            "score": "4:25",
+            "points": 0
+          },
+          {
+            "eventId": "2020-02",
+            "place": 10,
+            "score": "413 lb",
+            "points": 0
+          },
+          {
+            "eventId": "2020-03",
+            "place": 25,
+            "score": "6:02",
+            "points": 0
+          },
+          {
+            "eventId": "2020-04",
+            "place": 3,
+            "score": "2:53.30",
+            "points": 0
+          },
+          {
+            "eventId": "2020-05",
+            "place": 8,
+            "score": "19:47",
+            "points": 0
+          },
+          {
+            "eventId": "2020-06",
+            "place": 3,
+            "score": "1:32",
+            "points": 0
+          },
+          {
+            "eventId": "2020-07",
+            "place": 7,
+            "score": "9:41",
+            "points": 0
+          },
+          {
+            "eventId": "2020-08",
+            "place": 3,
+            "score": "13:38.29",
+            "points": 55
+          },
+          {
+            "eventId": "2020-09",
+            "place": 2,
+            "score": "3:07.90",
+            "points": 75
+          },
+          {
+            "eventId": "2020-10",
+            "place": 4,
+            "score": "1196 lb",
+            "points": 35
+          },
+          {
+            "eventId": "2020-11",
+            "place": 4,
+            "score": "1:43.77",
+            "points": 35
+          },
+          {
+            "eventId": "2020-12",
+            "place": 5,
+            "score": "1:10:11.27",
+            "points": 15
+          },
+          {
+            "eventId": "2020-13",
+            "place": 4,
+            "score": "3:39.23",
+            "points": 35
+          },
+          {
+            "eventId": "2020-14",
+            "place": 3,
+            "score": "55 pts",
+            "points": 55
+          },
+          {
+            "eventId": "2020-15",
+            "place": 4,
+            "score": "13:39.95",
+            "points": 35
+          },
+          {
+            "eventId": "2020-16",
+            "place": 2,
+            "score": "8:33.91",
+            "points": 75
+          },
+          {
+            "eventId": "2020-17",
+            "place": 1,
+            "score": "8:29.66",
+            "points": 100
+          },
+          {
+            "eventId": "2020-18",
+            "place": 2,
+            "score": "0:56.45",
+            "points": 75
+          },
+          {
+            "eventId": "2020-19",
+            "place": 5,
+            "score": "1:05:39.80",
+            "points": 15
+          }
+        ]
+      },
+      {
+        "rank": 3,
+        "name": "Justin Medeiros",
+        "country": "United States",
+        "totalPoints": 560,
+        "events": [
+          {
+            "eventId": "2020-01",
+            "place": 10,
+            "score": "4:10",
+            "points": 0
+          },
+          {
+            "eventId": "2020-02",
+            "place": 3,
+            "score": "437 lb",
+            "points": 0
+          },
+          {
+            "eventId": "2020-03",
+            "place": 19,
+            "score": "5:07",
+            "points": 0
+          },
+          {
+            "eventId": "2020-04",
+            "place": 15,
+            "score": "2:59.00",
+            "points": 0
+          },
+          {
+            "eventId": "2020-05",
+            "place": 2,
+            "score": "18:19",
+            "points": 0
+          },
+          {
+            "eventId": "2020-06",
+            "place": 11,
+            "score": "1:14",
+            "points": 0
+          },
+          {
+            "eventId": "2020-07",
+            "place": 4,
+            "score": "9:09",
+            "points": 0
+          },
+          {
+            "eventId": "2020-08",
+            "place": 2,
+            "score": "13:15.16",
+            "points": 75
+          },
+          {
+            "eventId": "2020-09",
+            "place": 5,
+            "score": "3:21.09",
+            "points": 15
+          },
+          {
+            "eventId": "2020-10",
+            "place": 5,
+            "score": "1192 lb",
+            "points": 15
+          },
+          {
+            "eventId": "2020-11",
+            "place": 2,
+            "score": "1:26.19",
+            "points": 75
+          },
+          {
+            "eventId": "2020-12",
+            "place": 2,
+            "score": "58:17.48",
+            "points": 75
+          },
+          {
+            "eventId": "2020-13",
+            "place": 3,
+            "score": "3:18.51",
+            "points": 55
+          },
+          {
+            "eventId": "2020-14",
+            "place": 5,
+            "score": "15 pts",
+            "points": 15
+          },
+          {
+            "eventId": "2020-15",
+            "place": 3,
+            "score": "13:20.52",
+            "points": 55
+          },
+          {
+            "eventId": "2020-16",
+            "place": 5,
+            "score": "8:59.33",
+            "points": 15
+          },
+          {
+            "eventId": "2020-17",
+            "place": 3,
+            "score": "8:52.93",
+            "points": 55
+          },
+          {
+            "eventId": "2020-18",
+            "place": 3,
+            "score": "1:01.97",
+            "points": 55
+          },
+          {
+            "eventId": "2020-19",
+            "place": 3,
+            "score": "53:18.87",
+            "points": 55
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "name": "Noah Ohlsen",
+        "country": "United States",
+        "totalPoints": 540,
+        "events": [
+          {
+            "eventId": "2020-01",
+            "place": 2,
+            "score": "3:55",
+            "points": 0
+          },
+          {
+            "eventId": "2020-02",
+            "place": 14,
+            "score": "401 lb",
+            "points": 0
+          },
+          {
+            "eventId": "2020-03",
+            "place": 2,
+            "score": "2:56",
+            "points": 0
+          },
+          {
+            "eventId": "2020-04",
+            "place": 17,
+            "score": "2:59.70",
+            "points": 0
+          },
+          {
+            "eventId": "2020-05",
+            "place": 7,
+            "score": "19:40",
+            "points": 0
+          },
+          {
+            "eventId": "2020-06",
+            "place": 1,
+            "score": "1:37",
+            "points": 0
+          },
+          {
+            "eventId": "2020-07",
+            "place": 20,
+            "score": "10:57",
+            "points": 0
+          },
+          {
+            "eventId": "2020-08",
+            "place": 5,
+            "score": "16:48.36",
+            "points": 15
+          },
+          {
+            "eventId": "2020-09",
+            "place": 3,
+            "score": "3:18.24",
+            "points": 55
+          },
+          {
+            "eventId": "2020-10",
+            "place": 3,
+            "score": "1200 lb",
+            "points": 55
+          },
+          {
+            "eventId": "2020-11",
+            "place": 3,
+            "score": "1:39.45",
+            "points": 55
+          },
+          {
+            "eventId": "2020-12",
+            "place": 3,
+            "score": "59:11.00",
+            "points": 55
+          },
+          {
+            "eventId": "2020-13",
+            "place": 2,
+            "score": "3:11.49",
+            "points": 75
+          },
+          {
+            "eventId": "2020-14",
+            "place": 4,
+            "score": "35 pts",
+            "points": 35
+          },
+          {
+            "eventId": "2020-15",
+            "place": 5,
+            "score": "14:20.82",
+            "points": 15
+          },
+          {
+            "eventId": "2020-16",
+            "place": 4,
+            "score": "8:54.53",
+            "points": 35
+          },
+          {
+            "eventId": "2020-17",
+            "place": 4,
+            "score": "9:14.34",
+            "points": 35
+          },
+          {
+            "eventId": "2020-18",
+            "place": 4,
+            "score": "1:03.89",
+            "points": 35
+          },
+          {
+            "eventId": "2020-19",
+            "place": 2,
+            "score": "52:24.75",
+            "points": 75
+          }
+        ]
+      },
+      {
+        "rank": 5,
+        "name": "Jeffrey Adler",
+        "country": "Canada",
+        "totalPoints": 505,
+        "events": [
+          {
+            "eventId": "2020-01",
+            "place": 6,
+            "score": "4:00",
+            "points": 0
+          },
+          {
+            "eventId": "2020-02",
+            "place": 7,
+            "score": "418 lb",
+            "points": 0
+          },
+          {
+            "eventId": "2020-03",
+            "place": 15,
+            "score": "4:47",
+            "points": 0
+          },
+          {
+            "eventId": "2020-04",
+            "place": 11,
+            "score": "2:57.30",
+            "points": 0
+          },
+          {
+            "eventId": "2020-05",
+            "place": 6,
+            "score": "19:36",
+            "points": 0
+          },
+          {
+            "eventId": "2020-06",
+            "place": 27,
+            "score": "0:36",
+            "points": 0
+          },
+          {
+            "eventId": "2020-07",
+            "place": 9,
+            "score": "9:51",
+            "points": 0
+          },
+          {
+            "eventId": "2020-08",
+            "place": 4,
+            "score": "14:03.42",
+            "points": 35
+          },
+          {
+            "eventId": "2020-09",
+            "place": 4,
+            "score": "3:20.87",
+            "points": 35
+          },
+          {
+            "eventId": "2020-10",
+            "place": 1,
+            "score": "1244 lb",
+            "points": 100
+          },
+          {
+            "eventId": "2020-11",
+            "place": 5,
+            "score": "1:54.39",
+            "points": 15
+          },
+          {
+            "eventId": "2020-12",
+            "place": 4,
+            "score": "1:00:17.95",
+            "points": 35
+          },
+          {
+            "eventId": "2020-13",
+            "place": 5,
+            "score": "4:03.03",
+            "points": 15
+          },
+          {
+            "eventId": "2020-14",
+            "place": 2,
+            "score": "75 pts",
+            "points": 75
+          },
+          {
+            "eventId": "2020-15",
+            "place": 2,
+            "score": "12:56.35",
+            "points": 75
+          },
+          {
+            "eventId": "2020-16",
+            "place": 3,
+            "score": "8:40.17",
+            "points": 55
+          },
+          {
+            "eventId": "2020-17",
+            "place": 5,
+            "score": "9:43.30",
+            "points": 15
+          },
+          {
+            "eventId": "2020-18",
+            "place": 5,
+            "score": "1:05.64",
+            "points": 15
+          },
+          {
+            "eventId": "2020-19",
+            "place": 4,
+            "score": "57:28.45",
+            "points": 35
+          }
+        ]
+      },
+      {
+        "rank": 6,
+        "name": "Chandler Smith",
+        "country": "United States",
+        "totalPoints": 0,
+        "events": [
+          {
+            "eventId": "2020-01",
+            "place": 20,
+            "score": "4:30",
+            "points": 0
+          },
+          {
+            "eventId": "2020-02",
+            "place": 5,
+            "score": "424 lb",
+            "points": 0
+          },
+          {
+            "eventId": "2020-03",
+            "place": 6,
+            "score": "3:59",
+            "points": 0
+          },
+          {
+            "eventId": "2020-04",
+            "place": 17,
+            "score": "2:59.70",
+            "points": 0
+          },
+          {
+            "eventId": "2020-05",
+            "place": 3,
+            "score": "18:43",
+            "points": 0
+          },
+          {
+            "eventId": "2020-06",
+            "place": 20,
+            "score": "1:00",
+            "points": 0
+          },
+          {
+            "eventId": "2020-07",
+            "place": 11,
+            "score": "10:09",
+            "points": 0
+          },
+          {
+            "eventId": "2020-08",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-09",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-10",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-11",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-12",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-13",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-14",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-15",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-16",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-17",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-18",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-19",
+            "place": 6,
+            "score": null,
+            "points": 0
+          }
+        ]
+      },
+      {
+        "rank": 7,
+        "name": "Jonne Koski",
+        "country": "Finland",
+        "totalPoints": 0,
+        "events": [
+          {
+            "eventId": "2020-01",
+            "place": 10,
+            "score": "4:10",
+            "points": 0
+          },
+          {
+            "eventId": "2020-02",
+            "place": 15,
+            "score": "396 lb",
+            "points": 0
+          },
+          {
+            "eventId": "2020-03",
+            "place": 3,
+            "score": "3:29",
+            "points": 0
+          },
+          {
+            "eventId": "2020-04",
+            "place": 16,
+            "score": "2:59.30",
+            "points": 0
+          },
+          {
+            "eventId": "2020-05",
+            "place": 22,
+            "score": "21:39",
+            "points": 0
+          },
+          {
+            "eventId": "2020-06",
+            "place": 4,
+            "score": "1:27",
+            "points": 0
+          },
+          {
+            "eventId": "2020-07",
+            "place": 13,
+            "score": "10:16",
+            "points": 0
+          },
+          {
+            "eventId": "2020-08",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-09",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-10",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-11",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-12",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-13",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-14",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-15",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-16",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-17",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-18",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-19",
+            "place": 6,
+            "score": null,
+            "points": 0
+          }
+        ]
+      },
+      {
+        "rank": 8,
+        "name": "Björgvin Karl Guðmundsson",
+        "country": "Iceland",
+        "totalPoints": 0,
+        "events": [
+          {
+            "eventId": "2020-01",
+            "place": 10,
+            "score": "4:10",
+            "points": 0
+          },
+          {
+            "eventId": "2020-02",
+            "place": 13,
+            "score": "406 lb",
+            "points": 0
+          },
+          {
+            "eventId": "2020-03",
+            "place": 16,
+            "score": "4:53",
+            "points": 0
+          },
+          {
+            "eventId": "2020-04",
+            "place": 24,
+            "score": "3:02.50",
+            "points": 0
+          },
+          {
+            "eventId": "2020-05",
+            "place": 5,
+            "score": "19:24",
+            "points": 0
+          },
+          {
+            "eventId": "2020-06",
+            "place": 6,
+            "score": "1:21",
+            "points": 0
+          },
+          {
+            "eventId": "2020-07",
+            "place": 10,
+            "score": "10:02",
+            "points": 0
+          },
+          {
+            "eventId": "2020-08",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-09",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-10",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-11",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-12",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-13",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-14",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-15",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-16",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-17",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-18",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-19",
+            "place": 6,
+            "score": null,
+            "points": 0
+          }
+        ]
+      },
+      {
+        "rank": 9,
+        "name": "Patrick Vellner",
+        "country": "Canada",
+        "totalPoints": 0,
+        "events": [
+          {
+            "eventId": "2020-01",
+            "place": 16,
+            "score": "4:20",
+            "points": 0
+          },
+          {
+            "eventId": "2020-02",
+            "place": 21,
+            "score": "383 lb",
+            "points": 0
+          },
+          {
+            "eventId": "2020-03",
+            "place": 8,
+            "score": "4:10",
+            "points": 0
+          },
+          {
+            "eventId": "2020-04",
+            "place": 7,
+            "score": "2:54.80",
+            "points": 0
+          },
+          {
+            "eventId": "2020-05",
+            "place": 19,
+            "score": "21:18",
+            "points": 0
+          },
+          {
+            "eventId": "2020-06",
+            "place": 8,
+            "score": "1:19",
+            "points": 0
+          },
+          {
+            "eventId": "2020-07",
+            "place": 6,
+            "score": "9:30",
+            "points": 0
+          },
+          {
+            "eventId": "2020-08",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-09",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-10",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-11",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-12",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-13",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-14",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-15",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-16",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-17",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-18",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-19",
+            "place": 6,
+            "score": null,
+            "points": 0
+          }
+        ]
+      },
+      {
+        "rank": 10,
+        "name": "Samuel Cournoyer",
+        "country": "Canada",
+        "totalPoints": 0,
+        "events": [
+          {
+            "eventId": "2020-01",
+            "place": 8,
+            "score": "4:03",
+            "points": 0
+          },
+          {
+            "eventId": "2020-02",
+            "place": 17,
+            "score": "395 lb",
+            "points": 0
+          },
+          {
+            "eventId": "2020-03",
+            "place": 4,
+            "score": "3:39",
+            "points": 0
+          },
+          {
+            "eventId": "2020-04",
+            "place": 25,
+            "score": "3:02.70",
+            "points": 0
+          },
+          {
+            "eventId": "2020-05",
+            "place": 20,
+            "score": "21:19",
+            "points": 0
+          },
+          {
+            "eventId": "2020-06",
+            "place": 10,
+            "score": "1:17",
+            "points": 0
+          },
+          {
+            "eventId": "2020-07",
+            "place": 5,
+            "score": "9:22",
+            "points": 0
+          },
+          {
+            "eventId": "2020-08",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-09",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-10",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-11",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-12",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-13",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-14",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-15",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-16",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-17",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-18",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-19",
+            "place": 6,
+            "score": null,
+            "points": 0
+          }
+        ]
+      }
+    ],
+    "women": [
+      {
+        "rank": 1,
+        "name": "Tia-Clair Toomey",
+        "country": "Australia",
+        "totalPoints": 1025,
+        "events": [
+          {
+            "eventId": "2020-01",
+            "place": 1,
+            "score": "3:40",
+            "points": 0
+          },
+          {
+            "eventId": "2020-02",
+            "place": 1,
+            "score": "313 lb",
+            "points": 0
+          },
+          {
+            "eventId": "2020-03",
+            "place": 1,
+            "score": "2:28",
+            "points": 0
+          },
+          {
+            "eventId": "2020-04",
+            "place": 6,
+            "score": "3:21.30",
+            "points": 0
+          },
+          {
+            "eventId": "2020-05",
+            "place": 3,
+            "score": "18:26",
+            "points": 0
+          },
+          {
+            "eventId": "2020-06",
+            "place": 16,
+            "score": "1:18",
+            "points": 0
+          },
+          {
+            "eventId": "2020-07",
+            "place": 1,
+            "score": "8:01",
+            "points": 0
+          },
+          {
+            "eventId": "2020-08",
+            "place": 1,
+            "score": "12:47.98",
+            "points": 100
+          },
+          {
+            "eventId": "2020-09",
+            "place": 1,
+            "score": "3:05.55",
+            "points": 100
+          },
+          {
+            "eventId": "2020-10",
+            "place": 1,
+            "score": "890 lb",
+            "points": 100
+          },
+          {
+            "eventId": "2020-11",
+            "place": 5,
+            "score": "2:05.67",
+            "points": 15
+          },
+          {
+            "eventId": "2020-12",
+            "place": 3,
+            "score": "1:06:09.10",
+            "points": 55
+          },
+          {
+            "eventId": "2020-13",
+            "place": 1,
+            "score": "3:33.63",
+            "points": 100
+          },
+          {
+            "eventId": "2020-14",
+            "place": 1,
+            "score": "100 pts",
+            "points": 100
+          },
+          {
+            "eventId": "2020-15",
+            "place": 1,
+            "score": "14:37.51",
+            "points": 100
+          },
+          {
+            "eventId": "2020-16",
+            "place": 1,
+            "score": "8:42.59",
+            "points": 100
+          },
+          {
+            "eventId": "2020-17",
+            "place": 1,
+            "score": "8:26.48",
+            "points": 100
+          },
+          {
+            "eventId": "2020-18",
+            "place": 1,
+            "score": "1:05.23",
+            "points": 100
+          },
+          {
+            "eventId": "2020-19",
+            "place": 3,
+            "score": "51:46.72",
+            "points": 55
+          }
+        ]
+      },
+      {
+        "rank": 2,
+        "name": "Katrin Tanja Davidsdottir",
+        "country": "Iceland",
+        "totalPoints": 665,
+        "events": [
+          {
+            "eventId": "2020-01",
+            "place": 12,
+            "score": "4:56",
+            "points": 0
+          },
+          {
+            "eventId": "2020-02",
+            "place": 27,
+            "score": "230 lb",
+            "points": 0
+          },
+          {
+            "eventId": "2020-03",
+            "place": 11,
+            "score": "3:30",
+            "points": 0
+          },
+          {
+            "eventId": "2020-04",
+            "place": 4,
+            "score": "3:20.60",
+            "points": 0
+          },
+          {
+            "eventId": "2020-05",
+            "place": 1,
+            "score": "18:16",
+            "points": 0
+          },
+          {
+            "eventId": "2020-06",
+            "place": 1,
+            "score": "2:54",
+            "points": 0
+          },
+          {
+            "eventId": "2020-07",
+            "place": 7,
+            "score": "9:43",
+            "points": 0
+          },
+          {
+            "eventId": "2020-08",
+            "place": 4,
+            "score": "15:16.76",
+            "points": 35
+          },
+          {
+            "eventId": "2020-09",
+            "place": 2,
+            "score": "3:13.18",
+            "points": 75
+          },
+          {
+            "eventId": "2020-10",
+            "place": 5,
+            "score": "701 lb",
+            "points": 15
+          },
+          {
+            "eventId": "2020-11",
+            "place": 4,
+            "score": "1:40.00",
+            "points": 35
+          },
+          {
+            "eventId": "2020-12",
+            "place": 1,
+            "score": "1:00:53.98",
+            "points": 100
+          },
+          {
+            "eventId": "2020-13",
+            "place": 2,
+            "score": "3:37.03",
+            "points": 75
+          },
+          {
+            "eventId": "2020-14",
+            "place": 3,
+            "score": "55 pts",
+            "points": 55
+          },
+          {
+            "eventId": "2020-15",
+            "place": 4,
+            "score": "15:36.02",
+            "points": 35
+          },
+          {
+            "eventId": "2020-16",
+            "place": 3,
+            "score": "9:32.02",
+            "points": 55
+          },
+          {
+            "eventId": "2020-17",
+            "place": 3,
+            "score": "8:47.62",
+            "points": 55
+          },
+          {
+            "eventId": "2020-18",
+            "place": 3,
+            "score": "1:12.57",
+            "points": 55
+          },
+          {
+            "eventId": "2020-19",
+            "place": 2,
+            "score": "49:09.96",
+            "points": 75
+          }
+        ]
+      },
+      {
+        "rank": 3,
+        "name": "Kari Pearce",
+        "country": "United States",
+        "totalPoints": 585,
+        "events": [
+          {
+            "eventId": "2020-01",
+            "place": 10,
+            "score": "4:48",
+            "points": 0
+          },
+          {
+            "eventId": "2020-02",
+            "place": 22,
+            "score": "246 lb",
+            "points": 0
+          },
+          {
+            "eventId": "2020-03",
+            "place": 4,
+            "score": "2:40",
+            "points": 0
+          },
+          {
+            "eventId": "2020-04",
+            "place": 19,
+            "score": "3:30.20",
+            "points": 0
+          },
+          {
+            "eventId": "2020-05",
+            "place": 8,
+            "score": "19:46",
+            "points": 0
+          },
+          {
+            "eventId": "2020-06",
+            "place": 2,
+            "score": "2:13",
+            "points": 0
+          },
+          {
+            "eventId": "2020-07",
+            "place": 8,
+            "score": "9:46",
+            "points": 0
+          },
+          {
+            "eventId": "2020-08",
+            "place": 3,
+            "score": "13:59.51",
+            "points": 55
+          },
+          {
+            "eventId": "2020-09",
+            "place": 4,
+            "score": "3:28.17",
+            "points": 35
+          },
+          {
+            "eventId": "2020-10",
+            "place": 3,
+            "score": "764 lb",
+            "points": 55
+          },
+          {
+            "eventId": "2020-11",
+            "place": 2,
+            "score": "1:23.32",
+            "points": 75
+          },
+          {
+            "eventId": "2020-12",
+            "place": 4,
+            "score": "1:07:07.07",
+            "points": 35
+          },
+          {
+            "eventId": "2020-13",
+            "place": 4,
+            "score": "4:13.36",
+            "points": 35
+          },
+          {
+            "eventId": "2020-14",
+            "place": 4,
+            "score": "35 pts",
+            "points": 35
+          },
+          {
+            "eventId": "2020-15",
+            "place": 3,
+            "score": "15:14.92",
+            "points": 55
+          },
+          {
+            "eventId": "2020-16",
+            "place": 2,
+            "score": "9:17.37",
+            "points": 75
+          },
+          {
+            "eventId": "2020-17",
+            "place": 5,
+            "score": "10:10.58",
+            "points": 15
+          },
+          {
+            "eventId": "2020-18",
+            "place": 5,
+            "score": "1:24.51",
+            "points": 15
+          },
+          {
+            "eventId": "2020-19",
+            "place": 1,
+            "score": "47:56.68",
+            "points": 100
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "name": "Haley Adams",
+        "country": "United States",
+        "totalPoints": 560,
+        "events": [
+          {
+            "eventId": "2020-01",
+            "place": 5,
+            "score": "4:36",
+            "points": 0
+          },
+          {
+            "eventId": "2020-02",
+            "place": 26,
+            "score": "230 lb",
+            "points": 0
+          },
+          {
+            "eventId": "2020-03",
+            "place": 12,
+            "score": "3:40",
+            "points": 0
+          },
+          {
+            "eventId": "2020-04",
+            "place": 6,
+            "score": "3:21.30",
+            "points": 0
+          },
+          {
+            "eventId": "2020-05",
+            "place": 4,
+            "score": "18:53",
+            "points": 0
+          },
+          {
+            "eventId": "2020-06",
+            "place": 4,
+            "score": "1:59",
+            "points": 0
+          },
+          {
+            "eventId": "2020-07",
+            "place": 4,
+            "score": "9:19",
+            "points": 0
+          },
+          {
+            "eventId": "2020-08",
+            "place": 2,
+            "score": "13:17.79",
+            "points": 75
+          },
+          {
+            "eventId": "2020-09",
+            "place": 3,
+            "score": "3:24.49",
+            "points": 55
+          },
+          {
+            "eventId": "2020-10",
+            "place": 4,
+            "score": "712 lb",
+            "points": 35
+          },
+          {
+            "eventId": "2020-11",
+            "place": 3,
+            "score": "1:24.25",
+            "points": 55
+          },
+          {
+            "eventId": "2020-12",
+            "place": 2,
+            "score": "1:02:16.23",
+            "points": 75
+          },
+          {
+            "eventId": "2020-13",
+            "place": 5,
+            "score": "4:21.20",
+            "points": 15
+          },
+          {
+            "eventId": "2020-14",
+            "place": 5,
+            "score": "15 pts",
+            "points": 15
+          },
+          {
+            "eventId": "2020-15",
+            "place": 2,
+            "score": "14:53.61",
+            "points": 75
+          },
+          {
+            "eventId": "2020-16",
+            "place": 5,
+            "score": "10:18.46",
+            "points": 15
+          },
+          {
+            "eventId": "2020-17",
+            "place": 2,
+            "score": "8:40.41",
+            "points": 75
+          },
+          {
+            "eventId": "2020-18",
+            "place": 4,
+            "score": "1:14.93",
+            "points": 35
+          },
+          {
+            "eventId": "2020-19",
+            "place": 4,
+            "score": "52:56.60",
+            "points": 35
+          }
+        ]
+      },
+      {
+        "rank": 5,
+        "name": "Brooke Wells",
+        "country": "United States",
+        "totalPoints": 525,
+        "events": [
+          {
+            "eventId": "2020-01",
+            "place": 3,
+            "score": "4:28",
+            "points": 0
+          },
+          {
+            "eventId": "2020-02",
+            "place": 10,
+            "score": "275 lb",
+            "points": 0
+          },
+          {
+            "eventId": "2020-03",
+            "place": 3,
+            "score": "2:34",
+            "points": 0
+          },
+          {
+            "eventId": "2020-04",
+            "place": 5,
+            "score": "3:21.10",
+            "points": 0
+          },
+          {
+            "eventId": "2020-05",
+            "place": 5,
+            "score": "19:21",
+            "points": 0
+          },
+          {
+            "eventId": "2020-06",
+            "place": 8,
+            "score": "1:50",
+            "points": 0
+          },
+          {
+            "eventId": "2020-07",
+            "place": 3,
+            "score": "9:10",
+            "points": 0
+          },
+          {
+            "eventId": "2020-08",
+            "place": 5,
+            "score": "15:45.13",
+            "points": 15
+          },
+          {
+            "eventId": "2020-09",
+            "place": 5,
+            "score": "3:35.02",
+            "points": 15
+          },
+          {
+            "eventId": "2020-10",
+            "place": 2,
+            "score": "884 lb",
+            "points": 75
+          },
+          {
+            "eventId": "2020-11",
+            "place": 1,
+            "score": "1:21.22",
+            "points": 100
+          },
+          {
+            "eventId": "2020-12",
+            "place": 5,
+            "score": "1:14:34.89",
+            "points": 15
+          },
+          {
+            "eventId": "2020-13",
+            "place": 3,
+            "score": "3:51.05",
+            "points": 55
+          },
+          {
+            "eventId": "2020-14",
+            "place": 2,
+            "score": "75 pts",
+            "points": 75
+          },
+          {
+            "eventId": "2020-15",
+            "place": 5,
+            "score": "16:39.54",
+            "points": 15
+          },
+          {
+            "eventId": "2020-16",
+            "place": 4,
+            "score": "10:05.21",
+            "points": 35
+          },
+          {
+            "eventId": "2020-17",
+            "place": 4,
+            "score": "9:39.96",
+            "points": 35
+          },
+          {
+            "eventId": "2020-18",
+            "place": 2,
+            "score": "1:07.81",
+            "points": 75
+          },
+          {
+            "eventId": "2020-19",
+            "place": 5,
+            "score": "1:00:19.01",
+            "points": 15
+          }
+        ]
+      },
+      {
+        "rank": 6,
+        "name": "Kristin Holte",
+        "country": "Norway",
+        "totalPoints": 0,
+        "events": [
+          {
+            "eventId": "2020-01",
+            "place": 13,
+            "score": "5:01",
+            "points": 0
+          },
+          {
+            "eventId": "2020-02",
+            "place": 14,
+            "score": "267 lb",
+            "points": 0
+          },
+          {
+            "eventId": "2020-03",
+            "place": 5,
+            "score": "2:50",
+            "points": 0
+          },
+          {
+            "eventId": "2020-04",
+            "place": 21,
+            "score": "3:31.00",
+            "points": 0
+          },
+          {
+            "eventId": "2020-05",
+            "place": 2,
+            "score": "18:23",
+            "points": 0
+          },
+          {
+            "eventId": "2020-06",
+            "place": 6,
+            "score": "1:54",
+            "points": 0
+          },
+          {
+            "eventId": "2020-07",
+            "place": 11,
+            "score": "10:03",
+            "points": 0
+          },
+          {
+            "eventId": "2020-08",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-09",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-10",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-11",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-12",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-13",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-14",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-15",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-16",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-17",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-18",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-19",
+            "place": 6,
+            "score": null,
+            "points": 0
+          }
+        ]
+      },
+      {
+        "rank": 7,
+        "name": "Amanda Barnhart",
+        "country": "United States",
+        "totalPoints": 0,
+        "events": [
+          {
+            "eventId": "2020-01",
+            "place": 22,
+            "score": "5:26",
+            "points": 0
+          },
+          {
+            "eventId": "2020-02",
+            "place": 5,
+            "score": "291 lb",
+            "points": 0
+          },
+          {
+            "eventId": "2020-03",
+            "place": 7,
+            "score": "3:17",
+            "points": 0
+          },
+          {
+            "eventId": "2020-04",
+            "place": 2,
+            "score": "3:17.40",
+            "points": 0
+          },
+          {
+            "eventId": "2020-05",
+            "place": 14,
+            "score": "20:49",
+            "points": 0
+          },
+          {
+            "eventId": "2020-06",
+            "place": 13,
+            "score": "1:24",
+            "points": 0
+          },
+          {
+            "eventId": "2020-07",
+            "place": 10,
+            "score": "10:01",
+            "points": 0
+          },
+          {
+            "eventId": "2020-08",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-09",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-10",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-11",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-12",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-13",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-14",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-15",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-16",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-17",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-18",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-19",
+            "place": 6,
+            "score": null,
+            "points": 0
+          }
+        ]
+      },
+      {
+        "rank": 8,
+        "name": "Kara Saunders",
+        "country": "Australia",
+        "totalPoints": 0,
+        "events": [
+          {
+            "eventId": "2020-01",
+            "place": 2,
+            "score": "3:49",
+            "points": 0
+          },
+          {
+            "eventId": "2020-02",
+            "place": 3,
+            "score": "294 lb",
+            "points": 0
+          },
+          {
+            "eventId": "2020-03",
+            "place": 20,
+            "score": "4:20",
+            "points": 0
+          },
+          {
+            "eventId": "2020-04",
+            "place": 13,
+            "score": "3:23.20",
+            "points": 0
+          },
+          {
+            "eventId": "2020-05",
+            "place": 13,
+            "score": "20:47",
+            "points": 0
+          },
+          {
+            "eventId": "2020-06",
+            "place": 22,
+            "score": "1:09",
+            "points": 0
+          },
+          {
+            "eventId": "2020-07",
+            "place": 2,
+            "score": "8:54",
+            "points": 0
+          },
+          {
+            "eventId": "2020-08",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-09",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-10",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-11",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-12",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-13",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-14",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-15",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-16",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-17",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-18",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-19",
+            "place": 6,
+            "score": null,
+            "points": 0
+          }
+        ]
+      },
+      {
+        "rank": 9,
+        "name": "Kristi Eramo O'Connell",
+        "country": "United States",
+        "totalPoints": 0,
+        "events": [
+          {
+            "eventId": "2020-01",
+            "place": 6,
+            "score": "4:41",
+            "points": 0
+          },
+          {
+            "eventId": "2020-02",
+            "place": 8,
+            "score": "281 lb",
+            "points": 0
+          },
+          {
+            "eventId": "2020-03",
+            "place": 14,
+            "score": "3:53",
+            "points": 0
+          },
+          {
+            "eventId": "2020-04",
+            "place": 29,
+            "score": "3:36.50",
+            "points": 0
+          },
+          {
+            "eventId": "2020-05",
+            "place": 6,
+            "score": "19:25",
+            "points": 0
+          },
+          {
+            "eventId": "2020-06",
+            "place": 18,
+            "score": "1:16",
+            "points": 0
+          },
+          {
+            "eventId": "2020-07",
+            "place": 6,
+            "score": "9:34",
+            "points": 0
+          },
+          {
+            "eventId": "2020-08",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-09",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-10",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-11",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-12",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-13",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-14",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-15",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-16",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-17",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-18",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-19",
+            "place": 6,
+            "score": null,
+            "points": 0
+          }
+        ]
+      },
+      {
+        "rank": 10,
+        "name": "Andrea Nisler",
+        "country": "United States",
+        "totalPoints": 0,
+        "events": [
+          {
+            "eventId": "2020-01",
+            "place": 16,
+            "score": "5:16",
+            "points": 0
+          },
+          {
+            "eventId": "2020-02",
+            "place": 6,
+            "score": "287 lb",
+            "points": 0
+          },
+          {
+            "eventId": "2020-03",
+            "place": 23,
+            "score": "5:04",
+            "points": 0
+          },
+          {
+            "eventId": "2020-04",
+            "place": 9,
+            "score": "3:21.60",
+            "points": 0
+          },
+          {
+            "eventId": "2020-05",
+            "place": 7,
+            "score": "19:41",
+            "points": 0
+          },
+          {
+            "eventId": "2020-06",
+            "place": 14,
+            "score": "1:19",
+            "points": 0
+          },
+          {
+            "eventId": "2020-07",
+            "place": 12,
+            "score": "10:26",
+            "points": 0
+          },
+          {
+            "eventId": "2020-08",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-09",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-10",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-11",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-12",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-13",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-14",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-15",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-16",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-17",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-18",
+            "place": 6,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2020-19",
+            "place": 6,
+            "score": null,
+            "points": 0
+          }
+        ]
+      }
+    ]
+  }
+}

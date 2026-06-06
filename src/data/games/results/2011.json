@@ -1,0 +1,377 @@
+{
+  "year": 2011,
+  "pointsSystem": "2011 Reebok CrossFit Games 100-point scoring table. The event winner earned 100 points; points then dropped 5 per place through 6th (100, 95, 90, 85, 80, 75), 2 points per place from 7th through 30th (73, 71, 69, 67, 65, 63 ... 27), and 1 point per place beyond 30th (26, 25, 24, 23, 22 ...). Each of the 10 events paid out on this same scale, and final placing is the sum of event points; ties share a placing and its points (e.g. three men tied 2nd in The End 2 at 137 reps, each earning 95). Skills 1 (Event 2) and Skills 2 (Event 5) were scored internally by summing each athlete's rank across three component tests, then paid out on the standard scale, so their score column shows event points (e.g. '100 pt'), not a raw mark - the official leaderboard preserved only the final event placing for those two events.",
+  "sources": [
+    "https://c3po.crossfit.com/api/leaderboards/v2/competitions/games/2011/leaderboards?division=1 (official CrossFit Games leaderboard archive API - per-athlete per-event rank, points, and score display for all men; primary source for every cell)",
+    "https://c3po.crossfit.com/api/leaderboards/v2/competitions/games/2011/leaderboards?division=2 (official leaderboard archive API for the women's division; primary source)",
+    "https://en.wikipedia.org/wiki/2011_CrossFit_Games (per-event results tables, final standings, and podium cross-check)",
+    "https://games.crossfit.com/article/2011-games-individual-event-5-results (Event 5 / Skills 2 component results)",
+    "https://games.crossfit.com/workouts/games/2011 (event definitions and winning scores)"
+  ],
+  "divisions": {
+    "men": [
+      {
+        "rank": 1,
+        "name": "Rich Froning",
+        "country": "United States",
+        "totalPoints": 856,
+        "events": [
+          { "eventId": "2011-01", "place": 26, "score": "41:33.0", "points": 35 },
+          { "eventId": "2011-02", "place": 1, "score": "100 pt", "points": 100 },
+          { "eventId": "2011-03", "place": 1, "score": "4:57.0", "points": 100 },
+          { "eventId": "2011-04", "place": 2, "score": "7:23.0", "points": 95 },
+          { "eventId": "2011-05", "place": 2, "score": "95 pt", "points": 95 },
+          { "eventId": "2011-06", "place": 6, "score": "6:43.0", "points": 75 },
+          { "eventId": "2011-07", "place": 2, "score": "5:34.0", "points": 95 },
+          { "eventId": "2011-08", "place": 3, "score": "94 reps", "points": 90 },
+          { "eventId": "2011-09", "place": 1, "score": "143 reps", "points": 100 },
+          { "eventId": "2011-10", "place": 8, "score": "14:10.0", "points": 71 }
+        ]
+      },
+      {
+        "rank": 2,
+        "name": "Josh Bridges",
+        "country": "United States",
+        "totalPoints": 763,
+        "events": [
+          { "eventId": "2011-01", "place": 1, "score": "33:21.0", "points": 100 },
+          { "eventId": "2011-02", "place": 28, "score": "31 pt", "points": 31 },
+          { "eventId": "2011-03", "place": 16, "score": "6:12.0", "points": 55 },
+          { "eventId": "2011-04", "place": 1, "score": "7:14.0", "points": 100 },
+          { "eventId": "2011-05", "place": 23, "score": "41 pt", "points": 41 },
+          { "eventId": "2011-06", "place": 4, "score": "6:36.0", "points": 85 },
+          { "eventId": "2011-07", "place": 1, "score": "4:58.0", "points": 100 },
+          { "eventId": "2011-08", "place": 8, "score": "83 reps", "points": 71 },
+          { "eventId": "2011-09", "place": 2, "score": "137 reps", "points": 95 },
+          { "eventId": "2011-10", "place": 4, "score": "12:09.0", "points": 85 }
+        ]
+      },
+      {
+        "rank": 3,
+        "name": "Ben Smith",
+        "country": "United States",
+        "totalPoints": 738,
+        "events": [
+          { "eventId": "2011-01", "place": 16, "score": "40:08.0", "points": 55 },
+          { "eventId": "2011-02", "place": 3, "score": "90 pt", "points": 90 },
+          { "eventId": "2011-03", "place": 2, "score": "5:00.0", "points": 95 },
+          { "eventId": "2011-04", "place": 12, "score": "8:11.0", "points": 63 },
+          { "eventId": "2011-05", "place": 10, "score": "67 pt", "points": 67 },
+          { "eventId": "2011-06", "place": 19, "score": "7:12.0", "points": 49 },
+          { "eventId": "2011-07", "place": 3, "score": "5:53.0", "points": 90 },
+          { "eventId": "2011-08", "place": 11, "score": "73 reps", "points": 65 },
+          { "eventId": "2011-09", "place": 9, "score": "127 reps", "points": 69 },
+          { "eventId": "2011-10", "place": 2, "score": "11:24.0", "points": 95 }
+        ]
+      },
+      {
+        "rank": 4,
+        "name": "Graham Holmberg",
+        "country": "United States",
+        "totalPoints": 717,
+        "events": [
+          { "eventId": "2011-01", "place": 28, "score": "41:45.0", "points": 31 },
+          { "eventId": "2011-02", "place": 19, "score": "49 pt", "points": 49 },
+          { "eventId": "2011-03", "place": 8, "score": "5:42.0", "points": 71 },
+          { "eventId": "2011-04", "place": 9, "score": "7:55.0", "points": 69 },
+          { "eventId": "2011-05", "place": 13, "score": "61 pt", "points": 61 },
+          { "eventId": "2011-06", "place": 2, "score": "6:31.0", "points": 95 },
+          { "eventId": "2011-07", "place": 13, "score": "7:07.0", "points": 61 },
+          { "eventId": "2011-08", "place": 1, "score": "104 reps", "points": 100 },
+          { "eventId": "2011-09", "place": 2, "score": "137 reps", "points": 95 },
+          { "eventId": "2011-10", "place": 4, "score": "12:09.0", "points": 85 }
+        ]
+      },
+      {
+        "rank": 5,
+        "name": "Blair Morrison",
+        "country": "United States",
+        "totalPoints": 708,
+        "events": [
+          { "eventId": "2011-01", "place": 5, "score": "37:57.0", "points": 80 },
+          { "eventId": "2011-02", "place": 18, "score": "51 pt", "points": 51 },
+          { "eventId": "2011-03", "place": 8, "score": "5:42.0", "points": 71 },
+          { "eventId": "2011-04", "place": 8, "score": "7:49.0", "points": 71 },
+          { "eventId": "2011-05", "place": 4, "score": "85 pt", "points": 85 },
+          { "eventId": "2011-06", "place": 18, "score": "7:09.0", "points": 51 },
+          { "eventId": "2011-07", "place": 15, "score": "8:03.0", "points": 57 },
+          { "eventId": "2011-08", "place": 2, "score": "96 reps", "points": 95 },
+          { "eventId": "2011-09", "place": 5, "score": "135 reps", "points": 80 },
+          { "eventId": "2011-10", "place": 10, "score": "14:32.0", "points": 67 }
+        ]
+      },
+      {
+        "rank": 6,
+        "name": "Dan Bailey",
+        "country": "United States",
+        "totalPoints": 696,
+        "events": [
+          { "eventId": "2011-01", "place": 4, "score": "37:42.0", "points": 85 },
+          { "eventId": "2011-02", "place": 13, "score": "61 pt", "points": 61 },
+          { "eventId": "2011-03", "place": 27, "score": "6:53.0", "points": 33 },
+          { "eventId": "2011-04", "place": 4, "score": "7:28.0", "points": 85 },
+          { "eventId": "2011-05", "place": 17, "score": "53 pt", "points": 53 },
+          { "eventId": "2011-06", "place": 8, "score": "6:51.0", "points": 71 },
+          { "eventId": "2011-07", "place": 7, "score": "6:15.0", "points": 73 },
+          { "eventId": "2011-08", "place": 6, "score": "92 reps", "points": 75 },
+          { "eventId": "2011-09", "place": 2, "score": "137 reps", "points": 95 },
+          { "eventId": "2011-10", "place": 11, "score": "15:10.0", "points": 65 }
+        ]
+      },
+      {
+        "rank": 7,
+        "name": "Jason Khalipa",
+        "country": "United States",
+        "totalPoints": 694,
+        "events": [
+          { "eventId": "2011-01", "place": 12, "score": "39:32.0", "points": 63 },
+          { "eventId": "2011-02", "place": 16, "score": "55 pt", "points": 55 },
+          { "eventId": "2011-03", "place": 17, "score": "6:14.0", "points": 53 },
+          { "eventId": "2011-04", "place": 4, "score": "7:28.0", "points": 85 },
+          { "eventId": "2011-05", "place": 7, "score": "73 pt", "points": 73 },
+          { "eventId": "2011-06", "place": 22, "score": "7:41.0", "points": 43 },
+          { "eventId": "2011-07", "place": 6, "score": "6:12.0", "points": 75 },
+          { "eventId": "2011-08", "place": 3, "score": "94 reps", "points": 90 },
+          { "eventId": "2011-09", "place": 10, "score": "123 reps", "points": 67 },
+          { "eventId": "2011-10", "place": 3, "score": "11:32.0", "points": 90 }
+        ]
+      },
+      {
+        "rank": 8,
+        "name": "Patrick Barber",
+        "country": "New Zealand",
+        "totalPoints": 678,
+        "events": [
+          { "eventId": "2011-01", "place": 35, "score": "43:48.0", "points": 22 },
+          { "eventId": "2011-02", "place": 4, "score": "85 pt", "points": 85 },
+          { "eventId": "2011-03", "place": 5, "score": "5:26.0", "points": 80 },
+          { "eventId": "2011-04", "place": 23, "score": "8:46.0", "points": 41 },
+          { "eventId": "2011-05", "place": 16, "score": "55 pt", "points": 55 },
+          { "eventId": "2011-06", "place": 5, "score": "6:37.0", "points": 80 },
+          { "eventId": "2011-07", "place": 4, "score": "5:56.0", "points": 85 },
+          { "eventId": "2011-08", "place": 10, "score": "78 reps", "points": 67 },
+          { "eventId": "2011-09", "place": 12, "score": "60 reps", "points": 63 },
+          { "eventId": "2011-10", "place": 1, "score": "11:12.0", "points": 100 }
+        ]
+      },
+      {
+        "rank": 9,
+        "name": "Spencer Hendel",
+        "country": "United States",
+        "totalPoints": 675,
+        "events": [
+          { "eventId": "2011-01", "place": 19, "score": "40:43.0", "points": 49 },
+          { "eventId": "2011-02", "place": 9, "score": "69 pt", "points": 69 },
+          { "eventId": "2011-03", "place": 25, "score": "6:52.0", "points": 37 },
+          { "eventId": "2011-04", "place": 13, "score": "8:15.0", "points": 61 },
+          { "eventId": "2011-05", "place": 7, "score": "73 pt", "points": 73 },
+          { "eventId": "2011-06", "place": 1, "score": "6:24.0", "points": 100 },
+          { "eventId": "2011-07", "place": 12, "score": "7:06.0", "points": 63 },
+          { "eventId": "2011-08", "place": 7, "score": "89 reps", "points": 73 },
+          { "eventId": "2011-09", "place": 6, "score": "130 reps", "points": 75 },
+          { "eventId": "2011-10", "place": 6, "score": "12:15.0", "points": 75 }
+        ]
+      },
+      {
+        "rank": 10,
+        "name": "Matt Chan",
+        "country": "United States",
+        "totalPoints": 670,
+        "events": [
+          { "eventId": "2011-01", "place": 17, "score": "40:19.0", "points": 53 },
+          { "eventId": "2011-02", "place": 20, "score": "47 pt", "points": 47 },
+          { "eventId": "2011-03", "place": 11, "score": "5:45.0", "points": 65 },
+          { "eventId": "2011-04", "place": 15, "score": "8:19.0", "points": 57 },
+          { "eventId": "2011-05", "place": 1, "score": "100 pt", "points": 100 },
+          { "eventId": "2011-06", "place": 10, "score": "6:54.0", "points": 67 },
+          { "eventId": "2011-07", "place": 20, "score": "8:54.0", "points": 47 },
+          { "eventId": "2011-08", "place": 3, "score": "94 reps", "points": 90 },
+          { "eventId": "2011-09", "place": 6, "score": "130 reps", "points": 75 },
+          { "eventId": "2011-10", "place": 9, "score": "14:17.0", "points": 69 }
+        ]
+      }
+    ],
+    "women": [
+      {
+        "rank": 1,
+        "name": "Annie Thorisdottir",
+        "country": "Iceland",
+        "totalPoints": 842,
+        "events": [
+          { "eventId": "2011-01", "place": 5, "score": "43:12.0", "points": 80 },
+          { "eventId": "2011-02", "place": 29, "score": "29 pt", "points": 29 },
+          { "eventId": "2011-03", "place": 1, "score": "6:54.0", "points": 100 },
+          { "eventId": "2011-04", "place": 7, "score": "9:34.0", "points": 73 },
+          { "eventId": "2011-05", "place": 1, "score": "100 pt", "points": 100 },
+          { "eventId": "2011-06", "place": 3, "score": "8:06.0", "points": 90 },
+          { "eventId": "2011-07", "place": 1, "score": "7:01.0", "points": 100 },
+          { "eventId": "2011-08", "place": 3, "score": "62 reps", "points": 90 },
+          { "eventId": "2011-09", "place": 3, "score": "118 reps", "points": 90 },
+          { "eventId": "2011-10", "place": 3, "score": "13:56.0", "points": 90 }
+        ]
+      },
+      {
+        "rank": 2,
+        "name": "Kristan Clever",
+        "country": "United States",
+        "totalPoints": 799,
+        "events": [
+          { "eventId": "2011-01", "place": 17, "score": "47:25.0", "points": 53 },
+          { "eventId": "2011-02", "place": 4, "score": "85 pt", "points": 85 },
+          { "eventId": "2011-03", "place": 2, "score": "7:19.0", "points": 95 },
+          { "eventId": "2011-04", "place": 2, "score": "8:43.0", "points": 95 },
+          { "eventId": "2011-05", "place": 2, "score": "95 pt", "points": 95 },
+          { "eventId": "2011-06", "place": 11, "score": "9:27.0", "points": 65 },
+          { "eventId": "2011-07", "place": 8, "score": "8:54.0", "points": 71 },
+          { "eventId": "2011-08", "place": 5, "score": "57 reps", "points": 80 },
+          { "eventId": "2011-09", "place": 6, "score": "111 reps", "points": 75 },
+          { "eventId": "2011-10", "place": 4, "score": "15:02.0", "points": 85 }
+        ]
+      },
+      {
+        "rank": 3,
+        "name": "Rebecca Voigt",
+        "country": "United States",
+        "totalPoints": 775,
+        "events": [
+          { "eventId": "2011-01", "place": 19, "score": "47:37.0", "points": 49 },
+          { "eventId": "2011-02", "place": 3, "score": "90 pt", "points": 90 },
+          { "eventId": "2011-03", "place": 7, "score": "8:23.0", "points": 73 },
+          { "eventId": "2011-04", "place": 15, "score": "10:50.0", "points": 57 },
+          { "eventId": "2011-05", "place": 7, "score": "73 pt", "points": 73 },
+          { "eventId": "2011-06", "place": 17, "score": "10:12.0", "points": 53 },
+          { "eventId": "2011-07", "place": 3, "score": "8:08.0", "points": 90 },
+          { "eventId": "2011-08", "place": 1, "score": "67 reps", "points": 100 },
+          { "eventId": "2011-09", "place": 2, "score": "120 reps", "points": 95 },
+          { "eventId": "2011-10", "place": 2, "score": "13:55.0", "points": 95 }
+        ]
+      },
+      {
+        "rank": 4,
+        "name": "Samantha Briggs",
+        "country": "United Kingdom",
+        "totalPoints": 752,
+        "events": [
+          { "eventId": "2011-01", "place": 2, "score": "39:14.0", "points": 95 },
+          { "eventId": "2011-02", "place": 13, "score": "61 pt", "points": 61 },
+          { "eventId": "2011-03", "place": 13, "score": "8:53.0", "points": 61 },
+          { "eventId": "2011-04", "place": 4, "score": "8:52.0", "points": 85 },
+          { "eventId": "2011-05", "place": 9, "score": "69 pt", "points": 69 },
+          { "eventId": "2011-06", "place": 23, "score": "11:13.0", "points": 41 },
+          { "eventId": "2011-07", "place": 10, "score": "10:17.0", "points": 67 },
+          { "eventId": "2011-08", "place": 7, "score": "51 reps", "points": 73 },
+          { "eventId": "2011-09", "place": 1, "score": "121 reps", "points": 100 },
+          { "eventId": "2011-10", "place": 1, "score": "13:06.0", "points": 100 }
+        ]
+      },
+      {
+        "rank": 5,
+        "name": "Julie Foucher",
+        "country": "United States",
+        "totalPoints": 730,
+        "events": [
+          { "eventId": "2011-01", "place": 1, "score": "39:04.0", "points": 100 },
+          { "eventId": "2011-02", "place": 18, "score": "51 pt", "points": 51 },
+          { "eventId": "2011-03", "place": 2, "score": "7:19.0", "points": 95 },
+          { "eventId": "2011-04", "place": 6, "score": "9:13.0", "points": 75 },
+          { "eventId": "2011-05", "place": 17, "score": "53 pt", "points": 53 },
+          { "eventId": "2011-06", "place": 24, "score": "11:40.0", "points": 39 },
+          { "eventId": "2011-07", "place": 2, "score": "7:08.0", "points": 95 },
+          { "eventId": "2011-08", "place": 10, "score": "42 reps", "points": 67 },
+          { "eventId": "2011-09", "place": 5, "score": "113 reps", "points": 80 },
+          { "eventId": "2011-10", "place": 6, "score": "15:29.0", "points": 75 }
+        ]
+      },
+      {
+        "rank": 6,
+        "name": "Jenny Labaw",
+        "country": "United States",
+        "totalPoints": 719,
+        "events": [
+          { "eventId": "2011-01", "place": 10, "score": "45:26.0", "points": 67 },
+          { "eventId": "2011-02", "place": 8, "score": "71 pt", "points": 71 },
+          { "eventId": "2011-03", "place": 8, "score": "8:34.0", "points": 71 },
+          { "eventId": "2011-04", "place": 19, "score": "11:04.0", "points": 49 },
+          { "eventId": "2011-05", "place": 4, "score": "85 pt", "points": 85 },
+          { "eventId": "2011-06", "place": 7, "score": "9:05.0", "points": 73 },
+          { "eventId": "2011-07", "place": 12, "score": "10:29.0", "points": 63 },
+          { "eventId": "2011-08", "place": 6, "score": "55 reps", "points": 75 },
+          { "eventId": "2011-09", "place": 4, "score": "116 reps", "points": 85 },
+          { "eventId": "2011-10", "place": 5, "score": "15:05.0", "points": 80 }
+        ]
+      },
+      {
+        "rank": 7,
+        "name": "Cheryl Brost",
+        "country": "United States",
+        "totalPoints": 660,
+        "events": [
+          { "eventId": "2011-01", "place": 22, "score": "48:04.0", "points": 43 },
+          { "eventId": "2011-02", "place": 6, "score": "75 pt", "points": 75 },
+          { "eventId": "2011-03", "place": 11, "score": "8:50.0", "points": 65 },
+          { "eventId": "2011-04", "place": 8, "score": "9:38.0", "points": 71 },
+          { "eventId": "2011-05", "place": 27, "score": "33 pt", "points": 33 },
+          { "eventId": "2011-06", "place": 5, "score": "8:33.0", "points": 80 },
+          { "eventId": "2011-07", "place": 15, "score": "10:43.0", "points": 57 },
+          { "eventId": "2011-08", "place": 3, "score": "62 reps", "points": 90 },
+          { "eventId": "2011-09", "place": 6, "score": "111 reps", "points": 75 },
+          { "eventId": "2011-10", "place": 8, "score": "15:43.0", "points": 71 }
+        ]
+      },
+      {
+        "rank": 8,
+        "name": "Camille Leblanc-Bazinet",
+        "country": "Canada",
+        "totalPoints": 651,
+        "events": [
+          { "eventId": "2011-01", "place": 20, "score": "47:53.0", "points": 47 },
+          { "eventId": "2011-02", "place": 2, "score": "95 pt", "points": 95 },
+          { "eventId": "2011-03", "place": 22, "score": "10:44.0", "points": 43 },
+          { "eventId": "2011-04", "place": 10, "score": "10:03.0", "points": 67 },
+          { "eventId": "2011-05", "place": 21, "score": "45 pt", "points": 45 },
+          { "eventId": "2011-06", "place": 10, "score": "9:21.0", "points": 67 },
+          { "eventId": "2011-07", "place": 5, "score": "8:10.0", "points": 80 },
+          { "eventId": "2011-08", "place": 9, "score": "45 reps", "points": 69 },
+          { "eventId": "2011-09", "place": 8, "score": "107 reps", "points": 71 },
+          { "eventId": "2011-10", "place": 10, "score": "16:52.0", "points": 67 }
+        ]
+      },
+      {
+        "rank": 9,
+        "name": "Annie Sakamoto",
+        "country": "United States",
+        "totalPoints": 643,
+        "events": [
+          { "eventId": "2011-01", "place": 3, "score": "41:23.0", "points": 90 },
+          { "eventId": "2011-02", "place": 11, "score": "65 pt", "points": 65 },
+          { "eventId": "2011-03", "place": 18, "score": "9:57.0", "points": 51 },
+          { "eventId": "2011-04", "place": 3, "score": "8:49.0", "points": 90 },
+          { "eventId": "2011-05", "place": 27, "score": "33 pt", "points": 33 },
+          { "eventId": "2011-06", "place": 32, "score": "23:38.0", "points": 25 },
+          { "eventId": "2011-07", "place": 5, "score": "8:10.0", "points": 80 },
+          { "eventId": "2011-08", "place": 8, "score": "46 reps", "points": 71 },
+          { "eventId": "2011-09", "place": 9, "score": "104 reps", "points": 69 },
+          { "eventId": "2011-10", "place": 9, "score": "16:28.0", "points": 69 }
+        ]
+      },
+      {
+        "rank": 10,
+        "name": "Angie Pye",
+        "country": "Canada",
+        "totalPoints": 642,
+        "events": [
+          { "eventId": "2011-01", "place": 7, "score": "43:54.0", "points": 73 },
+          { "eventId": "2011-02", "place": 18, "score": "51 pt", "points": 51 },
+          { "eventId": "2011-03", "place": 32, "score": "12:01.0", "points": 25 },
+          { "eventId": "2011-04", "place": 20, "score": "11:16.0", "points": 47 },
+          { "eventId": "2011-05", "place": 14, "score": "59 pt", "points": 59 },
+          { "eventId": "2011-06", "place": 2, "score": "7:38.0", "points": 95 },
+          { "eventId": "2011-07", "place": 14, "score": "10:42.0", "points": 59 },
+          { "eventId": "2011-08", "place": 2, "score": "66 reps", "points": 95 },
+          { "eventId": "2011-09", "place": 11, "score": "99 reps", "points": 65 },
+          { "eventId": "2011-10", "place": 7, "score": "15:31.0", "points": 73 }
+        ]
+      }
+    ]
+  }
+}

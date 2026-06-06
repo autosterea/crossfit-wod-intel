@@ -721,11 +721,18 @@ if (existsSync(RESULTS_DIR)) {
           }
         }
       })
-      // Final order must be strictly by rank with descending points
+      // Final order must be sequential by rank, and monotonic by total in the
+      // year's scoring direction. Early years (2008 time-sum, 2009-2010 rank-sum)
+      // are LOWER-is-better; the modern points table is HIGHER-is-better.
+      const withTotals = athletes.filter((a) => typeof a.totalPoints === 'number')
+      const lowerIsBetter = withTotals.length >= 2 && withTotals[0].totalPoints < withTotals[withTotals.length - 1].totalPoints
       for (let i = 1; i < athletes.length; i++) {
         if (athletes[i].rank !== athletes[i - 1].rank + 1) problem(`results/${year}/${division}: ranks not sequential at index ${i}`)
-        if (athletes[i].totalPoints > athletes[i - 1].totalPoints) {
-          problem(`results/${year}/${division}: ${athletes[i].name} has more points than the athlete ranked above`)
+        const a = athletes[i].totalPoints
+        const b = athletes[i - 1].totalPoints
+        if (typeof a === 'number' && typeof b === 'number') {
+          const wrong = lowerIsBetter ? a < b : a > b
+          if (wrong) problem(`results/${year}/${division}: ${athletes[i].name} total ${a} out of order vs athlete above (${b}); ${lowerIsBetter ? 'lower' : 'higher'}-is-better`)
         }
       }
     }

@@ -1,0 +1,337 @@
+{
+  "year": 2009,
+  "pointsSystem": "Placement-based (rank-sum) scoring: each athlete earned points equal to their finishing place in each event (1 point for 1st, 2 for 2nd, ...), and the lowest cumulative total won. This is not a 100-point table; points equal place for every event and totalPoints is the simple sum across the 8 events. Lower totalPoints = better. DNF/CUT athletes received heavy penalty points that dropped them below all complete finishers; none of those athletes are in either top 10 (e.g. Spencer Hendel and Annie Thorisdottir DNF'd the final chipper and finished 12th/11th, Cyndi Frieling DNF'd to 12th women).",
+  "sources": [
+    "https://c3po.crossfit.com/api/leaderboards/v2/competitions/games/2009/leaderboards?division=1",
+    "https://c3po.crossfit.com/api/leaderboards/v2/competitions/games/2009/leaderboards?division=2",
+    "https://games.crossfit.com/workouts/games/2009",
+    "https://en.wikipedia.org/wiki/2009_CrossFit_Games",
+    "NOTE on country: the official archive API did not return per-athlete nationality (all 'Not specified'). Mikko Salo is well documented as Finland; the remainder of both top 10s came through US regional qualifiers in an overwhelmingly American 2009 field and are recorded as USA. Country is therefore high-confidence for Salo and the women's field and reasonable-but-inferred for the other men."
+  ],
+  "divisions": {
+    "men": [
+      {
+        "rank": 1,
+        "name": "Mikko Salo",
+        "country": "Finland",
+        "totalPoints": 78,
+        "events": [
+          { "eventId": "2009-01", "place": 2, "score": "37:44.6", "points": 2 },
+          { "eventId": "2009-02", "place": 17, "score": "495 lb", "points": 17 },
+          { "eventId": "2009-03", "place": 9, "score": "1:08.6", "points": 9 },
+          { "eventId": "2009-04", "place": 32, "score": "6:24.4", "points": 32 },
+          { "eventId": "2009-05", "place": 4, "score": "12:14.7", "points": 4 },
+          { "eventId": "2009-06", "place": 11, "score": "190 lb", "points": 11 },
+          { "eventId": "2009-07", "place": 2, "score": "152 reps", "points": 2 },
+          { "eventId": "2009-08", "place": 1, "score": "19:46.0", "points": 1 }
+        ]
+      },
+      {
+        "rank": 2,
+        "name": "Tommy Hackenbruck",
+        "country": "USA",
+        "totalPoints": 83,
+        "events": [
+          { "eventId": "2009-01", "place": 14, "score": "41:45.4", "points": 14 },
+          { "eventId": "2009-02", "place": 24, "score": "475 lb", "points": 24 },
+          { "eventId": "2009-03", "place": 17, "score": "1:11.5", "points": 17 },
+          { "eventId": "2009-04", "place": 1, "score": "4:36.6", "points": 1 },
+          { "eventId": "2009-05", "place": 2, "score": "11:56.0", "points": 2 },
+          { "eventId": "2009-06", "place": 9, "score": "205 lb", "points": 9 },
+          { "eventId": "2009-07", "place": 9, "score": "107 reps", "points": 9 },
+          { "eventId": "2009-08", "place": 7, "score": "23:23.2", "points": 7 }
+        ]
+      },
+      {
+        "rank": 3,
+        "name": "Moe Kelsey",
+        "country": "USA",
+        "totalPoints": 91,
+        "events": [
+          { "eventId": "2009-01", "place": 28, "score": "44:11.3", "points": 28 },
+          { "eventId": "2009-02", "place": 1, "score": "505 lb", "points": 1 },
+          { "eventId": "2009-03", "place": 24, "score": "1:13.0", "points": 24 },
+          { "eventId": "2009-04", "place": 3, "score": "4:46.3", "points": 3 },
+          { "eventId": "2009-05", "place": 8, "score": "13:01.0", "points": 8 },
+          { "eventId": "2009-06", "place": 5, "score": "215 lb", "points": 5 },
+          { "eventId": "2009-07", "place": 13, "score": "75 reps", "points": 13 },
+          { "eventId": "2009-08", "place": 9, "score": "24:54.0", "points": 9 }
+        ]
+      },
+      {
+        "rank": 4,
+        "name": "Steve Willis",
+        "country": "USA",
+        "totalPoints": 101,
+        "events": [
+          { "eventId": "2009-01", "place": 33, "score": "44:36.2", "points": 33 },
+          { "eventId": "2009-02", "place": 20, "score": "485 lb", "points": 20 },
+          { "eventId": "2009-03", "place": 4, "score": "1:06.6", "points": 4 },
+          { "eventId": "2009-04", "place": 15, "score": "5:33.6", "points": 15 },
+          { "eventId": "2009-05", "place": 9, "score": "13:06.9", "points": 9 },
+          { "eventId": "2009-06", "place": 5, "score": "215 lb", "points": 5 },
+          { "eventId": "2009-07", "place": 5, "score": "142 reps", "points": 5 },
+          { "eventId": "2009-08", "place": 10, "score": "26:33.0", "points": 10 }
+        ]
+      },
+      {
+        "rank": 5,
+        "name": "Jason Khalipa",
+        "country": "USA",
+        "totalPoints": 106,
+        "events": [
+          { "eventId": "2009-01", "place": 72, "score": "54:35.5", "points": 72 },
+          { "eventId": "2009-02", "place": 1, "score": "505 lb", "points": 1 },
+          { "eventId": "2009-03", "place": 13, "score": "1:10.0", "points": 13 },
+          { "eventId": "2009-04", "place": 13, "score": "5:28.2", "points": 13 },
+          { "eventId": "2009-05", "place": 1, "score": "11:18.7", "points": 1 },
+          { "eventId": "2009-06", "place": 2, "score": "225 lb", "points": 2 },
+          { "eventId": "2009-07", "place": 2, "score": "152 reps", "points": 2 },
+          { "eventId": "2009-08", "place": 2, "score": "21:35.2", "points": 2 }
+        ]
+      },
+      {
+        "rank": 6,
+        "name": "Peter Egyed",
+        "country": "USA",
+        "totalPoints": 107,
+        "events": [
+          { "eventId": "2009-01", "place": 15, "score": "41:58.8", "points": 15 },
+          { "eventId": "2009-02", "place": 1, "score": "505 lb", "points": 1 },
+          { "eventId": "2009-03", "place": 44, "score": "1:20.0", "points": 44 },
+          { "eventId": "2009-04", "place": 9, "score": "5:10.6", "points": 9 },
+          { "eventId": "2009-05", "place": 5, "score": "12:35.3", "points": 5 },
+          { "eventId": "2009-06", "place": 12, "score": "185 lb", "points": 12 },
+          { "eventId": "2009-07", "place": 13, "score": "75 reps", "points": 13 },
+          { "eventId": "2009-08", "place": 8, "score": "24:25.7", "points": 8 }
+        ]
+      },
+      {
+        "rank": 7,
+        "name": "Blair Morrison",
+        "country": "USA",
+        "totalPoints": 111,
+        "events": [
+          { "eventId": "2009-01", "place": 4, "score": "38:54.5", "points": 4 },
+          { "eventId": "2009-02", "place": 44, "score": "435 lb", "points": 44 },
+          { "eventId": "2009-03", "place": 23, "score": "1:12.9", "points": 23 },
+          { "eventId": "2009-04", "place": 21, "score": "6:00.0", "points": 21 },
+          { "eventId": "2009-05", "place": 3, "score": "12:09.2", "points": 3 },
+          { "eventId": "2009-06", "place": 5, "score": "215 lb", "points": 5 },
+          { "eventId": "2009-07", "place": 7, "score": "122 reps", "points": 7 },
+          { "eventId": "2009-08", "place": 4, "score": "22:51.1", "points": 4 }
+        ]
+      },
+      {
+        "rank": 8,
+        "name": "Patrick Burke",
+        "country": "USA",
+        "totalPoints": 112,
+        "events": [
+          { "eventId": "2009-01", "place": 13, "score": "41:42.7", "points": 13 },
+          { "eventId": "2009-02", "place": 17, "score": "495 lb", "points": 17 },
+          { "eventId": "2009-03", "place": 16, "score": "1:11.1", "points": 16 },
+          { "eventId": "2009-04", "place": 38, "score": "6:31.0", "points": 38 },
+          { "eventId": "2009-05", "place": 11, "score": "13:11.0", "points": 11 },
+          { "eventId": "2009-06", "place": 10, "score": "195 lb", "points": 10 },
+          { "eventId": "2009-07", "place": 1, "score": "172 reps", "points": 1 },
+          { "eventId": "2009-08", "place": 6, "score": "23:10.0", "points": 6 }
+        ]
+      },
+      {
+        "rank": 9,
+        "name": "David Millar",
+        "country": "USA",
+        "totalPoints": 116,
+        "events": [
+          { "eventId": "2009-01", "place": 5, "score": "39:20.3", "points": 5 },
+          { "eventId": "2009-02", "place": 20, "score": "485 lb", "points": 20 },
+          { "eventId": "2009-03", "place": 30, "score": "1:14.3", "points": 30 },
+          { "eventId": "2009-04", "place": 14, "score": "5:30.7", "points": 14 },
+          { "eventId": "2009-05", "place": 19, "score": "15:19.0", "points": 19 },
+          { "eventId": "2009-06", "place": 13, "score": "175 lb", "points": 13 },
+          { "eventId": "2009-07", "place": 10, "score": "98 reps", "points": 10 },
+          { "eventId": "2009-08", "place": 5, "score": "23:02.0", "points": 5 }
+        ]
+      },
+      {
+        "rank": 10,
+        "name": "DJ Wickham",
+        "country": "USA",
+        "totalPoints": 127,
+        "events": [
+          { "eventId": "2009-01", "place": 47, "score": "46:09.1", "points": 47 },
+          { "eventId": "2009-02", "place": 1, "score": "505 lb", "points": 1 },
+          { "eventId": "2009-03", "place": 3, "score": "1:04.9", "points": 3 },
+          { "eventId": "2009-04", "place": 50, "score": "7:31.7", "points": 50 },
+          { "eventId": "2009-05", "place": 7, "score": "12:37.0", "points": 7 },
+          { "eventId": "2009-06", "place": 2, "score": "225 lb", "points": 2 },
+          { "eventId": "2009-07", "place": 6, "score": "124 reps", "points": 6 },
+          { "eventId": "2009-08", "place": 11, "score": "27:37.0", "points": 11 }
+        ]
+      }
+    ],
+    "women": [
+      {
+        "rank": 1,
+        "name": "Tanya Wagner",
+        "country": "USA",
+        "totalPoints": 54,
+        "events": [
+          { "eventId": "2009-01", "place": 11, "score": "46:17.0", "points": 11 },
+          { "eventId": "2009-02", "place": 6, "score": "325 lb", "points": 6 },
+          { "eventId": "2009-03", "place": 8, "score": "1:12.0", "points": 8 },
+          { "eventId": "2009-04", "place": 9, "score": "6:13.3", "points": 9 },
+          { "eventId": "2009-05", "place": 5, "score": "14:02.9", "points": 5 },
+          { "eventId": "2009-06", "place": 2, "score": "135 lb", "points": 2 },
+          { "eventId": "2009-07", "place": 6, "score": "51 reps", "points": 6 },
+          { "eventId": "2009-08", "place": 7, "score": "29:39.4", "points": 7 }
+        ]
+      },
+      {
+        "rank": 2,
+        "name": "Charity Vale",
+        "country": "USA",
+        "totalPoints": 72,
+        "events": [
+          { "eventId": "2009-01", "place": 9, "score": "45:56.4", "points": 9 },
+          { "eventId": "2009-02", "place": 9, "score": "315 lb", "points": 9 },
+          { "eventId": "2009-03", "place": 14, "score": "1:16.0", "points": 14 },
+          { "eventId": "2009-04", "place": 21, "score": "6:36.4", "points": 21 },
+          { "eventId": "2009-05", "place": 10, "score": "15:35.0", "points": 10 },
+          { "eventId": "2009-06", "place": 6, "score": "120 lb", "points": 6 },
+          { "eventId": "2009-07", "place": 2, "score": "148 reps", "points": 2 },
+          { "eventId": "2009-08", "place": 1, "score": "18:24.0", "points": 1 }
+        ]
+      },
+      {
+        "rank": 3,
+        "name": "Carey Kepler",
+        "country": "USA",
+        "totalPoints": 75,
+        "events": [
+          { "eventId": "2009-01", "place": 3, "score": "43:41.1", "points": 3 },
+          { "eventId": "2009-02", "place": 42, "score": "265 lb", "points": 42 },
+          { "eventId": "2009-03", "place": 2, "score": "1:10.6", "points": 2 },
+          { "eventId": "2009-04", "place": 3, "score": "5:50.4", "points": 3 },
+          { "eventId": "2009-05", "place": 1, "score": "11:01.4", "points": 1 },
+          { "eventId": "2009-06", "place": 14, "score": "105 lb", "points": 14 },
+          { "eventId": "2009-07", "place": 7, "score": "50 reps", "points": 7 },
+          { "eventId": "2009-08", "place": 3, "score": "21:06.0", "points": 3 }
+        ]
+      },
+      {
+        "rank": 4,
+        "name": "Kristan Clever",
+        "country": "USA",
+        "totalPoints": 75,
+        "events": [
+          { "eventId": "2009-01", "place": 4, "score": "43:47.3", "points": 4 },
+          { "eventId": "2009-02", "place": 15, "score": "305 lb", "points": 15 },
+          { "eventId": "2009-03", "place": 34, "score": "1:22.6", "points": 34 },
+          { "eventId": "2009-04", "place": 13, "score": "6:22.0", "points": 13 },
+          { "eventId": "2009-05", "place": 3, "score": "13:45.6", "points": 3 },
+          { "eventId": "2009-06", "place": 3, "score": "130 lb", "points": 3 },
+          { "eventId": "2009-07", "place": 1, "score": "153 reps", "points": 1 },
+          { "eventId": "2009-08", "place": 2, "score": "20:27.0", "points": 2 }
+        ]
+      },
+      {
+        "rank": 5,
+        "name": "Lindsey Smith",
+        "country": "USA",
+        "totalPoints": 105,
+        "events": [
+          { "eventId": "2009-01", "place": 33, "score": "50:00.9", "points": 33 },
+          { "eventId": "2009-02", "place": 9, "score": "315 lb", "points": 9 },
+          { "eventId": "2009-03", "place": 12, "score": "1:14.2", "points": 12 },
+          { "eventId": "2009-04", "place": 22, "score": "6:39.8", "points": 22 },
+          { "eventId": "2009-05", "place": 7, "score": "14:44.0", "points": 7 },
+          { "eventId": "2009-06", "place": 3, "score": "130 lb", "points": 3 },
+          { "eventId": "2009-07", "place": 11, "score": "24 reps", "points": 11 },
+          { "eventId": "2009-08", "place": 8, "score": "29:41.0", "points": 8 }
+        ]
+      },
+      {
+        "rank": 6,
+        "name": "Christy Phillips",
+        "country": "USA",
+        "totalPoints": 124,
+        "events": [
+          { "eventId": "2009-01", "place": 8, "score": "45:55.9", "points": 8 },
+          { "eventId": "2009-02", "place": 22, "score": "295 lb", "points": 22 },
+          { "eventId": "2009-03", "place": 23, "score": "1:19.0", "points": 23 },
+          { "eventId": "2009-04", "place": 16, "score": "6:29.4", "points": 16 },
+          { "eventId": "2009-05", "place": 29, "score": "18:43.1", "points": 29 },
+          { "eventId": "2009-06", "place": 12, "score": "110 lb", "points": 12 },
+          { "eventId": "2009-07", "place": 9, "score": "35 reps", "points": 9 },
+          { "eventId": "2009-08", "place": 5, "score": "24:47.0", "points": 5 }
+        ]
+      },
+      {
+        "rank": 7,
+        "name": "Jolie Gentry",
+        "country": "USA",
+        "totalPoints": 131,
+        "events": [
+          { "eventId": "2009-01", "place": 18, "score": "47:58.9", "points": 18 },
+          { "eventId": "2009-02", "place": 15, "score": "305 lb", "points": 15 },
+          { "eventId": "2009-03", "place": 16, "score": "1:17.0", "points": 16 },
+          { "eventId": "2009-04", "place": 35, "score": "7:05.0", "points": 35 },
+          { "eventId": "2009-05", "place": 23, "score": "18:13.8", "points": 23 },
+          { "eventId": "2009-06", "place": 9, "score": "115 lb", "points": 9 },
+          { "eventId": "2009-07", "place": 3, "score": "103 reps", "points": 3 },
+          { "eventId": "2009-08", "place": 12, "score": "30:06.0", "points": 12 }
+        ]
+      },
+      {
+        "rank": 8,
+        "name": "Jenny Olson",
+        "country": "USA",
+        "totalPoints": 134,
+        "events": [
+          { "eventId": "2009-01", "place": 46, "score": "52:28.5", "points": 46 },
+          { "eventId": "2009-02", "place": 2, "score": "355 lb", "points": 2 },
+          { "eventId": "2009-03", "place": 5, "score": "1:11.7", "points": 5 },
+          { "eventId": "2009-04", "place": 24, "score": "6:45.2", "points": 24 },
+          { "eventId": "2009-05", "place": 33, "score": "19:06.2", "points": 33 },
+          { "eventId": "2009-06", "place": 6, "score": "120 lb", "points": 6 },
+          { "eventId": "2009-07", "place": 5, "score": "52 reps", "points": 5 },
+          { "eventId": "2009-08", "place": 13, "score": "30:39.0", "points": 13 }
+        ]
+      },
+      {
+        "rank": 9,
+        "name": "Crystal McReynolds",
+        "country": "USA",
+        "totalPoints": 135,
+        "events": [
+          { "eventId": "2009-01", "place": 30, "score": "49:11.2", "points": 30 },
+          { "eventId": "2009-02", "place": 32, "score": "275 lb", "points": 32 },
+          { "eventId": "2009-03", "place": 28, "score": "1:20.5", "points": 28 },
+          { "eventId": "2009-04", "place": 12, "score": "6:21.0", "points": 12 },
+          { "eventId": "2009-05", "place": 12, "score": "15:43.1", "points": 12 },
+          { "eventId": "2009-06", "place": 5, "score": "125 lb", "points": 5 },
+          { "eventId": "2009-07", "place": 12, "score": "2 reps", "points": 12 },
+          { "eventId": "2009-08", "place": 4, "score": "24:24.0", "points": 4 }
+        ]
+      },
+      {
+        "rank": 10,
+        "name": "Stacey Kroon",
+        "country": "USA",
+        "totalPoints": 137,
+        "events": [
+          { "eventId": "2009-01", "place": 40, "score": "51:42.9", "points": 40 },
+          { "eventId": "2009-02", "place": 22, "score": "295 lb", "points": 22 },
+          { "eventId": "2009-03", "place": 19, "score": "1:18.0", "points": 19 },
+          { "eventId": "2009-04", "place": 23, "score": "6:40.3", "points": 23 },
+          { "eventId": "2009-05", "place": 8, "score": "14:53.8", "points": 8 },
+          { "eventId": "2009-06", "place": 12, "score": "110 lb", "points": 12 },
+          { "eventId": "2009-07", "place": 7, "score": "50 reps", "points": 7 },
+          { "eventId": "2009-08", "place": 6, "score": "28:08.0", "points": 6 }
+        ]
+      }
+    ]
+  }
+}

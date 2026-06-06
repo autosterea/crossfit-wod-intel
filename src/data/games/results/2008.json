@@ -1,0 +1,259 @@
+{
+  "year": 2008,
+  "pointsSystem": "2008 used cumulative-TIME scoring (lowest total elapsed time across all four events wins), not a points table - the format that gave the documentary its name 'Every Second Counts'. To fit the shared schema, each event's `points` is that athlete's event time expressed in whole seconds (from the official c3po leaderboard archive), and `totalPoints` is the athlete's cumulative time in seconds across all four events. LOWER IS BETTER. Event points sum exactly to totalPoints, and totalPoints in seconds equals the official overall finish time (e.g. Khalipa 236+157+238+166 = 797 s = 13:17; Matter 418+233+289+210 = 1150 s = 19:10).",
+  "sources": [
+    "https://c3po.crossfit.com/api/leaderboards/v2/competitions/games/2008/leaderboards?division=1 (official leaderboard archive, men - per-athlete per-event time/seconds; scoreDisplay e.g. '3:56.0' = 236 s)",
+    "https://c3po.crossfit.com/api/leaderboards/v2/competitions/games/2008/leaderboards?division=2 (official leaderboard archive, women)",
+    "https://games.crossfit.com/workouts/games/2008 (workout cards)",
+    "https://web.archive.org/web/20080920204637/http://games.crossfit.com/documents/CFGames08_Top5.pdf (official 'Top 5 in each event' PDF - used to correct the women's Hill Run places, which the c3po API deflates)",
+    "https://web.archive.org/web/20080820042821/http://games.crossfit.com/documents/MensCorrectedResults715.pdf",
+    "https://web.archive.org/web/20080820035520/http://games.crossfit.com/documents/WomensCorrectedResults715.pdf",
+    "https://en.wikipedia.org/wiki/2008_CrossFit_Games"
+  ],
+  "divisions": {
+    "men": [
+      {
+        "rank": 1,
+        "name": "Jason Khalipa",
+        "country": "USA",
+        "totalPoints": 797,
+        "events": [
+          { "eventId": "2008-01", "place": 11, "score": "3:56", "points": 236 },
+          { "eventId": "2008-02", "place": 3, "score": "2:37", "points": 157 },
+          { "eventId": "2008-03", "place": 32, "score": "3:58", "points": 238 },
+          { "eventId": "2008-04", "place": 1, "score": "2:46", "points": 166 }
+        ]
+      },
+      {
+        "rank": 2,
+        "name": "Josh Everett",
+        "country": "USA",
+        "totalPoints": 865,
+        "events": [
+          { "eventId": "2008-01", "place": 2, "score": "3:29", "points": 209 },
+          { "eventId": "2008-02", "place": 14, "score": "2:55", "points": 175 },
+          { "eventId": "2008-03", "place": 18, "score": "3:44", "points": 224 },
+          { "eventId": "2008-04", "place": 5, "score": "4:17", "points": 257 }
+        ]
+      },
+      {
+        "rank": 3,
+        "name": "Jeremy Thiel",
+        "country": "USA",
+        "totalPoints": 888,
+        "events": [
+          { "eventId": "2008-01", "place": 17, "score": "4:13", "points": 253 },
+          { "eventId": "2008-02", "place": 15, "score": "2:56", "points": 176 },
+          { "eventId": "2008-03", "place": 20, "score": "3:47", "points": 227 },
+          { "eventId": "2008-04", "place": 3, "score": "3:52", "points": 232 }
+        ]
+      },
+      {
+        "rank": 4,
+        "name": "Pat Barber",
+        "country": "USA",
+        "totalPoints": 913,
+        "events": [
+          { "eventId": "2008-01", "place": 6, "score": "3:39", "points": 219 },
+          { "eventId": "2008-02", "place": 11, "score": "2:50", "points": 170 },
+          { "eventId": "2008-03", "place": 23, "score": "3:48", "points": 228 },
+          { "eventId": "2008-04", "place": 9, "score": "4:56", "points": 296 }
+        ]
+      },
+      {
+        "rank": 5,
+        "name": "Jeff Tincher",
+        "country": "USA",
+        "totalPoints": 937,
+        "events": [
+          { "eventId": "2008-01", "place": 5, "score": "3:33", "points": 213 },
+          { "eventId": "2008-02", "place": 18, "score": "3:07", "points": 187 },
+          { "eventId": "2008-03", "place": 30, "score": "3:55", "points": 235 },
+          { "eventId": "2008-04", "place": 11, "score": "5:02", "points": 302 }
+        ]
+      },
+      {
+        "rank": 6,
+        "name": "Rick Frausto",
+        "country": "USA",
+        "totalPoints": 955,
+        "events": [
+          { "eventId": "2008-01", "place": 3, "score": "3:30", "points": 210 },
+          { "eventId": "2008-02", "place": 10, "score": "2:46", "points": 166 },
+          { "eventId": "2008-03", "place": 20, "score": "3:47", "points": 227 },
+          { "eventId": "2008-04", "place": 22, "score": "5:52", "points": 352 }
+        ]
+      },
+      {
+        "rank": 7,
+        "name": "Dutch Lowy",
+        "country": "USA",
+        "totalPoints": 962,
+        "events": [
+          { "eventId": "2008-01", "place": 3, "score": "3:30", "points": 210 },
+          { "eventId": "2008-02", "place": 12, "score": "2:51", "points": 171 },
+          { "eventId": "2008-03", "place": 43, "score": "4:04", "points": 244 },
+          { "eventId": "2008-04", "place": 17, "score": "5:37", "points": 337 }
+        ]
+      },
+      {
+        "rank": 8,
+        "name": "Matt Chan",
+        "country": "USA",
+        "totalPoints": 974,
+        "events": [
+          { "eventId": "2008-01", "place": 8, "score": "3:43", "points": 223 },
+          { "eventId": "2008-02", "place": 1, "score": "2:33", "points": 153 },
+          { "eventId": "2008-03", "place": 55, "score": "4:12", "points": 252 },
+          { "eventId": "2008-04", "place": 20, "score": "5:46", "points": 346 }
+        ]
+      },
+      {
+        "rank": 9,
+        "name": "Lucas Brainerd",
+        "country": "USA",
+        "totalPoints": 987,
+        "events": [
+          { "eventId": "2008-01", "place": 12, "score": "3:57", "points": 237 },
+          { "eventId": "2008-02", "place": 45, "score": "3:48", "points": 228 },
+          { "eventId": "2008-03", "place": 15, "score": "3:42", "points": 222 },
+          { "eventId": "2008-04", "place": 10, "score": "5:00", "points": 300 }
+        ]
+      },
+      {
+        "rank": 10,
+        "name": "Chris Spealler",
+        "country": "USA",
+        "totalPoints": 991,
+        "events": [
+          { "eventId": "2008-01", "place": 1, "score": "3:01", "points": 181 },
+          { "eventId": "2008-02", "place": 4, "score": "2:41", "points": 161 },
+          { "eventId": "2008-03", "place": 2, "score": "3:22", "points": 202 },
+          { "eventId": "2008-04", "place": 47, "score": "7:27", "points": 447 }
+        ]
+      }
+    ],
+    "women": [
+      {
+        "rank": 1,
+        "name": "Caity Matter",
+        "country": "USA",
+        "totalPoints": 1150,
+        "events": [
+          { "eventId": "2008-01", "place": 8, "score": "6:58", "points": 418 },
+          { "eventId": "2008-02", "place": 2, "score": "3:53", "points": 233 },
+          { "eventId": "2008-03", "place": 9, "score": "4:49", "points": 289 },
+          { "eventId": "2008-04", "place": 1, "score": "3:30", "points": 210 }
+        ]
+      },
+      {
+        "rank": 2,
+        "name": "Tanya Wagner",
+        "country": "USA",
+        "totalPoints": 1160,
+        "events": [
+          { "eventId": "2008-01", "place": 4, "score": "5:55", "points": 355 },
+          { "eventId": "2008-02", "place": 5, "score": "4:10", "points": 250 },
+          { "eventId": "2008-03", "place": 4, "score": "4:35", "points": 275 },
+          { "eventId": "2008-04", "place": 3, "score": "4:40", "points": 280 }
+        ]
+      },
+      {
+        "rank": 3,
+        "name": "Gillian Mounsey",
+        "country": "USA",
+        "totalPoints": 1188,
+        "events": [
+          { "eventId": "2008-01", "place": 2, "score": "5:17", "points": 317 },
+          { "eventId": "2008-02", "place": 9, "score": "4:17", "points": 257 },
+          { "eventId": "2008-03", "place": 18, "score": "5:03", "points": 303 },
+          { "eventId": "2008-04", "place": 4, "score": "5:11", "points": 311 }
+        ]
+      },
+      {
+        "rank": 4,
+        "name": "Tamara Holmes",
+        "country": "USA",
+        "totalPoints": 1296,
+        "events": [
+          { "eventId": "2008-01", "place": 11, "score": "7:33", "points": 453 },
+          { "eventId": "2008-02", "place": 7, "score": "4:12", "points": 252 },
+          { "eventId": "2008-03", "place": 27, "score": "5:37", "points": 337 },
+          { "eventId": "2008-04", "place": 2, "score": "4:14", "points": 254 }
+        ]
+      },
+      {
+        "rank": 5,
+        "name": "Jolie Gentry",
+        "country": "USA",
+        "totalPoints": 1373,
+        "events": [
+          { "eventId": "2008-01", "place": 3, "score": "5:43", "points": 343 },
+          { "eventId": "2008-02", "place": 14, "score": "4:38", "points": 278 },
+          { "eventId": "2008-03", "place": 6, "score": "4:43", "points": 283 },
+          { "eventId": "2008-04", "place": 16, "score": "7:49", "points": 469 }
+        ]
+      },
+      {
+        "rank": 6,
+        "name": "Libby Dibiase",
+        "country": "USA",
+        "totalPoints": 1404,
+        "events": [
+          { "eventId": "2008-01", "place": 14, "score": "8:12", "points": 492 },
+          { "eventId": "2008-02", "place": 1, "score": "3:23", "points": 203 },
+          { "eventId": "2008-03", "place": 14, "score": "4:57", "points": 297 },
+          { "eventId": "2008-04", "place": 11, "score": "6:52", "points": 412 }
+        ]
+      },
+      {
+        "rank": 7,
+        "name": "Rebecca Voigt",
+        "country": "USA",
+        "totalPoints": 1429,
+        "events": [
+          { "eventId": "2008-01", "place": 15, "score": "8:19", "points": 499 },
+          { "eventId": "2008-02", "place": 9, "score": "4:17", "points": 257 },
+          { "eventId": "2008-03", "place": 13, "score": "4:55", "points": 295 },
+          { "eventId": "2008-04", "place": 7, "score": "6:18", "points": 378 }
+        ]
+      },
+      {
+        "rank": 8,
+        "name": "Amber Wiggs",
+        "country": "USA",
+        "totalPoints": 1459,
+        "events": [
+          { "eventId": "2008-01", "place": 6, "score": "6:39", "points": 399 },
+          { "eventId": "2008-02", "place": 16, "score": "4:44", "points": 284 },
+          { "eventId": "2008-03", "place": 31, "score": "5:44", "points": 344 },
+          { "eventId": "2008-04", "place": 13, "score": "7:12", "points": 432 }
+        ]
+      },
+      {
+        "rank": 9,
+        "name": "Robin Lyons",
+        "country": "USA",
+        "totalPoints": 1459,
+        "events": [
+          { "eventId": "2008-01", "place": 9, "score": "7:24", "points": 444 },
+          { "eventId": "2008-02", "place": 31, "score": "6:13", "points": 373 },
+          { "eventId": "2008-03", "place": 25, "score": "5:27", "points": 327 },
+          { "eventId": "2008-04", "place": 5, "score": "5:15", "points": 315 }
+        ]
+      },
+      {
+        "rank": 10,
+        "name": "Jenni Orr",
+        "country": "USA",
+        "totalPoints": 1459,
+        "events": [
+          { "eventId": "2008-01", "place": 18, "score": "8:33", "points": 513 },
+          { "eventId": "2008-02", "place": 4, "score": "4:03", "points": 243 },
+          { "eventId": "2008-03", "place": 20, "score": "5:08", "points": 308 },
+          { "eventId": "2008-04", "place": 10, "score": "6:35", "points": 395 }
+        ]
+      }
+    ]
+  }
+}

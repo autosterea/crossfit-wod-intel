@@ -1,0 +1,437 @@
+{
+  "year": 2017,
+  "pointsSystem": "2017 CrossFit Games graduated points table (40-place scale, max 100 per event). Points by finishing place: 1st 100, 2nd 94, 3rd 88, 4th 84, 5th 80, 6th 76, 7th 72, 8th 68, 9th 64, 10th 60, then descending by 2 per place: 11th 58, 12th 56, 13th 54, 14th 52, 15th 50, 16th 48, 17th 46, 18th 44, 19th 42, 20th 40, 21st 38, 22nd 36, 23rd 34, 24th 32, 25th 30, 26th 28, 27th 26, 28th 24, 29th 22, 30th 20, 31st 18, 32nd 16, 33rd 14, 34th 12, 35th 10, 36th 8, 37th 6, 38th 4, 39th 2, 40th 0. Every athlete contested all 13 events (no cuts). Ricky Garard originally finished 3rd overall but was disqualified after the Games for testolone/endurobol and banned four years; the official leaderboard archive still displays his event scores (including event wins in the Cyclocross and Madison Triplet) but marks his overall result DQ. He is therefore excluded from this top 10 and Patrick Vellner is elevated to 3rd, matching the corrected official standings.",
+  "sources": [
+    "https://c3po.crossfit.com/api/leaderboards/v2/competitions/games/2017/leaderboards?division=1 (official CrossFit Games leaderboard archive API - per-event rank, points, and score display for all 39 men; primary source for every men's cell)",
+    "https://c3po.crossfit.com/api/leaderboards/v2/competitions/games/2017/leaderboards?division=2 (official CrossFit Games leaderboard archive API - per-event rank, points, and score display for all 40 women; primary source for every women's cell)",
+    "https://en.wikipedia.org/wiki/2017_CrossFit_Games (results tables, final standings, and Ricky Garard DQ / Patrick Vellner elevation to 3rd; cross-check)",
+    "https://thebarbellspin.com/functional-fitness/tia-clair-toomey-edges-out-fellow-australian-kara-webb-for-fittest-on-earth-title/ (confirms Toomey edged Kara Webb by 2 points, 994 vs 992, the closest women's finish in Games history at the time)",
+    "Athlete naming follows the raw anchor file (e.g. 'Kara Webb' as competed in 2017, later Kara Saunders; 'Katrin Tanja Davidsdottir'; 'Tennil Reed-Beuerlein'; 'Sara Sigmundsdottir') so documented event winners resolve against the events data."
+  ],
+  "divisions": {
+    "men": [
+      {
+        "rank": 1,
+        "name": "Mat Fraser",
+        "country": "United States",
+        "totalPoints": 1132,
+        "events": [
+          { "eventId": "2017-01", "place": 7, "score": "29:40.50", "points": 72 },
+          { "eventId": "2017-02", "place": 2, "score": "19:52.68", "points": 94 },
+          { "eventId": "2017-03", "place": 2, "score": "8:17.88", "points": 94 },
+          { "eventId": "2017-04", "place": 6, "score": "6 pt", "points": 76 },
+          { "eventId": "2017-05", "place": 5, "score": "291 lb", "points": 80 },
+          { "eventId": "2017-06", "place": 1, "score": "10:46.46", "points": 100 },
+          { "eventId": "2017-07", "place": 20, "score": "3:08.22", "points": 40 },
+          { "eventId": "2017-08", "place": 2, "score": "4:13.31", "points": 94 },
+          { "eventId": "2017-09", "place": 1, "score": "7:40.56", "points": 100 },
+          { "eventId": "2017-10", "place": 1, "score": "8:24.19", "points": 100 },
+          { "eventId": "2017-11", "place": 3, "score": "16:31.60", "points": 88 },
+          { "eventId": "2017-12", "place": 1, "score": "10:54.63", "points": 100 },
+          { "eventId": "2017-13", "place": 2, "score": "CAP+2", "points": 94 }
+        ]
+      },
+      {
+        "rank": 2,
+        "name": "Brent Fikowski",
+        "country": "Canada",
+        "totalPoints": 916,
+        "events": [
+          { "eventId": "2017-01", "place": 1, "score": "28:45.29", "points": 100 },
+          { "eventId": "2017-02", "place": 12, "score": "20:55.79", "points": 56 },
+          { "eventId": "2017-03", "place": 15, "score": "9:35.50", "points": 50 },
+          { "eventId": "2017-04", "place": 8, "score": "8 pt", "points": 68 },
+          { "eventId": "2017-05", "place": 3, "score": "300 lb", "points": 88 },
+          { "eventId": "2017-06", "place": 31, "score": "13:20.05", "points": 18 },
+          { "eventId": "2017-07", "place": 4, "score": "2:27.88", "points": 84 },
+          { "eventId": "2017-08", "place": 1, "score": "4:13.22", "points": 100 },
+          { "eventId": "2017-09", "place": 22, "score": "CAP+1", "points": 36 },
+          { "eventId": "2017-10", "place": 12, "score": "9:33.03", "points": 56 },
+          { "eventId": "2017-11", "place": 4, "score": "16:36.87", "points": 84 },
+          { "eventId": "2017-12", "place": 3, "score": "11:05.79", "points": 88 },
+          { "eventId": "2017-13", "place": 3, "score": "CAP+4", "points": 88 }
+        ]
+      },
+      {
+        "rank": 3,
+        "name": "Patrick Vellner",
+        "country": "Canada",
+        "totalPoints": 792,
+        "events": [
+          { "eventId": "2017-01", "place": 36, "score": "35:15.98", "points": 8 },
+          { "eventId": "2017-02", "place": 13, "score": "20:57.00", "points": 54 },
+          { "eventId": "2017-03", "place": 7, "score": "8:55.13", "points": 72 },
+          { "eventId": "2017-04", "place": 1, "score": "1 pt", "points": 100 },
+          { "eventId": "2017-05", "place": 29, "score": "262 lb", "points": 22 },
+          { "eventId": "2017-06", "place": 3, "score": "11:13.08", "points": 88 },
+          { "eventId": "2017-07", "place": 9, "score": "2:40.67", "points": 64 },
+          { "eventId": "2017-08", "place": 5, "score": "4:37.11", "points": 80 },
+          { "eventId": "2017-09", "place": 11, "score": "9:37.20", "points": 58 },
+          { "eventId": "2017-10", "place": 21, "score": "10:06.61", "points": 38 },
+          { "eventId": "2017-11", "place": 2, "score": "16:29.58", "points": 94 },
+          { "eventId": "2017-12", "place": 15, "score": "CAP+3", "points": 50 },
+          { "eventId": "2017-13", "place": 9, "score": "CAP+10", "points": 64 }
+        ]
+      },
+      {
+        "rank": 4,
+        "name": "Noah Ohlsen",
+        "country": "United States",
+        "totalPoints": 788,
+        "events": [
+          { "eventId": "2017-01", "place": 8, "score": "29:42.00", "points": 68 },
+          { "eventId": "2017-02", "place": 18, "score": "21:35.11", "points": 44 },
+          { "eventId": "2017-03", "place": 8, "score": "9:08.41", "points": 68 },
+          { "eventId": "2017-04", "place": 4, "score": "4 pt", "points": 84 },
+          { "eventId": "2017-05", "place": 20, "score": "273 lb", "points": 40 },
+          { "eventId": "2017-06", "place": 8, "score": "11:57.85", "points": 68 },
+          { "eventId": "2017-07", "place": 3, "score": "2:04.53", "points": 88 },
+          { "eventId": "2017-08", "place": 4, "score": "4:21.93", "points": 84 },
+          { "eventId": "2017-09", "place": 14, "score": "9:59.38", "points": 52 },
+          { "eventId": "2017-10", "place": 5, "score": "8:53.93", "points": 80 },
+          { "eventId": "2017-11", "place": 26, "score": "17:57.01", "points": 28 },
+          { "eventId": "2017-12", "place": 38, "score": "CAP+31", "points": 4 },
+          { "eventId": "2017-13", "place": 5, "score": "CAP+7", "points": 80 }
+        ]
+      },
+      {
+        "rank": 5,
+        "name": "Björgvin Karl Guðmundsson",
+        "country": "Iceland",
+        "totalPoints": 786,
+        "events": [
+          { "eventId": "2017-01", "place": 4, "score": "29:31.00", "points": 84 },
+          { "eventId": "2017-02", "place": 5, "score": "20:27.01", "points": 80 },
+          { "eventId": "2017-03", "place": 11, "score": "9:17.20", "points": 58 },
+          { "eventId": "2017-04", "place": 10, "score": "10 pt", "points": 60 },
+          { "eventId": "2017-05", "place": 9, "score": "286 lb", "points": 64 },
+          { "eventId": "2017-06", "place": 22, "score": "12:55.01", "points": 36 },
+          { "eventId": "2017-07", "place": 12, "score": "2:44.71", "points": 56 },
+          { "eventId": "2017-08", "place": 12, "score": "5:11.42", "points": 56 },
+          { "eventId": "2017-09", "place": 9, "score": "9:29.74", "points": 64 },
+          { "eventId": "2017-10", "place": 27, "score": "10:24.62", "points": 26 },
+          { "eventId": "2017-11", "place": 5, "score": "16:43.94", "points": 80 },
+          { "eventId": "2017-12", "place": 15, "score": "CAP+3", "points": 50 },
+          { "eventId": "2017-13", "place": 7, "score": "CAP+9", "points": 72 }
+        ]
+      },
+      {
+        "rank": 6,
+        "name": "Scott Panchik",
+        "country": "United States",
+        "totalPoints": 784,
+        "events": [
+          { "eventId": "2017-01", "place": 20, "score": "31:26.99", "points": 40 },
+          { "eventId": "2017-02", "place": 31, "score": "22:25.13", "points": 18 },
+          { "eventId": "2017-03", "place": 6, "score": "8:47.16", "points": 76 },
+          { "eventId": "2017-04", "place": 20, "score": "20 pt", "points": 40 },
+          { "eventId": "2017-05", "place": 13, "score": "277 lb", "points": 54 },
+          { "eventId": "2017-06", "place": 4, "score": "11:22.10", "points": 84 },
+          { "eventId": "2017-07", "place": 16, "score": "2:51.56", "points": 48 },
+          { "eventId": "2017-08", "place": 3, "score": "4:21.91", "points": 88 },
+          { "eventId": "2017-09", "place": 3, "score": "8:05.60", "points": 88 },
+          { "eventId": "2017-10", "place": 6, "score": "9:05.55", "points": 76 },
+          { "eventId": "2017-11", "place": 30, "score": "18:15.60", "points": 20 },
+          { "eventId": "2017-12", "place": 7, "score": "11:50.39", "points": 72 },
+          { "eventId": "2017-13", "place": 5, "score": "CAP+7", "points": 80 }
+        ]
+      },
+      {
+        "rank": 7,
+        "name": "Ben Smith",
+        "country": "United States",
+        "totalPoints": 730,
+        "events": [
+          { "eventId": "2017-01", "place": 3, "score": "29:28.00", "points": 88 },
+          { "eventId": "2017-02", "place": 28, "score": "22:04.40", "points": 24 },
+          { "eventId": "2017-03", "place": 14, "score": "9:34.66", "points": 52 },
+          { "eventId": "2017-04", "place": 31, "score": "31 pt", "points": 18 },
+          { "eventId": "2017-05", "place": 6, "score": "290 lb", "points": 76 },
+          { "eventId": "2017-06", "place": 7, "score": "11:44.07", "points": 72 },
+          { "eventId": "2017-07", "place": 13, "score": "2:45.10", "points": 54 },
+          { "eventId": "2017-08", "place": 18, "score": "5:38.79", "points": 44 },
+          { "eventId": "2017-09", "place": 4, "score": "8:09.15", "points": 84 },
+          { "eventId": "2017-10", "place": 9, "score": "9:23.55", "points": 64 },
+          { "eventId": "2017-11", "place": 25, "score": "17:55.14", "points": 30 },
+          { "eventId": "2017-12", "place": 10, "score": "11:58.04", "points": 60 },
+          { "eventId": "2017-13", "place": 9, "score": "CAP+10", "points": 64 }
+        ]
+      },
+      {
+        "rank": 8,
+        "name": "Alex Anderson",
+        "country": "United States",
+        "totalPoints": 702,
+        "events": [
+          { "eventId": "2017-01", "place": 13, "score": "30:25.83", "points": 54 },
+          { "eventId": "2017-02", "place": 10, "score": "20:39.32", "points": 60 },
+          { "eventId": "2017-03", "place": 19, "score": "9:47.22", "points": 42 },
+          { "eventId": "2017-04", "place": 14, "score": "14 pt", "points": 52 },
+          { "eventId": "2017-05", "place": 13, "score": "277 lb", "points": 54 },
+          { "eventId": "2017-06", "place": 11, "score": "12:18.36", "points": 58 },
+          { "eventId": "2017-07", "place": 21, "score": "3:11.37", "points": 38 },
+          { "eventId": "2017-08", "place": 26, "score": "6:34.79", "points": 28 },
+          { "eventId": "2017-09", "place": 2, "score": "7:58.77", "points": 94 },
+          { "eventId": "2017-10", "place": 14, "score": "9:43.85", "points": 52 },
+          { "eventId": "2017-11", "place": 23, "score": "17:51.69", "points": 34 },
+          { "eventId": "2017-12", "place": 4, "score": "11:26.83", "points": 84 },
+          { "eventId": "2017-13", "place": 14, "score": "CAP+11", "points": 52 }
+        ]
+      },
+      {
+        "rank": 9,
+        "name": "Jonne Koski",
+        "country": "Finland",
+        "totalPoints": 696,
+        "events": [
+          { "eventId": "2017-01", "place": 2, "score": "29:16.00", "points": 94 },
+          { "eventId": "2017-02", "place": 3, "score": "20:08.49", "points": 88 },
+          { "eventId": "2017-03", "place": 9, "score": "9:09.60", "points": 64 },
+          { "eventId": "2017-04", "place": 5, "score": "5 pt", "points": 80 },
+          { "eventId": "2017-05", "place": 33, "score": "247 lb", "points": 14 },
+          { "eventId": "2017-06", "place": 2, "score": "11:05.64", "points": 94 },
+          { "eventId": "2017-07", "place": 33, "score": "4:39.77", "points": 14 },
+          { "eventId": "2017-08", "place": 25, "score": "6:21.38", "points": 30 },
+          { "eventId": "2017-09", "place": 30, "score": "CAP+8", "points": 20 },
+          { "eventId": "2017-10", "place": 19, "score": "9:55.36", "points": 42 },
+          { "eventId": "2017-11", "place": 14, "score": "17:30.57", "points": 52 },
+          { "eventId": "2017-12", "place": 20, "score": "CAP+4", "points": 40 },
+          { "eventId": "2017-13", "place": 9, "score": "CAP+10", "points": 64 }
+        ]
+      },
+      {
+        "rank": 10,
+        "name": "Jason Smith",
+        "country": "South Africa",
+        "totalPoints": 688,
+        "events": [
+          { "eventId": "2017-01", "place": 27, "score": "32:38.40", "points": 26 },
+          { "eventId": "2017-02", "place": 4, "score": "20:25.58", "points": 84 },
+          { "eventId": "2017-03", "place": 12, "score": "9:24.41", "points": 56 },
+          { "eventId": "2017-04", "place": 7, "score": "7 pt", "points": 72 },
+          { "eventId": "2017-05", "place": 7, "score": "287 lb", "points": 72 },
+          { "eventId": "2017-06", "place": 25, "score": "12:57.38", "points": 30 },
+          { "eventId": "2017-07", "place": 8, "score": "2:40.26", "points": 68 },
+          { "eventId": "2017-08", "place": 15, "score": "5:24.24", "points": 50 },
+          { "eventId": "2017-09", "place": 6, "score": "8:46.96", "points": 76 },
+          { "eventId": "2017-10", "place": 18, "score": "9:53.93", "points": 44 },
+          { "eventId": "2017-11", "place": 8, "score": "17:07.18", "points": 68 },
+          { "eventId": "2017-12", "place": 23, "score": "CAP+7", "points": 34 },
+          { "eventId": "2017-13", "place": 36, "score": "CAP+37", "points": 8 }
+        ]
+      }
+    ],
+    "women": [
+      {
+        "rank": 1,
+        "name": "Tia-Clair Toomey",
+        "country": "Australia",
+        "totalPoints": 994,
+        "events": [
+          { "eventId": "2017-01", "place": 1, "score": "28:45.65", "points": 100 },
+          { "eventId": "2017-02", "place": 8, "score": "23:06.31", "points": 68 },
+          { "eventId": "2017-03", "place": 2, "score": "8:58.18", "points": 94 },
+          { "eventId": "2017-04", "place": 12, "score": "12 pt", "points": 56 },
+          { "eventId": "2017-05", "place": 2, "score": "202 lb", "points": 94 },
+          { "eventId": "2017-06", "place": 12, "score": "12:54.73", "points": 56 },
+          { "eventId": "2017-07", "place": 14, "score": "3:30.64", "points": 52 },
+          { "eventId": "2017-08", "place": 7, "score": "5:02.72", "points": 72 },
+          { "eventId": "2017-09", "place": 1, "score": "7:12.44", "points": 100 },
+          { "eventId": "2017-10", "place": 2, "score": "8:01.40", "points": 94 },
+          { "eventId": "2017-11", "place": 3, "score": "17:55.26", "points": 88 },
+          { "eventId": "2017-12", "place": 14, "score": "11:38.24", "points": 52 },
+          { "eventId": "2017-13", "place": 8, "score": "3:47.99", "points": 68 }
+        ]
+      },
+      {
+        "rank": 2,
+        "name": "Kara Webb",
+        "country": "Australia",
+        "totalPoints": 992,
+        "events": [
+          { "eventId": "2017-01", "place": 10, "score": "31:11.33", "points": 60 },
+          { "eventId": "2017-02", "place": 23, "score": "24:47.90", "points": 34 },
+          { "eventId": "2017-03", "place": 6, "score": "9:34.56", "points": 76 },
+          { "eventId": "2017-04", "place": 17, "score": "17 pt", "points": 46 },
+          { "eventId": "2017-05", "place": 1, "score": "203 lb", "points": 100 },
+          { "eventId": "2017-06", "place": 1, "score": "10:45.72", "points": 100 },
+          { "eventId": "2017-07", "place": 2, "score": "2:52.87", "points": 94 },
+          { "eventId": "2017-08", "place": 8, "score": "5:09.87", "points": 68 },
+          { "eventId": "2017-09", "place": 2, "score": "7:55.86", "points": 94 },
+          { "eventId": "2017-10", "place": 1, "score": "7:53.82", "points": 100 },
+          { "eventId": "2017-11", "place": 9, "score": "18:27.16", "points": 64 },
+          { "eventId": "2017-12", "place": 4, "score": "10:58.00", "points": 84 },
+          { "eventId": "2017-13", "place": 7, "score": "3:47.80", "points": 72 }
+        ]
+      },
+      {
+        "rank": 3,
+        "name": "Annie Thorisdottir",
+        "country": "Iceland",
+        "totalPoints": 964,
+        "events": [
+          { "eventId": "2017-01", "place": 21, "score": "33:08.40", "points": 38 },
+          { "eventId": "2017-02", "place": 5, "score": "22:50.85", "points": 80 },
+          { "eventId": "2017-03", "place": 15, "score": "10:59.44", "points": 50 },
+          { "eventId": "2017-04", "place": 3, "score": "3 pt", "points": 88 },
+          { "eventId": "2017-05", "place": 6, "score": "198 lb", "points": 76 },
+          { "eventId": "2017-06", "place": 3, "score": "11:40.47", "points": 88 },
+          { "eventId": "2017-07", "place": 4, "score": "3:06.41", "points": 84 },
+          { "eventId": "2017-08", "place": 3, "score": "4:21.85", "points": 88 },
+          { "eventId": "2017-09", "place": 5, "score": "9:36.75", "points": 80 },
+          { "eventId": "2017-10", "place": 13, "score": "9:38.31", "points": 54 },
+          { "eventId": "2017-11", "place": 15, "score": "18:51.14", "points": 50 },
+          { "eventId": "2017-12", "place": 2, "score": "10:56.42", "points": 94 },
+          { "eventId": "2017-13", "place": 2, "score": "3:18.09", "points": 94 }
+        ]
+      },
+      {
+        "rank": 4,
+        "name": "Sara Sigmundsdottir",
+        "country": "Iceland",
+        "totalPoints": 944,
+        "events": [
+          { "eventId": "2017-01", "place": 7, "score": "30:23.04", "points": 72 },
+          { "eventId": "2017-02", "place": 6, "score": "22:56.49", "points": 76 },
+          { "eventId": "2017-03", "place": 12, "score": "10:36.34", "points": 56 },
+          { "eventId": "2017-04", "place": 9, "score": "9 pt", "points": 64 },
+          { "eventId": "2017-05", "place": 4, "score": "200 lb", "points": 84 },
+          { "eventId": "2017-06", "place": 4, "score": "11:56.29", "points": 84 },
+          { "eventId": "2017-07", "place": 3, "score": "3:00.70", "points": 88 },
+          { "eventId": "2017-08", "place": 10, "score": "5:19.12", "points": 60 },
+          { "eventId": "2017-09", "place": 3, "score": "9:02.26", "points": 88 },
+          { "eventId": "2017-10", "place": 10, "score": "9:08.76", "points": 60 },
+          { "eventId": "2017-11", "place": 22, "score": "19:24.17", "points": 36 },
+          { "eventId": "2017-12", "place": 6, "score": "11:06.79", "points": 76 },
+          { "eventId": "2017-13", "place": 1, "score": "3:13.98", "points": 100 }
+        ]
+      },
+      {
+        "rank": 5,
+        "name": "Katrin Tanja Davidsdottir",
+        "country": "Iceland",
+        "totalPoints": 914,
+        "events": [
+          { "eventId": "2017-01", "place": 14, "score": "32:17.04", "points": 52 },
+          { "eventId": "2017-02", "place": 3, "score": "22:19.48", "points": 88 },
+          { "eventId": "2017-03", "place": 24, "score": "11:50.66", "points": 32 },
+          { "eventId": "2017-04", "place": 5, "score": "5 pt", "points": 80 },
+          { "eventId": "2017-05", "place": 8, "score": "197 lb", "points": 68 },
+          { "eventId": "2017-06", "place": 6, "score": "12:07.59", "points": 76 },
+          { "eventId": "2017-07", "place": 5, "score": "3:10.62", "points": 80 },
+          { "eventId": "2017-08", "place": 1, "score": "3:55.53", "points": 100 },
+          { "eventId": "2017-09", "place": 24, "score": "CAP+3", "points": 32 },
+          { "eventId": "2017-10", "place": 8, "score": "8:49.37", "points": 68 },
+          { "eventId": "2017-11", "place": 13, "score": "18:36.59", "points": 54 },
+          { "eventId": "2017-12", "place": 1, "score": "10:38.09", "points": 100 },
+          { "eventId": "2017-13", "place": 4, "score": "3:28.86", "points": 84 }
+        ]
+      },
+      {
+        "rank": 6,
+        "name": "Tennil Reed-Beuerlein",
+        "country": "United States",
+        "totalPoints": 888,
+        "events": [
+          { "eventId": "2017-01", "place": 5, "score": "30:18.41", "points": 80 },
+          { "eventId": "2017-02", "place": 7, "score": "23:01.30", "points": 72 },
+          { "eventId": "2017-03", "place": 14, "score": "10:46.33", "points": 52 },
+          { "eventId": "2017-04", "place": 1, "score": "1 pt", "points": 100 },
+          { "eventId": "2017-05", "place": 6, "score": "198 lb", "points": 76 },
+          { "eventId": "2017-06", "place": 7, "score": "12:24.02", "points": 72 },
+          { "eventId": "2017-07", "place": 10, "score": "3:18.64", "points": 60 },
+          { "eventId": "2017-08", "place": 2, "score": "4:17.14", "points": 94 },
+          { "eventId": "2017-09", "place": 9, "score": "10:54.88", "points": 64 },
+          { "eventId": "2017-10", "place": 22, "score": "10:11.10", "points": 36 },
+          { "eventId": "2017-11", "place": 4, "score": "18:04.10", "points": 84 },
+          { "eventId": "2017-12", "place": 21, "score": "CAP+5", "points": 38 },
+          { "eventId": "2017-13", "place": 10, "score": "4:05.95", "points": 60 }
+        ]
+      },
+      {
+        "rank": 7,
+        "name": "Kristin Holte",
+        "country": "Norway",
+        "totalPoints": 826,
+        "events": [
+          { "eventId": "2017-01", "place": 11, "score": "31:40.22", "points": 58 },
+          { "eventId": "2017-02", "place": 1, "score": "21:43.23", "points": 100 },
+          { "eventId": "2017-03", "place": 20, "score": "11:22.51", "points": 40 },
+          { "eventId": "2017-04", "place": 18, "score": "18 pt", "points": 44 },
+          { "eventId": "2017-05", "place": 31, "score": "165 lb", "points": 18 },
+          { "eventId": "2017-06", "place": 8, "score": "12:27.61", "points": 68 },
+          { "eventId": "2017-07", "place": 13, "score": "3:28.10", "points": 54 },
+          { "eventId": "2017-08", "place": 5, "score": "4:50.61", "points": 80 },
+          { "eventId": "2017-09", "place": 18, "score": "CAP+2", "points": 44 },
+          { "eventId": "2017-10", "place": 3, "score": "8:19.54", "points": 88 },
+          { "eventId": "2017-11", "place": 2, "score": "17:28.95", "points": 94 },
+          { "eventId": "2017-12", "place": 3, "score": "10:56.78", "points": 88 },
+          { "eventId": "2017-13", "place": 15, "score": "4:50.79", "points": 50 }
+        ]
+      },
+      {
+        "rank": 8,
+        "name": "Jamie Greene",
+        "country": "New Zealand",
+        "totalPoints": 796,
+        "events": [
+          { "eventId": "2017-01", "place": 4, "score": "30:16.79", "points": 84 },
+          { "eventId": "2017-02", "place": 11, "score": "23:17.02", "points": 58 },
+          { "eventId": "2017-03", "place": 1, "score": "8:51.51", "points": 100 },
+          { "eventId": "2017-04", "place": 6, "score": "6 pt", "points": 76 },
+          { "eventId": "2017-05", "place": 26, "score": "171 lb", "points": 28 },
+          { "eventId": "2017-06", "place": 2, "score": "11:04.48", "points": 94 },
+          { "eventId": "2017-07", "place": 33, "score": "5:01.97", "points": 14 },
+          { "eventId": "2017-08", "place": 21, "score": "6:27.99", "points": 38 },
+          { "eventId": "2017-09", "place": 10, "score": "CAP+1", "points": 60 },
+          { "eventId": "2017-10", "place": 11, "score": "9:23.13", "points": 58 },
+          { "eventId": "2017-11", "place": 6, "score": "18:17.51", "points": 76 },
+          { "eventId": "2017-12", "place": 8, "score": "11:18.39", "points": 68 },
+          { "eventId": "2017-13", "place": 19, "score": "5:06.90", "points": 42 }
+        ]
+      },
+      {
+        "rank": 9,
+        "name": "Samantha Briggs",
+        "country": "United Kingdom",
+        "totalPoints": 762,
+        "events": [
+          { "eventId": "2017-01", "place": 3, "score": "29:15.76", "points": 88 },
+          { "eventId": "2017-02", "place": 2, "score": "21:44.59", "points": 94 },
+          { "eventId": "2017-03", "place": 5, "score": "9:26.26", "points": 80 },
+          { "eventId": "2017-04", "place": 19, "score": "19 pt", "points": 42 },
+          { "eventId": "2017-05", "place": 34, "score": "156 lb", "points": 12 },
+          { "eventId": "2017-06", "place": 21, "score": "13:44.71", "points": 38 },
+          { "eventId": "2017-07", "place": 1, "score": "2:33.79", "points": 100 },
+          { "eventId": "2017-08", "place": 26, "score": "6:51.89", "points": 28 },
+          { "eventId": "2017-09", "place": 34, "score": "CAP+14", "points": 12 },
+          { "eventId": "2017-10", "place": 5, "score": "8:34.23", "points": 80 },
+          { "eventId": "2017-11", "place": 1, "score": "17:19.26", "points": 100 },
+          { "eventId": "2017-12", "place": 16, "score": "11:57.60", "points": 48 },
+          { "eventId": "2017-13", "place": 20, "score": "5:12.55", "points": 40 }
+        ]
+      },
+      {
+        "rank": 10,
+        "name": "Kari Pearce",
+        "country": "United States",
+        "totalPoints": 742,
+        "events": [
+          { "eventId": "2017-01", "place": 25, "score": "33:44.47", "points": 30 },
+          { "eventId": "2017-02", "place": 30, "score": "26:05.26", "points": 20 },
+          { "eventId": "2017-03", "place": 7, "score": "9:51.59", "points": 72 },
+          { "eventId": "2017-04", "place": 21, "score": "21 pt", "points": 38 },
+          { "eventId": "2017-05", "place": 9, "score": "192 lb", "points": 64 },
+          { "eventId": "2017-06", "place": 5, "score": "12:06.69", "points": 80 },
+          { "eventId": "2017-07", "place": 22, "score": "4:11.35", "points": 36 },
+          { "eventId": "2017-08", "place": 4, "score": "4:50.07", "points": 84 },
+          { "eventId": "2017-09", "place": 27, "score": "CAP+8", "points": 26 },
+          { "eventId": "2017-10", "place": 4, "score": "8:26.29", "points": 84 },
+          { "eventId": "2017-11", "place": 16, "score": "18:58.30", "points": 48 },
+          { "eventId": "2017-12", "place": 5, "score": "11:04.35", "points": 80 },
+          { "eventId": "2017-13", "place": 5, "score": "3:31.34", "points": 80 }
+        ]
+      }
+    ]
+  }
+}

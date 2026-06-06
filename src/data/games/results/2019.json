@@ -1,0 +1,1618 @@
+{
+  "year": 2019,
+  "pointsSystem": "Official CrossFit Games scaled points table (reintroduced 2019). Each event awards 100 points to the winner and descends by placement on a table whose step size widens as the field is cut. With the large opening field (Events 1-2) places fall by about 2 points each near the top (100, 98, 96, 94, ...); after the cut to 40/30 (Events 3-5) the step grows; the bracketed Sprint (Event 6, 20 athletes) falls by 5 per place (100, 95, 90, 85, ...); and for the final 10 (Events 7-12) points fall by 10 per place (100, 90, 80, 70, 60, 50, 40, 30, 20, 10). Tied athletes share the higher place and points. Final standing is the sum of event points (higher = better). Per-athlete places, scores, and points are taken directly from the official leaderboard archive API.",
+  "sources": [
+    "https://c3po.crossfit.com/api/leaderboards/v2/competitions/games/2019/leaderboards?division=1 (men: per-athlete per-event rank, points, and scoreDisplay for the top 10; primary source)",
+    "https://c3po.crossfit.com/api/leaderboards/v2/competitions/games/2019/leaderboards?division=2 (women: per-athlete per-event rank, points, and scoreDisplay for the top 10; primary source)",
+    "https://games.crossfit.com/leaderboard/games/2019 (official leaderboard UI)",
+    "https://en.wikipedia.org/wiki/2019_CrossFit_Games (final standings and podium cross-check)",
+    "https://fitnessvolt.com/2019-crossfit-games-results-final/ (final standings cross-check; note: FitnessVolt lists the disqualified Anna Fragkou at 9th and omits Brandon, whereas the official leaderboard excludes DQ athletes from the numbered standings — see notes)",
+    "NOTE: Anna Fragkou (Greece) finished inside the field on points (640) but was disqualified, so she carries no overall rank on the official leaderboard. With her removed, Þuríður Erla Helgadóttir is 9th and Danielle Brandon 10th. Brandon was cut after Event 6 (the progressive cut to 10) and did not contest Events 7-12; the official leaderboard shows those as CUT with 0 points. They are recorded here as place 11 (first athlete outside the final-10 cut), 0 points, null score. The four '0.0 lb' results in the Event 8 clean ladder (athletes who failed their opening bar and were separated by the 5-rep tiebreak) are recorded as null score with their real place and points."
+  ],
+  "divisions": {
+    "men": [
+      {
+        "rank": 1,
+        "name": "Mat Fraser",
+        "country": "USA",
+        "totalPoints": 984,
+        "events": [
+          {
+            "eventId": "2019-01",
+            "place": 1,
+            "score": "15:07.70",
+            "points": 100
+          },
+          {
+            "eventId": "2019-02",
+            "place": 1,
+            "score": "5:37.02",
+            "points": 100
+          },
+          {
+            "eventId": "2019-03",
+            "place": 17,
+            "score": "25:50.09",
+            "points": 68
+          },
+          {
+            "eventId": "2019-04",
+            "place": 21,
+            "score": "1:50.08",
+            "points": 40
+          },
+          {
+            "eventId": "2019-05",
+            "place": 2,
+            "score": "675 reps",
+            "points": 96
+          },
+          {
+            "eventId": "2019-06",
+            "place": 15,
+            "score": "6 pts",
+            "points": 30
+          },
+          {
+            "eventId": "2019-07",
+            "place": 1,
+            "score": "15:36.60",
+            "points": 100
+          },
+          {
+            "eventId": "2019-08",
+            "place": 1,
+            "score": "380 lb",
+            "points": 100
+          },
+          {
+            "eventId": "2019-09",
+            "place": 5,
+            "score": "29:04.68",
+            "points": 60
+          },
+          {
+            "eventId": "2019-10",
+            "place": 2,
+            "score": "3:49.52",
+            "points": 90
+          },
+          {
+            "eventId": "2019-11",
+            "place": 1,
+            "score": "3:06.94",
+            "points": 100
+          },
+          {
+            "eventId": "2019-12",
+            "place": 1,
+            "score": "8:05.78",
+            "points": 100
+          }
+        ]
+      },
+      {
+        "rank": 2,
+        "name": "Noah Ohlsen",
+        "country": "USA",
+        "totalPoints": 949,
+        "events": [
+          {
+            "eventId": "2019-01",
+            "place": 16,
+            "score": "17:02.14",
+            "points": 70
+          },
+          {
+            "eventId": "2019-02",
+            "place": 7,
+            "score": "6:13.01",
+            "points": 88
+          },
+          {
+            "eventId": "2019-03",
+            "place": 24,
+            "score": "26:27.77",
+            "points": 54
+          },
+          {
+            "eventId": "2019-04",
+            "place": 2,
+            "score": "1:28.40",
+            "points": 97
+          },
+          {
+            "eventId": "2019-05",
+            "place": 1,
+            "score": "677 reps",
+            "points": 100
+          },
+          {
+            "eventId": "2019-06",
+            "place": 3,
+            "score": "18 pts",
+            "points": 90
+          },
+          {
+            "eventId": "2019-07",
+            "place": 2,
+            "score": "16:35.90",
+            "points": 90
+          },
+          {
+            "eventId": "2019-08",
+            "place": 5,
+            "score": "355 lb",
+            "points": 60
+          },
+          {
+            "eventId": "2019-09",
+            "place": 3,
+            "score": "27:45.69",
+            "points": 80
+          },
+          {
+            "eventId": "2019-10",
+            "place": 4,
+            "score": "4:06.75",
+            "points": 70
+          },
+          {
+            "eventId": "2019-11",
+            "place": 5,
+            "score": "3:31.98",
+            "points": 60
+          },
+          {
+            "eventId": "2019-12",
+            "place": 2,
+            "score": "8:09.97",
+            "points": 90
+          }
+        ]
+      },
+      {
+        "rank": 3,
+        "name": "Björgvin Karl Guðmundsson",
+        "country": "Iceland",
+        "totalPoints": 888,
+        "events": [
+          {
+            "eventId": "2019-01",
+            "place": 4,
+            "score": "16:08.51",
+            "points": 94
+          },
+          {
+            "eventId": "2019-02",
+            "place": 30,
+            "score": "7:00.18",
+            "points": 45
+          },
+          {
+            "eventId": "2019-03",
+            "place": 16,
+            "score": "25:49.44",
+            "points": 70
+          },
+          {
+            "eventId": "2019-04",
+            "place": 19,
+            "score": "1:49.67",
+            "points": 46
+          },
+          {
+            "eventId": "2019-05",
+            "place": 9,
+            "score": "598 reps",
+            "points": 68
+          },
+          {
+            "eventId": "2019-06",
+            "place": 2,
+            "score": "19 pts",
+            "points": 95
+          },
+          {
+            "eventId": "2019-07",
+            "place": 3,
+            "score": "16:42.75",
+            "points": 80
+          },
+          {
+            "eventId": "2019-08",
+            "place": 4,
+            "score": "365 lb",
+            "points": 70
+          },
+          {
+            "eventId": "2019-09",
+            "place": 4,
+            "score": "28:14.96",
+            "points": 70
+          },
+          {
+            "eventId": "2019-10",
+            "place": 3,
+            "score": "3:55.66",
+            "points": 80
+          },
+          {
+            "eventId": "2019-11",
+            "place": 2,
+            "score": "3:15.61",
+            "points": 90
+          },
+          {
+            "eventId": "2019-12",
+            "place": 3,
+            "score": "8:22.80",
+            "points": 80
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "name": "Scott Panchik",
+        "country": "USA",
+        "totalPoints": 795,
+        "events": [
+          {
+            "eventId": "2019-01",
+            "place": 3,
+            "score": "16:05.95",
+            "points": 96
+          },
+          {
+            "eventId": "2019-02",
+            "place": 6,
+            "score": "6:10.12",
+            "points": 90
+          },
+          {
+            "eventId": "2019-03",
+            "place": 41,
+            "score": "27:57.70",
+            "points": 20
+          },
+          {
+            "eventId": "2019-04",
+            "place": 14,
+            "score": "1:45.68",
+            "points": 61
+          },
+          {
+            "eventId": "2019-05",
+            "place": 4,
+            "score": "645 reps",
+            "points": 88
+          },
+          {
+            "eventId": "2019-06",
+            "place": 7,
+            "score": "14 pts",
+            "points": 70
+          },
+          {
+            "eventId": "2019-07",
+            "place": 6,
+            "score": "19:05.50",
+            "points": 50
+          },
+          {
+            "eventId": "2019-08",
+            "place": 2,
+            "score": "375 lb",
+            "points": 90
+          },
+          {
+            "eventId": "2019-09",
+            "place": 8,
+            "score": "32:40.83",
+            "points": 30
+          },
+          {
+            "eventId": "2019-10",
+            "place": 6,
+            "score": "4:35.27",
+            "points": 50
+          },
+          {
+            "eventId": "2019-11",
+            "place": 3,
+            "score": "3:25.95",
+            "points": 80
+          },
+          {
+            "eventId": "2019-12",
+            "place": 4,
+            "score": "8:35.65",
+            "points": 70
+          }
+        ]
+      },
+      {
+        "rank": 5,
+        "name": "James Newbury",
+        "country": "Australia",
+        "totalPoints": 728,
+        "events": [
+          {
+            "eventId": "2019-01",
+            "place": 6,
+            "score": "16:21.19",
+            "points": 90
+          },
+          {
+            "eventId": "2019-02",
+            "place": 4,
+            "score": "6:08.09",
+            "points": 94
+          },
+          {
+            "eventId": "2019-03",
+            "place": 5,
+            "score": "24:47.93",
+            "points": 92
+          },
+          {
+            "eventId": "2019-04",
+            "place": 26,
+            "score": "1:52.74",
+            "points": 30
+          },
+          {
+            "eventId": "2019-05",
+            "place": 23,
+            "score": "515 reps",
+            "points": 22
+          },
+          {
+            "eventId": "2019-06",
+            "place": 9,
+            "score": "12 pts",
+            "points": 60
+          },
+          {
+            "eventId": "2019-07",
+            "place": 5,
+            "score": "17:17.46",
+            "points": 60
+          },
+          {
+            "eventId": "2019-08",
+            "place": 7,
+            "score": "345 lb",
+            "points": 40
+          },
+          {
+            "eventId": "2019-09",
+            "place": 2,
+            "score": "27:22.91",
+            "points": 90
+          },
+          {
+            "eventId": "2019-10",
+            "place": 1,
+            "score": "3:47.25",
+            "points": 100
+          },
+          {
+            "eventId": "2019-11",
+            "place": 8,
+            "score": "4:44.95",
+            "points": 30
+          },
+          {
+            "eventId": "2019-12",
+            "place": 9,
+            "score": "10:58.69",
+            "points": 20
+          }
+        ]
+      },
+      {
+        "rank": 6,
+        "name": "Jacob Heppner",
+        "country": "USA",
+        "totalPoints": 694,
+        "events": [
+          {
+            "eventId": "2019-01",
+            "place": 13,
+            "score": "16:47.94",
+            "points": 76
+          },
+          {
+            "eventId": "2019-02",
+            "place": 10,
+            "score": "6:23.63",
+            "points": 82
+          },
+          {
+            "eventId": "2019-03",
+            "place": 6,
+            "score": "24:55.28",
+            "points": 90
+          },
+          {
+            "eventId": "2019-04",
+            "place": 29,
+            "score": "1:58.98",
+            "points": 24
+          },
+          {
+            "eventId": "2019-05",
+            "place": 3,
+            "score": "660 reps",
+            "points": 92
+          },
+          {
+            "eventId": "2019-06",
+            "place": 17,
+            "score": "4 pts",
+            "points": 20
+          },
+          {
+            "eventId": "2019-07",
+            "place": 4,
+            "score": "17:07.03",
+            "points": 70
+          },
+          {
+            "eventId": "2019-08",
+            "place": 8,
+            "score": "335 lb",
+            "points": 30
+          },
+          {
+            "eventId": "2019-09",
+            "place": 7,
+            "score": "31:16.53",
+            "points": 40
+          },
+          {
+            "eventId": "2019-10",
+            "place": 5,
+            "score": "4:27.13",
+            "points": 60
+          },
+          {
+            "eventId": "2019-11",
+            "place": 4,
+            "score": "3:29.73",
+            "points": 70
+          },
+          {
+            "eventId": "2019-12",
+            "place": 7,
+            "score": "9:01.96",
+            "points": 40
+          }
+        ]
+      },
+      {
+        "rank": 7,
+        "name": "Matt McLeod",
+        "country": "Australia",
+        "totalPoints": 671,
+        "events": [
+          {
+            "eventId": "2019-01",
+            "place": 40,
+            "score": "19:21.19",
+            "points": 35
+          },
+          {
+            "eventId": "2019-02",
+            "place": 44,
+            "score": "7:27.51",
+            "points": 31
+          },
+          {
+            "eventId": "2019-03",
+            "place": 18,
+            "score": "25:53.24",
+            "points": 66
+          },
+          {
+            "eventId": "2019-04",
+            "place": 1,
+            "score": "1:27.30",
+            "points": 100
+          },
+          {
+            "eventId": "2019-05",
+            "place": 5,
+            "score": "622 reps",
+            "points": 84
+          },
+          {
+            "eventId": "2019-06",
+            "place": 4,
+            "score": "17 pts",
+            "points": 85
+          },
+          {
+            "eventId": "2019-07",
+            "place": 7,
+            "score": "19:14.46",
+            "points": 40
+          },
+          {
+            "eventId": "2019-08",
+            "place": 9,
+            "score": "325 lb",
+            "points": 20
+          },
+          {
+            "eventId": "2019-09",
+            "place": 1,
+            "score": "25:12.29",
+            "points": 100
+          },
+          {
+            "eventId": "2019-10",
+            "place": 7,
+            "score": "4:39.15",
+            "points": 40
+          },
+          {
+            "eventId": "2019-11",
+            "place": 9,
+            "score": "4:59.00",
+            "points": 20
+          },
+          {
+            "eventId": "2019-12",
+            "place": 6,
+            "score": "8:57.50",
+            "points": 50
+          }
+        ]
+      },
+      {
+        "rank": 8,
+        "name": "Adrian Mundwiler",
+        "country": "Switzerland",
+        "totalPoints": 632,
+        "events": [
+          {
+            "eventId": "2019-01",
+            "place": 25,
+            "score": "17:47.72",
+            "points": 52
+          },
+          {
+            "eventId": "2019-02",
+            "place": 16,
+            "score": "6:36.38",
+            "points": 70
+          },
+          {
+            "eventId": "2019-03",
+            "place": 15,
+            "score": "25:42.44",
+            "points": 72
+          },
+          {
+            "eventId": "2019-04",
+            "place": 7,
+            "score": "1:40.00",
+            "points": 82
+          },
+          {
+            "eventId": "2019-05",
+            "place": 12,
+            "score": "577 reps",
+            "points": 56
+          },
+          {
+            "eventId": "2019-06",
+            "place": 13,
+            "score": "8 pts",
+            "points": 40
+          },
+          {
+            "eventId": "2019-07",
+            "place": 8,
+            "score": "CAP+6",
+            "points": 30
+          },
+          {
+            "eventId": "2019-08",
+            "place": 3,
+            "score": "365 lb",
+            "points": 80
+          },
+          {
+            "eventId": "2019-09",
+            "place": 10,
+            "score": "35:52.24",
+            "points": 10
+          },
+          {
+            "eventId": "2019-10",
+            "place": 8,
+            "score": "4:41.25",
+            "points": 30
+          },
+          {
+            "eventId": "2019-11",
+            "place": 6,
+            "score": "3:37.85",
+            "points": 50
+          },
+          {
+            "eventId": "2019-12",
+            "place": 5,
+            "score": "8:52.84",
+            "points": 60
+          }
+        ]
+      },
+      {
+        "rank": 9,
+        "name": "Saxon Panchik",
+        "country": "USA",
+        "totalPoints": 587,
+        "events": [
+          {
+            "eventId": "2019-01",
+            "place": 20,
+            "score": "17:11.38",
+            "points": 62
+          },
+          {
+            "eventId": "2019-02",
+            "place": 19,
+            "score": "6:42.90",
+            "points": 64
+          },
+          {
+            "eventId": "2019-03",
+            "place": 46,
+            "score": "28:52.94",
+            "points": 10
+          },
+          {
+            "eventId": "2019-04",
+            "place": 8,
+            "score": "1:40.37",
+            "points": 79
+          },
+          {
+            "eventId": "2019-05",
+            "place": 8,
+            "score": "600 reps",
+            "points": 72
+          },
+          {
+            "eventId": "2019-06",
+            "place": 1,
+            "score": "20 pts",
+            "points": 100
+          },
+          {
+            "eventId": "2019-07",
+            "place": 10,
+            "score": "CAP+134",
+            "points": 10
+          },
+          {
+            "eventId": "2019-08",
+            "place": 6,
+            "score": "355 lb",
+            "points": 50
+          },
+          {
+            "eventId": "2019-09",
+            "place": 6,
+            "score": "29:35.41",
+            "points": 50
+          },
+          {
+            "eventId": "2019-10",
+            "place": 9,
+            "score": "4:41.66",
+            "points": 20
+          },
+          {
+            "eventId": "2019-11",
+            "place": 7,
+            "score": "3:42.24",
+            "points": 40
+          },
+          {
+            "eventId": "2019-12",
+            "place": 8,
+            "score": "10:06.60",
+            "points": 30
+          }
+        ]
+      },
+      {
+        "rank": 10,
+        "name": "Will Moorad",
+        "country": "USA",
+        "totalPoints": 485,
+        "events": [
+          {
+            "eventId": "2019-01",
+            "place": 14,
+            "score": "16:49.47",
+            "points": 74
+          },
+          {
+            "eventId": "2019-02",
+            "place": 46,
+            "score": "7:38.64",
+            "points": 29
+          },
+          {
+            "eventId": "2019-03",
+            "place": 25,
+            "score": "26:37.06",
+            "points": 52
+          },
+          {
+            "eventId": "2019-04",
+            "place": 3,
+            "score": "1:30.09",
+            "points": 94
+          },
+          {
+            "eventId": "2019-05",
+            "place": 7,
+            "score": "615 reps",
+            "points": 76
+          },
+          {
+            "eventId": "2019-06",
+            "place": 5,
+            "score": "16 pts",
+            "points": 80
+          },
+          {
+            "eventId": "2019-07",
+            "place": 9,
+            "score": "CAP+113",
+            "points": 20
+          },
+          {
+            "eventId": "2019-08",
+            "place": 10,
+            "score": null,
+            "points": 10
+          },
+          {
+            "eventId": "2019-09",
+            "place": 9,
+            "score": "33:35.52",
+            "points": 20
+          },
+          {
+            "eventId": "2019-10",
+            "place": 10,
+            "score": "5:02.65",
+            "points": 10
+          },
+          {
+            "eventId": "2019-11",
+            "place": 10,
+            "score": "CAP+40",
+            "points": 10
+          },
+          {
+            "eventId": "2019-12",
+            "place": 10,
+            "score": "CAP+90",
+            "points": 10
+          }
+        ]
+      }
+    ],
+    "women": [
+      {
+        "rank": 1,
+        "name": "Tia-Clair Toomey",
+        "country": "Australia",
+        "totalPoints": 1071,
+        "events": [
+          {
+            "eventId": "2019-01",
+            "place": 1,
+            "score": "16:56.63",
+            "points": 100
+          },
+          {
+            "eventId": "2019-02",
+            "place": 12,
+            "score": "6:59.75",
+            "points": 78
+          },
+          {
+            "eventId": "2019-03",
+            "place": 2,
+            "score": "27:11.18",
+            "points": 98
+          },
+          {
+            "eventId": "2019-04",
+            "place": 12,
+            "score": "1:47.66",
+            "points": 67
+          },
+          {
+            "eventId": "2019-05",
+            "place": 4,
+            "score": "656 reps",
+            "points": 88
+          },
+          {
+            "eventId": "2019-06",
+            "place": 3,
+            "score": "18 pts",
+            "points": 90
+          },
+          {
+            "eventId": "2019-07",
+            "place": 1,
+            "score": "14:07.10",
+            "points": 100
+          },
+          {
+            "eventId": "2019-08",
+            "place": 1,
+            "score": "265 lb",
+            "points": 100
+          },
+          {
+            "eventId": "2019-09",
+            "place": 1,
+            "score": "25:12.25",
+            "points": 100
+          },
+          {
+            "eventId": "2019-10",
+            "place": 4,
+            "score": "5:44.63",
+            "points": 70
+          },
+          {
+            "eventId": "2019-11",
+            "place": 3,
+            "score": "3:14.03",
+            "points": 80
+          },
+          {
+            "eventId": "2019-12",
+            "place": 1,
+            "score": "8:25.09",
+            "points": 100
+          }
+        ]
+      },
+      {
+        "rank": 2,
+        "name": "Kristin Holte",
+        "country": "Norway",
+        "totalPoints": 876,
+        "events": [
+          {
+            "eventId": "2019-01",
+            "place": 7,
+            "score": "CAP+2",
+            "points": 88
+          },
+          {
+            "eventId": "2019-02",
+            "place": 6,
+            "score": "6:43.32",
+            "points": 90
+          },
+          {
+            "eventId": "2019-03",
+            "place": 3,
+            "score": "27:12.24",
+            "points": 96
+          },
+          {
+            "eventId": "2019-04",
+            "place": 19,
+            "score": "2:00.54",
+            "points": 46
+          },
+          {
+            "eventId": "2019-05",
+            "place": 2,
+            "score": "675 reps",
+            "points": 96
+          },
+          {
+            "eventId": "2019-06",
+            "place": 1,
+            "score": "20 pts",
+            "points": 100
+          },
+          {
+            "eventId": "2019-07",
+            "place": 5,
+            "score": "16:10.92",
+            "points": 60
+          },
+          {
+            "eventId": "2019-08",
+            "place": 5,
+            "score": "225 lb",
+            "points": 60
+          },
+          {
+            "eventId": "2019-09",
+            "place": 6,
+            "score": "30:17.62",
+            "points": 50
+          },
+          {
+            "eventId": "2019-10",
+            "place": 3,
+            "score": "5:43.70",
+            "points": 80
+          },
+          {
+            "eventId": "2019-11",
+            "place": 7,
+            "score": "3:49.14",
+            "points": 40
+          },
+          {
+            "eventId": "2019-12",
+            "place": 4,
+            "score": "9:38.26",
+            "points": 70
+          }
+        ]
+      },
+      {
+        "rank": 3,
+        "name": "Jamie Greene",
+        "country": "New Zealand",
+        "totalPoints": 851,
+        "events": [
+          {
+            "eventId": "2019-01",
+            "place": 3,
+            "score": "19:00.67",
+            "points": 96
+          },
+          {
+            "eventId": "2019-02",
+            "place": 24,
+            "score": "7:41.94",
+            "points": 54
+          },
+          {
+            "eventId": "2019-03",
+            "place": 22,
+            "score": "30:30.81",
+            "points": 58
+          },
+          {
+            "eventId": "2019-04",
+            "place": 4,
+            "score": "1:35.70",
+            "points": 91
+          },
+          {
+            "eventId": "2019-05",
+            "place": 3,
+            "score": "664 reps",
+            "points": 92
+          },
+          {
+            "eventId": "2019-06",
+            "place": 5,
+            "score": "16 pts",
+            "points": 80
+          },
+          {
+            "eventId": "2019-07",
+            "place": 4,
+            "score": "15:32.03",
+            "points": 70
+          },
+          {
+            "eventId": "2019-08",
+            "place": 6,
+            "score": "220 lb",
+            "points": 50
+          },
+          {
+            "eventId": "2019-09",
+            "place": 4,
+            "score": "28:32.16",
+            "points": 70
+          },
+          {
+            "eventId": "2019-10",
+            "place": 6,
+            "score": "5:52.21",
+            "points": 50
+          },
+          {
+            "eventId": "2019-11",
+            "place": 6,
+            "score": "3:35.62",
+            "points": 50
+          },
+          {
+            "eventId": "2019-12",
+            "place": 2,
+            "score": "9:14.71",
+            "points": 90
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "name": "Katrín Davíðsdóttir",
+        "country": "Iceland",
+        "totalPoints": 784,
+        "events": [
+          {
+            "eventId": "2019-01",
+            "place": 21,
+            "score": "CAP+9",
+            "points": 60
+          },
+          {
+            "eventId": "2019-02",
+            "place": 10,
+            "score": "6:58.42",
+            "points": 82
+          },
+          {
+            "eventId": "2019-03",
+            "place": 5,
+            "score": "27:52.61",
+            "points": 92
+          },
+          {
+            "eventId": "2019-04",
+            "place": 26,
+            "score": "2:07.84",
+            "points": 30
+          },
+          {
+            "eventId": "2019-05",
+            "place": 11,
+            "score": "590 reps",
+            "points": 60
+          },
+          {
+            "eventId": "2019-06",
+            "place": 9,
+            "score": "12 pts",
+            "points": 60
+          },
+          {
+            "eventId": "2019-07",
+            "place": 3,
+            "score": "15:10.09",
+            "points": 80
+          },
+          {
+            "eventId": "2019-08",
+            "place": 4,
+            "score": "230 lb",
+            "points": 70
+          },
+          {
+            "eventId": "2019-09",
+            "place": 8,
+            "score": "32:36.98",
+            "points": 30
+          },
+          {
+            "eventId": "2019-10",
+            "place": 1,
+            "score": "5:09.87",
+            "points": 100
+          },
+          {
+            "eventId": "2019-11",
+            "place": 1,
+            "score": "2:53.29",
+            "points": 100
+          },
+          {
+            "eventId": "2019-12",
+            "place": 9,
+            "score": "10:56.22",
+            "points": 20
+          }
+        ]
+      },
+      {
+        "rank": 5,
+        "name": "Kari Pearce",
+        "country": "USA",
+        "totalPoints": 714,
+        "events": [
+          {
+            "eventId": "2019-01",
+            "place": 2,
+            "score": "18:16.35",
+            "points": 98
+          },
+          {
+            "eventId": "2019-02",
+            "place": 3,
+            "score": "6:32.22",
+            "points": 96
+          },
+          {
+            "eventId": "2019-03",
+            "place": 13,
+            "score": "29:25.99",
+            "points": 76
+          },
+          {
+            "eventId": "2019-04",
+            "place": 18,
+            "score": "1:59.41",
+            "points": 49
+          },
+          {
+            "eventId": "2019-05",
+            "place": 1,
+            "score": "695 reps",
+            "points": 100
+          },
+          {
+            "eventId": "2019-06",
+            "place": 16,
+            "score": "5 pts",
+            "points": 25
+          },
+          {
+            "eventId": "2019-07",
+            "place": 2,
+            "score": "14:34.71",
+            "points": 90
+          },
+          {
+            "eventId": "2019-08",
+            "place": 8,
+            "score": null,
+            "points": 30
+          },
+          {
+            "eventId": "2019-09",
+            "place": 7,
+            "score": "31:34.67",
+            "points": 40
+          },
+          {
+            "eventId": "2019-10",
+            "place": 7,
+            "score": "5:54.13",
+            "points": 40
+          },
+          {
+            "eventId": "2019-11",
+            "place": 10,
+            "score": "CAP+8",
+            "points": 10
+          },
+          {
+            "eventId": "2019-12",
+            "place": 5,
+            "score": "9:47.12",
+            "points": 60
+          }
+        ]
+      },
+      {
+        "rank": 6,
+        "name": "Haley Adams",
+        "country": "USA",
+        "totalPoints": 711,
+        "events": [
+          {
+            "eventId": "2019-01",
+            "place": 4,
+            "score": "19:00.73",
+            "points": 94
+          },
+          {
+            "eventId": "2019-02",
+            "place": 18,
+            "score": "7:20.43",
+            "points": 66
+          },
+          {
+            "eventId": "2019-03",
+            "place": 6,
+            "score": "28:34.89",
+            "points": 90
+          },
+          {
+            "eventId": "2019-04",
+            "place": 34,
+            "score": "2:28.77",
+            "points": 14
+          },
+          {
+            "eventId": "2019-05",
+            "place": 8,
+            "score": "605 reps",
+            "points": 72
+          },
+          {
+            "eventId": "2019-06",
+            "place": 6,
+            "score": "15 pts",
+            "points": 75
+          },
+          {
+            "eventId": "2019-07",
+            "place": 6,
+            "score": "17:28.35",
+            "points": 50
+          },
+          {
+            "eventId": "2019-08",
+            "place": 10,
+            "score": null,
+            "points": 10
+          },
+          {
+            "eventId": "2019-09",
+            "place": 2,
+            "score": "28:18.50",
+            "points": 90
+          },
+          {
+            "eventId": "2019-10",
+            "place": 5,
+            "score": "5:45.49",
+            "points": 60
+          },
+          {
+            "eventId": "2019-11",
+            "place": 5,
+            "score": "3:33.52",
+            "points": 60
+          },
+          {
+            "eventId": "2019-12",
+            "place": 8,
+            "score": "10:40.00",
+            "points": 30
+          }
+        ]
+      },
+      {
+        "rank": 7,
+        "name": "Amanda Barnhart",
+        "country": "USA",
+        "totalPoints": 706,
+        "events": [
+          {
+            "eventId": "2019-01",
+            "place": 19,
+            "score": "CAP+9",
+            "points": 64
+          },
+          {
+            "eventId": "2019-02",
+            "place": 4,
+            "score": "6:37.00",
+            "points": 94
+          },
+          {
+            "eventId": "2019-03",
+            "place": 15,
+            "score": "29:30.45",
+            "points": 72
+          },
+          {
+            "eventId": "2019-04",
+            "place": 1,
+            "score": "1:29.08",
+            "points": 100
+          },
+          {
+            "eventId": "2019-05",
+            "place": 25,
+            "score": "486 reps",
+            "points": 16
+          },
+          {
+            "eventId": "2019-06",
+            "place": 15,
+            "score": "6 pts",
+            "points": 30
+          },
+          {
+            "eventId": "2019-07",
+            "place": 10,
+            "score": "CAP+17",
+            "points": 10
+          },
+          {
+            "eventId": "2019-08",
+            "place": 2,
+            "score": "260 lb",
+            "points": 90
+          },
+          {
+            "eventId": "2019-09",
+            "place": 5,
+            "score": "28:32.52",
+            "points": 60
+          },
+          {
+            "eventId": "2019-10",
+            "place": 8,
+            "score": "6:00.45",
+            "points": 30
+          },
+          {
+            "eventId": "2019-11",
+            "place": 2,
+            "score": "3:06.76",
+            "points": 90
+          },
+          {
+            "eventId": "2019-12",
+            "place": 6,
+            "score": "10:04.82",
+            "points": 50
+          }
+        ]
+      },
+      {
+        "rank": 8,
+        "name": "Bethany Shadburne",
+        "country": "USA",
+        "totalPoints": 659,
+        "events": [
+          {
+            "eventId": "2019-01",
+            "place": 12,
+            "score": "CAP+8",
+            "points": 78
+          },
+          {
+            "eventId": "2019-02",
+            "place": 45,
+            "score": "8:55.25",
+            "points": 30
+          },
+          {
+            "eventId": "2019-03",
+            "place": 8,
+            "score": "28:43.07",
+            "points": 86
+          },
+          {
+            "eventId": "2019-04",
+            "place": 11,
+            "score": "1:47.02",
+            "points": 70
+          },
+          {
+            "eventId": "2019-05",
+            "place": 6,
+            "score": "609 reps",
+            "points": 80
+          },
+          {
+            "eventId": "2019-06",
+            "place": 10,
+            "score": "11 pts",
+            "points": 55
+          },
+          {
+            "eventId": "2019-07",
+            "place": 7,
+            "score": "17:54.87",
+            "points": 40
+          },
+          {
+            "eventId": "2019-08",
+            "place": 9,
+            "score": null,
+            "points": 20
+          },
+          {
+            "eventId": "2019-09",
+            "place": 3,
+            "score": "28:26.58",
+            "points": 80
+          },
+          {
+            "eventId": "2019-10",
+            "place": 2,
+            "score": "5:38.21",
+            "points": 90
+          },
+          {
+            "eventId": "2019-11",
+            "place": 9,
+            "score": "3:59.96",
+            "points": 20
+          },
+          {
+            "eventId": "2019-12",
+            "place": 10,
+            "score": "10:57.10",
+            "points": 10
+          }
+        ]
+      },
+      {
+        "rank": 9,
+        "name": "Thuridur Erla Helgadottir",
+        "country": "Iceland",
+        "totalPoints": 611,
+        "events": [
+          {
+            "eventId": "2019-01",
+            "place": 14,
+            "score": "CAP+8",
+            "points": 74
+          },
+          {
+            "eventId": "2019-02",
+            "place": 21,
+            "score": "7:28.44",
+            "points": 60
+          },
+          {
+            "eventId": "2019-03",
+            "place": 24,
+            "score": "30:51.60",
+            "points": 54
+          },
+          {
+            "eventId": "2019-04",
+            "place": 8,
+            "score": "1:45.23",
+            "points": 79
+          },
+          {
+            "eventId": "2019-05",
+            "place": 14,
+            "score": "574 reps",
+            "points": 49
+          },
+          {
+            "eventId": "2019-06",
+            "place": 4,
+            "score": "17 pts",
+            "points": 85
+          },
+          {
+            "eventId": "2019-07",
+            "place": 8,
+            "score": "19:21.03",
+            "points": 30
+          },
+          {
+            "eventId": "2019-08",
+            "place": 7,
+            "score": "215 lb",
+            "points": 40
+          },
+          {
+            "eventId": "2019-09",
+            "place": 9,
+            "score": "32:42.99",
+            "points": 20
+          },
+          {
+            "eventId": "2019-10",
+            "place": 10,
+            "score": "CAP",
+            "points": 10
+          },
+          {
+            "eventId": "2019-11",
+            "place": 4,
+            "score": "3:16.45",
+            "points": 70
+          },
+          {
+            "eventId": "2019-12",
+            "place": 7,
+            "score": "10:35.00",
+            "points": 40
+          }
+        ]
+      },
+      {
+        "rank": 10,
+        "name": "Danielle Brandon",
+        "country": "USA",
+        "totalPoints": 376,
+        "events": [
+          {
+            "eventId": "2019-01",
+            "place": 22,
+            "score": "CAP+9",
+            "points": 58
+          },
+          {
+            "eventId": "2019-02",
+            "place": 1,
+            "score": "6:16.17",
+            "points": 100
+          },
+          {
+            "eventId": "2019-03",
+            "place": 28,
+            "score": "31:16.72",
+            "points": 46
+          },
+          {
+            "eventId": "2019-04",
+            "place": 5,
+            "score": "1:36.93",
+            "points": 88
+          },
+          {
+            "eventId": "2019-05",
+            "place": 24,
+            "score": "491 reps",
+            "points": 19
+          },
+          {
+            "eventId": "2019-06",
+            "place": 8,
+            "score": "13 pts",
+            "points": 65
+          },
+          {
+            "eventId": "2019-07",
+            "place": 11,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2019-08",
+            "place": 11,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2019-09",
+            "place": 11,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2019-10",
+            "place": 11,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2019-11",
+            "place": 11,
+            "score": null,
+            "points": 0
+          },
+          {
+            "eventId": "2019-12",
+            "place": 11,
+            "score": null,
+            "points": 0
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,458 @@
+{
+  "year": 2022,
+  "pointsSystem": "2022 CrossFit Games individual scoring on a 100-point-per-event scale, using TWO tables because the field was cut once mid-competition (40->30 after Saturday's events, before the Sunday final day; this was the only mid-competition cut, per the official announcement games.crossfit.com/announcement/13704). Events 2022-01 through 2022-11 (40-athlete field) use the 40-athlete table: places 1-20 score 100, 97, 94, ... descending by 3 (1st=100, 5th=88, 10th=73, 15th=58, 20th=43); places 21-40 then descend by 2 (21st=40, 30th=22, 39th=4, 40th=2). Events 2022-12, 2022-13 and 2022-14 (Sunday, contested by the 30 remaining athletes) use the 30-athlete table: places 1-13 descend by 4 (1st=100, 2nd=96, 3rd=92, 4th=88, 5th=84, ... 13th=52), then places 14-30 descend by 3 (14th=49, 15th=46, ... 30th=1). First place is worth 100 on both tables. Thirteen named tests produced 14 scored events because Shuttle to Overhead was split into two 100-point scores (2A run time = event 2022-04, 2B max jerks = event 2022-05), so the maximum possible total was 1,400 points (a win in all 14 events). Final placement determined by total points across all 14 events. The Skill Speed Medley (2022-02) was a placement-only elimination race; the leaderboard records its score as the athlete's event rank (e.g. '1 pt').",
+  "sources": [
+    "https://c3po.crossfit.com/api/leaderboards/v2/competitions/games/2022/leaderboards?division=1",
+    "https://c3po.crossfit.com/api/leaderboards/v2/competitions/games/2022/leaderboards?division=2",
+    "https://games.crossfit.com/leaderboard/games/2022",
+    "https://games.crossfit.com/announcement/13704/games",
+    "https://en.wikipedia.org/wiki/2022_CrossFit_Games",
+    "https://breakingmuscle.com/2022-crossfit-games-results/"
+  ],
+  "divisions": {
+    "men": [
+      {
+        "rank": 1,
+        "name": "Justin Medeiros",
+        "country": "USA",
+        "totalPoints": 1184,
+        "events": [
+          { "eventId": "2022-01", "place": 3, "score": "36:53.65", "points": 94 },
+          { "eventId": "2022-02", "place": 3, "score": "3 pt", "points": 94 },
+          { "eventId": "2022-03", "place": 12, "score": "CAP+3", "points": 67 },
+          { "eventId": "2022-04", "place": 18, "score": "7:12.80", "points": 49 },
+          { "eventId": "2022-05", "place": 5, "score": "16 reps", "points": 88 },
+          { "eventId": "2022-06", "place": 8, "score": "34:08.32", "points": 79 },
+          { "eventId": "2022-07", "place": 2, "score": "13:09.31", "points": 97 },
+          { "eventId": "2022-08", "place": 5, "score": "7:29.07", "points": 88 },
+          { "eventId": "2022-09", "place": 7, "score": "151 cal", "points": 82 },
+          { "eventId": "2022-10", "place": 3, "score": "4:01.83", "points": 94 },
+          { "eventId": "2022-11", "place": 5, "score": "330 lb", "points": 88 },
+          { "eventId": "2022-12", "place": 5, "score": "6:46.48", "points": 84 },
+          { "eventId": "2022-13", "place": 3, "score": "1:32.82", "points": 92 },
+          { "eventId": "2022-14", "place": 4, "score": "8:26.34", "points": 88 }
+        ]
+      },
+      {
+        "rank": 2,
+        "name": "Roman Khrennikov",
+        "country": "Russia",
+        "totalPoints": 1157,
+        "events": [
+          { "eventId": "2022-01", "place": 6, "score": "37:18.52", "points": 85 },
+          { "eventId": "2022-02", "place": 9, "score": "9 pt", "points": 76 },
+          { "eventId": "2022-03", "place": 11, "score": "CAP+3", "points": 70 },
+          { "eventId": "2022-04", "place": 11, "score": "7:08.54", "points": 70 },
+          { "eventId": "2022-05", "place": 6, "score": "15 reps", "points": 85 },
+          { "eventId": "2022-06", "place": 2, "score": "32:01.47", "points": 97 },
+          { "eventId": "2022-07", "place": 15, "score": "14:47.09", "points": 58 },
+          { "eventId": "2022-08", "place": 3, "score": "7:02.22", "points": 94 },
+          { "eventId": "2022-09", "place": 1, "score": "160 cal", "points": 100 },
+          { "eventId": "2022-10", "place": 7, "score": "4:11.24", "points": 82 },
+          { "eventId": "2022-11", "place": 13, "score": "320 lb", "points": 64 },
+          { "eventId": "2022-12", "place": 1, "score": "6:23.92", "points": 100 },
+          { "eventId": "2022-13", "place": 6, "score": "1:43.93", "points": 80 },
+          { "eventId": "2022-14", "place": 2, "score": "8:09.71", "points": 96 }
+        ]
+      },
+      {
+        "rank": 3,
+        "name": "Ricky Garard",
+        "country": "Australia",
+        "totalPoints": 1068,
+        "events": [
+          { "eventId": "2022-01", "place": 1, "score": "36:47.61", "points": 100 },
+          { "eventId": "2022-02", "place": 5, "score": "5 pt", "points": 88 },
+          { "eventId": "2022-03", "place": 7, "score": "9:49.82", "points": 82 },
+          { "eventId": "2022-04", "place": 2, "score": "6:58.74", "points": 97 },
+          { "eventId": "2022-05", "place": 3, "score": "16 reps", "points": 94 },
+          { "eventId": "2022-06", "place": 1, "score": "31:54.47", "points": 100 },
+          { "eventId": "2022-07", "place": 3, "score": "13:17.76", "points": 94 },
+          { "eventId": "2022-08", "place": 28, "score": "CAP+32", "points": 26 },
+          { "eventId": "2022-09", "place": 10, "score": "147 cal", "points": 73 },
+          { "eventId": "2022-10", "place": 12, "score": "4:18.37", "points": 67 },
+          { "eventId": "2022-11", "place": 7, "score": "330 lb", "points": 82 },
+          { "eventId": "2022-12", "place": 7, "score": "6:50.63", "points": 76 },
+          { "eventId": "2022-13", "place": 13, "score": "2:17.67", "points": 52 },
+          { "eventId": "2022-14", "place": 18, "score": "9:11.76", "points": 37 }
+        ]
+      },
+      {
+        "rank": 4,
+        "name": "Samuel Kwant",
+        "country": "USA",
+        "totalPoints": 975,
+        "events": [
+          { "eventId": "2022-01", "place": 26, "score": "39:34.53", "points": 30 },
+          { "eventId": "2022-02", "place": 12, "score": "12 pt", "points": 67 },
+          { "eventId": "2022-03", "place": 17, "score": "CAP+9", "points": 52 },
+          { "eventId": "2022-04", "place": 10, "score": "7:08.21", "points": 73 },
+          { "eventId": "2022-05", "place": 11, "score": "13 reps", "points": 70 },
+          { "eventId": "2022-06", "place": 4, "score": "32:47.67", "points": 91 },
+          { "eventId": "2022-07", "place": 4, "score": "13:37.84", "points": 91 },
+          { "eventId": "2022-08", "place": 23, "score": "9:59.98", "points": 36 },
+          { "eventId": "2022-09", "place": 4, "score": "153 cal", "points": 91 },
+          { "eventId": "2022-10", "place": 21, "score": "4:25.84", "points": 40 },
+          { "eventId": "2022-11", "place": 11, "score": "320 lb", "points": 70 },
+          { "eventId": "2022-12", "place": 2, "score": "6:39.88", "points": 96 },
+          { "eventId": "2022-13", "place": 5, "score": "1:39.63", "points": 84 },
+          { "eventId": "2022-14", "place": 5, "score": "8:26.73", "points": 84 }
+        ]
+      },
+      {
+        "rank": 5,
+        "name": "Jeffrey Adler",
+        "country": "Canada",
+        "totalPoints": 950,
+        "events": [
+          { "eventId": "2022-01", "place": 4, "score": "37:06.17", "points": 91 },
+          { "eventId": "2022-02", "place": 11, "score": "11 pt", "points": 70 },
+          { "eventId": "2022-03", "place": 38, "score": "CAP+36", "points": 6 },
+          { "eventId": "2022-04", "place": 12, "score": "7:09.44", "points": 67 },
+          { "eventId": "2022-05", "place": 1, "score": "19 reps", "points": 100 },
+          { "eventId": "2022-06", "place": 6, "score": "33:16.60", "points": 85 },
+          { "eventId": "2022-07", "place": 13, "score": "14:42.25", "points": 64 },
+          { "eventId": "2022-08", "place": 18, "score": "9:19.82", "points": 49 },
+          { "eventId": "2022-09", "place": 13, "score": "146 cal", "points": 64 },
+          { "eventId": "2022-10", "place": 9, "score": "4:14.48", "points": 76 },
+          { "eventId": "2022-11", "place": 16, "score": "310 lb", "points": 55 },
+          { "eventId": "2022-12", "place": 16, "score": "7:36.55", "points": 43 },
+          { "eventId": "2022-13", "place": 1, "score": "1:17.40", "points": 100 },
+          { "eventId": "2022-14", "place": 6, "score": "8:27.51", "points": 80 }
+        ]
+      },
+      {
+        "rank": 6,
+        "name": "Patrick Vellner",
+        "country": "Canada",
+        "totalPoints": 892,
+        "events": [
+          { "eventId": "2022-01", "place": 20, "score": "38:49.81", "points": 43 },
+          { "eventId": "2022-02", "place": 3, "score": "3 pt", "points": 94 },
+          { "eventId": "2022-03", "place": 1, "score": "8:42.16", "points": 100 },
+          { "eventId": "2022-04", "place": 4, "score": "7:05.10", "points": 91 },
+          { "eventId": "2022-05", "place": 35, "score": "5 reps", "points": 12 },
+          { "eventId": "2022-06", "place": 23, "score": "38:24.81", "points": 36 },
+          { "eventId": "2022-07", "place": 8, "score": "14:09.22", "points": 79 },
+          { "eventId": "2022-08", "place": 9, "score": "8:08.35", "points": 76 },
+          { "eventId": "2022-09", "place": 30, "score": "135 cal", "points": 22 },
+          { "eventId": "2022-10", "place": 10, "score": "4:14.77", "points": 73 },
+          { "eventId": "2022-11", "place": 17, "score": "310 lb", "points": 52 },
+          { "eventId": "2022-12", "place": 3, "score": "6:41.12", "points": 92 },
+          { "eventId": "2022-13", "place": 7, "score": "1:45.72", "points": 76 },
+          { "eventId": "2022-14", "place": 15, "score": "8:58.52", "points": 46 }
+        ]
+      },
+      {
+        "rank": 7,
+        "name": "Jayson Hopper",
+        "country": "USA",
+        "totalPoints": 887,
+        "events": [
+          { "eventId": "2022-01", "place": 18, "score": "38:46.82", "points": 49 },
+          { "eventId": "2022-02", "place": 28, "score": "28 pt", "points": 26 },
+          { "eventId": "2022-03", "place": 29, "score": "CAP+17", "points": 24 },
+          { "eventId": "2022-04", "place": 8, "score": "7:06.45", "points": 79 },
+          { "eventId": "2022-05", "place": 4, "score": "16 reps", "points": 91 },
+          { "eventId": "2022-06", "place": 5, "score": "33:04.11", "points": 88 },
+          { "eventId": "2022-07", "place": 30, "score": "16:10.64", "points": 22 },
+          { "eventId": "2022-08", "place": 2, "score": "6:57.82", "points": 97 },
+          { "eventId": "2022-09", "place": 22, "score": "141 cal", "points": 38 },
+          { "eventId": "2022-10", "place": 11, "score": "4:15.87", "points": 70 },
+          { "eventId": "2022-11", "place": 4, "score": "340 lb", "points": 91 },
+          { "eventId": "2022-12", "place": 6, "score": "6:48.56", "points": 80 },
+          { "eventId": "2022-13", "place": 8, "score": "1:52.14", "points": 72 },
+          { "eventId": "2022-14", "place": 11, "score": "8:46.56", "points": 60 }
+        ]
+      },
+      {
+        "rank": 8,
+        "name": "Lazar Đukić",
+        "country": "Serbia",
+        "totalPoints": 850,
+        "events": [
+          { "eventId": "2022-01", "place": 10, "score": "37:48.00", "points": 73 },
+          { "eventId": "2022-02", "place": 8, "score": "8 pt", "points": 79 },
+          { "eventId": "2022-03", "place": 8, "score": "9:57.34", "points": 79 },
+          { "eventId": "2022-04", "place": 17, "score": "7:12.51", "points": 52 },
+          { "eventId": "2022-05", "place": 14, "score": "13 reps", "points": 61 },
+          { "eventId": "2022-06", "place": 13, "score": "35:16.42", "points": 64 },
+          { "eventId": "2022-07", "place": 24, "score": "15:23.78", "points": 34 },
+          { "eventId": "2022-08", "place": 33, "score": "CAP+37", "points": 16 },
+          { "eventId": "2022-09", "place": 5, "score": "152 cal", "points": 88 },
+          { "eventId": "2022-10", "place": 6, "score": "4:08.82", "points": 85 },
+          { "eventId": "2022-11", "place": 28, "score": "300 lb", "points": 26 },
+          { "eventId": "2022-12", "place": 9, "score": "6:58.07", "points": 68 },
+          { "eventId": "2022-13", "place": 22, "score": "3:07.67", "points": 25 },
+          { "eventId": "2022-14", "place": 1, "score": "7:59.70", "points": 100 }
+        ]
+      },
+      {
+        "rank": 9,
+        "name": "Björgvin Karl Guðmundsson",
+        "country": "Iceland",
+        "totalPoints": 841,
+        "events": [
+          { "eventId": "2022-01", "place": 7, "score": "37:24.35", "points": 82 },
+          { "eventId": "2022-02", "place": 25, "score": "25 pt", "points": 32 },
+          { "eventId": "2022-03", "place": 2, "score": "9:20.11", "points": 97 },
+          { "eventId": "2022-04", "place": 21, "score": "7:20.13", "points": 40 },
+          { "eventId": "2022-05", "place": 24, "score": "11 reps", "points": 34 },
+          { "eventId": "2022-06", "place": 9, "score": "34:12.77", "points": 76 },
+          { "eventId": "2022-07", "place": 6, "score": "13:39.71", "points": 85 },
+          { "eventId": "2022-08", "place": 16, "score": "9:10.70", "points": 55 },
+          { "eventId": "2022-09", "place": 19, "score": "144 cal", "points": 46 },
+          { "eventId": "2022-10", "place": 15, "score": "4:19.68", "points": 58 },
+          { "eventId": "2022-11", "place": 21, "score": "310 lb", "points": 40 },
+          { "eventId": "2022-12", "place": 12, "score": "7:05.05", "points": 56 },
+          { "eventId": "2022-13", "place": 9, "score": "1:53.77", "points": 68 },
+          { "eventId": "2022-14", "place": 8, "score": "8:36.85", "points": 72 }
+        ]
+      },
+      {
+        "rank": 10,
+        "name": "Guilherme Malheiros",
+        "country": "Brazil",
+        "totalPoints": 831,
+        "events": [
+          { "eventId": "2022-01", "place": 24, "score": "39:07.69", "points": 34 },
+          { "eventId": "2022-02", "place": 2, "score": "2 pt", "points": 97 },
+          { "eventId": "2022-03", "place": 30, "score": "CAP+17", "points": 22 },
+          { "eventId": "2022-04", "place": 36, "score": "7:49.76", "points": 10 },
+          { "eventId": "2022-05", "place": 10, "score": "14 reps", "points": 73 },
+          { "eventId": "2022-06", "place": 30, "score": "40:01.96", "points": 22 },
+          { "eventId": "2022-07", "place": 25, "score": "15:36.25", "points": 32 },
+          { "eventId": "2022-08", "place": 10, "score": "8:10.56", "points": 73 },
+          { "eventId": "2022-09", "place": 23, "score": "139 cal", "points": 36 },
+          { "eventId": "2022-10", "place": 1, "score": "3:44.18", "points": 100 },
+          { "eventId": "2022-11", "place": 1, "score": "340 lb", "points": 100 },
+          { "eventId": "2022-12", "place": 4, "score": "6:44.79", "points": 88 },
+          { "eventId": "2022-13", "place": 4, "score": "1:39.43", "points": 88 },
+          { "eventId": "2022-14", "place": 12, "score": "8:48.26", "points": 56 }
+        ]
+      }
+    ],
+    "women": [
+      {
+        "rank": 1,
+        "name": "Tia-Clair Toomey",
+        "country": "Australia",
+        "totalPoints": 1158,
+        "events": [
+          { "eventId": "2022-01", "place": 2, "score": "38:26.64", "points": 97 },
+          { "eventId": "2022-02", "place": 23, "score": "23 pt", "points": 36 },
+          { "eventId": "2022-03", "place": 9, "score": "11:22.64", "points": 76 },
+          { "eventId": "2022-04", "place": 2, "score": "7:08.14", "points": 97 },
+          { "eventId": "2022-05", "place": 1, "score": "18 reps", "points": 100 },
+          { "eventId": "2022-06", "place": 3, "score": "35:11.29", "points": 94 },
+          { "eventId": "2022-07", "place": 1, "score": "11:58.92", "points": 100 },
+          { "eventId": "2022-08", "place": 2, "score": "7:45.28", "points": 97 },
+          { "eventId": "2022-09", "place": 4, "score": "130 cal", "points": 91 },
+          { "eventId": "2022-10", "place": 3, "score": "4:05.12", "points": 94 },
+          { "eventId": "2022-11", "place": 9, "score": "210 lb", "points": 76 },
+          { "eventId": "2022-12", "place": 17, "score": "9:34.20", "points": 40 },
+          { "eventId": "2022-13", "place": 2, "score": "1:16.08", "points": 96 },
+          { "eventId": "2022-14", "place": 10, "score": "9:47.28", "points": 64 }
+        ]
+      },
+      {
+        "rank": 2,
+        "name": "Mallory O'Brien",
+        "country": "USA",
+        "totalPoints": 1045,
+        "events": [
+          { "eventId": "2022-01", "place": 6, "score": "39:06.04", "points": 85 },
+          { "eventId": "2022-02", "place": 4, "score": "4 pt", "points": 91 },
+          { "eventId": "2022-03", "place": 3, "score": "10:33.77", "points": 94 },
+          { "eventId": "2022-04", "place": 15, "score": "7:47.24", "points": 58 },
+          { "eventId": "2022-05", "place": 3, "score": "14 reps", "points": 94 },
+          { "eventId": "2022-06", "place": 9, "score": "37:20.04", "points": 76 },
+          { "eventId": "2022-07", "place": 2, "score": "12:58.91", "points": 97 },
+          { "eventId": "2022-08", "place": 15, "score": "11:18.24", "points": 58 },
+          { "eventId": "2022-09", "place": 9, "score": "127 cal", "points": 76 },
+          { "eventId": "2022-10", "place": 2, "score": "4:04.66", "points": 97 },
+          { "eventId": "2022-11", "place": 24, "score": "200 lb", "points": 34 },
+          { "eventId": "2022-12", "place": 18, "score": "9:49.08", "points": 37 },
+          { "eventId": "2022-13", "place": 12, "score": "2:25.13", "points": 56 },
+          { "eventId": "2022-14", "place": 3, "score": "8:45.58", "points": 92 }
+        ]
+      },
+      {
+        "rank": 3,
+        "name": "Laura Horvath",
+        "country": "Hungary",
+        "totalPoints": 981,
+        "events": [
+          { "eventId": "2022-01", "place": 5, "score": "39:01.25", "points": 88 },
+          { "eventId": "2022-02", "place": 16, "score": "16 pt", "points": 55 },
+          { "eventId": "2022-03", "place": 21, "score": "CAP+6", "points": 40 },
+          { "eventId": "2022-04", "place": 25, "score": "7:59.99", "points": 32 },
+          { "eventId": "2022-05", "place": 19, "score": "9 reps", "points": 46 },
+          { "eventId": "2022-06", "place": 2, "score": "35:02.72", "points": 97 },
+          { "eventId": "2022-07", "place": 12, "score": "15:00.33", "points": 67 },
+          { "eventId": "2022-08", "place": 39, "score": "CAP+84", "points": 4 },
+          { "eventId": "2022-09", "place": 3, "score": "133 cal", "points": 94 },
+          { "eventId": "2022-10", "place": 9, "score": "4:19.41", "points": 76 },
+          { "eventId": "2022-11", "place": 3, "score": "230 lb", "points": 94 },
+          { "eventId": "2022-12", "place": 1, "score": "6:46.96", "points": 100 },
+          { "eventId": "2022-13", "place": 1, "score": "1:13.11", "points": 100 },
+          { "eventId": "2022-14", "place": 4, "score": "8:46.72", "points": 88 }
+        ]
+      },
+      {
+        "rank": 4,
+        "name": "Danielle Brandon",
+        "country": "USA",
+        "totalPoints": 937,
+        "events": [
+          { "eventId": "2022-01", "place": 27, "score": "43:40.00", "points": 28 },
+          { "eventId": "2022-02", "place": 1, "score": "1 pt", "points": 100 },
+          { "eventId": "2022-03", "place": 6, "score": "10:48.71", "points": 85 },
+          { "eventId": "2022-04", "place": 12, "score": "7:40.22", "points": 67 },
+          { "eventId": "2022-05", "place": 2, "score": "15 reps", "points": 97 },
+          { "eventId": "2022-06", "place": 6, "score": "36:05.00", "points": 85 },
+          { "eventId": "2022-07", "place": 5, "score": "13:41.83", "points": 88 },
+          { "eventId": "2022-08", "place": 28, "score": "CAP+29", "points": 26 },
+          { "eventId": "2022-09", "place": 12, "score": "124 cal", "points": 67 },
+          { "eventId": "2022-10", "place": 4, "score": "4:08.80", "points": 91 },
+          { "eventId": "2022-11", "place": 15, "score": "200 lb", "points": 58 },
+          { "eventId": "2022-12", "place": 14, "score": "9:05.16", "points": 49 },
+          { "eventId": "2022-13", "place": 25, "score": "CAP+6", "points": 16 },
+          { "eventId": "2022-14", "place": 6, "score": "9:10.18", "points": 80 }
+        ]
+      },
+      {
+        "rank": 5,
+        "name": "Brooke Wells",
+        "country": "USA",
+        "totalPoints": 904,
+        "events": [
+          { "eventId": "2022-01", "place": 11, "score": "40:20.22", "points": 70 },
+          { "eventId": "2022-02", "place": 31, "score": "31 pt", "points": 20 },
+          { "eventId": "2022-03", "place": 17, "score": "CAP", "points": 52 },
+          { "eventId": "2022-04", "place": 6, "score": "7:26.21", "points": 85 },
+          { "eventId": "2022-05", "place": 7, "score": "12 reps", "points": 82 },
+          { "eventId": "2022-06", "place": 4, "score": "35:13.89", "points": 91 },
+          { "eventId": "2022-07", "place": 27, "score": "16:34.82", "points": 28 },
+          { "eventId": "2022-08", "place": 12, "score": "10:40.68", "points": 67 },
+          { "eventId": "2022-09", "place": 10, "score": "126 cal", "points": 73 },
+          { "eventId": "2022-10", "place": 14, "score": "4:24.71", "points": 61 },
+          { "eventId": "2022-11", "place": 6, "score": "220 lb", "points": 85 },
+          { "eventId": "2022-12", "place": 15, "score": "9:15.26", "points": 46 },
+          { "eventId": "2022-13", "place": 3, "score": "1:21.87", "points": 92 },
+          { "eventId": "2022-14", "place": 13, "score": "9:56.07", "points": 52 }
+        ]
+      },
+      {
+        "rank": 6,
+        "name": "Emma Lawson",
+        "country": "Canada",
+        "totalPoints": 893,
+        "events": [
+          { "eventId": "2022-01", "place": 3, "score": "38:30.48", "points": 94 },
+          { "eventId": "2022-02", "place": 3, "score": "3 pt", "points": 94 },
+          { "eventId": "2022-03", "place": 16, "score": "CAP", "points": 55 },
+          { "eventId": "2022-04", "place": 9, "score": "7:33.66", "points": 76 },
+          { "eventId": "2022-05", "place": 4, "score": "13 reps", "points": 91 },
+          { "eventId": "2022-06", "place": 11, "score": "38:08.40", "points": 70 },
+          { "eventId": "2022-07", "place": 3, "score": "13:29.56", "points": 94 },
+          { "eventId": "2022-08", "place": 9, "score": "9:43.37", "points": 76 },
+          { "eventId": "2022-09", "place": 15, "score": "123 cal", "points": 58 },
+          { "eventId": "2022-10", "place": 10, "score": "4:20.22", "points": 73 },
+          { "eventId": "2022-11", "place": 33, "score": "180 lb", "points": 16 },
+          { "eventId": "2022-12", "place": 24, "score": "10:40.60", "points": 19 },
+          { "eventId": "2022-13", "place": 21, "score": "CAP+2", "points": 28 },
+          { "eventId": "2022-14", "place": 14, "score": "10:06.95", "points": 49 }
+        ]
+      },
+      {
+        "rank": 7,
+        "name": "Kara Saunders",
+        "country": "Australia",
+        "totalPoints": 890,
+        "events": [
+          { "eventId": "2022-01", "place": 9, "score": "39:59.64", "points": 76 },
+          { "eventId": "2022-02", "place": 24, "score": "24 pt", "points": 34 },
+          { "eventId": "2022-03", "place": 2, "score": "10:31.72", "points": 97 },
+          { "eventId": "2022-04", "place": 38, "score": "8:18.08", "points": 6 },
+          { "eventId": "2022-05", "place": 24, "score": "8 reps", "points": 34 },
+          { "eventId": "2022-06", "place": 19, "score": "40:20.98", "points": 46 },
+          { "eventId": "2022-07", "place": 6, "score": "13:46.47", "points": 85 },
+          { "eventId": "2022-08", "place": 17, "score": "11:50.98", "points": 52 },
+          { "eventId": "2022-09", "place": 5, "score": "130 cal", "points": 88 },
+          { "eventId": "2022-10", "place": 5, "score": "4:10.73", "points": 88 },
+          { "eventId": "2022-11", "place": 17, "score": "200 lb", "points": 52 },
+          { "eventId": "2022-12", "place": 9, "score": "8:45.35", "points": 68 },
+          { "eventId": "2022-13", "place": 9, "score": "2:05.83", "points": 68 },
+          { "eventId": "2022-14", "place": 2, "score": "8:35.97", "points": 96 }
+        ]
+      },
+      {
+        "rank": 8,
+        "name": "Gabriela Migała",
+        "country": "Poland",
+        "totalPoints": 868,
+        "events": [
+          { "eventId": "2022-01", "place": 12, "score": "40:20.29", "points": 67 },
+          { "eventId": "2022-02", "place": 27, "score": "27 pt", "points": 28 },
+          { "eventId": "2022-03", "place": 30, "score": "CAP+20", "points": 22 },
+          { "eventId": "2022-04", "place": 3, "score": "7:17.19", "points": 94 },
+          { "eventId": "2022-05", "place": 6, "score": "12 reps", "points": 85 },
+          { "eventId": "2022-06", "place": 1, "score": "33:34.67", "points": 100 },
+          { "eventId": "2022-07", "place": 17, "score": "15:26.73", "points": 52 },
+          { "eventId": "2022-08", "place": 35, "score": "CAP+35", "points": 12 },
+          { "eventId": "2022-09", "place": 18, "score": "122 cal", "points": 49 },
+          { "eventId": "2022-10", "place": 6, "score": "4:15.81", "points": 85 },
+          { "eventId": "2022-11", "place": 26, "score": "200 lb", "points": 30 },
+          { "eventId": "2022-12", "place": 5, "score": "8:04.36", "points": 84 },
+          { "eventId": "2022-13", "place": 5, "score": "1:27.68", "points": 84 },
+          { "eventId": "2022-14", "place": 7, "score": "9:28.66", "points": 76 }
+        ]
+      },
+      {
+        "rank": 9,
+        "name": "Haley Adams",
+        "country": "USA",
+        "totalPoints": 867,
+        "events": [
+          { "eventId": "2022-01", "place": 1, "score": "38:23.74", "points": 100 },
+          { "eventId": "2022-02", "place": 9, "score": "9 pt", "points": 76 },
+          { "eventId": "2022-03", "place": 18, "score": "CAP+3", "points": 49 },
+          { "eventId": "2022-04", "place": 1, "score": "6:59.46", "points": 100 },
+          { "eventId": "2022-05", "place": 17, "score": "9 reps", "points": 52 },
+          { "eventId": "2022-06", "place": 5, "score": "35:51.51", "points": 88 },
+          { "eventId": "2022-07", "place": 4, "score": "13:41.11", "points": 91 },
+          { "eventId": "2022-08", "place": 18, "score": "CAP+3", "points": 49 },
+          { "eventId": "2022-09", "place": 6, "score": "129 cal", "points": 85 },
+          { "eventId": "2022-10", "place": 21, "score": "4:34.86", "points": 40 },
+          { "eventId": "2022-11", "place": 32, "score": "190 lb", "points": 18 },
+          { "eventId": "2022-12", "place": 23, "score": "10:38.47", "points": 22 },
+          { "eventId": "2022-13", "place": 26, "score": "CAP+8", "points": 13 },
+          { "eventId": "2022-14", "place": 5, "score": "8:56.87", "points": 84 }
+        ]
+      },
+      {
+        "rank": 10,
+        "name": "Alexis Raptis",
+        "country": "USA",
+        "totalPoints": 859,
+        "events": [
+          { "eventId": "2022-01", "place": 4, "score": "39:01.04", "points": 91 },
+          { "eventId": "2022-02", "place": 14, "score": "14 pt", "points": 61 },
+          { "eventId": "2022-03", "place": 12, "score": "11:51.29", "points": 67 },
+          { "eventId": "2022-04", "place": 11, "score": "7:40.17", "points": 70 },
+          { "eventId": "2022-05", "place": 18, "score": "9 reps", "points": 49 },
+          { "eventId": "2022-06", "place": 18, "score": "40:11.30", "points": 49 },
+          { "eventId": "2022-07", "place": 16, "score": "15:17.18", "points": 55 },
+          { "eventId": "2022-08", "place": 1, "score": "6:41.18", "points": 100 },
+          { "eventId": "2022-09", "place": 11, "score": "125 cal", "points": 70 },
+          { "eventId": "2022-10", "place": 17, "score": "4:31.39", "points": 52 },
+          { "eventId": "2022-11", "place": 29, "score": "190 lb", "points": 24 },
+          { "eventId": "2022-12", "place": 6, "score": "8:06.83", "points": 80 },
+          { "eventId": "2022-13", "place": 20, "score": "CAP+2", "points": 31 },
+          { "eventId": "2022-14", "place": 11, "score": "9:52.53", "points": 60 }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,456 @@
+{
+  "year": 2018,
+  "pointsSystem": "Standard CrossFit Games points table for a 40-athlete individual field: 1st = 100 points, descending by place (100, 94, 88, 84, 80, 76, 72, 68, 64, 60, then 58, 56, 54, 52, 50, 48, 46, 44, 42, 40, then -2 per place down to 38, 36, 34, 32, 30, 28, 26, 24, 22, 20, 18, 16, 14, 12, 10, 8, 6, 4, 2 for places 21-39). 14 scored events; each athlete's final overall total is the sum of points across all 14 events. The Clean and Jerk Speed Ladder (event 6) was scored by elimination placement (leaderboard shows the place as '<n> pt').",
+  "sources": [
+    "https://c3po.crossfit.com/api/leaderboards/v2/competitions/games/2018/leaderboards?division=1",
+    "https://c3po.crossfit.com/api/leaderboards/v2/competitions/games/2018/leaderboards?division=2",
+    "https://games.crossfit.com/leaderboard/games/2018",
+    "https://en.wikipedia.org/wiki/2018_CrossFit_Games"
+  ],
+  "divisions": {
+    "men": [
+      {
+        "rank": 1,
+        "name": "Mat Fraser",
+        "country": "USA",
+        "totalPoints": 1162,
+        "events": [
+          { "eventId": "2018-01", "place": 4, "score": "18:36.55", "points": 84 },
+          { "eventId": "2018-02", "place": 3, "score": "2:00.16", "points": 88 },
+          { "eventId": "2018-03", "place": 8, "score": "1215 lb", "points": 68 },
+          { "eventId": "2018-04", "place": 11, "score": "2:48:36.00", "points": 58 },
+          { "eventId": "2018-05", "place": 2, "score": "8:49.40", "points": 94 },
+          { "eventId": "2018-06", "place": 7, "score": "7 pt", "points": 72 },
+          { "eventId": "2018-07", "place": 1, "score": "4:54.84", "points": 100 },
+          { "eventId": "2018-08", "place": 4, "score": "27:24.58", "points": 84 },
+          { "eventId": "2018-09", "place": 9, "score": "9:47.81", "points": 64 },
+          { "eventId": "2018-10", "place": 2, "score": "3:10.36", "points": 94 },
+          { "eventId": "2018-11", "place": 4, "score": "4:10.77", "points": 84 },
+          { "eventId": "2018-12", "place": 4, "score": "14:06.03", "points": 84 },
+          { "eventId": "2018-13", "place": 3, "score": "1:44.99", "points": 88 },
+          { "eventId": "2018-14", "place": 1, "score": "3:56.47", "points": 100 }
+        ]
+      },
+      {
+        "rank": 2,
+        "name": "Patrick Vellner",
+        "country": "Canada",
+        "totalPoints": 942,
+        "events": [
+          { "eventId": "2018-01", "place": 35, "score": "20:52.66", "points": 10 },
+          { "eventId": "2018-02", "place": 9, "score": "2:12.69", "points": 64 },
+          { "eventId": "2018-03", "place": 2, "score": "1250 lb", "points": 94 },
+          { "eventId": "2018-04", "place": 5, "score": "2:47:13.00", "points": 80 },
+          { "eventId": "2018-05", "place": 4, "score": "8:54.79", "points": 84 },
+          { "eventId": "2018-06", "place": 11, "score": "11 pt", "points": 58 },
+          { "eventId": "2018-07", "place": 4, "score": "5:51.65", "points": 84 },
+          { "eventId": "2018-08", "place": 21, "score": "30:24.98", "points": 38 },
+          { "eventId": "2018-09", "place": 1, "score": "9:19.86", "points": 100 },
+          { "eventId": "2018-10", "place": 5, "score": "3:16.90", "points": 80 },
+          { "eventId": "2018-11", "place": 10, "score": "4:30.13", "points": 60 },
+          { "eventId": "2018-12", "place": 11, "score": "14:22.74", "points": 58 },
+          { "eventId": "2018-13", "place": 10, "score": "2:20.07", "points": 60 },
+          { "eventId": "2018-14", "place": 7, "score": "4:50.76", "points": 72 }
+        ]
+      },
+      {
+        "rank": 3,
+        "name": "Lukas Högberg",
+        "country": "Sweden",
+        "totalPoints": 886,
+        "events": [
+          { "eventId": "2018-01", "place": 3, "score": "18:36.28", "points": 88 },
+          { "eventId": "2018-02", "place": 12, "score": "2:22.36", "points": 56 },
+          { "eventId": "2018-03", "place": 11, "score": "1190 lb", "points": 58 },
+          { "eventId": "2018-04", "place": 2, "score": "2:44:33.00", "points": 94 },
+          { "eventId": "2018-05", "place": 3, "score": "8:51.20", "points": 88 },
+          { "eventId": "2018-06", "place": 10, "score": "10 pt", "points": 60 },
+          { "eventId": "2018-07", "place": 7, "score": "CAP+1", "points": 72 },
+          { "eventId": "2018-08", "place": 23, "score": "30:34.44", "points": 34 },
+          { "eventId": "2018-09", "place": 4, "score": "9:40.94", "points": 84 },
+          { "eventId": "2018-10", "place": 11, "score": "3:31.68", "points": 58 },
+          { "eventId": "2018-11", "place": 34, "score": "5:39.87", "points": 12 },
+          { "eventId": "2018-12", "place": 1, "score": "13:36.40", "points": 100 },
+          { "eventId": "2018-13", "place": 24, "score": "3:34.68", "points": 32 },
+          { "eventId": "2018-14", "place": 15, "score": "5:29.05", "points": 50 }
+        ]
+      },
+      {
+        "rank": 4,
+        "name": "Brent Fikowski",
+        "country": "Canada",
+        "totalPoints": 886,
+        "events": [
+          { "eventId": "2018-01", "place": 9, "score": "18:39.05", "points": 64 },
+          { "eventId": "2018-02", "place": 13, "score": "2:28.15", "points": 54 },
+          { "eventId": "2018-03", "place": 20, "score": "1150 lb", "points": 40 },
+          { "eventId": "2018-04", "place": 4, "score": "2:47:03.00", "points": 84 },
+          { "eventId": "2018-05", "place": 7, "score": "9:26.42", "points": 72 },
+          { "eventId": "2018-06", "place": 8, "score": "8 pt", "points": 68 },
+          { "eventId": "2018-07", "place": 5, "score": "CAP", "points": 80 },
+          { "eventId": "2018-08", "place": 2, "score": "26:52.44", "points": 94 },
+          { "eventId": "2018-09", "place": 10, "score": "9:48.21", "points": 60 },
+          { "eventId": "2018-10", "place": 29, "score": "3:53.76", "points": 22 },
+          { "eventId": "2018-11", "place": 18, "score": "4:37.66", "points": 44 },
+          { "eventId": "2018-12", "place": 2, "score": "13:55.60", "points": 94 },
+          { "eventId": "2018-13", "place": 27, "score": "3:49.76", "points": 26 },
+          { "eventId": "2018-14", "place": 4, "score": "4:42.17", "points": 84 }
+        ]
+      },
+      {
+        "rank": 5,
+        "name": "Björgvin Karl Guðmundsson",
+        "country": "Iceland",
+        "totalPoints": 834,
+        "events": [
+          { "eventId": "2018-01", "place": 6, "score": "18:37.24", "points": 76 },
+          { "eventId": "2018-02", "place": 10, "score": "2:16.87", "points": 60 },
+          { "eventId": "2018-03", "place": 15, "score": "1185 lb", "points": 50 },
+          { "eventId": "2018-04", "place": 14, "score": "2:51:17.00", "points": 52 },
+          { "eventId": "2018-05", "place": 6, "score": "9:24.68", "points": 76 },
+          { "eventId": "2018-06", "place": 21, "score": "21 pt", "points": 38 },
+          { "eventId": "2018-07", "place": 12, "score": "CAP+5", "points": 56 },
+          { "eventId": "2018-08", "place": 10, "score": "27:55.80", "points": 60 },
+          { "eventId": "2018-09", "place": 8, "score": "9:45.99", "points": 68 },
+          { "eventId": "2018-10", "place": 9, "score": "3:29.14", "points": 64 },
+          { "eventId": "2018-11", "place": 12, "score": "4:32.34", "points": 56 },
+          { "eventId": "2018-12", "place": 15, "score": "14:37.00", "points": 50 },
+          { "eventId": "2018-13", "place": 7, "score": "2:12.40", "points": 72 },
+          { "eventId": "2018-14", "place": 12, "score": "5:12.11", "points": 56 }
+        ]
+      },
+      {
+        "rank": 6,
+        "name": "Noah Ohlsen",
+        "country": "USA",
+        "totalPoints": 786,
+        "events": [
+          { "eventId": "2018-01", "place": 30, "score": "20:08.10", "points": 20 },
+          { "eventId": "2018-02", "place": 11, "score": "2:21.67", "points": 58 },
+          { "eventId": "2018-03", "place": 11, "score": "1190 lb", "points": 58 },
+          { "eventId": "2018-04", "place": 24, "score": "2:57:12.00", "points": 32 },
+          { "eventId": "2018-05", "place": 10, "score": "9:35.18", "points": 60 },
+          { "eventId": "2018-06", "place": 15, "score": "15 pt", "points": 50 },
+          { "eventId": "2018-07", "place": 2, "score": "5:22.39", "points": 94 },
+          { "eventId": "2018-08", "place": 12, "score": "28:17.31", "points": 56 },
+          { "eventId": "2018-09", "place": 11, "score": "9:52.58", "points": 58 },
+          { "eventId": "2018-10", "place": 4, "score": "3:13.89", "points": 84 },
+          { "eventId": "2018-11", "place": 24, "score": "4:50.27", "points": 32 },
+          { "eventId": "2018-12", "place": 24, "score": "15:19.91", "points": 32 },
+          { "eventId": "2018-13", "place": 9, "score": "2:15.65", "points": 64 },
+          { "eventId": "2018-14", "place": 3, "score": "4:25.26", "points": 88 }
+        ]
+      },
+      {
+        "rank": 7,
+        "name": "Cole Sager",
+        "country": "USA",
+        "totalPoints": 760,
+        "events": [
+          { "eventId": "2018-01", "place": 13, "score": "18:44.34", "points": 54 },
+          { "eventId": "2018-02", "place": 5, "score": "2:01.85", "points": 80 },
+          { "eventId": "2018-03", "place": 17, "score": "1165 lb", "points": 46 },
+          { "eventId": "2018-04", "place": 3, "score": "2:46:55.00", "points": 88 },
+          { "eventId": "2018-05", "place": 1, "score": "8:35.01", "points": 100 },
+          { "eventId": "2018-06", "place": 33, "score": "33 pt", "points": 14 },
+          { "eventId": "2018-07", "place": 22, "score": "CAP+15", "points": 36 },
+          { "eventId": "2018-08", "place": 20, "score": "29:32.05", "points": 40 },
+          { "eventId": "2018-09", "place": 5, "score": "9:41.31", "points": 80 },
+          { "eventId": "2018-10", "place": 25, "score": "3:51.08", "points": 30 },
+          { "eventId": "2018-11", "place": 32, "score": "5:28.64", "points": 16 },
+          { "eventId": "2018-12", "place": 28, "score": "15:43.04", "points": 24 },
+          { "eventId": "2018-13", "place": 11, "score": "2:22.40", "points": 58 },
+          { "eventId": "2018-14", "place": 2, "score": "4:07.11", "points": 94 }
+        ]
+      },
+      {
+        "rank": 8,
+        "name": "Rasmus Andersen",
+        "country": "United Arab Emirates",
+        "totalPoints": 734,
+        "events": [
+          { "eventId": "2018-01", "place": 7, "score": "18:37.38", "points": 72 },
+          { "eventId": "2018-02", "place": 16, "score": "2:34.30", "points": 48 },
+          { "eventId": "2018-03", "place": 31, "score": "1095 lb", "points": 18 },
+          { "eventId": "2018-04", "place": 7, "score": "2:47:50.00", "points": 72 },
+          { "eventId": "2018-05", "place": 35, "score": "CAP+4", "points": 10 },
+          { "eventId": "2018-06", "place": 18, "score": "18 pt", "points": 44 },
+          { "eventId": "2018-07", "place": 35, "score": "CAP+29", "points": 10 },
+          { "eventId": "2018-08", "place": 7, "score": "27:36.91", "points": 72 },
+          { "eventId": "2018-09", "place": 18, "score": "10:29.01", "points": 44 },
+          { "eventId": "2018-10", "place": 18, "score": "3:41.24", "points": 44 },
+          { "eventId": "2018-11", "place": 1, "score": "4:03.93", "points": 100 },
+          { "eventId": "2018-12", "place": 6, "score": "14:14.70", "points": 76 },
+          { "eventId": "2018-13", "place": 6, "score": "2:04.07", "points": 76 },
+          { "eventId": "2018-14", "place": 16, "score": "5:38.87", "points": 48 }
+        ]
+      },
+      {
+        "rank": 9,
+        "name": "Willy Georges",
+        "country": "France",
+        "totalPoints": 728,
+        "events": [
+          { "eventId": "2018-01", "place": 11, "score": "18:43.29", "points": 58 },
+          { "eventId": "2018-02", "place": 15, "score": "2:32.13", "points": 50 },
+          { "eventId": "2018-03", "place": 5, "score": "1230 lb", "points": 80 },
+          { "eventId": "2018-04", "place": 20, "score": "2:54:16.00", "points": 40 },
+          { "eventId": "2018-05", "place": 14, "score": "9:48.52", "points": 52 },
+          { "eventId": "2018-06", "place": 16, "score": "16 pt", "points": 48 },
+          { "eventId": "2018-07", "place": 22, "score": "CAP+15", "points": 36 },
+          { "eventId": "2018-08", "place": 14, "score": "28:34.23", "points": 52 },
+          { "eventId": "2018-09", "place": 20, "score": "10:31.78", "points": 40 },
+          { "eventId": "2018-10", "place": 1, "score": "3:03.67", "points": 100 },
+          { "eventId": "2018-11", "place": 2, "score": "4:05.72", "points": 94 },
+          { "eventId": "2018-12", "place": 12, "score": "14:33.16", "points": 56 },
+          { "eventId": "2018-13", "place": 37, "score": "CAP+2", "points": 6 },
+          { "eventId": "2018-14", "place": 32, "score": "7:34.16", "points": 16 }
+        ]
+      },
+      {
+        "rank": 10,
+        "name": "Cody Anderson",
+        "country": "USA",
+        "totalPoints": 712,
+        "events": [
+          { "eventId": "2018-01", "place": 36, "score": "20:53.50", "points": 8 },
+          { "eventId": "2018-02", "place": 4, "score": "2:01.28", "points": 84 },
+          { "eventId": "2018-03", "place": 28, "score": "1115 lb", "points": 24 },
+          { "eventId": "2018-04", "place": 33, "score": "3:03:40.00", "points": 14 },
+          { "eventId": "2018-05", "place": 16, "score": "9:52.65", "points": 48 },
+          { "eventId": "2018-06", "place": 19, "score": "19 pt", "points": 42 },
+          { "eventId": "2018-07", "place": 7, "score": "CAP+1", "points": 72 },
+          { "eventId": "2018-08", "place": 27, "score": "31:03.06", "points": 26 },
+          { "eventId": "2018-09", "place": 6, "score": "9:41.95", "points": 76 },
+          { "eventId": "2018-10", "place": 3, "score": "3:11.41", "points": 88 },
+          { "eventId": "2018-11", "place": 7, "score": "4:17.51", "points": 72 },
+          { "eventId": "2018-12", "place": 38, "score": "16:49.84", "points": 4 },
+          { "eventId": "2018-13", "place": 1, "score": "1:29.42", "points": 100 },
+          { "eventId": "2018-14", "place": 13, "score": "5:17.83", "points": 54 }
+        ]
+      }
+    ],
+    "women": [
+      {
+        "rank": 1,
+        "name": "Tia-Clair Toomey",
+        "country": "Australia",
+        "totalPoints": 1154,
+        "events": [
+          { "eventId": "2018-01", "place": 5, "score": "20:02.79", "points": 80 },
+          { "eventId": "2018-02", "place": 2, "score": "2:33.52", "points": 94 },
+          { "eventId": "2018-03", "place": 1, "score": "875 lb", "points": 100 },
+          { "eventId": "2018-04", "place": 14, "score": "3:09:58.00", "points": 52 },
+          { "eventId": "2018-05", "place": 6, "score": "10:29.31", "points": 76 },
+          { "eventId": "2018-06", "place": 2, "score": "2 pt", "points": 94 },
+          { "eventId": "2018-07", "place": 4, "score": "3:50.69", "points": 84 },
+          { "eventId": "2018-08", "place": 1, "score": "25:35.01", "points": 100 },
+          { "eventId": "2018-09", "place": 3, "score": "8:52.69", "points": 88 },
+          { "eventId": "2018-10", "place": 6, "score": "3:24.11", "points": 76 },
+          { "eventId": "2018-11", "place": 4, "score": "3:47.33", "points": 84 },
+          { "eventId": "2018-12", "place": 7, "score": "15:51.08", "points": 72 },
+          { "eventId": "2018-13", "place": 10, "score": "2:56.89", "points": 60 },
+          { "eventId": "2018-14", "place": 2, "score": "3:55.45", "points": 94 }
+        ]
+      },
+      {
+        "rank": 2,
+        "name": "Laura Horvath",
+        "country": "Hungary",
+        "totalPoints": 1090,
+        "events": [
+          { "eventId": "2018-01", "place": 2, "score": "20:01.07", "points": 94 },
+          { "eventId": "2018-02", "place": 3, "score": "3:06.59", "points": 88 },
+          { "eventId": "2018-03", "place": 7, "score": "850 lb", "points": 72 },
+          { "eventId": "2018-04", "place": 4, "score": "3:03:37.00", "points": 84 },
+          { "eventId": "2018-05", "place": 1, "score": "9:29.76", "points": 100 },
+          { "eventId": "2018-06", "place": 21, "score": "21 pt", "points": 38 },
+          { "eventId": "2018-07", "place": 17, "score": "5:30.87", "points": 46 },
+          { "eventId": "2018-08", "place": 7, "score": "28:08.61", "points": 72 },
+          { "eventId": "2018-09", "place": 8, "score": "9:17.78", "points": 68 },
+          { "eventId": "2018-10", "place": 5, "score": "3:24.07", "points": 80 },
+          { "eventId": "2018-11", "place": 7, "score": "3:50.88", "points": 72 },
+          { "eventId": "2018-12", "place": 1, "score": "15:12.38", "points": 100 },
+          { "eventId": "2018-13", "place": 6, "score": "2:12.09", "points": 76 },
+          { "eventId": "2018-14", "place": 1, "score": "3:49.96", "points": 100 }
+        ]
+      },
+      {
+        "rank": 3,
+        "name": "Katrín Tanja Davíðsdóttir",
+        "country": "Iceland",
+        "totalPoints": 1020,
+        "events": [
+          { "eventId": "2018-01", "place": 3, "score": "20:01.33", "points": 88 },
+          { "eventId": "2018-02", "place": 15, "score": "3:52.45", "points": 50 },
+          { "eventId": "2018-03", "place": 36, "score": "705 lb", "points": 8 },
+          { "eventId": "2018-04", "place": 5, "score": "3:05:19.00", "points": 80 },
+          { "eventId": "2018-05", "place": 3, "score": "10:08.35", "points": 88 },
+          { "eventId": "2018-06", "place": 8, "score": "8 pt", "points": 68 },
+          { "eventId": "2018-07", "place": 1, "score": "3:31.73", "points": 100 },
+          { "eventId": "2018-08", "place": 13, "score": "29:01.57", "points": 54 },
+          { "eventId": "2018-09", "place": 1, "score": "8:19.35", "points": 100 },
+          { "eventId": "2018-10", "place": 23, "score": "4:24.00", "points": 34 },
+          { "eventId": "2018-11", "place": 2, "score": "3:40.00", "points": 94 },
+          { "eventId": "2018-12", "place": 3, "score": "15:31.76", "points": 88 },
+          { "eventId": "2018-13", "place": 5, "score": "2:05.52", "points": 80 },
+          { "eventId": "2018-14", "place": 3, "score": "4:05.85", "points": 88 }
+        ]
+      },
+      {
+        "rank": 4,
+        "name": "Kara Saunders",
+        "country": "Australia",
+        "totalPoints": 1006,
+        "events": [
+          { "eventId": "2018-01", "place": 22, "score": "20:13.04", "points": 36 },
+          { "eventId": "2018-02", "place": 8, "score": "3:16.01", "points": 68 },
+          { "eventId": "2018-03", "place": 8, "score": "840 lb", "points": 68 },
+          { "eventId": "2018-04", "place": 6, "score": "3:06:06.00", "points": 76 },
+          { "eventId": "2018-05", "place": 11, "score": "11:29.21", "points": 58 },
+          { "eventId": "2018-06", "place": 3, "score": "3 pt", "points": 88 },
+          { "eventId": "2018-07", "place": 5, "score": "3:54.88", "points": 80 },
+          { "eventId": "2018-08", "place": 6, "score": "28:01.23", "points": 76 },
+          { "eventId": "2018-09", "place": 10, "score": "9:30.47", "points": 60 },
+          { "eventId": "2018-10", "place": 2, "score": "3:17.34", "points": 94 },
+          { "eventId": "2018-11", "place": 1, "score": "3:39.00", "points": 100 },
+          { "eventId": "2018-12", "place": 8, "score": "16:00.24", "points": 68 },
+          { "eventId": "2018-13", "place": 13, "score": "3:13.79", "points": 54 },
+          { "eventId": "2018-14", "place": 5, "score": "4:43.83", "points": 80 }
+        ]
+      },
+      {
+        "rank": 5,
+        "name": "Annie Thorisdottir",
+        "country": "Iceland",
+        "totalPoints": 866,
+        "events": [
+          { "eventId": "2018-01", "place": 6, "score": "20:03.26", "points": 76 },
+          { "eventId": "2018-02", "place": 18, "score": "3:59.03", "points": 44 },
+          { "eventId": "2018-03", "place": 8, "score": "840 lb", "points": 68 },
+          { "eventId": "2018-04", "place": 3, "score": "3:02:46.00", "points": 88 },
+          { "eventId": "2018-05", "place": 8, "score": "10:58.62", "points": 68 },
+          { "eventId": "2018-06", "place": 4, "score": "4 pt", "points": 84 },
+          { "eventId": "2018-07", "place": 3, "score": "3:48.67", "points": 88 },
+          { "eventId": "2018-08", "place": 19, "score": "30:00.72", "points": 42 },
+          { "eventId": "2018-09", "place": 21, "score": "10:06.63", "points": 38 },
+          { "eventId": "2018-10", "place": 13, "score": "3:42.08", "points": 54 },
+          { "eventId": "2018-11", "place": 8, "score": "3:53.61", "points": 68 },
+          { "eventId": "2018-12", "place": 20, "score": "16:50.20", "points": 40 },
+          { "eventId": "2018-13", "place": 12, "score": "3:08.67", "points": 56 },
+          { "eventId": "2018-14", "place": 14, "score": "5:22.17", "points": 52 }
+        ]
+      },
+      {
+        "rank": 6,
+        "name": "Kari Pearce",
+        "country": "USA",
+        "totalPoints": 834,
+        "events": [
+          { "eventId": "2018-01", "place": 23, "score": "20:20.46", "points": 34 },
+          { "eventId": "2018-02", "place": 7, "score": "3:15.12", "points": 72 },
+          { "eventId": "2018-03", "place": 13, "score": "800 lb", "points": 54 },
+          { "eventId": "2018-04", "place": 19, "score": "3:12:01.00", "points": 42 },
+          { "eventId": "2018-05", "place": 17, "score": "CAP", "points": 46 },
+          { "eventId": "2018-06", "place": 18, "score": "18 pt", "points": 44 },
+          { "eventId": "2018-07", "place": 2, "score": "3:40.58", "points": 94 },
+          { "eventId": "2018-08", "place": 20, "score": "30:01.45", "points": 40 },
+          { "eventId": "2018-09", "place": 7, "score": "9:16.40", "points": 72 },
+          { "eventId": "2018-10", "place": 3, "score": "3:18.52", "points": 88 },
+          { "eventId": "2018-11", "place": 3, "score": "3:44.90", "points": 88 },
+          { "eventId": "2018-12", "place": 30, "score": "17:22.05", "points": 20 },
+          { "eventId": "2018-13", "place": 7, "score": "2:15.22", "points": 72 },
+          { "eventId": "2018-14", "place": 8, "score": "4:54.87", "points": 68 }
+        ]
+      },
+      {
+        "rank": 7,
+        "name": "Kristin Holte",
+        "country": "Norway",
+        "totalPoints": 820,
+        "events": [
+          { "eventId": "2018-01", "place": 1, "score": "20:00.20", "points": 100 },
+          { "eventId": "2018-02", "place": 19, "score": "4:02.77", "points": 42 },
+          { "eventId": "2018-03", "place": 28, "score": "735 lb", "points": 24 },
+          { "eventId": "2018-04", "place": 12, "score": "3:09:07.00", "points": 56 },
+          { "eventId": "2018-05", "place": 2, "score": "10:04.33", "points": 94 },
+          { "eventId": "2018-06", "place": 23, "score": "23 pt", "points": 34 },
+          { "eventId": "2018-07", "place": 14, "score": "4:58.83", "points": 52 },
+          { "eventId": "2018-08", "place": 16, "score": "29:22.36", "points": 48 },
+          { "eventId": "2018-09", "place": 2, "score": "8:42.54", "points": 94 },
+          { "eventId": "2018-10", "place": 14, "score": "3:48.66", "points": 52 },
+          { "eventId": "2018-11", "place": 10, "score": "3:55.01", "points": 60 },
+          { "eventId": "2018-12", "place": 12, "score": "16:18.00", "points": 56 },
+          { "eventId": "2018-13", "place": 9, "score": "2:28.41", "points": 64 },
+          { "eventId": "2018-14", "place": 18, "score": "5:38.78", "points": 44 }
+        ]
+      },
+      {
+        "rank": 8,
+        "name": "Brooke Wells",
+        "country": "USA",
+        "totalPoints": 818,
+        "events": [
+          { "eventId": "2018-01", "place": 18, "score": "20:09.80", "points": 44 },
+          { "eventId": "2018-02", "place": 38, "score": "CAP+7", "points": 4 },
+          { "eventId": "2018-03", "place": 2, "score": "870 lb", "points": 94 },
+          { "eventId": "2018-04", "place": 15, "score": "3:10:11.00", "points": 50 },
+          { "eventId": "2018-05", "place": 9, "score": "11:20.56", "points": 64 },
+          { "eventId": "2018-06", "place": 7, "score": "7 pt", "points": 72 },
+          { "eventId": "2018-07", "place": 7, "score": "4:10.34", "points": 72 },
+          { "eventId": "2018-08", "place": 22, "score": "30:19.16", "points": 36 },
+          { "eventId": "2018-09", "place": 4, "score": "9:10.88", "points": 84 },
+          { "eventId": "2018-10", "place": 9, "score": "3:35.99", "points": 64 },
+          { "eventId": "2018-11", "place": 5, "score": "3:49.25", "points": 80 },
+          { "eventId": "2018-12", "place": 23, "score": "17:01.70", "points": 34 },
+          { "eventId": "2018-13", "place": 1, "score": "1:57.78", "points": 100 },
+          { "eventId": "2018-14", "place": 30, "score": "CAP+56", "points": 20 }
+        ]
+      },
+      {
+        "rank": 9,
+        "name": "Kristi Eramo",
+        "country": "USA",
+        "totalPoints": 754,
+        "events": [
+          { "eventId": "2018-01", "place": 20, "score": "20:10.21", "points": 40 },
+          { "eventId": "2018-02", "place": 1, "score": "2:32.52", "points": 100 },
+          { "eventId": "2018-03", "place": 14, "score": "790 lb", "points": 52 },
+          { "eventId": "2018-04", "place": 21, "score": "3:13:24.00", "points": 38 },
+          { "eventId": "2018-05", "place": 12, "score": "11:32.15", "points": 56 },
+          { "eventId": "2018-06", "place": 36, "score": "36 pt", "points": 8 },
+          { "eventId": "2018-07", "place": 8, "score": "4:36.70", "points": 68 },
+          { "eventId": "2018-08", "place": 2, "score": "25:40.33", "points": 94 },
+          { "eventId": "2018-09", "place": 15, "score": "9:52.35", "points": 50 },
+          { "eventId": "2018-10", "place": 8, "score": "3:32.16", "points": 68 },
+          { "eventId": "2018-11", "place": 14, "score": "4:13.79", "points": 52 },
+          { "eventId": "2018-12", "place": 19, "score": "16:47.73", "points": 42 },
+          { "eventId": "2018-13", "place": 15, "score": "3:45.94", "points": 50 },
+          { "eventId": "2018-14", "place": 22, "score": "6:39.18", "points": 36 }
+        ]
+      },
+      {
+        "rank": 10,
+        "name": "Cassidy Lance-McWherter",
+        "country": "USA",
+        "totalPoints": 742,
+        "events": [
+          { "eventId": "2018-01", "place": 7, "score": "20:03.76", "points": 72 },
+          { "eventId": "2018-02", "place": 4, "score": "3:07.48", "points": 84 },
+          { "eventId": "2018-03", "place": 16, "score": "785 lb", "points": 48 },
+          { "eventId": "2018-04", "place": 38, "score": "3:31:22.00", "points": 4 },
+          { "eventId": "2018-05", "place": 15, "score": "11:51.86", "points": 50 },
+          { "eventId": "2018-06", "place": 5, "score": "5 pt", "points": 80 },
+          { "eventId": "2018-07", "place": 12, "score": "4:50.43", "points": 56 },
+          { "eventId": "2018-08", "place": 17, "score": "29:22.90", "points": 46 },
+          { "eventId": "2018-09", "place": 9, "score": "9:25.60", "points": 64 },
+          { "eventId": "2018-10", "place": 4, "score": "3:19.00", "points": 84 },
+          { "eventId": "2018-11", "place": 11, "score": "3:56.16", "points": 58 },
+          { "eventId": "2018-12", "place": 27, "score": "17:15.06", "points": 26 },
+          { "eventId": "2018-13", "place": 18, "score": "3:50.07", "points": 44 },
+          { "eventId": "2018-14", "place": 27, "score": "CAP+6", "points": 26 }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,236 @@
+{
+  "year": 2007,
+  "pointsSystem": "Placement-based points table taken directly from the official CrossFit Games leaderboard archive (games.crossfit.com / c3po API). Per event: 1st = 100, 2nd = 95, 3rd = 90, then a 1-point decrement per place from 4th onward (4th = 89, 5th = 88, ... i.e. 93 minus place for places >= 3). An athlete's totalPoints is the sum of points across the three events; James Fitzgerald won the men's title with 272 and Jolie Gentry the women's with 290. The exact 2007-era table was never formally published by CrossFit, so these point values are reproduced from the archived leaderboard rather than re-derived. Withdrawals (WD) scored 0 for the missed event (no withdrawn athlete reaches either top 10). Country of origin was not populated in the 2007 archive, so country is null for every athlete.",
+  "sources": [
+    "https://c3po.crossfit.com/api/leaderboards/v2/competitions/games/2007/leaderboards?division=1",
+    "https://c3po.crossfit.com/api/leaderboards/v2/competitions/games/2007/leaderboards?division=2",
+    "https://games.crossfit.com/leaderboard/games/2007",
+    "https://en.wikipedia.org/wiki/2007_CrossFit_Games"
+  ],
+  "divisions": {
+    "men": [
+      {
+        "rank": 1,
+        "name": "James Fitzgerald",
+        "country": null,
+        "totalPoints": 272,
+        "events": [
+          { "eventId": "2007-01", "place": 2, "score": "13:39", "points": 95 },
+          { "eventId": "2007-02", "place": 2, "score": "20:45", "points": 95 },
+          { "eventId": "2007-03", "place": 11, "score": "906.4 lb", "points": 82 }
+        ]
+      },
+      {
+        "rank": 2,
+        "name": "Brett Marshall",
+        "country": null,
+        "totalPoints": 270,
+        "events": [
+          { "eventId": "2007-01", "place": 1, "score": "13:07", "points": 100 },
+          { "eventId": "2007-02", "place": 3, "score": "22:00", "points": 90 },
+          { "eventId": "2007-03", "place": 13, "score": "891 lb", "points": 80 }
+        ]
+      },
+      {
+        "rank": 3,
+        "name": "Josh Everett",
+        "country": null,
+        "totalPoints": 267,
+        "events": [
+          { "eventId": "2007-01", "place": 4, "score": "14:13", "points": 89 },
+          { "eventId": "2007-02", "place": 10, "score": "24:28", "points": 83 },
+          { "eventId": "2007-03", "place": 2, "score": "1133 lb", "points": 95 }
+        ]
+      },
+      {
+        "rank": 4,
+        "name": "Chris Spealler",
+        "country": null,
+        "totalPoints": 261,
+        "events": [
+          { "eventId": "2007-01", "place": 3, "score": "13:52", "points": 90 },
+          { "eventId": "2007-02", "place": 1, "score": "20:43", "points": 100 },
+          { "eventId": "2007-03", "place": 22, "score": "756.8 lb", "points": 71 }
+        ]
+      },
+      {
+        "rank": 5,
+        "name": "Breck Berry",
+        "country": null,
+        "totalPoints": 252,
+        "events": [
+          { "eventId": "2007-01", "place": 13, "score": "18:21", "points": 80 },
+          { "eventId": "2007-02", "place": 4, "score": "22:04", "points": 89 },
+          { "eventId": "2007-03", "place": 10, "score": "906.4 lb", "points": 83 }
+        ]
+      },
+      {
+        "rank": 6,
+        "name": "Jeremy Thiel",
+        "country": null,
+        "totalPoints": 248,
+        "events": [
+          { "eventId": "2007-01", "place": 19, "score": "Rnd 5 13 Pullups", "points": 74 },
+          { "eventId": "2007-02", "place": 7, "score": "23:56", "points": 86 },
+          { "eventId": "2007-03", "place": 5, "score": "974.8 lb", "points": 88 }
+        ]
+      },
+      {
+        "rank": 7,
+        "name": "Brendan Gilliam",
+        "country": null,
+        "totalPoints": 243,
+        "events": [
+          { "eventId": "2007-01", "place": 5, "score": "15:35", "points": 88 },
+          { "eventId": "2007-02", "place": 16, "score": "25:39", "points": 77 },
+          { "eventId": "2007-03", "place": 15, "score": "866.8 lb", "points": 78 }
+        ]
+      },
+      {
+        "rank": 8,
+        "name": "Evan Von",
+        "country": null,
+        "totalPoints": 239,
+        "events": [
+          { "eventId": "2007-01", "place": 9, "score": "17:25", "points": 84 },
+          { "eventId": "2007-02", "place": 28, "score": "27:25", "points": 65 },
+          { "eventId": "2007-03", "place": 3, "score": "1025 lb", "points": 90 }
+        ]
+      },
+      {
+        "rank": 9,
+        "name": "Brent Oakson",
+        "country": null,
+        "totalPoints": 235,
+        "events": [
+          { "eventId": "2007-01", "place": 7, "score": "16:53", "points": 86 },
+          { "eventId": "2007-02", "place": 17, "score": "25:44", "points": 76 },
+          { "eventId": "2007-03", "place": 20, "score": "781 lb", "points": 73 }
+        ]
+      },
+      {
+        "rank": 10,
+        "name": "Peter Egyed",
+        "country": null,
+        "totalPoints": 232,
+        "events": [
+          { "eventId": "2007-01", "place": 23, "score": "Rnd 5 3 Pullups", "points": 70 },
+          { "eventId": "2007-02", "place": 15, "score": "25:21", "points": 78 },
+          { "eventId": "2007-03", "place": 9, "score": "913 lb", "points": 84 }
+        ]
+      }
+    ],
+    "women": [
+      {
+        "rank": 1,
+        "name": "Jolie Gentry",
+        "country": null,
+        "totalPoints": 290,
+        "events": [
+          { "eventId": "2007-01", "place": 1, "score": "16:22", "points": 100 },
+          { "eventId": "2007-02", "place": 2, "score": "26:05", "points": 95 },
+          { "eventId": "2007-03", "place": 2, "score": "496 lb", "points": 95 }
+        ]
+      },
+      {
+        "rank": 2,
+        "name": "Mary Rigney",
+        "country": null,
+        "totalPoints": 271,
+        "events": [
+          { "eventId": "2007-01", "place": 2, "score": "20:00", "points": 95 },
+          { "eventId": "2007-02", "place": 6, "score": "28:47", "points": 87 },
+          { "eventId": "2007-03", "place": 4, "score": "465 lb", "points": 89 }
+        ]
+      },
+      {
+        "rank": 3,
+        "name": "Nichole Dehart",
+        "country": null,
+        "totalPoints": 270,
+        "events": [
+          { "eventId": "2007-01", "place": 3, "score": "Rnd 5 25 Pullups", "points": 90 },
+          { "eventId": "2007-02", "place": 13, "score": "31:47", "points": 80 },
+          { "eventId": "2007-03", "place": 1, "score": "530 lb", "points": 100 }
+        ]
+      },
+      {
+        "rank": 4,
+        "name": "Tara Muccilli",
+        "country": null,
+        "totalPoints": 261,
+        "events": [
+          { "eventId": "2007-01", "place": 7, "score": "Rnd 5 10 Pullups", "points": 86 },
+          { "eventId": "2007-02", "place": 8, "score": "29:59", "points": 85 },
+          { "eventId": "2007-03", "place": 3, "score": "475 lb", "points": 90 }
+        ]
+      },
+      {
+        "rank": 5,
+        "name": "Maggie Larson",
+        "country": null,
+        "totalPoints": 260,
+        "events": [
+          { "eventId": "2007-01", "place": 4, "score": "Rnd 5 23 Pullups", "points": 89 },
+          { "eventId": "2007-02", "place": 9, "score": "30:17", "points": 84 },
+          { "eventId": "2007-03", "place": 6, "score": "436 lb", "points": 87 }
+        ]
+      },
+      {
+        "rank": 6,
+        "name": "Kate Hunt",
+        "country": null,
+        "totalPoints": 260,
+        "events": [
+          { "eventId": "2007-01", "place": 14, "score": "14:20 Jumping Pullups 65#", "points": 79 },
+          { "eventId": "2007-02", "place": 1, "score": "25:14", "points": 100 },
+          { "eventId": "2007-03", "place": 12, "score": "360 lb", "points": 81 }
+        ]
+      },
+      {
+        "rank": 7,
+        "name": "Nora Grant",
+        "country": null,
+        "totalPoints": 258,
+        "events": [
+          { "eventId": "2007-01", "place": 5, "score": "Rnd 5 22 Pullups", "points": 88 },
+          { "eventId": "2007-02", "place": 11, "score": "30:46", "points": 82 },
+          { "eventId": "2007-03", "place": 5, "score": "462 lb", "points": 88 }
+        ]
+      },
+      {
+        "rank": 8,
+        "name": "Dani Martin",
+        "country": null,
+        "totalPoints": 256,
+        "events": [
+          { "eventId": "2007-01", "place": 11, "score": "Rnd 3 65#", "points": 82 },
+          { "eventId": "2007-02", "place": 3, "score": "26:46", "points": 90 },
+          { "eventId": "2007-03", "place": 9, "score": "385 lb", "points": 84 }
+        ]
+      },
+      {
+        "rank": 9,
+        "name": "Kallista Pappas",
+        "country": null,
+        "totalPoints": 255,
+        "events": [
+          { "eventId": "2007-01", "place": 8, "score": "17:21 65#", "points": 85 },
+          { "eventId": "2007-02", "place": 5, "score": "27:15", "points": 88 },
+          { "eventId": "2007-03", "place": 11, "score": "363 lb", "points": 82 }
+        ]
+      },
+      {
+        "rank": 10,
+        "name": "Denise Serrano",
+        "country": null,
+        "totalPoints": 249,
+        "events": [
+          { "eventId": "2007-01", "place": 6, "score": "Rnd 5 14 Pullups", "points": 87 },
+          { "eventId": "2007-02", "place": 17, "score": "40:11", "points": 76 },
+          { "eventId": "2007-03", "place": 7, "score": "430 lb", "points": 86 }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,436 @@
+{
+  "year": 2015,
+  "pointsSystem": "Each event scored on a graduated 100-point table for the winner: 1st=100, 2nd=94, 3rd=88, 4th=84, 5th=80, 6th=76, 7th=72, 8th=68, 9th=64, 10th=60, then descending by 2 (11th=58 ... 40th=0). Sprint Course 1 and Sprint Course 2 (2015-06, 2015-07) were worth 50 points to the winner on a halved table: 1st=50, 2nd=47, 3rd=44, 4th=42, 5th=40, 6th=38, 7th=36, 8th=34, 9th=32, 10th=30, 11th=29, then descending by 1 (40th=0). Total points are the sum across all 13 events; highest total wins. No athletes were cut during the Games. Tied places share that place's point value.",
+  "sources": [
+    "https://c3po.crossfit.com/api/leaderboards/v2/competitions/games/2015/leaderboards?division=1&page=1",
+    "https://c3po.crossfit.com/api/leaderboards/v2/competitions/games/2015/leaderboards?division=2&page=1",
+    "https://en.wikipedia.org/wiki/2015_CrossFit_Games",
+    "https://games.crossfit.com/workouts/games/2015"
+  ],
+  "divisions": {
+    "men": [
+      {
+        "rank": 1,
+        "name": "Ben Smith",
+        "country": "USA",
+        "totalPoints": 915,
+        "events": [
+          { "eventId": "2015-01", "place": 7, "score": "49:20.51", "points": 72 },
+          { "eventId": "2015-02", "place": 34, "score": "CAP+2", "points": 12 },
+          { "eventId": "2015-03", "place": 10, "score": "42:45.12", "points": 60 },
+          { "eventId": "2015-04", "place": 2, "score": "2 pt", "points": 94 },
+          { "eventId": "2015-05", "place": 1, "score": "7:55.97", "points": 100 },
+          { "eventId": "2015-06", "place": 11, "score": ":19.63", "points": 29 },
+          { "eventId": "2015-07", "place": 6, "score": ":19.06", "points": 38 },
+          { "eventId": "2015-08", "place": 1, "score": "4:30.93", "points": 100 },
+          { "eventId": "2015-09", "place": 2, "score": "347 lb", "points": 94 },
+          { "eventId": "2015-10", "place": 6, "score": "5:08.34", "points": 76 },
+          { "eventId": "2015-11", "place": 7, "score": "13:19.00", "points": 72 },
+          { "eventId": "2015-12", "place": 4, "score": "5:23.05", "points": 84 },
+          { "eventId": "2015-13", "place": 4, "score": "5:01.20", "points": 84 }
+        ]
+      },
+      {
+        "rank": 2,
+        "name": "Mat Fraser",
+        "country": "USA",
+        "totalPoints": 879,
+        "events": [
+          { "eventId": "2015-01", "place": 12, "score": "50:52.00", "points": 56 },
+          { "eventId": "2015-02", "place": 2, "score": "10:38.00", "points": 94 },
+          { "eventId": "2015-03", "place": 2, "score": "39:20.93", "points": 94 },
+          { "eventId": "2015-04", "place": 3, "score": "3 pt", "points": 88 },
+          { "eventId": "2015-05", "place": 2, "score": "8:33.59", "points": 94 },
+          { "eventId": "2015-06", "place": 24, "score": ":20.47", "points": 16 },
+          { "eventId": "2015-07", "place": 37, "score": ":22.80", "points": 3 },
+          { "eventId": "2015-08", "place": 32, "score": "CAP+3", "points": 16 },
+          { "eventId": "2015-09", "place": 4, "score": "342 lb", "points": 84 },
+          { "eventId": "2015-10", "place": 1, "score": "4:43.31", "points": 100 },
+          { "eventId": "2015-11", "place": 2, "score": "12:58.85", "points": 94 },
+          { "eventId": "2015-12", "place": 2, "score": "4:52.15", "points": 94 },
+          { "eventId": "2015-13", "place": 17, "score": "6:31.61", "points": 46 }
+        ]
+      },
+      {
+        "rank": 3,
+        "name": "Björgvin Karl Guðmundsson",
+        "country": "Iceland",
+        "totalPoints": 766,
+        "events": [
+          { "eventId": "2015-01", "place": 6, "score": "48:39.97", "points": 76 },
+          { "eventId": "2015-02", "place": 17, "score": "12:22.00", "points": 46 },
+          { "eventId": "2015-03", "place": 1, "score": "38:36.21", "points": 100 },
+          { "eventId": "2015-04", "place": 14, "score": "14 pt", "points": 52 },
+          { "eventId": "2015-05", "place": 25, "score": "CAP+6", "points": 30 },
+          { "eventId": "2015-06", "place": 12, "score": ":19.67", "points": 28 },
+          { "eventId": "2015-07", "place": 9, "score": ":19.26", "points": 32 },
+          { "eventId": "2015-08", "place": 9, "score": "7:27.79", "points": 64 },
+          { "eventId": "2015-09", "place": 23, "score": "307 lb", "points": 34 },
+          { "eventId": "2015-10", "place": 7, "score": "5:20.41", "points": 72 },
+          { "eventId": "2015-11", "place": 5, "score": "13:13.87", "points": 80 },
+          { "eventId": "2015-12", "place": 7, "score": "CAP", "points": 72 },
+          { "eventId": "2015-13", "place": 5, "score": "5:30.45", "points": 80 }
+        ]
+      },
+      {
+        "rank": 4,
+        "name": "Dan Bailey",
+        "country": "USA",
+        "totalPoints": 730,
+        "events": [
+          { "eventId": "2015-01", "place": 8, "score": "49:24.87", "points": 68 },
+          { "eventId": "2015-02", "place": 29, "score": "14:41.00", "points": 22 },
+          { "eventId": "2015-03", "place": 17, "score": "46:40.46", "points": 46 },
+          { "eventId": "2015-04", "place": 34, "score": "34 pt", "points": 12 },
+          { "eventId": "2015-05", "place": 6, "score": "10:05.10", "points": 76 },
+          { "eventId": "2015-06", "place": 1, "score": ":18.10", "points": 50 },
+          { "eventId": "2015-07", "place": 1, "score": ":18.56", "points": 50 },
+          { "eventId": "2015-08", "place": 18, "score": "8:32.17", "points": 44 },
+          { "eventId": "2015-09", "place": 15, "score": "316 lb", "points": 50 },
+          { "eventId": "2015-10", "place": 4, "score": "5:02.14", "points": 84 },
+          { "eventId": "2015-11", "place": 14, "score": "13:40.61", "points": 52 },
+          { "eventId": "2015-12", "place": 3, "score": "5:16.55", "points": 88 },
+          { "eventId": "2015-13", "place": 3, "score": "4:52.57", "points": 88 }
+        ]
+      },
+      {
+        "rank": 5,
+        "name": "Spencer Hendel",
+        "country": "USA",
+        "totalPoints": 718,
+        "events": [
+          { "eventId": "2015-01", "place": 9, "score": "49:54.89", "points": 64 },
+          { "eventId": "2015-02", "place": 31, "score": "14:48.00", "points": 18 },
+          { "eventId": "2015-03", "place": 29, "score": "50:01.77", "points": 22 },
+          { "eventId": "2015-04", "place": 18, "score": "18 pt", "points": 44 },
+          { "eventId": "2015-05", "place": 13, "score": "10:42.18", "points": 54 },
+          { "eventId": "2015-06", "place": 19, "score": ":20.00", "points": 21 },
+          { "eventId": "2015-07", "place": 13, "score": ":19.72", "points": 27 },
+          { "eventId": "2015-08", "place": 2, "score": "4:42.06", "points": 94 },
+          { "eventId": "2015-09", "place": 21, "score": "310 lb", "points": 38 },
+          { "eventId": "2015-10", "place": 8, "score": "5:29.13", "points": 68 },
+          { "eventId": "2015-11", "place": 8, "score": "13:32.96", "points": 68 },
+          { "eventId": "2015-12", "place": 1, "score": "4:35.86", "points": 100 },
+          { "eventId": "2015-13", "place": 1, "score": "4:18.97", "points": 100 }
+        ]
+      },
+      {
+        "rank": 6,
+        "name": "Scott Panchik",
+        "country": "USA",
+        "totalPoints": 709,
+        "events": [
+          { "eventId": "2015-01", "place": 20, "score": "56:51.19", "points": 40 },
+          { "eventId": "2015-02", "place": 33, "score": "14:57.00", "points": 14 },
+          { "eventId": "2015-03", "place": 14, "score": "45:36.60", "points": 52 },
+          { "eventId": "2015-04", "place": 9, "score": "9 pt", "points": 64 },
+          { "eventId": "2015-05", "place": 3, "score": "9:17.14", "points": 88 },
+          { "eventId": "2015-06", "place": 2, "score": ":18.40", "points": 47 },
+          { "eventId": "2015-07", "place": 8, "score": ":19.07", "points": 34 },
+          { "eventId": "2015-08", "place": 21, "score": "8:53.91", "points": 38 },
+          { "eventId": "2015-09", "place": 6, "score": "330 lb", "points": 76 },
+          { "eventId": "2015-10", "place": 5, "score": "5:05.08", "points": 80 },
+          { "eventId": "2015-11", "place": 30, "score": "14:45.65", "points": 20 },
+          { "eventId": "2015-12", "place": 5, "score": "5:25.94", "points": 80 },
+          { "eventId": "2015-13", "place": 6, "score": "5:32.87", "points": 76 }
+        ]
+      },
+      {
+        "rank": 7,
+        "name": "Cole Sager",
+        "country": "USA",
+        "totalPoints": 700,
+        "events": [
+          { "eventId": "2015-01", "place": 19, "score": "55:03.24", "points": 42 },
+          { "eventId": "2015-02", "place": 6, "score": "11:17.00", "points": 76 },
+          { "eventId": "2015-03", "place": 13, "score": "45:01.61", "points": 54 },
+          { "eventId": "2015-04", "place": 17, "score": "17 pt", "points": 46 },
+          { "eventId": "2015-05", "place": 27, "score": "CAP+8", "points": 26 },
+          { "eventId": "2015-06", "place": 4, "score": ":18.53", "points": 42 },
+          { "eventId": "2015-07", "place": 5, "score": ":18.96", "points": 40 },
+          { "eventId": "2015-08", "place": 3, "score": "6:01.12", "points": 88 },
+          { "eventId": "2015-09", "place": 7, "score": "325 lb", "points": 72 },
+          { "eventId": "2015-10", "place": 3, "score": "4:52.88", "points": 88 },
+          { "eventId": "2015-11", "place": 18, "score": "13:58.00", "points": 44 },
+          { "eventId": "2015-12", "place": 18, "score": "CAP+49", "points": 44 },
+          { "eventId": "2015-13", "place": 21, "score": "CAP+2", "points": 38 }
+        ]
+      },
+      {
+        "rank": 8,
+        "name": "Noah Ohlsen",
+        "country": "USA",
+        "totalPoints": 693,
+        "events": [
+          { "eventId": "2015-01", "place": 3, "score": "46:14.13", "points": 88 },
+          { "eventId": "2015-02", "place": 36, "score": "CAP+3", "points": 8 },
+          { "eventId": "2015-03", "place": 3, "score": "39:33.74", "points": 88 },
+          { "eventId": "2015-04", "place": 26, "score": "26 pt", "points": 28 },
+          { "eventId": "2015-05", "place": 7, "score": "10:09.11", "points": 72 },
+          { "eventId": "2015-06", "place": 8, "score": ":19.47", "points": 34 },
+          { "eventId": "2015-07", "place": 23, "score": ":20.72", "points": 17 },
+          { "eventId": "2015-08", "place": 14, "score": "7:52.46", "points": 52 },
+          { "eventId": "2015-09", "place": 27, "score": "305 lb", "points": 26 },
+          { "eventId": "2015-10", "place": 2, "score": "4:47.95", "points": 94 },
+          { "eventId": "2015-11", "place": 6, "score": "13:14.47", "points": 76 },
+          { "eventId": "2015-12", "place": 17, "score": "CAP+12", "points": 46 },
+          { "eventId": "2015-13", "place": 9, "score": "5:51.48", "points": 64 }
+        ]
+      },
+      {
+        "rank": 9,
+        "name": "Jonne Koski",
+        "country": "Finland",
+        "totalPoints": 638,
+        "events": [
+          { "eventId": "2015-01", "place": 1, "score": "42:16.87", "points": 100 },
+          { "eventId": "2015-02", "place": 8, "score": "11:22.00", "points": 68 },
+          { "eventId": "2015-03", "place": 5, "score": "41:14.12", "points": 80 },
+          { "eventId": "2015-04", "place": 36, "score": "36 pt", "points": 8 },
+          { "eventId": "2015-05", "place": 10, "score": "10:37.14", "points": 60 },
+          { "eventId": "2015-06", "place": 26, "score": ":20.70", "points": 14 },
+          { "eventId": "2015-07", "place": 18, "score": ":20.37", "points": 22 },
+          { "eventId": "2015-08", "place": 20, "score": "8:37.90", "points": 40 },
+          { "eventId": "2015-09", "place": 23, "score": "307 lb", "points": 34 },
+          { "eventId": "2015-10", "place": 9, "score": "5:30.59", "points": 64 },
+          { "eventId": "2015-11", "place": 11, "score": "13:35.64", "points": 58 },
+          { "eventId": "2015-12", "place": 14, "score": "CAP+8", "points": 52 },
+          { "eventId": "2015-13", "place": 21, "score": "CAP+2", "points": 38 }
+        ]
+      },
+      {
+        "rank": 10,
+        "name": "Jacob Heppner",
+        "country": "USA",
+        "totalPoints": 621,
+        "events": [
+          { "eventId": "2015-01", "place": 15, "score": "53:09.05", "points": 50 },
+          { "eventId": "2015-02", "place": 16, "score": "12:19.00", "points": 48 },
+          { "eventId": "2015-03", "place": 6, "score": "41:28.40", "points": 76 },
+          { "eventId": "2015-04", "place": 27, "score": "27 pt", "points": 26 },
+          { "eventId": "2015-05", "place": 20, "score": "CAP", "points": 40 },
+          { "eventId": "2015-06", "place": 31, "score": ":21.57", "points": 9 },
+          { "eventId": "2015-07", "place": 34, "score": ":21.93", "points": 6 },
+          { "eventId": "2015-08", "place": 11, "score": "7:32.12", "points": 58 },
+          { "eventId": "2015-09", "place": 22, "score": "308 lb", "points": 36 },
+          { "eventId": "2015-10", "place": 10, "score": "5:39.29", "points": 60 },
+          { "eventId": "2015-11", "place": 1, "score": "12:52.40", "points": 100 },
+          { "eventId": "2015-12", "place": 20, "score": "CAP+50", "points": 40 },
+          { "eventId": "2015-13", "place": 7, "score": "5:44.86", "points": 72 }
+        ]
+      }
+    ],
+    "women": [
+      {
+        "rank": 1,
+        "name": "Katrin Tanja Davidsdottir",
+        "country": "Iceland",
+        "totalPoints": 790,
+        "events": [
+          { "eventId": "2015-01", "place": 18, "score": "54:30.08", "points": 44 },
+          { "eventId": "2015-02", "place": 14, "score": "10:49.00", "points": 52 },
+          { "eventId": "2015-03", "place": 12, "score": "45:44.51", "points": 56 },
+          { "eventId": "2015-04", "place": 2, "score": "2 pt", "points": 94 },
+          { "eventId": "2015-05", "place": 2, "score": "9:18.93", "points": 94 },
+          { "eventId": "2015-06", "place": 21, "score": ":22.23", "points": 19 },
+          { "eventId": "2015-07", "place": 21, "score": ":21.97", "points": 19 },
+          { "eventId": "2015-08", "place": 15, "score": "CAP+3", "points": 50 },
+          { "eventId": "2015-09", "place": 10, "score": "217 lb", "points": 60 },
+          { "eventId": "2015-10", "place": 8, "score": "6:36.34", "points": 68 },
+          { "eventId": "2015-11", "place": 5, "score": "14:33.34", "points": 80 },
+          { "eventId": "2015-12", "place": 13, "score": "CAP+51", "points": 54 },
+          { "eventId": "2015-13", "place": 1, "score": "4:42.77", "points": 100 }
+        ]
+      },
+      {
+        "rank": 2,
+        "name": "Tia-Clair Toomey",
+        "country": "Australia",
+        "totalPoints": 750,
+        "events": [
+          { "eventId": "2015-01", "place": 4, "score": "46:41.10", "points": 84 },
+          { "eventId": "2015-02", "place": 18, "score": "11:22.00", "points": 44 },
+          { "eventId": "2015-03", "place": 27, "score": "52:44.80", "points": 26 },
+          { "eventId": "2015-04", "place": 6, "score": "6 pt", "points": 76 },
+          { "eventId": "2015-05", "place": 31, "score": "CAP+20", "points": 18 },
+          { "eventId": "2015-06", "place": 4, "score": ":20.13", "points": 42 },
+          { "eventId": "2015-07", "place": 3, "score": ":20.06", "points": 44 },
+          { "eventId": "2015-08", "place": 13, "score": "CAP+2", "points": 54 },
+          { "eventId": "2015-09", "place": 15, "score": "212 lb", "points": 50 },
+          { "eventId": "2015-10", "place": 6, "score": "6:20.23", "points": 76 },
+          { "eventId": "2015-11", "place": 6, "score": "14:34.04", "points": 76 },
+          { "eventId": "2015-12", "place": 6, "score": "CAP+50", "points": 76 },
+          { "eventId": "2015-13", "place": 4, "score": "5:30.27", "points": 84 }
+        ]
+      },
+      {
+        "rank": 3,
+        "name": "Sara Sigmundsdottir",
+        "country": "Iceland",
+        "totalPoints": 743,
+        "events": [
+          { "eventId": "2015-01", "place": 8, "score": "49:44.28", "points": 68 },
+          { "eventId": "2015-02", "place": 4, "score": "9:54.00", "points": 84 },
+          { "eventId": "2015-03", "place": 9, "score": "44:58.27", "points": 64 },
+          { "eventId": "2015-04", "place": 9, "score": "9 pt", "points": 64 },
+          { "eventId": "2015-05", "place": 1, "score": "8:25.17", "points": 100 },
+          { "eventId": "2015-06", "place": 37, "score": ":26.80", "points": 3 },
+          { "eventId": "2015-07", "place": 38, "score": ":26.67", "points": 2 },
+          { "eventId": "2015-08", "place": 4, "score": "10:07.41", "points": 84 },
+          { "eventId": "2015-09", "place": 6, "score": "230 lb", "points": 76 },
+          { "eventId": "2015-10", "place": 18, "score": "7:23.13", "points": 44 },
+          { "eventId": "2015-11", "place": 9, "score": "15:09.44", "points": 64 },
+          { "eventId": "2015-12", "place": 13, "score": "CAP+51", "points": 54 },
+          { "eventId": "2015-13", "place": 22, "score": "CAP+9", "points": 36 }
+        ]
+      },
+      {
+        "rank": 4,
+        "name": "Samantha Briggs",
+        "country": "United Kingdom",
+        "totalPoints": 735,
+        "events": [
+          { "eventId": "2015-01", "place": 7, "score": "49:34.00", "points": 72 },
+          { "eventId": "2015-02", "place": 10, "score": "10:26.00", "points": 60 },
+          { "eventId": "2015-03", "place": 1, "score": "39:10.14", "points": 100 },
+          { "eventId": "2015-04", "place": 35, "score": "35 pt", "points": 10 },
+          { "eventId": "2015-05", "place": 15, "score": "11:51.42", "points": 50 },
+          { "eventId": "2015-06", "place": 34, "score": ":25.33", "points": 6 },
+          { "eventId": "2015-07", "place": 31, "score": ":23.23", "points": 9 },
+          { "eventId": "2015-08", "place": 8, "score": "CAP+1", "points": 68 },
+          { "eventId": "2015-09", "place": 31, "score": "188 lb", "points": 18 },
+          { "eventId": "2015-10", "place": 2, "score": "5:32.00", "points": 94 },
+          { "eventId": "2015-11", "place": 1, "score": "13:26.57", "points": 100 },
+          { "eventId": "2015-12", "place": 13, "score": "CAP+51", "points": 54 },
+          { "eventId": "2015-13", "place": 2, "score": "4:51.60", "points": 94 }
+        ]
+      },
+      {
+        "rank": 5,
+        "name": "Kara Saunders",
+        "country": "Australia",
+        "totalPoints": 703,
+        "events": [
+          { "eventId": "2015-01", "place": 1, "score": "45:30.52", "points": 100 },
+          { "eventId": "2015-02", "place": 3, "score": "9:33.00", "points": 88 },
+          { "eventId": "2015-03", "place": 13, "score": "45:59.02", "points": 54 },
+          { "eventId": "2015-04", "place": 21, "score": "21 pt", "points": 38 },
+          { "eventId": "2015-05", "place": 10, "score": "10:51.63", "points": 60 },
+          { "eventId": "2015-06", "place": 35, "score": ":25.43", "points": 5 },
+          { "eventId": "2015-07", "place": 32, "score": ":23.29", "points": 8 },
+          { "eventId": "2015-08", "place": 8, "score": "CAP+1", "points": 68 },
+          { "eventId": "2015-09", "place": 9, "score": "225 lb", "points": 64 },
+          { "eventId": "2015-10", "place": 4, "score": "6:14.09", "points": 84 },
+          { "eventId": "2015-11", "place": 19, "score": "15:53.47", "points": 42 },
+          { "eventId": "2015-12", "place": 6, "score": "CAP+50", "points": 76 },
+          { "eventId": "2015-13", "place": 32, "score": "CAP+54", "points": 16 }
+        ]
+      },
+      {
+        "rank": 6,
+        "name": "Chyna Cho",
+        "country": "USA",
+        "totalPoints": 661,
+        "events": [
+          { "eventId": "2015-01", "place": 3, "score": "46:13.76", "points": 88 },
+          { "eventId": "2015-02", "place": 17, "score": "11:21.00", "points": 46 },
+          { "eventId": "2015-03", "place": 15, "score": "46:35.77", "points": 50 },
+          { "eventId": "2015-04", "place": 14, "score": "14 pt", "points": 52 },
+          { "eventId": "2015-05", "place": 16, "score": "11:56.09", "points": 48 },
+          { "eventId": "2015-06", "place": 25, "score": ":23.07", "points": 15 },
+          { "eventId": "2015-07", "place": 30, "score": ":22.85", "points": 10 },
+          { "eventId": "2015-08", "place": 8, "score": "CAP+1", "points": 68 },
+          { "eventId": "2015-09", "place": 19, "score": "207 lb", "points": 42 },
+          { "eventId": "2015-10", "place": 19, "score": "7:36.31", "points": 42 },
+          { "eventId": "2015-11", "place": 10, "score": "15:11.52", "points": 60 },
+          { "eventId": "2015-12", "place": 4, "score": "CAP+49", "points": 84 },
+          { "eventId": "2015-13", "place": 12, "score": "CAP+2", "points": 56 }
+        ]
+      },
+      {
+        "rank": 7,
+        "name": "Lindsey Valenzuela",
+        "country": "USA",
+        "totalPoints": 636,
+        "events": [
+          { "eventId": "2015-01", "place": 15, "score": "52:24.63", "points": 50 },
+          { "eventId": "2015-02", "place": 7, "score": "10:03.00", "points": 72 },
+          { "eventId": "2015-03", "place": 32, "score": "CAP", "points": 16 },
+          { "eventId": "2015-04", "place": 8, "score": "8 pt", "points": 68 },
+          { "eventId": "2015-05", "place": 9, "score": "10:39.04", "points": 64 },
+          { "eventId": "2015-06", "place": 26, "score": ":23.17", "points": 14 },
+          { "eventId": "2015-07", "place": 16, "score": ":21.55", "points": 24 },
+          { "eventId": "2015-08", "place": 19, "score": "CAP+4", "points": 42 },
+          { "eventId": "2015-09", "place": 2, "score": "240 lb", "points": 94 },
+          { "eventId": "2015-10", "place": 12, "score": "6:54.66", "points": 56 },
+          { "eventId": "2015-11", "place": 21, "score": "16:09.58", "points": 38 },
+          { "eventId": "2015-12", "place": 6, "score": "CAP+50", "points": 76 },
+          { "eventId": "2015-13", "place": 29, "score": "CAP+51", "points": 22 }
+        ]
+      },
+      {
+        "rank": 8,
+        "name": "Emily Abbott",
+        "country": "Canada",
+        "totalPoints": 623,
+        "events": [
+          { "eventId": "2015-01", "place": 29, "score": "59:00.29", "points": 22 },
+          { "eventId": "2015-02", "place": 2, "score": "9:03.00", "points": 94 },
+          { "eventId": "2015-03", "place": 35, "score": "CAP+3", "points": 10 },
+          { "eventId": "2015-04", "place": 10, "score": "10 pt", "points": 60 },
+          { "eventId": "2015-05", "place": 5, "score": "10:03.65", "points": 80 },
+          { "eventId": "2015-06", "place": 11, "score": ":20.97", "points": 29 },
+          { "eventId": "2015-07", "place": 12, "score": ":21.18", "points": 28 },
+          { "eventId": "2015-08", "place": 15, "score": "CAP+3", "points": 50 },
+          { "eventId": "2015-09", "place": 3, "score": "232 lb", "points": 88 },
+          { "eventId": "2015-10", "place": 26, "score": "8:12.58", "points": 28 },
+          { "eventId": "2015-11", "place": 12, "score": "15:18.11", "points": 56 },
+          { "eventId": "2015-12", "place": 13, "score": "CAP+51", "points": 54 },
+          { "eventId": "2015-13", "place": 28, "score": "CAP+50", "points": 24 }
+        ]
+      },
+      {
+        "rank": 9,
+        "name": "Margaux Alvarez",
+        "country": "USA",
+        "totalPoints": 620,
+        "events": [
+          { "eventId": "2015-01", "place": 20, "score": "54:39.75", "points": 40 },
+          { "eventId": "2015-02", "place": 5, "score": "9:54.50", "points": 80 },
+          { "eventId": "2015-03", "place": 18, "score": "47:26.50", "points": 44 },
+          { "eventId": "2015-04", "place": 16, "score": "16 pt", "points": 48 },
+          { "eventId": "2015-05", "place": 21, "score": "CAP+4", "points": 38 },
+          { "eventId": "2015-06", "place": 9, "score": ":20.83", "points": 32 },
+          { "eventId": "2015-07", "place": 8, "score": ":20.76", "points": 34 },
+          { "eventId": "2015-08", "place": 34, "score": "CAP+7", "points": 12 },
+          { "eventId": "2015-09", "place": 17, "score": "210 lb", "points": 46 },
+          { "eventId": "2015-10", "place": 14, "score": "7:06.44", "points": 52 },
+          { "eventId": "2015-11", "place": 4, "score": "14:32.59", "points": 84 },
+          { "eventId": "2015-12", "place": 1, "score": "CAP+8", "points": 100 },
+          { "eventId": "2015-13", "place": 35, "score": "CAP+58", "points": 10 }
+        ]
+      },
+      {
+        "rank": 10,
+        "name": "Amanda Goodman",
+        "country": "USA",
+        "totalPoints": 616,
+        "events": [
+          { "eventId": "2015-01", "place": 37, "score": "CAP+3", "points": 6 },
+          { "eventId": "2015-02", "place": 39, "score": "CAP+3", "points": 2 },
+          { "eventId": "2015-03", "place": 25, "score": "52:05.09", "points": 30 },
+          { "eventId": "2015-04", "place": 7, "score": "7 pt", "points": 72 },
+          { "eventId": "2015-05", "place": 17, "score": "CAP", "points": 46 },
+          { "eventId": "2015-06", "place": 19, "score": ":21.77", "points": 21 },
+          { "eventId": "2015-07", "place": 19, "score": ":21.78", "points": 21 },
+          { "eventId": "2015-08", "place": 15, "score": "CAP+3", "points": 50 },
+          { "eventId": "2015-09", "place": 6, "score": "230 lb", "points": 76 },
+          { "eventId": "2015-10", "place": 3, "score": "6:01.34", "points": 88 },
+          { "eventId": "2015-11", "place": 25, "score": "16:20.02", "points": 30 },
+          { "eventId": "2015-12", "place": 2, "score": "CAP+11", "points": 94 },
+          { "eventId": "2015-13", "place": 5, "score": "5:42.90", "points": 80 }
+        ]
+      }
+    ]
+  }
+}

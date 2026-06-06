@@ -128,11 +128,10 @@ function useCapacityModel(yearResults: GamesYearResults | null, division: Divisi
     const field = (division === 'men' ? yearData.fieldMen : yearData.fieldWomen) ?? 30
     const athletes = yearResults.divisions[division]
     if (!athletes?.length) return null
-    const wm = yearResults.workModel
-    if (!wm) return null
+    const wm = yearResults.workModel ?? null // optional: only 2025 has one so far
 
-    const underMeasured = new Set(wm.underMeasured ?? [])
-    const [fitLo, fitHi] = wm.cpFitWindowSec ?? [120, 1800]
+    const underMeasured = new Set(wm?.underMeasured ?? [])
+    const [fitLo, fitHi] = wm?.cpFitWindowSec ?? [120, 1800]
 
     const orderedEvents = [...yearData.events].sort((a, b) => a.order - b.order)
     const eventInfo = new Map(
@@ -140,7 +139,7 @@ function useCapacityModel(yearResults: GamesYearResults | null, division: Divisi
         const isMax = ev.format === 'max-load'
         const winning = division === 'men' ? ev.winningScoreMen : ev.winningScoreWomen
         const winSec = isMax ? null : parseSeconds(winning)
-        const w = wm.events[ev.id]
+        const w = wm?.events?.[ev.id]
         const workKj = w ? (division === 'men' ? w.workKjMen : w.workKjWomen) : null
         const beyondWindow = winSec != null && (winSec < fitLo || winSec > fitHi)
         const eligible = !isMax && workKj != null && !underMeasured.has(ev.id) && !beyondWindow
@@ -161,7 +160,7 @@ function useCapacityModel(yearResults: GamesYearResults | null, division: Divisi
       }
       const tSec = parseSeconds(cell.score)
       if (tSec != null && info.winSec != null) return Math.min(100, (info.winSec / tSec) * 100)
-      const capInfo = wm.capEstimates?.[cell.eventId]
+      const capInfo = wm?.capEstimates?.[cell.eventId]
       const m = cell.score?.match(/cap\s*\+\s*(\d+)/i)
       if (capInfo && m && info.winSec != null) {
         const frac = Math.max(0, (capInfo.totalUnits - Number(m[1])) / capInfo.totalUnits)
@@ -241,11 +240,20 @@ function useCapacityModel(yearResults: GamesYearResults | null, division: Divisi
     const byCapacity = [...rows].sort((a, b) => b.capacityScore - a.capacityScore)
     const fieldAvg = rows.reduce((a, r) => a + r.capacityScore, 0) / rows.length
 
-    // Curve plotting bounds
+    // Does this year have a power-duration (Critical Power) model?
+    const hasPowerModel = rows.some((r) => r.cp != null)
+    // Whether the Capacity Score is mostly real output vs placement fallback
+    const scoredCells = rows.flatMap((r) => r.points).filter((p) => p.tSec != null || p.isMax).length
+    const totalCells = rows.flatMap((r) => r.points).length
+    const outputBased = totalCells > 0 && scoredCells / totalCells >= 0.6
+
+    // Curve plotting bounds (guard against no eligible events)
     const eligibleWinTimes = [...eventInfo.values()].filter((e) => e.eligible).map((e) => e.winSec!)
-    const curveLo = Math.max(fitLo, Math.min(...eligibleWinTimes) * 0.9)
-    const curveHi = Math.min(fitHi, Math.max(...eligibleWinTimes) * 1.1)
     const timedInfo = [...eventInfo.values()].filter((e) => !e.isMax && e.winSec != null).sort((a, b) => a.winSec! - b.winSec!)
+    const fallbackLo = timedInfo.length ? timedInfo[0].winSec! : 120
+    const fallbackHi = timedInfo.length ? timedInfo[timedInfo.length - 1].winSec! : 1200
+    const curveLo = eligibleWinTimes.length ? Math.max(fitLo, Math.min(...eligibleWinTimes) * 0.9) : fallbackLo
+    const curveHi = eligibleWinTimes.length ? Math.min(fitHi, Math.max(...eligibleWinTimes) * 1.1) : fallbackHi
 
     // Modal radar (% of best per domain)
     const radarData = MODAL_BUCKETS.map((b) => {
@@ -260,11 +268,18 @@ function useCapacityModel(yearResults: GamesYearResults | null, division: Divisi
 
     const fingerprintCols = [...timedInfo.map((e) => e.ev), ...maxEvents]
 
+    // Scoring direction: modern years are higher-points-better; 2008 (time-sum)
+    // and 2009-2010 (rank-sum) are lower-better.
+    const byRank = [...rows].sort((a, b) => a.athlete.rank - b.athlete.rank)
+    const t0 = byRank[0]?.athlete.totalPoints
+    const tN = byRank[byRank.length - 1]?.athlete.totalPoints
+    const lowerIsBetter = typeof t0 === 'number' && typeof tN === 'number' && t0 < tN
+
     // The Race: cumulative position among the eventual top 10 after each event
     const raceRows = orderedEvents.map((ev, k) => {
       const standings = rows
         .map((r) => ({ name: r.athlete.name, cum: r.cumPoints[k] }))
-        .sort((a, b) => b.cum - a.cum)
+        .sort((a, b) => (lowerIsBetter ? a.cum - b.cum : b.cum - a.cum))
       const row: Record<string, number | string> = { ev: k + 1, eventName: ev.name }
       standings.forEach((s, idx) => {
         row[s.name] = idx + 1
@@ -272,15 +287,19 @@ function useCapacityModel(yearResults: GamesYearResults | null, division: Divisi
       return row
     })
 
-    // Where the field separated: stdev of points per event
+    // Where the field separated: spread of placement percentile per event
+    // (placement-based so it is consistent across all scoring systems and years)
     const decisive = orderedEvents.map((ev) => {
-      const pts = rows.map((r) => r.perfByEvent.get(ev.id)?.points ?? 0)
-      const mean = pts.reduce((a, b) => a + b, 0) / pts.length
-      const spread = Math.sqrt(pts.reduce((a, p) => a + (p - mean) ** 2, 0) / pts.length)
+      const perfs = rows.map((r) => {
+        const p = r.perfByEvent.get(ev.id)
+        return p ? ((field - p.place + 1) / field) * 100 : 0
+      })
+      const mean = perfs.reduce((a, b) => a + b, 0) / perfs.length
+      const spread = Math.sqrt(perfs.reduce((a, p) => a + (p - mean) ** 2, 0) / perfs.length)
       const info = eventInfo.get(ev.id)
       return { ev, spread: Math.round(spread), winSec: info?.winSec ?? null, isMax: info?.isMax ?? false }
     })
-    const maxSpread = Math.max(...decisive.map((d) => d.spread))
+    const maxSpread = Math.max(...decisive.map((d) => d.spread), 1)
 
     // Hopper quadrant bounds
     const capMin = Math.min(...rows.map((r) => r.capacityScore))
@@ -294,7 +313,7 @@ function useCapacityModel(yearResults: GamesYearResults | null, division: Divisi
     return {
       field, rows, byCapacity, fieldAvg, maxEvents, timedInfo, radarData, fingerprintCols,
       raceRows, decisive, maxSpread, curveLo, curveHi, underMeasuredNames, beyondNames,
-      capMin, capMax, conMin, conMax, orderedEvents,
+      capMin, capMax, conMin, conMax, orderedEvents, hasPowerModel, outputBased,
     }
   }, [yearResults, division])
 }
@@ -476,17 +495,20 @@ export default function CapacityView() {
     )
   }
 
+  // Power-duration curve only exists where a work model does; otherwise the
+  // section shows the assumption-free "% of best" output curve.
+  const effMode: CurveMode = model.hasPowerModel ? mode : 'relative'
   const selRows = model.rows.filter((r) => selected.has(r.athlete.name))
   const champKing = model.byCapacity[0]
   const allT = model.rows.flatMap((r) => r.points.filter((p) => p.tSec).map((p) => p.tSec! / 60))
-  const tMin = Math.min(...allT)
-  const tMax = Math.max(...allT)
+  const tMin = allT.length ? Math.min(...allT) : 2
+  const tMax = allT.length ? Math.max(...allT) : 46
   const durTicks = [2, 3, 5, 8, 12, 20, 30, 45, 60].filter((t) => t >= tMin * 0.85 && t <= tMax * 1.2)
-  const yMax = mode === 'power' ? Math.ceil(Math.max(...model.rows.flatMap((r) => r.points.map((p) => p.powerW ?? 0))) / 250) * 250 : 100
+  const yMax = effMode === 'power' ? Math.ceil(Math.max(1, ...model.rows.flatMap((r) => r.points.map((p) => p.powerW ?? 0))) / 250) * 250 : 100
 
   const STEPS = 44
   const curve = selRows.map((r) => {
-    if (mode === 'power' && r.cp != null && r.wPrime != null) {
+    if (effMode === 'power' && r.cp != null && r.wPrime != null) {
       const line = Array.from({ length: STEPS + 1 }, (_, k) => {
         const t = model.curveLo * Math.pow(model.curveHi / model.curveLo, k / STEPS)
         return { t: t / 60, [r.athlete.name]: Math.round(r.cp! + (r.wPrime! * 1000) / t) }
@@ -576,6 +598,9 @@ export default function CapacityView() {
           share of the best output an athlete produced across every event (same work for all finishers, so output
           is exactly the inverse of time). No model, fully comparable. Ranked here against the field average of{' '}
           <span className="text-[#91C640] font-semibold">{model.fieldAvg.toFixed(1)}</span>.
+          {!model.outputBased && (
+            <span className="text-[#f59e0b]"> For this year the official archive is missing many event scores, so the score falls back to field placement where a time or load was not recorded.</span>
+          )}
         </p>
         <div className="space-y-1.5">
           {model.byCapacity.map((r, i) => {
@@ -618,17 +643,21 @@ export default function CapacityView() {
 
       {/* ===== 03 POWER-DURATION CURVE ===== */}
       <section className="mb-12">
-        <SectionTag no="03" kicker="Across broad time domains" title={mode === 'power' ? 'The Power-Duration Curve' : 'The Output Curve'}
+        <SectionTag no="03" kicker="Across broad time domains" title={effMode === 'power' ? 'The Power-Duration Curve' : 'The Output Curve'}
           right={
-            <div className="flex items-center rounded-lg border border-[var(--panel-border)] overflow-hidden">
-              {([{ m: 'power' as const, label: 'Power-duration' }, { m: 'relative' as const, label: '% of best' }]).map(({ m, label }) => (
-                <button key={m} onClick={() => setMode(m)} className="games-condensed px-3 py-1.5 text-[12px] font-semibold uppercase tracking-[0.06em] transition-colors"
-                  style={{ background: mode === m ? 'rgba(145,198,64,0.15)' : 'transparent', color: mode === m ? '#91C640' : 'var(--text-secondary)' }}>{label}</button>
-              ))}
-            </div>
+            model.hasPowerModel ? (
+              <div className="flex items-center rounded-lg border border-[var(--panel-border)] overflow-hidden">
+                {([{ m: 'power' as const, label: 'Power-duration' }, { m: 'relative' as const, label: '% of best' }]).map(({ m, label }) => (
+                  <button key={m} onClick={() => setMode(m)} className="games-condensed px-3 py-1.5 text-[12px] font-semibold uppercase tracking-[0.06em] transition-colors"
+                    style={{ background: mode === m ? 'rgba(145,198,64,0.15)' : 'transparent', color: mode === m ? '#91C640' : 'var(--text-secondary)' }}>{label}</button>
+                ))}
+              </div>
+            ) : (
+              <span className="games-condensed text-[11px] uppercase tracking-[0.1em] text-[var(--text-muted)] text-right hidden sm:block">output = winning time<br />over athlete time</span>
+            )
           } />
         <p className="text-[12.5px] text-[var(--text-secondary)] -mt-2 mb-4 max-w-3xl">
-          {mode === 'power' ? (
+          {effMode === 'power' ? (
             <>The canonical CrossFit curve. Each athlete's fitted Critical Power model, P(t) = CP + W'/t: output
               falls as the effort lengthens, flattening toward CP, the oxidative engine floor. The shaded bands
               are the metabolic pathways the time domains tax. Dots are real events (solid = fit; hollow = shown
@@ -641,7 +670,7 @@ export default function CapacityView() {
         <Panel>
           <ResponsiveContainer width="100%" height={400}>
             <ComposedChart margin={{ top: 12, right: 24, bottom: 8, left: -4 }}>
-              {mode === 'power' && (
+              {effMode === 'power' && (
                 <>
                   <ReferenceArea x1={tMin * 0.9} x2={2} y1={0} y2={yMax} fill="#f43f5e" fillOpacity={0.05} />
                   <ReferenceArea x1={2} x2={8} y1={0} y2={yMax} fill="#f59e0b" fillOpacity={0.045} />
@@ -652,21 +681,21 @@ export default function CapacityView() {
               <XAxis dataKey="t" type="number" scale="log" domain={[tMin * 0.9, tMax * 1.1]} ticks={durTicks}
                 tickFormatter={(v: number) => `${v}m`} tick={{ fill: 'var(--chart-axis)', fontSize: 11 }} stroke="var(--chart-grid)" allowDuplicatedCategory={false} />
               <YAxis domain={[0, yMax]} tick={{ fill: 'var(--chart-axis)', fontSize: 11 }} stroke="var(--chart-grid)"
-                tickFormatter={(v: number) => (mode === 'power' ? `${v}` : `${v}%`)}
-                label={mode === 'power' ? { value: 'W (metabolic)', angle: -90, position: 'insideLeft', fill: 'var(--chart-axis)', fontSize: 10, offset: 16 } : undefined} />
+                tickFormatter={(v: number) => (effMode === 'power' ? `${v}` : `${v}%`)}
+                label={effMode === 'power' ? { value: 'W (metabolic)', angle: -90, position: 'insideLeft', fill: 'var(--chart-axis)', fontSize: 10, offset: 16 } : undefined} />
               <Tooltip contentStyle={CHART_TOOLTIP_STYLE}
-                formatter={(value, name) => [mode === 'power' ? `~${Number(value).toLocaleString()} W` : `${value}%`, String(name)]}
+                formatter={(value, name) => [effMode === 'power' ? `~${Number(value).toLocaleString()} W` : `${value}%`, String(name)]}
                 labelFormatter={(v) => fmtMin(Number(v))} />
-              {mode === 'power' && curve.map(({ r, line }) => line.length ? (
+              {effMode === 'power' && curve.map(({ r, line }) => line.length ? (
                 <Line key={`fit-${r.athlete.name}`} data={line} dataKey={r.athlete.name} name={r.athlete.name} type="monotone"
                   stroke={r.color} strokeWidth={r.athlete.rank === 1 ? 3 : 2} dot={false} connectNulls isAnimationActive={false} />
               ) : null)}
-              {mode === 'relative' && selRows.map((r) => (
+              {effMode === 'relative' && selRows.map((r) => (
                 <Line key={`rel-${r.athlete.name}`} data={r.points.filter((p) => p.tSec).map((p) => ({ t: p.tSec! / 60, [r.athlete.name]: p.rel }))}
                   dataKey={r.athlete.name} name={r.athlete.name} type="monotone" stroke={r.color} strokeWidth={r.athlete.rank === 1 ? 3 : 2}
                   dot={{ r: 3, fill: r.color, strokeWidth: 0 }} connectNulls isAnimationActive={false} />
               ))}
-              {mode === 'power' && selRows.map((r) => (
+              {effMode === 'power' && selRows.map((r) => (
                 <Scatter key={`dots-${r.athlete.name}`} name={r.athlete.name} isAnimationActive={false}
                   data={r.points.filter((p) => p.powerW != null).map((p) => ({ t: p.tSec! / 60, [r.athlete.name]: p.powerW, _p: p }))}
                   dataKey={r.athlete.name}
@@ -679,7 +708,7 @@ export default function CapacityView() {
               ))}
             </ComposedChart>
           </ResponsiveContainer>
-          {mode === 'power' && (
+          {effMode === 'power' && (
             <div className="mt-2 flex flex-wrap gap-x-5 gap-y-1 text-[10.5px]">
               <span className="cap-energy-band" style={{ color: '#f43f5e' }}>&lt;2 min &middot; phosphagen / glycolytic</span>
               <span className="cap-energy-band" style={{ color: '#f59e0b' }}>2-8 min &middot; glycolytic / oxidative</span>
@@ -693,7 +722,7 @@ export default function CapacityView() {
               </span>
             ))}
           </div>
-          {mode === 'power' && (
+          {effMode === 'power' && (
             <div className="mt-2 text-[10.5px] leading-relaxed text-[var(--text-muted)]">
               <span className="text-[#f59e0b]">*</span> Hollow dots shown but excluded from the fit:{' '}
               {model.underMeasuredNames.length > 0 && <>skill/grip-limited ({model.underMeasuredNames.join(', ')})</>}

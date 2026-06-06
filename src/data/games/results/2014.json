@@ -1,0 +1,436 @@
+{
+  "year": 2014,
+  "pointsSystem": "Placement-based points from the official CrossFit Games leaderboard. Eleven events were worth up to 100 points and the two Sprint Sled races (events 2014-04 and 2014-05) were worth up to 50 points each. For the 100-point events points descend with finishing place per the 2014 table (1st=100, 2nd=95, 3rd=90, 4th=85, 5th=80, 6th=75, then dropping by 2 from 7th=73, 8th=71, 9th=69, 10th=67 ... through the field); the 50-point sled events use a halved version (1st=50, 2nd=48, 3rd=46, 7th=40 ...). Per-event place, score and points are taken directly from the official leaderboard archive; each athlete's 13 event point values sum to their overall total. The Clean Speed Ladder (2014-09) was scored by bracket placement, so its leaderboard score displays as '{rank} pt' rather than a time.",
+  "sources": [
+    "https://c3po.crossfit.com/api/competitions/v2/competitions/games/2014/leaderboards?division=1",
+    "https://c3po.crossfit.com/api/competitions/v2/competitions/games/2014/leaderboards?division=2",
+    "https://games.crossfit.com/workouts/games/2014",
+    "https://en.wikipedia.org/wiki/2014_CrossFit_Games"
+  ],
+  "divisions": {
+    "men": [
+      {
+        "rank": 1,
+        "name": "Rich Froning",
+        "country": "USA",
+        "totalPoints": 925,
+        "events": [
+          { "eventId": "2014-01", "place": 8, "score": "35:10.11", "points": 71 },
+          { "eventId": "2014-02", "place": 1, "score": "377 lb", "points": 100 },
+          { "eventId": "2014-03", "place": 37, "score": "38:31.38", "points": 20 },
+          { "eventId": "2014-04", "place": 15, "score": ":58.02", "points": 32 },
+          { "eventId": "2014-05", "place": 27, "score": "2:09.07", "points": 20 },
+          { "eventId": "2014-06", "place": 1, "score": "4:16.63", "points": 100 },
+          { "eventId": "2014-07", "place": 13, "score": "13:07.44", "points": 61 },
+          { "eventId": "2014-08", "place": 15, "score": "2:48.89", "points": 57 },
+          { "eventId": "2014-09", "place": 9, "score": "9 pt", "points": 69 },
+          { "eventId": "2014-10", "place": 2, "score": "4:48.34", "points": 95 },
+          { "eventId": "2014-11", "place": 1, "score": "5:25.0", "points": 100 },
+          { "eventId": "2014-12", "place": 1, "score": "1:40.3", "points": 100 },
+          { "eventId": "2014-13", "place": 1, "score": "5:05.6", "points": 100 }
+        ]
+      },
+      {
+        "rank": 2,
+        "name": "Mat Fraser",
+        "country": "USA",
+        "totalPoints": 875,
+        "events": [
+          { "eventId": "2014-01", "place": 17, "score": "36:31.85", "points": 53 },
+          { "eventId": "2014-02", "place": 1, "score": "377 lb", "points": 100 },
+          { "eventId": "2014-03", "place": 19, "score": "35:34.86", "points": 49 },
+          { "eventId": "2014-04", "place": 17, "score": ":58.16", "points": 30 },
+          { "eventId": "2014-05", "place": 23, "score": "1:57.08", "points": 24 },
+          { "eventId": "2014-06", "place": 13, "score": "4:59.19", "points": 61 },
+          { "eventId": "2014-07", "place": 8, "score": "12:25.80", "points": 71 },
+          { "eventId": "2014-08", "place": 10, "score": "2:44.67", "points": 67 },
+          { "eventId": "2014-09", "place": 3, "score": "3 pt", "points": 90 },
+          { "eventId": "2014-10", "place": 6, "score": "5:17.38", "points": 75 },
+          { "eventId": "2014-11", "place": 2, "score": "6:00.5", "points": 95 },
+          { "eventId": "2014-12", "place": 2, "score": "1:59.0", "points": 95 },
+          { "eventId": "2014-13", "place": 11, "score": "5:56.6", "points": 65 }
+        ]
+      },
+      {
+        "rank": 3,
+        "name": "Jason Khalipa",
+        "country": "USA",
+        "totalPoints": 844,
+        "events": [
+          { "eventId": "2014-01", "place": 18, "score": "36:34.43", "points": 51 },
+          { "eventId": "2014-02", "place": 5, "score": "367 lb", "points": 80 },
+          { "eventId": "2014-03", "place": 16, "score": "35:14.73", "points": 55 },
+          { "eventId": "2014-04", "place": 2, "score": ":38.44", "points": 48 },
+          { "eventId": "2014-05", "place": 3, "score": "1:10.76", "points": 46 },
+          { "eventId": "2014-06", "place": 3, "score": "4:29.29", "points": 90 },
+          { "eventId": "2014-07", "place": 37, "score": "17:02.32", "points": 20 },
+          { "eventId": "2014-08", "place": 13, "score": "2:48.00", "points": 61 },
+          { "eventId": "2014-09", "place": 4, "score": "4 pt", "points": 85 },
+          { "eventId": "2014-10", "place": 22, "score": "6:04.57", "points": 43 },
+          { "eventId": "2014-11", "place": 4, "score": "6:06.4", "points": 85 },
+          { "eventId": "2014-12", "place": 4, "score": "2:15.5", "points": 85 },
+          { "eventId": "2014-13", "place": 2, "score": "5:08.8", "points": 95 }
+        ]
+      },
+      {
+        "rank": 4,
+        "name": "Josh Bridges",
+        "country": "USA",
+        "totalPoints": 786,
+        "events": [
+          { "eventId": "2014-01", "place": 3, "score": "31:56.10", "points": 90 },
+          { "eventId": "2014-02", "place": 27, "score": "318 lb", "points": 33 },
+          { "eventId": "2014-03", "place": 5, "score": "34:11.72", "points": 80 },
+          { "eventId": "2014-04", "place": 21, "score": "1:02.57", "points": 26 },
+          { "eventId": "2014-05", "place": 19, "score": "1:47.16", "points": 28 },
+          { "eventId": "2014-06", "place": 2, "score": "4:26.03", "points": 95 },
+          { "eventId": "2014-07", "place": 10, "score": "12:28.88", "points": 67 },
+          { "eventId": "2014-08", "place": 19, "score": "2:50.07", "points": 49 },
+          { "eventId": "2014-09", "place": 21, "score": "21 pt", "points": 45 },
+          { "eventId": "2014-10", "place": 1, "score": "4:46.43", "points": 100 },
+          { "eventId": "2014-11", "place": 7, "score": "6:32.9", "points": 73 },
+          { "eventId": "2014-12", "place": 14, "score": "3:59.0", "points": 59 },
+          { "eventId": "2014-13", "place": 23, "score": "6:51.5", "points": 41 }
+        ]
+      },
+      {
+        "rank": 5,
+        "name": "Scott Panchik",
+        "country": "USA",
+        "totalPoints": 782,
+        "events": [
+          { "eventId": "2014-01", "place": 10, "score": "35:30.16", "points": 67 },
+          { "eventId": "2014-02", "place": 8, "score": "360 lb", "points": 71 },
+          { "eventId": "2014-03", "place": 18, "score": "35:26.59", "points": 51 },
+          { "eventId": "2014-04", "place": 20, "score": "1:00.61", "points": 27 },
+          { "eventId": "2014-05", "place": 13, "score": "1:39.55", "points": 34 },
+          { "eventId": "2014-06", "place": 4, "score": "4:36.33", "points": 85 },
+          { "eventId": "2014-07", "place": 7, "score": "12:18.52", "points": 73 },
+          { "eventId": "2014-08", "place": 16, "score": "2:48.94", "points": 55 },
+          { "eventId": "2014-09", "place": 7, "score": "7 pt", "points": 73 },
+          { "eventId": "2014-10", "place": 29, "score": "6:30.56", "points": 29 },
+          { "eventId": "2014-11", "place": 6, "score": "6:23.5", "points": 75 },
+          { "eventId": "2014-12", "place": 8, "score": "2:41.6", "points": 71 },
+          { "eventId": "2014-13", "place": 8, "score": "5:44.6", "points": 71 }
+        ]
+      },
+      {
+        "rank": 6,
+        "name": "Tommy Hackenbruck",
+        "country": "USA",
+        "totalPoints": 781,
+        "events": [
+          { "eventId": "2014-01", "place": 26, "score": "40:00.20", "points": 35 },
+          { "eventId": "2014-02", "place": 3, "score": "376 lb", "points": 90 },
+          { "eventId": "2014-03", "place": 13, "score": "35:03.64", "points": 61 },
+          { "eventId": "2014-04", "place": 3, "score": ":39.54", "points": 46 },
+          { "eventId": "2014-05", "place": 2, "score": "1:10.32", "points": 48 },
+          { "eventId": "2014-06", "place": 12, "score": "4:58.10", "points": 63 },
+          { "eventId": "2014-07", "place": 21, "score": "14:46.74", "points": 45 },
+          { "eventId": "2014-08", "place": 2, "score": "2:33.83", "points": 95 },
+          { "eventId": "2014-09", "place": 13, "score": "13 pt", "points": 61 },
+          { "eventId": "2014-10", "place": 21, "score": "6:01.76", "points": 45 },
+          { "eventId": "2014-11", "place": 3, "score": "6:05.3", "points": 90 },
+          { "eventId": "2014-12", "place": 26, "score": "CAP+4", "points": 35 },
+          { "eventId": "2014-13", "place": 10, "score": "5:52.5", "points": 67 }
+        ]
+      },
+      {
+        "rank": 7,
+        "name": "Ben Smith",
+        "country": "USA",
+        "totalPoints": 772,
+        "events": [
+          { "eventId": "2014-01", "place": 11, "score": "35:32.02", "points": 65 },
+          { "eventId": "2014-02", "place": 9, "score": "357 lb", "points": 69 },
+          { "eventId": "2014-03", "place": 20, "score": "35:44.84", "points": 47 },
+          { "eventId": "2014-04", "place": 31, "score": "1:11.39", "points": 16 },
+          { "eventId": "2014-05", "place": 25, "score": "2:02.00", "points": 22 },
+          { "eventId": "2014-06", "place": 28, "score": "5:30.13", "points": 31 },
+          { "eventId": "2014-07", "place": 2, "score": "11:15.24", "points": 95 },
+          { "eventId": "2014-08", "place": 5, "score": "2:40.17", "points": 80 },
+          { "eventId": "2014-09", "place": 5, "score": "5 pt", "points": 80 },
+          { "eventId": "2014-10", "place": 24, "score": "6:14.86", "points": 39 },
+          { "eventId": "2014-11", "place": 11, "score": "7:13.6", "points": 65 },
+          { "eventId": "2014-12", "place": 3, "score": "2:03.4", "points": 90 },
+          { "eventId": "2014-13", "place": 7, "score": "5:36.1", "points": 73 }
+        ]
+      },
+      {
+        "rank": 8,
+        "name": "Noah Ohlsen",
+        "country": "USA",
+        "totalPoints": 761,
+        "events": [
+          { "eventId": "2014-01", "place": 5, "score": "32:28.94", "points": 80 },
+          { "eventId": "2014-02", "place": 14, "score": "337 lb", "points": 59 },
+          { "eventId": "2014-03", "place": 6, "score": "34:16.76", "points": 75 },
+          { "eventId": "2014-04", "place": 7, "score": ":49.31", "points": 40 },
+          { "eventId": "2014-05", "place": 14, "score": "1:40.25", "points": 33 },
+          { "eventId": "2014-06", "place": 9, "score": "4:51.78", "points": 69 },
+          { "eventId": "2014-07", "place": 5, "score": "11:52.26", "points": 80 },
+          { "eventId": "2014-08", "place": 11, "score": "2:45.13", "points": 65 },
+          { "eventId": "2014-09", "place": 23, "score": "23 pt", "points": 41 },
+          { "eventId": "2014-10", "place": 16, "score": "5:40.54", "points": 55 },
+          { "eventId": "2014-11", "place": 5, "score": "6:10.5", "points": 80 },
+          { "eventId": "2014-12", "place": 17, "score": "CAP+1", "points": 53 },
+          { "eventId": "2014-13", "place": 28, "score": "CAP+8", "points": 31 }
+        ]
+      },
+      {
+        "rank": 9,
+        "name": "Ben Stoneberg",
+        "country": "USA",
+        "totalPoints": 716,
+        "events": [
+          { "eventId": "2014-01", "place": 23, "score": "39:12.10", "points": 41 },
+          { "eventId": "2014-02", "place": 16, "score": "335 lb", "points": 55 },
+          { "eventId": "2014-03", "place": 3, "score": "33:56.65", "points": 90 },
+          { "eventId": "2014-04", "place": 11, "score": ":53.02", "points": 36 },
+          { "eventId": "2014-05", "place": 22, "score": "1:54.00", "points": 25 },
+          { "eventId": "2014-06", "place": 18, "score": "5:08.93", "points": 51 },
+          { "eventId": "2014-07", "place": 11, "score": "12:45.28", "points": 65 },
+          { "eventId": "2014-08", "place": 22, "score": "2:51.96", "points": 43 },
+          { "eventId": "2014-09", "place": 17, "score": "17 pt", "points": 53 },
+          { "eventId": "2014-10", "place": 3, "score": "5:03.51", "points": 90 },
+          { "eventId": "2014-11", "place": 26, "score": "8:08.8", "points": 35 },
+          { "eventId": "2014-12", "place": 6, "score": "2:29.3", "points": 75 },
+          { "eventId": "2014-13", "place": 15, "score": "6:25.3", "points": 57 }
+        ]
+      },
+      {
+        "rank": 10,
+        "name": "Dan Bailey",
+        "country": "USA",
+        "totalPoints": 704,
+        "events": [
+          { "eventId": "2014-01", "place": 9, "score": "35:26.63", "points": 69 },
+          { "eventId": "2014-02", "place": 22, "score": "327 lb", "points": 43 },
+          { "eventId": "2014-03", "place": 30, "score": "36:33.87", "points": 27 },
+          { "eventId": "2014-04", "place": 12, "score": ":53.40", "points": 35 },
+          { "eventId": "2014-05", "place": 15, "score": "1:43.38", "points": 32 },
+          { "eventId": "2014-06", "place": 8, "score": "4:48.90", "points": 71 },
+          { "eventId": "2014-07", "place": 16, "score": "13:36.04", "points": 55 },
+          { "eventId": "2014-08", "place": 35, "score": "3:02.49", "points": 22 },
+          { "eventId": "2014-09", "place": 14, "score": "14 pt", "points": 59 },
+          { "eventId": "2014-10", "place": 8, "score": "5:21.57", "points": 71 },
+          { "eventId": "2014-11", "place": 9, "score": "6:42.9", "points": 69 },
+          { "eventId": "2014-12", "place": 13, "score": "3:47.1", "points": 61 },
+          { "eventId": "2014-13", "place": 3, "score": "5:09.0", "points": 90 }
+        ]
+      }
+    ],
+    "women": [
+      {
+        "rank": 1,
+        "name": "Camille Leblanc-Bazinet",
+        "country": "Canada",
+        "totalPoints": 918,
+        "events": [
+          { "eventId": "2014-01", "place": 6, "score": "35:58.54", "points": 75 },
+          { "eventId": "2014-02", "place": 2, "score": "242 lb", "points": 95 },
+          { "eventId": "2014-03", "place": 17, "score": "39:52.75", "points": 53 },
+          { "eventId": "2014-04", "place": 8, "score": ":36.58", "points": 39 },
+          { "eventId": "2014-05", "place": 11, "score": "1:29.00", "points": 36 },
+          { "eventId": "2014-06", "place": 1, "score": "4:50.49", "points": 100 },
+          { "eventId": "2014-07", "place": 2, "score": "16:09.26", "points": 95 },
+          { "eventId": "2014-08", "place": 25, "score": "3:12.71", "points": 37 },
+          { "eventId": "2014-09", "place": 5, "score": "5 pt", "points": 80 },
+          { "eventId": "2014-10", "place": 3, "score": "5:17.01", "points": 90 },
+          { "eventId": "2014-11", "place": 6, "score": "7:38.0", "points": 75 },
+          { "eventId": "2014-12", "place": 12, "score": "3:49.9", "points": 63 },
+          { "eventId": "2014-13", "place": 5, "score": "5:45.7", "points": 80 }
+        ]
+      },
+      {
+        "rank": 2,
+        "name": "Annie Thorisdottir",
+        "country": "Iceland",
+        "totalPoints": 878,
+        "events": [
+          { "eventId": "2014-01", "place": 15, "score": "39:21.21", "points": 57 },
+          { "eventId": "2014-02", "place": 14, "score": "222 lb", "points": 59 },
+          { "eventId": "2014-03", "place": 26, "score": "41:22.33", "points": 35 },
+          { "eventId": "2014-04", "place": 11, "score": ":38.02", "points": 36 },
+          { "eventId": "2014-05", "place": 6, "score": "1:23.27", "points": 41 },
+          { "eventId": "2014-06", "place": 3, "score": "5:10.72", "points": 90 },
+          { "eventId": "2014-07", "place": 20, "score": "CAP+6", "points": 47 },
+          { "eventId": "2014-08", "place": 5, "score": "2:54.92", "points": 80 },
+          { "eventId": "2014-09", "place": 12, "score": "12 pt", "points": 63 },
+          { "eventId": "2014-10", "place": 6, "score": "5:33.39", "points": 75 },
+          { "eventId": "2014-11", "place": 1, "score": "6:34.1", "points": 100 },
+          { "eventId": "2014-12", "place": 2, "score": "3:03.0", "points": 95 },
+          { "eventId": "2014-13", "place": 1, "score": "5:17.4", "points": 100 }
+        ]
+      },
+      {
+        "rank": 3,
+        "name": "Julie Foucher",
+        "country": "USA",
+        "totalPoints": 793,
+        "events": [
+          { "eventId": "2014-01", "place": 13, "score": "38:47.11", "points": 61 },
+          { "eventId": "2014-02", "place": 8, "score": "231 lb", "points": 71 },
+          { "eventId": "2014-03", "place": 6, "score": "37:46.46", "points": 75 },
+          { "eventId": "2014-04", "place": 17, "score": ":40.00", "points": 30 },
+          { "eventId": "2014-05", "place": 20, "score": "1:45.00", "points": 27 },
+          { "eventId": "2014-06", "place": 6, "score": "5:24.65", "points": 75 },
+          { "eventId": "2014-07", "place": 13, "score": "CAP+2", "points": 61 },
+          { "eventId": "2014-08", "place": 16, "score": "3:08.22", "points": 55 },
+          { "eventId": "2014-09", "place": 29, "score": "29 pt", "points": 29 },
+          { "eventId": "2014-10", "place": 8, "score": "5:49.31", "points": 71 },
+          { "eventId": "2014-11", "place": 5, "score": "7:35.7", "points": 80 },
+          { "eventId": "2014-12", "place": 7, "score": "3:22.5", "points": 73 },
+          { "eventId": "2014-13", "place": 4, "score": "5:38.2", "points": 85 }
+        ]
+      },
+      {
+        "rank": 4,
+        "name": "Michele Letendre",
+        "country": "Canada",
+        "totalPoints": 787,
+        "events": [
+          { "eventId": "2014-01", "place": 4, "score": "32:49.96", "points": 85 },
+          { "eventId": "2014-02", "place": 8, "score": "231 lb", "points": 71 },
+          { "eventId": "2014-03", "place": 24, "score": "40:34.50", "points": 39 },
+          { "eventId": "2014-04", "place": 21, "score": ":42.50", "points": 26 },
+          { "eventId": "2014-05", "place": 26, "score": "2:03.00", "points": 21 },
+          { "eventId": "2014-06", "place": 8, "score": "5:27.42", "points": 71 },
+          { "eventId": "2014-07", "place": 7, "score": "17:40.22", "points": 73 },
+          { "eventId": "2014-08", "place": 30, "score": "3:19.79", "points": 27 },
+          { "eventId": "2014-09", "place": 9, "score": "9 pt", "points": 69 },
+          { "eventId": "2014-10", "place": 1, "score": "5:00.24", "points": 100 },
+          { "eventId": "2014-11", "place": 14, "score": "9:03.5", "points": 59 },
+          { "eventId": "2014-12", "place": 6, "score": "3:19.0", "points": 75 },
+          { "eventId": "2014-13", "place": 8, "score": "5:51.7", "points": 71 }
+        ]
+      },
+      {
+        "rank": 5,
+        "name": "Valerie Voboril",
+        "country": "USA",
+        "totalPoints": 780,
+        "events": [
+          { "eventId": "2014-01", "place": 8, "score": "36:15.95", "points": 71 },
+          { "eventId": "2014-02", "place": 38, "score": "185 lb", "points": 19 },
+          { "eventId": "2014-03", "place": 9, "score": "38:21.47", "points": 69 },
+          { "eventId": "2014-04", "place": 16, "score": ":39.47", "points": 31 },
+          { "eventId": "2014-05", "place": 9, "score": "1:28.35", "points": 38 },
+          { "eventId": "2014-06", "place": 2, "score": "5:10.49", "points": 95 },
+          { "eventId": "2014-07", "place": 11, "score": "CAP+1", "points": 65 },
+          { "eventId": "2014-08", "place": 20, "score": "3:10.35", "points": 47 },
+          { "eventId": "2014-09", "place": 13, "score": "13 pt", "points": 61 },
+          { "eventId": "2014-10", "place": 4, "score": "5:23.14", "points": 85 },
+          { "eventId": "2014-11", "place": 21, "score": "CAP+1", "points": 45 },
+          { "eventId": "2014-12", "place": 14, "score": "3:56.5", "points": 59 },
+          { "eventId": "2014-13", "place": 2, "score": "5:28.9", "points": 95 }
+        ]
+      },
+      {
+        "rank": 6,
+        "name": "Emily Bridgers",
+        "country": "USA",
+        "totalPoints": 705,
+        "events": [
+          { "eventId": "2014-01", "place": 14, "score": "39:05.39", "points": 59 },
+          { "eventId": "2014-02", "place": 14, "score": "222 lb", "points": 59 },
+          { "eventId": "2014-03", "place": 18, "score": "40:01.94", "points": 51 },
+          { "eventId": "2014-04", "place": 12, "score": ":38.70", "points": 35 },
+          { "eventId": "2014-05", "place": 18, "score": "1:40.00", "points": 29 },
+          { "eventId": "2014-06", "place": 11, "score": "5:54.30", "points": 65 },
+          { "eventId": "2014-07", "place": 18, "score": "CAP+5", "points": 51 },
+          { "eventId": "2014-08", "place": 29, "score": "3:16.92", "points": 29 },
+          { "eventId": "2014-09", "place": 23, "score": "23 pt", "points": 41 },
+          { "eventId": "2014-10", "place": 18, "score": "6:57.56", "points": 51 },
+          { "eventId": "2014-11", "place": 2, "score": "6:51.8", "points": 95 },
+          { "eventId": "2014-12", "place": 11, "score": "3:48.8", "points": 65 },
+          { "eventId": "2014-13", "place": 6, "score": "5:48.5", "points": 75 }
+        ]
+      },
+      {
+        "rank": 7,
+        "name": "Lauren Brooks",
+        "country": "USA",
+        "totalPoints": 695,
+        "events": [
+          { "eventId": "2014-01", "place": 25, "score": "42:09.85", "points": 37 },
+          { "eventId": "2014-02", "place": 24, "score": "215 lb", "points": 39 },
+          { "eventId": "2014-03", "place": 10, "score": "38:38.41", "points": 67 },
+          { "eventId": "2014-04", "place": 1, "score": ":25.50", "points": 50 },
+          { "eventId": "2014-05", "place": 2, "score": ":58.10", "points": 48 },
+          { "eventId": "2014-06", "place": 18, "score": "6:26.17", "points": 51 },
+          { "eventId": "2014-07", "place": 31, "score": "CAP+13", "points": 26 },
+          { "eventId": "2014-08", "place": 1, "score": "2:47.75", "points": 100 },
+          { "eventId": "2014-09", "place": 4, "score": "4 pt", "points": 85 },
+          { "eventId": "2014-10", "place": 29, "score": "10:51.53", "points": 29 },
+          { "eventId": "2014-11", "place": 19, "score": "9:59.8", "points": 49 },
+          { "eventId": "2014-12", "place": 21, "score": "CAP+3", "points": 45 },
+          { "eventId": "2014-13", "place": 9, "score": "6:01.1", "points": 69 }
+        ]
+      },
+      {
+        "rank": 8,
+        "name": "Cassidy Lance-McWherter",
+        "country": "USA",
+        "totalPoints": 688,
+        "events": [
+          { "eventId": "2014-01", "place": 5, "score": "35:27.07", "points": 80 },
+          { "eventId": "2014-02", "place": 3, "score": "241 lb", "points": 90 },
+          { "eventId": "2014-03", "place": 27, "score": "42:15.51", "points": 33 },
+          { "eventId": "2014-04", "place": 26, "score": ":46.40", "points": 21 },
+          { "eventId": "2014-05", "place": 31, "score": "2:24.00", "points": 16 },
+          { "eventId": "2014-06", "place": 4, "score": "5:13.57", "points": 85 },
+          { "eventId": "2014-07", "place": 28, "score": "CAP+12", "points": 31 },
+          { "eventId": "2014-08", "place": 15, "score": "3:08.21", "points": 57 },
+          { "eventId": "2014-09", "place": 17, "score": "17 pt", "points": 53 },
+          { "eventId": "2014-10", "place": 17, "score": "6:55.21", "points": 53 },
+          { "eventId": "2014-11", "place": 11, "score": "7:56.5", "points": 65 },
+          { "eventId": "2014-12", "place": 9, "score": "3:28.8", "points": 69 },
+          { "eventId": "2014-13", "place": 26, "score": "CAP+1", "points": 35 }
+        ]
+      },
+      {
+        "rank": 9,
+        "name": "Lauren Fisher",
+        "country": "USA",
+        "totalPoints": 681,
+        "events": [
+          { "eventId": "2014-01", "place": 11, "score": "37:35.87", "points": 65 },
+          { "eventId": "2014-02", "place": 6, "score": "238 lb", "points": 75 },
+          { "eventId": "2014-03", "place": 22, "score": "40:23.55", "points": 43 },
+          { "eventId": "2014-04", "place": 37, "score": ":56.30", "points": 10 },
+          { "eventId": "2014-05", "place": 39, "score": "CAP+1", "points": 8 },
+          { "eventId": "2014-06", "place": 15, "score": "6:15.97", "points": 57 },
+          { "eventId": "2014-07", "place": 14, "score": "CAP+3", "points": 59 },
+          { "eventId": "2014-08", "place": 18, "score": "3:08.68", "points": 51 },
+          { "eventId": "2014-09", "place": 6, "score": "6 pt", "points": 75 },
+          { "eventId": "2014-10", "place": 16, "score": "6:52.07", "points": 55 },
+          { "eventId": "2014-11", "place": 9, "score": "7:51.4", "points": 69 },
+          { "eventId": "2014-12", "place": 8, "score": "3:25.6", "points": 71 },
+          { "eventId": "2014-13", "place": 22, "score": "6:44.6", "points": 43 }
+        ]
+      },
+      {
+        "rank": 10,
+        "name": "Jenn Jones",
+        "country": "USA",
+        "totalPoints": 680,
+        "events": [
+          { "eventId": "2014-01", "place": 31, "score": "44:32.88", "points": 26 },
+          { "eventId": "2014-02", "place": 12, "score": "230 lb", "points": 63 },
+          { "eventId": "2014-03", "place": 36, "score": "43:28.23", "points": 21 },
+          { "eventId": "2014-04", "place": 10, "score": ":37.14", "points": 37 },
+          { "eventId": "2014-05", "place": 21, "score": "1:45.07", "points": 26 },
+          { "eventId": "2014-06", "place": 13, "score": "5:56.16", "points": 61 },
+          { "eventId": "2014-07", "place": 28, "score": "CAP+12", "points": 31 },
+          { "eventId": "2014-08", "place": 17, "score": "3:08.58", "points": 53 },
+          { "eventId": "2014-09", "place": 14, "score": "14 pt", "points": 59 },
+          { "eventId": "2014-10", "place": 10, "score": "6:28.68", "points": 67 },
+          { "eventId": "2014-11", "place": 7, "score": "7:38.7", "points": 73 },
+          { "eventId": "2014-12", "place": 1, "score": "3:01.9", "points": 100 },
+          { "eventId": "2014-13", "place": 12, "score": "6:16.2", "points": 63 }
+        ]
+      }
+    ]
+  }
+}

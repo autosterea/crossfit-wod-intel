@@ -1,0 +1,1617 @@
+{
+  "year": 2023,
+  "pointsSystem": "Standard CrossFit Games points-per-place scaling table: 100 points for an event win, descending by finishing place. The table scales with field size, which shrank with the returning mid-competition cuts (40 athletes for Tests 1-6, 30 for Tests 7-9, 20 for Tests 10-12), so the points awarded for the same place differ across the three phases (e.g. 2nd place = 97 pts in a 40-athlete event but 96 pts in a 30-athlete event). Capped or last-place finishes can score 0. Maximum 1,200 points over 12 tests. Points shown are the official per-event awards from the CrossFit Games leaderboard archive.",
+  "sources": [
+    "https://c3po.crossfit.com/api/competitions/v2/competitions/games/2023/leaderboards?division=1",
+    "https://c3po.crossfit.com/api/competitions/v2/competitions/games/2023/leaderboards?division=2",
+    "https://en.wikipedia.org/wiki/2023_CrossFit_Games",
+    "https://games.crossfit.com/leaderboard/games/2023?division=1",
+    "https://breakingmuscle.com/2023-crossfit-games-results/"
+  ],
+  "divisions": {
+    "men": [
+      {
+        "rank": 1,
+        "name": "Jeffrey Adler",
+        "country": "Canada",
+        "totalPoints": 953,
+        "events": [
+          {
+            "eventId": "2023-01",
+            "place": 2,
+            "score": "7 laps",
+            "points": 97
+          },
+          {
+            "eventId": "2023-02",
+            "place": 25,
+            "score": "17:59.34",
+            "points": 30
+          },
+          {
+            "eventId": "2023-03",
+            "place": 15,
+            "score": "5:57.78",
+            "points": 58
+          },
+          {
+            "eventId": "2023-04",
+            "place": 8,
+            "score": "14:33.78",
+            "points": 79
+          },
+          {
+            "eventId": "2023-05",
+            "place": 8,
+            "score": "4:59.86",
+            "points": 79
+          },
+          {
+            "eventId": "2023-06",
+            "place": 1,
+            "score": "7:56.58",
+            "points": 100
+          },
+          {
+            "eventId": "2023-07",
+            "place": 2,
+            "score": "16:46.48",
+            "points": 96
+          },
+          {
+            "eventId": "2023-08",
+            "place": 7,
+            "score": "7:57.16",
+            "points": 76
+          },
+          {
+            "eventId": "2023-09",
+            "place": 4,
+            "score": "642 lb",
+            "points": 88
+          },
+          {
+            "eventId": "2023-10",
+            "place": 1,
+            "score": "7:28.70",
+            "points": 100
+          },
+          {
+            "eventId": "2023-11",
+            "place": 7,
+            "score": "8:38.44",
+            "points": 70
+          },
+          {
+            "eventId": "2023-12",
+            "place": 5,
+            "score": "7:09.74",
+            "points": 80
+          }
+        ]
+      },
+      {
+        "rank": 2,
+        "name": "Patrick Vellner",
+        "country": "Canada",
+        "totalPoints": 837,
+        "events": [
+          {
+            "eventId": "2023-01",
+            "place": 27,
+            "score": "7 laps",
+            "points": 26
+          },
+          {
+            "eventId": "2023-02",
+            "place": 6,
+            "score": "15:36.50",
+            "points": 85
+          },
+          {
+            "eventId": "2023-03",
+            "place": 6,
+            "score": "4:48.38",
+            "points": 85
+          },
+          {
+            "eventId": "2023-04",
+            "place": 27,
+            "score": "CAP+1",
+            "points": 26
+          },
+          {
+            "eventId": "2023-05",
+            "place": 6,
+            "score": "4:55.13",
+            "points": 85
+          },
+          {
+            "eventId": "2023-06",
+            "place": 6,
+            "score": "8:16.52",
+            "points": 85
+          },
+          {
+            "eventId": "2023-07",
+            "place": 10,
+            "score": "17:29.52",
+            "points": 64
+          },
+          {
+            "eventId": "2023-08",
+            "place": 1,
+            "score": "7:21.36",
+            "points": 100
+          },
+          {
+            "eventId": "2023-09",
+            "place": 12,
+            "score": "623 lb",
+            "points": 56
+          },
+          {
+            "eventId": "2023-10",
+            "place": 5,
+            "score": "7:55.62",
+            "points": 80
+          },
+          {
+            "eventId": "2023-11",
+            "place": 2,
+            "score": "7:49.95",
+            "points": 95
+          },
+          {
+            "eventId": "2023-12",
+            "place": 11,
+            "score": "7:46.27",
+            "points": 50
+          }
+        ]
+      },
+      {
+        "rank": 3,
+        "name": "Roman Khrennikov",
+        "country": "USA",
+        "totalPoints": 801,
+        "events": [
+          {
+            "eventId": "2023-01",
+            "place": 4,
+            "score": "7 laps",
+            "points": 91
+          },
+          {
+            "eventId": "2023-02",
+            "place": 1,
+            "score": "14:28.77",
+            "points": 100
+          },
+          {
+            "eventId": "2023-03",
+            "place": 5,
+            "score": "4:40.23",
+            "points": 88
+          },
+          {
+            "eventId": "2023-04",
+            "place": 1,
+            "score": "12:34.59",
+            "points": 100
+          },
+          {
+            "eventId": "2023-05",
+            "place": 9,
+            "score": "5:00.83",
+            "points": 76
+          },
+          {
+            "eventId": "2023-06",
+            "place": 5,
+            "score": "8:13.25",
+            "points": 88
+          },
+          {
+            "eventId": "2023-07",
+            "place": 3,
+            "score": "16:57.08",
+            "points": 92
+          },
+          {
+            "eventId": "2023-08",
+            "place": 17,
+            "score": "8:24.09",
+            "points": 39
+          },
+          {
+            "eventId": "2023-09",
+            "place": 16,
+            "score": "617 lb",
+            "points": 42
+          },
+          {
+            "eventId": "2023-10",
+            "place": 4,
+            "score": "7:52.68",
+            "points": 85
+          },
+          {
+            "eventId": "2023-11",
+            "place": 20,
+            "score": "CAP+115",
+            "points": 0
+          },
+          {
+            "eventId": "2023-12",
+            "place": 20,
+            "score": "CAP+98",
+            "points": 0
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "name": "Brent Fikowski",
+        "country": "Canada",
+        "totalPoints": 781,
+        "events": [
+          {
+            "eventId": "2023-01",
+            "place": 10,
+            "score": "7 laps",
+            "points": 73
+          },
+          {
+            "eventId": "2023-02",
+            "place": 3,
+            "score": "15:04.80",
+            "points": 94
+          },
+          {
+            "eventId": "2023-03",
+            "place": 23,
+            "score": "CAP+1",
+            "points": 34
+          },
+          {
+            "eventId": "2023-04",
+            "place": 3,
+            "score": "13:21.91",
+            "points": 94
+          },
+          {
+            "eventId": "2023-05",
+            "place": 21,
+            "score": "5:29.54",
+            "points": 40
+          },
+          {
+            "eventId": "2023-06",
+            "place": 11,
+            "score": "8:21.42",
+            "points": 70
+          },
+          {
+            "eventId": "2023-07",
+            "place": 5,
+            "score": "17:07.96",
+            "points": 84
+          },
+          {
+            "eventId": "2023-08",
+            "place": 15,
+            "score": "8:20.39",
+            "points": 45
+          },
+          {
+            "eventId": "2023-09",
+            "place": 8,
+            "score": "629 lb",
+            "points": 72
+          },
+          {
+            "eventId": "2023-10",
+            "place": 14,
+            "score": "8:20.40",
+            "points": 35
+          },
+          {
+            "eventId": "2023-11",
+            "place": 1,
+            "score": "7:45.08",
+            "points": 100
+          },
+          {
+            "eventId": "2023-12",
+            "place": 13,
+            "score": "7:50.69",
+            "points": 40
+          }
+        ]
+      },
+      {
+        "rank": 5,
+        "name": "Dallin Pepper",
+        "country": "USA",
+        "totalPoints": 778,
+        "events": [
+          {
+            "eventId": "2023-01",
+            "place": 8,
+            "score": "7 laps",
+            "points": 79
+          },
+          {
+            "eventId": "2023-02",
+            "place": 13,
+            "score": "16:33.15",
+            "points": 64
+          },
+          {
+            "eventId": "2023-03",
+            "place": 17,
+            "score": "6:27.82",
+            "points": 52
+          },
+          {
+            "eventId": "2023-04",
+            "place": 4,
+            "score": "13:57.83",
+            "points": 91
+          },
+          {
+            "eventId": "2023-05",
+            "place": 29,
+            "score": "CAP",
+            "points": 22
+          },
+          {
+            "eventId": "2023-06",
+            "place": 18,
+            "score": "8:30.75",
+            "points": 49
+          },
+          {
+            "eventId": "2023-07",
+            "place": 25,
+            "score": "18:55.08",
+            "points": 15
+          },
+          {
+            "eventId": "2023-08",
+            "place": 5,
+            "score": "7:55.53",
+            "points": 84
+          },
+          {
+            "eventId": "2023-09",
+            "place": 8,
+            "score": "629 lb",
+            "points": 72
+          },
+          {
+            "eventId": "2023-10",
+            "place": 7,
+            "score": "7:56.62",
+            "points": 70
+          },
+          {
+            "eventId": "2023-11",
+            "place": 5,
+            "score": "8:17.85",
+            "points": 80
+          },
+          {
+            "eventId": "2023-12",
+            "place": 1,
+            "score": "6:44.79",
+            "points": 100
+          }
+        ]
+      },
+      {
+        "rank": 6,
+        "name": "Jonne Koski",
+        "country": "Finland",
+        "totalPoints": 771,
+        "events": [
+          {
+            "eventId": "2023-01",
+            "place": 1,
+            "score": "7 laps",
+            "points": 100
+          },
+          {
+            "eventId": "2023-02",
+            "place": 26,
+            "score": "CAP+1",
+            "points": 28
+          },
+          {
+            "eventId": "2023-03",
+            "place": 11,
+            "score": "5:13.49",
+            "points": 70
+          },
+          {
+            "eventId": "2023-04",
+            "place": 14,
+            "score": "15:55.07",
+            "points": 61
+          },
+          {
+            "eventId": "2023-05",
+            "place": 16,
+            "score": "5:19.54",
+            "points": 55
+          },
+          {
+            "eventId": "2023-06",
+            "place": 20,
+            "score": "8:34.95",
+            "points": 43
+          },
+          {
+            "eventId": "2023-07",
+            "place": 20,
+            "score": "18:14.71",
+            "points": 30
+          },
+          {
+            "eventId": "2023-08",
+            "place": 2,
+            "score": "7:45.38",
+            "points": 96
+          },
+          {
+            "eventId": "2023-09",
+            "place": 24,
+            "score": "582 lb",
+            "points": 18
+          },
+          {
+            "eventId": "2023-10",
+            "place": 2,
+            "score": "7:31.43",
+            "points": 95
+          },
+          {
+            "eventId": "2023-11",
+            "place": 3,
+            "score": "8:02.29",
+            "points": 90
+          },
+          {
+            "eventId": "2023-12",
+            "place": 4,
+            "score": "7:08.92",
+            "points": 85
+          }
+        ]
+      },
+      {
+        "rank": 7,
+        "name": "Chandler Smith",
+        "country": "USA",
+        "totalPoints": 743,
+        "events": [
+          {
+            "eventId": "2023-01",
+            "place": 17,
+            "score": "7 laps",
+            "points": 52
+          },
+          {
+            "eventId": "2023-02",
+            "place": 15,
+            "score": "16:49.98",
+            "points": 58
+          },
+          {
+            "eventId": "2023-03",
+            "place": 7,
+            "score": "4:50.28",
+            "points": 82
+          },
+          {
+            "eventId": "2023-04",
+            "place": 9,
+            "score": "14:49.37",
+            "points": 76
+          },
+          {
+            "eventId": "2023-05",
+            "place": 7,
+            "score": "4:57.11",
+            "points": 82
+          },
+          {
+            "eventId": "2023-06",
+            "place": 7,
+            "score": "8:17.72",
+            "points": 82
+          },
+          {
+            "eventId": "2023-07",
+            "place": 7,
+            "score": "17:09.03",
+            "points": 76
+          },
+          {
+            "eventId": "2023-08",
+            "place": 12,
+            "score": "8:10.41",
+            "points": 56
+          },
+          {
+            "eventId": "2023-09",
+            "place": 10,
+            "score": "628 lb",
+            "points": 64
+          },
+          {
+            "eventId": "2023-10",
+            "place": 9,
+            "score": "8:10.53",
+            "points": 60
+          },
+          {
+            "eventId": "2023-11",
+            "place": 19,
+            "score": "10:17.87",
+            "points": 10
+          },
+          {
+            "eventId": "2023-12",
+            "place": 12,
+            "score": "7:49.73",
+            "points": 45
+          }
+        ]
+      },
+      {
+        "rank": 8,
+        "name": "Jay Crouch",
+        "country": "Australia",
+        "totalPoints": 728,
+        "events": [
+          {
+            "eventId": "2023-01",
+            "place": 3,
+            "score": "7 laps",
+            "points": 94
+          },
+          {
+            "eventId": "2023-02",
+            "place": 10,
+            "score": "16:17.00",
+            "points": 73
+          },
+          {
+            "eventId": "2023-03",
+            "place": 4,
+            "score": "4:27.72",
+            "points": 91
+          },
+          {
+            "eventId": "2023-04",
+            "place": 22,
+            "score": "CAP+1",
+            "points": 37
+          },
+          {
+            "eventId": "2023-05",
+            "place": 22,
+            "score": "5:33.46",
+            "points": 37
+          },
+          {
+            "eventId": "2023-06",
+            "place": 8,
+            "score": "8:18.36",
+            "points": 79
+          },
+          {
+            "eventId": "2023-07",
+            "place": 6,
+            "score": "17:08.62",
+            "points": 80
+          },
+          {
+            "eventId": "2023-08",
+            "place": 10,
+            "score": "8:03.51",
+            "points": 64
+          },
+          {
+            "eventId": "2023-09",
+            "place": 19,
+            "score": "610 lb",
+            "points": 33
+          },
+          {
+            "eventId": "2023-10",
+            "place": 20,
+            "score": "9:34.77",
+            "points": 0
+          },
+          {
+            "eventId": "2023-11",
+            "place": 8,
+            "score": "8:45.65",
+            "points": 65
+          },
+          {
+            "eventId": "2023-12",
+            "place": 6,
+            "score": "7:11.94",
+            "points": 75
+          }
+        ]
+      },
+      {
+        "rank": 9,
+        "name": "Lazar Đukić",
+        "country": "Serbia",
+        "totalPoints": 716,
+        "events": [
+          {
+            "eventId": "2023-01",
+            "place": 35,
+            "score": "7 laps",
+            "points": 10
+          },
+          {
+            "eventId": "2023-02",
+            "place": 2,
+            "score": "14:44.74",
+            "points": 97
+          },
+          {
+            "eventId": "2023-03",
+            "place": 22,
+            "score": "6:34.03",
+            "points": 37
+          },
+          {
+            "eventId": "2023-04",
+            "place": 18,
+            "score": "17:36.78",
+            "points": 49
+          },
+          {
+            "eventId": "2023-05",
+            "place": 19,
+            "score": "5:27.54",
+            "points": 46
+          },
+          {
+            "eventId": "2023-06",
+            "place": 3,
+            "score": "8:08.12",
+            "points": 94
+          },
+          {
+            "eventId": "2023-07",
+            "place": 4,
+            "score": "17:02.63",
+            "points": 88
+          },
+          {
+            "eventId": "2023-08",
+            "place": 6,
+            "score": "7:56.38",
+            "points": 80
+          },
+          {
+            "eventId": "2023-09",
+            "place": 20,
+            "score": "607 lb",
+            "points": 30
+          },
+          {
+            "eventId": "2023-10",
+            "place": 12,
+            "score": "8:13.59",
+            "points": 45
+          },
+          {
+            "eventId": "2023-11",
+            "place": 6,
+            "score": "8:30.61",
+            "points": 75
+          },
+          {
+            "eventId": "2023-12",
+            "place": 8,
+            "score": "7:24.11",
+            "points": 65
+          }
+        ]
+      },
+      {
+        "rank": 10,
+        "name": "Jelle Hoste",
+        "country": "Belgium",
+        "totalPoints": 710,
+        "events": [
+          {
+            "eventId": "2023-01",
+            "place": 6,
+            "score": "7 laps",
+            "points": 85
+          },
+          {
+            "eventId": "2023-02",
+            "place": 30,
+            "score": "CAP+2",
+            "points": 20
+          },
+          {
+            "eventId": "2023-03",
+            "place": 21,
+            "score": "6:33.50",
+            "points": 40
+          },
+          {
+            "eventId": "2023-04",
+            "place": 12,
+            "score": "15:12.84",
+            "points": 67
+          },
+          {
+            "eventId": "2023-05",
+            "place": 4,
+            "score": "4:53.48",
+            "points": 91
+          },
+          {
+            "eventId": "2023-06",
+            "place": 14,
+            "score": "8:23.49",
+            "points": 61
+          },
+          {
+            "eventId": "2023-07",
+            "place": 1,
+            "score": "16:39.68",
+            "points": 100
+          },
+          {
+            "eventId": "2023-08",
+            "place": 11,
+            "score": "8:04.98",
+            "points": 60
+          },
+          {
+            "eventId": "2023-09",
+            "place": 28,
+            "score": "545 lb",
+            "points": 6
+          },
+          {
+            "eventId": "2023-10",
+            "place": 3,
+            "score": "7:47.90",
+            "points": 90
+          },
+          {
+            "eventId": "2023-11",
+            "place": 17,
+            "score": "9:26.73",
+            "points": 20
+          },
+          {
+            "eventId": "2023-12",
+            "place": 7,
+            "score": "7:17.49",
+            "points": 70
+          }
+        ]
+      }
+    ],
+    "women": [
+      {
+        "rank": 1,
+        "name": "Laura Horvath",
+        "country": "Hungary",
+        "totalPoints": 966,
+        "events": [
+          {
+            "eventId": "2023-01",
+            "place": 9,
+            "score": "7 laps",
+            "points": 76
+          },
+          {
+            "eventId": "2023-02",
+            "place": 1,
+            "score": "13:50.40",
+            "points": 100
+          },
+          {
+            "eventId": "2023-03",
+            "place": 27,
+            "score": "CAP+5",
+            "points": 26
+          },
+          {
+            "eventId": "2023-04",
+            "place": 2,
+            "score": "16:36.18",
+            "points": 97
+          },
+          {
+            "eventId": "2023-05",
+            "place": 1,
+            "score": "4:36.18",
+            "points": 100
+          },
+          {
+            "eventId": "2023-06",
+            "place": 15,
+            "score": "9:06.79",
+            "points": 58
+          },
+          {
+            "eventId": "2023-07",
+            "place": 13,
+            "score": "19:02.68",
+            "points": 52
+          },
+          {
+            "eventId": "2023-08",
+            "place": 8,
+            "score": "8:32.50",
+            "points": 72
+          },
+          {
+            "eventId": "2023-09",
+            "place": 1,
+            "score": "470 lb",
+            "points": 100
+          },
+          {
+            "eventId": "2023-10",
+            "place": 1,
+            "score": "8:41.22",
+            "points": 100
+          },
+          {
+            "eventId": "2023-11",
+            "place": 1,
+            "score": "8:36.46",
+            "points": 100
+          },
+          {
+            "eventId": "2023-12",
+            "place": 4,
+            "score": "7:41.20",
+            "points": 85
+          }
+        ]
+      },
+      {
+        "rank": 2,
+        "name": "Emma Lawson",
+        "country": "Canada",
+        "totalPoints": 919,
+        "events": [
+          {
+            "eventId": "2023-01",
+            "place": 1,
+            "score": "7 laps",
+            "points": 100
+          },
+          {
+            "eventId": "2023-02",
+            "place": 15,
+            "score": "17:13.59",
+            "points": 58
+          },
+          {
+            "eventId": "2023-03",
+            "place": 13,
+            "score": "5:16.28",
+            "points": 64
+          },
+          {
+            "eventId": "2023-04",
+            "place": 4,
+            "score": "17:35.41",
+            "points": 91
+          },
+          {
+            "eventId": "2023-05",
+            "place": 9,
+            "score": "CAP+4",
+            "points": 76
+          },
+          {
+            "eventId": "2023-06",
+            "place": 5,
+            "score": "8:44.92",
+            "points": 88
+          },
+          {
+            "eventId": "2023-07",
+            "place": 7,
+            "score": "18:31.60",
+            "points": 76
+          },
+          {
+            "eventId": "2023-08",
+            "place": 1,
+            "score": "7:48.64",
+            "points": 100
+          },
+          {
+            "eventId": "2023-09",
+            "place": 7,
+            "score": "433 lb",
+            "points": 76
+          },
+          {
+            "eventId": "2023-10",
+            "place": 6,
+            "score": "9:49.49",
+            "points": 75
+          },
+          {
+            "eventId": "2023-11",
+            "place": 10,
+            "score": "10:06.92",
+            "points": 55
+          },
+          {
+            "eventId": "2023-12",
+            "place": 9,
+            "score": "8:21.07",
+            "points": 60
+          }
+        ]
+      },
+      {
+        "rank": 3,
+        "name": "Arielle Loewen",
+        "country": "USA",
+        "totalPoints": 883,
+        "events": [
+          {
+            "eventId": "2023-01",
+            "place": 12,
+            "score": "6 laps",
+            "points": 67
+          },
+          {
+            "eventId": "2023-02",
+            "place": 2,
+            "score": "14:43.54",
+            "points": 97
+          },
+          {
+            "eventId": "2023-03",
+            "place": 14,
+            "score": "5:22.78",
+            "points": 61
+          },
+          {
+            "eventId": "2023-04",
+            "place": 13,
+            "score": "CAP+12",
+            "points": 64
+          },
+          {
+            "eventId": "2023-05",
+            "place": 17,
+            "score": "CAP+12",
+            "points": 52
+          },
+          {
+            "eventId": "2023-06",
+            "place": 4,
+            "score": "8:42.74",
+            "points": 91
+          },
+          {
+            "eventId": "2023-07",
+            "place": 3,
+            "score": "18:21.21",
+            "points": 92
+          },
+          {
+            "eventId": "2023-08",
+            "place": 3,
+            "score": "8:11.96",
+            "points": 92
+          },
+          {
+            "eventId": "2023-09",
+            "place": 13,
+            "score": "422 lb",
+            "points": 52
+          },
+          {
+            "eventId": "2023-10",
+            "place": 3,
+            "score": "9:38.84",
+            "points": 90
+          },
+          {
+            "eventId": "2023-11",
+            "place": 6,
+            "score": "9:28.97",
+            "points": 75
+          },
+          {
+            "eventId": "2023-12",
+            "place": 11,
+            "score": "8:28.94",
+            "points": 50
+          }
+        ]
+      },
+      {
+        "rank": 4,
+        "name": "Gabriela Migała",
+        "country": "Poland",
+        "totalPoints": 788,
+        "events": [
+          {
+            "eventId": "2023-01",
+            "place": 7,
+            "score": "7 laps",
+            "points": 82
+          },
+          {
+            "eventId": "2023-02",
+            "place": 17,
+            "score": "17:26.22",
+            "points": 52
+          },
+          {
+            "eventId": "2023-03",
+            "place": 22,
+            "score": "CAP+5",
+            "points": 37
+          },
+          {
+            "eventId": "2023-04",
+            "place": 15,
+            "score": "CAP+14",
+            "points": 58
+          },
+          {
+            "eventId": "2023-05",
+            "place": 7,
+            "score": "CAP+3",
+            "points": 82
+          },
+          {
+            "eventId": "2023-06",
+            "place": 27,
+            "score": "9:26.85",
+            "points": 26
+          },
+          {
+            "eventId": "2023-07",
+            "place": 5,
+            "score": "18:27.44",
+            "points": 84
+          },
+          {
+            "eventId": "2023-08",
+            "place": 4,
+            "score": "8:17.58",
+            "points": 88
+          },
+          {
+            "eventId": "2023-09",
+            "place": 5,
+            "score": "436 lb",
+            "points": 84
+          },
+          {
+            "eventId": "2023-10",
+            "place": 8,
+            "score": "10:36.84",
+            "points": 65
+          },
+          {
+            "eventId": "2023-11",
+            "place": 13,
+            "score": "11:10.51",
+            "points": 40
+          },
+          {
+            "eventId": "2023-12",
+            "place": 3,
+            "score": "7:40.61",
+            "points": 90
+          }
+        ]
+      },
+      {
+        "rank": 5,
+        "name": "Alex Gazan",
+        "country": "USA",
+        "totalPoints": 786,
+        "events": [
+          {
+            "eventId": "2023-01",
+            "place": 18,
+            "score": "6 laps",
+            "points": 49
+          },
+          {
+            "eventId": "2023-02",
+            "place": 6,
+            "score": "16:13.39",
+            "points": 85
+          },
+          {
+            "eventId": "2023-03",
+            "place": 19,
+            "score": "CAP",
+            "points": 46
+          },
+          {
+            "eventId": "2023-04",
+            "place": 3,
+            "score": "17:25.97",
+            "points": 94
+          },
+          {
+            "eventId": "2023-05",
+            "place": 2,
+            "score": "5:50.32",
+            "points": 97
+          },
+          {
+            "eventId": "2023-06",
+            "place": 8,
+            "score": "8:53.66",
+            "points": 79
+          },
+          {
+            "eventId": "2023-07",
+            "place": 19,
+            "score": "19:39.65",
+            "points": 33
+          },
+          {
+            "eventId": "2023-08",
+            "place": 11,
+            "score": "8:38.26",
+            "points": 60
+          },
+          {
+            "eventId": "2023-09",
+            "place": 19,
+            "score": "416 lb",
+            "points": 33
+          },
+          {
+            "eventId": "2023-10",
+            "place": 2,
+            "score": "8:59.04",
+            "points": 95
+          },
+          {
+            "eventId": "2023-11",
+            "place": 3,
+            "score": "9:16.53",
+            "points": 90
+          },
+          {
+            "eventId": "2023-12",
+            "place": 16,
+            "score": "9:15.83",
+            "points": 25
+          }
+        ]
+      },
+      {
+        "rank": 6,
+        "name": "Alexis Raptis",
+        "country": "USA",
+        "totalPoints": 771,
+        "events": [
+          {
+            "eventId": "2023-01",
+            "place": 5,
+            "score": "7 laps",
+            "points": 88
+          },
+          {
+            "eventId": "2023-02",
+            "place": 3,
+            "score": "15:14.94",
+            "points": 94
+          },
+          {
+            "eventId": "2023-03",
+            "place": 5,
+            "score": "4:13.51",
+            "points": 88
+          },
+          {
+            "eventId": "2023-04",
+            "place": 5,
+            "score": "17:45.74",
+            "points": 88
+          },
+          {
+            "eventId": "2023-05",
+            "place": 37,
+            "score": "CAP+29",
+            "points": 6
+          },
+          {
+            "eventId": "2023-06",
+            "place": 3,
+            "score": "8:40.85",
+            "points": 94
+          },
+          {
+            "eventId": "2023-07",
+            "place": 4,
+            "score": "18:26.55",
+            "points": 88
+          },
+          {
+            "eventId": "2023-08",
+            "place": 12,
+            "score": "8:39.20",
+            "points": 56
+          },
+          {
+            "eventId": "2023-09",
+            "place": 22,
+            "score": "404 lb",
+            "points": 24
+          },
+          {
+            "eventId": "2023-10",
+            "place": 13,
+            "score": "11:23.88",
+            "points": 40
+          },
+          {
+            "eventId": "2023-11",
+            "place": 8,
+            "score": "9:45.72",
+            "points": 65
+          },
+          {
+            "eventId": "2023-12",
+            "place": 13,
+            "score": "8:43.46",
+            "points": 40
+          }
+        ]
+      },
+      {
+        "rank": 7,
+        "name": "Katrin Tanja Davidsdottir",
+        "country": "USA",
+        "totalPoints": 741,
+        "events": [
+          {
+            "eventId": "2023-01",
+            "place": 4,
+            "score": "7 laps",
+            "points": 91
+          },
+          {
+            "eventId": "2023-02",
+            "place": 34,
+            "score": "CAP+6",
+            "points": 12
+          },
+          {
+            "eventId": "2023-03",
+            "place": 6,
+            "score": "4:17.56",
+            "points": 85
+          },
+          {
+            "eventId": "2023-04",
+            "place": 34,
+            "score": "CAP+15",
+            "points": 12
+          },
+          {
+            "eventId": "2023-05",
+            "place": 9,
+            "score": "CAP+4",
+            "points": 76
+          },
+          {
+            "eventId": "2023-06",
+            "place": 19,
+            "score": "9:13.31",
+            "points": 46
+          },
+          {
+            "eventId": "2023-07",
+            "place": 2,
+            "score": "18:20.13",
+            "points": 96
+          },
+          {
+            "eventId": "2023-08",
+            "place": 9,
+            "score": "8:35.32",
+            "points": 68
+          },
+          {
+            "eventId": "2023-09",
+            "place": 20,
+            "score": "412 lb",
+            "points": 30
+          },
+          {
+            "eventId": "2023-10",
+            "place": 9,
+            "score": "10:47.96",
+            "points": 60
+          },
+          {
+            "eventId": "2023-11",
+            "place": 7,
+            "score": "9:33.93",
+            "points": 70
+          },
+          {
+            "eventId": "2023-12",
+            "place": 2,
+            "score": "7:33.41",
+            "points": 95
+          }
+        ]
+      },
+      {
+        "rank": 8,
+        "name": "Emma Cary",
+        "country": "USA",
+        "totalPoints": 731,
+        "events": [
+          {
+            "eventId": "2023-01",
+            "place": 40,
+            "score": "5 laps",
+            "points": 0
+          },
+          {
+            "eventId": "2023-02",
+            "place": 4,
+            "score": "15:38.84",
+            "points": 91
+          },
+          {
+            "eventId": "2023-03",
+            "place": 17,
+            "score": "6:17.68",
+            "points": 52
+          },
+          {
+            "eventId": "2023-04",
+            "place": 39,
+            "score": "CAP+30",
+            "points": 2
+          },
+          {
+            "eventId": "2023-05",
+            "place": 16,
+            "score": "CAP+11",
+            "points": 55
+          },
+          {
+            "eventId": "2023-06",
+            "place": 2,
+            "score": "8:38.61",
+            "points": 97
+          },
+          {
+            "eventId": "2023-07",
+            "place": 12,
+            "score": "18:59.97",
+            "points": 56
+          },
+          {
+            "eventId": "2023-08",
+            "place": 2,
+            "score": "8:01.67",
+            "points": 96
+          },
+          {
+            "eventId": "2023-09",
+            "place": 8,
+            "score": "428 lb",
+            "points": 72
+          },
+          {
+            "eventId": "2023-10",
+            "place": 11,
+            "score": "11:12.24",
+            "points": 50
+          },
+          {
+            "eventId": "2023-11",
+            "place": 5,
+            "score": "9:27.72",
+            "points": 80
+          },
+          {
+            "eventId": "2023-12",
+            "place": 5,
+            "score": "7:42.54",
+            "points": 80
+          }
+        ]
+      },
+      {
+        "rank": 9,
+        "name": "Danielle Brandon",
+        "country": "USA",
+        "totalPoints": 711,
+        "events": [
+          {
+            "eventId": "2023-01",
+            "place": 21,
+            "score": "6 laps",
+            "points": 40
+          },
+          {
+            "eventId": "2023-02",
+            "place": 21,
+            "score": "17:45.91",
+            "points": 40
+          },
+          {
+            "eventId": "2023-03",
+            "place": 1,
+            "score": "3:12.75",
+            "points": 100
+          },
+          {
+            "eventId": "2023-04",
+            "place": 20,
+            "score": "CAP+14",
+            "points": 43
+          },
+          {
+            "eventId": "2023-05",
+            "place": 17,
+            "score": "CAP+12",
+            "points": 52
+          },
+          {
+            "eventId": "2023-06",
+            "place": 11,
+            "score": "8:56.63",
+            "points": 70
+          },
+          {
+            "eventId": "2023-07",
+            "place": 11,
+            "score": "18:42.71",
+            "points": 60
+          },
+          {
+            "eventId": "2023-08",
+            "place": 10,
+            "score": "8:37.85",
+            "points": 64
+          },
+          {
+            "eventId": "2023-09",
+            "place": 26,
+            "score": "382 lb",
+            "points": 12
+          },
+          {
+            "eventId": "2023-10",
+            "place": 7,
+            "score": "9:58.90",
+            "points": 70
+          },
+          {
+            "eventId": "2023-11",
+            "place": 2,
+            "score": "8:48.42",
+            "points": 95
+          },
+          {
+            "eventId": "2023-12",
+            "place": 8,
+            "score": "8:20.26",
+            "points": 65
+          }
+        ]
+      },
+      {
+        "rank": 10,
+        "name": "Paige Powers",
+        "country": "USA",
+        "totalPoints": 696,
+        "events": [
+          {
+            "eventId": "2023-01",
+            "place": 14,
+            "score": "6 laps",
+            "points": 61
+          },
+          {
+            "eventId": "2023-02",
+            "place": 20,
+            "score": "17:43.40",
+            "points": 43
+          },
+          {
+            "eventId": "2023-03",
+            "place": 3,
+            "score": "3:56.62",
+            "points": 94
+          },
+          {
+            "eventId": "2023-04",
+            "place": 19,
+            "score": "CAP+14",
+            "points": 46
+          },
+          {
+            "eventId": "2023-05",
+            "place": 28,
+            "score": "CAP+16",
+            "points": 24
+          },
+          {
+            "eventId": "2023-06",
+            "place": 7,
+            "score": "8:50.70",
+            "points": 82
+          },
+          {
+            "eventId": "2023-07",
+            "place": 24,
+            "score": "20:12.60",
+            "points": 18
+          },
+          {
+            "eventId": "2023-08",
+            "place": 17,
+            "score": "8:50.10",
+            "points": 39
+          },
+          {
+            "eventId": "2023-09",
+            "place": 10,
+            "score": "426 lb",
+            "points": 64
+          },
+          {
+            "eventId": "2023-10",
+            "place": 4,
+            "score": "9:41.97",
+            "points": 85
+          },
+          {
+            "eventId": "2023-11",
+            "place": 4,
+            "score": "9:18.73",
+            "points": 85
+          },
+          {
+            "eventId": "2023-12",
+            "place": 10,
+            "score": "8:26.31",
+            "points": 55
+          }
+        ]
+      }
+    ]
+  }
+}

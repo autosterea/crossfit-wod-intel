@@ -1,0 +1,379 @@
+{
+  "year": 2024,
+  "pointsSystem": "Standard CrossFit Games points-per-place scale, max 100 for 1st in every event. Points descend with place on a table whose per-place increment depends on the field size for a given event: full-field Thursday/Friday/Saturday-morning events (~40, then ~32 after early withdrawals) step down by 3 per place from 100 (100, 97, 94, 91...), while the Sunday events contested by the top 30 use a compressed table stepping down by ~4 per place (100, 96, 92, 88...). Two events were scored on combined sub-event placement (2024-04 Track and Field, two separately timed parts) or elimination round-then-time (2024-06 Clean Ladder) rather than a single time. All place and points values are taken directly from the official CrossFit Games leaderboard archive (c3po API).",
+  "sources": [
+    "https://c3po.crossfit.com/api/leaderboards/v2/competitions/games/2024/leaderboards?division=1",
+    "https://c3po.crossfit.com/api/leaderboards/v2/competitions/games/2024/leaderboards?division=2",
+    "https://games.crossfit.com/leaderboard/games/2024",
+    "https://en.wikipedia.org/wiki/2024_CrossFit_Games",
+    "https://barbend.com/news/2024-crossfit-games-results/",
+    "https://morningchalkup.barbend.com/p/tiaclair-toomeyorr-james-sprague-win-2024-crossfit-games"
+  ],
+  "notes": "Scores for 2024-04 (Track and Field, combined placement of two separately timed parts) are null for all athletes: the leaderboard scores that event by combined rank, so no single time exists (the raw file records null winning scores and lists the fastest part times in its event notes). For 2024-06 (Clean Ladder, elimination rounds scored by round reached then time), the leaderboard score display is a placement; only the documented round-winning scores are recoverable, so place 1 carries the raw file's winning score and other athletes are null. All other events carry real leaderboard time/CAP scores.",
+  "divisions": {
+    "men": [
+      {
+        "rank": 1,
+        "name": "James Sprague",
+        "country": "USA",
+        "totalPoints": 806,
+        "events": [
+          { "eventId": "2024-01", "place": 7, "score": "39:26.02", "points": 82 },
+          { "eventId": "2024-02", "place": 7, "score": "15:05.66", "points": 82 },
+          { "eventId": "2024-03", "place": 4, "score": "02:42.10", "points": 91 },
+          { "eventId": "2024-04", "place": 4, "score": null, "points": 91 },
+          { "eventId": "2024-05", "place": 1, "score": "43:58.00", "points": 100 },
+          { "eventId": "2024-06", "place": 21, "score": null, "points": 40 },
+          { "eventId": "2024-07", "place": 17, "score": "09:40.03", "points": 52 },
+          { "eventId": "2024-08", "place": 2, "score": "07:07.98", "points": 96 },
+          { "eventId": "2024-09", "place": 5, "score": "02:34.85", "points": 84 },
+          { "eventId": "2024-10", "place": 4, "score": "05:22.54", "points": 88 }
+        ]
+      },
+      {
+        "rank": 2,
+        "name": "Dallin Pepper",
+        "country": "USA",
+        "totalPoints": 785,
+        "events": [
+          { "eventId": "2024-01", "place": 15, "score": "40:44.36", "points": 58 },
+          { "eventId": "2024-02", "place": 3, "score": "14:26.50", "points": 94 },
+          { "eventId": "2024-03", "place": 2, "score": "02:37.48", "points": 97 },
+          { "eventId": "2024-04", "place": 22, "score": null, "points": 37 },
+          { "eventId": "2024-05", "place": 5, "score": "47:16.00", "points": 88 },
+          { "eventId": "2024-06", "place": 6, "score": null, "points": 85 },
+          { "eventId": "2024-07", "place": 11, "score": "08:37.85", "points": 70 },
+          { "eventId": "2024-08", "place": 5, "score": "07:17.25", "points": 84 },
+          { "eventId": "2024-09", "place": 2, "score": "02:31.58", "points": 96 },
+          { "eventId": "2024-10", "place": 7, "score": "05:26.30", "points": 76 }
+        ]
+      },
+      {
+        "rank": 3,
+        "name": "Brent Fikowski",
+        "country": "Canada",
+        "totalPoints": 765,
+        "events": [
+          { "eventId": "2024-01", "place": 2, "score": "37:55.41", "points": 97 },
+          { "eventId": "2024-02", "place": 12, "score": "15:58.72", "points": 67 },
+          { "eventId": "2024-03", "place": 9, "score": "02:50.97", "points": 76 },
+          { "eventId": "2024-04", "place": 7, "score": null, "points": 82 },
+          { "eventId": "2024-05", "place": 6, "score": "47:36.00", "points": 85 },
+          { "eventId": "2024-06", "place": 8, "score": null, "points": 79 },
+          { "eventId": "2024-07", "place": 2, "score": "07:08.36", "points": 97 },
+          { "eventId": "2024-08", "place": 3, "score": "07:14.24", "points": 92 },
+          { "eventId": "2024-09", "place": 11, "score": "02:38.75", "points": 60 },
+          { "eventId": "2024-10", "place": 20, "score": "06:07.47", "points": 30 }
+        ]
+      },
+      {
+        "rank": 4,
+        "name": "Jayson Hopper",
+        "country": "USA",
+        "totalPoints": 742,
+        "events": [
+          { "eventId": "2024-01", "place": 19, "score": "41:38.45", "points": 46 },
+          { "eventId": "2024-02", "place": 2, "score": "14:16.68", "points": 97 },
+          { "eventId": "2024-03", "place": 1, "score": "02:32.48", "points": 100 },
+          { "eventId": "2024-04", "place": 12, "score": null, "points": 67 },
+          { "eventId": "2024-05", "place": 9, "score": "49:04.00", "points": 76 },
+          { "eventId": "2024-06", "place": 12, "score": null, "points": 67 },
+          { "eventId": "2024-07", "place": 10, "score": "08:37.48", "points": 73 },
+          { "eventId": "2024-08", "place": 1, "score": "07:04.19", "points": 100 },
+          { "eventId": "2024-09", "place": 6, "score": "02:35.57", "points": 80 },
+          { "eventId": "2024-10", "place": 18, "score": "05:57.79", "points": 36 }
+        ]
+      },
+      {
+        "rank": 5,
+        "name": "Patrick Vellner",
+        "country": "Canada",
+        "totalPoints": 742,
+        "events": [
+          { "eventId": "2024-01", "place": 33, "score": "46:38.84", "points": 14 },
+          { "eventId": "2024-02", "place": 1, "score": "14:14.05", "points": 100 },
+          { "eventId": "2024-03", "place": 3, "score": "02:41.54", "points": 94 },
+          { "eventId": "2024-04", "place": 5, "score": null, "points": 88 },
+          { "eventId": "2024-05", "place": 4, "score": "46:36.00", "points": 91 },
+          { "eventId": "2024-06", "place": 10, "score": null, "points": 73 },
+          { "eventId": "2024-07", "place": 15, "score": "08:54.49", "points": 58 },
+          { "eventId": "2024-08", "place": 4, "score": "07:17.10", "points": 88 },
+          { "eventId": "2024-09", "place": 9, "score": "02:37.26", "points": 68 },
+          { "eventId": "2024-10", "place": 9, "score": "05:35.34", "points": 68 }
+        ]
+      },
+      {
+        "rank": 6,
+        "name": "Samuel Kwant",
+        "country": "USA",
+        "totalPoints": 663,
+        "events": [
+          { "eventId": "2024-01", "place": 25, "score": "42:35.20", "points": 30 },
+          { "eventId": "2024-02", "place": 6, "score": "15:03.60", "points": 85 },
+          { "eventId": "2024-03", "place": 5, "score": "02:45.07", "points": 88 },
+          { "eventId": "2024-04", "place": 8, "score": null, "points": 79 },
+          { "eventId": "2024-05", "place": 13, "score": "49:51.00", "points": 64 },
+          { "eventId": "2024-06", "place": 20, "score": null, "points": 43 },
+          { "eventId": "2024-07", "place": 19, "score": "09:51.48", "points": 46 },
+          { "eventId": "2024-08", "place": 13, "score": "07:39.46", "points": 52 },
+          { "eventId": "2024-09", "place": 3, "score": "02:31.79", "points": 92 },
+          { "eventId": "2024-10", "place": 5, "score": "05:23.93", "points": 84 }
+        ]
+      },
+      {
+        "rank": 7,
+        "name": "Ricky Garard",
+        "country": "Australia",
+        "totalPoints": 639,
+        "events": [
+          { "eventId": "2024-01", "place": 4, "score": "38:32.60", "points": 91 },
+          { "eventId": "2024-02", "place": 18, "score": "16:55.96", "points": 49 },
+          { "eventId": "2024-03", "place": 14, "score": "02:54.04", "points": 61 },
+          { "eventId": "2024-04", "place": 1, "score": null, "points": 100 },
+          { "eventId": "2024-05", "place": 17, "score": "51:25.00", "points": 52 },
+          { "eventId": "2024-06", "place": 5, "score": null, "points": 88 },
+          { "eventId": "2024-07", "place": 13, "score": "08:48.22", "points": 64 },
+          { "eventId": "2024-08", "place": 22, "score": "07:59.25", "points": 24 },
+          { "eventId": "2024-09", "place": 24, "score": "02:55.25", "points": 18 },
+          { "eventId": "2024-10", "place": 3, "score": "05:18.73", "points": 92 }
+        ]
+      },
+      {
+        "rank": 8,
+        "name": "Justin Medeiros",
+        "country": "USA",
+        "totalPoints": 639,
+        "events": [
+          { "eventId": "2024-01", "place": 11, "score": "40:00.00", "points": 70 },
+          { "eventId": "2024-02", "place": 4, "score": "14:27.76", "points": 91 },
+          { "eventId": "2024-03", "place": 26, "score": "03:12.93", "points": 28 },
+          { "eventId": "2024-04", "place": 25, "score": null, "points": 30 },
+          { "eventId": "2024-05", "place": 12, "score": "49:46.00", "points": 67 },
+          { "eventId": "2024-06", "place": 1, "score": "37.24 (Round 3, 365 lb)", "points": 100 },
+          { "eventId": "2024-07", "place": 5, "score": "07:56.36", "points": 88 },
+          { "eventId": "2024-08", "place": 10, "score": "07:34.06", "points": 64 },
+          { "eventId": "2024-09", "place": 15, "score": "02:40.73", "points": 45 },
+          { "eventId": "2024-10", "place": 12, "score": "05:43.93", "points": 56 }
+        ]
+      },
+      {
+        "rank": 9,
+        "name": "Roman Khrennikov",
+        "country": "Russia",
+        "totalPoints": 601,
+        "events": [
+          { "eventId": "2024-01", "place": 3, "score": "38:10.72", "points": 94 },
+          { "eventId": "2024-02", "place": 11, "score": "15:53.84", "points": 70 },
+          { "eventId": "2024-03", "place": 8, "score": "02:50.82", "points": 79 },
+          { "eventId": "2024-04", "place": 3, "score": null, "points": 94 },
+          { "eventId": "2024-05", "place": 3, "score": "46:33.00", "points": 94 },
+          { "eventId": "2024-06", "place": 22, "score": null, "points": 37 },
+          { "eventId": "2024-07", "place": 12, "score": "08:44.28", "points": 67 },
+          { "eventId": "2024-08", "place": 27, "score": "08:09.47", "points": 9 },
+          { "eventId": "2024-09", "place": 22, "score": "02:51.71", "points": 24 },
+          { "eventId": "2024-10", "place": 19, "score": "06:01.64", "points": 33 }
+        ]
+      },
+      {
+        "rank": 10,
+        "name": "Austin Hatfield",
+        "country": "USA",
+        "totalPoints": 594,
+        "events": [
+          { "eventId": "2024-01", "place": 31, "score": "44:01.15", "points": 18 },
+          { "eventId": "2024-02", "place": 32, "score": "19:10.62", "points": 16 },
+          { "eventId": "2024-03", "place": 27, "score": "03:13.31", "points": 26 },
+          { "eventId": "2024-04", "place": 19, "score": null, "points": 46 },
+          { "eventId": "2024-05", "place": 2, "score": "44:09.00", "points": 97 },
+          { "eventId": "2024-06", "place": 7, "score": null, "points": 82 },
+          { "eventId": "2024-07", "place": 22, "score": "CAP+4", "points": 37 },
+          { "eventId": "2024-08", "place": 8, "score": "07:28.63", "points": 72 },
+          { "eventId": "2024-09", "place": 1, "score": "02:25.94", "points": 100 },
+          { "eventId": "2024-10", "place": 1, "score": "04:40.12", "points": 100 }
+        ]
+      }
+    ],
+    "women": [
+      {
+        "rank": 1,
+        "name": "Tia-Clair Toomey-Orr",
+        "country": "Australia",
+        "totalPoints": 951,
+        "events": [
+          { "eventId": "2024-01", "place": 1, "score": "38:06.88", "points": 100 },
+          { "eventId": "2024-02", "place": 1, "score": "13:15.95", "points": 100 },
+          { "eventId": "2024-03", "place": 7, "score": "03:15.66", "points": 82 },
+          { "eventId": "2024-04", "place": 1, "score": null, "points": 100 },
+          { "eventId": "2024-05", "place": 4, "score": "48:19.00", "points": 91 },
+          { "eventId": "2024-06", "place": 1, "score": "25.05 (Round 3, 250 lb)", "points": 100 },
+          { "eventId": "2024-07", "place": 7, "score": "07:18.46", "points": 82 },
+          { "eventId": "2024-08", "place": 1, "score": "07:23.69", "points": 100 },
+          { "eventId": "2024-09", "place": 2, "score": "02:31.13", "points": 96 },
+          { "eventId": "2024-10", "place": 1, "score": "04:33.89", "points": 100 }
+        ]
+      },
+      {
+        "rank": 2,
+        "name": "Gabriela Migała",
+        "country": "Poland",
+        "totalPoints": 800,
+        "events": [
+          { "eventId": "2024-01", "place": 12, "score": "42:41.69", "points": 67 },
+          { "eventId": "2024-02", "place": 4, "score": "13:58.38", "points": 91 },
+          { "eventId": "2024-03", "place": 6, "score": "03:15.08", "points": 85 },
+          { "eventId": "2024-04", "place": 4, "score": null, "points": 91 },
+          { "eventId": "2024-05", "place": 2, "score": "47:15.00", "points": 97 },
+          { "eventId": "2024-06", "place": 4, "score": null, "points": 91 },
+          { "eventId": "2024-07", "place": 10, "score": "08:02.46", "points": 73 },
+          { "eventId": "2024-08", "place": 2, "score": "07:33.59", "points": 96 },
+          { "eventId": "2024-09", "place": 10, "score": "02:46.89", "points": 64 },
+          { "eventId": "2024-10", "place": 15, "score": "06:18.33", "points": 45 }
+        ]
+      },
+      {
+        "rank": 3,
+        "name": "Emily Rolfe",
+        "country": "Canada",
+        "totalPoints": 770,
+        "events": [
+          { "eventId": "2024-01", "place": 3, "score": "40:21.26", "points": 94 },
+          { "eventId": "2024-02", "place": 6, "score": "15:05.50", "points": 85 },
+          { "eventId": "2024-03", "place": 5, "score": "03:14.49", "points": 88 },
+          { "eventId": "2024-04", "place": 6, "score": null, "points": 85 },
+          { "eventId": "2024-05", "place": 1, "score": "47:01.00", "points": 100 },
+          { "eventId": "2024-06", "place": 27, "score": null, "points": 26 },
+          { "eventId": "2024-07", "place": 9, "score": "07:49.20", "points": 76 },
+          { "eventId": "2024-08", "place": 4, "score": "07:54.29", "points": 88 },
+          { "eventId": "2024-09", "place": 11, "score": "02:47.20", "points": 60 },
+          { "eventId": "2024-10", "place": 9, "score": "05:43.03", "points": 68 }
+        ]
+      },
+      {
+        "rank": 4,
+        "name": "Bethany Flores",
+        "country": "USA",
+        "totalPoints": 736,
+        "events": [
+          { "eventId": "2024-01", "place": 2, "score": "39:36.72", "points": 97 },
+          { "eventId": "2024-02", "place": 11, "score": "15:32.95", "points": 70 },
+          { "eventId": "2024-03", "place": 2, "score": "03:09.07", "points": 97 },
+          { "eventId": "2024-04", "place": 9, "score": null, "points": 76 },
+          { "eventId": "2024-05", "place": 6, "score": "49:14.00", "points": 85 },
+          { "eventId": "2024-06", "place": 32, "score": null, "points": 16 },
+          { "eventId": "2024-07", "place": 8, "score": "07:43.31", "points": 79 },
+          { "eventId": "2024-08", "place": 8, "score": "08:01.42", "points": 72 },
+          { "eventId": "2024-09", "place": 9, "score": "02:43.76", "points": 68 },
+          { "eventId": "2024-10", "place": 7, "score": "05:33.40", "points": 76 }
+        ]
+      },
+      {
+        "rank": 5,
+        "name": "Haley Adams",
+        "country": "USA",
+        "totalPoints": 736,
+        "events": [
+          { "eventId": "2024-01", "place": 7, "score": "41:41.34", "points": 82 },
+          { "eventId": "2024-02", "place": 3, "score": "13:56.77", "points": 94 },
+          { "eventId": "2024-03", "place": 8, "score": "03:16.76", "points": 79 },
+          { "eventId": "2024-04", "place": 2, "score": null, "points": 97 },
+          { "eventId": "2024-05", "place": 3, "score": "47:46.00", "points": 94 },
+          { "eventId": "2024-06", "place": 31, "score": null, "points": 18 },
+          { "eventId": "2024-07", "place": 17, "score": "08:58.00", "points": 52 },
+          { "eventId": "2024-08", "place": 3, "score": "07:49.22", "points": 92 },
+          { "eventId": "2024-09", "place": 12, "score": "02:47.22", "points": 56 },
+          { "eventId": "2024-10", "place": 8, "score": "05:40.23", "points": 72 }
+        ]
+      },
+      {
+        "rank": 6,
+        "name": "Alexis Raptis",
+        "country": "USA",
+        "totalPoints": 698,
+        "events": [
+          { "eventId": "2024-01", "place": 14, "score": "43:53.50", "points": 61 },
+          { "eventId": "2024-02", "place": 26, "score": "17:13.80", "points": 28 },
+          { "eventId": "2024-03", "place": 19, "score": "03:30.16", "points": 46 },
+          { "eventId": "2024-04", "place": 15, "score": null, "points": 58 },
+          { "eventId": "2024-05", "place": 12, "score": "50:56.00", "points": 67 },
+          { "eventId": "2024-06", "place": 14, "score": null, "points": 61 },
+          { "eventId": "2024-07", "place": 2, "score": "06:31.62", "points": 97 },
+          { "eventId": "2024-08", "place": 5, "score": "07:56.06", "points": 84 },
+          { "eventId": "2024-09", "place": 1, "score": "02:28.75", "points": 100 },
+          { "eventId": "2024-10", "place": 2, "score": "05:05.61", "points": 96 }
+        ]
+      },
+      {
+        "rank": 7,
+        "name": "Danielle Brandon",
+        "country": "USA",
+        "totalPoints": 639,
+        "events": [
+          { "eventId": "2024-01", "place": 10, "score": "42:13.70", "points": 73 },
+          { "eventId": "2024-02", "place": 37, "score": "18:26.67", "points": 6 },
+          { "eventId": "2024-03", "place": 4, "score": "03:13.68", "points": 91 },
+          { "eventId": "2024-04", "place": 7, "score": null, "points": 82 },
+          { "eventId": "2024-05", "place": 25, "score": "57:12.00", "points": 30 },
+          { "eventId": "2024-06", "place": 22, "score": null, "points": 37 },
+          { "eventId": "2024-07", "place": 5, "score": "06:51.80", "points": 88 },
+          { "eventId": "2024-08", "place": 7, "score": "07:59.26", "points": 76 },
+          { "eventId": "2024-09", "place": 8, "score": "02:40.67", "points": 72 },
+          { "eventId": "2024-10", "place": 5, "score": "05:22.85", "points": 84 }
+        ]
+      },
+      {
+        "rank": 8,
+        "name": "Madeline Sturt",
+        "country": "Australia",
+        "totalPoints": 638,
+        "events": [
+          { "eventId": "2024-01", "place": 13, "score": "43:32.59", "points": 64 },
+          { "eventId": "2024-02", "place": 2, "score": "13:43.21", "points": 97 },
+          { "eventId": "2024-03", "place": 22, "score": "03:31.32", "points": 37 },
+          { "eventId": "2024-04", "place": 11, "score": null, "points": 70 },
+          { "eventId": "2024-05", "place": 19, "score": "53:37.00", "points": 46 },
+          { "eventId": "2024-06", "place": 10, "score": null, "points": 73 },
+          { "eventId": "2024-07", "place": 23, "score": "CAP+3", "points": 34 },
+          { "eventId": "2024-08", "place": 15, "score": "08:16.28", "points": 45 },
+          { "eventId": "2024-09", "place": 5, "score": "02:37.68", "points": 84 },
+          { "eventId": "2024-10", "place": 4, "score": "05:13.58", "points": 88 }
+        ]
+      },
+      {
+        "rank": 9,
+        "name": "Paige Semenza",
+        "country": "USA",
+        "totalPoints": 612,
+        "events": [
+          { "eventId": "2024-01", "place": 11, "score": "42:21.52", "points": 70 },
+          { "eventId": "2024-02", "place": 13, "score": "15:56.78", "points": 64 },
+          { "eventId": "2024-03", "place": 18, "score": "03:29.47", "points": 49 },
+          { "eventId": "2024-04", "place": 5, "score": null, "points": 88 },
+          { "eventId": "2024-05", "place": 9, "score": "49:46.00", "points": 76 },
+          { "eventId": "2024-06", "place": 12, "score": null, "points": 67 },
+          { "eventId": "2024-07", "place": 28, "score": "CAP+9", "points": 24 },
+          { "eventId": "2024-08", "place": 16, "score": "08:20.03", "points": 42 },
+          { "eventId": "2024-09", "place": 6, "score": "02:39.39", "points": 80 },
+          { "eventId": "2024-10", "place": 13, "score": "06:05.54", "points": 52 }
+        ]
+      },
+      {
+        "rank": 10,
+        "name": "Alex Gazan",
+        "country": "USA",
+        "totalPoints": 599,
+        "events": [
+          { "eventId": "2024-01", "place": 38, "score": "49:14.84", "points": 4 },
+          { "eventId": "2024-02", "place": 9, "score": "15:20.47", "points": 76 },
+          { "eventId": "2024-03", "place": 3, "score": "03:11.20", "points": 94 },
+          { "eventId": "2024-04", "place": 20, "score": null, "points": 43 },
+          { "eventId": "2024-05", "place": 15, "score": "52:26.00", "points": 58 },
+          { "eventId": "2024-06", "place": 3, "score": null, "points": 94 },
+          { "eventId": "2024-07", "place": 25, "score": "CAP+6", "points": 30 },
+          { "eventId": "2024-08", "place": 9, "score": "08:01.96", "points": 68 },
+          { "eventId": "2024-09", "place": 13, "score": "02:49.21", "points": 52 },
+          { "eventId": "2024-10", "place": 6, "score": "05:29.83", "points": 80 }
+        ]
+      }
+    ]
+  }
+}
