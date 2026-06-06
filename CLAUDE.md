@@ -185,45 +185,83 @@ The **Today's WOD** tab (`DailyWod.tsx`) is the primary daily entry point:
 ## Classification (scraper)
 
 `scripts/fetch-daily-wod.mjs` extracts a workout from the crossfit.com page
-and classifies it. Bugs we've fixed:
+and classifies it. Iteratively-fixed bugs:
 
-1. **Load regex accepts hyphens.** `(\d{2,3})[-\s]*(?:lb|pound|#)` —
-   matches "105-lb" / "125-lb" / "185-lb" as well as "105 lb" or "105lb".
-2. **Named WOD detection restricted to workout header.** Only the first ~5
-   lines / 250 chars of the extracted text are scanned for named-WOD matches.
-   Anything past article markers ("Compare to", "Stimulus and Strategy:",
-   "Post time to comments", "Today's Hero workout") is treated as
-   commentary, not workout content.
-3. **Movement-signature fallback** for the 8 famous WODs (Murph, Fran,
-   Helen, Grace, Diane, Annie, DT, Cindy) so we still detect them when the
-   name only appears in the article body.
-4. **isHero flag** follows structure detection (`Hero WOD` structure
-   promotes `ih: true` even without a named-WOD match — covers hero
-   workouts honoring service members not in our names list).
+1. **Load regex accepts hyphens, pood, kg, lift+bare-number.**
+   `(\d{2,3})[-\s]*(?:lb|pound|#)` for pounds, `(\d{2,3})[-\s]*(?:kg|kilo)`
+   converted ×2.2 for kg, `(\d+(?:\.\d+)?)[-\s]*pood` converted ×35 for
+   Russian KB, and `(deadlift|clean|snatch|squat|press|jerk|thruster)\s+(\d{2,3})\b`
+   for early-CrossFit notation like "Deadlift 225". Negative lookahead
+   excludes rep/round/sec/cal so it doesn't match "Deadlift 30 reps".
+2. **Named WOD detection restricted to workout header.** Only first ~5
+   lines / 250 chars are scanned. Past article markers ("Compare to",
+   "Stimulus and Strategy:", "Post time to comments", "Today's Hero
+   workout") is commentary, not workout content.
+3. **Markdown-stripped header for word-boundary matches.** Before regex,
+   `[Name](link)`, `**bold**`, smart-quotes are stripped. Otherwise `\b`
+   fails across markdown and legitimate names like `**Fran**` go undetected.
+4. **Movement-signature fallback** for famous WODs (Murph, Fran, Helen,
+   Grace, Diane, Annie, DT, Cindy) — detects them by movement signature
+   when the name only appears in article body.
+5. **isHero flag** follows structure detection (`Hero WOD` structure
+   promotes `ih: true` even without a named-WOD match).
+6. **Rest-day guard.** Detects when extracted text looks like nav/ad
+   content (e.g. "CROSSFIT GAMES TICKETS NOW AVAILABLE") with no workout
+   markers — stores as "Rest Day" instead of garbage.
+
+**Movement dictionary** (`MOVEMENT_DICT`) currently covers: Run, Row, Bike,
+PullUp, MuscleUp, HSPU, HandstandWalk, ToesToBar, RopeClimb, PistolSquat,
+BoxJump, Burpee, GHD, DoubleUnders, PushUp, AirSquat, SitUp, Lunge, LSit,
+HandstandHold, Dip, WallWalk, KneesToElbows, BackExtension, Plank,
+JumpRope, GoodMorning, GroundToOverhead, Clean, Snatch, Deadlift,
+BackSquat, FrontSquat, OverheadSquat, ShoulderPress, PushPress, PushJerk,
+SplitJerk, Thruster, WallBall, KettlebellSwing, DumbbellWork, Swim, SkiErg.
 
 ## Retro-fixing classifications
 
 `scripts/reclassify.mjs` re-runs the classifiers on existing entries:
 
 ```bash
-node scripts/reclassify.mjs --dry-run --since 2026-03-26   # preview
-node scripts/reclassify.mjs --since 2026-03-26              # apply
+# Preview
+node scripts/reclassify.mjs --dry-run --conservative
+node scripts/reclassify.mjs --dry-run --since 2026-03-26
+
+# Apply
+node scripts/reclassify.mjs --conservative                 # safe across all years
+node scripts/reclassify.mjs --since 2026-03-26              # all changes, scraper era only
 ```
 
-Use the `--since YYYY-MM-DD` flag to scope to scraper-era entries
-(daily-wod scraper started running on 2026-03-26). Running unbounded across
-all 6800+ entries will rewrite years of historical data with the new
-classifier — usually not what you want.
+**Flags:**
+- `--dry-run` — preview without writing
+- `--since YYYY-MM-DD` — scope to entries on or after a date
+- `--conservative` — only apply additive fixes (add missing movements,
+  resolve Unknown modality/load). Skips nw clearing and ih promotion,
+  which can regress historical entries that were ingested by a different
+  pipeline with cleaner workout text.
+
+**Heuristic:** for full-history runs use `--conservative`. For
+scraper-era only (`--since 2026-03-26`), the full reclassify is safe
+because the scraper-era data has known patterns the fixes target.
+
+**Cross-year audit history (2026-06-05):** 1062 entries improved across
+2001-2026 with the conservative pass. Remaining 1604 weighted-but-no-load
+entries are mostly legitimate "Post loads to comments" workouts where the
+athlete picks the weight — no number to extract. 218 of those use
+bodyweight-relative notation (e.g. Linda's "1.5 BW deadlift") which
+would need a new `Bodyweight-Relative` lp category to capture properly
+— deferred as a schema change.
 
 ## Where to look when something breaks
 
 - **Daily WOD didn't update:** check the GH Action at
   https://github.com/autosterea/crossfit-wod-intel/actions/workflows/daily-wod.yml
-  — it should run at 14:00 UTC every day. If green but no new commit, the
-  fetcher saw a rest day or article (look at the run log).
+  — scheduled for 14:00 UTC daily but GH cron is jittery (can fire 10min
+  to 2h late). If green but no new commit, the fetcher saw a rest day or
+  article (look at the run log).
 - **Site didn't pick up new WOD:** check the VPS cron log:
-  `ssh digitalocean 'tail -50 /var/log/crossfit-wod-rebuild.log'`. Cron is
-  scheduled for 15:30 UTC daily.
+  `ssh digitalocean 'tail -50 /var/log/crossfit-wod-rebuild.log'`. The
+  rebuild runs every 30 min between 14:00-22:00 UTC and only triggers
+  `npm run build` when `git fetch` shows a new commit on origin/main.
 - **Site down / 502:** check Caddy: `ssh digitalocean 'systemctl status
   caddy'`. The site is purely static so it's hard to break — most issues
   will be the underlying `dist/` directory being missing or empty after a
