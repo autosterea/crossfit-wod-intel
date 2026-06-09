@@ -212,17 +212,93 @@ Data pipeline (one-time research, manually re-runnable):
   pushState: `/games/2014`, `/games/evolution`…).
 - To add the 2026 Games later: write `raw/2026.json` per SCHEMA.md, run
   `npm run build:games`, commit both files.
-- **Capacity Lab** (`/games/capacity`, `src/games/CapacityView.tsx`):
-  top-10 athlete analysis — work capacity across time domains (capacity
-  curve on log duration), modal domains (radar), fingerprint heatmap,
-  breadth index. Data: `src/data/games/results/<year>.json` (top-10 per
-  division, per-event place/score/points). The build script validates:
-  points must sum to totals, documented event winners must place 1st,
-  places within field size, sequential ranks. Pilot year 2025; to add a
-  year, research a results file (official leaderboard API
-  `c3po.crossfit.com/api/leaderboards/v2/competitions/games/<year>/leaderboards?division=1|2`
-  is the best source) and rebuild. Performance metric = placement
-  percentile (field−place+1)/field; event duration = division winning time.
+## Capacity Lab (`/games/capacity`)
+
+`src/games/CapacityView.tsx` — operationalizes CrossFit's definition of
+fitness ("work capacity across broad time and modal domains") for the top
+10 of **every** Games year 2007–2025 plus the multi-stage 2026 season.
+
+- **Data:** `src/data/games/results/<year>.json` (schema:
+  `results/SCHEMA.md`). Past years: top-10 per division with per-event
+  place/score/points, researched per year (research → adversarial verify →
+  fix → audit), anchored to the raw event files. Best source is the
+  official leaderboard API
+  `c3po.crossfit.com/api/leaderboards/v2/competitions/games/<year>/leaderboards?division=1|2`.
+- **Headline metric — Capacity Score:** mean % of best output across all
+  events. Within a for-time event all finishers do the same work, so
+  output is exactly inverse to time (no model). 1RM events score as % of
+  best lift; capped scores are discounted by completed fraction; events
+  without scores fall back to placement percentile.
+- **Sections:** capacity leaderboard (bars + sparklines), head-to-head
+  comparator, power-duration curve, the race (cumulative-position bump
+  chart), modal radar (M/G/W + loading/engine), hopper quadrant
+  (capacity × consistency), decisive tests (placement-spread), fingerprint
+  heatmap.
+- **Power-duration curve** needs a per-event work model (kJ); only 2025
+  has one (`scripts/games-work-model-2025.mjs`, physiology-audited;
+  Critical Power fit P(t)=CP+W′/t over the 2–20 min window, skill/grip and
+  marathon-length events shown but excluded). Years without a work model
+  show the exact "% of best" curve and hide the toggle.
+- **Scoring-direction-aware:** 2008 (cumulative time) and 2009–2010
+  (rank-sum) are lower-is-better; build validation + the race chart detect
+  direction from rank-vs-total ordering.
+- **2026 is multi-stage:** `results/2026.json` uses `stages`
+  (open/quarterfinals/games-projected) instead of `divisions`; top-30
+  cohort re-ranked within itself; `scripts/build-2026-results.mjs`
+  assembles it from a research-workflow output. CapacityView renders a
+  year OR a stage through one source-agnostic context.
+
+## 2026 Hub (`/games/2026`)
+
+The dedicated 2026 Games home (mobile-first), feeding the
+@CrossFit-games-update Instagram plan (pre/post-event content during the
+Games, athlete tagging).
+
+- **Views:** `src/games/Hub2026.tsx` (countdown hero → Jul 24–26 SAP
+  Center San Jose, field-forming banner, men/women roster cards,
+  interviews feed) and `src/games/AthleteProfile.tsx`
+  (`/games/2026/athlete/<slug>`: photo, vitals, year-by-year "Every Games
+  appearance" strip, Road to San Jose (Open → QF → Semifinal), embedded
+  Dave Castro YouTube interview or "coming" slot, storyline, IG link).
+  `src/games/AthleteAvatar.tsx` = photo with monogram fallback;
+  `src/games/athletes2026.ts` = data + helpers (countryFlag,
+  youtubeEmbed). Routing: `hub`/`athlete` views in `gamesStore.ts`.
+- **Data:** `src/data/games/athletes-2026.json` — 23+23 in-person
+  qualifiers (7+7 from the online Semifinal pending). Pipeline scripts (in
+  order used): `build-2026-athletes.mjs` (assemble from research
+  workflow), `merge-2026-refine.mjs` (verified Castro interviews +
+  verified-only IG + rank fills), `merge-2026-deep.mjs` (complete official
+  per-athlete Games history + HEAD-verified photos),
+  `download-2026-photos.mjs` + `resize-2026-photos.mjs` (self-host best
+  photos → `public/athletes/<slug>.webp`, 400×520 face-cropped webp).
+- **Correctness rules (hard-learned):**
+  - Champion flags MUST be grounded against `games-data.json`'s verified
+    champions array, never research output. Men: Adler 2023, **Sprague
+    2024** (the Lazar Dukic year), Hopper 2025.
+  - Interview URLs: only verified Dave Castro YouTube videos from the 2026
+    cycle (his channel: `@davecastro6289`); crossfit.com pages, podcasts,
+    and prior-cycle videos are wrong. Null > wrong.
+  - Instagram: link only verified handles; never guess (wrong tags are
+    worse than blanks).
+  - Photos: HEAD-verify (200 + image/*) before shipping; self-hosted under
+    `public/athletes/` so nothing expires; teen-division Games years don't
+    count as individual appearances.
+- **Scheduled automation:** remote routine
+  `trig_01Bp6dpjAP143dMDiQdbyrhj` ("2026 field lock → Capacity Lab + 2026
+  Hub") fires once 2026-06-16 13:00Z: researches the locked 30+30 field +
+  semifinal paths, adds the 7+7 with full profiles, refreshes interviews,
+  re-bases the projection, builds the Road-to-Games view, tests, pushes
+  (VPS auto-rebuild deploys), verifies live, emails ravi@autosterea.com.
+  Manage at claude.ai/code/routines.
+- **Next phase (planned, not built):** IG share-card generator (portrait
+  1080×1350: athlete journey / pre-event prediction / post-event result);
+  live Games results ingestion end of July; optional recurring Castro
+  interview refresh.
+- **Workflow hygiene:** research agents sometimes leave scratch files in
+  the repo root (`Usersravik*`, `qf_*`, `open_*.json`, `shed.html` were
+  removed); `.gitignore` now covers the known patterns plus `*.local.mjs`
+  (local Playwright test scripts). Check `git status` after big agent
+  runs.
 
 ## Classification (scraper)
 
