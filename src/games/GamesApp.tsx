@@ -12,6 +12,8 @@ const EvolutionView = lazy(() => import('./EvolutionView'))
 const MovementsView = lazy(() => import('./MovementsView'))
 const LoreView = lazy(() => import('./LoreView'))
 const CapacityView = lazy(() => import('./CapacityView'))
+const Hub2026 = lazy(() => import('./Hub2026'))
+const AthleteProfile = lazy(() => import('./AthleteProfile'))
 
 class ViewErrorBoundary extends Component<{ children: ReactNode; name: string }, { error: Error | null }> {
   state = { error: null as Error | null }
@@ -37,7 +39,8 @@ class ViewErrorBoundary extends Component<{ children: ReactNode; name: string },
   }
 }
 
-const NAV: { view: 'home' | 'evolution' | 'movements' | 'lore' | 'capacity'; label: string; mobileLabel?: string }[] = [
+const NAV: { view: 'hub' | 'home' | 'evolution' | 'movements' | 'lore' | 'capacity'; label: string; mobileLabel?: string }[] = [
+  { view: 'hub', label: '2026 Games', mobileLabel: '2026' },
   { view: 'home', label: 'Timeline' },
   { view: 'evolution', label: 'Evolution' },
   { view: 'movements', label: 'Movements' },
@@ -181,11 +184,13 @@ export default function GamesApp() {
       ) : (
         <>
           {route.view === 'home' && <GamesHero />}
-          <YearRibbon />
+          {route.view !== 'hub' && route.view !== 'athlete' && <YearRibbon />}
           <main className="max-w-6xl mx-auto px-4 pb-8">
             <Suspense fallback={<ViewLoading />}>
               <ViewErrorBoundary name={route.view} key={route.view === 'year' ? `year-${route.year}` : route.view}>
                 {route.view === 'home' && <TimelineView />}
+                {route.view === 'hub' && <Hub2026 />}
+                {route.view === 'athlete' && <AthleteProfile key={route.slug} />}
                 {route.view === 'year' && <YearView key={route.year} />}
                 {route.view === 'evolution' && <EvolutionView />}
                 {route.view === 'movements' && <MovementsView />}

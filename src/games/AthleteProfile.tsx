@@ -1,0 +1,131 @@
+import { athleteBySlug, countryFlag, youtubeEmbed, allAthletes2026 } from './athletes2026'
+import { useGamesStore } from './gamesStore'
+import AthleteAvatar from './AthleteAvatar'
+import type { GamesAthlete2026 } from '../types-games'
+
+function Stat({ label, value, accent }: { label: string; value: string; accent?: boolean }) {
+  return (
+    <div className="rounded-xl p-3 bg-[var(--panel-bg-2)] border border-[var(--panel-border-subtle)] text-center">
+      <div className="games-display text-xl sm:text-2xl leading-none" style={{ color: accent ? '#91C640' : 'var(--text-primary)' }}>{value}</div>
+      <div className="games-condensed text-[9.5px] uppercase tracking-[0.12em] text-[var(--text-muted)] mt-1">{label}</div>
+    </div>
+  )
+}
+
+function PathStep({ stage, value, sub, won }: { stage: string; value: string; sub?: string; won?: boolean }) {
+  return (
+    <div className="flex-1 min-w-0 rounded-xl p-3 border" style={{ borderColor: won ? 'rgba(1,150,68,0.4)' : 'var(--panel-border)', background: won ? 'rgba(1,150,68,0.08)' : 'var(--panel-bg)' }}>
+      <div className="games-condensed text-[10px] uppercase tracking-[0.12em] text-[#91C640]">{stage}</div>
+      <div className="games-display text-lg text-[var(--text-primary)] leading-tight mt-0.5">{value}</div>
+      {sub && <div className="text-[10.5px] text-[var(--text-muted)] truncate">{sub}</div>}
+    </div>
+  )
+}
+
+export default function AthleteProfile() {
+  const route = useGamesStore((s) => s.route)
+  const navigate = useGamesStore((s) => s.navigate)
+  const a: GamesAthlete2026 | undefined = route.slug ? athleteBySlug.get(route.slug) : undefined
+
+  if (!a) {
+    return (
+      <div className="text-center py-24">
+        <div className="games-display text-2xl text-[var(--text-primary)] mb-2">Athlete not found</div>
+        <button onClick={() => navigate({ view: 'hub', year: 2026 })} className="text-[#91C640] text-sm">← Back to the 2026 hub</button>
+      </div>
+    )
+  }
+
+  const embed = youtubeEmbed(a.interviewUrl)
+  const sameDivision = allAthletes2026.filter((x) => x.division === a.division)
+  const idx = sameDivision.findIndex((x) => x.slug === a.slug)
+  const next = sameDivision[(idx + 1) % sameDivision.length]
+  const semiWin = a.semifinalFinish2026 && /1st|won/i.test(a.semifinalFinish2026)
+  const vitals = [
+    a.age ? `${a.age} yrs` : null,
+    a.heightCm ? `${Math.floor(a.heightCm / 30.48)}'${Math.round((a.heightCm / 2.54) % 12)}"` : null,
+    a.weightKg ? `${Math.round(a.weightKg * 2.205)} lb` : null,
+  ].filter(Boolean)
+
+  return (
+    <div className="pt-6 max-w-3xl mx-auto">
+      <button onClick={() => navigate({ view: 'hub', year: 2026 })} className="games-condensed text-[12px] uppercase tracking-[0.1em] text-[var(--text-tertiary)] hover:text-[#91C640] mb-4">← 2026 field</button>
+
+      {/* Header */}
+      <section className="cap-card overflow-hidden mb-5 games-rise games-rise-1">
+        <div className="p-5 flex items-center gap-4" style={{ background: 'linear-gradient(120deg, rgba(1,150,68,0.12), transparent 70%)' }}>
+          <AthleteAvatar athlete={a} size={96} rounded="rounded-2xl" />
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center gap-2 flex-wrap">
+              <h1 className="games-display text-2xl sm:text-3xl text-[var(--text-primary)] leading-none">{a.name}</h1>
+              {a.isFormerChampion && <span className="games-chip" style={{ background: 'rgba(245,158,11,0.18)', color: '#f59e0b' }}>🏆 Champion</span>}
+              {a.isRookie && <span className="games-chip" style={{ background: 'rgba(96,165,250,0.16)', color: '#60a5fa' }}>Rookie</span>}
+            </div>
+            <div className="text-[13px] text-[var(--text-secondary)] mt-1">
+              {countryFlag(a.country)} {a.country}{a.hometown ? ` · ${a.hometown}` : ''}
+            </div>
+            <div className="text-[11.5px] text-[var(--text-muted)] mt-0.5">
+              {[a.affiliate, ...vitals].filter(Boolean).join(' · ')}
+            </div>
+            {a.instagramHandle && (
+              <a href={`https://instagram.com/${a.instagramHandle.replace('@', '')}`} target="_blank" rel="noopener noreferrer" className="text-[11.5px] text-[#91C640] mt-0.5 inline-block">{a.instagramHandle}</a>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* Storyline */}
+      {a.storyline && (
+        <section className="mb-5">
+          <div className="games-condensed text-[10px] uppercase tracking-[0.16em] text-[#91C640] mb-1">The story</div>
+          <p className="text-[14px] leading-relaxed text-[var(--text-secondary)]">{a.storyline}</p>
+        </section>
+      )}
+
+      {/* Games history */}
+      <section className="mb-5 grid grid-cols-3 gap-2.5">
+        <Stat label="Games" value={a.gamesAppearances != null ? `${a.gamesAppearances}×` : a.isRookie ? '1st' : '-'} />
+        <Stat label="Best finish" value={a.bestGamesFinish ? a.bestGamesFinish.replace(/\s*\(.*\)/, '') : a.isRookie ? 'Debut' : '-'} accent />
+        <Stat label="Since" value={a.firstGamesYear ? String(a.firstGamesYear) : a.isRookie ? '2026' : '-'} />
+      </section>
+
+      {/* Road to the Games */}
+      <section className="mb-5">
+        <div className="games-condensed text-[10px] uppercase tracking-[0.16em] text-[#91C640] mb-2">Road to San Jose</div>
+        <div className="flex items-stretch gap-2">
+          <PathStep stage="Open" value={a.openRank2026 ? `#${a.openRank2026}` : '-'} sub="worldwide" />
+          <PathStep stage="Quarterfinal" value={a.qfRank2026 ? `#${a.qfRank2026}` : '-'} sub="worldwide" />
+          <PathStep stage="Semifinal" value={a.semifinalFinish2026 ? a.semifinalFinish2026.replace(/\s*\(.*\)/, '') : a.semifinalEvent2026 ? 'Qualified' : '-'} sub={a.semifinalEvent2026 ?? undefined} won={!!semiWin} />
+        </div>
+        <p className="mt-2 text-[10.5px] text-[var(--text-muted)]">Semifinal results are within the athlete's own event (the ~10 Semifinals aren't comparable to each other).</p>
+      </section>
+
+      {/* Interview */}
+      <section className="mb-6">
+        <div className="games-condensed text-[10px] uppercase tracking-[0.16em] text-[#91C640] mb-2">Dave Castro interview</div>
+        {embed ? (
+          <div className="rounded-xl overflow-hidden border border-[var(--panel-border)]" style={{ aspectRatio: '16 / 9' }}>
+            <iframe src={embed} title={`${a.name} interview`} className="w-full h-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
+          </div>
+        ) : a.interviewUrl ? (
+          <a href={a.interviewUrl} target="_blank" rel="noopener noreferrer" className="cap-card flex items-center gap-3 p-4">
+            <span className="text-2xl">🎙️</span>
+            <span className="games-condensed text-[13px] font-semibold text-[#91C640]">Watch the interview →</span>
+          </a>
+        ) : (
+          <div className="rounded-xl p-4 text-center border border-dashed" style={{ borderColor: 'var(--panel-border)' }}>
+            <div className="text-2xl mb-1 opacity-50">🎙️</div>
+            <div className="games-condensed text-[12px] uppercase tracking-[0.1em] text-[var(--text-muted)]">Interview coming</div>
+            <div className="text-[11px] text-[var(--text-muted)] mt-0.5">Castro is interviewing athletes as they qualify; this slot fills when {a.name.split(' ')[0]}'s drops.</div>
+          </div>
+        )}
+      </section>
+
+      {/* Footer nav */}
+      <div className="flex items-center justify-between gap-3 mb-4">
+        <button onClick={() => navigate({ view: 'capacity', year: 2026 })} className="games-condensed text-[12px] uppercase tracking-[0.1em] text-[var(--text-tertiary)] hover:text-[#91C640]">Capacity Lab →</button>
+        <button onClick={() => navigate({ view: 'athlete', year: 2026, slug: next.slug })} className="games-condensed text-[12px] uppercase tracking-[0.1em] text-[var(--text-tertiary)] hover:text-[#91C640]">Next: {next.name} →</button>
+      </div>
+    </div>
+  )
+}

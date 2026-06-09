@@ -1,10 +1,11 @@
 import { create } from 'zustand'
 
-export type GamesView = 'home' | 'year' | 'evolution' | 'movements' | 'lore' | 'capacity'
+export type GamesView = 'home' | 'year' | 'evolution' | 'movements' | 'lore' | 'capacity' | 'hub' | 'athlete'
 
 export interface GamesRoute {
   view: GamesView
   year: number | null
+  slug?: string | null
 }
 
 const TITLES: Record<GamesView, string> = {
@@ -14,21 +15,28 @@ const TITLES: Record<GamesView, string> = {
   movements: 'Movements - CrossFit Games Almanac',
   lore: 'Records & Lore - CrossFit Games Almanac',
   capacity: 'Capacity Lab - CrossFit Games Almanac',
+  hub: '2026 CrossFit Games - Persistence Athletics',
+  athlete: '2026 Athlete - CrossFit Games',
 }
 
 export function parseGamesPath(pathname: string): GamesRoute {
   const seg = pathname.replace(/^\/games\/?/, '').replace(/\/+$/, '')
-  if (/^\d{4}$/.test(seg)) return { view: 'year', year: Number(seg) }
+  const athlete = seg.match(/^2026\/athlete\/([a-z0-9-]+)$/)
+  if (athlete) return { view: 'athlete', year: 2026, slug: athlete[1] }
+  if (seg === '2026') return { view: 'hub', year: 2026 }
   const capacityYear = seg.match(/^capacity\/(\d{4})$/)
   if (capacityYear) return { view: 'capacity', year: Number(capacityYear[1]) }
   if (seg === 'capacity') return { view: 'capacity', year: null }
   if (seg === 'evolution' || seg === 'movements' || seg === 'lore') {
     return { view: seg, year: null }
   }
+  if (/^\d{4}$/.test(seg)) return { view: 'year', year: Number(seg) }
   return { view: 'home', year: null }
 }
 
 export function routeToPath(route: GamesRoute): string {
+  if (route.view === 'hub') return '/games/2026'
+  if (route.view === 'athlete') return `/games/2026/athlete/${route.slug ?? ''}`
   if (route.view === 'year') return route.year ? `/games/${route.year}` : '/games'
   if (route.view === 'capacity') return route.year ? `/games/capacity/${route.year}` : '/games/capacity'
   if (route.view === 'home') return '/games'

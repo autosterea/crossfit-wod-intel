@@ -204,6 +204,50 @@ export interface GamesYearResults {
   workModel?: GamesWorkModel
 }
 
+// ---- 2026 athlete hub ----
+
+export interface GamesAthlete2026 {
+  name: string
+  slug: string
+  division: 'men' | 'women'
+  country: string | null
+  birthYear?: number | null
+  age?: number | null
+  hometown?: string | null
+  affiliate?: string | null
+  heightCm?: number | null
+  weightKg?: number | null
+  gamesAppearances?: number | null
+  firstGamesYear?: number | null
+  bestGamesFinish?: string | null
+  isFormerChampion?: boolean | null
+  isRookie?: boolean | null
+  openRank2026?: number | null
+  qfRank2026?: number | null
+  semifinalEvent2026?: string | null
+  semifinalFinish2026?: string | null
+  qualified: boolean
+  storyline?: string | null
+  nickname?: string | null
+  instagramHandle?: string | null
+  interviewUrl?: string | null
+  photoUrl?: string | null
+}
+
+export interface Athletes2026Data {
+  meta: {
+    generated: string
+    gamesDates: string
+    venue: string
+    city: string
+    fieldNote: string
+    fieldLocked: boolean
+  }
+  interviewSeries?: { series: string; seriesUrl: string | null } | null
+  men: GamesAthlete2026[]
+  women: GamesAthlete2026[]
+}
+
 export interface GamesData {
   meta: {
     generated: string
