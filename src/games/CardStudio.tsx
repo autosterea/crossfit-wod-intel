@@ -1,6 +1,7 @@
 import { useMemo, useRef, useState } from 'react'
 import { toPng } from 'html-to-image'
-import { A2026, allAthletes2026, countryFlag } from './athletes2026'
+import { A2026, allAthletes2026, countryFlag, initials, monogramColor } from './athletes2026'
+import photosExtra from '../data/games/photos-extra.json'
 import rawGames from '../data/games-data.json'
 import type { GamesData, GamesAthlete2026 } from '../types-games'
 
@@ -39,6 +40,25 @@ function formStandings(division: Division) {
   const stage = G.results?.['2026']?.stages?.games
   if (!stage) return []
   return stage.divisions[division].slice(0, 10)
+}
+
+// Photo lookup across the qualified field + supplementary headshots (Open-top-30
+// athletes who appear in form standings but aren't Games-qualified yet)
+const EXTRA: Record<string, string> = photosExtra as Record<string, string>
+function photoFor(name: string): string | null {
+  const k = name.toLowerCase().trim()
+  return allAthletes2026.find((x) => x.name.toLowerCase() === k)?.photoUrl ?? EXTRA[k] ?? null
+}
+
+function RoundPhoto({ name, size }: { name: string; size: number }) {
+  const url = photoFor(name)
+  return url ? (
+    <img src={url} alt="" crossOrigin="anonymous" style={{ width: size, height: size, objectFit: 'cover', objectPosition: 'center 22%', borderRadius: 999 }} />
+  ) : (
+    <div style={{ width: size, height: size, borderRadius: 999, background: monogramColor(name), display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: "'Anton', sans-serif", fontSize: size * 0.36, color: '#fff' }}>
+      {initials(name)}
+    </div>
+  )
 }
 
 const cardBg: React.CSSProperties = {
@@ -242,7 +262,6 @@ function H2HCard({ a, b }: { a: GamesAthlete2026; b: GamesAthlete2026 }) {
 
 function FormCard({ division }: { division: Division }) {
   const rows = formStandings(division)
-  const bySlug = new Map(allAthletes2026.map((x) => [x.name.toLowerCase(), x]))
   const max = rows.length ? Math.max(...rows.map((r) => r.totalPoints)) : 1
   const min = rows.length ? Math.min(...rows.map((r) => r.totalPoints)) : 0
   return (
@@ -255,16 +274,11 @@ function FormCard({ division }: { division: Division }) {
       </div>
       <div style={{ padding: '30px 56px 0' }}>
         {rows.map((r, i) => {
-          const ath = bySlug.get(r.name.toLowerCase())
           const w = 30 + (1 - (r.totalPoints - min) / Math.max(1, max - min)) * 64
           return (
             <div key={r.name} style={{ display: 'flex', alignItems: 'center', gap: 18, padding: '9px 0' }}>
               <div style={{ fontFamily: "'Anton', sans-serif", fontSize: 36, width: 50, color: i < 3 ? GREEN : DIM, textAlign: 'center' }}>{i + 1}</div>
-              {ath?.photoUrl ? (
-                <img src={ath.photoUrl} alt="" crossOrigin="anonymous" style={{ width: 62, height: 62, objectFit: 'cover', objectPosition: 'center 22%', borderRadius: 999 }} />
-              ) : (
-                <div style={{ width: 62, height: 62, borderRadius: 999, background: DGREEN }} />
-              )}
+              <RoundPhoto name={r.name} size={62} />
               <div style={{ width: 330, fontFamily: "'Anton', sans-serif", fontSize: 34, textTransform: 'uppercase', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{r.name}</div>
               <div style={{ flex: 1, height: 26, background: 'rgba(244,246,242,0.07)', borderRadius: 8, overflow: 'hidden' }}>
                 <div style={{ width: `${w}%`, height: '100%', borderRadius: 8, background: `linear-gradient(90deg, ${DGREEN}, ${GREEN})` }} />
