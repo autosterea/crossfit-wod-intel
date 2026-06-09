@@ -1,0 +1,395 @@
+import { useMemo, useRef, useState } from 'react'
+import { toPng } from 'html-to-image'
+import { A2026, allAthletes2026, countryFlag } from './athletes2026'
+import rawGames from '../data/games-data.json'
+import type { GamesData, GamesAthlete2026 } from '../types-games'
+
+// Instagram card studio for @cf_games_update. URL-only tool (not in nav).
+// Cards render at a fixed 1080x1350 (IG portrait) offscreen and export as PNG.
+// URL params for automation: ?t=<template>&d=<division>&a=<slug>&b=<slug2>
+
+const G = rawGames as unknown as GamesData
+
+type Division = 'men' | 'women'
+type Template = 'spotlight' | 'cover' | 'h2h' | 'form'
+
+const TEMPLATES: { id: Template; label: string }[] = [
+  { id: 'spotlight', label: 'Athlete Spotlight' },
+  { id: 'cover', label: 'Field / Countdown Cover' },
+  { id: 'h2h', label: 'Head to Head' },
+  { id: 'form', label: 'Season Form Top 10' },
+]
+
+const HUB_URL = 'wod.persistenceathletics.com/games/2026'
+const HANDLE = '@cf_games_update'
+const HASHTAGS = '#CrossFitGames #CrossFitGames2026 #CrossFit #RoadToSanJose'
+
+const GREEN = '#91C640'
+const DGREEN = '#019644'
+const INK = '#f4f6f2'
+const DIM = 'rgba(244,246,242,0.62)'
+
+function daysToGames(): number {
+  const target = new Date('July 24, 2026 00:00:00')
+  return Math.max(0, Math.ceil((target.getTime() - Date.now()) / 86400000))
+}
+
+// Season-form standings from the projected stage (placement-sum, lower = better)
+function formStandings(division: Division) {
+  const stage = G.results?.['2026']?.stages?.games
+  if (!stage) return []
+  return stage.divisions[division].slice(0, 10)
+}
+
+const cardBg: React.CSSProperties = {
+  width: 1080,
+  height: 1350,
+  background:
+    'radial-gradient(120% 90% at 85% -10%, rgba(1,150,68,0.38) 0%, transparent 55%), radial-gradient(80% 70% at 10% 110%, rgba(145,198,64,0.20) 0%, transparent 60%), linear-gradient(160deg, #0b0e10 0%, #07090b 100%)',
+  color: INK,
+  display: 'flex',
+  flexDirection: 'column',
+  fontFamily: "'Barlow Condensed', sans-serif",
+  position: 'relative',
+  overflow: 'hidden',
+}
+
+function CardHeader() {
+  return (
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '44px 56px 0' }}>
+      <div style={{ fontFamily: "'Anton', sans-serif", fontSize: 34, letterSpacing: 1, textTransform: 'uppercase' }}>
+        <span style={{ color: INK }}>CF GAMES </span>
+        <span style={{ color: GREEN }}>UPDATE</span>
+      </div>
+      <div style={{ fontSize: 26, fontWeight: 600, letterSpacing: 3, textTransform: 'uppercase', color: DIM }}>{HANDLE}</div>
+    </div>
+  )
+}
+
+function CardFooter() {
+  return (
+    <div style={{ marginTop: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 56px 40px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+        <img src="/pa-logo.png" alt="" style={{ width: 44, height: 44, borderRadius: 999, background: '#fff', padding: 4 }} crossOrigin="anonymous" />
+        <span style={{ fontSize: 24, letterSpacing: 1.5, textTransform: 'uppercase', color: DIM }}>by Persistence Athletics</span>
+      </div>
+      <span style={{ fontSize: 24, color: GREEN, letterSpacing: 0.5 }}>{HUB_URL}</span>
+    </div>
+  )
+}
+
+function Photo({ a, size, radius = 28 }: { a: GamesAthlete2026; size: number; radius?: number }) {
+  return a.photoUrl ? (
+    <img src={a.photoUrl} alt="" crossOrigin="anonymous" style={{ width: size, height: size * 1.18, objectFit: 'cover', objectPosition: 'center 20%', borderRadius: radius, border: `3px solid rgba(145,198,64,0.5)` }} />
+  ) : (
+    <div style={{ width: size, height: size * 1.18, borderRadius: radius, background: DGREEN, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: "'Anton', sans-serif", fontSize: size * 0.32, color: '#fff' }}>
+      {a.name.split(' ').map((p) => p[0]).join('').slice(0, 2)}
+    </div>
+  )
+}
+
+function StatBox({ v, l }: { v: string; l: string }) {
+  return (
+    <div style={{ flex: 1, background: 'rgba(244,246,242,0.06)', borderRadius: 18, padding: '20px 8px', textAlign: 'center' }}>
+      <div style={{ fontFamily: "'Anton', sans-serif", fontSize: 52, color: INK, lineHeight: 1 }}>{v}</div>
+      <div style={{ fontSize: 22, letterSpacing: 2.5, textTransform: 'uppercase', color: GREEN, marginTop: 8 }}>{l}</div>
+    </div>
+  )
+}
+
+// ---------- Templates ----------
+
+function SpotlightCard({ a }: { a: GamesAthlete2026 }) {
+  const semi = a.semifinalFinish2026 ? a.semifinalFinish2026.replace(/\s*\(.*\)/, '') : 'Qualified'
+  return (
+    <div style={cardBg}>
+      <CardHeader />
+      <div style={{ padding: '36px 56px 0', display: 'flex', gap: 40, alignItems: 'flex-start' }}>
+        <Photo a={a} size={330} />
+        <div style={{ minWidth: 0, paddingTop: 8 }}>
+          <div style={{ fontSize: 26, letterSpacing: 4, textTransform: 'uppercase', color: GREEN, marginBottom: 6 }}>Athlete Spotlight</div>
+          <div style={{ fontFamily: "'Anton', sans-serif", fontSize: a.name.length > 16 ? 64 : 78, textTransform: 'uppercase', lineHeight: 0.95 }}>{a.name}</div>
+          <div style={{ fontSize: 32, color: DIM, marginTop: 14 }}>
+            {countryFlag(a.country)} {a.country}{a.affiliate ? ` · ${a.affiliate}` : ''}
+          </div>
+          <div style={{ display: 'flex', gap: 12, marginTop: 18, flexWrap: 'wrap' }}>
+            {a.isFormerChampion && (
+              <span style={{ background: 'rgba(245,158,11,0.2)', color: '#f5b82e', borderRadius: 12, padding: '10px 18px', fontSize: 26, fontWeight: 600, letterSpacing: 2, textTransform: 'uppercase' }}>🏆 Former Champion</span>
+            )}
+            {a.isRookie && (
+              <span style={{ background: 'rgba(96,165,250,0.2)', color: '#7db5f8', borderRadius: 12, padding: '10px 18px', fontSize: 26, fontWeight: 600, letterSpacing: 2, textTransform: 'uppercase' }}>Rookie</span>
+            )}
+            {a.instagramHandle && <span style={{ color: GREEN, fontSize: 28, padding: '10px 0' }}>{a.instagramHandle}</span>}
+          </div>
+        </div>
+      </div>
+
+      <div style={{ display: 'flex', gap: 18, padding: '36px 56px 0' }}>
+        <StatBox v={a.gamesAppearances ? `${a.gamesAppearances}x` : a.isRookie ? '1st' : '-'} l="Games" />
+        <StatBox v={a.bestGamesFinish ? a.bestGamesFinish.replace(/\s*\(.*\)/, '') : 'Debut'} l="Best Finish" />
+        <StatBox v={a.firstGamesYear ? String(a.firstGamesYear) : '2026'} l="Since" />
+      </div>
+
+      <div style={{ padding: '32px 56px 0' }}>
+        <div style={{ fontSize: 24, letterSpacing: 3, textTransform: 'uppercase', color: GREEN, marginBottom: 14 }}>Road to San Jose</div>
+        <div style={{ display: 'flex', gap: 18 }}>
+          {[
+            ['Open', a.openRank2026 ? `#${a.openRank2026}` : '-'],
+            ['Quarterfinal', a.qfRank2026 ? `#${a.qfRank2026}` : '-'],
+            [a.semifinalEvent2026 ?? 'Semifinal', semi],
+          ].map(([l, v]) => (
+            <div key={l} style={{ flex: 1, border: '2px solid rgba(145,198,64,0.35)', borderRadius: 18, padding: '18px 12px', textAlign: 'center' }}>
+              <div style={{ fontSize: 22, letterSpacing: 2, textTransform: 'uppercase', color: DIM, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{l}</div>
+              <div style={{ fontFamily: "'Anton', sans-serif", fontSize: 46, color: GREEN, marginTop: 6 }}>{v}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {a.storyline && (
+        <div style={{ padding: '34px 56px 0', fontSize: 30, lineHeight: 1.45, color: 'rgba(244,246,242,0.85)' }}>
+          {a.storyline.length > 220 ? a.storyline.slice(0, 217).replace(/\s+\S*$/, '') + '...' : a.storyline}
+        </div>
+      )}
+      <CardFooter />
+    </div>
+  )
+}
+
+function CoverCard() {
+  const days = daysToGames()
+  const all = allAthletes2026
+  return (
+    <div style={cardBg}>
+      <CardHeader />
+      <div style={{ padding: '40px 56px 0', textAlign: 'center' }}>
+        <div style={{ fontFamily: "'Anton', sans-serif", fontSize: 92, textTransform: 'uppercase', lineHeight: 0.95 }}>
+          The 2026<br /><span style={{ color: GREEN }}>CrossFit Games</span>
+        </div>
+        <div style={{ fontSize: 32, color: DIM, marginTop: 18, letterSpacing: 2 }}>SAP CENTER · SAN JOSE · JULY 24-26</div>
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'center', gap: 60, padding: '34px 56px 0' }}>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ fontFamily: "'Anton', sans-serif", fontSize: 84, color: GREEN, lineHeight: 1 }}>{days}</div>
+          <div style={{ fontSize: 24, letterSpacing: 3, textTransform: 'uppercase', color: DIM }}>days to go</div>
+        </div>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ fontFamily: "'Anton', sans-serif", fontSize: 84, color: INK, lineHeight: 1 }}>{all.length}</div>
+          <div style={{ fontSize: 24, letterSpacing: 3, textTransform: 'uppercase', color: DIM }}>qualified so far</div>
+        </div>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ fontFamily: "'Anton', sans-serif", fontSize: 84, color: INK, lineHeight: 1 }}>14</div>
+          <div style={{ fontSize: 24, letterSpacing: 3, textTransform: 'uppercase', color: DIM }}>spots open</div>
+        </div>
+      </div>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 14, justifyContent: 'center', padding: '40px 70px 0' }}>
+        {all.map((a) => (
+          <div key={a.slug} style={{ width: 92, textAlign: 'center' }}>
+            {a.photoUrl ? (
+              <img src={a.photoUrl} alt="" crossOrigin="anonymous" style={{ width: 88, height: 88, objectFit: 'cover', objectPosition: 'center 22%', borderRadius: 999, border: `2px solid rgba(145,198,64,0.45)` }} />
+            ) : (
+              <div style={{ width: 88, height: 88, borderRadius: 999, background: DGREEN, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: "'Anton', sans-serif", fontSize: 30, color: '#fff', margin: '0 auto' }}>
+                {a.name.split(' ').map((p) => p[0]).join('').slice(0, 2)}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+      <div style={{ textAlign: 'center', padding: '36px 56px 0', fontSize: 30, color: 'rgba(244,246,242,0.85)' }}>
+        Every athlete. Every number. One place.
+      </div>
+      <CardFooter />
+    </div>
+  )
+}
+
+function H2HCard({ a, b }: { a: GamesAthlete2026; b: GamesAthlete2026 }) {
+  const row = (label: string, va: string, vb: string) => (
+    <div key={label} style={{ display: 'flex', alignItems: 'center', padding: '20px 0', borderTop: '1px solid rgba(244,246,242,0.12)' }}>
+      <div style={{ flex: 1, fontFamily: "'Anton', sans-serif", fontSize: 44, color: INK, textAlign: 'left' }}>{va}</div>
+      <div style={{ width: 320, fontSize: 25, letterSpacing: 2.5, textTransform: 'uppercase', color: DIM, textAlign: 'center' }}>{label}</div>
+      <div style={{ flex: 1, fontFamily: "'Anton', sans-serif", fontSize: 44, color: INK, textAlign: 'right' }}>{vb}</div>
+    </div>
+  )
+  return (
+    <div style={cardBg}>
+      <CardHeader />
+      <div style={{ textAlign: 'center', padding: '30px 56px 0', fontSize: 28, letterSpacing: 4, textTransform: 'uppercase', color: GREEN }}>Head to Head</div>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '24px 56px 0' }}>
+        <div style={{ textAlign: 'center', width: 400 }}>
+          <Photo a={a} size={290} />
+          <div style={{ fontFamily: "'Anton', sans-serif", fontSize: 44, textTransform: 'uppercase', marginTop: 16, lineHeight: 1 }}>{a.name}</div>
+          <div style={{ fontSize: 26, color: DIM, marginTop: 6 }}>{countryFlag(a.country)} {a.country}</div>
+        </div>
+        <div style={{ fontFamily: "'Anton', sans-serif", fontSize: 56, color: GREEN }}>VS</div>
+        <div style={{ textAlign: 'center', width: 400 }}>
+          <Photo a={b} size={290} />
+          <div style={{ fontFamily: "'Anton', sans-serif", fontSize: 44, textTransform: 'uppercase', marginTop: 16, lineHeight: 1 }}>{b.name}</div>
+          <div style={{ fontSize: 26, color: DIM, marginTop: 6 }}>{countryFlag(b.country)} {b.country}</div>
+        </div>
+      </div>
+      <div style={{ padding: '36px 64px 0' }}>
+        {row('Games', a.gamesAppearances ? `${a.gamesAppearances}x` : '-', b.gamesAppearances ? `${b.gamesAppearances}x` : '-')}
+        {row('Best finish', a.bestGamesFinish?.replace(/\s*\(.*\)/, '') ?? '-', b.bestGamesFinish?.replace(/\s*\(.*\)/, '') ?? '-')}
+        {row('2026 Open', a.openRank2026 ? `#${a.openRank2026}` : '-', b.openRank2026 ? `#${b.openRank2026}` : '-')}
+        {row('Quarterfinal', a.qfRank2026 ? `#${a.qfRank2026}` : '-', b.qfRank2026 ? `#${b.qfRank2026}` : '-')}
+        {row('Semifinal', a.semifinalFinish2026?.replace(/\s*\(.*\)/, '') ?? '-', b.semifinalFinish2026?.replace(/\s*\(.*\)/, '') ?? '-')}
+      </div>
+      <CardFooter />
+    </div>
+  )
+}
+
+function FormCard({ division }: { division: Division }) {
+  const rows = formStandings(division)
+  const bySlug = new Map(allAthletes2026.map((x) => [x.name.toLowerCase(), x]))
+  const max = rows.length ? Math.max(...rows.map((r) => r.totalPoints)) : 1
+  const min = rows.length ? Math.min(...rows.map((r) => r.totalPoints)) : 0
+  return (
+    <div style={cardBg}>
+      <CardHeader />
+      <div style={{ padding: '34px 56px 0' }}>
+        <div style={{ fontSize: 26, letterSpacing: 4, textTransform: 'uppercase', color: GREEN }}>Season Form · {division}</div>
+        <div style={{ fontFamily: "'Anton', sans-serif", fontSize: 64, textTransform: 'uppercase', lineHeight: 1, marginTop: 6 }}>Who's Hottest<br />Right Now</div>
+        <div style={{ fontSize: 25, color: DIM, marginTop: 12 }}>Open + Quarterfinals combined, all 7 tests, top 30 cohort</div>
+      </div>
+      <div style={{ padding: '30px 56px 0' }}>
+        {rows.map((r, i) => {
+          const ath = bySlug.get(r.name.toLowerCase())
+          const w = 30 + (1 - (r.totalPoints - min) / Math.max(1, max - min)) * 64
+          return (
+            <div key={r.name} style={{ display: 'flex', alignItems: 'center', gap: 18, padding: '9px 0' }}>
+              <div style={{ fontFamily: "'Anton', sans-serif", fontSize: 36, width: 50, color: i < 3 ? GREEN : DIM, textAlign: 'center' }}>{i + 1}</div>
+              {ath?.photoUrl ? (
+                <img src={ath.photoUrl} alt="" crossOrigin="anonymous" style={{ width: 62, height: 62, objectFit: 'cover', objectPosition: 'center 22%', borderRadius: 999 }} />
+              ) : (
+                <div style={{ width: 62, height: 62, borderRadius: 999, background: DGREEN }} />
+              )}
+              <div style={{ width: 330, fontFamily: "'Anton', sans-serif", fontSize: 34, textTransform: 'uppercase', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{r.name}</div>
+              <div style={{ flex: 1, height: 26, background: 'rgba(244,246,242,0.07)', borderRadius: 8, overflow: 'hidden' }}>
+                <div style={{ width: `${w}%`, height: '100%', borderRadius: 8, background: `linear-gradient(90deg, ${DGREEN}, ${GREEN})` }} />
+              </div>
+            </div>
+          )
+        })}
+      </div>
+      <CardFooter />
+    </div>
+  )
+}
+
+// ---------- Captions ----------
+
+function captionFor(t: Template, a: GamesAthlete2026 | undefined, b: GamesAthlete2026 | undefined, division: Division): string {
+  const tagLine = (x?: GamesAthlete2026) => (x?.instagramHandle ? ` ${x.instagramHandle}` : '')
+  if (t === 'spotlight' && a) {
+    return `🎯 ATHLETE SPOTLIGHT: ${a.name.toUpperCase()} ${countryFlag(a.country)}\n\n${a.storyline ?? ''}\n\n${a.gamesAppearances ? `${a.gamesAppearances}x Games athlete` : 'Games rookie'}${a.bestGamesFinish ? ` · best finish ${a.bestGamesFinish}` : ''}\nRoad to San Jose: Open #${a.openRank2026 ?? '-'} · QF #${a.qfRank2026 ?? '-'} · ${a.semifinalEvent2026 ?? 'Semifinal'} ${a.semifinalFinish2026?.replace(/\s*\(.*\)/, '') ?? ''}\n\nFull profile, every athlete, every stat: link in bio${tagLine(a)}\n\n${HASHTAGS}`
+  }
+  if (t === 'h2h' && a && b) {
+    return `⚔️ ${a.name.toUpperCase()} vs ${b.name.toUpperCase()}\n\nTwo roads to San Jose. One floor. Who you got?\n\nFull breakdowns: link in bio${tagLine(a)}${tagLine(b)}\n\n${HASHTAGS}`
+  }
+  if (t === 'form') {
+    return `📊 WHO'S HOTTEST RIGHT NOW (${division.toUpperCase()})\n\nOpen + Quarterfinals combined, all 7 tests. This is season form, not a prediction. The Games floor decides the rest.\n\nFull analytics: link in bio\n\n${HASHTAGS}`
+  }
+  return `🚨 THE 2026 CROSSFIT GAMES. EVERY ATHLETE. EVERY NUMBER. ONE PLACE.\n\nWe built the most complete tracker of the 2026 season - free, no login:\n🏆 All ${allAthletes2026.length} qualified athletes (so far) - full profiles, photos, complete Games history\n🛣️ Every road to San Jose: Open → Quarterfinals → Semifinal\n🎙️ Dave Castro's athlete interviews, embedded as they drop\n📊 Analytics nobody else has\n\n7 more men + 7 more women punch their ticket at the Online Semifinal (June 11-15). The field locks June 16. We'll have it the same day.\n\nSan Jose. July 24-26. ${daysToGames()} days.\n\n🔗 Link in bio\n\n${HASHTAGS}`
+}
+
+// ---------- Studio shell ----------
+
+export default function CardStudio() {
+  const params = new URLSearchParams(window.location.search)
+  const [template, setTemplate] = useState<Template>((params.get('t') as Template) || 'spotlight')
+  const [division, setDivision] = useState<Division>((params.get('d') as Division) || 'men')
+  const roster = division === 'men' ? A2026.men : A2026.women
+  const [slugA, setSlugA] = useState(params.get('a') || roster[0].slug)
+  const [slugB, setSlugB] = useState(params.get('b') || roster[1].slug)
+  const [busy, setBusy] = useState(false)
+  const cardRef = useRef<HTMLDivElement>(null)
+
+  const a = useMemo(() => allAthletes2026.find((x) => x.slug === slugA) ?? roster[0], [slugA, roster])
+  const b = useMemo(() => allAthletes2026.find((x) => x.slug === slugB) ?? roster[1], [slugB, roster])
+  const caption = captionFor(template, a, b, division)
+
+  const download = async () => {
+    if (!cardRef.current || busy) return
+    setBusy(true)
+    try {
+      // double-render to ensure fonts/images settle
+      await toPng(cardRef.current, { width: 1080, height: 1350, pixelRatio: 1, cacheBust: true })
+      const url = await toPng(cardRef.current, { width: 1080, height: 1350, pixelRatio: 1, cacheBust: true })
+      const link = document.createElement('a')
+      link.download = template === 'spotlight' ? `${a.slug}-spotlight.png` : template === 'h2h' ? `${a.slug}-vs-${b.slug}.png` : `${template}-${division}.png`
+      link.href = url
+      link.click()
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  const copyCaption = () => navigator.clipboard.writeText(caption)
+
+  return (
+    <div className="pt-6 pb-10">
+      <div className="games-condensed text-[11px] uppercase tracking-[0.2em] text-[#91C640] mb-1">Internal tool</div>
+      <h1 className="games-display text-3xl text-[var(--text-primary)] mb-1">Card Studio</h1>
+      <p className="text-[12.5px] text-[var(--text-secondary)] mb-5 max-w-2xl">
+        Pick a template, download the 1080x1350 PNG, copy the caption, post to {HANDLE}. Tags use verified handles only.
+      </p>
+
+      {/* Controls */}
+      <div className="flex flex-wrap items-center gap-2 mb-5">
+        <select value={template} onChange={(e) => setTemplate(e.target.value as Template)} className="bg-[var(--input-bg)] border border-[var(--input-border)] rounded-lg px-3 py-2 text-sm text-[var(--text-primary)]">
+          {TEMPLATES.map((t) => <option key={t.id} value={t.id}>{t.label}</option>)}
+        </select>
+        <div className="flex items-center rounded-lg border border-[var(--panel-border)] overflow-hidden">
+          {(['men', 'women'] as const).map((d) => (
+            <button key={d} onClick={() => { setDivision(d); const r = d === 'men' ? A2026.men : A2026.women; setSlugA(r[0].slug); setSlugB(r[1].slug) }}
+              className="games-condensed px-4 py-2 text-[13px] font-semibold uppercase tracking-[0.08em]"
+              style={{ background: division === d ? '#019644' : 'transparent', color: division === d ? '#fff' : 'var(--text-secondary)' }}>{d}</button>
+          ))}
+        </div>
+        {(template === 'spotlight' || template === 'h2h') && (
+          <select value={slugA} onChange={(e) => setSlugA(e.target.value)} className="bg-[var(--input-bg)] border border-[var(--input-border)] rounded-lg px-3 py-2 text-sm text-[var(--text-primary)]">
+            {roster.map((x) => <option key={x.slug} value={x.slug}>{x.name}</option>)}
+          </select>
+        )}
+        {template === 'h2h' && (
+          <select value={slugB} onChange={(e) => setSlugB(e.target.value)} className="bg-[var(--input-bg)] border border-[var(--input-border)] rounded-lg px-3 py-2 text-sm text-[var(--text-primary)]">
+            {roster.map((x) => <option key={x.slug} value={x.slug}>{x.name}</option>)}
+          </select>
+        )}
+        <button onClick={download} disabled={busy} data-testid="download-card"
+          className="games-condensed uppercase tracking-[0.1em] font-semibold text-[13px] px-5 py-2 rounded-lg bg-[#019644] text-white hover:bg-[#01a94d] transition-colors disabled:opacity-50">
+          {busy ? 'Rendering...' : 'Download PNG'}
+        </button>
+      </div>
+
+      <div className="grid lg:grid-cols-[auto_1fr] gap-6 items-start">
+        {/* Preview (scaled) */}
+        <div className="rounded-2xl border border-[var(--panel-border)] overflow-hidden" style={{ width: 378, height: 472.5 }}>
+          <div style={{ transform: 'scale(0.35)', transformOrigin: 'top left' }}>
+            <div ref={cardRef}>
+              {template === 'spotlight' && <SpotlightCard a={a} />}
+              {template === 'cover' && <CoverCard />}
+              {template === 'h2h' && <H2HCard a={a} b={b} />}
+              {template === 'form' && <FormCard division={division} />}
+            </div>
+          </div>
+        </div>
+
+        {/* Caption */}
+        <div>
+          <div className="flex items-center justify-between mb-2">
+            <span className="games-condensed text-[11px] uppercase tracking-[0.14em] text-[var(--text-muted)]">Caption (auto-generated)</span>
+            <button onClick={copyCaption} className="games-condensed text-[12px] uppercase tracking-[0.08em] font-semibold text-[#91C640]">Copy caption</button>
+          </div>
+          <textarea readOnly value={caption} rows={16}
+            className="w-full bg-[var(--input-bg)] border border-[var(--input-border)] rounded-xl p-4 text-[13px] leading-relaxed text-[var(--text-primary)] font-mono" />
+          <p className="text-[11px] text-[var(--text-muted)] mt-2">
+            Castro interview clips: always credit @davecastro6289 / Dave Castro and link his video. Photos on cards are official/press imagery used for commentary.
+          </p>
+        </div>
+      </div>
+    </div>
+  )
+}
