@@ -83,7 +83,7 @@ and resilient to upstream timing.
       file_server
       header /assets/* Cache-Control "public, max-age=31536000, immutable"
       header *.svg Cache-Control "public, max-age=2592000"
-      try_files {path} /index.html
+      try_files {path} {path}/index.html /index.html
   }
   ```
 - **TLS:** Let's Encrypt, auto-provisioned by Caddy.
