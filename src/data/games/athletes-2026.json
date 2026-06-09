@@ -37,7 +37,7 @@
       "nickname": null,
       "instagramHandle": "@spraguerrrr",
       "interviewUrl": "https://www.youtube.com/watch?v=DL-PWhQJvsA",
-      "photoUrl": "https://profilepicsbucket.crossfit.com/98726-P900251_9-184.jpg",
+      "photoUrl": "/athletes/james-sprague.webp",
       "finishes": [
         {
           "year": 2023,
@@ -79,7 +79,7 @@
       "nickname": null,
       "instagramHandle": "@jhopper3",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/da4cc-P1020449_8-184.jpg",
+      "photoUrl": "/athletes/jayson-hopper.webp",
       "finishes": [
         {
           "year": 2021,
@@ -129,7 +129,7 @@
       "nickname": null,
       "instagramHandle": "@adlerjeff",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/e480e-P469656_1-184.jpg",
+      "photoUrl": "/athletes/jeffrey-adler.webp",
       "finishes": [
         {
           "year": 2019,
@@ -187,7 +187,7 @@
       "nickname": null,
       "instagramHandle": "@jaycrouch_",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/91a9a-P156156_17-184.jpg",
+      "photoUrl": "/athletes/jay-crouch.webp",
       "finishes": [
         {
           "year": 2020,
@@ -241,7 +241,7 @@
       "nickname": null,
       "instagramHandle": "@saxon_panchik",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/00087-P310970_11-184.jpg",
+      "photoUrl": "/athletes/saxon-panchik.webp",
       "finishes": [
         {
           "year": 2018,
@@ -295,7 +295,7 @@
       "nickname": null,
       "instagramHandle": "@dallinpepper",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/d5ba0-P671093_6-184.jpg",
+      "photoUrl": "/athletes/dallin-pepper.webp",
       "finishes": [
         {
           "year": 2022,
@@ -341,7 +341,7 @@
       "nickname": null,
       "instagramHandle": "@victor.hfr",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/3137b-P1978208_10-184.jpg",
+      "photoUrl": "/athletes/victor-hoffer.webp",
       "finishes": [
         {
           "year": 2024,
@@ -375,7 +375,7 @@
       "nickname": null,
       "instagramHandle": "@ben.fowlerr",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/79c64-P1285760_1-184.jpg",
+      "photoUrl": "/athletes/ben-fowler.webp",
       "crossfitAthleteId": "1285760"
     },
     {
@@ -403,7 +403,7 @@
       "nickname": null,
       "instagramHandle": "@moritz_fiebig",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/7c303-P925870_3-184.jpg",
+      "photoUrl": "/athletes/moritz-fiebig.webp",
       "finishes": [
         {
           "year": 2022,
@@ -449,7 +449,7 @@
       "nickname": "Nuru Dabai",
       "instagramHandle": "@aniolekaib",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/d4fd7-P1135386_1-184.jpg",
+      "photoUrl": "/athletes/aniol-ekai.webp",
       "finishes": [
         {
           "year": 2024,
@@ -483,7 +483,7 @@
       "nickname": null,
       "instagramHandle": "@tmagda1",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/0a940-P897110_3-184.jpg",
+      "photoUrl": "/athletes/tudor-magda.webp",
       "finishes": [
         {
           "year": 2022,
@@ -521,7 +521,7 @@
       "nickname": "Ricky Mac",
       "instagramHandle": "@rickygarard",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/89cbe-P40955_10-184.jpg",
+      "photoUrl": "/athletes/ricky-garard.webp",
       "finishes": [
         {
           "year": 2017,
@@ -567,7 +567,7 @@
       "nickname": null,
       "instagramHandle": "@nikomaisuradzee",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/4765d-P2225448_6-184.jpg",
+      "photoUrl": "/athletes/nika-maisuradze.webp",
       "crossfitAthleteId": "2225448"
     },
     {
@@ -595,7 +595,7 @@
       "nickname": null,
       "instagramHandle": "@austinhatfield_1",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/63a40-P947291_7-184.jpg",
+      "photoUrl": "/athletes/austin-hatfield.webp",
       "finishes": [
         {
           "year": 2024,
@@ -633,7 +633,7 @@
       "nickname": null,
       "instagramHandle": "@bayleymartin_athlete",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/b0134-P479759_1-184.jpg",
+      "photoUrl": "/athletes/bayley-martin.webp",
       "finishes": [
         {
           "year": 2023,
@@ -671,7 +671,7 @@
       "nickname": null,
       "instagramHandle": "@dylanhamming",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/d969d-P422637_3-184.jpg",
+      "photoUrl": "/athletes/dylan-hamming.webp",
       "crossfitAthleteId": "422637"
     },
     {
@@ -699,7 +699,7 @@
       "nickname": null,
       "instagramHandle": "@henrikhaapalainen",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/520e8-P680734_2-184.jpg",
+      "photoUrl": "/athletes/henrik-haapalainen.webp",
       "finishes": [
         {
           "year": 2021,
@@ -745,7 +745,7 @@
       "nickname": null,
       "instagramHandle": "@roman_khrennikov",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/767cc-P975774_3-184.jpg",
+      "photoUrl": "/athletes/roman-khrennikov.webp",
       "finishes": [
         {
           "year": 2020,
@@ -795,7 +795,7 @@
       "nickname": null,
       "instagramHandle": "@calum_clements",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/50898-P771441_3-184.jpg",
+      "photoUrl": "/athletes/calum-clements.webp",
       "finishes": [
         {
           "year": 2024,
@@ -833,7 +833,7 @@
       "nickname": null,
       "instagramHandle": "@kalyancf",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/853f2-P2064040_2-184.jpg",
+      "photoUrl": "/athletes/kalyan-souza.webp",
       "finishes": [
         {
           "year": 2023,
@@ -875,7 +875,7 @@
       "nickname": null,
       "instagramHandle": "@breyess1",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/cc14c-P1398324_3-184.jpg",
+      "photoUrl": "/athletes/benjamin-reyes.webp",
       "crossfitAthleteId": "1398324"
     },
     {
@@ -903,7 +903,7 @@
       "nickname": null,
       "instagramHandle": "@luiscuellar12",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/b9f88-P1774373_1-184.jpg",
+      "photoUrl": "/athletes/luis-cuellar.webp",
       "crossfitAthleteId": "1774373"
     },
     {
@@ -931,7 +931,7 @@
       "nickname": null,
       "instagramHandle": "@tyjenkins75",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/f617e-P1967193_6-184.jpg",
+      "photoUrl": "/athletes/ty-jenkins.webp",
       "finishes": [
         {
           "year": 2025,
@@ -967,7 +967,7 @@
       "nickname": null,
       "instagramHandle": "@lucycampbell5",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/61fce-P1458106_4-184.jpg",
+      "photoUrl": "/athletes/lucy-campbell.webp",
       "finishes": [
         {
           "year": 2022,
@@ -1005,7 +1005,7 @@
       "nickname": null,
       "instagramHandle": "@mirjam_v.r",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/baa04-P2080362_5-184.jpg",
+      "photoUrl": "/athletes/mirjam-von-rohr.webp",
       "finishes": [
         {
           "year": 2025,
@@ -1039,7 +1039,7 @@
       "nickname": null,
       "instagramHandle": "@aimee_cringle",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/51e3c-P1314653_5-184.jpg",
+      "photoUrl": "/athletes/aimee-cringle.webp",
       "finishes": [
         {
           "year": 2024,
@@ -1077,7 +1077,7 @@
       "nickname": "Fella",
       "instagramHandle": "@ellawilkinsonxx",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/630e5-P1034822_3-184.jpg",
+      "photoUrl": "/athletes/ella-wilkinson.webp",
       "crossfitAthleteId": "1034822"
     },
     {
@@ -1105,7 +1105,7 @@
       "nickname": null,
       "instagramHandle": "@_paige_rodgers",
       "interviewUrl": "https://www.youtube.com/watch?v=n5H9qMMSYfE",
-      "photoUrl": "https://profilepicsbucket.crossfit.com/31908-P1190381_3-184.jpg",
+      "photoUrl": "/athletes/paige-rodgers.webp",
       "finishes": [
         {
           "year": 2022,
@@ -1143,7 +1143,7 @@
       "nickname": null,
       "instagramHandle": "@siriameha",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/bd73d-P2184972_17-184.jpg",
+      "photoUrl": "/athletes/siria-meha.webp",
       "finishes": [
         {
           "year": 2025,
@@ -1177,7 +1177,7 @@
       "nickname": null,
       "instagramHandle": "@fish_lydia",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/7e495-P1763858_7-184.jpg",
+      "photoUrl": "/athletes/lydia-fish.webp",
       "finishes": [
         {
           "year": 2025,
@@ -1211,7 +1211,7 @@
       "nickname": "Dani",
       "instagramHandle": "@daniellebrandon7",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/025a0-P349097_6-184.jpg",
+      "photoUrl": "/athletes/danielle-brandon.webp",
       "finishes": [
         {
           "year": 2019,
@@ -1269,7 +1269,7 @@
       "nickname": null,
       "instagramHandle": "@miley_crossfit",
       "interviewUrl": "https://www.youtube.com/watch?v=ko19YwdXrks",
-      "photoUrl": "https://profilepicsbucket.crossfit.com/0428b-P2206930_8-184.jpg",
+      "photoUrl": "/athletes/miley-wade.webp",
       "crossfitAthleteId": "2206930"
     },
     {
@@ -1297,7 +1297,7 @@
       "nickname": null,
       "instagramHandle": "@anikhagreer",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/9bf9b-P1239579_27-184.jpg",
+      "photoUrl": "/athletes/anikha-greer.webp",
       "finishes": [
         {
           "year": 2025,
@@ -1331,7 +1331,7 @@
       "nickname": "All Gas No Brakes (#AGNB)",
       "instagramHandle": "@gabimiga",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/8877a-P764556_7-184.jpg"
+      "photoUrl": "/athletes/gabriela-migala.webp"
     },
     {
       "name": "Abigail Domit",
@@ -1358,7 +1358,7 @@
       "nickname": "Abbie",
       "instagramHandle": "@abbiedomit",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/7fe27-P2077209_9-184.jpg",
+      "photoUrl": "/athletes/abigail-domit.webp",
       "finishes": [
         {
           "year": 2023,
@@ -1400,7 +1400,7 @@
       "nickname": null,
       "instagramHandle": "@lucy.mcgonigle",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/139ea-P1984229_9-184.jpg",
+      "photoUrl": "/athletes/lucy-mcgonigle.webp",
       "finishes": [
         {
           "year": 2025,
@@ -1434,7 +1434,7 @@
       "nickname": null,
       "instagramHandle": "@oliviakerstetter",
       "interviewUrl": "https://www.youtube.com/watch?v=fDDdpVBcqXs",
-      "photoUrl": "https://profilepicsbucket.crossfit.com/83d02-P1269411_6-184.jpg",
+      "photoUrl": "/athletes/olivia-kerstetter.webp",
       "finishes": [
         {
           "year": 2023,
@@ -1472,7 +1472,7 @@
       "nickname": "Fulix",
       "instagramHandle": "@_fulix_",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/dd92a-P1983424_10-184.jpg",
+      "photoUrl": "/athletes/elisa-fuliano.webp",
       "finishes": [
         {
           "year": 2022,
@@ -1514,7 +1514,7 @@
       "nickname": null,
       "instagramHandle": "@alexgazan_",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/3364b-P1232297_4-184.jpg",
+      "photoUrl": "/athletes/alex-gazan.webp",
       "finishes": [
         {
           "year": 2022,
@@ -1556,7 +1556,7 @@
       "nickname": null,
       "instagramHandle": "@rachelknoel",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/ec21d-P1460972_12-184.jpg",
+      "photoUrl": "/athletes/rachel-noel.webp",
       "crossfitAthleteId": "1460972"
     },
     {
@@ -1584,7 +1584,7 @@
       "nickname": null,
       "instagramHandle": "@h_blackk",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/5a54c-P864249_9-184.jpg",
+      "photoUrl": "/athletes/hannah-black.webp",
       "crossfitAthleteId": "864249"
     },
     {
@@ -1612,7 +1612,7 @@
       "nickname": null,
       "instagramHandle": "@elliebecturner",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/77bcc-P1119323_3-184.jpg",
+      "photoUrl": "/athletes/ellie-turner.webp",
       "finishes": [
         {
           "year": 2021,
@@ -1654,7 +1654,7 @@
       "nickname": null,
       "instagramHandle": "@emma.lawson_5",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/945d6-P1931423_8-184.jpg",
+      "photoUrl": "/athletes/emma-lawson.webp",
       "finishes": [
         {
           "year": 2022,
@@ -1696,7 +1696,7 @@
       "nickname": null,
       "instagramHandle": "@haleyadamssss",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/bc637-P671666_10-184.jpg",
+      "photoUrl": "/athletes/haley-adams.webp",
       "finishes": [
         {
           "year": 2019,
@@ -1750,7 +1750,7 @@
       "nickname": null,
       "instagramHandle": "@quads.like.kyra",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/4a098-P873895_12-184.jpg",
+      "photoUrl": "/athletes/kyra-milligan.webp",
       "finishes": [
         {
           "year": 2024,
@@ -1784,7 +1784,7 @@
       "nickname": "Maddie",
       "instagramHandle": "@maddiesturt",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/cd1ef-P21556_13-184.jpg",
+      "photoUrl": "/athletes/madeline-sturt.webp",
       "finishes": [
         {
           "year": 2016,
