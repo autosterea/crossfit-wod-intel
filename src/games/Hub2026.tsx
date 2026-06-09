@@ -27,25 +27,28 @@ function AthleteCard({ a, index }: { a: GamesAthlete2026; index: number }) {
     >
       <AthleteAvatar athlete={a} size={56} rounded="rounded-xl" />
       <div className="min-w-0 flex-1">
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-1.5 min-w-0">
           <span className="games-display text-[15px] text-[var(--text-primary)] truncate leading-tight">{a.name}</span>
-          {a.isFormerChampion && <span title="Former Games champion">🏆</span>}
+          {a.isFormerChampion && <span className="shrink-0" title="Former Games champion">🏆</span>}
         </div>
         <div className="text-[11px] text-[var(--text-muted)] truncate">
           {countryFlag(a.country)} {a.country}
           {a.affiliate ? ` · ${a.affiliate}` : ''}
         </div>
-        <div className="mt-1 flex items-center gap-1.5 flex-wrap">
+        <div className="mt-1 flex items-center gap-1.5 min-w-0">
           {a.semifinalEvent2026 && (
-            <span className="games-chip" style={{ background: semiWin ? 'rgba(1,150,68,0.18)' : 'var(--panel-bg-2)', color: semiWin ? '#019644' : 'var(--text-tertiary)' }}>
-              {semiWin ? '★ won ' : ''}{a.semifinalEvent2026}
+            <span
+              className="games-chip inline-flex min-w-0 max-w-full"
+              style={{ background: semiWin ? 'rgba(1,150,68,0.18)' : 'var(--panel-bg-2)', color: semiWin ? '#019644' : 'var(--text-tertiary)' }}
+            >
+              <span className="truncate">{semiWin ? '★ ' : ''}{a.semifinalEvent2026}</span>
             </span>
           )}
-          {a.isRookie && <span className="games-chip" style={{ background: 'rgba(96,165,250,0.16)', color: '#60a5fa' }}>Rookie</span>}
-          {a.interviewUrl && <span title="Interview available">🎙️</span>}
+          {a.isRookie && <span className="games-chip shrink-0" style={{ background: 'rgba(96,165,250,0.16)', color: '#60a5fa' }}>Rookie</span>}
+          {a.interviewUrl && <span className="shrink-0" title="Interview available">🎙️</span>}
         </div>
       </div>
-      <div className="text-right shrink-0">
+      <div className="text-right shrink-0 pl-1">
         <div className="games-condensed text-[10px] uppercase tracking-[0.1em] text-[var(--text-muted)]">Best</div>
         <div className="games-display text-[15px] text-[#91C640] leading-none">{a.bestGamesFinish ? a.bestGamesFinish.replace(/\s*\(.*\)/, '') : a.isRookie ? 'R' : '-'}</div>
       </div>
