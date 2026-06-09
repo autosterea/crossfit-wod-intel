@@ -22,3 +22,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# stray agent scratch + local test scripts
+*.local.mjs
+Usersravik*
+open_*.json
+qf_*.html
+qf_*.txt
