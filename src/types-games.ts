@@ -220,6 +220,9 @@ export interface GamesAthlete2026 {
   gamesAppearances?: number | null
   firstGamesYear?: number | null
   bestGamesFinish?: string | null
+  /** Every individual Games appearance: year + overall placement */
+  finishes?: { year: number; place: number | string }[]
+  crossfitAthleteId?: string | null
   isFormerChampion?: boolean | null
   isRookie?: boolean | null
   openRank2026?: number | null

@@ -37,14 +37,29 @@
       "nickname": null,
       "instagramHandle": "@spraguerrrr",
       "interviewUrl": "https://www.youtube.com/watch?v=DL-PWhQJvsA",
-      "photoUrl": "https://profilepicsbucket.crossfit.com/98726-P900251_9-184.jpg"
+      "photoUrl": "https://profilepicsbucket.crossfit.com/98726-P900251_9-184.jpg",
+      "finishes": [
+        {
+          "year": 2023,
+          "place": 25
+        },
+        {
+          "year": 2024,
+          "place": 1
+        },
+        {
+          "year": 2025,
+          "place": 3
+        }
+      ],
+      "crossfitAthleteId": "900251"
     },
     {
       "name": "Jayson Hopper",
       "slug": "jayson-hopper",
       "division": "men",
       "country": "United States",
-      "age": 28,
+      "age": 27,
       "birthYear": 1997,
       "hometown": "Lexington, South Carolina",
       "affiliate": "CrossFit Crash",
@@ -64,14 +79,37 @@
       "nickname": null,
       "instagramHandle": "@jhopper3",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/da4cc-P1020449_8-184.jpg"
+      "photoUrl": "https://profilepicsbucket.crossfit.com/da4cc-P1020449_8-184.jpg",
+      "finishes": [
+        {
+          "year": 2021,
+          "place": 19
+        },
+        {
+          "year": 2022,
+          "place": 7
+        },
+        {
+          "year": 2023,
+          "place": 31
+        },
+        {
+          "year": 2024,
+          "place": 4
+        },
+        {
+          "year": 2025,
+          "place": 1
+        }
+      ],
+      "crossfitAthleteId": "1020449"
     },
     {
       "name": "Jeffrey Adler",
       "slug": "jeffrey-adler",
       "division": "men",
       "country": "Canada",
-      "age": 32,
+      "age": 31,
       "birthYear": 1994,
       "hometown": "Montreal, Quebec",
       "affiliate": "CrossFit Wonderland",
@@ -91,7 +129,38 @@
       "nickname": null,
       "instagramHandle": "@adlerjeff",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/PLACEHOLDER"
+      "photoUrl": "https://profilepicsbucket.crossfit.com/e480e-P469656_1-184.jpg",
+      "finishes": [
+        {
+          "year": 2019,
+          "place": 33
+        },
+        {
+          "year": 2020,
+          "place": 5
+        },
+        {
+          "year": 2021,
+          "place": 13
+        },
+        {
+          "year": 2022,
+          "place": 5
+        },
+        {
+          "year": 2023,
+          "place": 1
+        },
+        {
+          "year": 2024,
+          "place": 36
+        },
+        {
+          "year": 2025,
+          "place": 8
+        }
+      ],
+      "crossfitAthleteId": "469656"
     },
     {
       "name": "Jay Crouch",
@@ -101,12 +170,12 @@
       "age": 27,
       "birthYear": 1999,
       "hometown": "Langwarrin South, Victoria, Australia",
-      "affiliate": "Reebok CrossFit Frankston",
+      "affiliate": "CrossFit Frankston",
       "heightCm": 175,
       "weightKg": 86,
       "gamesAppearances": 6,
       "firstGamesYear": 2020,
-      "bestGamesFinish": "6th (2025)",
+      "bestGamesFinish": "8th (2023)",
       "isFormerChampion": false,
       "isRookie": false,
       "openRank2026": 8,
@@ -118,7 +187,34 @@
       "nickname": null,
       "instagramHandle": "@jaycrouch_",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/91a9a-P156156_17-184.jpg"
+      "photoUrl": "https://profilepicsbucket.crossfit.com/91a9a-P156156_17-184.jpg",
+      "finishes": [
+        {
+          "year": 2020,
+          "place": 18
+        },
+        {
+          "year": 2021,
+          "place": 22
+        },
+        {
+          "year": 2022,
+          "place": 28
+        },
+        {
+          "year": 2023,
+          "place": 8
+        },
+        {
+          "year": 2024,
+          "place": 12
+        },
+        {
+          "year": 2025,
+          "place": 6
+        }
+      ],
+      "crossfitAthleteId": "156156"
     },
     {
       "name": "Saxon Panchik",
@@ -145,7 +241,34 @@
       "nickname": null,
       "instagramHandle": "@saxon_panchik",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/00087-P310970_11-184.jpg"
+      "photoUrl": "https://profilepicsbucket.crossfit.com/00087-P310970_11-184.jpg",
+      "finishes": [
+        {
+          "year": 2018,
+          "place": 19
+        },
+        {
+          "year": 2019,
+          "place": 9
+        },
+        {
+          "year": 2020,
+          "place": 21
+        },
+        {
+          "year": 2021,
+          "place": 5
+        },
+        {
+          "year": 2022,
+          "place": 11
+        },
+        {
+          "year": 2024,
+          "place": 11
+        }
+      ],
+      "crossfitAthleteId": "310970"
     },
     {
       "name": "Dallin Pepper",
@@ -172,14 +295,33 @@
       "nickname": null,
       "instagramHandle": "@dallinpepper",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/d5ba0-P671093_6-184.jpg"
+      "photoUrl": "https://profilepicsbucket.crossfit.com/d5ba0-P671093_6-184.jpg",
+      "finishes": [
+        {
+          "year": 2022,
+          "place": 19
+        },
+        {
+          "year": 2023,
+          "place": 5
+        },
+        {
+          "year": 2024,
+          "place": 2
+        },
+        {
+          "year": 2025,
+          "place": 4
+        }
+      ],
+      "crossfitAthleteId": "671093"
     },
     {
       "name": "Victor Hoffer",
       "slug": "victor-hoffer",
       "division": "men",
       "country": "France",
-      "age": 22,
+      "age": 23,
       "birthYear": 2003,
       "hometown": null,
       "affiliate": "CrossFit Grillen",
@@ -199,14 +341,21 @@
       "nickname": null,
       "instagramHandle": "@victor.hfr",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/3137b-P1978208_10-184.jpg"
+      "photoUrl": "https://profilepicsbucket.crossfit.com/3137b-P1978208_10-184.jpg",
+      "finishes": [
+        {
+          "year": 2024,
+          "place": 38
+        }
+      ],
+      "crossfitAthleteId": "1978208"
     },
     {
       "name": "Ben Fowler",
       "slug": "ben-fowler",
       "division": "men",
       "country": "New Zealand",
-      "age": null,
+      "age": 25,
       "birthYear": null,
       "hometown": "Christchurch / Selwyn, New Zealand",
       "affiliate": "CrossFit Selwyn",
@@ -224,16 +373,17 @@
       "qualified": true,
       "storyline": "A New Zealand national champion, coach and programmer out of CrossFit Selwyn who previously reached the Games only as part of a team (2022). For his individual breakthrough he flew to South Africa and blew open the REBEL Renegade Games, winning by over 100 points to become the Fittest from that Semifinal and earn his first solo Games berth.",
       "nickname": null,
-      "instagramHandle": "@_ben_fowler_",
+      "instagramHandle": "@ben.fowlerr",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/79c64-P1285760_1-184.jpg"
+      "photoUrl": "https://profilepicsbucket.crossfit.com/79c64-P1285760_1-184.jpg",
+      "crossfitAthleteId": "1285760"
     },
     {
       "name": "Moritz Fiebig",
       "slug": "moritz-fiebig",
       "division": "men",
       "country": "Germany",
-      "age": 32,
+      "age": 31,
       "birthYear": 1993,
       "hometown": "Hamburg, Germany (raised near Cologne)",
       "affiliate": "CrossFit Sankt Pauli / Sankt Pauli Athletik",
@@ -253,7 +403,26 @@
       "nickname": null,
       "instagramHandle": "@moritz_fiebig",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/7c303-P925870_3-184.jpg"
+      "photoUrl": "https://profilepicsbucket.crossfit.com/7c303-P925870_3-184.jpg",
+      "finishes": [
+        {
+          "year": 2022,
+          "place": 36
+        },
+        {
+          "year": 2023,
+          "place": 21
+        },
+        {
+          "year": 2024,
+          "place": 33
+        },
+        {
+          "year": 2025,
+          "place": 19
+        }
+      ],
+      "crossfitAthleteId": "925870"
     },
     {
       "name": "Aniol Ekai",
@@ -280,7 +449,14 @@
       "nickname": "Nuru Dabai",
       "instagramHandle": "@aniolekaib",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/d4fd7-P1135386_1-184.jpg"
+      "photoUrl": "https://profilepicsbucket.crossfit.com/d4fd7-P1135386_1-184.jpg",
+      "finishes": [
+        {
+          "year": 2024,
+          "place": 18
+        }
+      ],
+      "crossfitAthleteId": "1135386"
     },
     {
       "name": "Tudor Magda",
@@ -290,7 +466,7 @@
       "age": 23,
       "birthYear": 2002,
       "hometown": "Seattle, Washington, USA",
-      "affiliate": "University Place CrossFit",
+      "affiliate": "SnoRidge CrossFit",
       "heightCm": 178,
       "weightKg": 91,
       "gamesAppearances": 2,
@@ -307,7 +483,18 @@
       "nickname": null,
       "instagramHandle": "@tmagda1",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/0a940-P897110_3-184.jpg"
+      "photoUrl": "https://profilepicsbucket.crossfit.com/0a940-P897110_3-184.jpg",
+      "finishes": [
+        {
+          "year": 2022,
+          "place": 34
+        },
+        {
+          "year": 2025,
+          "place": 10
+        }
+      ],
+      "crossfitAthleteId": "897110"
     },
     {
       "name": "Ricky Garard",
@@ -320,8 +507,8 @@
       "affiliate": "HomeFront CrossFit",
       "heightCm": 178,
       "weightKg": 85,
-      "gamesAppearances": 3,
-      "firstGamesYear": 2022,
+      "gamesAppearances": 4,
+      "firstGamesYear": 2017,
       "bestGamesFinish": "2nd (2025)",
       "isFormerChampion": false,
       "isRookie": false,
@@ -334,14 +521,33 @@
       "nickname": "Ricky Mac",
       "instagramHandle": "@rickygarard",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/89cbe-P40955_10-184.jpg"
+      "photoUrl": "https://profilepicsbucket.crossfit.com/89cbe-P40955_10-184.jpg",
+      "finishes": [
+        {
+          "year": 2017,
+          "place": "DQ"
+        },
+        {
+          "year": 2022,
+          "place": 3
+        },
+        {
+          "year": 2024,
+          "place": 7
+        },
+        {
+          "year": 2025,
+          "place": 2
+        }
+      ],
+      "crossfitAthleteId": "40955"
     },
     {
       "name": "Nika Maisuradze",
       "slug": "nika-maisuradze",
       "division": "men",
       "country": "Georgia",
-      "age": null,
+      "age": 26,
       "birthYear": null,
       "hometown": "Tbilisi, Georgia",
       "affiliate": "CrossFit 148",
@@ -361,7 +567,8 @@
       "nickname": null,
       "instagramHandle": "@nikomaisuradzee",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/4765d-P2225448_6-184.jpg"
+      "photoUrl": "https://profilepicsbucket.crossfit.com/4765d-P2225448_6-184.jpg",
+      "crossfitAthleteId": "2225448"
     },
     {
       "name": "Austin Hatfield",
@@ -388,7 +595,18 @@
       "nickname": null,
       "instagramHandle": "@austinhatfield_1",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/63a40-P947291_7-184.jpg"
+      "photoUrl": "https://profilepicsbucket.crossfit.com/63a40-P947291_7-184.jpg",
+      "finishes": [
+        {
+          "year": 2024,
+          "place": 10
+        },
+        {
+          "year": 2025,
+          "place": 5
+        }
+      ],
+      "crossfitAthleteId": "947291"
     },
     {
       "name": "Bayley Martin",
@@ -415,7 +633,18 @@
       "nickname": null,
       "instagramHandle": "@bayleymartin_athlete",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/b0134-P479759_1-184.jpg"
+      "photoUrl": "https://profilepicsbucket.crossfit.com/b0134-P479759_1-184.jpg",
+      "finishes": [
+        {
+          "year": 2023,
+          "place": 12
+        },
+        {
+          "year": 2024,
+          "place": 28
+        }
+      ],
+      "crossfitAthleteId": "479759"
     },
     {
       "name": "Dylan Hamming",
@@ -440,9 +669,10 @@
       "qualified": true,
       "storyline": "A multi-time team Games competitor (5th with 8th Day CrossFit in 2024) finally making the leap to the individual field, Hamming overcame a rough 24th in one NorCal event to take 2nd overall and his first individual Games berth. After narrowly missing at the Legends Championship (3rd), the NorCal runner-up finish is the validating breakthrough of a long grind.",
       "nickname": null,
-      "instagramHandle": null,
+      "instagramHandle": "@dylanhamming",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/d969d-P422637_3-184.jpg"
+      "photoUrl": "https://profilepicsbucket.crossfit.com/d969d-P422637_3-184.jpg",
+      "crossfitAthleteId": "422637"
     },
     {
       "name": "Henrik Haapalainen",
@@ -469,7 +699,26 @@
       "nickname": null,
       "instagramHandle": "@henrikhaapalainen",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/520e8-P680734_2-184.jpg"
+      "photoUrl": "https://profilepicsbucket.crossfit.com/520e8-P680734_2-184.jpg",
+      "finishes": [
+        {
+          "year": 2021,
+          "place": 18
+        },
+        {
+          "year": 2022,
+          "place": 24
+        },
+        {
+          "year": 2023,
+          "place": 24
+        },
+        {
+          "year": 2024,
+          "place": 14
+        }
+      ],
+      "crossfitAthleteId": "680734"
     },
     {
       "name": "Roman Khrennikov",
@@ -496,7 +745,30 @@
       "nickname": null,
       "instagramHandle": "@roman_khrennikov",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/767cc-P975774_3-184.jpg"
+      "photoUrl": "https://profilepicsbucket.crossfit.com/767cc-P975774_3-184.jpg",
+      "finishes": [
+        {
+          "year": 2020,
+          "place": 13
+        },
+        {
+          "year": 2022,
+          "place": 2
+        },
+        {
+          "year": 2023,
+          "place": 3
+        },
+        {
+          "year": 2024,
+          "place": 9
+        },
+        {
+          "year": 2025,
+          "place": 9
+        }
+      ],
+      "crossfitAthleteId": "975774"
     },
     {
       "name": "Calum Clements",
@@ -506,7 +778,7 @@
       "age": 28,
       "birthYear": 1997,
       "hometown": "Pedreguer, Alicante, Spain",
-      "affiliate": "CrossFit Denia (co-founder, Train For You)",
+      "affiliate": "CrossFit Denia",
       "heightCm": null,
       "weightKg": null,
       "gamesAppearances": 2,
@@ -523,7 +795,18 @@
       "nickname": null,
       "instagramHandle": "@calum_clements",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/50898-P771441_3-184.jpg"
+      "photoUrl": "https://profilepicsbucket.crossfit.com/50898-P771441_3-184.jpg",
+      "finishes": [
+        {
+          "year": 2024,
+          "place": 20
+        },
+        {
+          "year": 2025,
+          "place": 16
+        }
+      ],
+      "crossfitAthleteId": "771441"
     },
     {
       "name": "Kalyan Souza",
@@ -533,7 +816,7 @@
       "age": 25,
       "birthYear": 2000,
       "hometown": null,
-      "affiliate": "CrossFit Al Ain",
+      "affiliate": "None",
       "heightCm": 184,
       "weightKg": 92,
       "gamesAppearances": 3,
@@ -550,7 +833,22 @@
       "nickname": null,
       "instagramHandle": "@kalyancf",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/853f2-P2064040_2-184.jpg"
+      "photoUrl": "https://profilepicsbucket.crossfit.com/853f2-P2064040_2-184.jpg",
+      "finishes": [
+        {
+          "year": 2023,
+          "place": 32
+        },
+        {
+          "year": 2024,
+          "place": 23
+        },
+        {
+          "year": 2025,
+          "place": 14
+        }
+      ],
+      "crossfitAthleteId": "2064040"
     },
     {
       "name": "Benjamin Reyes",
@@ -575,16 +873,17 @@
       "qualified": true,
       "storyline": "One of the first two rookies to punch a ticket to the 2026 Games, the 21-year-old Chilean finished a razor-thin 2nd at Copa Sur, just 4 points behind winner Kalyan Souza. A former age-group competitor (10th in Boys 16-17 in 2022), he now arrives in San Jose as a fresh face from South America to watch in his individual debut.",
       "nickname": null,
-      "instagramHandle": null,
+      "instagramHandle": "@breyess1",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/cc14c-P1398324_3-184.jpg"
+      "photoUrl": "https://profilepicsbucket.crossfit.com/cc14c-P1398324_3-184.jpg",
+      "crossfitAthleteId": "1398324"
     },
     {
       "name": "Luis Cuellar",
       "slug": "luis-cuellar",
       "division": "men",
       "country": "Spain",
-      "age": 23,
+      "age": 20,
       "birthYear": 2002,
       "hometown": "Granada, Spain",
       "affiliate": null,
@@ -604,7 +903,8 @@
       "nickname": null,
       "instagramHandle": "@luiscuellar12",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/b9f88-P1774373_1-184.jpg"
+      "photoUrl": "https://profilepicsbucket.crossfit.com/b9f88-P1774373_1-184.jpg",
+      "crossfitAthleteId": "1774373"
     },
     {
       "name": "Ty Jenkins",
@@ -614,7 +914,7 @@
       "age": 19,
       "birthYear": 2006,
       "hometown": "Branson, Missouri, United States",
-      "affiliate": null,
+      "affiliate": "Table Rock CrossFit",
       "heightCm": 175,
       "weightKg": 84,
       "gamesAppearances": 1,
@@ -631,7 +931,14 @@
       "nickname": null,
       "instagramHandle": "@tyjenkins75",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/2080623"
+      "photoUrl": "https://profilepicsbucket.crossfit.com/f617e-P1967193_6-184.jpg",
+      "finishes": [
+        {
+          "year": 2025,
+          "place": 15
+        }
+      ],
+      "crossfitAthleteId": "1967193"
     }
   ],
   "women": [
@@ -640,7 +947,7 @@
       "slug": "lucy-campbell",
       "division": "women",
       "country": "United Kingdom",
-      "age": 29,
+      "age": 30,
       "birthYear": 1996,
       "hometown": "Windsor, England",
       "affiliate": "Cattle Dog CrossFit",
@@ -660,14 +967,25 @@
       "nickname": null,
       "instagramHandle": "@lucycampbell5",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/61fce-P1458106_4-184.jpg"
+      "photoUrl": "https://profilepicsbucket.crossfit.com/61fce-P1458106_4-184.jpg",
+      "finishes": [
+        {
+          "year": 2022,
+          "place": 16
+        },
+        {
+          "year": 2025,
+          "place": 2
+        }
+      ],
+      "crossfitAthleteId": "1458106"
     },
     {
       "name": "Mirjam von Rohr",
       "slug": "mirjam-von-rohr",
       "division": "women",
       "country": "Switzerland",
-      "age": 24,
+      "age": 23,
       "birthYear": null,
       "hometown": null,
       "affiliate": "CrossFit Ouf",
@@ -687,14 +1005,21 @@
       "nickname": null,
       "instagramHandle": "@mirjam_v.r",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/baa04-P2080362_5-184.jpg"
+      "photoUrl": "https://profilepicsbucket.crossfit.com/baa04-P2080362_5-184.jpg",
+      "finishes": [
+        {
+          "year": 2025,
+          "place": 7
+        }
+      ],
+      "crossfitAthleteId": "2080362"
     },
     {
       "name": "Aimee Cringle",
       "slug": "aimee-cringle",
       "division": "women",
       "country": "United Kingdom",
-      "age": 25,
+      "age": 26,
       "birthYear": null,
       "hometown": "Glen Maye, Isle of Man",
       "affiliate": "Blueprint CrossFit",
@@ -714,7 +1039,18 @@
       "nickname": null,
       "instagramHandle": "@aimee_cringle",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/51e3c-P1314653_5-184.jpg"
+      "photoUrl": "https://profilepicsbucket.crossfit.com/51e3c-P1314653_5-184.jpg",
+      "finishes": [
+        {
+          "year": 2024,
+          "place": 13
+        },
+        {
+          "year": 2025,
+          "place": 8
+        }
+      ],
+      "crossfitAthleteId": "1314653"
     },
     {
       "name": "Ella Wilkinson",
@@ -741,14 +1077,15 @@
       "nickname": "Fella",
       "instagramHandle": "@ellawilkinsonxx",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/630e5-P1034822_3-184.jpg"
+      "photoUrl": "https://profilepicsbucket.crossfit.com/630e5-P1034822_3-184.jpg",
+      "crossfitAthleteId": "1034822"
     },
     {
       "name": "Paige Rodgers",
       "slug": "paige-rodgers",
       "division": "women",
       "country": "United States",
-      "age": null,
+      "age": 22,
       "birthYear": null,
       "hometown": "Cookeville, Tennessee",
       "affiliate": "CrossFit Mayhem",
@@ -768,7 +1105,18 @@
       "nickname": null,
       "instagramHandle": "@_paige_rodgers",
       "interviewUrl": "https://www.youtube.com/watch?v=n5H9qMMSYfE",
-      "photoUrl": "https://profilepicsbucket.crossfit.com/31908-P1190381_3-184.jpg"
+      "photoUrl": "https://profilepicsbucket.crossfit.com/31908-P1190381_3-184.jpg",
+      "finishes": [
+        {
+          "year": 2022,
+          "place": 25
+        },
+        {
+          "year": 2023,
+          "place": 10
+        }
+      ],
+      "crossfitAthleteId": "1190381"
     },
     {
       "name": "Siria Meha",
@@ -795,14 +1143,21 @@
       "nickname": null,
       "instagramHandle": "@siriameha",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/bd73d-P2184972_17-184.jpg"
+      "photoUrl": "https://profilepicsbucket.crossfit.com/bd73d-P2184972_17-184.jpg",
+      "finishes": [
+        {
+          "year": 2025,
+          "place": 26
+        }
+      ],
+      "crossfitAthleteId": "2184972"
     },
     {
       "name": "Lydia Fish",
       "slug": "lydia-fish",
       "division": "women",
       "country": "United States",
-      "age": null,
+      "age": 21,
       "birthYear": 2004,
       "hometown": "Chippewa Falls, Wisconsin",
       "affiliate": "CrossFit Chippewa Falls",
@@ -822,14 +1177,21 @@
       "nickname": null,
       "instagramHandle": "@fish_lydia",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/7e495-P1763858_7-184.jpg"
+      "photoUrl": "https://profilepicsbucket.crossfit.com/7e495-P1763858_7-184.jpg",
+      "finishes": [
+        {
+          "year": 2025,
+          "place": 13
+        }
+      ],
+      "crossfitAthleteId": "1763858"
     },
     {
       "name": "Danielle Brandon",
       "slug": "danielle-brandon",
       "division": "women",
       "country": "United States",
-      "age": 29,
+      "age": 30,
       "birthYear": 1996,
       "hometown": "Kennewick, Washington",
       "affiliate": null,
@@ -849,7 +1211,38 @@
       "nickname": "Dani",
       "instagramHandle": "@daniellebrandon7",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/025a0-P349097_6-184.jpg"
+      "photoUrl": "https://profilepicsbucket.crossfit.com/025a0-P349097_6-184.jpg",
+      "finishes": [
+        {
+          "year": 2019,
+          "place": 10
+        },
+        {
+          "year": 2020,
+          "place": 15
+        },
+        {
+          "year": 2021,
+          "place": 11
+        },
+        {
+          "year": 2022,
+          "place": 4
+        },
+        {
+          "year": 2023,
+          "place": 9
+        },
+        {
+          "year": 2024,
+          "place": 7
+        },
+        {
+          "year": 2025,
+          "place": 4
+        }
+      ],
+      "crossfitAthleteId": "349097"
     },
     {
       "name": "Miley Wade",
@@ -876,7 +1269,8 @@
       "nickname": null,
       "instagramHandle": "@miley_crossfit",
       "interviewUrl": "https://www.youtube.com/watch?v=ko19YwdXrks",
-      "photoUrl": "https://profilepicsbucket.crossfit.com/0428b-P2206930_8-184.jpg"
+      "photoUrl": "https://profilepicsbucket.crossfit.com/0428b-P2206930_8-184.jpg",
+      "crossfitAthleteId": "2206930"
     },
     {
       "name": "Anikha Greer",
@@ -903,7 +1297,14 @@
       "nickname": null,
       "instagramHandle": "@anikhagreer",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/9bf9b-P1239579_27-184.jpg"
+      "photoUrl": "https://profilepicsbucket.crossfit.com/9bf9b-P1239579_27-184.jpg",
+      "finishes": [
+        {
+          "year": 2025,
+          "place": 9
+        }
+      ],
+      "crossfitAthleteId": "1239579"
     },
     {
       "name": "Gabriela Migala",
@@ -937,7 +1338,7 @@
       "slug": "abigail-domit",
       "division": "women",
       "country": "United States",
-      "age": null,
+      "age": 27,
       "birthYear": null,
       "hometown": null,
       "affiliate": "Elite CrossFit",
@@ -957,14 +1358,29 @@
       "nickname": "Abbie",
       "instagramHandle": "@abbiedomit",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/7fe27-P2077209_9-184.jpg"
+      "photoUrl": "https://profilepicsbucket.crossfit.com/7fe27-P2077209_9-184.jpg",
+      "finishes": [
+        {
+          "year": 2023,
+          "place": 26
+        },
+        {
+          "year": 2024,
+          "place": 15
+        },
+        {
+          "year": 2025,
+          "place": 12
+        }
+      ],
+      "crossfitAthleteId": "2077209"
     },
     {
       "name": "Lucy McGonigle",
       "slug": "lucy-mcgonigle",
       "division": "women",
       "country": "Ireland",
-      "age": 18,
+      "age": 19,
       "birthYear": null,
       "hometown": "Newtownards, Northern Ireland",
       "affiliate": "CrossFit Resplendent",
@@ -984,7 +1400,14 @@
       "nickname": null,
       "instagramHandle": "@lucy.mcgonigle",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/139ea-P1984229_9-184.jpg"
+      "photoUrl": "https://profilepicsbucket.crossfit.com/139ea-P1984229_9-184.jpg",
+      "finishes": [
+        {
+          "year": 2025,
+          "place": 11
+        }
+      ],
+      "crossfitAthleteId": "1984229"
     },
     {
       "name": "Olivia Kerstetter",
@@ -1011,7 +1434,18 @@
       "nickname": null,
       "instagramHandle": "@oliviakerstetter",
       "interviewUrl": "https://www.youtube.com/watch?v=fDDdpVBcqXs",
-      "photoUrl": "https://profilepicsbucket.crossfit.com/83d02-P1269411_6-184.jpg"
+      "photoUrl": "https://profilepicsbucket.crossfit.com/83d02-P1269411_6-184.jpg",
+      "finishes": [
+        {
+          "year": 2023,
+          "place": 16
+        },
+        {
+          "year": 2025,
+          "place": 3
+        }
+      ],
+      "crossfitAthleteId": "1269411"
     },
     {
       "name": "Elisa Fuliano",
@@ -1038,14 +1472,29 @@
       "nickname": "Fulix",
       "instagramHandle": "@_fulix_",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/dd92a-P1983424_10-184.jpg"
+      "photoUrl": "https://profilepicsbucket.crossfit.com/dd92a-P1983424_10-184.jpg",
+      "finishes": [
+        {
+          "year": 2022,
+          "place": 35
+        },
+        {
+          "year": 2023,
+          "place": 20
+        },
+        {
+          "year": 2024,
+          "place": 39
+        }
+      ],
+      "crossfitAthleteId": "1983424"
     },
     {
       "name": "Alex Gazan",
       "slug": "alex-gazan",
       "division": "women",
       "country": "United States",
-      "age": 25,
+      "age": 24,
       "birthYear": 2001,
       "hometown": "Hood River, Oregon",
       "affiliate": "Camp Rhino CrossFit",
@@ -1065,14 +1514,29 @@
       "nickname": null,
       "instagramHandle": "@alexgazan_",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/3364b-P1232297_4-184.jpg"
+      "photoUrl": "https://profilepicsbucket.crossfit.com/3364b-P1232297_4-184.jpg",
+      "finishes": [
+        {
+          "year": 2022,
+          "place": 24
+        },
+        {
+          "year": 2023,
+          "place": 5
+        },
+        {
+          "year": 2024,
+          "place": 10
+        }
+      ],
+      "crossfitAthleteId": "1232297"
     },
     {
       "name": "Rachel Noel",
       "slug": "rachel-noel",
       "division": "women",
       "country": "United States",
-      "age": null,
+      "age": 26,
       "birthYear": null,
       "hometown": "Salt Lake City area, Utah",
       "affiliate": "CrossFit 801",
@@ -1092,7 +1556,8 @@
       "nickname": null,
       "instagramHandle": "@rachelknoel",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/ec21d-P1460972_12-184.jpg"
+      "photoUrl": "https://profilepicsbucket.crossfit.com/ec21d-P1460972_12-184.jpg",
+      "crossfitAthleteId": "1460972"
     },
     {
       "name": "Hannah Black",
@@ -1119,14 +1584,15 @@
       "nickname": null,
       "instagramHandle": "@h_blackk",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/5a54c-P864249_9-184.jpg"
+      "photoUrl": "https://profilepicsbucket.crossfit.com/5a54c-P864249_9-184.jpg",
+      "crossfitAthleteId": "864249"
     },
     {
       "name": "Ellie Turner",
       "slug": "ellie-turner",
       "division": "women",
       "country": "Australia",
-      "age": null,
+      "age": 28,
       "birthYear": 1998,
       "hometown": "Moonta, South Australia",
       "affiliate": "CrossFit Shred Shed",
@@ -1146,7 +1612,22 @@
       "nickname": null,
       "instagramHandle": "@elliebecturner",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/77bcc-P1119323_3-184.jpg"
+      "photoUrl": "https://profilepicsbucket.crossfit.com/77bcc-P1119323_3-184.jpg",
+      "finishes": [
+        {
+          "year": 2021,
+          "place": 26
+        },
+        {
+          "year": 2022,
+          "place": 18
+        },
+        {
+          "year": 2023,
+          "place": 31
+        }
+      ],
+      "crossfitAthleteId": "1119323"
     },
     {
       "name": "Emma Lawson",
@@ -1173,7 +1654,22 @@
       "nickname": null,
       "instagramHandle": "@emma.lawson_5",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/e8a1d-P1581247_4-184.jpg"
+      "photoUrl": "https://profilepicsbucket.crossfit.com/945d6-P1931423_8-184.jpg",
+      "finishes": [
+        {
+          "year": 2022,
+          "place": 6
+        },
+        {
+          "year": 2023,
+          "place": 2
+        },
+        {
+          "year": 2024,
+          "place": 16
+        }
+      ],
+      "crossfitAthleteId": "1931423"
     },
     {
       "name": "Haley Adams",
@@ -1200,14 +1696,41 @@
       "nickname": null,
       "instagramHandle": "@haleyadamssss",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/bc637-P671666_10-184.jpg"
+      "photoUrl": "https://profilepicsbucket.crossfit.com/bc637-P671666_10-184.jpg",
+      "finishes": [
+        {
+          "year": 2019,
+          "place": 6
+        },
+        {
+          "year": 2020,
+          "place": 4
+        },
+        {
+          "year": 2021,
+          "place": 5
+        },
+        {
+          "year": 2022,
+          "place": 9
+        },
+        {
+          "year": 2024,
+          "place": 5
+        },
+        {
+          "year": 2025,
+          "place": 19
+        }
+      ],
+      "crossfitAthleteId": "671666"
     },
     {
       "name": "Kyra Milligan",
       "slug": "kyra-milligan",
       "division": "women",
       "country": "United States",
-      "age": null,
+      "age": 29,
       "birthYear": 1997,
       "hometown": null,
       "affiliate": "CrossFit PRVN",
@@ -1227,14 +1750,21 @@
       "nickname": null,
       "instagramHandle": "@quads.like.kyra",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/4a098-P873895_12-184.jpg"
+      "photoUrl": "https://profilepicsbucket.crossfit.com/4a098-P873895_12-184.jpg",
+      "finishes": [
+        {
+          "year": 2024,
+          "place": 22
+        }
+      ],
+      "crossfitAthleteId": "873895"
     },
     {
       "name": "Madeline Sturt",
       "slug": "madeline-sturt",
       "division": "women",
       "country": "Australia",
-      "age": null,
+      "age": 29,
       "birthYear": 1996,
       "hometown": null,
       "affiliate": "Reebok CrossFit Frankston",
@@ -1254,7 +1784,34 @@
       "nickname": "Maddie",
       "instagramHandle": "@maddiesturt",
       "interviewUrl": null,
-      "photoUrl": "https://profilepicsbucket.crossfit.com/cd1ef-P21556_13-184.jpg"
+      "photoUrl": "https://profilepicsbucket.crossfit.com/cd1ef-P21556_13-184.jpg",
+      "finishes": [
+        {
+          "year": 2016,
+          "place": 39
+        },
+        {
+          "year": 2017,
+          "place": 35
+        },
+        {
+          "year": 2018,
+          "place": 20
+        },
+        {
+          "year": 2019,
+          "place": 22
+        },
+        {
+          "year": 2024,
+          "place": 8
+        },
+        {
+          "year": 2025,
+          "place": 6
+        }
+      ],
+      "crossfitAthleteId": "21556"
     }
   ]
 }

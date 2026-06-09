@@ -3,6 +3,8 @@ import { useGamesStore } from './gamesStore'
 import AthleteAvatar from './AthleteAvatar'
 import type { GamesAthlete2026 } from '../types-games'
 
+const ord = (n: number) => (n % 100 >= 11 && n % 100 <= 13 ? 'th' : n % 10 === 1 ? 'st' : n % 10 === 2 ? 'nd' : n % 10 === 3 ? 'rd' : 'th')
+
 function Stat({ label, value, accent }: { label: string; value: string; accent?: boolean }) {
   return (
     <div className="rounded-xl p-3 bg-[var(--panel-bg-2)] border border-[var(--panel-border-subtle)] text-center">
@@ -88,6 +90,25 @@ export default function AthleteProfile() {
         <Stat label="Best finish" value={a.bestGamesFinish ? a.bestGamesFinish.replace(/\s*\(.*\)/, '') : a.isRookie ? 'Debut' : '-'} accent />
         <Stat label="Since" value={a.firstGamesYear ? String(a.firstGamesYear) : a.isRookie ? '2026' : '-'} />
       </section>
+
+      {/* Year-by-year Games history */}
+      {a.finishes && a.finishes.length > 0 ? (
+        <section className="mb-5">
+          <div className="games-condensed text-[10px] uppercase tracking-[0.16em] text-[#91C640] mb-2">Every Games appearance</div>
+          <div className="flex flex-wrap gap-1.5">
+            {a.finishes.map((f) => {
+              const win = f.place === 1 || f.place === '1'
+              return (
+                <span key={f.year} className="games-chip" style={{ background: win ? 'rgba(245,158,11,0.18)' : 'var(--panel-bg-2)', color: win ? '#f59e0b' : 'var(--text-secondary)' }}>
+                  {f.year} · {typeof f.place === 'number' ? `${f.place}${ord(f.place)}` : f.place}{win ? ' 🏆' : ''}
+                </span>
+              )
+            })}
+          </div>
+        </section>
+      ) : a.isRookie ? (
+        <p className="mb-5 text-[12.5px] text-[var(--text-muted)]">2026 will be {a.name.split(' ')[0]}'s first CrossFit Games as an individual.</p>
+      ) : null}
 
       {/* Road to the Games */}
       <section className="mb-5">
