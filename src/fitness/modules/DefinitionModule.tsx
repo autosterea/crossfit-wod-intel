@@ -45,10 +45,12 @@ const YS = 7.6 // world height for relative power = 1.0
 const T_MIN = POWER_DURATIONS[0] // 1 s
 const T_MAX = POWER_DURATIONS[POWER_DURATIONS.length - 1] // 3600 s
 
-// Three label tiers (world units above each dot) so the 10 task labels stagger
-// and never overlap, especially where the short-duration events cluster on the
-// left of the log axis; cycled by marker index in ActiveCurve.
-const TASK_TIERS = [0.5, 1.18, 1.86]
+// Four label tiers (world units above each dot) so the 10 task labels stagger
+// across noticeably DIFFERENT heights and never collide, especially where the
+// short-duration events cluster on the left and the long ones cluster on the
+// right of the log axis; cycled by marker index in ActiveCurve. Wider spacing
+// (min gap ~1.05) than before so x-adjacent labels are clearly separated.
+const TASK_TIERS = [0.5, 1.55, 2.6, 3.65]
 
 /**
  * All seven archetypes, in POWER_CURVES order. The preset keys ARE the curve
@@ -406,15 +408,15 @@ function ActiveCurve({ targetSamples }: { targetSamples: number[] }) {
         <bufferGeometry />
       </mesh>
 
-      {/* Quiet "area = fitness" note, kept SMALL and tucked low inside the fill
-          (the brightest region) rather than floating large over the curve. */}
+      {/* "AREA = FITNESS" - the key idea of the module, so it reads clearly
+          inside the fill (the brightest region). Sized to be legible, not tiny. */}
       <Label
-        text="area = fitness"
-        position={[xOfU(0.34), YS * 0.22, 0.25]}
-        worldHeight={0.46}
+        text="AREA = FITNESS"
+        position={[xOfU(0.32), YS * 0.3, 0.25]}
+        worldHeight={0.82}
         color={PAL.yellowGreen}
         mono
-        fontPx={30}
+        fontPx={42}
         weight="700"
       />
 
