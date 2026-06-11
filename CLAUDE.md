@@ -300,6 +300,56 @@ Games, athlete tagging).
   (local Playwright test scripts). Check `git status` after big agent
   runs.
 
+## What Is Fitness lesson (`/fitness`)
+
+A third standalone page (alongside `/` and `/games`), served by the same SPA
+bundle. `src/main.tsx` branches `/fitness`* to the lazy
+`src/fitness/FitnessApp.tsx` chunk. An interactive 3D lesson teaching Greg
+Glassman's 2002 "What Is Fitness?" essay + the CrossFit Level 1 Training
+Guide, in six React Three Fiber modules + an intro hub.
+
+- **Routing/shell:** `src/fitness/fitnessStore.ts` (zustand pushState router,
+  mirrors gamesStore) and `FitnessApp.tsx` (PA top bar + module nav + prev/next
+  stepper + footer with CrossFit/Glassman/L1 citations and Games cross-links).
+- **Harness:** `src/fitness/LessonStage.tsx` is the shared R3F hero every
+  module builds against (Canvas + 3-light rig + OrbitControls with
+  auto-rotate-pause; both overlay panels collapse to launcher pills so the 3D
+  is unobstructed; explanation collapsed by default since its text also renders
+  below the stage via `ModulePage`; on phones the camera auto-pulls-back 1.28x
+  so wide models fit portrait). `src/fitness/ui.tsx` = `ModulePage` shell +
+  dark-glass control widgets. `src/fitness/fitness.css` = PA-themed design
+  system (loads its own Anton/Barlow fonts).
+- **Data:** `src/fitness/fitnessData.ts` is the single source of truth (palette,
+  13 archetype skill profiles, Gastin-anchored energy crossover table,
+  Critical-Power curves, L1 continuum biomarkers, aging model, all faithful copy
+  + verified SOURCES). `src/fitness/lessonMath.ts` = math helpers. Numbers were
+  researched + adversarially verified.
+- **Modules** (`src/fitness/modules/*.tsx`, one self-contained file each):
+  SkillsModule (10-skill radar, compare 13 archetypes), HopperModule (brushed-
+  steel tumbling drum + 6 procedural human athletes posed per drawn task,
+  running-average scoring), PathwaysModule (3 metabolic ribbons), DefinitionModule
+  (power-duration area = fitness), ContinuumModule (L1 sickness-wellness-fitness
+  parallel marker axes), HealthModule (capacity-over-age surface), IntroView.
+- **Constraints:** TypeScript strict; NO external/CDN assets in the 3D (no drei
+  `<Environment preset>` or `<Text>` default font - use CanvasTexture sprites or
+  `<Html>`; metal via metalness+lights, no envMap); 3D stays dark in both themes;
+  per-frame work is ref-based; no em/en dashes. No new dependencies were added
+  (three / @react-three/fiber / drei were already present), so VPS deploy needs
+  no `npm ci`.
+- **To extend:** add to `MODULES` in fitnessData + a `modules/XModule.tsx`
+  wrapping `<ModulePage moduleKey><LessonStage controls={...}>{scene}</LessonStage></ModulePage>`,
+  then register the view in FitnessApp.
+
+## Standalone share/announcement cards (`public/share/posts/`)
+
+Beyond Card Studio's athlete cards, one-off announcement cards (anniversary,
+road-to-Games, etc.) are rendered to 1080x1350 PNG by a gitignored Playwright
+script (`gen-cards.local.mjs`) and committed under `public/share/posts/`, served
+at `/share/posts/<name>.png`. Branded with the white-wordmark Persistence logo
+(`public/persistence-logo.png`, knocked out to transparent by
+`gen-assets.local.mjs` since `sharp` is not installed - it uses a headless
+Chromium canvas for image processing). Card copy uses plain hyphens.
+
 ## Classification (scraper)
 
 `scripts/fetch-daily-wod.mjs` extracts a workout from the crossfit.com page
