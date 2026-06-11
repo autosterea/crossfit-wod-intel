@@ -31,6 +31,11 @@ const YS = 7.6 // world height for relative power = 1.0
 const T_MIN = POWER_DURATIONS[0] // 1 s
 const T_MAX = POWER_DURATIONS[POWER_DURATIONS.length - 1] // 3600 s
 
+// Two label tiers (world units above each dot) so the 10 task labels stagger
+// and never overlap; alternated by marker index in ActiveCurve.
+const TASK_TIER_LO = 0.62
+const TASK_TIER_HI = 1.62
+
 /** The four archetypes, in the order the original presets used them. */
 const ATHLETES = ['Generalist', 'Sprinter', 'Marathoner', 'Sedentary'] as const
 type AthleteKey = (typeof ATHLETES)[number]
@@ -82,9 +87,13 @@ function meanOf(samples: number[]): number {
   return s / M
 }
 
-/** 0-100 fitness score = area under the averaged curve, normalized. */
+/**
+ * 0-100 fitness score = area under the averaged curve, normalized. The
+ * multiplier is tuned so the Generalist (meanOf ~= 0.626) lands ~94 and
+ * reads "Broad"; a specialist's narrower area scores lower.
+ */
 function scoreOf(samples: number[]): number {
-  return clamp(Math.round(meanOf(samples) * 143), 0, 100)
+  return clamp(Math.round(meanOf(samples) * 150), 0, 100)
 }
 
 function scoreWord(s: number): string {
@@ -277,7 +286,9 @@ function ActiveCurve({ targetSamples }: { targetSamples: number[] }) {
       areaRef.current.geometry.dispose()
       areaRef.current.geometry = areaGeometryFrom(pts)
     }
-    // Re-seat each task node group (sphere + its label) on the new height.
+    // Re-seat each task node group (its sphere sits ON the curve). The label +
+    // leader line are offset locally to a staggered tier, so only the group's
+    // Y (the curve height) animates here; the stagger offsets stay constant.
     if (nodesRef.current) {
       nodesRef.current.children.forEach((child) => {
         const seconds = child.userData.seconds as number
@@ -325,18 +336,29 @@ function ActiveCurve({ targetSamples }: { targetSamples: number[] }) {
         weight="700"
       />
 
-      {/* Task markers + labels ride the active curve and morph with it.
-          Each child group is re-seated in Y by the frame loop above. */}
+      {/* Task markers ride the active curve and morph with it. Ten markers on a
+          log axis would collide if every label sat at one height, so labels are
+          STAGGERED onto two tiers (alternating by index) and joined to their dot
+          by a thin leader line. Each child group is re-seated in Y by the frame
+          loop above; the label + leader offsets below it stay constant. */}
       <group ref={nodesRef}>
         {POWER_TASKS.map((task, i) => {
           const y0 = valAt(targetSamples, clamp(logU(task.seconds, T_MIN, T_MAX), 0, 1)) * YS
+          // Alternate tiers so neighbouring markers never share a label height.
+          const tier = i % 2 === 0 ? TASK_TIER_LO : TASK_TIER_HI
           return (
             <group key={task.name} position={[taskX[i], y0, 0]} userData={{ seconds: task.seconds }}>
+              {/* dot stays exactly on the curve */}
               <mesh>
-                <sphereGeometry args={[0.17, 32, 32]} />
+                <sphereGeometry args={[0.17, 24, 24]} />
                 <meshStandardMaterial color={PAL.chalk} emissive={PAL.chalk} emissiveIntensity={0.4} roughness={0.35} toneMapped={false} />
               </mesh>
-              <Label text={task.name} position={[0, 0.68, 0]} worldHeight={0.52} color={PAL.chalk} fontPx={30} />
+              {/* thin leader line from the dot up to its staggered label */}
+              <mesh position={[0, tier / 2, 0.02]}>
+                <boxGeometry args={[0.022, tier, 0.022]} />
+                <meshBasicMaterial color={PAL.chalk} transparent opacity={0.4} toneMapped={false} />
+              </mesh>
+              <Label text={task.name} position={[0, tier + 0.26, 0.04]} worldHeight={0.46} color={PAL.chalk} fontPx={28} />
             </group>
           )
         })}
@@ -387,21 +409,36 @@ function ModalDomains({ athlete }: { athlete: AthleteKey }) {
 }
 
 /* ----------------------------- axes + ticks ---------------------------- */
+// Relative-power gridlines on Y. 1.0 = the most powerful possible burst (the
+// shared scale's ceiling); 0.5 is a mid reference. Higher = more power.
+const Y_LEVELS: { v: number; label: string }[] = [
+  { v: 1.0, label: '1.0 max' },
+  { v: 0.5, label: '0.5' },
+]
+
 function Axes() {
-  // Build the axis + tick line objects once; they never change, so memoizing
-  // the THREE.Line objects (not just geometry) keeps them stable across the
-  // parent's athlete/domain re-renders.
+  // Build the axis + tick + Y-grid line objects once; they never change, so
+  // memoizing the THREE.Line objects (not just geometry) keeps them stable
+  // across the parent's athlete/domain re-renders.
   const lines = useMemo(() => {
     const axisMat = new THREE.LineBasicMaterial({ color: new THREE.Color(PAL.muted), transparent: true, opacity: 0.85 })
-    const mk = (a: THREE.Vector3, b: THREE.Vector3) =>
-      new THREE.Line(new THREE.BufferGeometry().setFromPoints([a, b]), axisMat)
+    const gridMat = new THREE.LineBasicMaterial({ color: new THREE.Color(PAL.muted), transparent: true, opacity: 0.22 })
+    const mk = (a: THREE.Vector3, b: THREE.Vector3, mat = axisMat) =>
+      new THREE.Line(new THREE.BufferGeometry().setFromPoints([a, b]), mat)
     const out: THREE.Line[] = [
+      // X axis (duration) and Y axis (power).
       mk(new THREE.Vector3(X0, 0, 0), new THREE.Vector3(X1 + 0.6, 0, 0)),
       mk(new THREE.Vector3(X0, 0, 0), new THREE.Vector3(X0, YS + 0.5, 0)),
     ]
+    // X ticks at each of the 8 log durations.
     for (const t of POWER_DURATIONS) {
       const x = xOf(t)
       out.push(mk(new THREE.Vector3(x, 0, 0), new THREE.Vector3(x, -0.28, 0)))
+    }
+    // Faint horizontal Y reference levels (0.5 and 1.0 = max) spanning the plot.
+    for (const lvl of Y_LEVELS) {
+      const y = lvl.v * YS
+      out.push(mk(new THREE.Vector3(X0, y, 0), new THREE.Vector3(X1 + 0.2, y, 0), gridMat))
     }
     return out
   }, [])
@@ -410,11 +447,29 @@ function Axes() {
       {lines.map((ln, i) => (
         <primitive key={i} object={ln} />
       ))}
+
+      {/* X axis: clearly LOGARITHMIC. A pill per tick + a LOG TIME caption. */}
       {POWER_DURATIONS.map((t, i) => (
         <Label key={t} text={POWER_DURATION_LABELS[i]} position={[xOf(t), -0.78, 0]} worldHeight={0.52} color={PAL.chalk} mono fontPx={30} />
       ))}
-      <Label text="EFFORT DURATION" position={[0, -1.7, 0]} worldHeight={0.72} color={PAL.chalk} mono fontPx={40} weight="700" />
+      <Label text="EFFORT DURATION" position={[-2.1, -1.74, 0]} worldHeight={0.72} color={PAL.chalk} mono fontPx={40} weight="700" />
+      <Label text="LOG TIME ->" position={[5.0, -1.74, 0]} worldHeight={0.56} color={PAL.yellowGreen} mono fontPx={32} weight="700" />
+
+      {/* Y axis: relative power, higher = more. Tick labels for each level. */}
+      {Y_LEVELS.map((lvl) => (
+        <Label
+          key={lvl.label}
+          text={lvl.label}
+          position={[X0 - 1.05, lvl.v * YS, 0]}
+          worldHeight={0.46}
+          color={lvl.v >= 1 ? PAL.yellowGreen : PAL.muted}
+          mono
+          fontPx={28}
+        />
+      ))}
       <Label text="POWER OUTPUT" position={[X0 - 0.2, YS + 1.1, 0]} worldHeight={0.72} color={PAL.chalk} mono fontPx={40} weight="700" />
+      <Label text="higher = more power" position={[X0 - 0.2, YS + 0.42, 0]} worldHeight={0.42} color={PAL.muted} fontPx={26} />
+      <Label text="power falls left -> right" position={[8.4, -1.18, 0]} worldHeight={0.44} color={PAL.muted} fontPx={26} />
     </group>
   )
 }
@@ -471,6 +526,10 @@ function DefinitionControls({
   return (
     <div>
       <ControlHead>Work capacity</ControlHead>
+
+      <div style={{ fontSize: 12, color: 'var(--wf-muted)', marginBottom: 10, lineHeight: 1.5 }}>
+        Power falls as duration grows. A specialist wins one zone; the generalist wins the area.
+      </div>
 
       <Readout
         label="Fitness, area under the curve"

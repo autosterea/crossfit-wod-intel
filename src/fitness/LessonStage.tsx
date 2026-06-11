@@ -127,12 +127,9 @@ export default function LessonStage({
   const isMobile = useIsMobile()
   // Explanation starts collapsed (the same copy is shown below the stage).
   const [infoOpen, setInfoOpen] = useState(false)
-  // Controls start open on desktop, collapsed on phones.
-  const [controlsOpen, setControlsOpen] = useState(!isMobile)
-
-  useEffect(() => {
-    setControlsOpen(!isMobile)
-  }, [isMobile])
+  // Controls start CLOSED by default on every device (the 3D is the star); the
+  // user opens the "Controls" launcher pill as needed. (User feedback 2026-06.)
+  const [controlsOpen, setControlsOpen] = useState(false)
 
   // On phones, pull the camera back so wide models fit the portrait width, and
   // allow a bit more zoom-out range.

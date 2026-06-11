@@ -308,9 +308,35 @@ export const ENERGY_BENCHMARKS: EffortBenchmark[] = [
   { name: 'Marathon', seconds: 12600, dominant: 'oxidative' },
 ]
 
+/**
+ * Relative MAX SUSTAINABLE TOTAL power (0..1, where 1.0 = a peak ~1 to 3 second
+ * all-out burst) at each ENERGY_CROSSOVER duration, in the SAME order/length as
+ * ENERGY_CROSSOVER. Monotonically NON-INCREASING (power falls as effort length
+ * grows). Anchored to reality: ~1 hr sustainable power is roughly 13% of a peak
+ * burst, a 1 min all-out ~50%, a 5 min effort ~28%.
+ *
+ * The Energy Systems module plots POWER, not "share of supply": each engine's
+ * ribbon height = (its Gastin %-share at that duration / 100) * envelope. That
+ * makes the PHOSPHAGEN ribbon tower at short efforts, GLYCOLYTIC peak in the
+ * middle, and OXIDATIVE a LOW, sustained tail at long durations - it outlasts
+ * the others, it is not more powerful. (Fixes the "oxidative looks strongest"
+ * chart crime while preserving the dominance/crossover story.)
+ */
+export const ENERGY_POWER_ENVELOPE: number[] = [
+  0.97, 0.93, 0.86, 0.78, 0.63, 0.53, 0.5, 0.46, 0.43, 0.38, 0.33, 0.3, 0.28, 0.24, 0.21, 0.16, 0.13,
+]
+
+/** Relative PEAK power each engine can produce (phosphagen normalized to 1.0),
+ *  consistent with ATP turnover rates. Highest -> lowest, for axis annotation. */
+export const ENERGY_PEAK_POWER: Record<EnergyKey, number> = {
+  phosphagen: 1.0,
+  glycolytic: 0.6,
+  oxidative: 0.28,
+}
+
 /* ------------------- 04 - work capacity (definition) ------------------- */
-export const POWER_DURATIONS = [1, 10, 60, 300, 1080, 3600]
-export const POWER_DURATION_LABELS = ['1 s', '10 s', '1 min', '5 min', '18 min', '1 hr']
+export const POWER_DURATIONS = [1, 10, 30, 60, 300, 900, 1800, 3600]
+export const POWER_DURATION_LABELS = ['1 s', '10 s', '30 s', '1 min', '5 min', '15 min', '30 min', '1 hr']
 
 export interface PowerCurve {
   name: string
@@ -318,19 +344,34 @@ export interface PowerCurve {
   samples: number[]
 }
 
+/**
+ * Power-duration curves on ONE SHARED absolute scale (1.0 = the most powerful
+ * possible ~1 s human burst), so the four archetypes are directly comparable.
+ * EVERY curve is monotonically NON-INCREASING: for everyone, power falls (or
+ * holds) as duration grows; it never rises. A marathoner beats a sprinter at
+ * long efforts only because the SPRINTER has decayed below the marathoner, not
+ * because the marathoner's power went up. The generalist owns the largest AREA
+ * (the whole point: a specialist wins one zone, the generalist wins the
+ * integral). Columns = POWER_DURATIONS (1 s .. 1 hr).
+ */
 export const POWER_CURVES: PowerCurve[] = [
-  { name: 'Generalist CrossFitter', samples: [0.78, 0.8, 0.82, 0.8, 0.75, 0.7] },
-  { name: '100m Sprinter', samples: [0.97, 0.95, 0.7, 0.4, 0.25, 0.18] },
-  { name: 'Marathoner', samples: [0.3, 0.35, 0.5, 0.75, 0.93, 0.97] },
-  { name: 'Sedentary Adult', samples: [0.25, 0.22, 0.2, 0.18, 0.15, 0.12] },
+  { name: 'Generalist CrossFitter', samples: [0.8, 0.79, 0.74, 0.7, 0.58, 0.5, 0.46, 0.42] },
+  { name: '100m Sprinter', samples: [1.0, 0.88, 0.6, 0.44, 0.24, 0.16, 0.13, 0.11] },
+  { name: 'Marathoner', samples: [0.56, 0.55, 0.54, 0.53, 0.51, 0.49, 0.475, 0.46] },
+  { name: 'Sedentary Adult', samples: [0.3, 0.29, 0.27, 0.25, 0.21, 0.17, 0.15, 0.12] },
 ]
 
 export const POWER_TASKS: { name: string; seconds: number }[] = [
   { name: '1RM clean', seconds: 3 },
-  { name: '400 m run', seconds: 60 },
-  { name: 'Fran', seconds: 180 },
+  { name: '100m sprint', seconds: 10 },
+  { name: '400m run', seconds: 55 },
+  { name: '500m row', seconds: 95 },
+  { name: 'Fran', seconds: 150 },
+  { name: 'Mile run', seconds: 360 },
   { name: '2k row', seconds: 430 },
+  { name: 'Cindy 20-min', seconds: 1200 },
   { name: '5k run', seconds: 1320 },
+  { name: '10k run', seconds: 2700 },
 ]
 
 export const POWER_CONCEPT =

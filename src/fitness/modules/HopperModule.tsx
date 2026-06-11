@@ -10,20 +10,22 @@ import {
   moduleByKey,
   type DomainKey,
   type HopperDomain,
-  type RosterAthlete,
 } from '../fitnessData'
-import { clamp, lerp, prefersReducedMotion, smoothK } from '../lessonMath'
+import { clamp, prefersReducedMotion } from '../lessonMath'
 import LessonStage from '../LessonStage'
 import { Bar, ControlHead, Legend, ModulePage, Readout } from '../ui'
 
 /* =========================================================================
    02 - The Hopper.
 
-   A realistic tumbling bird-cage drum full of numbered task capsules sits
-   behind a row of six procedural human athletes. Draw a random task and the
-   matching capsule is ejected down a chute while all six athletes re-pose for
-   that modal domain and are scored. Over many draws the broad Generalist pulls
-   ahead of every single specialist - the whole point of the model.
+   A genuine raffle / bingo tumbling drum: a brushed-steel bird cage spinning
+   about the horizontal viewing axis, packed with ~48 numbered task balls
+   colored by modal domain. Real cage physics carry the balls up one rotating
+   wall and cascade them back down the pile. Draw a task and a ball ejects down
+   the chute to the tray while the drawn task flashes large at the top of the
+   stage. A live scoreboard beside the drum accumulates points for the six
+   competitors across draws - over many random draws the broad Generalist pulls
+   ahead of every single specialist, which is the whole point of the model.
    ========================================================================= */
 
 const DOMAIN_BY_KEY: Record<DomainKey, HopperDomain> = HOPPER_DOMAINS.reduce(
@@ -33,8 +35,6 @@ const DOMAIN_BY_KEY: Record<DomainKey, HopperDomain> = HOPPER_DOMAINS.reduce(
   },
   {} as Record<DomainKey, HopperDomain>,
 )
-
-const DOMAIN_KEYS = HOPPER_DOMAINS.map((d) => d.key)
 
 /** Weighted pick: mostly known domains, roughly 1 in 5 is the "unknown" bucket. */
 function weightedDomain(): DomainKey {
@@ -47,8 +47,8 @@ function weightedDomain(): DomainKey {
 
 /**
  * Build a crisp text sprite texture on a 2D canvas (self-contained, no font
- * fetch). Ported from the source makeLabel; returns a texture plus the world
- * aspect so the caller can size a sprite or plane. Uses a system font stack.
+ * fetch). Returns a texture plus the world aspect so the caller can size a
+ * sprite or plane. Uses a system font stack.
  */
 function makeLabelTexture(
   text: string,
@@ -56,8 +56,6 @@ function makeLabelTexture(
 ): { texture: THREE.CanvasTexture; aspect: number } {
   const fontPx = opt.fontPx ?? 46
   const color = opt.color ?? PAL.chalk
-  // Default to a high-contrast dark rounded pill behind the text so labels
-  // stay legible against the 3D scene; callers can override with their own bg.
   const bg = opt.bg ?? 'rgba(7,10,14,0.72)'
   const border = opt.border ?? null
   const weight = opt.weight ?? '600'
@@ -110,7 +108,7 @@ function makeLabelTexture(
   return { texture, aspect: w / h }
 }
 
-/** A small number painted on a circular chip texture for a capsule. */
+/** A small number painted on a circular chip texture for a ball. */
 function makeNumberTexture(n: number, color: string): THREE.CanvasTexture {
   const S = 128
   const c = document.createElement('canvas')
@@ -139,17 +137,62 @@ function makeNumberTexture(n: number, color: string): THREE.CanvasTexture {
 /* ----------------------------- the hopper drum -------------------------- */
 
 const DRUM_R = 1.55 // m, internal radius
-const DRUM_HALF = 1.0 // m, half-length along the spin axis (z)
-const N_CAPSULES = 56
-const CAP_R = 0.052 // m
-const RESTITUTION = 0.6
+const DRUM_HALF = 1.0 // m, half-length along the spin axis (drum-local y)
+const N_BALLS = 48
+const CAP_R = 0.066 // m, ball radius
+const RESTITUTION = 0.42 // wall bounce
+const N_CHIPS = 10 // numbered chips that ride a readable subset of balls
 
-interface Capsule {
+interface Ball {
+  /** Position in drum-local coordinates (the cage spins about local y). */
   pos: THREE.Vector3
+  /** Velocity in drum-local coordinates. */
   vel: THREE.Vector3
   dk: DomainKey
   color: THREE.Color
   staged: boolean
+}
+
+/**
+ * Drop a single ball at a random point inside the cylinder with a random kick.
+ * The disc cross-section is the camera-facing x-y plane; z is the spin axis.
+ */
+function seedBall(b: Ball): void {
+  const rr = DRUM_R - CAP_R - 0.04
+  const zz = DRUM_HALF - CAP_R - 0.04
+  let x = 0
+  let y = 0
+  do {
+    x = Math.random() * 2 - 1
+    y = Math.random() * 2 - 1
+  } while (x * x + y * y > 1)
+  b.pos.set(x * rr, y * rr, (Math.random() * 2 - 1) * zz)
+  b.vel.set(Math.random() * 2 - 1, Math.random() * 2 - 1, (Math.random() * 2 - 1) * 0.3)
+  b.staged = false
+}
+
+/**
+ * Pick the domains for every ball once. The first N_CHIPS domains also color the
+ * numbered chips, so returning them as a plain array lets the chips be built in
+ * a memo (a render-safe value) while the balls themselves live in a ref.
+ */
+function makeBallDomains(): DomainKey[] {
+  return Array.from({ length: N_BALLS }, () => weightedDomain())
+}
+
+/** Build the mutable task balls from a fixed domain assignment, seeded inside the drum. */
+function makeBalls(domains: DomainKey[]): Ball[] {
+  return domains.map((dk) => {
+    const b: Ball = {
+      pos: new THREE.Vector3(),
+      vel: new THREE.Vector3(),
+      dk,
+      color: new THREE.Color(DOMAIN_BY_KEY[dk].color),
+      staged: false,
+    }
+    seedBall(b)
+    return b
+  })
 }
 
 /** Brushed-steel shared material for the cage. */
@@ -166,113 +209,84 @@ function useSteelMaterial() {
 }
 
 interface HopperHandle {
-  /** Stage a capsule of the given domain to eject; returns nothing. */
+  /** Stage a ball of the given domain to eject down the chute. */
   eject: (dk: DomainKey) => void
-  /** Re-seat every staged/popped capsule back inside the drum. */
+  /** Re-seat every staged/popped ball back inside the drum. */
   refill: () => void
 }
 
 function TumblingHopper({
   reduced,
   apiRef,
-  onDraw,
 }: {
   reduced: boolean
   apiRef: React.MutableRefObject<HopperHandle | null>
-  onDraw: (label: string, color: string) => void
 }) {
   const steel = useSteelMaterial()
   const cageRef = useRef<THREE.Group>(null)
-  const capsulesMesh = useRef<THREE.InstancedMesh>(null)
+  const crankRef = useRef<THREE.Group>(null)
+  const ballsMesh = useRef<THREE.InstancedMesh>(null)
   const chipRefs = useRef<(THREE.Sprite | null)[]>([])
 
   // Vertical bars of the bird cage.
   const N_BARS = 20
   const barAngles = useMemo(() => Array.from({ length: N_BARS }, (_, i) => (i / N_BARS) * Math.PI * 2), [])
 
-  // Per-capsule physics state.
-  const caps = useMemo<Capsule[]>(() => {
-    const arr: Capsule[] = []
-    for (let i = 0; i < N_CAPSULES; i++) {
-      const dk = weightedDomain()
-      const color = new THREE.Color(DOMAIN_BY_KEY[dk].color)
-      // random point inside the cylinder
-      let x = 0
-      let y = 0
-      do {
-        x = Math.random() * 2 - 1
-        y = Math.random() * 2 - 1
-      } while (x * x + y * y > 1)
-      const rr = DRUM_R - CAP_R - 0.05
-      arr.push({
-        pos: new THREE.Vector3(x * rr, y * rr, (Math.random() * 2 - 1) * (DRUM_HALF - CAP_R - 0.04)),
-        vel: new THREE.Vector3(Math.random() * 2 - 1, Math.random() * 2 - 1, (Math.random() * 2 - 1) * 0.4).multiplyScalar(
-          0.5,
-        ),
-        dk,
-        color,
-        staged: false,
-      })
-    }
-    return arr
-  }, [])
+  // The fixed domain assignment for every ball (a plain, render-safe value).
+  const [domains] = useState<DomainKey[]>(makeBallDomains)
 
-  // Numbered front-facing chips for a readable subset of capsules. (Instanced
-  // meshes cannot carry per-instance textures, so the index is shown on the few
-  // capsules that ride the front of the drum via individual sprites below.)
+  // The mutable per-ball physics state (drum-local frame; the cage spins about
+  // local y). Kept in a lazily-initialized ref so the ball objects stay stable
+  // and are mutated in place each frame (read only in useFrame and handlers).
+  const ballsRef = useRef<Ball[] | null>(null)
+  if (ballsRef.current === null) ballsRef.current = makeBalls(domains)
+  const balls = ballsRef.current
+
+  // Numbered chips ride a readable subset of balls so the drum reads as a hopper
+  // of distinct numbered tasks. Built from the (render-safe) domain list, not
+  // from the ball ref, so this stays a pure render-time value.
   const chipTextures = useMemo(
-    () => caps.slice(0, 8).map((c, i) => makeNumberTexture(i + 1, `#${c.color.getHexString()}`)),
-    [caps],
+    () => domains.slice(0, N_CHIPS).map((dk, i) => makeNumberTexture(i + 1, DOMAIN_BY_KEY[dk].color)),
+    [domains],
   )
 
-  // Eject animation bookkeeping (capsule index -> progress along the chute).
-  const ejecting = useRef<{ idx: number; t: number; from: THREE.Vector3; label: string }[]>([])
+  // Eject animation bookkeeping (ball index -> progress along the chute).
+  const ejecting = useRef<{ idx: number; t: number; from: THREE.Vector3 }[]>([])
 
-  // Chute curve from drum bottom out to the tray, in world space.
+  // Chute curve from drum exit out to the tray, in the group's local space.
   const chuteCurve = useMemo(() => {
-    const start = new THREE.Vector3(0, -DRUM_R * 0.2, DRUM_HALF + 0.1)
+    const start = new THREE.Vector3(0, -DRUM_R * 0.35, DRUM_HALF + 0.1)
     const mid = new THREE.Vector3(0.05, -DRUM_R - 0.55, DRUM_HALF + 0.95)
-    const end = new THREE.Vector3(0, -DRUM_R - 1.35, DRUM_HALF + 1.55)
+    const end = new THREE.Vector3(0, -DRUM_R - 1.3, DRUM_HALF + 1.55)
     return new THREE.CatmullRomCurve3([start, mid, end])
   }, [])
 
   const eject = useCallback(
     (dk: DomainKey) => {
-      const pool = caps.map((c, i) => ({ c, i })).filter(({ c }) => !c.staged && c.dk === dk)
+      const pool = balls.map((b, i) => ({ b, i })).filter(({ b }) => !b.staged && b.dk === dk)
       const target = pool.length ? pool[Math.floor(Math.random() * pool.length)] : null
       if (!target) {
-        // No capsule of this exact domain left in the drum; pick any free one.
-        const any = caps.map((c, i) => ({ c, i })).filter(({ c }) => !c.staged)
+        const any = balls.map((b, i) => ({ b, i })).filter(({ b }) => !b.staged)
         if (!any.length) return
         const pick = any[Math.floor(Math.random() * any.length)]
-        pick.c.staged = true
-        pick.c.dk = dk
-        pick.c.color = new THREE.Color(DOMAIN_BY_KEY[dk].color)
-        ejecting.current.push({ idx: pick.i, t: 0, from: pick.c.pos.clone(), label: '' })
+        pick.b.staged = true
+        pick.b.dk = dk
+        pick.b.color = new THREE.Color(DOMAIN_BY_KEY[dk].color)
+        ejecting.current.push({ idx: pick.i, t: 0, from: pick.b.pos.clone() })
         return
       }
-      target.c.staged = true
-      ejecting.current.push({ idx: target.i, t: 0, from: target.c.pos.clone(), label: '' })
+      target.b.staged = true
+      ejecting.current.push({ idx: target.i, t: 0, from: target.b.pos.clone() })
     },
-    [caps],
+    [balls],
   )
 
   const refill = useCallback(() => {
     ejecting.current = []
-    for (const c of caps) {
-      if (!c.staged) continue
-      let x = 0
-      let y = 0
-      do {
-        x = Math.random() * 2 - 1
-        y = Math.random() * 2 - 1
-      } while (x * x + y * y > 1)
-      const rr = DRUM_R - CAP_R - 0.05
-      c.pos.set(x * rr, y * rr, (Math.random() * 2 - 1) * (DRUM_HALF - CAP_R - 0.04))
-      c.vel.set(Math.random() * 2 - 1, Math.random() * 2 - 1, (Math.random() * 2 - 1) * 0.4).multiplyScalar(0.6)
-      c.staged = false
+    for (const b of balls) {
+      if (b.staged) seedBall(b)
     }
-  }, [caps])
+  }, [balls])
 
   useEffect(() => {
     apiRef.current = { eject, refill }
@@ -280,120 +294,154 @@ function TumblingHopper({
 
   useEffect(() => () => chipTextures.forEach((t) => t.dispose()), [chipTextures])
 
-  const spin = reduced ? 0 : 1.55 // rad/s cage spin
+  // Cage spins about its LOCAL y axis (which the parent group tips to lie along
+  // the world horizontal viewing axis, +z, so it reads like a raffle drum).
+  const spin = reduced ? 0.18 : 1.5 // rad/s
   const dummy = useMemo(() => new THREE.Object3D(), [])
   const cageAngle = useRef(0)
+
+  /* --- physics tuning ---
+     The balls live in the parent group's world-aligned frame. The drum's spin
+     axis is HORIZONTAL and points toward the viewer (world +z), so the balls
+     tumble in the camera-facing x-y plane: gravity pulls down (-y), the cage
+     rotates about +z, and a ball touching the rotating wall is dragged
+     tangentially (wall friction) - carried UP the ascending side, then it loses
+     the wall and cascades back down the pile. The classic raffle-drum motion. */
+  const GRAVITY = reduced ? -2.0 : -7.0 // m/s^2 along -y (world down)
+  const WALL_DRAG = reduced ? 0.05 : 0.42 // how strongly the rotating wall carries a contacting ball
+  const CONTACT_BAND = 0.74 // start dragging once a ball is past this fraction of the radius
+  const DAMP = reduced ? 1.2 : 0.5 // velocity damping (1/s); keeps the pile churning, not exploding
+  const MAX_SPEED = 7.5 // clamp to avoid blow-ups on slow frames
 
   useFrame((_, rawDt) => {
     const dt = Math.min(rawDt, 1 / 30)
     cageAngle.current += spin * dt
-    if (cageRef.current) cageRef.current.rotation.z = cageAngle.current
+    // The cage mesh spins about its own local y, which the [PI/2,0,0] tilt lays
+    // along world z (the viewing axis), so it reads as a wheel facing the camera.
+    if (cageRef.current) cageRef.current.rotation.y = cageAngle.current
+    if (crankRef.current) crankRef.current.rotation.z = -cageAngle.current
 
-    const g = -3.0 // gentle gravity in drum-local units
-    const innerZ = DRUM_HALF - CAP_R - 0.02
     const innerR = DRUM_R - CAP_R - 0.02
+    const innerZ = DRUM_HALF - CAP_R - 0.02
+    const wallTangentialSpeed = spin * innerR // m/s of the cage wall at the shell
+    const bandR = innerR * CONTACT_BAND
 
-    for (let i = 0; i < caps.length; i++) {
-      const c = caps[i]
-      if (c.staged) continue
-      // gravity
-      c.vel.y += g * dt
-      // tangential churn from the spinning cage near the shell
-      const rad = Math.hypot(c.pos.x, c.pos.y)
-      if (rad > innerR * 0.62) {
-        const churn = spin * 0.5
-        // tangent direction (perpendicular to radius, sense of spin about +z)
-        const tx = -c.pos.y
-        const ty = c.pos.x
-        const tl = Math.hypot(tx, ty) || 1
-        c.vel.x += (tx / tl) * churn * dt * 6
-        c.vel.y += (ty / tl) * churn * dt * 6
+    for (let i = 0; i < balls.length; i++) {
+      const b = balls[i]
+      if (b.staged) continue
+
+      // Gravity pulls straight down in world space.
+      b.vel.y += GRAVITY * dt
+
+      // Wall drag: balls riding the rotating shell are dragged tangentially.
+      // For rotation about +z, the tangent in the x-y plane is (-y, +x).
+      const rad = Math.hypot(b.pos.x, b.pos.y)
+      if (rad > bandR && rad > 1e-4) {
+        const depth = clamp((rad - bandR) / (innerR - bandR), 0, 1)
+        const inv = 1 / rad
+        const tx = -b.pos.y * inv
+        const ty = b.pos.x * inv
+        // wall velocity at this point (rigid rotation about +z): omega x r
+        const wx = tx * wallTangentialSpeed
+        const wy = ty * wallTangentialSpeed
+        // pull the ball's in-plane velocity toward the wall velocity
+        const k = clamp(WALL_DRAG * depth * dt * 9, 0, 1)
+        b.vel.x += (wx - b.vel.x) * k
+        b.vel.y += (wy - b.vel.y) * k
       }
+
+      // damping
+      const d = Math.max(0, 1 - DAMP * dt)
+      b.vel.multiplyScalar(d)
+
+      // clamp speed
+      const sp = b.vel.length()
+      if (sp > MAX_SPEED) b.vel.multiplyScalar(MAX_SPEED / sp)
+
       // integrate
-      c.pos.addScaledVector(c.vel, dt)
-      // contain radially in x-y, reflect with restitution
-      const r2 = Math.hypot(c.pos.x, c.pos.y)
+      b.pos.addScaledVector(b.vel, dt)
+
+      // contain radially (x-y disc), reflect inward with restitution
+      const r2 = Math.hypot(b.pos.x, b.pos.y)
       if (r2 > innerR) {
-        const nx = c.pos.x / r2
-        const ny = c.pos.y / r2
-        const vn = c.vel.x * nx + c.vel.y * ny
+        const nx = b.pos.x / r2
+        const ny = b.pos.y / r2
+        const vn = b.vel.x * nx + b.vel.y * ny
         if (vn > 0) {
-          c.vel.x -= (1 + RESTITUTION) * vn * nx
-          c.vel.y -= (1 + RESTITUTION) * vn * ny
+          b.vel.x -= (1 + RESTITUTION) * vn * nx
+          b.vel.y -= (1 + RESTITUTION) * vn * ny
         }
-        c.pos.x = nx * innerR
-        c.pos.y = ny * innerR
+        b.pos.x = nx * innerR
+        b.pos.y = ny * innerR
       }
-      // contain along axis
-      if (c.pos.z > innerZ) {
-        c.pos.z = innerZ
-        c.vel.z = -Math.abs(c.vel.z) * RESTITUTION
-      } else if (c.pos.z < -innerZ) {
-        c.pos.z = -innerZ
-        c.vel.z = Math.abs(c.vel.z) * RESTITUTION
+
+      // contain along the spin axis (z), reflect with restitution
+      if (b.pos.z > innerZ) {
+        b.pos.z = innerZ
+        b.vel.z = -Math.abs(b.vel.z) * RESTITUTION
+      } else if (b.pos.z < -innerZ) {
+        b.pos.z = -innerZ
+        b.vel.z = Math.abs(b.vel.z) * RESTITUTION
       }
-      // mild damping so they settle and churn rather than blow up
-      c.vel.multiplyScalar(1 - 0.4 * dt)
     }
 
-    // advance ejecting capsules along the chute curve
-    const finished: number[] = []
-    for (const e of ejecting.current) {
-      e.t += dt / (reduced ? 0.001 : 0.85)
-      const tt = clamp(e.t, 0, 1)
+    // advance ejecting balls along the chute curve (mutate ref entries in place)
+    const list = ejecting.current
+    const rate = dt / (reduced ? 0.18 : 0.85)
+    const still: { idx: number; t: number; from: THREE.Vector3 }[] = []
+    for (let k = 0; k < list.length; k++) {
+      const e = list[k]
+      const t = e.t + rate
+      const tt = clamp(t, 0, 1)
       const eased = tt < 0.5 ? 2 * tt * tt : -1 + (4 - 2 * tt) * tt
-      const c = caps[e.idx]
+      const b = balls[e.idx]
       if (tt < 0.35) {
-        // rise out of the drum to the chute mouth
-        c.pos.lerpVectors(e.from, chuteCurve.getPoint(0), eased / 0.35)
+        b.pos.lerpVectors(e.from, chuteCurve.getPoint(0), eased / 0.35)
       } else {
         const u = (tt - 0.35) / 0.65
-        chuteCurve.getPoint(u, c.pos)
+        chuteCurve.getPoint(u, b.pos)
       }
-      if (tt >= 1) finished.push(e.idx)
+      if (tt < 1) still.push({ idx: e.idx, t, from: e.from })
     }
-    if (finished.length) ejecting.current = ejecting.current.filter((e) => !finished.includes(e.idx))
+    if (still.length !== list.length) ejecting.current = still
 
     // write instances
-    const im = capsulesMesh.current
+    const im = ballsMesh.current
     if (im) {
-      for (let i = 0; i < caps.length; i++) {
-        const c = caps[i]
-        const popped = c.staged
-        dummy.position.copy(c.pos)
-        const s = popped ? 1.7 : 1
+      for (let i = 0; i < balls.length; i++) {
+        const b = balls[i]
+        dummy.position.copy(b.pos)
+        const s = b.staged ? 1.55 : 1
         dummy.scale.set(s, s, s)
-        dummy.rotation.set(c.pos.y * 1.4, c.pos.x * 1.4, c.pos.z)
+        dummy.rotation.set(b.pos.z * 1.4, b.pos.x * 1.4, b.pos.y * 1.2)
         dummy.updateMatrix()
         im.setMatrixAt(i, dummy.matrix)
-        im.setColorAt(i, c.color)
+        im.setColorAt(i, b.color)
       }
       im.instanceMatrix.needsUpdate = true
       if (im.instanceColor) im.instanceColor.needsUpdate = true
     }
 
-    // the numbered front chips follow their capsules
+    // numbered chips track their balls
     for (let i = 0; i < chipRefs.current.length; i++) {
       const sp = chipRefs.current[i]
-      const c = caps[i]
-      if (sp && c) {
-        const s = c.staged ? 1.7 : 1
-        sp.position.set(c.pos.x, c.pos.y, c.pos.z)
-        sp.scale.set(CAP_R * 2.1 * s, CAP_R * 2.1 * s, 1)
-        sp.visible = !c.staged
+      const b = balls[i]
+      if (sp && b) {
+        const s = b.staged ? 1.55 : 1
+        sp.position.set(b.pos.x, b.pos.y, b.pos.z)
+        sp.scale.set(CAP_R * 2.05 * s, CAP_R * 2.05 * s, 1)
+        sp.visible = !b.staged
       }
     }
   })
-
-  // expose draw label to parent when an eject is triggered: handled in parent.
-  void onDraw
 
   const ringGeo = useMemo(() => new THREE.TorusGeometry(DRUM_R + 0.06, 0.06, 12, 48), [])
   const barGeo = useMemo(() => new THREE.CylinderGeometry(0.022, 0.022, DRUM_HALF * 2, 12), [])
 
   return (
-    <group position={[0, DRUM_R + 1.45, -1.7]}>
-      {/* The spinning bird-cage drum (its axis is z). */}
+    <group position={[0, DRUM_R + 1.4, 0]}>
+      {/* The cage tips so its local-y spin axis lies along world +z (horizontal,
+          facing the camera) - the classic raffle-drum orientation. */}
       <group ref={cageRef} rotation={[Math.PI / 2, 0, 0]}>
         {/* two end-cap hoops */}
         <mesh geometry={ringGeo} material={steel} position={[0, DRUM_HALF, 0]} rotation={[Math.PI / 2, 0, 0]} castShadow />
@@ -431,11 +479,11 @@ function TumblingHopper({
       </mesh>
 
       {/* A-frame stand: two angled legs each side of the axle */}
-      <Aframe steel={steel} z={DRUM_HALF + 0.55} drop={DRUM_R + 1.45} />
-      <Aframe steel={steel} z={-(DRUM_HALF + 0.55)} drop={DRUM_R + 1.45} />
+      <Aframe steel={steel} z={DRUM_HALF + 0.55} drop={DRUM_R + 1.4} />
+      <Aframe steel={steel} z={-(DRUM_HALF + 0.55)} drop={DRUM_R + 1.4} />
 
-      {/* hand crank */}
-      <group position={[0, 0, DRUM_HALF + 0.85]}>
+      {/* hand crank (spins with the cage) */}
+      <group ref={crankRef} position={[0, 0, DRUM_HALF + 0.85]}>
         <mesh material={steel} position={[0.42, 0, 0]}>
           <cylinderGeometry args={[0.028, 0.028, 0.85, 12]} />
         </mesh>
@@ -445,33 +493,21 @@ function TumblingHopper({
       </group>
 
       {/* clear draw chute leading down-forward to a small tray */}
-      <mesh
-        material={steel}
-        position={[0, -DRUM_R * 0.55, DRUM_HALF + 0.85]}
-        rotation={[Math.PI / 2.5, 0, 0]}
-      >
+      <mesh material={steel} position={[0, -DRUM_R * 0.55, DRUM_HALF + 0.85]} rotation={[Math.PI / 2.5, 0, 0]}>
         <cylinderGeometry args={[0.24, 0.24, 1.5, 24, 1, true]} />
       </mesh>
       {/* tray */}
-      <mesh position={[0, -(DRUM_R + 1.35), DRUM_HALF + 1.55]} castShadow receiveShadow>
+      <mesh position={[0, -(DRUM_R + 1.3), DRUM_HALF + 1.55]} castShadow receiveShadow>
         <boxGeometry args={[0.7, 0.08, 0.5]} />
         <meshStandardMaterial color="#2a3138" metalness={0.5} roughness={0.5} />
       </mesh>
 
-      {/* capsules (instanced spheres) */}
-      <instancedMesh ref={capsulesMesh} args={[undefined, undefined, N_CAPSULES]} castShadow>
-        <sphereGeometry args={[CAP_R, 20, 16]} />
-        <meshStandardMaterial
-          toneMapped={false}
-          roughness={0.4}
-          metalness={0.05}
-          emissiveIntensity={0.32}
-          vertexColors={false}
-        />
+      {/* the task balls (instanced spheres) */}
+      <instancedMesh ref={ballsMesh} args={[undefined, undefined, N_BALLS]} castShadow>
+        <sphereGeometry args={[CAP_R, 18, 14]} />
+        <meshStandardMaterial toneMapped={false} roughness={0.42} metalness={0.05} emissiveIntensity={0.3} />
       </instancedMesh>
-      {/* a readable handful of numbered chips ride with their capsules so the
-          drum reads as a hopper of distinct, numbered tasks (per-instance
-          textures are not possible on an InstancedMesh, so these are sprites) */}
+      {/* a readable handful of numbered chips ride with their balls */}
       {chipTextures.map((tex, i) => (
         <sprite
           key={i}
@@ -490,7 +526,7 @@ function TumblingHopper({
         color={PAL.chalk}
         border="rgba(255,255,255,0.18)"
         position={[0, DRUM_R + 0.78, 0]}
-        height={0.56}
+        height={0.5}
       />
     </group>
   )
@@ -549,477 +585,160 @@ function SpriteLabel({
   )
 }
 
-/* --------------------------- procedural athletes ------------------------ */
+/* ------------------------------ scoreboard ------------------------------ */
 
-type BuildKey = RosterAthlete['build']
-
-interface BodySpec {
-  H: number // total height, m
-  bulk: number // radius multiplier
-  shoulderHip: number // shoulder:hip ratio
-  limb: number // limb-length factor
-  color: string
-}
-
-/** Body-type knobs per archetype (real-ish proportions). */
-const BODY: Record<BuildKey, BodySpec> = {
-  generalist: { H: 1.78, bulk: 1.0, shoulderHip: 1.35, limb: 1.0, color: PAL.fit },
-  weightlifter: { H: 1.7, bulk: 1.18, shoulderHip: 1.5, limb: 0.94, color: PAL.weightlifting },
-  endurance: { H: 1.82, bulk: 0.85, shoulderHip: 1.12, limb: 1.08, color: PAL.monostructural },
-  gymnast: { H: 1.66, bulk: 1.08, shoulderHip: 1.55, limb: 0.92, color: PAL.gymnastics },
-  strongman: { H: 1.84, bulk: 1.25, shoulderHip: 1.7, limb: 0.9, color: PAL.oddObject },
-  sprinter: { H: 1.86, bulk: 1.0, shoulderHip: 1.4, limb: 1.06, color: '#f4b740' },
-}
-
-/** Joint pose targets (Euler X on each joint, radians) per drawn domain. */
-type Pose = {
-  spineX: number
-  shoulderX: number
-  elbowX: number
-  hipX: number
-  kneeX: number
-  ankleX: number
-  armSplit?: number // opposite-arm swing for sprint
-  legSplit?: number // lead/trail hip split for sprint
-}
-
-function poseFor(dk: DomainKey | null): Pose {
-  switch (dk) {
-    case 'weightlifting':
-      // deadlift / hinge with bar
-      return { spineX: -0.95, shoulderX: -0.15, elbowX: 0.05, hipX: -1.2, kneeX: 0.55, ankleX: -0.2 }
-    case 'gymnastics':
-      // dead hang from a bar, arms overhead
-      return { spineX: 0.02, shoulderX: -2.9, elbowX: 0.0, hipX: 0.04, kneeX: 0.04, ankleX: 0.05 }
-    case 'monostructural':
-      // mid-sprint stride
-      return {
-        spineX: 0.18,
-        shoulderX: 0,
-        elbowX: 1.5,
-        hipX: 0,
-        kneeX: 0,
-        ankleX: 0,
-        armSplit: 1.4,
-        legSplit: 1.2,
-      }
-    case 'oddObject':
-      // sandbag to shoulder carry: arms up around a load, slight squat
-      return { spineX: -0.2, shoulderX: -1.7, elbowX: 1.7, hipX: -0.5, kneeX: 0.7, ankleX: -0.2 }
-    default:
-      // unknown / ready stance, athletic
-      return { spineX: -0.12, shoulderX: -0.32, elbowX: 0.5, hipX: -0.28, kneeX: 0.4, ankleX: -0.12 }
-  }
-}
-
-interface JointRefs {
-  spine: THREE.Group
-  shoulderL: THREE.Group
-  shoulderR: THREE.Group
-  elbowL: THREE.Group
-  elbowR: THREE.Group
-  hipL: THREE.Group
-  hipR: THREE.Group
-  kneeL: THREE.Group
-  kneeR: THREE.Group
-  ankleL: THREE.Group
-  ankleR: THREE.Group
-}
-
-/** A capsule limb segment that hangs along -Y from its joint group. */
-function Segment({
-  len,
-  r,
-  material,
-}: {
-  len: number
-  r: number
-  material: THREE.Material
-}) {
-  // CapsuleGeometry is centered; shift so the top sits at the joint (y=0) and
-  // it hangs down to y=-len.
-  return (
-    <mesh position={[0, -len / 2, 0]} material={material} castShadow>
-      <capsuleGeometry args={[r, Math.max(0.001, len - 2 * r), 6, 16]} />
-    </mesh>
-  )
-}
-
-function JointBall({ r, material }: { r: number; material: THREE.Material }) {
-  return (
-    <mesh material={material} castShadow>
-      <sphereGeometry args={[r, 16, 12]} />
-    </mesh>
-  )
-}
-
-function Athlete({
-  spec,
-  drawnDomain,
-  reduced,
-  phase,
-}: {
-  spec: BodySpec
-  drawnDomain: DomainKey | null
-  reduced: boolean
-  phase: number
-}) {
-  const material = useMemo(
-    () => new THREE.MeshStandardMaterial({ color: spec.color, roughness: 0.55, metalness: 0.08 }),
-    [spec.color],
-  )
-  useEffect(() => () => material.dispose(), [material])
-
-  // proportions from the ~7.5-head canon
-  const head = spec.H / 7.5
-  const r = head * 0.42 * spec.bulk // base limb radius
-  const hipWidth = head * 0.5
-  const shoulderWidth = hipWidth * spec.shoulderHip
-  const thighLen = head * 1.9 * spec.limb
-  const shinLen = head * 1.75 * spec.limb
-  const upperArm = head * 1.35 * spec.limb
-  const foreArm = head * 1.2 * spec.limb
-  const torsoLower = head * 1.05
-  const chestLen = head * 1.2
-  const neckLen = head * 0.35
-
-  const root = useRef<THREE.Group>(null)
-  const j = useRef<Partial<JointRefs>>({})
-  const setRef = useCallback((k: keyof JointRefs) => (el: THREE.Group | null) => {
-    if (el) j.current[k] = el
-  }, [])
-
-  // current eased pose values
-  const cur = useRef<Pose>(poseFor(null))
-
-  useFrame((state, rawDt) => {
-    const dt = Math.min(rawDt, 1 / 30)
-    const target = poseFor(drawnDomain)
-    const k = reduced ? 1 : smoothK(dt, 7)
-    const c = cur.current
-    c.spineX = lerp(c.spineX, target.spineX, k)
-    c.shoulderX = lerp(c.shoulderX, target.shoulderX, k)
-    c.elbowX = lerp(c.elbowX, target.elbowX, k)
-    c.hipX = lerp(c.hipX, target.hipX, k)
-    c.kneeX = lerp(c.kneeX, target.kneeX, k)
-    c.ankleX = lerp(c.ankleX, target.ankleX, k)
-    const split = lerp(c.legSplit ?? 0, target.legSplit ?? 0, k)
-    const aSplit = lerp(c.armSplit ?? 0, target.armSplit ?? 0, k)
-    c.legSplit = split
-    c.armSplit = aSplit
-
-    const t = reduced ? 0 : state.clock.getElapsedTime()
-    const breath = Math.sin(t * 1.3 + phase) * 0.02
-    const sway = Math.sin(t * 0.7 + phase) * 0.015
-
-    const jr = j.current
-    if (jr.spine) jr.spine.rotation.x = c.spineX + breath
-    if (jr.shoulderL) jr.shoulderL.rotation.x = c.shoulderX - aSplit
-    if (jr.shoulderR) jr.shoulderR.rotation.x = c.shoulderX + aSplit
-    if (jr.elbowL) jr.elbowL.rotation.x = c.elbowX
-    if (jr.elbowR) jr.elbowR.rotation.x = c.elbowX
-    if (jr.hipL) jr.hipL.rotation.x = c.hipX + split
-    if (jr.hipR) jr.hipR.rotation.x = c.hipX - split
-    if (jr.kneeL) jr.kneeL.rotation.x = c.kneeX + (split > 0.4 ? 0.7 : 0)
-    if (jr.kneeR) jr.kneeR.rotation.x = c.kneeX
-    if (jr.ankleL) jr.ankleL.rotation.x = c.ankleX
-    if (jr.ankleR) jr.ankleR.rotation.x = c.ankleX
-    if (root.current) root.current.rotation.z = sway
-  })
-
-  // Pelvis sits so feet land on y=0. Standing leg length ~ thigh+shin; with a
-  // little knee bend we place the pelvis a touch lower than full extension.
-  const pelvisY = thighLen + shinLen + r * 0.5
-
-  return (
-    <group ref={root}>
-      {/* pelvis */}
-      <group position={[0, pelvisY, 0]}>
-        <JointBall r={hipWidth * 0.55} material={material} />
-        {/* pelvis bar */}
-        <mesh material={material} rotation={[0, 0, Math.PI / 2]} castShadow>
-          <capsuleGeometry args={[r * 0.85, hipWidth, 6, 16]} />
-        </mesh>
-
-        {/* spine -> chest -> neck -> head */}
-        <group ref={setRef('spine')}>
-          <Segment len={torsoLower} r={r * 0.95} material={material} />
-          <group position={[0, torsoLower, 0]}>
-            <JointBall r={r * 0.7} material={material} />
-            {/* chest */}
-            <Segment len={chestLen} r={r * 1.05} material={material} />
-            {/* shoulder bar */}
-            <mesh material={material} position={[0, chestLen * 0.92, 0]} rotation={[0, 0, Math.PI / 2]} castShadow>
-              <capsuleGeometry args={[r * 0.8, shoulderWidth, 6, 16]} />
-            </mesh>
-            {/* neck + head */}
-            <group position={[0, chestLen, 0]}>
-              <Segment len={neckLen} r={r * 0.5} material={material} />
-              <mesh position={[0, neckLen + head * 0.5, 0]} material={material} castShadow>
-                <sphereGeometry args={[head * 0.5, 24, 18]} />
-              </mesh>
-            </group>
-
-            {/* arms hang from shoulder bar ends, at chest top */}
-            <group position={[-shoulderWidth / 2, chestLen * 0.92, 0]} ref={setRef('shoulderL')}>
-              <JointBall r={r * 0.6} material={material} />
-              <Segment len={upperArm} r={r * 0.6} material={material} />
-              <group position={[0, -upperArm, 0]} ref={setRef('elbowL')}>
-                <JointBall r={r * 0.5} material={material} />
-                <Segment len={foreArm} r={r * 0.5} material={material} />
-                {/* hand */}
-                <mesh position={[0, -foreArm - r * 0.4, 0]} material={material} castShadow>
-                  <sphereGeometry args={[r * 0.55, 12, 10]} />
-                </mesh>
-              </group>
-            </group>
-            <group position={[shoulderWidth / 2, chestLen * 0.92, 0]} ref={setRef('shoulderR')}>
-              <JointBall r={r * 0.6} material={material} />
-              <Segment len={upperArm} r={r * 0.6} material={material} />
-              <group position={[0, -upperArm, 0]} ref={setRef('elbowR')}>
-                <JointBall r={r * 0.5} material={material} />
-                <Segment len={foreArm} r={r * 0.5} material={material} />
-                <mesh position={[0, -foreArm - r * 0.4, 0]} material={material} castShadow>
-                  <sphereGeometry args={[r * 0.55, 12, 10]} />
-                </mesh>
-              </group>
-            </group>
-          </group>
-        </group>
-
-        {/* legs */}
-        <group position={[-hipWidth / 2, 0, 0]} ref={setRef('hipL')}>
-          <JointBall r={r * 0.7} material={material} />
-          <Segment len={thighLen} r={r * 0.85} material={material} />
-          <group position={[0, -thighLen, 0]} ref={setRef('kneeL')}>
-            <JointBall r={r * 0.55} material={material} />
-            <Segment len={shinLen} r={r * 0.62} material={material} />
-            <group position={[0, -shinLen, 0]} ref={setRef('ankleL')}>
-              <mesh position={[0, -r * 0.4, head * 0.18]} material={material} castShadow>
-                <boxGeometry args={[r * 1.2, r * 0.55, head * 0.7]} />
-              </mesh>
-            </group>
-          </group>
-        </group>
-        <group position={[hipWidth / 2, 0, 0]} ref={setRef('hipR')}>
-          <JointBall r={r * 0.7} material={material} />
-          <Segment len={thighLen} r={r * 0.85} material={material} />
-          <group position={[0, -thighLen, 0]} ref={setRef('kneeR')}>
-            <JointBall r={r * 0.55} material={material} />
-            <Segment len={shinLen} r={r * 0.62} material={material} />
-            <group position={[0, -shinLen, 0]} ref={setRef('ankleR')}>
-              <mesh position={[0, -r * 0.4, head * 0.18]} material={material} castShadow>
-                <boxGeometry args={[r * 1.2, r * 0.55, head * 0.7]} />
-              </mesh>
-            </group>
-          </group>
-        </group>
-      </group>
-
-      {/* a prop that appears for the drawn domain */}
-      <DomainProp dk={drawnDomain} spec={spec} pelvisY={pelvisY} head={head} />
-    </group>
-  )
-}
-
-/** A small contextual prop (barbell, pull-up bar, sandbag) per domain. */
-function DomainProp({
-  dk,
-  spec,
-  pelvisY,
-  head,
-}: {
-  dk: DomainKey | null
-  spec: BodySpec
-  pelvisY: number
-  head: number
-}) {
-  const metal = useMemo(
-    () => new THREE.MeshStandardMaterial({ color: '#3a4047', metalness: 0.7, roughness: 0.35 }),
-    [],
-  )
-  const plate = useMemo(
-    () => new THREE.MeshStandardMaterial({ color: '#15191d', metalness: 0.4, roughness: 0.6 }),
-    [],
-  )
-  const sand = useMemo(() => new THREE.MeshStandardMaterial({ color: '#6b5a3a', roughness: 0.9 }), [])
-  useEffect(
-    () => () => {
-      metal.dispose()
-      plate.dispose()
-      sand.dispose()
-    },
-    [metal, plate, sand],
-  )
-
-  if (dk === 'weightlifting') {
-    const barY = pelvisY * 0.36
-    return (
-      <group position={[0, barY, head * 0.9]}>
-        <mesh material={metal} rotation={[0, 0, Math.PI / 2]}>
-          <cylinderGeometry args={[0.016, 0.016, head * 4.5, 16]} />
-        </mesh>
-        {[-1, 1].map((s) => (
-          <mesh key={s} material={plate} position={[s * head * 1.8, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
-            <cylinderGeometry args={[head * 0.78, head * 0.78, 0.09, 28]} />
-          </mesh>
-        ))}
-      </group>
-    )
-  }
-  if (dk === 'gymnastics') {
-    // a pull-up bar overhead
-    const y = pelvisY + head * 2.9
-    return (
-      <mesh material={metal} position={[0, y, 0]} rotation={[0, 0, Math.PI / 2]}>
-        <cylinderGeometry args={[0.02, 0.02, head * 3.4, 16]} />
-      </mesh>
-    )
-  }
-  if (dk === 'oddObject') {
-    // sandbag shouldered
-    return (
-      <mesh material={sand} position={[0, pelvisY + head * 1.7, head * 0.55 * spec.bulk]} castShadow>
-        <boxGeometry args={[head * 1.5, head * 0.9, head * 0.9]} />
-      </mesh>
-    )
-  }
-  return null
-}
-
-/* ------------------------------ the roster ------------------------------ */
-
-interface AthleteScore {
-  /** Score on the most recent draw, 0..100 (-1 if no draw yet). */
-  last: number
-  /** Cumulative running total + count for the average. */
+interface CompetitorScore {
+  /** Cumulative points across all draws so far. */
   total: number
-  count: number
 }
 
-function RosterRow({
-  drawnDomain,
+/** Short display name for a roster competitor. */
+const shortName = (name: string) => name.replace(' CrossFitter', '')
+
+/**
+ * An in-scene scoreboard panel (drei <Html>) pinned beside the drum, so the
+ * names + accumulating points + leader are visible without opening the
+ * (closed-by-default) controls panel.
+ */
+function ScoreboardPanel({
   scores,
-  reduced,
+  drawCount,
+  leaderIdx,
 }: {
-  drawnDomain: DomainKey | null
-  scores: AthleteScore[]
-  reduced: boolean
+  scores: CompetitorScore[]
+  drawCount: number
+  leaderIdx: number
 }) {
-  const gap = 2.05
-  const x0 = -((HOPPER_ROSTER.length - 1) * gap) / 2
-  return (
-    <group position={[0, 0, 2.0]}>
-      {HOPPER_ROSTER.map((a, i) => {
-        const spec = BODY[a.build]
-        const sc = scores[i]
-        const x = x0 + i * gap
-        return (
-          <group key={a.name} position={[x, 0, 0]} rotation={[0, Math.PI, 0]}>
-            <Athlete spec={spec} drawnDomain={drawnDomain} reduced={reduced} phase={i * 1.7} />
-            {/* floating score bar above the head */}
-            <ScoreBar value={sc.last} avg={sc.count ? sc.total / sc.count : -1} color={spec.color} h={spec.H} name={a.name} />
-          </group>
-        )
-      })}
-    </group>
+  const ranked = useMemo(
+    () =>
+      HOPPER_ROSTER.map((a, i) => ({ a, i, total: scores[i].total })).sort((x, y) => y.total - x.total),
+    [scores],
   )
-}
-
-/** A 3D score bar that rises above an athlete plus an Html name/score chip. */
-function ScoreBar({
-  value,
-  avg,
-  color,
-  h,
-  name,
-}: {
-  value: number
-  avg: number
-  color: string
-  h: number
-  name: string
-}) {
-  const fill = useRef<THREE.Mesh>(null)
-  const avgRing = useRef<THREE.Mesh>(null)
-  const shown = useRef(0)
-  const shownAvg = useRef(0)
-  const barTop = h + 0.95
-  const maxH = 1.4
-
-  useFrame((_, rawDt) => {
-    const dt = Math.min(rawDt, 1 / 30)
-    const k = smoothK(dt, 6)
-    const tv = value < 0 ? 0 : value / 100
-    const ta = avg < 0 ? 0 : avg / 100
-    shown.current = lerp(shown.current, tv, k)
-    shownAvg.current = lerp(shownAvg.current, ta, k)
-    if (fill.current) {
-      const fh = Math.max(0.001, shown.current * maxH)
-      fill.current.scale.y = fh
-      fill.current.position.y = barTop + fh / 2
-    }
-    if (avgRing.current) {
-      avgRing.current.position.y = barTop + shownAvg.current * maxH
-    }
-  })
+  const maxTotal = Math.max(1, ...ranked.map((r) => r.total))
 
   return (
-    <group rotation={[0, Math.PI, 0]}>
-      {/* track */}
-      <mesh position={[0, barTop + maxH / 2, 0]}>
-        <boxGeometry args={[0.14, maxH, 0.05]} />
-        <meshStandardMaterial color="#1a2129" transparent opacity={0.5} />
-      </mesh>
-      {/* live fill */}
-      <mesh ref={fill} position={[0, barTop, 0]}>
-        <boxGeometry args={[0.16, 1, 0.07]} />
-        <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.5} toneMapped={false} />
-      </mesh>
-      {/* running-average marker */}
-      <mesh ref={avgRing} position={[0, barTop, 0]} rotation={[0, 0, Math.PI / 2]}>
-        <cylinderGeometry args={[0.13, 0.13, 0.22, 6]} />
-        <meshStandardMaterial color="#f3f7fa" emissive="#f3f7fa" emissiveIntensity={0.3} toneMapped={false} />
-      </mesh>
-      {/* name chip */}
-      <Html position={[0, h + 0.5, 0]} center distanceFactor={9} occlude={false}>
+    <Html
+      position={[DRUM_R + 2.7, DRUM_R + 1.7, 0]}
+      center
+      distanceFactor={9}
+      zIndexRange={[30, 0]}
+      occlude={false}
+      pointerEvents="none"
+    >
+      <div
+        style={{
+          width: 230,
+          fontFamily: 'system-ui, -apple-system, "Segoe UI", sans-serif',
+          background: 'rgba(7,10,14,0.86)',
+          border: '1px solid rgba(255,255,255,0.14)',
+          borderRadius: 14,
+          padding: '12px 13px 13px',
+          color: '#eef3f6',
+          boxShadow: '0 10px 30px rgba(0,0,0,0.45)',
+          pointerEvents: 'none',
+        }}
+      >
         <div
           style={{
-            fontFamily: 'system-ui, sans-serif',
-            fontSize: '14px',
-            fontWeight: 700,
-            color: '#eef3f6',
-            background: 'rgba(7,10,14,0.82)',
-            border: `1px solid ${color}`,
-            borderRadius: '8px',
-            padding: '4px 10px',
-            whiteSpace: 'nowrap',
-            pointerEvents: 'none',
-            transform: 'translateY(8px)',
+            display: 'flex',
+            alignItems: 'baseline',
+            justifyContent: 'space-between',
+            marginBottom: 9,
           }}
         >
-          {name.replace(' CrossFitter', '')}
-          {avg >= 0 && (
-            <span style={{ color, marginLeft: 7, fontVariantNumeric: 'tabular-nums' }}>{Math.round(avg)}</span>
-          )}
+          <span style={{ fontSize: 13, fontWeight: 800, letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+            Scoreboard
+          </span>
+          <span style={{ fontSize: 11, color: PAL.muted, fontVariantNumeric: 'tabular-nums' }}>{drawCount} drawn</span>
         </div>
-      </Html>
-    </group>
+        {ranked.map(({ a, i, total }, rank) => {
+          const isLeader = drawCount > 0 && i === leaderIdx
+          const color = DOMAIN_BY_KEY[primaryDomain(i)].color
+          const w = Math.round((total / maxTotal) * 100)
+          return (
+            <div key={a.name} style={{ marginBottom: rank === ranked.length - 1 ? 0 : 7 }}>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  fontSize: 12.5,
+                  fontWeight: isLeader ? 800 : 600,
+                  color: isLeader ? '#fff' : '#dfe7eb',
+                }}
+              >
+                <span style={{ display: 'flex', alignItems: 'center', gap: 5, whiteSpace: 'nowrap' }}>
+                  <span style={{ color: PAL.muted, fontVariantNumeric: 'tabular-nums', width: 14 }}>{rank + 1}</span>
+                  {isLeader && <span style={{ fontSize: 13 }}>{'♛'}</span>}
+                  {shortName(a.name)}
+                </span>
+                <span style={{ fontVariantNumeric: 'tabular-nums', color }}>{Math.round(total)}</span>
+              </div>
+              <div
+                style={{
+                  height: 5,
+                  marginTop: 3,
+                  borderRadius: 3,
+                  background: 'rgba(255,255,255,0.08)',
+                  overflow: 'hidden',
+                }}
+              >
+                <div
+                  style={{
+                    height: '100%',
+                    width: `${w}%`,
+                    background: color,
+                    borderRadius: 3,
+                    boxShadow: isLeader ? `0 0 8px ${color}` : 'none',
+                    transition: 'width 0.45s ease',
+                  }}
+                />
+              </div>
+            </div>
+          )
+        })}
+        {drawCount === 0 ? (
+          <div style={{ marginTop: 9, fontSize: 10.5, color: PAL.muted, lineHeight: 1.4 }}>
+            Draw tasks at random. Over many draws the generalist accumulates the most.
+          </div>
+        ) : (
+          <div style={{ marginTop: 9, fontSize: 10.5, color: PAL.muted, lineHeight: 1.4 }}>
+            Leader: <span style={{ color: '#fff', fontWeight: 700 }}>{shortName(HOPPER_ROSTER[leaderIdx].name)}</span>
+          </div>
+        )}
+      </div>
+    </Html>
   )
+}
+
+/** The modal domain a competitor is the relative best at (for its bar color). */
+function primaryDomain(i: number): DomainKey {
+  const dom = HOPPER_ROSTER[i].domain
+  let best: DomainKey = 'unknown'
+  let bestV = -1
+  ;(Object.keys(dom) as DomainKey[]).forEach((k) => {
+    if (dom[k] > bestV) {
+      bestV = dom[k]
+      best = k
+    }
+  })
+  return best
 }
 
 /* --------------------------------- scene -------------------------------- */
 
 function HopperScene({
-  drawnDomain,
   drawnLabel,
   scores,
+  drawCount,
+  leaderIdx,
   reduced,
   apiRef,
 }: {
-  drawnDomain: DomainKey | null
-  drawnLabel: { task: string; color: string } | null
-  scores: AthleteScore[]
+  drawnLabel: { task: string; domainLabel: string; color: string } | null
+  scores: CompetitorScore[]
+  drawCount: number
+  leaderIdx: number
   reduced: boolean
   apiRef: React.MutableRefObject<HopperHandle | null>
 }) {
@@ -1032,25 +751,59 @@ function HopperScene({
       </mesh>
       <gridHelper args={[40, 40, '#1c3326', '#0e1a13']} position={[0, 0, 0]} />
 
-      <TumblingHopper reduced={reduced} apiRef={apiRef} onDraw={() => {}} />
+      <TumblingHopper reduced={reduced} apiRef={apiRef} />
 
-      <RosterRow drawnDomain={drawnDomain} scores={scores} reduced={reduced} />
+      <ScoreboardPanel scores={scores} drawCount={drawCount} leaderIdx={leaderIdx} />
 
-      {/* the drawn-task banner above the drum */}
+      {/* PROMINENT draw banner pinned to the top-center of the canvas */}
       {drawnLabel && (
-        <SpriteLabel
-          text={drawnLabel.task}
-          fontPx={52}
-          color={PAL.ink}
-          bg={drawnLabel.color}
-          border="rgba(255,255,255,0.4)"
-          position={[0, DRUM_R * 2 + 3.0, -1.7]}
-          height={0.78}
-        />
+        <Html
+          position={[0, DRUM_R * 2 + 4.0, 0]}
+          center
+          zIndexRange={[40, 0]}
+          occlude={false}
+          pointerEvents="none"
+        >
+          <div
+            style={{
+              fontFamily: 'system-ui, -apple-system, "Segoe UI", sans-serif',
+              textAlign: 'center',
+              whiteSpace: 'nowrap',
+              pointerEvents: 'none',
+            }}
+          >
+            <div
+              style={{
+                fontSize: 11,
+                letterSpacing: '0.22em',
+                textTransform: 'uppercase',
+                color: drawnLabel.color,
+                fontWeight: 700,
+                marginBottom: 4,
+              }}
+            >
+              Drawn - {drawnLabel.domainLabel}
+            </div>
+            <div
+              style={{
+                fontSize: 30,
+                fontWeight: 800,
+                color: '#0a0f0c',
+                background: drawnLabel.color,
+                border: '2px solid rgba(255,255,255,0.55)',
+                borderRadius: 14,
+                padding: '8px 20px',
+                boxShadow: `0 0 28px ${drawnLabel.color}, 0 12px 36px rgba(0,0,0,0.5)`,
+              }}
+            >
+              {drawnLabel.task}
+            </div>
+          </div>
+        </Html>
       )}
 
       {/* soft contact shadows under the whole arrangement */}
-      <ContactShadows position={[0, 0.001, 0.4]} scale={18} blur={2.6} far={9} opacity={0.5} resolution={1024} />
+      <ContactShadows position={[0, 0.001, 0.4]} scale={16} blur={2.6} far={9} opacity={0.5} resolution={1024} />
     </group>
   )
 }
@@ -1064,32 +817,34 @@ function HopperControls({
   drawn,
   scores,
   drawCount,
+  leaderIdx,
 }: {
   onDraw: () => void
   onRefill: () => void
   onResetStats: () => void
   drawn: { task: string; domain: HopperDomain } | null
-  scores: AthleteScore[]
+  scores: CompetitorScore[]
   drawCount: number
+  leaderIdx: number
 }) {
-  // Leaderboard sorted by running average, generalist tinted.
-  const ranked = useMemo(() => {
-    return HOPPER_ROSTER.map((a, i) => ({
-      a,
-      avg: scores[i].count ? scores[i].total / scores[i].count : 0,
-      last: scores[i].last,
-    })).sort((x, y) => y.avg - x.avg)
-  }, [scores])
+  // Leaderboard ranked by CUMULATIVE total points.
+  const ranked = useMemo(
+    () =>
+      HOPPER_ROSTER.map((a, i) => ({ a, i, total: scores[i].total })).sort((x, y) => y.total - x.total),
+    [scores],
+  )
+  const maxTotal = Math.max(1, ...ranked.map((r) => r.total))
 
   const genIdx = HOPPER_ROSTER.findIndex((a) => a.build === 'generalist')
-  const genAvg = scores[genIdx].count ? scores[genIdx].total / scores[genIdx].count : 0
+  const genTotal = scores[genIdx].total
   const topSpecialist = ranked.find((r) => r.a.build !== 'generalist')
+
   const leadMsg =
     drawCount === 0
       ? 'Spin it, then draw a random challenge from the hopper.'
-      : genAvg >= (topSpecialist?.avg ?? 0)
-        ? 'Across the hopper, the generalist stays ahead.'
-        : 'Keep drawing. A specialist only leads inside its own domain.'
+      : leaderIdx === genIdx
+        ? 'Across random draws, the generalist accumulates the most points.'
+        : 'Keep drawing. A specialist only leads while its own domain keeps coming up.'
 
   return (
     <>
@@ -1113,7 +868,7 @@ function HopperControls({
         <Readout
           label={`Drew (${drawn.domain.label})`}
           value={<span style={{ color: drawn.domain.color, fontSize: 17 }}>{drawn.task}</span>}
-          sub="All six athletes re-pose and are scored on this domain"
+          sub="Every competitor scores on this domain; totals accumulate"
         />
       ) : (
         <div className="wf-mono" style={{ fontSize: 11.5, color: PAL.muted, margin: '2px 0 12px' }}>
@@ -1121,80 +876,93 @@ function HopperControls({
         </div>
       )}
 
-      {/* per-athlete bars: last score + running average chip */}
       <div className="wf-c-head" style={{ marginTop: 4 }}>
-        <span>Running average over {drawCount} draws</span>
+        <span>Leaderboard - cumulative points</span>
       </div>
-      {ranked.map(({ a, avg, last }, rank) => {
-        const isGen = a.build === 'generalist'
-        const label = `${rank + 1}. ${a.name.replace(' CrossFitter', '')}${isGen ? ' *' : ''}`
+      {ranked.map(({ a, i, total }, rank) => {
+        const isLeader = drawCount > 0 && i === leaderIdx
+        const label = `${rank + 1}. ${shortName(a.name)}${isLeader ? ' ♛' : ''}`
         return (
           <Bar
             key={a.name}
             label={label}
-            value={drawCount === 0 ? 0 : avg}
-            color={isGen ? PAL.fit : BODY[a.build].color}
+            value={total}
+            max={maxTotal}
+            color={DOMAIN_BY_KEY[primaryDomain(i)].color}
           />
         )
       })}
-      {drawCount > 0 && (
-        <div className="wf-mono" style={{ fontSize: 11, color: PAL.muted, marginTop: 6 }}>
-          {leadMsg} Last draw shown as the lighter tick.
-        </div>
-      )}
+
       {drawCount > 0 && (
         <div className="wf-pct-row">
           <div className="wf-pct">
             <div className="p" style={{ color: PAL.fit }}>
-              {Math.round(genAvg)}
+              {Math.round(genTotal)}
             </div>
             <div className="n">Generalist</div>
           </div>
           <div className="wf-pct">
-            <div className="p" style={{ color: topSpecialist ? BODY[topSpecialist.a.build].color : PAL.muted }}>
-              {Math.round(topSpecialist?.avg ?? 0)}
+            <div
+              className="p"
+              style={{ color: topSpecialist ? DOMAIN_BY_KEY[primaryDomain(topSpecialist.i)].color : PAL.muted }}
+            >
+              {Math.round(topSpecialist?.total ?? 0)}
             </div>
             <div className="n">Top specialist</div>
           </div>
         </div>
       )}
 
-      <Legend items={HOPPER_DOMAINS.map((d) => ({ label: d.label, color: d.color }))} />
-      <div className="wf-mono" style={{ fontSize: 10, color: PAL.muted, marginTop: 8 }}>
-        Last score shown over each athlete; the white tick is their running average.
+      <div className="wf-mono" style={{ fontSize: 11, color: PAL.muted, marginTop: 6 }}>
+        {leadMsg}
       </div>
+
+      <Legend items={HOPPER_DOMAINS.map((d) => ({ label: d.label, color: d.color }))} />
     </>
   )
 }
 
 /* ------------------------------ module shell ---------------------------- */
 
-const EMPTY_SCORE = (): AthleteScore => ({ last: -1, total: 0, count: 0 })
+const EMPTY_SCORE = (): CompetitorScore => ({ total: 0 })
+
+/** Index of the current leader by cumulative total (ties -> first / generalist). */
+function leaderOf(scores: CompetitorScore[]): number {
+  let idx = 0
+  let best = -Infinity
+  for (let i = 0; i < scores.length; i++) {
+    if (scores[i].total > best) {
+      best = scores[i].total
+      idx = i
+    }
+  }
+  return idx
+}
 
 export default function HopperModule() {
   const reduced = useMemo(() => prefersReducedMotion(), [])
   const apiRef = useRef<HopperHandle | null>(null)
 
-  const [drawnDomain, setDrawnDomain] = useState<DomainKey | null>(null)
-  const [drawnLabel, setDrawnLabel] = useState<{ task: string; color: string } | null>(null)
+  const [drawnLabel, setDrawnLabel] = useState<{ task: string; domainLabel: string; color: string } | null>(null)
   const [drawn, setDrawn] = useState<{ task: string; domain: HopperDomain } | null>(null)
   const [drawCount, setDrawCount] = useState(0)
-  const [scores, setScores] = useState<AthleteScore[]>(() => HOPPER_ROSTER.map(EMPTY_SCORE))
+  const [scores, setScores] = useState<CompetitorScore[]>(() => HOPPER_ROSTER.map(EMPTY_SCORE))
+
+  const leaderIdx = useMemo(() => leaderOf(scores), [scores])
 
   const onDraw = useCallback(() => {
     const dk = weightedDomain()
     const domain = DOMAIN_BY_KEY[dk]
     const task = domain.tasks[Math.floor(Math.random() * domain.tasks.length)]
-    setDrawnDomain(dk)
-    setDrawnLabel({ task, color: domain.color })
+    setDrawnLabel({ task, domainLabel: domain.label, color: domain.color })
     setDrawn({ task, domain })
     setDrawCount((n) => n + 1)
-    // score every athlete on this domain with a little jitter
+    // Each competitor scores on this domain (plus small jitter); totals accumulate.
     setScores((prev) =>
       prev.map((s, i) => {
         const base = HOPPER_ROSTER[i].domain[dk]
-        const score = clamp(base + (Math.random() * 8 - 4), 5, 99)
-        return { last: score, total: s.total + score, count: s.count + 1 }
+        const pts = clamp(base + (Math.random() * 8 - 4), 5, 99)
+        return { total: s.total + pts }
       }),
     )
     apiRef.current?.eject(dk)
@@ -1208,7 +976,6 @@ export default function HopperModule() {
   const onResetStats = useCallback(() => {
     setScores(HOPPER_ROSTER.map(EMPTY_SCORE))
     setDrawCount(0)
-    setDrawnDomain(null)
     setDrawnLabel(null)
     setDrawn(null)
     apiRef.current?.refill()
@@ -1220,8 +987,8 @@ export default function HopperModule() {
         eyebrow={MODULE_COPY.hopper.eyebrow}
         title={moduleByKey('hopper').title}
         body={MODULE_COPY.hopper.body}
-        camera={{ position: [0, 4.3, 11.6], fov: 50 }}
-        target={[0, 2.3, 0]}
+        camera={{ position: [0, 4.6, 12.2], fov: 50 }}
+        target={[0.6, 2.7, 0]}
         minDistance={6}
         maxDistance={26}
         controls={
@@ -1232,13 +999,15 @@ export default function HopperModule() {
             drawn={drawn}
             scores={scores}
             drawCount={drawCount}
+            leaderIdx={leaderIdx}
           />
         }
       >
         <HopperScene
-          drawnDomain={drawnDomain}
           drawnLabel={drawnLabel}
           scores={scores}
+          drawCount={drawCount}
+          leaderIdx={leaderIdx}
           reduced={reduced}
           apiRef={apiRef}
         />

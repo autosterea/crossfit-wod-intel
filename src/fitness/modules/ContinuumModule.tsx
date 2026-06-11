@@ -20,31 +20,49 @@ import { ModulePage, PresetButtons, ControlHead, Readout, Slider } from '../ui'
 /* =========================================================================
    Module 05 - The Sickness, Wellness, Fitness Continuum.
 
-   Ported and improved from moduleContinuum() in what-is-fitness-3d.html
-   (lines 991-1179). The original drew eight unlabeled lanes; this builds the
-   ten real L1 biomarker axes from fitnessData (each with a healthy direction,
-   a real unit, and interpolated values via markerValueAt). Each marker is its
-   OWN horizontal continuum sweeping sickness (left, red) -> wellness (middle,
-   amber) -> fitness (right, green), and the whole person is plotted as a
-   glowing dot on each parallel axis. Above the stack an aggregate orb + state
-   WORD (SICK / WELL / FIT / ROBUST) slides along its own rail.
+   REDESIGN (2026-06-11): the coach found the old ten-parallel-lanes layout
+   too crowded (labels stacked on top of each other, readable only from
+   overhead) and disliked the auto-rotation. This rebuilds it as a RADIAL
+   "fitness dial": the ten L1 biomarkers fan out as spokes around straight
+   up, CENTER = sickness, RIM = fitness. Concentric zone bands (sick / well /
+   fit thirds) read like a gauge; each marker's value rides its spoke as a
+   glowing dot, and the ten dots are joined into a translucent radar polygon
+   ("the person"). Pushing markers toward fitness inflates that shape toward
+   the rim. A central orb + a sweeping arc + the state WORD (SICK / WELL /
+   FIT / ROBUST) report the overall score. The dial faces the camera head-on
+   (no orbiting needed) and the stage no longer auto-rotates.
 
    Per-frame morphing is done by mutating refs in useFrame; React state only
    holds the per-marker TARGET positions that the controls write.
    ========================================================================= */
 
-const RUNWAY_X0 = -11
-const RUNWAY_X1 = 11
-const LANE_Z0 = -5.4
-const LANE_Z1 = 5.4
-const LANE_Y = 0.62
-const RAIL_Y = 4.5
 const N = BIOMARKERS.length
 
-/** Position 0..1 -> world x along a marker axis. */
-const xOf = (v: number): number => lerp(RUNWAY_X0, RUNWAY_X1, clamp(v, 0, 1))
-/** Lane index -> world z (stacked front to back). */
-const zOf = (i: number): number => lerp(LANE_Z0, LANE_Z1, N <= 1 ? 0.5 : i / (N - 1))
+/** Dial geometry (in the plane of the dial; world units). */
+const R_RIM = 9.4 // radius of the fitness rim
+const R_HUB = 0.7 // inner dead-zone radius around the sickness center
+const FAN_DEG = 200 // total fan angle the ten spokes spread across
+const TILT = -0.32 // small backward tilt (radians) so it reads as 3D, still head-on
+const LABEL_GAP = 1.1 // how far past the rim each spoke label sits
+
+/** Spoke index -> angle (radians) measured from +Y (straight up), spread
+ *  symmetrically across the fan so the two end spokes never touch.            */
+function spokeAngle(i: number): number {
+  const half = (FAN_DEG * Math.PI) / 180 / 2
+  const t = N <= 1 ? 0.5 : i / (N - 1)
+  return lerp(-half, half, t)
+}
+
+/** Position 0..1 along a spoke -> radius from center. */
+const radiusOf = (pos: number): number => lerp(R_HUB, R_RIM, clamp(pos, 0, 1))
+
+/** Spoke angle + position -> [x, y] in the dial plane (y up, x right). */
+function pointOn(i: number, pos: number): [number, number] {
+  const a = spokeAngle(i)
+  const r = radiusOf(pos)
+  // angle measured from +Y, positive toward +X
+  return [Math.sin(a) * r, Math.cos(a) * r]
+}
 
 interface StateWord {
   word: string
@@ -72,9 +90,8 @@ function fmtMarker(value: number, unit: string): string {
 }
 
 /* ---------------------------------------------------------------------------
-   makeLabel: ported from the source HTML. Renders crisp text onto a
-   CanvasTexture sprite so no CDN font is loaded. Used for the spanning zone
-   labels and the sliding aggregate state word.
+   makeLabel: renders crisp text onto a CanvasTexture sprite so no CDN font is
+   loaded. Used for the zone band labels at the foot of the dial.
 --------------------------------------------------------------------------- */
 interface LabelOpts {
   fontPx?: number
@@ -88,8 +105,6 @@ interface LabelOpts {
 function makeLabelTexture(text: string, opts: LabelOpts): { texture: THREE.CanvasTexture; aspect: number } {
   const fontPx = opts.fontPx ?? 40
   const weight = opts.weight ?? 800
-  // Every label now gets a high-contrast pill so text reads over the gradient
-  // axes; a coloured bg (state word) keeps its colour, otherwise a dark pill.
   const bg = opts.bg ?? 'rgba(7,10,14,0.72)'
   const pad = opts.pad ?? 0.42
   // Supersample (SS) on top of DPR for crisp text at any zoom on a phone.
@@ -168,27 +183,42 @@ function SpriteLabel({
 }
 
 /* ---------------------------------------------------------------------------
-   The gradient runway bar for one marker axis: a thin slab textured with the
-   sick -> well -> fit gradient, drawn once and reused across all ten lanes.
+   The concentric zone-band texture: a radial sick -> well -> fit gradient on a
+   ring, with faint divider arcs at the 1/3 and 2/3 boundaries. Drawn once and
+   mapped onto a ring geometry that fills the dial face.
 --------------------------------------------------------------------------- */
-function useRunwayTexture(): THREE.CanvasTexture {
+function useDialTexture(): THREE.CanvasTexture {
   return useMemo(() => {
-    const cw = 512
-    const ch = 32
+    const size = 512
     const cnv = document.createElement('canvas')
-    cnv.width = cw
-    cnv.height = ch
+    cnv.width = size
+    cnv.height = size
     const ctx = cnv.getContext('2d')!
-    const grad = ctx.createLinearGradient(0, 0, cw, 0)
+    const cx = size / 2
+    const cy = size / 2
+    const rOuter = size / 2
+
+    // radial spectrum: center = sick (red), rim = fit (green)
+    const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, rOuter)
     grad.addColorStop(0, PAL.sick)
+    grad.addColorStop(0.33, PAL.sick)
     grad.addColorStop(0.5, PAL.well)
+    grad.addColorStop(0.66, PAL.well)
     grad.addColorStop(1, PAL.fit)
     ctx.fillStyle = grad
-    ctx.fillRect(0, 0, cw, ch)
-    // subtle band ticks at the 1/3 and 2/3 zone boundaries
-    ctx.fillStyle = 'rgba(7,10,14,0.35)'
-    ctx.fillRect(Math.round(cw / 3) - 1, 0, 2, ch)
-    ctx.fillRect(Math.round((cw * 2) / 3) - 1, 0, 2, ch)
+    ctx.beginPath()
+    ctx.arc(cx, cy, rOuter, 0, Math.PI * 2)
+    ctx.fill()
+
+    // faint zone boundary rings at the 1/3 and 2/3 radii
+    ctx.strokeStyle = 'rgba(7,10,14,0.4)'
+    ctx.lineWidth = size * 0.006
+    for (const f of [1 / 3, 2 / 3]) {
+      ctx.beginPath()
+      ctx.arc(cx, cy, rOuter * f, 0, Math.PI * 2)
+      ctx.stroke()
+    }
+
     const tex = new THREE.CanvasTexture(cnv)
     tex.colorSpace = THREE.SRGBColorSpace
     tex.needsUpdate = true
@@ -203,151 +233,186 @@ interface SceneProps {
   onLive: (positions: number[], avg: number) => void
 }
 
-/** One marker lane: gradient runway + guide line + the person's glowing dot. */
-function MarkerLane({
+/* ---------------------------------------------------------------------------
+   One spoke: a thin guide line from hub to rim, the marker's glowing dot at
+   radius = position, and a billboarded <Html> label at the outer end carrying
+   the marker NAME + live VALUE. Labels fan around the arc so they never
+   overlap; the dot + its color are driven imperatively in useFrame.
+--------------------------------------------------------------------------- */
+function MarkerSpoke({
   index,
-  runwayTex,
   initPos,
   setDot,
   setMat,
 }: {
   index: number
-  runwayTex: THREE.CanvasTexture
   initPos: number
   setDot: (index: number, g: THREE.Group | null) => void
   setMat: (index: number, mat: THREE.MeshStandardMaterial | null) => void
 }) {
   const m = BIOMARKERS[index]
-  const z = zOf(index)
+  const a = spokeAngle(index)
   const initCol = useMemo(() => {
     const [r, g, b] = spectrum(initPos)
     return new THREE.Color(r, g, b)
   }, [initPos])
 
+  // Guide line geometry from hub to rim along this spoke.
+  const lineGeom = useMemo(() => {
+    const p0 = pointOn(index, 0)
+    const p1 = pointOn(index, 1)
+    const g = new THREE.BufferGeometry()
+    g.setAttribute(
+      'position',
+      new THREE.Float32BufferAttribute([p0[0], p0[1], 0, p1[0], p1[1], 0], 3),
+    )
+    return g
+  }, [index])
+  useEffect(() => () => lineGeom.dispose(), [lineGeom])
+
+  // Where the label sits (just past the rim, biased to the correct side so
+  // text reads outward and the fan stays uncluttered).
+  const [lx, ly] = pointOn(index, 1)
+  const labelR = R_RIM + LABEL_GAP
+  const labelX = Math.sin(a) * labelR
+  const labelY = Math.cos(a) * labelR
+  // anchor the label box to its outer side so the fan reads outward: spokes on
+  // the left half anchor their right edge, spokes on the right half their left.
+  const onLeft = labelX < 0
+  const translateX = onLeft ? 'translateX(-100%)' : 'translateX(0)'
+  const textAlign = onLeft ? 'right' : 'left'
+
+  const [dotX, dotY] = pointOn(index, initPos)
+
   return (
-    <group position={[0, 0, z]}>
-      {/* gradient runway slab */}
-      <mesh position={[0, 0.02, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-        <planeGeometry args={[RUNWAY_X1 - RUNWAY_X0, 0.86]} />
-        <meshBasicMaterial map={runwayTex} transparent opacity={0.92} toneMapped={false} />
-      </mesh>
+    <group>
+      {/* spoke guide line */}
+      <line>
+        <primitive object={lineGeom} attach="geometry" />
+        <lineBasicMaterial color="#ffffff" transparent opacity={0.16} depthWrite={false} toneMapped={false} />
+      </line>
 
-      {/* thin metal rail under the runway for grounding */}
-      <mesh position={[0, -0.04, 0]}>
-        <boxGeometry args={[RUNWAY_X1 - RUNWAY_X0 + 0.4, 0.06, 0.12]} />
-        <meshStandardMaterial color="#1c2a22" metalness={0.6} roughness={0.5} />
+      {/* tiny rim cap so the spoke reads as a tick on the fitness rim */}
+      <mesh position={[lx, ly, 0]}>
+        <circleGeometry args={[0.12, 18]} />
+        <meshBasicMaterial color="#cdd8d2" transparent opacity={0.5} depthWrite={false} toneMapped={false} />
       </mesh>
-
-      {/* marker name + unit label, fixed at the left */}
-      <Html
-        position={[RUNWAY_X0 - 0.5, LANE_Y, 0]}
-        center
-        distanceFactor={16}
-        style={{ pointerEvents: 'none' }}
-        zIndexRange={[8, 0]}
-      >
-        <div
-          className="wf-cont-label"
-          style={{
-            transform: 'translateX(-100%)',
-            textAlign: 'right',
-            whiteSpace: 'nowrap',
-            fontFamily: "'Barlow Condensed', Poppins, sans-serif",
-            color: '#eef3f6',
-            lineHeight: 1.08,
-            padding: '4px 9px',
-            borderRadius: 8,
-            background: 'rgba(7,10,14,0.72)',
-            border: '1px solid rgba(238,243,246,0.12)',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.5)',
-          }}
-        >
-          <div style={{ fontSize: 20, fontWeight: 700, letterSpacing: '0.01em' }}>{m.name}</div>
-          <div style={{ fontSize: 13, color: '#cdd8d2', letterSpacing: '0.02em' }}>
-            {m.unit} {' '}
-            <span style={{ color: 'rgba(223,231,226,0.7)' }}>
-              ({m.betterDirection === 'higher' ? 'higher better' : 'lower better'})
-            </span>
-          </div>
-        </div>
-      </Html>
 
       {/* the person's glowing dot, positioned/recolored each frame in useFrame */}
       <group
         ref={(g) => {
           setDot(index, g)
         }}
-        position={[xOf(initPos), LANE_Y, 0]}
+        position={[dotX, dotY, 0.12]}
       >
-        {/* connector stick down to the runway */}
-        <mesh position={[0, -(LANE_Y - 0.02) / 2, 0]}>
-          <cylinderGeometry args={[0.035, 0.035, LANE_Y - 0.02, 10]} />
-          <meshBasicMaterial color="#ffffff" transparent opacity={0.22} />
-        </mesh>
         {/* halo */}
         <mesh>
-          <sphereGeometry args={[0.58, 24, 24]} />
-          <meshBasicMaterial color={initCol} transparent opacity={0.14} toneMapped={false} depthWrite={false} />
+          <sphereGeometry args={[0.5, 22, 22]} />
+          <meshBasicMaterial color={initCol} transparent opacity={0.16} toneMapped={false} depthWrite={false} />
         </mesh>
         {/* the marker sphere */}
         <mesh castShadow>
-          <sphereGeometry args={[0.4, 32, 32]} />
+          <sphereGeometry args={[0.32, 28, 28]} />
           <meshStandardMaterial
             ref={(mat) => {
               setMat(index, mat)
             }}
             color={initCol}
             emissive={initCol}
-            emissiveIntensity={0.55}
-            roughness={0.32}
-            metalness={0.15}
+            emissiveIntensity={0.6}
+            roughness={0.3}
+            metalness={0.18}
             toneMapped={false}
           />
         </mesh>
-        {/* live numeric value readout above the dot */}
-        <Html position={[0, 0.92, 0]} center distanceFactor={15} style={{ pointerEvents: 'none' }} zIndexRange={[7, 0]}>
+      </group>
+
+      {/* marker NAME + live VALUE at the spoke's outer end, fanned outward */}
+      <Html
+        position={[labelX, labelY, 0]}
+        distanceFactor={14}
+        style={{ pointerEvents: 'none' }}
+        zIndexRange={[8, 0]}
+      >
+        <div
+          className="wf-cont-label"
+          style={{
+            transform: `translateY(-50%) ${translateX}`,
+            textAlign,
+            whiteSpace: 'nowrap',
+            fontFamily: "'Barlow Condensed', Poppins, sans-serif",
+            color: '#eef3f6',
+            lineHeight: 1.1,
+            padding: '3px 8px',
+            borderRadius: 8,
+            background: 'rgba(7,10,14,0.74)',
+            border: '1px solid rgba(238,243,246,0.12)',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.5)',
+          }}
+        >
+          <div style={{ fontSize: 17, fontWeight: 700, letterSpacing: '0.01em' }}>{m.name}</div>
           <div
             data-marker-value={index}
-            className="wf-cont-value"
             style={{
               fontFamily: "'JetBrains Mono', ui-monospace, monospace",
-              fontSize: 13.5,
+              fontSize: 12.5,
               fontWeight: 700,
               color: spectrumCss(initPos),
-              whiteSpace: 'nowrap',
-              padding: '2px 7px',
-              borderRadius: 7,
-              background: 'rgba(7,10,14,0.74)',
-              border: '1px solid rgba(238,243,246,0.1)',
+              letterSpacing: '0.01em',
             }}
           >
             {fmtMarker(markerValueAt(m, initPos), m.unit)}
           </div>
-        </Html>
-      </group>
+        </div>
+      </Html>
     </group>
   )
 }
 
 function ContinuumScene({ targets, onLive }: SceneProps) {
   const reduced = prefersReducedMotion()
-  const runwayTex = useRunwayTexture()
-  useEffect(() => () => runwayTex.dispose(), [runwayTex])
+  const dialTex = useDialTexture()
+  useEffect(() => () => dialTex.dispose(), [dialTex])
 
   // Live (eased) positions, mutated in useFrame and read by refs only.
   const liveRef = useRef<number[]>(targets.slice())
   const targetRef = useRef<number[]>(targets.slice())
-  // Snapshot of positions at mount, for the lanes' initial transforms/colors.
-  // (Subsequent moves are driven imperatively in useFrame, never via re-mount.)
+  // Snapshot of positions at mount, for the spokes' initial transforms/colors.
   const [initPositions] = useState<number[]>(() => targets.slice())
   const dotRefs = useRef<(THREE.Group | null)[]>(new Array<THREE.Group | null>(N).fill(null))
   const matRefs = useRef<(THREE.MeshStandardMaterial | null)[]>(
     new Array<THREE.MeshStandardMaterial | null>(N).fill(null),
   )
 
-  // Aggregate orb + its word sprite.
-  const aggRef = useRef<THREE.Group | null>(null)
+  // The radar polygon ("the person"): one BufferGeometry whose 10 vertices we
+  // rewrite each frame to follow the eased dot positions.
+  const polyGeom = useMemo(() => {
+    const g = new THREE.BufferGeometry()
+    g.setAttribute('position', new THREE.Float32BufferAttribute(new Float32Array((N + 1) * 3), 3))
+    return g
+  }, [])
+  useEffect(() => () => polyGeom.dispose(), [polyGeom])
+  const polyFillGeom = useMemo(() => {
+    // a triangle-fan from the center (vertex 0) out to the N dot vertices
+    // (1..N), so the closed shape fills with one translucent membrane.
+    const g = new THREE.BufferGeometry()
+    const verts = new Float32Array((N + 1) * 3) // center + N rim vertices
+    g.setAttribute('position', new THREE.Float32BufferAttribute(verts, 3))
+    const idx: number[] = []
+    for (let i = 1; i <= N; i++) {
+      const a = i
+      const b = i === N ? 1 : i + 1
+      idx.push(0, a, b)
+    }
+    g.setIndex(idx)
+    return g
+  }, [])
+  useEffect(() => () => polyFillGeom.dispose(), [polyFillGeom])
+
+  // Aggregate orb + its word sprite + the sweeping score arc.
   const aggMatRef = useRef<THREE.MeshStandardMaterial | null>(null)
+  const aggHaloRef = useRef<THREE.MeshBasicMaterial | null>(null)
+  const arcMatRef = useRef<THREE.MeshBasicMaterial | null>(null)
   const initAvg = useMemo(() => targets.reduce((s, v) => s + v, 0) / N, [targets])
   const [word, setWord] = useState<StateWord>(() => stateWord(initAvg))
   const wordRef = useRef<string>(word.word)
@@ -356,15 +421,31 @@ function ContinuumScene({ targets, onLive }: SceneProps) {
   useEffect(() => {
     targetRef.current = targets.slice()
     if (reduced) {
-      // Reduced motion: snap instead of morphing.
       liveRef.current = targets.slice()
     }
   }, [targets, reduced])
 
   const tmpCol = useMemo(() => new THREE.Color(), [])
 
-  // Setter callbacks so child lanes never mutate a ref passed as a prop
-  // (satisfies the react-hooks immutability rule).
+  // The score arc: a fixed full-fan ring built ONCE; we reveal a prefix of its
+  // segments each frame with setDrawRange (no per-frame geometry allocation).
+  // It is sized to the fan span and starts at the first spoke, sweeping toward
+  // fitness. RingGeometry runs CCW from +X; our spokes run CW from +Y as the
+  // angle grows, so the arc's world start angle is (pi/2 - lastSpoke).
+  const ARC_SEG = 120
+  const arcGeom = useMemo(() => {
+    const fanEnd = spokeAngle(N - 1)
+    const span = Math.abs(fanEnd - spokeAngle(0))
+    const thetaStart = Math.PI / 2 - fanEnd // world angle (from +X) of the far spoke
+    const g = new THREE.RingGeometry(R_RIM + 0.45, R_RIM + 0.85, ARC_SEG, 1, thetaStart, span)
+    // start showing a prefix matching the initial mean (overwritten each frame)
+    g.setDrawRange(0, Math.max(0, Math.round(ARC_SEG * initAvg)) * 6)
+    return g
+    // initAvg is the mount-time mean; the prefix is re-set every frame anyway.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+  useEffect(() => () => arcGeom.dispose(), [arcGeom])
+
   const setDot = (i: number, g: THREE.Group | null) => {
     dotRefs.current[i] = g
   }
@@ -379,14 +460,21 @@ function ContinuumScene({ targets, onLive }: SceneProps) {
     let sum = 0
     let moved = false
 
+    const poly = polyGeom.getAttribute('position') as THREE.BufferAttribute
+    const fill = polyFillGeom.getAttribute('position') as THREE.BufferAttribute
+
     for (let i = 0; i < N; i++) {
       const next = Math.abs(live[i] - tgt[i]) > 0.0015 ? lerp(live[i], tgt[i], k) : tgt[i]
       if (next !== live[i]) moved = true
       live[i] = next
       sum += next
 
+      const [px, py] = pointOn(i, next)
       const dot = dotRefs.current[i]
-      if (dot) dot.position.x = xOf(next)
+      if (dot) {
+        dot.position.x = px
+        dot.position.y = py
+      }
       const mat = matRefs.current[i]
       if (mat) {
         const [r, g, b] = spectrum(next)
@@ -394,21 +482,40 @@ function ContinuumScene({ targets, onLive }: SceneProps) {
         mat.color.copy(tmpCol)
         mat.emissive.copy(tmpCol)
       }
+
+      // radar outline vertex
+      poly.setXYZ(i, px, py, 0.06)
+      // fill fan vertex (index 0 is the center, set below)
+      fill.setXYZ(i + 1, px, py, 0.04)
     }
+    // close the outline polygon back to vertex 0
+    poly.setXYZ(N, poly.getX(0), poly.getY(0), 0.06)
+    poly.needsUpdate = true
+    // fill center vertex (rim verts 1..N were written in the loop above)
+    fill.setXYZ(0, 0, 0, 0.04)
+    fill.needsUpdate = true
 
     const avg = sum / N
     const ac = spectrum(avg)
-    if (aggRef.current) aggRef.current.position.x = xOf(avg)
+
+    // aggregate orb color + halo
     if (aggMatRef.current) {
       tmpCol.setRGB(ac[0], ac[1], ac[2])
       aggMatRef.current.color.copy(tmpCol)
       aggMatRef.current.emissive.copy(tmpCol)
     }
+    if (aggHaloRef.current) {
+      tmpCol.setRGB(ac[0], ac[1], ac[2])
+      aggHaloRef.current.color.copy(tmpCol)
+    }
 
-    // Idle breathing on the aggregate orb (skipped under reduced motion).
-    if (aggRef.current && !reduced) {
-      const t = performance.now() * 0.001
-      aggRef.current.position.y = RAIL_Y + Math.sin(t * 1.3) * 0.06
+    // the sweeping score arc: reveal a prefix of the fan ring proportional to
+    // the overall score (more fitness -> longer, fuller arc). 6 indices/segment.
+    if (arcMatRef.current) {
+      const segs = Math.max(0, Math.round(ARC_SEG * avg))
+      arcGeom.setDrawRange(0, segs * 6)
+      tmpCol.setRGB(ac[0], ac[1], ac[2])
+      arcMatRef.current.color.copy(tmpCol)
     }
 
     // Update the live numeric readouts via the DOM (cheap, no React re-render).
@@ -432,94 +539,127 @@ function ContinuumScene({ targets, onLive }: SceneProps) {
     }
   })
 
-  // Zone bands span the whole stack (sickness | wellness | fitness thirds).
-  const zoneZ = LANE_Z1 + 1.2
-  const zones: { label: string; color: string; x: number }[] = [
-    { label: 'SICKNESS', color: PAL.sick, x: xOf(1 / 6) },
-    { label: 'WELLNESS', color: '#e6c25a', x: xOf(0.5) },
-    { label: 'FITNESS', color: PAL.fit, x: xOf(5 / 6) },
+  // Static zone-band labels along the bottom edge of the dial (the gauge key).
+  // Placed below the hub so they never collide with the fanned spoke labels.
+  const zoneLabels: { label: string; color: string; r: number }[] = [
+    { label: 'SICK', color: PAL.sick, r: R_HUB + (R_RIM - R_HUB) * (1 / 6) },
+    { label: 'WELL', color: '#e6c25a', r: R_HUB + (R_RIM - R_HUB) * 0.5 },
+    { label: 'FIT', color: PAL.fit, r: R_HUB + (R_RIM - R_HUB) * (5 / 6) },
   ]
 
   return (
-    <group position={[0, 0, 0]}>
-      {/* dark grounding floor + subtle grid under the whole stack */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.35, 0]} receiveShadow>
-        <planeGeometry args={[40, 22]} />
+    <group>
+      {/* dark grounding floor far below the dial */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -R_RIM - 1.4, -1.5]} receiveShadow>
+        <planeGeometry args={[44, 30]} />
         <meshStandardMaterial color="#070d0a" roughness={1} metalness={0} />
       </mesh>
-      <gridHelper args={[40, 36, '#15331f', '#0c1b13']} position={[0, -0.33, 0]} />
 
-      {/* zone divider planes (very faint) at the 1/3 and 2/3 boundaries */}
-      {[1 / 3, 2 / 3].map((f) => (
-        <mesh key={f} position={[xOf(f), RAIL_Y / 2 - 0.2, 0]}>
-          <planeGeometry args={[0.03, RAIL_Y + 1.2]} />
-          <meshBasicMaterial color="#ffffff" transparent opacity={0.05} depthWrite={false} />
+      {/* the whole dial, tilted slightly back so it reads as 3D but head-on */}
+      <group position={[0, 0, 0]} rotation={[TILT, 0, 0]}>
+        {/* the concentric zone-band face (radial sick->well->fit gradient) */}
+        <mesh position={[0, 0, -0.05]} receiveShadow>
+          <ringGeometry args={[R_HUB, R_RIM, 128, 1]} />
+          <meshBasicMaterial map={dialTex} transparent opacity={0.9} toneMapped={false} side={THREE.DoubleSide} />
         </mesh>
-      ))}
 
-      {/* spanning zone labels above the stack (the largest titles in the scene) */}
-      {zones.map((z) => (
-        <group key={z.label} position={[z.x, RAIL_Y - 0.7, zoneZ]}>
-          <SpriteLabel text={z.label} worldHeight={0.84} color={z.color} fontPx={52} />
-        </group>
-      ))}
-
-      {/* the ten marker lanes */}
-      {BIOMARKERS.map((_, i) => (
-        <MarkerLane
-          key={i}
-          index={i}
-          runwayTex={runwayTex}
-          initPos={initPositions[i]}
-          setDot={setDot}
-          setMat={setMat}
-        />
-      ))}
-
-      {/* aggregate rail line */}
-      <mesh position={[0, RAIL_Y, 0]}>
-        <boxGeometry args={[RUNWAY_X1 - RUNWAY_X0 + 0.4, 0.025, 0.025]} />
-        <meshBasicMaterial color="#3a4d40" transparent opacity={0.7} />
-      </mesh>
-
-      {/* aggregate orb + sliding state word */}
-      <group
-        ref={(g) => {
-          aggRef.current = g
-        }}
-        position={[xOf(initAvg), RAIL_Y, 0]}
-      >
-        <mesh>
-          <sphereGeometry args={[0.95, 24, 24]} />
-          <meshBasicMaterial color={word.css} transparent opacity={0.12} toneMapped={false} depthWrite={false} />
+        {/* a faint metal back-plate ring for grounding the gauge */}
+        <mesh position={[0, 0, -0.12]}>
+          <ringGeometry args={[R_RIM, R_RIM + 0.4, 128, 1]} />
+          <meshStandardMaterial color="#1c2a22" metalness={0.6} roughness={0.5} side={THREE.DoubleSide} />
         </mesh>
-        <mesh castShadow>
-          <sphereGeometry args={[0.66, 32, 32]} />
-          <meshStandardMaterial
-            ref={(m) => {
-              aggMatRef.current = m
-            }}
-            color={word.css}
-            emissive={word.css}
-            emissiveIntensity={0.6}
-            roughness={0.28}
-            metalness={0.2}
+
+        {/* the ten marker spokes (guide line + dot + fanned label) */}
+        {BIOMARKERS.map((_, i) => (
+          <MarkerSpoke key={i} index={i} initPos={initPositions[i]} setDot={setDot} setMat={setMat} />
+        ))}
+
+        {/* "the person": translucent radar polygon over the dots. Frustum
+            culling off since we rewrite the vertices each frame (the cached
+            bounding sphere would otherwise cull the inflated shape). */}
+        <mesh frustumCulled={false}>
+          <primitive object={polyFillGeom} attach="geometry" />
+          <meshBasicMaterial
+            color="#eef3f6"
+            transparent
+            opacity={0.12}
+            depthWrite={false}
             toneMapped={false}
+            side={THREE.DoubleSide}
           />
         </mesh>
-        <group position={[0, 1.35, 0]}>
-          <SpriteLabel text={word.word} worldHeight={0.94} color={PAL.ink} bg={word.css} fontPx={56} />
+        <lineLoop frustumCulled={false}>
+          <primitive object={polyGeom} attach="geometry" />
+          <lineBasicMaterial color="#eef3f6" transparent opacity={0.6} depthWrite={false} toneMapped={false} />
+        </lineLoop>
+
+        {/* the sweeping score arc just outside the rim */}
+        <mesh position={[0, 0, 0.02]}>
+          <primitive object={arcGeom} attach="geometry" />
+          <meshBasicMaterial
+            ref={(mat) => {
+              arcMatRef.current = mat
+            }}
+            color={spectrumCss(initAvg)}
+            transparent
+            opacity={0.85}
+            depthWrite={false}
+            toneMapped={false}
+            side={THREE.DoubleSide}
+          />
+        </mesh>
+
+        {/* zone-band key labels along the dial's vertical (down the center) */}
+        {zoneLabels.map((z) => (
+          <group key={z.label} position={[0, -z.r, 0.1]}>
+            <SpriteLabel text={z.label} worldHeight={0.7} color={z.color} fontPx={46} />
+          </group>
+        ))}
+
+        {/* central aggregate readout orb (colored by the mean) */}
+        <group position={[0, 0, 0.2]}>
+          <mesh>
+            <sphereGeometry args={[1.05, 24, 24]} />
+            <meshBasicMaterial
+              ref={(mat) => {
+                aggHaloRef.current = mat
+              }}
+              color={word.css}
+              transparent
+              opacity={0.13}
+              toneMapped={false}
+              depthWrite={false}
+            />
+          </mesh>
+          <mesh castShadow>
+            <sphereGeometry args={[0.72, 32, 32]} />
+            <meshStandardMaterial
+              ref={(mat) => {
+                aggMatRef.current = mat
+              }}
+              color={word.css}
+              emissive={word.css}
+              emissiveIntensity={0.62}
+              roughness={0.28}
+              metalness={0.2}
+              toneMapped={false}
+            />
+          </mesh>
+          {/* the state WORD floating just above the central orb */}
+          <group position={[0, 1.55, 0.2]}>
+            <SpriteLabel text={word.word} worldHeight={0.92} color={PAL.ink} bg={word.css} fontPx={54} />
+          </group>
         </group>
       </group>
 
-      {/* soft contact shadow grounding the whole installation */}
+      {/* soft contact shadow grounding the installation */}
       <ContactShadows
-        position={[0, -0.3, 0]}
-        scale={36}
+        position={[0, -R_RIM - 1.35, -1.5]}
+        scale={40}
         resolution={1024}
         blur={2.6}
-        opacity={0.42}
-        far={6}
+        opacity={0.4}
+        far={8}
         color="#000000"
       />
     </group>
@@ -567,7 +707,7 @@ function ContinuumControls({
       <PresetButtons options={presetNames} value={active} onChange={onPreset} />
 
       <div style={{ fontSize: 11.5, color: PAL.muted, margin: '2px 0 12px', lineHeight: 1.5 }}>
-        Each marker has its own healthy direction. All map onto one sick to fit scale. Drag a marker and the profile
+        Center is sickness, the rim is fitness. Each marker rides its own spoke. Drag any marker outward and the profile
         becomes Custom.
       </div>
 
@@ -657,13 +797,13 @@ export default function ContinuumModule() {
         eyebrow={copy.eyebrow}
         title={meta.title}
         body={copy.body}
-        autoRotate={!prefersReducedMotion()}
-        autoRotateSpeed={0.18}
-        camera={{ position: [1, 9, 27.5], fov: 50 }}
-        target={[-0.5, 2.4, 0]}
-        minDistance={14}
-        maxDistance={52}
-        hint="Drag to orbit. Load a profile or drag any marker toward fitness."
+        autoRotate={false}
+        camera={{ position: [0, 1.6, 26], fov: 50 }}
+        target={[0, 0.4, 0]}
+        minDistance={15}
+        maxDistance={40}
+        maxPolarAngle={Math.PI / 1.7}
+        hint="Drag to tilt the dial. Load a profile or drag any marker toward the fitness rim."
         controls={
           <ContinuumControls
             active={active}
