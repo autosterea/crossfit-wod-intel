@@ -143,6 +143,26 @@ const CAP_R = 0.066 // m, ball radius
 const RESTITUTION = 0.42 // wall bounce
 const N_CHIPS = 10 // numbered chips that ride a readable subset of balls
 
+// Draw-chute geometry (group-local). The funnel collar hugs the drum's lower
+// front edge and ONE straight pipe leads down-forward to the tray, so the whole
+// thing reads as a single machine. The pipe center / length / tilt are derived
+// from the two connection points (funnel throat at the cage, mouth at the tray)
+// so there is never a visible gap.
+const CHUTE_EXIT_Y = -DRUM_R * 0.6 // y where the funnel meets the cage's lower-front
+const CHUTE_THROAT_Z = DRUM_HALF + 0.18 // z of the funnel throat, just past the front hoop
+const PIPE_R = 0.26 // chute pipe radius
+const TRAY_Y = -(DRUM_R + 1.5) // tray height
+const TRAY_Z = DRUM_HALF + 1.42 // tray depth (forward of the drum)
+
+// Pipe spans from the funnel throat down to just above the tray.
+const PIPE_TOP = new THREE.Vector3(0, CHUTE_EXIT_Y - 0.12, CHUTE_THROAT_Z)
+const PIPE_BOT = new THREE.Vector3(0, TRAY_Y + 0.22, TRAY_Z)
+const PIPE_MID = PIPE_TOP.clone().add(PIPE_BOT).multiplyScalar(0.5)
+const PIPE_LEN = PIPE_TOP.distanceTo(PIPE_BOT) + 0.36 // overlap both ends a touch
+// A default (local-y) cylinder rotated by PIPE_TILT about +x has its axis along
+// (0, cos, sin); pick the tilt that aligns that axis with (bottom -> top).
+const PIPE_TILT = Math.atan2(PIPE_TOP.z - PIPE_BOT.z, PIPE_TOP.y - PIPE_BOT.y)
+
 interface Ball {
   /** Position in drum-local coordinates (the cage spins about local y). */
   pos: THREE.Vector3
@@ -253,12 +273,17 @@ function TumblingHopper({
   // Eject animation bookkeeping (ball index -> progress along the chute).
   const ejecting = useRef<{ idx: number; t: number; from: THREE.Vector3 }[]>([])
 
-  // Chute curve from drum exit out to the tray, in the group's local space.
+  // Chute curve from the drum's front-bottom exit, through the funnel collar and
+  // down the connected pipe to the tray (group-local space). The control points
+  // are aligned with the DrawChute geometry below so the ball never leaves the
+  // pipe: it slips out the drum's lower-front edge, into the funnel throat, then
+  // rides the straight pipe to the tray.
   const chuteCurve = useMemo(() => {
-    const start = new THREE.Vector3(0, -DRUM_R * 0.35, DRUM_HALF + 0.1)
-    const mid = new THREE.Vector3(0.05, -DRUM_R - 0.55, DRUM_HALF + 0.95)
-    const end = new THREE.Vector3(0, -DRUM_R - 1.3, DRUM_HALF + 1.55)
-    return new THREE.CatmullRomCurve3([start, mid, end])
+    const start = new THREE.Vector3(0, CHUTE_EXIT_Y + 0.2, DRUM_HALF - 0.06) // just inside the drum
+    const throat = PIPE_TOP.clone() // funnel throat at the cage edge
+    const mid = PIPE_MID.clone() // straight down the pipe centerline
+    const end = new THREE.Vector3(0, TRAY_Y + 0.18, TRAY_Z) // settle in the tray
+    return new THREE.CatmullRomCurve3([start, throat, mid, end])
   }, [])
 
   const eject = useCallback(
@@ -492,15 +517,9 @@ function TumblingHopper({
         </mesh>
       </group>
 
-      {/* clear draw chute leading down-forward to a small tray */}
-      <mesh material={steel} position={[0, -DRUM_R * 0.55, DRUM_HALF + 0.85]} rotation={[Math.PI / 2.5, 0, 0]}>
-        <cylinderGeometry args={[0.24, 0.24, 1.5, 24, 1, true]} />
-      </mesh>
-      {/* tray */}
-      <mesh position={[0, -(DRUM_R + 1.3), DRUM_HALF + 1.55]} castShadow receiveShadow>
-        <boxGeometry args={[0.7, 0.08, 0.5]} />
-        <meshStandardMaterial color="#2a3138" metalness={0.5} roughness={0.5} />
-      </mesh>
+      {/* the draw chute: a funnel collar bolted to the drum's lower-front edge
+          feeding ONE continuous pipe down to the tray (reads as one machine) */}
+      <DrawChute steel={steel} />
 
       {/* the task balls (instanced spheres) */}
       <instancedMesh ref={ballsMesh} args={[undefined, undefined, N_BALLS]} castShadow>
@@ -555,6 +574,74 @@ function Aframe({ steel, z, drop }: { steel: THREE.Material; z: number; drop: nu
   )
 }
 
+/**
+ * The draw chute as ONE continuous form: a funnel collar that bolts onto the
+ * drum's lower-front edge, narrowing into a straight steel pipe that leads down
+ * to the catch tray. Positions/rotations are derived from PIPE_TOP/PIPE_BOT so
+ * the funnel, pipe and tray meet with no visible gap.
+ */
+function DrawChute({ steel }: { steel: THREE.Material }) {
+  // The funnel: wide mouth hugging the cage's lower-front, tapering to PIPE_R at
+  // the throat. Centered between the cage edge and the pipe top, leaned to share
+  // the pipe's axis so it blends straight into the pipe.
+  const funnelMouth = useMemo(
+    () => new THREE.Vector3(0, -DRUM_R + 0.18, DRUM_HALF - 0.02),
+    [],
+  )
+  const funnelCenter = useMemo(
+    () => funnelMouth.clone().add(PIPE_TOP).multiplyScalar(0.5),
+    [funnelMouth],
+  )
+  const funnelLen = useMemo(() => funnelMouth.distanceTo(PIPE_TOP) + 0.18, [funnelMouth])
+  // The cone's narrow (radiusTop) end is at +local-y and must point at the pipe
+  // throat (PIPE_TOP); rotation [funnelTilt,0,0] lays +local-y along (0,cos,sin),
+  // so aim that axis from the mouth toward PIPE_TOP.
+  const funnelTilt = useMemo(
+    () => Math.atan2(PIPE_TOP.z - funnelMouth.z, PIPE_TOP.y - funnelMouth.y),
+    [funnelMouth],
+  )
+
+  return (
+    <group>
+      {/* collar ring where the funnel bolts to the cage's lower-front */}
+      <mesh material={steel} position={funnelMouth} rotation={[Math.PI / 2 + funnelTilt, 0, 0]}>
+        <torusGeometry args={[0.46, 0.05, 10, 28]} />
+      </mesh>
+      {/* funnel: wide mouth at the cage -> narrows to the pipe throat */}
+      <mesh material={steel} position={funnelCenter} rotation={[funnelTilt, 0, 0]}>
+        <cylinderGeometry args={[PIPE_R, 0.46, funnelLen, 28, 1, true]} />
+      </mesh>
+      {/* the straight pipe: funnel throat -> tray, as one continuous tube */}
+      <mesh material={steel} position={PIPE_MID} rotation={[PIPE_TILT, 0, 0]} castShadow>
+        <cylinderGeometry args={[PIPE_R, PIPE_R, PIPE_LEN, 28, 1, true]} />
+      </mesh>
+      {/* a couple of band stiffeners so the pipe reads as a built part */}
+      <mesh
+        material={steel}
+        position={PIPE_TOP.clone().lerp(PIPE_BOT, 0.34)}
+        rotation={[Math.PI / 2 + PIPE_TILT, 0, 0]}
+      >
+        <torusGeometry args={[PIPE_R + 0.02, 0.035, 8, 24]} />
+      </mesh>
+      <mesh
+        material={steel}
+        position={PIPE_TOP.clone().lerp(PIPE_BOT, 0.7)}
+        rotation={[Math.PI / 2 + PIPE_TILT, 0, 0]}
+      >
+        <torusGeometry args={[PIPE_R + 0.02, 0.035, 8, 24]} />
+      </mesh>
+      {/* catch tray with a low back lip, sitting under the pipe mouth */}
+      <mesh position={[0, TRAY_Y, TRAY_Z]} castShadow receiveShadow>
+        <boxGeometry args={[0.78, 0.08, 0.58]} />
+        <meshStandardMaterial color="#2a3138" metalness={0.5} roughness={0.5} />
+      </mesh>
+      <mesh material={steel} position={[0, TRAY_Y + 0.13, TRAY_Z - 0.27]}>
+        <boxGeometry args={[0.78, 0.22, 0.05]} />
+      </mesh>
+    </group>
+  )
+}
+
 /** A billboard text sprite built from a canvas texture (self-contained). */
 function SpriteLabel({
   text,
@@ -585,6 +672,29 @@ function SpriteLabel({
   )
 }
 
+/** Small media-query hook so the in-scene scoreboard can shrink on phones. */
+function useIsNarrow(query = '(max-width: 760px)'): boolean {
+  const [m, setM] = useState(() => {
+    try {
+      return window.matchMedia(query).matches
+    } catch {
+      return false
+    }
+  })
+  useEffect(() => {
+    let mq: MediaQueryList
+    try {
+      mq = window.matchMedia(query)
+    } catch {
+      return
+    }
+    const on = () => setM(mq.matches)
+    mq.addEventListener('change', on)
+    return () => mq.removeEventListener('change', on)
+  }, [query])
+  return m
+}
+
 /* ------------------------------ scoreboard ------------------------------ */
 
 interface CompetitorScore {
@@ -609,6 +719,7 @@ function ScoreboardPanel({
   drawCount: number
   leaderIdx: number
 }) {
+  const narrow = useIsNarrow()
   const ranked = useMemo(
     () =>
       HOPPER_ROSTER.map((a, i) => ({ a, i, total: scores[i].total })).sort((x, y) => y.total - x.total),
@@ -616,23 +727,31 @@ function ScoreboardPanel({
   )
   const maxTotal = Math.max(1, ...ranked.map((r) => r.total))
 
+  // Sit the board beside the drum at roughly its vertical center, so it never
+  // spatially overlaps the "THE HOPPER" plate (above the drum) nor the top draw
+  // banner. On phones pull it inward and make it narrower/smaller so it does not
+  // clip off the right edge of the portrait canvas.
+  const pos: [number, number, number] = narrow
+    ? [DRUM_R + 1.15, DRUM_R + 0.55, 0]
+    : [DRUM_R + 2.45, DRUM_R + 0.95, 0]
+
   return (
     <Html
-      position={[DRUM_R + 2.7, DRUM_R + 1.7, 0]}
+      position={pos}
       center
-      distanceFactor={9}
-      zIndexRange={[30, 0]}
+      distanceFactor={narrow ? 7 : 9}
+      zIndexRange={[20, 0]}
       occlude={false}
       pointerEvents="none"
     >
       <div
         style={{
-          width: 230,
+          width: narrow ? 184 : 230,
           fontFamily: 'system-ui, -apple-system, "Segoe UI", sans-serif',
           background: 'rgba(7,10,14,0.86)',
           border: '1px solid rgba(255,255,255,0.14)',
           borderRadius: 14,
-          padding: '12px 13px 13px',
+          padding: narrow ? '10px 11px 11px' : '12px 13px 13px',
           color: '#eef3f6',
           boxShadow: '0 10px 30px rgba(0,0,0,0.45)',
           pointerEvents: 'none',
@@ -755,12 +874,14 @@ function HopperScene({
 
       <ScoreboardPanel scores={scores} drawCount={drawCount} leaderIdx={leaderIdx} />
 
-      {/* PROMINENT draw banner pinned to the top-center of the canvas */}
+      {/* PROMINENT draw banner pinned to the top-center of the canvas. Kept at a
+          low zIndexRange so an opened About/Controls panel (z-index 200) sits in
+          front of it; among the in-scene labels it still wins (banner 30 > 20). */}
       {drawnLabel && (
         <Html
           position={[0, DRUM_R * 2 + 4.0, 0]}
           center
-          zIndexRange={[40, 0]}
+          zIndexRange={[30, 0]}
           occlude={false}
           pointerEvents="none"
         >

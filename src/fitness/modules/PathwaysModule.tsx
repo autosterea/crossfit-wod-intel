@@ -1,6 +1,6 @@
 import { useMemo, useRef, useState, useEffect } from 'react'
 import { useFrame } from '@react-three/fiber'
-import { ContactShadows } from '@react-three/drei'
+import { ContactShadows, Html } from '@react-three/drei'
 import * as THREE from 'three'
 import {
   ENERGY_SYSTEMS,
@@ -207,6 +207,72 @@ function SpriteLabel({
     <sprite position={position} scale={[worldHeight * aspect, worldHeight, 1]}>
       <spriteMaterial map={texture} transparent depthWrite={false} toneMapped={false} />
     </sprite>
+  )
+}
+
+/* --------------------------- DOM pill labels --------------------------- */
+/**
+ * A crisp DOM pill label (drei <Html>), in the SAME gold-standard style as
+ * SkillsModule -> SkillLabels(): white text on a dark rounded pill with a 1px
+ * colored border. Used for every AXIS label here (the log-time ticks + the
+ * axis captions). DOM labels are always crisp and never clip through 3D
+ * geometry the way the ground-hugging CanvasTexture sprites did - that was the
+ * "tick numbers vanish on zoom" bug the user reported. zIndexRange stays low
+ * (<= 40) so an opened Controls/About glass panel (z-index 200) sits on top.
+ */
+function PillLabel({
+  text,
+  position,
+  color = PAL.chalk,
+  dot,
+  fontSize = 17,
+  emphasis = false,
+}: {
+  text: string
+  position: [number, number, number]
+  /** Border (and optional dot) color. Defaults to a subtle chalk border. */
+  color?: string
+  /** Show a colored leading dot (like the skill labels). */
+  dot?: string
+  fontSize?: number
+  /** A heavier, brighter pill for the two axis captions. */
+  emphasis?: boolean
+}) {
+  return (
+    <Html
+      position={position}
+      center
+      distanceFactor={36}
+      zIndexRange={[20, 0]}
+      occlude={false}
+    >
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 7,
+          padding: emphasis ? '5px 13px' : '4px 11px',
+          borderRadius: 999,
+          whiteSpace: 'nowrap',
+          background: emphasis ? 'rgba(7, 10, 14, 0.95)' : 'rgba(7, 10, 14, 0.92)',
+          border: `1px solid ${color === PAL.chalk ? 'rgba(238,243,246,0.28)' : color}`,
+          boxShadow: '0 2px 8px rgba(0,0,0,0.55)',
+          fontFamily: '"Barlow Condensed", Poppins, sans-serif',
+          fontWeight: 700,
+          fontSize,
+          letterSpacing: '0.05em',
+          textTransform: 'uppercase',
+          color: PAL.chalk,
+          userSelect: 'none',
+          pointerEvents: 'none',
+        }}
+      >
+        {dot && (
+          <span style={{ width: 8, height: 8, borderRadius: '50%', background: dot, flex: 'none' }} />
+        )}
+        {text}
+      </div>
+    </Html>
   )
 }
 
@@ -476,25 +542,24 @@ function AxisRig({ onPick }: { onPick: (t: number) => void }) {
               <primitive object={tickGeos[i]} attach="geometry" />
               <lineBasicMaterial color={PAL.muted} transparent opacity={0.22} />
             </line>
-            <SpriteLabel text={tk.label} position={[x, -0.82, LANE_DEPTH / 2 + 0.7]} worldHeight={0.8} fontPx={46} />
+            {/* DOM pill (crisp at every zoom, never clipped by the floor). */}
+            <PillLabel text={tk.label} position={[x, -1.15, LANE_DEPTH / 2 + 0.5]} fontSize={16} />
           </group>
         )
       })}
 
-      <SpriteLabel
+      {/* axis caption + the "LOG TIME" hint that makes the axis OBVIOUSLY log. */}
+      <PillLabel
         text="EFFORT DURATION"
-        position={[-1.7, -2.0, LANE_DEPTH / 2 + 0.7]}
-        worldHeight={0.94}
-        fontPx={46}
-        color={PAL.chalk}
+        position={[-2.6, -2.5, LANE_DEPTH / 2 + 0.5]}
+        fontSize={16}
+        emphasis
       />
-      {/* the "LOG TIME" caption makes the axis OBVIOUSLY logarithmic. */}
-      <SpriteLabel
+      <PillLabel
         text="LOG TIME -->"
-        position={[2.9, -2.0, LANE_DEPTH / 2 + 0.7]}
-        worldHeight={0.72}
-        fontPx={42}
+        position={[3.4, -2.5, LANE_DEPTH / 2 + 0.5]}
         color={PAL.yellowGreen}
+        fontSize={15}
       />
 
       {/* ---- vertical LEFT power axis ---- */}
@@ -514,23 +579,26 @@ function AxisRig({ onPick }: { onPick: (t: number) => void }) {
         </line>
       ))}
 
-      {/* power axis caption, rotated to read up the axis. */}
-      <group position={[Y_AXIS_X - 0.95, HS / 2, 0]} rotation={[0, 0, Math.PI / 2]}>
-        <SpriteLabel text="POWER OUTPUT" position={[0, 0, 0]} worldHeight={0.92} fontPx={46} color={PAL.chalk} />
-      </group>
-      <SpriteLabel
-        text="higher = more power"
-        position={[Y_AXIS_X + 2.2, HS + 0.95, 0]}
-        worldHeight={0.62}
-        fontPx={40}
-        color={PAL.muted}
+      {/* Power-axis caption as a DOM pill. Anchored just INSIDE the axis top
+          (not rotated out past the left edge) so nothing clips on mobile
+          portrait, where the harness pulls the camera back 1.28x. */}
+      <PillLabel
+        text="POWER OUTPUT"
+        position={[Y_AXIS_X + 1.0, HS + 1.1, 0]}
+        fontSize={16}
+        emphasis
       />
-      <SpriteLabel
-        text="power falls as effort lasts longer"
-        position={[X_HALF - 3.2, 0.95, 0]}
-        worldHeight={0.6}
-        fontPx={40}
+      <PillLabel
+        text="higher = more power"
+        position={[Y_AXIS_X + 3.4, HS + 0.05, 0]}
         color={PAL.muted}
+        fontSize={13}
+      />
+      <PillLabel
+        text="power falls as effort lasts longer"
+        position={[X_HALF - 3.4, 1.0, 0]}
+        color={PAL.muted}
+        fontSize={13}
       />
 
       {/* benchmark studs sitting on the axis (clamped to the visible range) */}

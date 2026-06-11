@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useFrame } from '@react-three/fiber'
-import { ContactShadows } from '@react-three/drei'
+import { ContactShadows, Html } from '@react-three/drei'
 import * as THREE from 'three'
 import {
   AGING_PROFILES,
@@ -12,7 +12,7 @@ import {
   spectrum,
   type AgingProfile,
 } from '../fitnessData'
-import { clamp, lerp, map, prefersReducedMotion, smoothK } from '../lessonMath'
+import { clamp, lerp, map, prefersReducedMotion, smoothK, smoothstep } from '../lessonMath'
 import LessonStage from '../LessonStage'
 import { ControlHead, ModulePage, PresetButtons, Readout, Segmented, Slider } from '../ui'
 
@@ -41,7 +41,79 @@ const AGE_MAX = 85
 const HEALTH_SCALE = 175
 const FITNESS_SCALE = 143
 
-const PROFILE_NAMES = AGING_PROFILES.map((p) => p.name)
+/* ------------------------- extra aging profiles ------------------------ *
+ * The shared AGING_PROFILES (fitnessData) ships four canonical trajectories.
+ * The user asked for MORE options, so we compose additional, physiologically
+ * honest AgingProfile objects LOCALLY here (fitnessData is untouched) and merge
+ * them into the preset list. Each new ampAt(age) returns a 0..1 amplitude that
+ * the shared agingCapacity() multiplies by the duration shape - so these obey
+ * the exact same surface model as the built-ins, just with different histories.
+ *
+ * Honesty notes:
+ *  - "Detrained at 40": a trained adult who stops cold at 40. Capacity holds
+ *    high until ~38 then drops steeply over the next several years (accelerated
+ *    sarcopenia / power loss when training stops), settling toward a low,
+ *    sedentary-like decline tail. Crosses the line earlier than a lifelong
+ *    trainer but later than someone never trained.
+ *  - "Masters competitor": trains hard for life, a notch below the elite
+ *    lifelong trainer (a touch lower peak, a slightly steeper post-50 slope)
+ *    yet still well above the line into the late eighties.
+ *  - "Sedentary then active at 60": the late-start mirror of "Starts at 50" but
+ *    later - decades sedentary, then resistance + power training at 60 reclaims
+ *    real capacity (the literature: trainable even into the 90s), lifting the
+ *    whole surface and buying years of independence.
+ */
+const detrainedSed = (a: number): number =>
+  Math.max(a < 24 ? 0.5 : 0.5 * (1 - (0.14 * (a - 24)) / 10), 0.06)
+
+const EXTRA_PROFILES: AgingProfile[] = [
+  {
+    name: 'Detrained at 40',
+    trajectory: 'Trained and strong through the thirties, then training stops at 40 and the surface drops steeply over the next decade as power and muscle are lost. The crossing comes early.',
+    peak: 0.85,
+    independentThrough: '74',
+    ampAt: (a) => {
+      const trained = Math.max(a < 32 ? 0.85 : 0.85 - (0.045 * (a - 32)) / 10, 0.3)
+      const fell = detrainedSed(a)
+      // smoothly hand off from the trained track to the detrained decline at 40
+      const k = smoothstep(38, 47, a)
+      return Math.max(lerp(trained, fell, k), 0.06)
+    },
+    modality: 0.62,
+  },
+  {
+    name: 'Masters competitor',
+    trajectory: 'Trains hard for life and competes into the masters divisions. A notch below the elite lifelong trainer, with a slightly steeper slope past fifty, yet still far above the line deep into old age.',
+    peak: 0.92,
+    independentThrough: '88',
+    ampAt: (a) => {
+      if (a < 30) return 0.92
+      // gentle to 50, a touch steeper after (power fades fastest past 50)
+      const early = 0.92 - (0.04 * (a - 30)) / 10
+      const late = 0.92 - (0.04 * 20) / 10 - (0.07 * (a - 50)) / 10
+      return Math.max(a < 50 ? early : late, 0.34)
+    },
+    modality: 0.92,
+  },
+  {
+    name: 'Sedentary then active at 60',
+    trajectory: 'Decades sedentary, then resistance and power training begun at 60 reclaims real capacity and lifts the whole surface. Proof that the curve responds at any age, buying back years of independence.',
+    peak: 0.6,
+    independentThrough: '84',
+    ampAt: (a) => {
+      const sed = Math.max(a < 24 ? 0.45 : 0.45 * (1 - (0.16 * (a - 24)) / 10), 0.05)
+      // the reclaimed track the late starter rises onto (a moderate trained adult)
+      const tr = Math.max(a < 32 ? 0.66 : 0.66 - (0.05 * (a - 32)) / 10, 0.26)
+      const k = smoothstep(58, 66, a)
+      return lerp(sed, tr, k)
+    },
+    modality: 0.45,
+  },
+]
+
+/** Built-in profiles plus the local extras, in one list for lookup + presets. */
+const ALL_PROFILES: AgingProfile[] = [...AGING_PROFILES, ...EXTRA_PROFILES]
+const PROFILE_NAMES = ALL_PROFILES.map((p) => p.name)
 
 /* ------------------------------ small helpers -------------------------- */
 
@@ -181,6 +253,90 @@ function HealthScene({ profile, ageSlice, showLine, reduced }: SceneProps) {
     return g
   }, [])
 
+  /* ---- the VOLUME solid: the surface extruded straight down to the floor ----
+     This is the whole point of the module: HEALTH IS THE VOLUME under the
+     surface, so we render that volume as a real translucent solid - skirt walls
+     dropping from every perimeter point of the surface down to y=0, capped by a
+     floor. Both share the surface's (X,Z) footprint and grid resolution, so the
+     volume is rebuilt only when the surface morphs (in applyGrid), never per
+     frame. Vertex-colored by the same sickness-wellness-fitness spectrum as the
+     surface, darkened toward the floor for depth. */
+  const PERIM = useMemo<number[]>(() => {
+    // grid indices walked once around the perimeter (front, right, back, left).
+    const p: number[] = []
+    for (let di = 0; di < ND; di++) p.push(0 * ND + di) // front (ai=0)
+    for (let ai = 1; ai < NA; ai++) p.push(ai * ND + (ND - 1)) // right
+    for (let di = ND - 2; di >= 0; di--) p.push((NA - 1) * ND + di) // back
+    for (let ai = NA - 2; ai >= 1; ai--) p.push(ai * ND + 0) // left
+    return p
+  }, [])
+
+  const volGeo = useMemo(() => {
+    const np = PERIM.length
+    // Skirt: top rim verts (0..np-1) + bottom rim verts (np..2np-1).
+    // Floor cap: a full ND*NA grid of verts at y=0, reusing the surface layout.
+    const skirtVerts = np * 2
+    const capVerts = ND * NA
+    const total = skirtVerts + capVerts
+    const pos = new Float32Array(total * 3)
+    const col = new Float32Array(total * 3)
+    const idx: number[] = []
+
+    // static positions: top rim x/z (its y is morphed in applyVolume), the
+    // bottom rim (y=0), and the whole floor cap (y=0).
+    for (let k = 0; k < np; k++) {
+      const g = PERIM[k]
+      const di = g % ND
+      const ai = Math.floor(g / ND)
+      const x = map(di, 0, ND - 1, X0, X1)
+      const z = map(ai, 0, NA - 1, Z0, Z1)
+      // top rim (y filled later by applyVolume)
+      pos[k * 3] = x
+      pos[k * 3 + 1] = 0
+      pos[k * 3 + 2] = z
+      // bottom rim on the floor
+      const bi = (np + k) * 3
+      pos[bi] = x
+      pos[bi + 1] = 0
+      pos[bi + 2] = z
+    }
+    const capBase = skirtVerts
+    for (let ai = 0; ai < NA; ai++) {
+      for (let di = 0; di < ND; di++) {
+        const v = capBase + ai * ND + di
+        pos[v * 3] = map(di, 0, ND - 1, X0, X1)
+        pos[v * 3 + 1] = 0
+        pos[v * 3 + 2] = map(ai, 0, NA - 1, Z0, Z1)
+      }
+    }
+
+    // skirt quads: each perimeter segment becomes top0-top1-bot1 / top0-bot1-bot0.
+    for (let k = 0; k < np; k++) {
+      const k1 = (k + 1) % np
+      const t0 = k
+      const t1 = k1
+      const b0 = np + k
+      const b1 = np + k1
+      idx.push(t0, b0, b1, t0, b1, t1)
+    }
+    // floor cap (faces down) - reversed winding so it reads from below.
+    for (let a = 0; a < NA - 1; a++) {
+      for (let d = 0; d < ND - 1; d++) {
+        const i0 = capBase + a * ND + d
+        const i1 = i0 + 1
+        const i2 = i0 + ND
+        const i3 = i2 + 1
+        idx.push(i0, i1, i2, i1, i3, i2)
+      }
+    }
+
+    const g = new THREE.BufferGeometry()
+    g.setIndex(idx)
+    g.setAttribute('position', new THREE.BufferAttribute(pos, 3))
+    g.setAttribute('color', new THREE.BufferAttribute(col, 3))
+    return g
+  }, [PERIM])
+
   /* ---- amber slice: a filled area + a bright top curve (fixed vertex counts) ---- */
   const sliceGeo = useMemo(() => {
     const g = new THREE.BufferGeometry()
@@ -255,7 +411,48 @@ function HealthScene({ profile, ageSlice, showLine, reduced }: SceneProps) {
     tgtGrid.current = curGrid.current.slice()
   }
 
-  /** Push the current grid into surface position.y + vertex colors. */
+  /**
+   * Push the grid into the extruded VOLUME solid: lift each top-rim vertex onto
+   * the surface, tint the rim by the spectrum, and shade the skirt/floor darker
+   * toward the ground so the translucent solid reads as a real volume. Same
+   * cadence as applyGrid (morph / first paint only), never per frame.
+   */
+  const applyVolume = (grid: Float32Array) => {
+    const np = PERIM.length
+    const posAttr = volGeo.getAttribute('position') as THREE.BufferAttribute
+    const colAttr = volGeo.getAttribute('color') as THREE.BufferAttribute
+    const pa = posAttr.array as Float32Array
+    const ca = colAttr.array as Float32Array
+
+    // top + bottom rim: lift tops onto the surface, color both rims (skirt walls).
+    for (let k = 0; k < np; k++) {
+      const cap = grid[PERIM[k]]
+      const rgb = colorOf(cap)
+      // top rim sits on the surface
+      pa[k * 3 + 1] = cap * YS
+      ca[k * 3] = rgb[0]
+      ca[k * 3 + 1] = rgb[1]
+      ca[k * 3 + 2] = rgb[2]
+      // bottom rim: same hue, darkened toward the floor for depth
+      const bi = np + k
+      ca[bi * 3] = rgb[0] * 0.28
+      ca[bi * 3 + 1] = rgb[1] * 0.28
+      ca[bi * 3 + 2] = rgb[2] * 0.28
+    }
+    // floor cap: tinted by each cell's capacity, dimmed (it is the deep underside).
+    const capBase = np * 2
+    for (let i = 0; i < grid.length; i++) {
+      const rgb = colorOf(grid[i])
+      const v = (capBase + i) * 3
+      ca[v] = rgb[0] * 0.22
+      ca[v + 1] = rgb[1] * 0.22
+      ca[v + 2] = rgb[2] * 0.22
+    }
+    posAttr.needsUpdate = true
+    colAttr.needsUpdate = true
+  }
+
+  /** Push the current grid into surface position.y + vertex colors (+ volume). */
   const applyGrid = (grid: Float32Array) => {
     const posAttr = surfGeo.getAttribute('position') as THREE.BufferAttribute
     const colAttr = surfGeo.getAttribute('color') as THREE.BufferAttribute
@@ -271,6 +468,7 @@ function HealthScene({ profile, ageSlice, showLine, reduced }: SceneProps) {
     posAttr.needsUpdate = true
     colAttr.needsUpdate = true
     surfGeo.computeVertexNormals()
+    applyVolume(grid)
   }
 
   /**
@@ -388,13 +586,19 @@ function HealthScene({ profile, ageSlice, showLine, reduced }: SceneProps) {
   useEffect(() => {
     return () => {
       surfGeo.dispose()
+      volGeo.dispose()
       sliceGeo.dispose()
       curveGeo.dispose()
       frame.dispose()
     }
-  }, [surfGeo, sliceGeo, curveGeo, frame])
+  }, [surfGeo, volGeo, sliceGeo, curveGeo, frame])
 
   const lineY = INDEPENDENCE_LINE * YS
+
+  // The volume's translucency scales with the score: a fitter life fills more of
+  // the box, so its solid reads denser. Recomputed only when the profile changes.
+  const score = useMemo(() => healthScore(profile), [profile])
+  const volOpacity = map(clamp(score, 0, 100), 0, 100, 0.16, 0.42)
 
   return (
     <group ref={groupRef}>
@@ -405,6 +609,21 @@ function HealthScene({ profile, ageSlice, showLine, reduced }: SceneProps) {
         <meshStandardMaterial color="#070c0a" roughness={1} metalness={0} />
       </mesh>
       <ContactShadows position={[0, -0.03, 0]} scale={26} blur={2.4} opacity={0.45} far={12} resolution={512} color="#000000" />
+
+      {/* THE VOLUME = HEALTH: the surface extruded down to the floor as a real
+          translucent solid (skirt walls + floor cap), tinted by the spectrum and
+          denser the higher the score. This is the value the module is about. */}
+      <mesh geometry={volGeo}>
+        <meshBasicMaterial
+          vertexColors
+          transparent
+          opacity={volOpacity}
+          side={THREE.DoubleSide}
+          depthWrite={false}
+          toneMapped={false}
+        />
+      </mesh>
+      <VolumeLabel score={score} />
 
       {/* the capacity surface (vertex-colored) + faint wireframe overlay */}
       <mesh geometry={surfGeo} castShadow>
@@ -462,6 +681,51 @@ function IndependenceLabel({ y }: { y: number }) {
   return <primitive object={made.sprite} position={[X0 + 2.8, y + 0.45, Z0 - 0.4]} />
 }
 
+/**
+ * The prominent "VOLUME = HEALTH" callout, anchored low at the front of the
+ * solid so it tags the translucent volume directly. A drei <Html> pill in the
+ * SkillsModule gold-standard style (rounded, dark glass, robust-tinted border,
+ * Barlow Condensed), with the live score read large beside it. DOM, so always
+ * crisp; zIndexRange [20,0] keeps it below the overlay panels.
+ */
+function VolumeLabel({ score }: { score: number }) {
+  return (
+    <Html
+      position={[0, YS * 0.34, Z0 + 0.6]}
+      center
+      distanceFactor={32}
+      zIndexRange={[20, 0]}
+      occlude={false}
+    >
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 9,
+          padding: '5px 13px',
+          borderRadius: 999,
+          whiteSpace: 'nowrap',
+          background: 'rgba(7, 10, 14, 0.92)',
+          border: `1px solid ${PAL.robust}`,
+          boxShadow: '0 2px 10px rgba(0,0,0,0.6)',
+          fontFamily: '"Barlow Condensed", Poppins, sans-serif',
+          fontWeight: 700,
+          fontSize: 20,
+          letterSpacing: '0.05em',
+          textTransform: 'uppercase',
+          color: PAL.chalk,
+          userSelect: 'none',
+          pointerEvents: 'none',
+        }}
+      >
+        <span style={{ width: 9, height: 9, borderRadius: '50%', background: PAL.robust, flex: 'none' }} />
+        Volume = Health
+        <span style={{ color: PAL.robust, fontSize: 22, marginLeft: 2 }}>{score}</span>
+      </div>
+    </Html>
+  )
+}
+
 /* =============================== controls ============================== */
 
 interface ControlsProps {
@@ -481,14 +745,14 @@ function HealthControls({ profile, ageSlice, showLine, onProfile, onAge, onToggl
       <ControlHead>A lifetime of capacity</ControlHead>
 
       <Readout
-        label="Health, volume under the surface"
+        label="Volume = Health"
         value={
           <>
             {health}
             <span style={{ fontSize: 14, color: PAL.muted }}>/100</span>
           </>
         }
-        sub="Sustained fitness is health."
+        sub="The translucent solid IS this number: the whole volume under the surface."
         color={PAL.robust}
       />
 
@@ -542,12 +806,12 @@ export default function HealthModule() {
   const copy = MODULE_COPY.health
   const reduced = useMemo(() => prefersReducedMotion(), [])
 
-  const [profileName, setProfileName] = useState<string>(AGING_PROFILES[0].name)
+  const [profileName, setProfileName] = useState<string>(ALL_PROFILES[0].name)
   const [ageSlice, setAgeSlice] = useState(45)
   const [showLine, setShowLine] = useState(true)
 
   const profile = useMemo(
-    () => AGING_PROFILES.find((p) => p.name === profileName) ?? AGING_PROFILES[0],
+    () => ALL_PROFILES.find((p) => p.name === profileName) ?? ALL_PROFILES[0],
     [profileName],
   )
 

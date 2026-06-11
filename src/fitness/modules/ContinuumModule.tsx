@@ -43,7 +43,7 @@ const R_RIM = 9.4 // radius of the fitness rim
 const R_HUB = 0.7 // inner dead-zone radius around the sickness center
 const FAN_DEG = 200 // total fan angle the ten spokes spread across
 const TILT = -0.32 // small backward tilt (radians) so it reads as 3D, still head-on
-const LABEL_GAP = 1.1 // how far past the rim each spoke label sits
+const LABEL_GAP = 2.2 // how far past the rim each spoke label's anchor sits
 
 /** Spoke index -> angle (radians) measured from +Y (straight up), spread
  *  symmetrically across the fan so the two end spokes never touch.            */
@@ -270,17 +270,13 @@ function MarkerSpoke({
   }, [index])
   useEffect(() => () => lineGeom.dispose(), [lineGeom])
 
-  // Where the label sits (just past the rim, biased to the correct side so
-  // text reads outward and the fan stays uncluttered).
+  // Where the label sits: centered on an anchor just past the rim, fanned along
+  // the spoke so the ten pills spread around the arc and never overlap.
   const [lx, ly] = pointOn(index, 1)
   const labelR = R_RIM + LABEL_GAP
   const labelX = Math.sin(a) * labelR
   const labelY = Math.cos(a) * labelR
-  // anchor the label box to its outer side so the fan reads outward: spokes on
-  // the left half anchor their right edge, spokes on the right half their left.
-  const onLeft = labelX < 0
-  const translateX = onLeft ? 'translateX(-100%)' : 'translateX(0)'
-  const textAlign = onLeft ? 'right' : 'left'
+  const initLabelCss = spectrumCss(initPos)
 
   const [dotX, dotY] = pointOn(index, initPos)
 
@@ -327,42 +323,59 @@ function MarkerSpoke({
         </mesh>
       </group>
 
-      {/* marker NAME + live VALUE at the spoke's outer end, fanned outward */}
+      {/* marker NAME + live VALUE at the spoke's outer end. Styled to match the
+          10-Physical-Skills SkillLabels gold standard: a rounded dark pill,
+          1px border keyed to spectrum(position), a small colored dot, Barlow
+          Condensed bold uppercase. Bigger + crisper than before; fanned so the
+          ten pills never overlap. zIndexRange [20,0] keeps it below the panels. */}
       <Html
         position={[labelX, labelY, 0]}
-        distanceFactor={14}
+        center
+        distanceFactor={30}
+        occlude={false}
         style={{ pointerEvents: 'none' }}
-        zIndexRange={[8, 0]}
+        zIndexRange={[20, 0]}
       >
         <div
-          className="wf-cont-label"
+          data-marker-pill={index}
           style={{
-            transform: `translateY(-50%) ${translateX}`,
-            textAlign,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: 2,
+            padding: '6px 13px',
+            borderRadius: 14,
             whiteSpace: 'nowrap',
-            fontFamily: "'Barlow Condensed', Poppins, sans-serif",
-            color: '#eef3f6',
-            lineHeight: 1.1,
-            padding: '3px 8px',
-            borderRadius: 8,
-            background: 'rgba(7,10,14,0.74)',
-            border: '1px solid rgba(238,243,246,0.12)',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.5)',
+            background: 'rgba(7, 10, 14, 0.92)',
+            border: `1px solid ${initLabelCss}`,
+            boxShadow: '0 3px 12px rgba(0,0,0,0.6)',
+            fontFamily: '"Barlow Condensed", Poppins, sans-serif',
+            color: PAL.chalk,
+            userSelect: 'none',
+            pointerEvents: 'none',
           }}
         >
-          <div style={{ fontSize: 17, fontWeight: 700, letterSpacing: '0.01em' }}>{m.name}</div>
-          <div
+          <span style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+            <span
+              data-marker-dot={index}
+              style={{ width: 9, height: 9, borderRadius: '50%', background: initLabelCss, flex: 'none' }}
+            />
+            <span style={{ fontSize: 18, fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+              {m.name}
+            </span>
+          </span>
+          <span
             data-marker-value={index}
             style={{
-              fontFamily: "'JetBrains Mono', ui-monospace, monospace",
-              fontSize: 12.5,
+              fontSize: 15.5,
               fontWeight: 700,
-              color: spectrumCss(initPos),
-              letterSpacing: '0.01em',
+              letterSpacing: '0.03em',
+              textTransform: 'uppercase',
+              color: initLabelCss,
             }}
           >
             {fmtMarker(markerValueAt(m, initPos), m.unit)}
-          </div>
+          </span>
         </div>
       </Html>
     </group>
@@ -427,17 +440,22 @@ function ContinuumScene({ targets, onLive }: SceneProps) {
 
   const tmpCol = useMemo(() => new THREE.Color(), [])
 
-  // The score arc: a fixed full-fan ring built ONCE; we reveal a prefix of its
-  // segments each frame with setDrawRange (no per-frame geometry allocation).
-  // It is sized to the fan span and starts at the first spoke, sweeping toward
-  // fitness. RingGeometry runs CCW from +X; our spokes run CW from +Y as the
-  // angle grows, so the arc's world start angle is (pi/2 - lastSpoke).
+  // The score arc: a sick->fit PROGRESS METER that reads LEFT to RIGHT (the way
+  // CrossFit draws the continuum). A fixed full-fan ring is built ONCE; we
+  // reveal a prefix of its segments each frame with setDrawRange (no per-frame
+  // geometry allocation), and we recolor the whole arc by the live mean so it
+  // ramps sick-red -> green as fitness rises.
+  //
+  // World angle (from +X) of spoke i is (pi/2 - spokeAngle(i)). The LEFT end of
+  // the fan is spoke 0 (negative spoke angle -> larger world angle); the RIGHT
+  // end is spoke N-1. To grow FROM THE LEFT and fill toward the right we start
+  // the ring at the left spoke's world angle and sweep with a NEGATIVE length
+  // (clockwise), so revealing a prefix of segments extends the bar rightward.
   const ARC_SEG = 120
   const arcGeom = useMemo(() => {
-    const fanEnd = spokeAngle(N - 1)
-    const span = Math.abs(fanEnd - spokeAngle(0))
-    const thetaStart = Math.PI / 2 - fanEnd // world angle (from +X) of the far spoke
-    const g = new THREE.RingGeometry(R_RIM + 0.45, R_RIM + 0.85, ARC_SEG, 1, thetaStart, span)
+    const span = Math.abs(spokeAngle(N - 1) - spokeAngle(0))
+    const thetaStart = Math.PI / 2 - spokeAngle(0) // world angle of the LEFT spoke
+    const g = new THREE.RingGeometry(R_RIM + 0.45, R_RIM + 0.95, ARC_SEG, 1, thetaStart, -span)
     // start showing a prefix matching the initial mean (overwritten each frame)
     g.setDrawRange(0, Math.max(0, Math.round(ARC_SEG * initAvg)) * 6)
     return g
@@ -445,6 +463,15 @@ function ContinuumScene({ targets, onLive }: SceneProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   useEffect(() => () => arcGeom.dispose(), [arcGeom])
+
+  // A faint full-length track behind the arc so the unfilled portion of the
+  // meter is visible (the bar fills along this groove from left to right).
+  const arcTrackGeom = useMemo(() => {
+    const span = Math.abs(spokeAngle(N - 1) - spokeAngle(0))
+    const thetaStart = Math.PI / 2 - spokeAngle(0)
+    return new THREE.RingGeometry(R_RIM + 0.45, R_RIM + 0.95, ARC_SEG, 1, thetaStart, -span)
+  }, [])
+  useEffect(() => () => arcTrackGeom.dispose(), [arcTrackGeom])
 
   const setDot = (i: number, g: THREE.Group | null) => {
     dotRefs.current[i] = g
@@ -518,15 +545,22 @@ function ContinuumScene({ targets, onLive }: SceneProps) {
       arcMatRef.current.color.copy(tmpCol)
     }
 
-    // Update the live numeric readouts via the DOM (cheap, no React re-render).
+    // Update the live numeric readouts + the pill's color accents via the DOM
+    // (cheap, no React re-render). Value text, dot, and pill border all ramp
+    // with each marker's position so the label color matches its dot on screen.
     if (moved || reduced) {
       for (let i = 0; i < N; i++) {
+        const css = spectrumCss(live[i])
         const el = document.querySelector<HTMLElement>(`[data-marker-value="${i}"]`)
         if (el) {
           const m = BIOMARKERS[i]
           el.textContent = fmtMarker(markerValueAt(m, live[i]), m.unit)
-          el.style.color = spectrumCss(live[i])
+          el.style.color = css
         }
+        const dot = document.querySelector<HTMLElement>(`[data-marker-dot="${i}"]`)
+        if (dot) dot.style.background = css
+        const pill = document.querySelector<HTMLElement>(`[data-marker-pill="${i}"]`)
+        if (pill) pill.style.borderColor = css
       }
       onLive(live.slice(), avg)
     }
@@ -539,12 +573,14 @@ function ContinuumScene({ targets, onLive }: SceneProps) {
     }
   })
 
-  // Static zone-band labels along the bottom edge of the dial (the gauge key).
-  // Placed below the hub so they never collide with the fanned spoke labels.
+  // The continuum's three named zones, labeled on the concentric bands from
+  // the inner third (SICKNESS) out to the rim (FITNESS). Placed straight DOWN
+  // the dial center (the -Y gap below the 200-degree spoke fan) so they sit on
+  // their band yet never collide with the fanned spoke pills above.
   const zoneLabels: { label: string; color: string; r: number }[] = [
-    { label: 'SICK', color: PAL.sick, r: R_HUB + (R_RIM - R_HUB) * (1 / 6) },
-    { label: 'WELL', color: '#e6c25a', r: R_HUB + (R_RIM - R_HUB) * 0.5 },
-    { label: 'FIT', color: PAL.fit, r: R_HUB + (R_RIM - R_HUB) * (5 / 6) },
+    { label: 'SICKNESS', color: PAL.sick, r: R_HUB + (R_RIM - R_HUB) * (1 / 6) },
+    { label: 'WELLNESS', color: PAL.well, r: R_HUB + (R_RIM - R_HUB) * 0.5 },
+    { label: 'FITNESS', color: PAL.fit, r: R_HUB + (R_RIM - R_HUB) * (5 / 6) },
   ]
 
   return (
@@ -593,7 +629,21 @@ function ContinuumScene({ targets, onLive }: SceneProps) {
           <lineBasicMaterial color="#eef3f6" transparent opacity={0.6} depthWrite={false} toneMapped={false} />
         </lineLoop>
 
-        {/* the sweeping score arc just outside the rim */}
+        {/* faint full-length groove behind the score meter */}
+        <mesh position={[0, 0, 0.015]}>
+          <primitive object={arcTrackGeom} attach="geometry" />
+          <meshBasicMaterial
+            color="#0b1310"
+            transparent
+            opacity={0.55}
+            depthWrite={false}
+            toneMapped={false}
+            side={THREE.DoubleSide}
+          />
+        </mesh>
+
+        {/* the sweeping score arc: grows from the LEFT (sick) and fills toward
+            the RIGHT (fit), ramping sick-red -> green as overall fitness rises */}
         <mesh position={[0, 0, 0.02]}>
           <primitive object={arcGeom} attach="geometry" />
           <meshBasicMaterial
@@ -602,18 +652,51 @@ function ContinuumScene({ targets, onLive }: SceneProps) {
             }}
             color={spectrumCss(initAvg)}
             transparent
-            opacity={0.85}
+            opacity={0.9}
             depthWrite={false}
             toneMapped={false}
             side={THREE.DoubleSide}
           />
         </mesh>
 
-        {/* zone-band key labels along the dial's vertical (down the center) */}
+        {/* the SICKNESS / WELLNESS / FITNESS zone labels, one per concentric
+            band (inner -> outer), in the SkillLabels pill style so the
+            sick -> well -> fit structure of the continuum is unmistakable. */}
         {zoneLabels.map((z) => (
-          <group key={z.label} position={[0, -z.r, 0.1]}>
-            <SpriteLabel text={z.label} worldHeight={0.7} color={z.color} fontPx={46} />
-          </group>
+          <Html
+            key={z.label}
+            position={[0, -z.r, 0.12]}
+            center
+            distanceFactor={30}
+            occlude={false}
+            style={{ pointerEvents: 'none' }}
+            zIndexRange={[20, 0]}
+          >
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 8,
+                padding: '6px 15px',
+                borderRadius: 999,
+                whiteSpace: 'nowrap',
+                background: 'rgba(7, 10, 14, 0.92)',
+                border: `1px solid ${z.color}`,
+                boxShadow: '0 3px 12px rgba(0,0,0,0.6)',
+                fontFamily: '"Barlow Condensed", Poppins, sans-serif',
+                fontWeight: 700,
+                fontSize: 21,
+                letterSpacing: '0.12em',
+                textTransform: 'uppercase',
+                color: PAL.chalk,
+                userSelect: 'none',
+                pointerEvents: 'none',
+              }}
+            >
+              <span style={{ width: 10, height: 10, borderRadius: '50%', background: z.color, flex: 'none' }} />
+              {z.label}
+            </div>
+          </Html>
         ))}
 
         {/* central aggregate readout orb (colored by the mean) */}

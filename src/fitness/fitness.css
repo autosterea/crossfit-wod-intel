@@ -65,7 +65,10 @@
 /* ---------- Floating glass panels (always dark, over the canvas) ---------- */
 .wf-glass {
   position: absolute;
-  z-index: 5;
+  /* Above every in-scene drei <Html> label/scoreboard (which use zIndexRange
+     up to ~40) so an opened About/Controls panel always sits IN FRONT of the
+     3D labels instead of being hidden behind them. (User feedback 2026-06.) */
+  z-index: 200;
   background: var(--wf-glass);
   border: 1px solid var(--wf-line);
   border-radius: 16px;
@@ -195,7 +198,9 @@
 /* ---------- Collapse launchers + close buttons ---------- */
 .wf-launch {
   position: absolute;
-  z-index: 6;
+  /* Same stacking context as .wf-glass: launcher pills ride above in-scene
+     <Html> too, so they stay tappable and never sit behind a 3D label. */
+  z-index: 200;
   display: inline-flex;
   align-items: center;
   gap: 8px;

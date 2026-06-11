@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useFrame } from '@react-three/fiber'
-import { ContactShadows } from '@react-three/drei'
+import { ContactShadows, Html } from '@react-three/drei'
 import * as THREE from 'three'
 import {
   MODULE_COPY,
   moduleByKey,
   POWER_CURVES,
+  POWER_DOMAIN_TILT,
   POWER_DURATIONS,
   POWER_DURATION_LABELS,
   POWER_TASKS,
@@ -21,7 +22,20 @@ import { ModulePage, ControlHead, Readout, PresetButtons, Legend } from '../ui'
    domains. A 3D power (Y) vs log-duration (X) curve, the area beneath it
    tinted PA yellow-green ("AREA = FITNESS"). Ported from moduleDefinition()
    in what-is-fitness-3d.html (lines 1182-1364) and re-grounded entirely in
-   POWER_CURVES / POWER_DURATIONS / POWER_TASKS / MODAL_DOMAINS.
+   POWER_CURVES / POWER_DOMAIN_TILT / POWER_DURATIONS / POWER_TASKS /
+   MODAL_DOMAINS.
+
+   All seven POWER_CURVES archetypes drive the module dynamically: the preset
+   list, the per-key curve lookup, and the per-domain tilt are built from the
+   data layer by name (default preset = Generalist CrossFitter). The Powerlifter
+   reads as the extreme short spike (1.0 at 1 s, crashing fast); the Generalist
+   owns the largest area and scores "Broad".
+
+   Data labels (the X-axis log-time ticks, the Y-axis power references, and the
+   task names that ride the curve) are crisp white drei <Html> pills matching
+   the SkillsModule SkillLabels() gold standard, so they stay legible over the
+   bright fill and never clip behind the 3D. zIndexRange stays <= 40 so an
+   opened About/Controls panel sits in front of them.
    ========================================================================= */
 
 /* ----------------------------- geometry frame -------------------------- */
@@ -36,31 +50,37 @@ const T_MAX = POWER_DURATIONS[POWER_DURATIONS.length - 1] // 3600 s
 const TASK_TIER_LO = 0.62
 const TASK_TIER_HI = 1.62
 
-/** The four archetypes, in the order the original presets used them. */
-const ATHLETES = ['Generalist', 'Sprinter', 'Marathoner', 'Sedentary'] as const
-type AthleteKey = (typeof ATHLETES)[number]
+/**
+ * All seven archetypes, in POWER_CURVES order. The preset keys ARE the curve
+ * names, so adding/renaming an archetype in fitnessData flows through here with
+ * no edits. Default preset (index 0) is the Generalist CrossFitter.
+ */
+const ATHLETES = POWER_CURVES.map((c) => c.name)
+type AthleteKey = string
 
-/** Map a friendly preset key to its PowerCurve in fitnessData. */
-const CURVE_BY_KEY: Record<AthleteKey, (typeof POWER_CURVES)[number]> = {
-  Generalist: POWER_CURVES[0], // Generalist CrossFitter
-  Sprinter: POWER_CURVES[1], // 100m Sprinter
-  Marathoner: POWER_CURVES[2], // Marathoner
-  Sedentary: POWER_CURVES[3], // Sedentary Adult
-}
+const DEFAULT_ATHLETE: AthleteKey = POWER_CURVES[0].name // Generalist CrossFitter
+
+/** Curve lookup by archetype name. */
+type PowerCurveEntry = (typeof POWER_CURVES)[number]
+const CURVE_BY_KEY: Record<AthleteKey, PowerCurveEntry> = POWER_CURVES.reduce(
+  (acc, c) => {
+    acc[c.name] = c
+    return acc
+  },
+  {} as Record<AthleteKey, PowerCurveEntry>,
+)
+
+/** A flat 5-domain tilt fallback for any name missing from POWER_DOMAIN_TILT. */
+const FLAT_TILT = [1, 1, 1, 1, 1]
 
 /**
- * Per-domain power multipliers (5, in MODAL_DOMAINS order). A specialist
- * tilts the curve toward its strong domain and away from the rest; the
- * generalist and the untrained adult sit flat. Ported from the `dom`
- * arrays in moduleDefinition() and kept here because the data layer only
- * stores the averaged curve, not the per-domain spread.
+ * Per-domain power multipliers (5, in MODAL_DOMAINS order) by archetype name,
+ * sourced from POWER_DOMAIN_TILT in fitnessData. A specialist tilts the curve
+ * toward its strong domain and away from the rest; the generalist sits near
+ * flat. The data layer stores only the averaged curve, so the per-domain spread
+ * comes from this tilt table.
  */
-const DOMAIN_MULT: Record<AthleteKey, number[]> = {
-  Generalist: [1.02, 1.0, 0.95, 1.0, 0.95],
-  Sprinter: [1.12, 0.92, 0.72, 1.0, 0.8],
-  Marathoner: [0.62, 0.72, 1.22, 0.8, 0.85],
-  Sedentary: [1, 1, 1, 1, 1],
-}
+const domainMult = (name: AthleteKey): number[] => POWER_DOMAIN_TILT[name] ?? FLAT_TILT
 
 const N = 72 // samples along each curve (smooth, mobile-friendly)
 
@@ -195,6 +215,64 @@ function Label({
     <sprite position={position} scale={[worldHeight * aspect, worldHeight, 1]}>
       <spriteMaterial map={texture} transparent opacity={opacity} depthWrite={false} toneMapped={false} />
     </sprite>
+  )
+}
+
+/* ----------------------------- html pill label ------------------------- */
+/**
+ * Crisp white pill label as a drei <Html> (the SkillsModule SkillLabels() gold
+ * standard). DOM, so it is always sharp and never clipped by the 3D curve or
+ * fill. White #eef3f6 text on a dark rounded pill with a colored border; an
+ * optional colored dot. zIndexRange={[20,0]} keeps it BELOW the overlay panels
+ * (which are z-index 200) so an opened About/Controls card sits in front of it.
+ * `fontSize` ~16-18 reads like a tick; bump it for the bigger Y references.
+ */
+function HtmlLabel({
+  text,
+  position,
+  color = PAL.chalk,
+  fontSize = 17,
+  dot = false,
+  mono = false,
+  distanceFactor = 32,
+}: {
+  text: string
+  position: [number, number, number]
+  color?: string
+  fontSize?: number
+  dot?: boolean
+  mono?: boolean
+  distanceFactor?: number
+}) {
+  return (
+    <Html position={position} center distanceFactor={distanceFactor} zIndexRange={[20, 0]} occlude={false}>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 7,
+          padding: '4px 11px',
+          borderRadius: 999,
+          whiteSpace: 'nowrap',
+          background: 'rgba(7, 10, 14, 0.92)',
+          border: `1px solid ${color}`,
+          boxShadow: '0 2px 8px rgba(0,0,0,0.55)',
+          fontFamily: mono
+            ? 'ui-monospace, "JetBrains Mono", "Barlow Condensed", monospace'
+            : '"Barlow Condensed", Poppins, sans-serif',
+          fontWeight: 700,
+          fontSize,
+          letterSpacing: '0.04em',
+          textTransform: 'uppercase',
+          color: PAL.chalk,
+          userSelect: 'none',
+          pointerEvents: 'none',
+        }}
+      >
+        {dot && <span style={{ width: 8, height: 8, borderRadius: '50%', background: color, flex: 'none' }} />}
+        {text}
+      </div>
+    </Html>
   )
 }
 
@@ -358,7 +436,14 @@ function ActiveCurve({ targetSamples }: { targetSamples: number[] }) {
                 <boxGeometry args={[0.022, tier, 0.022]} />
                 <meshBasicMaterial color={PAL.chalk} transparent opacity={0.4} toneMapped={false} />
               </mesh>
-              <Label text={task.name} position={[0, tier + 0.26, 0.04]} worldHeight={0.46} color={PAL.chalk} fontPx={28} />
+              {/* crisp white task name (drei <Html> pill) - rides the curve with
+                  the group, never clips behind the fill. yellow-green border. */}
+              <HtmlLabel
+                text={task.name}
+                position={[0, tier + 0.34, 0.04]}
+                color={PAL.yellowGreen}
+                fontSize={15}
+              />
             </group>
           )
         })}
@@ -370,7 +455,7 @@ function ActiveCurve({ targetSamples }: { targetSamples: number[] }) {
 /* ----------------------------- ghost generalist ------------------------ */
 function GhostGeneralist() {
   const { geo, lastY } = useMemo(() => {
-    const pts = curvePoints(CURVE_BY_KEY.Generalist.samples, 1, 0.12)
+    const pts = curvePoints(CURVE_BY_KEY[DEFAULT_ATHLETE].samples, 1, 0.12)
     return { geo: tubeGeometryFrom(pts, 0.045), lastY: pts[N - 1].y }
   }, [])
   return (
@@ -386,7 +471,7 @@ function GhostGeneralist() {
 /* ----------------------------- modal domains --------------------------- */
 function ModalDomains({ athlete }: { athlete: AthleteKey }) {
   const samples = CURVE_BY_KEY[athlete].samples
-  const mult = DOMAIN_MULT[athlete]
+  const mult = domainMult(athlete)
   const built = useMemo(() => {
     return MODAL_DOMAINS.map((dom, d) => {
       const z = map(d, 0, MODAL_DOMAINS.length - 1, -2.6, 2.6)
@@ -448,23 +533,31 @@ function Axes() {
         <primitive key={i} object={ln} />
       ))}
 
-      {/* X axis: clearly LOGARITHMIC. A pill per tick + a LOG TIME caption. */}
+      {/* X axis: clearly LOGARITHMIC. A crisp WHITE pill per log-time tick (drei
+          <Html>, always sharp) + a LOG TIME caption. */}
       {POWER_DURATIONS.map((t, i) => (
-        <Label key={t} text={POWER_DURATION_LABELS[i]} position={[xOf(t), -0.78, 0]} worldHeight={0.52} color={PAL.chalk} mono fontPx={30} />
+        <HtmlLabel
+          key={t}
+          text={POWER_DURATION_LABELS[i]}
+          position={[xOf(t), -0.82, 0]}
+          color={PAL.yellowGreen}
+          fontSize={16}
+          mono
+        />
       ))}
       <Label text="EFFORT DURATION" position={[-2.1, -1.74, 0]} worldHeight={0.72} color={PAL.chalk} mono fontPx={40} weight="700" />
       <Label text="LOG TIME ->" position={[5.0, -1.74, 0]} worldHeight={0.56} color={PAL.yellowGreen} mono fontPx={32} weight="700" />
 
-      {/* Y axis: relative power, higher = more. Tick labels for each level. */}
+      {/* Y axis: relative power, higher = more. WHITE pill per reference level,
+          enlarged for legibility (user feedback: make 0.5 / 1.0 max bigger). */}
       {Y_LEVELS.map((lvl) => (
-        <Label
+        <HtmlLabel
           key={lvl.label}
           text={lvl.label}
-          position={[X0 - 1.05, lvl.v * YS, 0]}
-          worldHeight={0.46}
-          color={lvl.v >= 1 ? PAL.yellowGreen : PAL.muted}
+          position={[X0 - 1.15, lvl.v * YS, 0]}
+          color={lvl.v >= 1 ? PAL.yellowGreen : PAL.robust}
+          fontSize={lvl.v >= 1 ? 19 : 18}
           mono
-          fontPx={28}
         />
       ))}
       <Label text="POWER OUTPUT" position={[X0 - 0.2, YS + 1.1, 0]} worldHeight={0.72} color={PAL.chalk} mono fontPx={40} weight="700" />
@@ -498,7 +591,7 @@ function DefinitionScene({ athlete, showDomains }: { athlete: AthleteKey; showDo
 
       <group ref={driftRef}>
         <Axes />
-        {athlete !== 'Generalist' && <GhostGeneralist />}
+        {athlete !== DEFAULT_ATHLETE && <GhostGeneralist />}
         {showDomains && <ModalDomains athlete={athlete} />}
         <ActiveCurve targetSamples={targetSamples} />
       </group>
@@ -543,7 +636,7 @@ function DefinitionControls({
         sub="Power averaged across all modal domains."
       />
 
-      <PresetButtons<AthleteKey> options={ATHLETES as unknown as AthleteKey[]} value={athlete} onChange={setAthlete} />
+      <PresetButtons<AthleteKey> options={ATHLETES} value={athlete} onChange={setAthlete} />
 
       <div className="wf-btns">
         <button
@@ -566,7 +659,7 @@ function DefinitionControls({
 
 /* ----------------------------- module ---------------------------------- */
 export default function DefinitionModule() {
-  const [athlete, setAthlete] = useState<AthleteKey>('Generalist')
+  const [athlete, setAthlete] = useState<AthleteKey>(DEFAULT_ATHLETE)
   const [showDomains, setShowDomains] = useState(false)
 
   return (

@@ -356,10 +356,30 @@ export interface PowerCurve {
  */
 export const POWER_CURVES: PowerCurve[] = [
   { name: 'Generalist CrossFitter', samples: [0.8, 0.79, 0.74, 0.7, 0.58, 0.5, 0.46, 0.42] },
-  { name: '100m Sprinter', samples: [1.0, 0.88, 0.6, 0.44, 0.24, 0.16, 0.13, 0.11] },
+  { name: 'Powerlifter', samples: [1.0, 0.56, 0.3, 0.18, 0.08, 0.05, 0.04, 0.03] },
+  { name: '100m Sprinter', samples: [0.94, 0.9, 0.62, 0.45, 0.25, 0.17, 0.14, 0.12] },
+  { name: 'Team-sport Athlete', samples: [0.78, 0.77, 0.72, 0.66, 0.5, 0.42, 0.38, 0.34] },
+  { name: 'Triathlete', samples: [0.6, 0.6, 0.59, 0.58, 0.56, 0.54, 0.52, 0.5] },
   { name: 'Marathoner', samples: [0.56, 0.55, 0.54, 0.53, 0.51, 0.49, 0.475, 0.46] },
   { name: 'Sedentary Adult', samples: [0.3, 0.29, 0.27, 0.25, 0.21, 0.17, 0.15, 0.12] },
 ]
+
+/**
+ * Per-domain power tilt (5 multipliers in MODAL_DOMAINS order: weightlifting,
+ * gymnastics, mono/cardio, odd object, unknown) for each POWER_CURVES archetype
+ * by name. A specialist leans toward its strong domain and away from the rest;
+ * the generalist sits near-flat. The Powerlifter spikes weightlifting hardest,
+ * the endurance types lean mono/cardio, the generalist is broadest.
+ */
+export const POWER_DOMAIN_TILT: Record<string, number[]> = {
+  'Generalist CrossFitter': [1.02, 1.0, 0.95, 1.0, 0.95],
+  Powerlifter: [1.25, 0.72, 0.55, 0.95, 0.7],
+  '100m Sprinter': [1.12, 0.92, 0.72, 1.0, 0.8],
+  'Team-sport Athlete': [0.95, 1.0, 1.02, 0.95, 1.0],
+  Triathlete: [0.7, 0.82, 1.2, 0.82, 0.9],
+  Marathoner: [0.62, 0.72, 1.22, 0.8, 0.85],
+  'Sedentary Adult': [1, 1, 1, 1, 1],
+}
 
 export const POWER_TASKS: { name: string; seconds: number }[] = [
   { name: '1RM clean', seconds: 3 },
