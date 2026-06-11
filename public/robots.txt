@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /games/cards
+
+Sitemap: https://wod.persistenceathletics.com/sitemap.xml
