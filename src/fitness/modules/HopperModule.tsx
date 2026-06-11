@@ -56,12 +56,14 @@ function makeLabelTexture(
 ): { texture: THREE.CanvasTexture; aspect: number } {
   const fontPx = opt.fontPx ?? 46
   const color = opt.color ?? PAL.chalk
-  const bg = opt.bg ?? null
+  // Default to a high-contrast dark rounded pill behind the text so labels
+  // stay legible against the 3D scene; callers can override with their own bg.
+  const bg = opt.bg ?? 'rgba(7,10,14,0.72)'
   const border = opt.border ?? null
   const weight = opt.weight ?? '600'
   const family = 'system-ui, -apple-system, "Segoe UI", sans-serif'
-  const padX = 26
-  const padY = 16
+  const padX = 30
+  const padY = 19
   const SS = 2
 
   const measureCtx = document.createElement('canvas').getContext('2d')!
@@ -482,7 +484,14 @@ function TumblingHopper({
       ))}
 
       {/* THE HOPPER name plate above the drum */}
-      <SpriteLabel text="THE HOPPER" fontPx={36} color={PAL.muted} position={[0, DRUM_R + 0.7, 0]} height={0.42} />
+      <SpriteLabel
+        text="THE HOPPER"
+        fontPx={48}
+        color={PAL.chalk}
+        border="rgba(255,255,255,0.18)"
+        position={[0, DRUM_R + 0.78, 0]}
+        height={0.56}
+      />
     </group>
   )
 }
@@ -977,13 +986,13 @@ function ScoreBar({
         <div
           style={{
             fontFamily: 'system-ui, sans-serif',
-            fontSize: '11px',
-            fontWeight: 600,
+            fontSize: '14px',
+            fontWeight: 700,
             color: '#eef3f6',
-            background: 'rgba(7,10,14,0.72)',
+            background: 'rgba(7,10,14,0.82)',
             border: `1px solid ${color}`,
-            borderRadius: '7px',
-            padding: '3px 8px',
+            borderRadius: '8px',
+            padding: '4px 10px',
             whiteSpace: 'nowrap',
             pointerEvents: 'none',
             transform: 'translateY(8px)',
@@ -991,7 +1000,7 @@ function ScoreBar({
         >
           {name.replace(' CrossFitter', '')}
           {avg >= 0 && (
-            <span style={{ color, marginLeft: 6, fontVariantNumeric: 'tabular-nums' }}>{Math.round(avg)}</span>
+            <span style={{ color, marginLeft: 7, fontVariantNumeric: 'tabular-nums' }}>{Math.round(avg)}</span>
           )}
         </div>
       </Html>
@@ -1031,12 +1040,12 @@ function HopperScene({
       {drawnLabel && (
         <SpriteLabel
           text={drawnLabel.task}
-          fontPx={40}
+          fontPx={52}
           color={PAL.ink}
           bg={drawnLabel.color}
           border="rgba(255,255,255,0.4)"
           position={[0, DRUM_R * 2 + 3.0, -1.7]}
-          height={0.6}
+          height={0.78}
         />
       )}
 
@@ -1211,8 +1220,8 @@ export default function HopperModule() {
         eyebrow={MODULE_COPY.hopper.eyebrow}
         title={moduleByKey('hopper').title}
         body={MODULE_COPY.hopper.body}
-        camera={{ position: [0, 4.1, 11], fov: 50 }}
-        target={[0, 1.9, 0]}
+        camera={{ position: [0, 4.3, 11.6], fov: 50 }}
+        target={[0, 2.3, 0]}
         minDistance={6}
         maxDistance={26}
         controls={

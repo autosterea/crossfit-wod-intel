@@ -105,7 +105,7 @@ function makeLabelTexture(
   text: string,
   opts: { fontPx?: number; color?: string; weight?: string; mono?: boolean },
 ): { texture: THREE.CanvasTexture; aspect: number } {
-  const fontPx = opts.fontPx ?? 28
+  const fontPx = opts.fontPx ?? 36
   const weight = opts.weight ?? '600'
   const color = opts.color ?? PAL.chalk
   const family = opts.mono
@@ -126,6 +126,24 @@ function makeLabelTexture(
   c.width = w
   c.height = h
   const ctx = c.getContext('2d')!
+
+  // High-contrast dark rounded-pill background so labels stay legible over
+  // the bright curve, area fill and grid. Drawn first, inside the padding.
+  const r = Math.min(h * 0.32, 18 * SS)
+  const bw = w - SS
+  const bh = h - SS
+  const bx = SS / 2
+  const by = SS / 2
+  ctx.beginPath()
+  ctx.moveTo(bx + r, by)
+  ctx.arcTo(bx + bw, by, bx + bw, by + bh, r)
+  ctx.arcTo(bx + bw, by + bh, bx, by + bh, r)
+  ctx.arcTo(bx, by + bh, bx, by, r)
+  ctx.arcTo(bx, by, bx + bw, by, r)
+  ctx.closePath()
+  ctx.fillStyle = 'rgba(7,10,14,0.72)'
+  ctx.fill()
+
   ctx.font = font
   ctx.textAlign = 'center'
   ctx.textBaseline = 'middle'
@@ -142,10 +160,10 @@ function makeLabelTexture(
 function Label({
   text,
   position,
-  worldHeight = 0.46,
+  worldHeight = 0.58,
   color,
   mono = false,
-  fontPx = 28,
+  fontPx = 36,
   weight = '600',
   opacity = 1,
 }: {
@@ -300,10 +318,10 @@ function ActiveCurve({ targetSamples }: { targetSamples: number[] }) {
       <Label
         text="AREA = FITNESS"
         position={[xOfU(0.3), Math.max(valAt(targetSamples, 0.3) * YS * 0.5, 1.0), 0.25]}
-        worldHeight={0.6}
+        worldHeight={0.78}
         color={PAL.yellowGreen}
         mono
-        fontPx={32}
+        fontPx={42}
         weight="700"
       />
 
@@ -318,7 +336,7 @@ function ActiveCurve({ targetSamples }: { targetSamples: number[] }) {
                 <sphereGeometry args={[0.17, 32, 32]} />
                 <meshStandardMaterial color={PAL.chalk} emissive={PAL.chalk} emissiveIntensity={0.4} roughness={0.35} toneMapped={false} />
               </mesh>
-              <Label text={task.name} position={[0, 0.6, 0]} worldHeight={0.42} color="#c2ccdd" fontPx={24} />
+              <Label text={task.name} position={[0, 0.68, 0]} worldHeight={0.52} color={PAL.chalk} fontPx={30} />
             </group>
           )
         })}
@@ -338,7 +356,7 @@ function GhostGeneralist() {
       <mesh geometry={geo}>
         <meshStandardMaterial color={PAL.fit} emissive={PAL.fit} emissiveIntensity={0.4} roughness={0.5} transparent opacity={0.45} toneMapped={false} />
       </mesh>
-      <Label text="Generalist, for scale" position={[X1 + 0.4, lastY + 0.55, 0]} worldHeight={0.46} color={PAL.fit} fontPx={26} />
+      <Label text="Generalist, for scale" position={[X1 + 0.4, lastY + 0.6, 0]} worldHeight={0.58} color={PAL.fit} fontPx={32} />
     </group>
   )
 }
@@ -361,7 +379,7 @@ function ModalDomains({ athlete }: { athlete: AthleteKey }) {
           <mesh geometry={b.geo}>
             <meshStandardMaterial color={b.color} emissive={b.color} emissiveIntensity={0.45} roughness={0.5} transparent opacity={0.85} toneMapped={false} />
           </mesh>
-          <Label text={b.name} position={[X1 + 1.7, b.lastY, b.z]} worldHeight={0.44} color={b.color} fontPx={24} />
+          <Label text={b.name} position={[X1 + 1.7, b.lastY, b.z]} worldHeight={0.55} color={b.color} fontPx={30} />
         </group>
       ))}
     </group>
@@ -393,10 +411,10 @@ function Axes() {
         <primitive key={i} object={ln} />
       ))}
       {POWER_DURATIONS.map((t, i) => (
-        <Label key={t} text={POWER_DURATION_LABELS[i]} position={[xOf(t), -0.72, 0]} worldHeight={0.42} color={PAL.muted} mono fontPx={24} />
+        <Label key={t} text={POWER_DURATION_LABELS[i]} position={[xOf(t), -0.78, 0]} worldHeight={0.52} color={PAL.chalk} mono fontPx={30} />
       ))}
-      <Label text="EFFORT DURATION" position={[0, -1.55, 0]} worldHeight={0.5} color={PAL.muted} mono fontPx={28} />
-      <Label text="POWER OUTPUT" position={[X0 - 0.2, YS + 1.0, 0]} worldHeight={0.5} color={PAL.muted} mono fontPx={28} />
+      <Label text="EFFORT DURATION" position={[0, -1.7, 0]} worldHeight={0.72} color={PAL.chalk} mono fontPx={40} weight="700" />
+      <Label text="POWER OUTPUT" position={[X0 - 0.2, YS + 1.1, 0]} worldHeight={0.72} color={PAL.chalk} mono fontPx={40} weight="700" />
     </group>
   )
 }
@@ -498,10 +516,10 @@ export default function DefinitionModule() {
         eyebrow={MODULE_COPY.definition.eyebrow}
         title={moduleByKey('definition').title}
         body={MODULE_COPY.definition.body}
-        camera={{ position: [0, 4.4, 27], fov: 50 }}
-        target={[0, 3.1, 0]}
+        camera={{ position: [0, 4.6, 29], fov: 50 }}
+        target={[0, 3.5, 0]}
         minDistance={14}
-        maxDistance={60}
+        maxDistance={64}
         controls={
           <DefinitionControls
             athlete={athlete}

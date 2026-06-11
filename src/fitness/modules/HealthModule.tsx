@@ -90,12 +90,12 @@ function makeLabel(
   opt: { fontPx?: number; worldHeight?: number; color?: string; weight?: string } = {},
 ): { sprite: THREE.Sprite; dispose: () => void } {
   const color = opt.color ?? PAL.chalk
-  const fontPx = opt.fontPx ?? 24
+  const fontPx = opt.fontPx ?? 30
   const weight = opt.weight ?? '600'
-  const worldH = opt.worldHeight ?? 0.42
+  const worldH = opt.worldHeight ?? 0.52
   const family = 'ui-monospace, "SFMono-Regular", Menlo, monospace'
-  const padX = 18
-  const padY = 12
+  const padX = 22
+  const padY = 14
   const SS = 2 // supersample for sharpness
 
   const measure = document.createElement('canvas').getContext('2d')!
@@ -108,6 +108,19 @@ function makeLabel(
   c.width = w
   c.height = h
   const ctx = c.getContext('2d')!
+
+  // High-contrast dark rounded-pill background so text reads on any 3D color.
+  const r = Math.min(h * 0.32, 26 * SS)
+  ctx.beginPath()
+  ctx.moveTo(r, 0)
+  ctx.arcTo(w, 0, w, h, r)
+  ctx.arcTo(w, h, 0, h, r)
+  ctx.arcTo(0, h, 0, 0, r)
+  ctx.arcTo(0, 0, w, 0, r)
+  ctx.closePath()
+  ctx.fillStyle = 'rgba(7,10,14,0.72)'
+  ctx.fill()
+
   ctx.font = `${weight} ${fontPx * SS}px ${family}`
   ctx.textAlign = 'center'
   ctx.textBaseline = 'middle'
@@ -204,7 +217,7 @@ function HealthScene({ profile, ageSlice, showLine, reduced }: SceneProps) {
       z: number,
       o: { fontPx?: number; worldHeight?: number } = {},
     ) => {
-      const { sprite, dispose } = makeLabel(text, { fontPx: 24, worldHeight: 0.42, color: PAL.muted, ...o })
+      const { sprite, dispose } = makeLabel(text, { fontPx: 30, worldHeight: 0.52, color: PAL.chalk, ...o })
       sprite.position.set(x, y, z)
       objs.push(sprite)
       disposers.push(dispose)
@@ -219,9 +232,9 @@ function HealthScene({ profile, ageSlice, showLine, reduced }: SceneProps) {
     }
     for (const a of [20, 40, 60, 80]) addLabel(String(a), X1 + 1.1, 0.12, zOfAge(a))
 
-    addLabel('DURATION', 0, 0.12, Z0 + 1.95, { fontPx: 26, worldHeight: 0.5 })
-    addLabel('AGE', X1 + 2.5, 0.12, 0, { fontPx: 26, worldHeight: 0.5 })
-    addLabel('CAPACITY', X0 - 1.5, YS * 0.95, Z1 + 1.0, { fontPx: 26, worldHeight: 0.5 })
+    addLabel('DURATION', 0, 0.12, Z0 + 2.15, { fontPx: 36, worldHeight: 0.72 })
+    addLabel('AGE', X1 + 2.7, 0.12, 0, { fontPx: 36, worldHeight: 0.72 })
+    addLabel('CAPACITY', X0 - 1.6, YS * 0.97, Z1 + 1.0, { fontPx: 36, worldHeight: 0.72 })
 
     return { objs, dispose: () => disposers.forEach((d) => d()) }
   }, [])
@@ -434,7 +447,7 @@ function HealthScene({ profile, ageSlice, showLine, reduced }: SceneProps) {
  *  its vertical position tracks the live slice top via a shared ref. */
 function SliceLabel({ age, topYRef }: { age: number; topYRef: React.RefObject<number> }) {
   const spriteRef = useRef<THREE.Sprite>(null)
-  const made = useMemo(() => makeLabel(`AGE ${age}`, { fontPx: 30, worldHeight: 0.56, color: PAL.well }), [age])
+  const made = useMemo(() => makeLabel(`AGE ${age}`, { fontPx: 38, worldHeight: 0.72, color: PAL.well }), [age])
   useEffect(() => () => made.dispose(), [made])
   useFrame(() => {
     if (spriteRef.current) spriteRef.current.position.y = topYRef.current + 0.7
@@ -444,7 +457,7 @@ function SliceLabel({ age, topYRef }: { age: number; topYRef: React.RefObject<nu
 
 /** The red "INDEPENDENCE LINE" sprite (fixed text). */
 function IndependenceLabel({ y }: { y: number }) {
-  const made = useMemo(() => makeLabel('INDEPENDENCE LINE', { fontPx: 26, worldHeight: 0.46, color: PAL.sick }), [])
+  const made = useMemo(() => makeLabel('INDEPENDENCE LINE', { fontPx: 32, worldHeight: 0.58, color: PAL.sick }), [])
   useEffect(() => () => made.dispose(), [made])
   return <primitive object={made.sprite} position={[X0 + 2.8, y + 0.45, Z0 - 0.4]} />
 }
@@ -544,8 +557,8 @@ export default function HealthModule() {
         eyebrow={copy.eyebrow}
         title={meta.title}
         body={copy.body}
-        camera={{ position: [18, 13, 22], fov: 50 }}
-        target={[0, 2.4, 0]}
+        camera={{ position: [19.5, 14, 24], fov: 50 }}
+        target={[0, 2.8, 0]}
         minDistance={16}
         maxDistance={70}
         controls={

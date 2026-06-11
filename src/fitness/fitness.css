@@ -43,7 +43,7 @@
 .wf-stage {
   position: relative;
   width: 100%;
-  height: clamp(440px, 72vh, 860px);
+  height: clamp(520px, 80vh, 940px);
   border-radius: 20px;
   overflow: hidden;
   touch-action: none;
@@ -78,8 +78,14 @@
 .wf-info {
   top: 16px;
   left: 16px;
-  width: min(360px, calc(100% - 32px));
-  padding: 16px 18px;
+  width: min(330px, calc(100% - 32px));
+  max-height: calc(100% - 32px);
+  overflow: auto;
+  padding: 15px 18px 16px;
+}
+.wf-info .wf-eyebrow,
+.wf-info h2 {
+  padding-right: 26px;
 }
 .wf-info .wf-eyebrow {
   font-family: 'JetBrains Mono', ui-monospace, monospace;
@@ -184,6 +190,114 @@
   letter-spacing: 0.04em;
   z-index: 4;
   backdrop-filter: blur(4px);
+}
+
+/* ---------- Collapse launchers + close buttons ---------- */
+.wf-launch {
+  position: absolute;
+  z-index: 6;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 14px;
+  border-radius: 999px;
+  background: var(--wf-glass);
+  border: 1px solid var(--wf-line);
+  color: var(--wf-chalk);
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.42);
+  font-family: 'Barlow Condensed', 'Poppins', sans-serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1;
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+.wf-launch:hover {
+  border-color: rgba(145, 198, 64, 0.55);
+  color: var(--wf-accent);
+}
+.wf-launch-ic {
+  display: inline-flex;
+}
+.wf-launch-ic svg {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+.wf-launch-info {
+  top: 14px;
+  left: 14px;
+  max-width: calc(100% - 28px);
+}
+.wf-launch-controls {
+  bottom: 14px;
+  right: 14px;
+  background: color-mix(in srgb, var(--wf-accent-solid) 88%, transparent);
+  border-color: var(--wf-accent-solid);
+  color: #fff;
+}
+.wf-launch-controls:hover {
+  background: var(--wf-accent-solid);
+  border-color: var(--wf-accent);
+  color: #fff;
+  filter: brightness(1.08);
+}
+
+.wf-panel-close {
+  position: absolute;
+  top: 9px;
+  right: 9px;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  border: 1px solid var(--wf-line);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--wf-muted);
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+.wf-panel-close:hover {
+  color: var(--wf-chalk);
+  border-color: rgba(145, 198, 64, 0.45);
+}
+
+.wf-controls-head-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 11px 14px 2px;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--wf-muted);
+}
+.wf-panel-close-inline {
+  width: 24px;
+  height: 24px;
+  border-radius: 7px;
+  border: 1px solid var(--wf-line);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--wf-muted);
+  cursor: pointer;
+  font-size: 11px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.wf-panel-close-inline:hover {
+  color: var(--wf-chalk);
+  border-color: rgba(145, 198, 64, 0.45);
 }
 
 /* ---------- Control widgets ---------- */
@@ -471,7 +585,8 @@
 /* ---------- Mobile ---------- */
 @media (max-width: 760px) {
   .wf-stage {
-    height: 70vh;
+    height: 80vh;
+    max-height: 760px;
     border-radius: 16px;
   }
   .wf-info {
@@ -479,34 +594,37 @@
     left: 8px;
     right: 8px;
     width: auto;
-    padding: 11px 46px 11px 14px;
+    max-height: 62vh;
+    overflow: auto;
+    padding: 13px 16px 15px;
   }
   .wf-info h2 {
     font-size: 16px;
-  }
-  .wf-info.collapsed p {
-    display: none;
-  }
-  .wf-info-toggle {
-    display: flex;
   }
   .wf-controls-wrap {
     left: 8px;
     right: 8px;
     bottom: 8px;
     width: auto;
-    max-height: 46vh;
+    max-height: 58vh;
     padding-bottom: env(safe-area-inset-bottom);
   }
-  .wf-controls-wrap.collapsed .wf-controls {
-    display: none;
-  }
-  .wf-sheet-handle {
-    display: flex;
-  }
   .wf-controls {
-    max-height: 40vh;
+    max-height: 50vh;
     padding: 2px 14px 14px;
+  }
+  /* Bigger, easier-to-hit launcher pills on phones. */
+  .wf-launch {
+    padding: 11px 16px;
+    font-size: 13px;
+  }
+  .wf-launch-info {
+    top: 10px;
+    left: 10px;
+  }
+  .wf-launch-controls {
+    bottom: 10px;
+    right: 10px;
   }
   .wf-hint {
     display: none;

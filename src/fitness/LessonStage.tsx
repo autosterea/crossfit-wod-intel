@@ -21,6 +21,32 @@ function useIsMobile(query = '(max-width: 760px)') {
   return m
 }
 
+type Vec3 = [number, number, number]
+
+/** Move a camera position toward/away from its target by factor k (k>1 = out). */
+function scaleAroundTarget(pos: Vec3, target: Vec3, k: number): Vec3 {
+  return [
+    target[0] + (pos[0] - target[0]) * k,
+    target[1] + (pos[1] - target[1]) * k,
+    target[2] + (pos[2] - target[2]) * k,
+  ]
+}
+
+const InfoIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round">
+    <circle cx="12" cy="12" r="9" />
+    <path d="M12 11v5M12 7.6h.01" />
+  </svg>
+)
+const SlidersIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round">
+    <path d="M4 7h9M18 7h2M4 12h2M11 12h9M4 17h13M20 17h0" />
+    <circle cx="15" cy="7" r="2.1" fill="currentColor" stroke="none" />
+    <circle cx="8" cy="12" r="2.1" fill="currentColor" stroke="none" />
+    <circle cx="18" cy="17" r="2.1" fill="currentColor" stroke="none" />
+  </svg>
+)
+
 /**
  * Camera rig: drei OrbitControls plus an auto-rotate that pauses for 3 seconds
  * whenever the user interacts, then resumes. Lives inside <Canvas>.
@@ -33,7 +59,7 @@ function StageRig({
   maxDistance,
   maxPolarAngle,
 }: {
-  target: [number, number, number]
+  target: Vec3
   autoRotate: boolean
   autoRotateSpeed: number
   minDistance: number
@@ -74,11 +100,13 @@ function StageRig({
 }
 
 /**
- * The interactive hero for every lesson module: a dark, full-bleed 3D stage
- * with a floating info panel (top-left) and an optional controls panel
- * (bottom-right on desktop, a bottom sheet on mobile). The R3F scene is passed
- * as `children`; modules may add their own <Environment>, <ContactShadows>,
- * fog, etc. inside it.
+ * The interactive hero for every lesson module: a dark, full-bleed 3D stage.
+ * Both overlay panels collapse to small launcher pills so the 3D is the star:
+ *  - the explanation panel is collapsed by DEFAULT (its full text also renders
+ *    below the stage in ModulePage), so the model is unobstructed on load.
+ *  - the controls panel is open on desktop, collapsed on phones (tap to reveal
+ *    a bottom sheet). On mobile the camera also pulls back so wide models fit a
+ *    portrait screen. The R3F scene is passed as `children`.
  */
 export default function LessonStage({
   children,
@@ -97,22 +125,25 @@ export default function LessonStage({
   className = '',
 }: LessonStageProps) {
   const isMobile = useIsMobile()
-  const [infoOpen, setInfoOpen] = useState(true)
-  const [sheetOpen, setSheetOpen] = useState(true)
+  // Explanation starts collapsed (the same copy is shown below the stage).
+  const [infoOpen, setInfoOpen] = useState(false)
+  // Controls start open on desktop, collapsed on phones.
+  const [controlsOpen, setControlsOpen] = useState(!isMobile)
 
-  // Collapse the panels by default on first load on small screens.
   useEffect(() => {
-    if (isMobile) {
-      setInfoOpen(false)
-      setSheetOpen(false)
-    }
+    setControlsOpen(!isMobile)
   }, [isMobile])
+
+  // On phones, pull the camera back so wide models fit the portrait width, and
+  // allow a bit more zoom-out range.
+  const camPos = isMobile ? scaleAroundTarget(camera.position, target, 1.28) : camera.position
+  const maxDist = isMobile ? maxDistance * 1.4 : maxDistance
 
   return (
     <div className={`wf-stage ${className}`}>
       <Canvas
         dpr={[1, isMobile ? 1.75 : 2]}
-        camera={{ position: camera.position, fov: camera.fov ?? 50 }}
+        camera={{ position: camPos, fov: camera.fov ?? 50 }}
         gl={{ antialias: true }}
         shadows
       >
@@ -125,39 +156,55 @@ export default function LessonStage({
           autoRotate={autoRotate}
           autoRotateSpeed={autoRotateSpeed}
           minDistance={minDistance}
-          maxDistance={maxDistance}
+          maxDistance={maxDist}
           maxPolarAngle={maxPolarAngle}
         />
         {children}
       </Canvas>
 
-      {/* Info panel */}
-      <div className={`wf-glass wf-info ${infoOpen ? '' : 'collapsed'}`}>
-        <button
-          className="wf-info-toggle"
-          aria-label="Show or hide explanation"
-          onClick={() => setInfoOpen((v) => !v)}
-        >
-          <span className="chev">&#9662;</span>
-        </button>
-        <div className="wf-eyebrow">{eyebrow}</div>
-        <h2>{title}</h2>
-        <p>{body}</p>
-      </div>
-
-      {/* Controls panel */}
-      {controls && (
-        <div className={`wf-glass wf-controls-wrap ${sheetOpen ? '' : 'collapsed'}`}>
-          <button
-            className="wf-sheet-handle"
-            aria-label="Show or hide controls"
-            onClick={() => setSheetOpen((v) => !v)}
-          >
-            <span className="grab" />
+      {/* Explanation: launcher pill (default) <-> glass card */}
+      {infoOpen ? (
+        <div className="wf-glass wf-info">
+          <button className="wf-panel-close" aria-label="Hide explanation" onClick={() => setInfoOpen(false)}>
+            &#10005;
           </button>
-          <div className="wf-controls">{controls}</div>
+          <div className="wf-eyebrow">{eyebrow}</div>
+          <h2>{title}</h2>
+          <p>{body}</p>
         </div>
+      ) : (
+        <button className="wf-launch wf-launch-info" onClick={() => setInfoOpen(true)} aria-label="Show explanation">
+          <span className="wf-launch-ic">
+            <InfoIcon />
+          </span>
+          About
+        </button>
       )}
+
+      {/* Controls: launcher pill <-> glass card / bottom sheet */}
+      {controls &&
+        (controlsOpen ? (
+          <div className="wf-glass wf-controls-wrap">
+            <div className="wf-controls-head-bar">
+              <span>Controls</span>
+              <button className="wf-panel-close-inline" aria-label="Hide controls" onClick={() => setControlsOpen(false)}>
+                &#10005;
+              </button>
+            </div>
+            <div className="wf-controls">{controls}</div>
+          </div>
+        ) : (
+          <button
+            className="wf-launch wf-launch-controls"
+            onClick={() => setControlsOpen(true)}
+            aria-label="Show controls"
+          >
+            <span className="wf-launch-ic">
+              <SlidersIcon />
+            </span>
+            Controls
+          </button>
+        ))}
 
       <div className="wf-hint">{hint}</div>
     </div>

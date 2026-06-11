@@ -34,7 +34,7 @@ const MAX_VALUE = 10
 const RADIUS_PER_POINT = 1.2 // value 10 -> radius 12 world units
 const MAX_RADIUS = MAX_VALUE * RADIUS_PER_POINT // 12
 const REF_VALUE = 7.5 // dashed reference decagon (a balanced 7.5 across the wheel)
-const LABEL_RADIUS = MAX_RADIUS + 1.7
+const LABEL_RADIUS = MAX_RADIUS + 2.1
 const Y_PLANE = 0.08 // the radar plane floats just above the grid floor
 
 const CUSTOM = 'Custom'
@@ -152,7 +152,7 @@ function SkillLabels() {
             key={name}
             position={[LABEL_RADIUS * dx, 0.55, LABEL_RADIUS * dz]}
             center
-            distanceFactor={26}
+            distanceFactor={32}
             zIndexRange={[20, 0]}
             occlude={false}
           >
@@ -160,24 +160,24 @@ function SkillLabels() {
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: 6,
-                padding: '3px 9px',
+                gap: 7,
+                padding: '4px 11px',
                 borderRadius: 999,
                 whiteSpace: 'nowrap',
-                background: 'rgba(7, 10, 14, 0.66)',
-                border: '1px solid rgba(238,243,246,0.12)',
+                background: 'rgba(7, 10, 14, 0.92)',
+                border: `1px solid ${color}`,
+                boxShadow: '0 2px 8px rgba(0,0,0,0.55)',
                 fontFamily: '"Barlow Condensed", Poppins, sans-serif',
-                fontWeight: 600,
-                fontSize: 15,
+                fontWeight: 700,
+                fontSize: 19,
                 letterSpacing: '0.04em',
                 textTransform: 'uppercase',
-                color: '#eef3f6',
+                color: PAL.chalk,
                 userSelect: 'none',
                 pointerEvents: 'none',
-                backdropFilter: 'blur(3px)',
               }}
             >
-              <span style={{ width: 7, height: 7, borderRadius: '50%', background: color, flex: 'none' }} />
+              <span style={{ width: 8, height: 8, borderRadius: '50%', background: color, flex: 'none' }} />
               {name}
             </div>
           </Html>

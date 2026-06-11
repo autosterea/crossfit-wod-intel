@@ -131,6 +131,22 @@ function makeLabelTexture(
   c.width = w
   c.height = h
   const ctx = c.getContext('2d')!
+
+  // High-contrast dark rounded-pill background so text reads against any 3D.
+  const r = Math.min(h * 0.42, 26 * SS)
+  ctx.beginPath()
+  ctx.moveTo(r, 0)
+  ctx.arcTo(w, 0, w, h, r)
+  ctx.arcTo(w, h, 0, h, r)
+  ctx.arcTo(0, h, 0, 0, r)
+  ctx.arcTo(0, 0, w, 0, r)
+  ctx.closePath()
+  ctx.fillStyle = 'rgba(7,10,14,0.72)'
+  ctx.fill()
+  ctx.lineWidth = SS
+  ctx.strokeStyle = 'rgba(238,243,246,0.16)'
+  ctx.stroke()
+
   ctx.font = `${weight} ${fontPx * SS}px ${family}`
   ctx.textAlign = 'center'
   ctx.textBaseline = 'middle'
@@ -149,7 +165,7 @@ function SpriteLabel({
   position,
   worldHeight,
   fontPx = 38,
-  color = PAL.muted,
+  color = PAL.chalk,
 }: {
   text: string
   position: [number, number, number]
@@ -244,7 +260,7 @@ function Ribbon({ systemKey }: { systemKey: EnergyKey }) {
         <primitive object={crestGeometry} attach="geometry" />
         <lineBasicMaterial color={color} transparent opacity={0.95} toneMapped={false} />
       </line>
-      <SpriteLabel text={NAME[systemKey]} position={[labelX, labelY, z]} worldHeight={0.82} fontPx={40} color={color} />
+      <SpriteLabel text={NAME[systemKey]} position={[labelX, labelY, z]} worldHeight={1.04} fontPx={52} color={color} />
     </group>
   )
 }
@@ -385,17 +401,17 @@ function AxisRig({ onPick }: { onPick: (t: number) => void }) {
               <primitive object={tickGeos[i]} attach="geometry" />
               <lineBasicMaterial color={PAL.muted} transparent opacity={0.22} />
             </line>
-            <SpriteLabel text={tk.label} position={[x, -0.72, LANE_DEPTH / 2 + 0.7]} worldHeight={0.6} fontPx={34} />
+            <SpriteLabel text={tk.label} position={[x, -0.82, LANE_DEPTH / 2 + 0.7]} worldHeight={0.78} fontPx={44} />
           </group>
         )
       })}
 
       <SpriteLabel
         text="EFFORT DURATION"
-        position={[0, -1.7, LANE_DEPTH / 2 + 0.7]}
-        worldHeight={0.56}
-        fontPx={30}
-        color={PAL.muted}
+        position={[0, -2.0, LANE_DEPTH / 2 + 0.7]}
+        worldHeight={0.92}
+        fontPx={46}
+        color={PAL.chalk}
       />
 
       {/* benchmark studs sitting on the axis (clamped to the visible range) */}
@@ -593,8 +609,8 @@ export default function PathwaysModule() {
         eyebrow={copy.eyebrow}
         title={meta.title}
         body={copy.body}
-        camera={{ position: [0, 5.5, 29], fov: 50 }}
-        target={[0, 3, 0]}
+        camera={{ position: [0, 5.2, 30], fov: 50 }}
+        target={[0, 2.6, 0]}
         minDistance={16}
         maxDistance={55}
         hint="Drag to orbit, scrub the slider, or tap a benchmark stud"

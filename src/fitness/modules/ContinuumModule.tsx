@@ -88,8 +88,12 @@ interface LabelOpts {
 function makeLabelTexture(text: string, opts: LabelOpts): { texture: THREE.CanvasTexture; aspect: number } {
   const fontPx = opts.fontPx ?? 40
   const weight = opts.weight ?? 800
-  const pad = opts.pad ?? (opts.bg ? 0.42 : 0.12)
-  const dpr = Math.min(2, typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1)
+  // Every label now gets a high-contrast pill so text reads over the gradient
+  // axes; a coloured bg (state word) keeps its colour, otherwise a dark pill.
+  const bg = opts.bg ?? 'rgba(7,10,14,0.72)'
+  const pad = opts.pad ?? 0.42
+  // Supersample (SS) on top of DPR for crisp text at any zoom on a phone.
+  const ss = Math.min(3, (typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1) * 1.5)
   const measure = document.createElement('canvas').getContext('2d')!
   const font = `${weight} ${fontPx}px Poppins, system-ui, sans-serif`
   measure.font = font
@@ -99,39 +103,36 @@ function makeLabelTexture(text: string, opts: LabelOpts): { texture: THREE.Canva
   const h = Math.ceil(fontPx * 1.45 + padPx * 1.2)
 
   const cnv = document.createElement('canvas')
-  cnv.width = Math.max(2, Math.round(w * dpr))
-  cnv.height = Math.max(2, Math.round(h * dpr))
+  cnv.width = Math.max(2, Math.round(w * ss))
+  cnv.height = Math.max(2, Math.round(h * ss))
   const ctx = cnv.getContext('2d')!
-  ctx.scale(dpr, dpr)
+  ctx.scale(ss, ss)
 
-  if (opts.bg) {
-    const r = h * 0.32
-    ctx.fillStyle = opts.bg
-    ctx.beginPath()
-    // rounded pill background
-    ctx.moveTo(r, 0)
-    ctx.arcTo(w, 0, w, h, r)
-    ctx.arcTo(w, h, 0, h, r)
-    ctx.arcTo(0, h, 0, 0, r)
-    ctx.arcTo(0, 0, w, 0, r)
-    ctx.closePath()
-    ctx.fill()
-  }
+  // rounded pill background for maximum legibility
+  const r = h * 0.34
+  ctx.fillStyle = bg
+  ctx.beginPath()
+  ctx.moveTo(r, 0)
+  ctx.arcTo(w, 0, w, h, r)
+  ctx.arcTo(w, h, 0, h, r)
+  ctx.arcTo(0, h, 0, 0, r)
+  ctx.arcTo(0, 0, w, 0, r)
+  ctx.closePath()
+  ctx.fill()
+  // hairline edge to lift the pill off dark scenery
+  ctx.lineWidth = Math.max(1, fontPx * 0.035)
+  ctx.strokeStyle = 'rgba(238,243,246,0.16)'
+  ctx.stroke()
 
   ctx.font = font
   ctx.textAlign = 'center'
   ctx.textBaseline = 'middle'
-  if (!opts.bg) {
-    ctx.shadowColor = 'rgba(0,0,0,0.55)'
-    ctx.shadowBlur = fontPx * 0.18
-    ctx.shadowOffsetY = fontPx * 0.04
-  }
   ctx.fillStyle = opts.color ?? '#eef3f6'
   ctx.fillText(text, w / 2, h / 2 + fontPx * 0.04)
 
   const texture = new THREE.CanvasTexture(cnv)
   texture.colorSpace = THREE.SRGBColorSpace
-  texture.anisotropy = 4
+  texture.anisotropy = 8
   texture.needsUpdate = true
   return { texture, aspect: w / h }
 }
@@ -252,15 +253,19 @@ function MarkerLane({
             textAlign: 'right',
             whiteSpace: 'nowrap',
             fontFamily: "'Barlow Condensed', Poppins, sans-serif",
-            color: '#dfe7e2',
-            lineHeight: 1.05,
-            textShadow: '0 1px 4px rgba(0,0,0,0.7)',
+            color: '#eef3f6',
+            lineHeight: 1.08,
+            padding: '4px 9px',
+            borderRadius: 8,
+            background: 'rgba(7,10,14,0.72)',
+            border: '1px solid rgba(238,243,246,0.12)',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.5)',
           }}
         >
-          <div style={{ fontSize: 19, fontWeight: 600, letterSpacing: '0.01em' }}>{m.name}</div>
-          <div style={{ fontSize: 12.5, color: PAL.muted, letterSpacing: '0.02em' }}>
+          <div style={{ fontSize: 20, fontWeight: 700, letterSpacing: '0.01em' }}>{m.name}</div>
+          <div style={{ fontSize: 13, color: '#cdd8d2', letterSpacing: '0.02em' }}>
             {m.unit} {' '}
-            <span style={{ color: 'rgba(223,231,226,0.55)' }}>
+            <span style={{ color: 'rgba(223,231,226,0.7)' }}>
               ({m.betterDirection === 'higher' ? 'higher better' : 'lower better'})
             </span>
           </div>
@@ -306,11 +311,14 @@ function MarkerLane({
             className="wf-cont-value"
             style={{
               fontFamily: "'JetBrains Mono', ui-monospace, monospace",
-              fontSize: 12.5,
-              fontWeight: 600,
+              fontSize: 13.5,
+              fontWeight: 700,
               color: spectrumCss(initPos),
               whiteSpace: 'nowrap',
-              textShadow: '0 1px 5px rgba(0,0,0,0.85)',
+              padding: '2px 7px',
+              borderRadius: 7,
+              background: 'rgba(7,10,14,0.74)',
+              border: '1px solid rgba(238,243,246,0.1)',
             }}
           >
             {fmtMarker(markerValueAt(m, initPos), m.unit)}
@@ -449,10 +457,10 @@ function ContinuumScene({ targets, onLive }: SceneProps) {
         </mesh>
       ))}
 
-      {/* spanning zone labels above the stack */}
+      {/* spanning zone labels above the stack (the largest titles in the scene) */}
       {zones.map((z) => (
         <group key={z.label} position={[z.x, RAIL_Y - 0.7, zoneZ]}>
-          <SpriteLabel text={z.label} worldHeight={0.62} color={z.color} fontPx={40} />
+          <SpriteLabel text={z.label} worldHeight={0.84} color={z.color} fontPx={52} />
         </group>
       ))}
 
@@ -499,8 +507,8 @@ function ContinuumScene({ targets, onLive }: SceneProps) {
             toneMapped={false}
           />
         </mesh>
-        <group position={[0, 1.15, 0]}>
-          <SpriteLabel text={word.word} worldHeight={0.72} color={PAL.ink} bg={word.css} fontPx={42} />
+        <group position={[0, 1.35, 0]}>
+          <SpriteLabel text={word.word} worldHeight={0.94} color={PAL.ink} bg={word.css} fontPx={56} />
         </group>
       </group>
 
@@ -651,8 +659,8 @@ export default function ContinuumModule() {
         body={copy.body}
         autoRotate={!prefersReducedMotion()}
         autoRotateSpeed={0.18}
-        camera={{ position: [1, 8.5, 27], fov: 50 }}
-        target={[-0.5, 2, 0]}
+        camera={{ position: [1, 9, 27.5], fov: 50 }}
+        target={[-0.5, 2.4, 0]}
         minDistance={14}
         maxDistance={52}
         hint="Drag to orbit. Load a profile or drag any marker toward fitness."
