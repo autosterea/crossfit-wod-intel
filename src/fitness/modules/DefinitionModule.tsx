@@ -45,10 +45,10 @@ const YS = 7.6 // world height for relative power = 1.0
 const T_MIN = POWER_DURATIONS[0] // 1 s
 const T_MAX = POWER_DURATIONS[POWER_DURATIONS.length - 1] // 3600 s
 
-// Two label tiers (world units above each dot) so the 10 task labels stagger
-// and never overlap; alternated by marker index in ActiveCurve.
-const TASK_TIER_LO = 0.62
-const TASK_TIER_HI = 1.62
+// Three label tiers (world units above each dot) so the 10 task labels stagger
+// and never overlap, especially where the short-duration events cluster on the
+// left of the log axis; cycled by marker index in ActiveCurve.
+const TASK_TIERS = [0.5, 1.18, 1.86]
 
 /**
  * All seven archetypes, in POWER_CURVES order. The preset keys ARE the curve
@@ -225,13 +225,15 @@ function Label({
  * fill. White #eef3f6 text on a dark rounded pill with a colored border; an
  * optional colored dot. zIndexRange={[20,0]} keeps it BELOW the overlay panels
  * (which are z-index 200) so an opened About/Controls card sits in front of it.
- * `fontSize` ~16-18 reads like a tick; bump it for the bigger Y references.
+ * Deliberately SMALL (fontSize ~11-12, tight padding): these are tick/data
+ * labels on a dense plot, so they must stay compact and out of the curve, not
+ * the roomy vertex labels the SkillsModule radar can afford.
  */
 function HtmlLabel({
   text,
   position,
   color = PAL.chalk,
-  fontSize = 17,
+  fontSize = 11,
   dot = false,
   mono = false,
   distanceFactor = 32,
@@ -250,26 +252,26 @@ function HtmlLabel({
         style={{
           display: 'flex',
           alignItems: 'center',
-          gap: 7,
-          padding: '4px 11px',
+          gap: 5,
+          padding: '2px 7px',
           borderRadius: 999,
           whiteSpace: 'nowrap',
-          background: 'rgba(7, 10, 14, 0.92)',
+          background: 'rgba(7, 10, 14, 0.9)',
           border: `1px solid ${color}`,
-          boxShadow: '0 2px 8px rgba(0,0,0,0.55)',
+          boxShadow: '0 1px 5px rgba(0,0,0,0.5)',
           fontFamily: mono
             ? 'ui-monospace, "JetBrains Mono", "Barlow Condensed", monospace'
             : '"Barlow Condensed", Poppins, sans-serif',
           fontWeight: 700,
           fontSize,
-          letterSpacing: '0.04em',
+          letterSpacing: '0.03em',
           textTransform: 'uppercase',
           color: PAL.chalk,
           userSelect: 'none',
           pointerEvents: 'none',
         }}
       >
-        {dot && <span style={{ width: 8, height: 8, borderRadius: '50%', background: color, flex: 'none' }} />}
+        {dot && <span style={{ width: 6, height: 6, borderRadius: '50%', background: color, flex: 'none' }} />}
         {text}
       </div>
     </Html>
@@ -404,45 +406,48 @@ function ActiveCurve({ targetSamples }: { targetSamples: number[] }) {
         <bufferGeometry />
       </mesh>
 
+      {/* Quiet "area = fitness" note, kept SMALL and tucked low inside the fill
+          (the brightest region) rather than floating large over the curve. */}
       <Label
-        text="AREA = FITNESS"
-        position={[xOfU(0.3), Math.max(valAt(targetSamples, 0.3) * YS * 0.5, 1.0), 0.25]}
-        worldHeight={0.78}
+        text="area = fitness"
+        position={[xOfU(0.34), YS * 0.22, 0.25]}
+        worldHeight={0.46}
         color={PAL.yellowGreen}
         mono
-        fontPx={42}
+        fontPx={30}
         weight="700"
       />
 
       {/* Task markers ride the active curve and morph with it. Ten markers on a
-          log axis would collide if every label sat at one height, so labels are
-          STAGGERED onto two tiers (alternating by index) and joined to their dot
-          by a thin leader line. Each child group is re-seated in Y by the frame
-          loop above; the label + leader offsets below it stay constant. */}
+          log axis cluster on the LEFT (short events) and would collide if labels
+          shared a height, so labels are STAGGERED across three tiers (cycled by
+          index) and joined to their dot by a thin leader line. Each child group
+          is re-seated in Y by the frame loop above; the label + leader offsets
+          below it stay constant. */}
       <group ref={nodesRef}>
         {POWER_TASKS.map((task, i) => {
           const y0 = valAt(targetSamples, clamp(logU(task.seconds, T_MIN, T_MAX), 0, 1)) * YS
-          // Alternate tiers so neighbouring markers never share a label height.
-          const tier = i % 2 === 0 ? TASK_TIER_LO : TASK_TIER_HI
+          // Cycle three tiers so neighbouring markers never share a label height.
+          const tier = TASK_TIERS[i % TASK_TIERS.length]
           return (
             <group key={task.name} position={[taskX[i], y0, 0]} userData={{ seconds: task.seconds }}>
-              {/* dot stays exactly on the curve */}
+              {/* dot stays exactly on the curve (small, so it does not take over) */}
               <mesh>
-                <sphereGeometry args={[0.17, 24, 24]} />
+                <sphereGeometry args={[0.1, 20, 20]} />
                 <meshStandardMaterial color={PAL.chalk} emissive={PAL.chalk} emissiveIntensity={0.4} roughness={0.35} toneMapped={false} />
               </mesh>
               {/* thin leader line from the dot up to its staggered label */}
               <mesh position={[0, tier / 2, 0.02]}>
-                <boxGeometry args={[0.022, tier, 0.022]} />
-                <meshBasicMaterial color={PAL.chalk} transparent opacity={0.4} toneMapped={false} />
+                <boxGeometry args={[0.016, tier, 0.016]} />
+                <meshBasicMaterial color={PAL.chalk} transparent opacity={0.35} toneMapped={false} />
               </mesh>
-              {/* crisp white task name (drei <Html> pill) - rides the curve with
-                  the group, never clips behind the fill. yellow-green border. */}
+              {/* small crisp white task name (drei <Html> pill) - rides the curve
+                  with the group, never clips behind the fill. */}
               <HtmlLabel
                 text={task.name}
-                position={[0, tier + 0.34, 0.04]}
+                position={[0, tier + 0.24, 0.04]}
                 color={PAL.yellowGreen}
-                fontSize={15}
+                fontSize={10.5}
               />
             </group>
           )
@@ -463,7 +468,7 @@ function GhostGeneralist() {
       <mesh geometry={geo}>
         <meshStandardMaterial color={PAL.fit} emissive={PAL.fit} emissiveIntensity={0.4} roughness={0.5} transparent opacity={0.45} toneMapped={false} />
       </mesh>
-      <Label text="Generalist, for scale" position={[X1 + 0.4, lastY + 0.6, 0]} worldHeight={0.58} color={PAL.fit} fontPx={32} />
+      <Label text="Generalist, for scale" position={[X1 + 0.5, lastY + 0.5, 0]} worldHeight={0.44} color={PAL.fit} fontPx={26} />
     </group>
   )
 }
@@ -486,7 +491,7 @@ function ModalDomains({ athlete }: { athlete: AthleteKey }) {
           <mesh geometry={b.geo}>
             <meshStandardMaterial color={b.color} emissive={b.color} emissiveIntensity={0.45} roughness={0.5} transparent opacity={0.85} toneMapped={false} />
           </mesh>
-          <Label text={b.name} position={[X1 + 1.7, b.lastY, b.z]} worldHeight={0.55} color={b.color} fontPx={30} />
+          <Label text={b.name} position={[X1 + 1.7, b.lastY, b.z]} worldHeight={0.42} color={b.color} fontPx={26} />
         </group>
       ))}
     </group>
@@ -497,9 +502,15 @@ function ModalDomains({ athlete }: { athlete: AthleteKey }) {
 // Relative-power gridlines on Y. 1.0 = the most powerful possible burst (the
 // shared scale's ceiling); 0.5 is a mid reference. Higher = more power.
 const Y_LEVELS: { v: number; label: string }[] = [
-  { v: 1.0, label: '1.0 max' },
+  { v: 1.0, label: '1.0' },
   { v: 0.5, label: '0.5' },
 ]
+
+// X-axis time labels are sparse: a curated subset of the 8 log durations that
+// spreads evenly so the pills never collide on the squeezed left side of the
+// log axis (the small tick marks still sit under all 8 durations). Indices into
+// POWER_DURATIONS / POWER_DURATION_LABELS: 1 s, 10 s, 1 min, 5 min, 15 min, 1 hr.
+const X_LABEL_INDICES = [0, 1, 3, 4, 5, 7]
 
 function Axes() {
   // Build the axis + tick + Y-grid line objects once; they never change, so
@@ -533,36 +544,37 @@ function Axes() {
         <primitive key={i} object={ln} />
       ))}
 
-      {/* X axis: clearly LOGARITHMIC. A crisp WHITE pill per log-time tick (drei
-          <Html>, always sharp) + a LOG TIME caption. */}
-      {POWER_DURATIONS.map((t, i) => (
+      {/* X axis: clearly LOGARITHMIC. Small crisp WHITE pills on a SPARSE, evenly
+          spread subset of the log-time ticks (drei <Html>, always sharp) so they
+          never overlap where the short events squeeze together on the left. */}
+      {X_LABEL_INDICES.map((i) => (
         <HtmlLabel
-          key={t}
+          key={POWER_DURATIONS[i]}
           text={POWER_DURATION_LABELS[i]}
-          position={[xOf(t), -0.82, 0]}
+          position={[xOf(POWER_DURATIONS[i]), -0.72, 0]}
           color={PAL.yellowGreen}
-          fontSize={16}
+          fontSize={10.5}
           mono
         />
       ))}
-      <Label text="EFFORT DURATION" position={[-2.1, -1.74, 0]} worldHeight={0.72} color={PAL.chalk} mono fontPx={40} weight="700" />
-      <Label text="LOG TIME ->" position={[5.0, -1.74, 0]} worldHeight={0.56} color={PAL.yellowGreen} mono fontPx={32} weight="700" />
+      {/* One small axis caption in the bottom margin (merges effort duration +
+          log time); the full explanation lives in the About panel + page text. */}
+      <Label text="effort duration  (log time ->)" position={[0, -1.6, 0]} worldHeight={0.46} color={PAL.muted} mono fontPx={28} weight="700" />
 
-      {/* Y axis: relative power, higher = more. WHITE pill per reference level,
-          enlarged for legibility (user feedback: make 0.5 / 1.0 max bigger). */}
+      {/* Y axis: relative power, higher = more. Small WHITE reference pill tucked
+          just OUTSIDE the left axis, not over the curve or fill. */}
       {Y_LEVELS.map((lvl) => (
         <HtmlLabel
           key={lvl.label}
           text={lvl.label}
-          position={[X0 - 1.15, lvl.v * YS, 0]}
+          position={[X0 - 0.72, lvl.v * YS, 0]}
           color={lvl.v >= 1 ? PAL.yellowGreen : PAL.robust}
-          fontSize={lvl.v >= 1 ? 19 : 18}
+          fontSize={10.5}
           mono
         />
       ))}
-      <Label text="POWER OUTPUT" position={[X0 - 0.2, YS + 1.1, 0]} worldHeight={0.72} color={PAL.chalk} mono fontPx={40} weight="700" />
-      <Label text="higher = more power" position={[X0 - 0.2, YS + 0.42, 0]} worldHeight={0.42} color={PAL.muted} fontPx={26} />
-      <Label text="power falls left -> right" position={[8.4, -1.18, 0]} worldHeight={0.44} color={PAL.muted} fontPx={26} />
+      {/* Y axis title in the top-left margin, small. */}
+      <Label text="power output" position={[X0 - 0.1, YS + 0.9, 0]} worldHeight={0.46} color={PAL.muted} mono fontPx={28} weight="700" />
     </group>
   )
 }

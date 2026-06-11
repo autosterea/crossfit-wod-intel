@@ -23,7 +23,8 @@ import { Bar, ControlHead, Legend, ModulePage, Readout } from '../ui'
    colored by modal domain. Real cage physics carry the balls up one rotating
    wall and cascade them back down the pile. Draw a task and a ball ejects down
    the chute to the tray while the drawn task flashes large at the top of the
-   stage. A live scoreboard beside the drum accumulates points for the six
+   stage. A live scoreboard, pinned as a screen-fixed HUD to the LEFT edge of
+   the stage (it stays put while you orbit), accumulates points for the six
    competitors across draws - over many random draws the broad Generalist pulls
    ahead of every single specialist, which is the whole point of the model.
    ========================================================================= */
@@ -706,9 +707,15 @@ interface CompetitorScore {
 const shortName = (name: string) => name.replace(' CrossFitter', '')
 
 /**
- * An in-scene scoreboard panel (drei <Html>) pinned beside the drum, so the
- * names + accumulating points + leader are visible without opening the
- * (closed-by-default) controls panel.
+ * A SCREEN-FIXED scoreboard HUD (not 3D-anchored). It is a drei <Html
+ * fullscreen> whose wrapper is pinned to the canvas center every frame via a
+ * constant `calculatePosition`, so the panel does NOT swing with the orbit:
+ * `fullscreen` then offsets the content div by half the canvas in each axis,
+ * which lands its top-left exactly on the stage's top-left. The result is a
+ * full-stage, non-camera-transformed overlay (pointerEvents:'none' so orbit
+ * still works) with the scoreboard panel absolutely pinned to the LEFT edge,
+ * vertically centered - clear of the drum, the "THE HOPPER" plate, and the top
+ * draw banner. zIndexRange stays <= 40 so the About/Controls panels (z 200) win.
  */
 function ScoreboardPanel({
   scores,
@@ -727,31 +734,37 @@ function ScoreboardPanel({
   )
   const maxTotal = Math.max(1, ...ranked.map((r) => r.total))
 
-  // Sit the board beside the drum at roughly its vertical center, so it never
-  // spatially overlaps the "THE HOPPER" plate (above the drum) nor the top draw
-  // banner. On phones pull it inward and make it narrower/smaller so it does not
-  // clip off the right edge of the portrait canvas.
-  const pos: [number, number, number] = narrow
-    ? [DRUM_R + 1.15, DRUM_R + 0.55, 0]
-    : [DRUM_R + 2.45, DRUM_R + 0.95, 0]
-
   return (
     <Html
-      position={pos}
-      center
-      distanceFactor={narrow ? 7 : 9}
+      fullscreen
+      // Pin the wrapper to the canvas center regardless of camera/orbit; with
+      // `fullscreen` this makes the content div fill the stage from its corner.
+      calculatePosition={(_el, _cam, size) => [size.width / 2, size.height / 2]}
       zIndexRange={[20, 0]}
       occlude={false}
       pointerEvents="none"
     >
+      {/* full-stage, click-through layer; the panel is pinned to the LEFT */}
       <div
         style={{
-          width: narrow ? 184 : 230,
+          position: 'absolute',
+          inset: 0,
+          pointerEvents: 'none',
+        }}
+      >
+      <div
+        style={{
+          position: 'absolute',
+          left: narrow ? 10 : 18,
+          top: '50%',
+          transform: 'translateY(-50%)',
+          width: narrow ? 168 : 224,
+          maxWidth: '42vw',
           fontFamily: 'system-ui, -apple-system, "Segoe UI", sans-serif',
           background: 'rgba(7,10,14,0.86)',
           border: '1px solid rgba(255,255,255,0.14)',
           borderRadius: 14,
-          padding: narrow ? '10px 11px 11px' : '12px 13px 13px',
+          padding: narrow ? '9px 10px 10px' : '12px 13px 13px',
           color: '#eef3f6',
           boxShadow: '0 10px 30px rgba(0,0,0,0.45)',
           pointerEvents: 'none',
@@ -825,6 +838,7 @@ function ScoreboardPanel({
             Leader: <span style={{ color: '#fff', fontWeight: 700 }}>{shortName(HOPPER_ROSTER[leaderIdx].name)}</span>
           </div>
         )}
+      </div>
       </div>
     </Html>
   )

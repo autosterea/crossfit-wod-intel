@@ -453,16 +453,14 @@ function SliceAndMarkers({
 }
 
 /* ------------------------- axis + benchmark studs ---------------------- */
-// An OBVIOUSLY logarithmic, named-band tick set (echoing the main WOD app's
-// "Sprint (<5m)" style bands): readable pills at 3s..60m.
+// An OBVIOUSLY logarithmic tick set. Kept to 6 WELL-SPACED ticks so the small
+// pills never collide with each other even when the user zooms the camera out
+// (9 ticks crowded together was the overlap the user reported).
 const TICKS: { t: number; label: string }[] = [
   { t: 3, label: '3s' },
   { t: 10, label: '10s' },
-  { t: 30, label: '30s' },
   { t: 60, label: '1m' },
-  { t: 120, label: '2m' },
   { t: 300, label: '5m' },
-  { t: 600, label: '10m' },
   { t: 1800, label: '30m' },
   { t: 3600, label: '60m' },
 ]
@@ -542,24 +540,20 @@ function AxisRig({ onPick }: { onPick: (t: number) => void }) {
               <primitive object={tickGeos[i]} attach="geometry" />
               <lineBasicMaterial color={PAL.muted} transparent opacity={0.22} />
             </line>
-            {/* DOM pill (crisp at every zoom, never clipped by the floor). */}
-            <PillLabel text={tk.label} position={[x, -1.15, LANE_DEPTH / 2 + 0.5]} fontSize={16} />
+            {/* DOM pill (crisp at every zoom, never clipped by the floor).
+                Small so the 6 ticks read without crowding. */}
+            <PillLabel text={tk.label} position={[x, -1.15, LANE_DEPTH / 2 + 0.5]} fontSize={12} />
           </group>
         )
       })}
 
-      {/* axis caption + the "LOG TIME" hint that makes the axis OBVIOUSLY log. */}
+      {/* Single small axis title, centered BELOW the tick row (margin, not over
+          the data). Merged the old EFFORT DURATION + LOG TIME pills into one so
+          they can no longer overlap each other on zoom-out. */}
       <PillLabel
-        text="EFFORT DURATION"
-        position={[-2.6, -2.5, LANE_DEPTH / 2 + 0.5]}
-        fontSize={16}
-        emphasis
-      />
-      <PillLabel
-        text="LOG TIME -->"
-        position={[3.4, -2.5, LANE_DEPTH / 2 + 0.5]}
-        color={PAL.yellowGreen}
-        fontSize={15}
+        text="EFFORT DURATION (LOG)"
+        position={[0, -2.5, LANE_DEPTH / 2 + 0.5]}
+        fontSize={12}
       />
 
       {/* ---- vertical LEFT power axis ---- */}
@@ -579,26 +573,16 @@ function AxisRig({ onPick }: { onPick: (t: number) => void }) {
         </line>
       ))}
 
-      {/* Power-axis caption as a DOM pill. Anchored just INSIDE the axis top
-          (not rotated out past the left edge) so nothing clips on mobile
-          portrait, where the harness pulls the camera back 1.28x. */}
+      {/* Small power-axis title at the FAR LEFT, OUTSIDE the ribbons (sitting
+          on the vertical axis line, not floating over the data). The verbose
+          helper sentences ("higher = more power", "power falls as effort lasts
+          longer") were removed: that explanation already lives in the About
+          panel and the page copy below the stage, and the big pills were
+          covering the ribbons. */}
       <PillLabel
         text="POWER OUTPUT"
-        position={[Y_AXIS_X + 1.0, HS + 1.1, 0]}
-        fontSize={16}
-        emphasis
-      />
-      <PillLabel
-        text="higher = more power"
-        position={[Y_AXIS_X + 3.4, HS + 0.05, 0]}
-        color={PAL.muted}
-        fontSize={13}
-      />
-      <PillLabel
-        text="power falls as effort lasts longer"
-        position={[X_HALF - 3.4, 1.0, 0]}
-        color={PAL.muted}
-        fontSize={13}
+        position={[Y_AXIS_X - 0.1, HS + 1.0, 0]}
+        fontSize={12}
       />
 
       {/* benchmark studs sitting on the axis (clamped to the visible range) */}

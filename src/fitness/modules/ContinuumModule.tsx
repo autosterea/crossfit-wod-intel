@@ -43,7 +43,39 @@ const R_RIM = 9.4 // radius of the fitness rim
 const R_HUB = 0.7 // inner dead-zone radius around the sickness center
 const FAN_DEG = 200 // total fan angle the ten spokes spread across
 const TILT = -0.32 // small backward tilt (radians) so it reads as 3D, still head-on
-const LABEL_GAP = 2.2 // how far past the rim each spoke label's anchor sits
+const LABEL_GAP = 3.5 // how far past the rim each spoke label's anchor sits (well clear of the dial)
+
+/** Short forms of the marker names so the rim pills stay tiny and never clip
+ *  the phone's screen edges. Keyed by the full BIOMARKERS name. */
+const SHORT_NAME: Record<string, string> = {
+  'Resting heart rate': 'Resting HR',
+  'Systolic blood pressure': 'Systolic BP',
+  'Body fat': 'Body fat',
+  'VO2 max': 'VO2 max',
+  'HDL cholesterol': 'HDL',
+  Triglycerides: 'Triglyc.',
+  'Fasting glucose': 'Glucose',
+  'Bone density': 'Bone',
+  'Relative strength': 'Rel. strength',
+  Flexibility: 'Flexibility',
+}
+
+/** Lightweight viewport probe so the in-scene rim pills can use a smaller font
+ *  and shorter labels on phones (where the fanned cluster would otherwise clip
+ *  the screen edges). Re-evaluated on resize; no per-frame work. */
+function useIsPhone(): boolean {
+  const [phone, setPhone] = useState<boolean>(() =>
+    typeof window !== 'undefined' ? window.matchMedia('(max-width: 720px)').matches : false,
+  )
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const mq = window.matchMedia('(max-width: 720px)')
+    const onChange = () => setPhone(mq.matches)
+    mq.addEventListener('change', onChange)
+    return () => mq.removeEventListener('change', onChange)
+  }, [])
+  return phone
+}
 
 /** Spoke index -> angle (radians) measured from +Y (straight up), spread
  *  symmetrically across the fan so the two end spokes never touch.            */
@@ -242,16 +274,19 @@ interface SceneProps {
 function MarkerSpoke({
   index,
   initPos,
+  phone,
   setDot,
   setMat,
 }: {
   index: number
   initPos: number
+  phone: boolean
   setDot: (index: number, g: THREE.Group | null) => void
   setMat: (index: number, mat: THREE.MeshStandardMaterial | null) => void
 }) {
   const m = BIOMARKERS[index]
   const a = spokeAngle(index)
+  const displayName = SHORT_NAME[m.name] ?? m.name
   const initCol = useMemo(() => {
     const [r, g, b] = spectrum(initPos)
     return new THREE.Color(r, g, b)
@@ -323,15 +358,18 @@ function MarkerSpoke({
         </mesh>
       </group>
 
-      {/* marker NAME + live VALUE at the spoke's outer end. Styled to match the
-          10-Physical-Skills SkillLabels gold standard: a rounded dark pill,
-          1px border keyed to spectrum(position), a small colored dot, Barlow
-          Condensed bold uppercase. Bigger + crisper than before; fanned so the
-          ten pills never overlap. zIndexRange [20,0] keeps it below the panels. */}
+      {/* marker NAME + live VALUE at the spoke's outer end, pushed well past the
+          rim so it never covers the dial. Same SkillLabels pill family (dark
+          pill, 1px border keyed to spectrum(position), small colored dot, Barlow
+          Condensed) but SMALL: a bigger distanceFactor shrinks the on-screen
+          size and the larger LABEL_GAP fans the cluster clear of the dial. On
+          phones the font shrinks again and the name uses its short form so the
+          pills do not clip the screen edges. zIndexRange [20,0] keeps it below
+          the z-200 About/Controls panels. */}
       <Html
         position={[labelX, labelY, 0]}
         center
-        distanceFactor={30}
+        distanceFactor={phone ? 52 : 44}
         occlude={false}
         style={{ pointerEvents: 'none' }}
         zIndexRange={[20, 0]}
@@ -342,34 +380,41 @@ function MarkerSpoke({
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            gap: 2,
-            padding: '6px 13px',
-            borderRadius: 14,
+            gap: 1,
+            padding: phone ? '2px 7px' : '3px 9px',
+            borderRadius: 9,
             whiteSpace: 'nowrap',
             background: 'rgba(7, 10, 14, 0.92)',
             border: `1px solid ${initLabelCss}`,
-            boxShadow: '0 3px 12px rgba(0,0,0,0.6)',
+            boxShadow: '0 2px 7px rgba(0,0,0,0.55)',
             fontFamily: '"Barlow Condensed", Poppins, sans-serif',
             color: PAL.chalk,
             userSelect: 'none',
             pointerEvents: 'none',
           }}
         >
-          <span style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+          <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
             <span
               data-marker-dot={index}
-              style={{ width: 9, height: 9, borderRadius: '50%', background: initLabelCss, flex: 'none' }}
+              style={{ width: 6, height: 6, borderRadius: '50%', background: initLabelCss, flex: 'none' }}
             />
-            <span style={{ fontSize: 18, fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
-              {m.name}
+            <span
+              style={{
+                fontSize: phone ? 11 : 13,
+                fontWeight: 700,
+                letterSpacing: '0.03em',
+                textTransform: 'uppercase',
+              }}
+            >
+              {displayName}
             </span>
           </span>
           <span
             data-marker-value={index}
             style={{
-              fontSize: 15.5,
+              fontSize: phone ? 10 : 12,
               fontWeight: 700,
-              letterSpacing: '0.03em',
+              letterSpacing: '0.02em',
               textTransform: 'uppercase',
               color: initLabelCss,
             }}
@@ -384,6 +429,7 @@ function MarkerSpoke({
 
 function ContinuumScene({ targets, onLive }: SceneProps) {
   const reduced = prefersReducedMotion()
+  const phone = useIsPhone()
   const dialTex = useDialTexture()
   useEffect(() => () => dialTex.dispose(), [dialTex])
 
@@ -573,14 +619,14 @@ function ContinuumScene({ targets, onLive }: SceneProps) {
     }
   })
 
-  // The continuum's three named zones, labeled on the concentric bands from
-  // the inner third (SICKNESS) out to the rim (FITNESS). Placed straight DOWN
-  // the dial center (the -Y gap below the 200-degree spoke fan) so they sit on
-  // their band yet never collide with the fanned spoke pills above.
-  const zoneLabels: { label: string; color: string; r: number }[] = [
-    { label: 'SICKNESS', color: PAL.sick, r: R_HUB + (R_RIM - R_HUB) * (1 / 6) },
-    { label: 'WELLNESS', color: PAL.well, r: R_HUB + (R_RIM - R_HUB) * 0.5 },
-    { label: 'FITNESS', color: PAL.fit, r: R_HUB + (R_RIM - R_HUB) * (5 / 6) },
+  // The continuum's three named zones. Instead of floating big labels over the
+  // dial face (which covered the gauge), these read as one small compact KEY
+  // anchored OFF to the lower-left, clear of the rim: center -> sickness,
+  // middle band -> wellness, rim -> fitness.
+  const zoneLegend: { label: string; color: string }[] = [
+    { label: 'Center = sickness', color: PAL.sick },
+    { label: 'Middle = wellness', color: PAL.well },
+    { label: 'Rim = fitness', color: PAL.fit },
   ]
 
   return (
@@ -607,7 +653,7 @@ function ContinuumScene({ targets, onLive }: SceneProps) {
 
         {/* the ten marker spokes (guide line + dot + fanned label) */}
         {BIOMARKERS.map((_, i) => (
-          <MarkerSpoke key={i} index={i} initPos={initPositions[i]} setDot={setDot} setMat={setMat} />
+          <MarkerSpoke key={i} index={i} initPos={initPositions[i]} phone={phone} setDot={setDot} setMat={setMat} />
         ))}
 
         {/* "the person": translucent radar polygon over the dots. Frustum
@@ -659,45 +705,50 @@ function ContinuumScene({ targets, onLive }: SceneProps) {
           />
         </mesh>
 
-        {/* the SICKNESS / WELLNESS / FITNESS zone labels, one per concentric
-            band (inner -> outer), in the SkillLabels pill style so the
-            sick -> well -> fit structure of the continuum is unmistakable. */}
-        {zoneLabels.map((z) => (
-          <Html
-            key={z.label}
-            position={[0, -z.r, 0.12]}
-            center
-            distanceFactor={30}
-            occlude={false}
-            style={{ pointerEvents: 'none' }}
-            zIndexRange={[20, 0]}
+        {/* the SICKNESS / WELLNESS / FITNESS key: a single small compact legend
+            anchored OFF to the lower-left, clear of the dial rim, so the gauge
+            face stays fully visible. One <Html> stacks the three rows. */}
+        <Html
+          position={[-(R_RIM + 1.2), -(R_RIM - 0.6), 0.12]}
+          center
+          distanceFactor={phone ? 60 : 50}
+          occlude={false}
+          style={{ pointerEvents: 'none' }}
+          zIndexRange={[20, 0]}
+        >
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 4,
+              padding: phone ? '6px 9px' : '7px 11px',
+              borderRadius: 10,
+              background: 'rgba(7, 10, 14, 0.9)',
+              border: '1px solid rgba(238,243,246,0.16)',
+              boxShadow: '0 2px 9px rgba(0,0,0,0.55)',
+              fontFamily: '"Barlow Condensed", Poppins, sans-serif',
+              color: PAL.chalk,
+              userSelect: 'none',
+              pointerEvents: 'none',
+            }}
           >
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 8,
-                padding: '6px 15px',
-                borderRadius: 999,
-                whiteSpace: 'nowrap',
-                background: 'rgba(7, 10, 14, 0.92)',
-                border: `1px solid ${z.color}`,
-                boxShadow: '0 3px 12px rgba(0,0,0,0.6)',
-                fontFamily: '"Barlow Condensed", Poppins, sans-serif',
-                fontWeight: 700,
-                fontSize: 21,
-                letterSpacing: '0.12em',
-                textTransform: 'uppercase',
-                color: PAL.chalk,
-                userSelect: 'none',
-                pointerEvents: 'none',
-              }}
-            >
-              <span style={{ width: 10, height: 10, borderRadius: '50%', background: z.color, flex: 'none' }} />
-              {z.label}
-            </div>
-          </Html>
-        ))}
+            {zoneLegend.map((z) => (
+              <span key={z.label} style={{ display: 'flex', alignItems: 'center', gap: 6, whiteSpace: 'nowrap' }}>
+                <span style={{ width: 7, height: 7, borderRadius: '50%', background: z.color, flex: 'none' }} />
+                <span
+                  style={{
+                    fontSize: phone ? 11 : 13,
+                    fontWeight: 700,
+                    letterSpacing: '0.04em',
+                    textTransform: 'uppercase',
+                  }}
+                >
+                  {z.label}
+                </span>
+              </span>
+            ))}
+          </div>
+        </Html>
 
         {/* central aggregate readout orb (colored by the mean) */}
         <group position={[0, 0, 0.2]}>

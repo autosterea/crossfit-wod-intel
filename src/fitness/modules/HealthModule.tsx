@@ -682,18 +682,20 @@ function IndependenceLabel({ y }: { y: number }) {
 }
 
 /**
- * The prominent "VOLUME = HEALTH" callout, anchored low at the front of the
- * solid so it tags the translucent volume directly. A drei <Html> pill in the
- * SkillsModule gold-standard style (rounded, dark glass, robust-tinted border,
- * Barlow Condensed), with the live score read large beside it. DOM, so always
- * crisp; zIndexRange [20,0] keeps it below the overlay panels.
+ * The small "VOLUME = HEALTH" tag. A compact drei <Html> pill in the
+ * SkillsModule style (rounded, dark glass, robust-tinted border, Barlow
+ * Condensed) but deliberately small, tucked into the high front-left corner of
+ * the solid rather than floating over the center of the volume - so it labels
+ * the translucent volume without dominating it. The full explanation lives in
+ * the About panel and the page text below the stage. DOM, so always crisp;
+ * a larger distanceFactor + smaller font keep it physically tiny; zIndexRange
+ * [20,0] keeps it below the overlay panels.
  */
 function VolumeLabel({ score }: { score: number }) {
   return (
     <Html
-      position={[0, YS * 0.34, Z0 + 0.6]}
-      center
-      distanceFactor={32}
+      position={[X0 + 0.4, YS * 0.92, Z0 - 0.2]}
+      distanceFactor={52}
       zIndexRange={[20, 0]}
       occlude={false}
     >
@@ -701,16 +703,16 @@ function VolumeLabel({ score }: { score: number }) {
         style={{
           display: 'flex',
           alignItems: 'center',
-          gap: 9,
-          padding: '5px 13px',
+          gap: 5,
+          padding: '2px 8px',
           borderRadius: 999,
           whiteSpace: 'nowrap',
           background: 'rgba(7, 10, 14, 0.92)',
           border: `1px solid ${PAL.robust}`,
-          boxShadow: '0 2px 10px rgba(0,0,0,0.6)',
+          boxShadow: '0 1px 6px rgba(0,0,0,0.55)',
           fontFamily: '"Barlow Condensed", Poppins, sans-serif',
           fontWeight: 700,
-          fontSize: 20,
+          fontSize: 13,
           letterSpacing: '0.05em',
           textTransform: 'uppercase',
           color: PAL.chalk,
@@ -718,9 +720,9 @@ function VolumeLabel({ score }: { score: number }) {
           pointerEvents: 'none',
         }}
       >
-        <span style={{ width: 9, height: 9, borderRadius: '50%', background: PAL.robust, flex: 'none' }} />
+        <span style={{ width: 6, height: 6, borderRadius: '50%', background: PAL.robust, flex: 'none' }} />
         Volume = Health
-        <span style={{ color: PAL.robust, fontSize: 22, marginLeft: 2 }}>{score}</span>
+        <span style={{ color: PAL.robust, marginLeft: 1 }}>{score}</span>
       </div>
     </Html>
   )
