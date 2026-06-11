@@ -52,11 +52,20 @@ interface GamesStore {
   syncFromLocation: () => void
 }
 
+/** "james-sprague" -> "James Sprague" for a specific tab title (the exact
+ *  name + full meta is in the prerendered HTML; this keeps the client tab
+ *  title specific instead of a generic "2026 Athlete" after hydration). */
+const slugToName = (slug: string) =>
+  slug.split('-').map((w) => (w ? w[0].toUpperCase() + w.slice(1) : w)).join(' ')
+
 const applyTitle = (route: GamesRoute) => {
-  document.title =
-    route.view === 'year' && route.year
-      ? `${route.year} CrossFit Games - Almanac by Persistence Athletics`
-      : TITLES[route.view]
+  if (route.view === 'year' && route.year) {
+    document.title = `${route.year} CrossFit Games - Almanac by Persistence Athletics`
+  } else if (route.view === 'athlete' && route.slug) {
+    document.title = `${slugToName(route.slug)} - 2026 CrossFit Games | Persistence Athletics`
+  } else {
+    document.title = TITLES[route.view]
+  }
 }
 
 export const useGamesStore = create<GamesStore>((set) => ({
