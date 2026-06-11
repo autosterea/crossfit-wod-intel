@@ -1,0 +1,597 @@
+/* =========================================================================
+   What Is Fitness? - the data layer.
+   Single source of truth for every lesson module. Grounded in Greg Glassman's
+   "What Is Fitness?" (CrossFit Journal, Oct 2002) and the CrossFit Level 1
+   Training Guide, with quantitative tables researched + adversarially verified
+   against Gastin 2001, the Critical Power literature, ACSM norms, and the
+   BLSA/sarcopenia aging studies (see SOURCES). No em or en dashes (house rule).
+   ========================================================================= */
+
+import type { ModuleKey, ModuleMeta } from './lessonTypes'
+import { catmull1, clamp, lerp, smoothstep } from './lessonMath'
+
+/* ----------------------------- palette --------------------------------- */
+export const PAL = {
+  seaGreen: '#019644',
+  yellowGreen: '#91c640',
+  ink: '#070a0e',
+  chalk: '#eef3f6',
+  muted: '#8ea0a8',
+  line: '#1d2a22',
+  trained: '#019644', // organic / metabolic adaptation
+  practiced: '#38bdf8', // neurological
+  both: '#f4b740', // power + speed
+  weightlifting: '#f97316',
+  gymnastics: '#a78bfa',
+  monostructural: '#22d3ee',
+  oddObject: '#34d399',
+  unknown: '#94a3b8',
+  phosphagen: '#f43f5e',
+  glycolytic: '#f59e0b',
+  oxidative: '#38bdf8',
+  sick: '#ef4444',
+  well: '#f5b740',
+  fit: '#34d399',
+  robust: '#22d3ee',
+} as const
+
+const hexToRgb = (h: string): [number, number, number] => [
+  parseInt(h.slice(1, 3), 16) / 255,
+  parseInt(h.slice(3, 5), 16) / 255,
+  parseInt(h.slice(5, 7), 16) / 255,
+]
+
+/** Sickness (0) -> wellness (0.5) -> fitness (1) color as an [r,g,b] 0..1. */
+export function spectrum(t: number): [number, number, number] {
+  t = clamp(t, 0, 1)
+  const a = hexToRgb(PAL.sick)
+  const b = hexToRgb(PAL.well)
+  const c = hexToRgb(PAL.fit)
+  const mix = (x: [number, number, number], y: [number, number, number], k: number): [number, number, number] => [
+    lerp(x[0], y[0], k),
+    lerp(x[1], y[1], k),
+    lerp(x[2], y[2], k),
+  ]
+  return t < 0.5 ? mix(a, b, t / 0.5) : mix(b, c, (t - 0.5) / 0.5)
+}
+
+/** Same spectrum as a CSS rgb() string. */
+export function spectrumCss(t: number): string {
+  const [r, g, b] = spectrum(t)
+  return `rgb(${Math.round(r * 255)}, ${Math.round(g * 255)}, ${Math.round(b * 255)})`
+}
+
+/* --------------------------- module registry --------------------------- */
+export const MODULES: ModuleMeta[] = [
+  {
+    key: 'skills',
+    slug: 'skills',
+    num: '01',
+    label: '10 Physical Skills',
+    mobileLabel: 'Skills',
+    title: 'The 10 General Physical Skills',
+    blurb: 'You are as fit as you are competent across ten skills. Compare a balanced athlete to twelve specialists.',
+    accent: PAL.yellowGreen,
+  },
+  {
+    key: 'hopper',
+    slug: 'hopper',
+    num: '02',
+    label: 'The Hopper',
+    title: 'The Hopper Model',
+    blurb: 'Draw a random physical task from the hopper and watch a roster of specialists try to beat the generalist.',
+    accent: PAL.oddObject,
+  },
+  {
+    key: 'pathways',
+    slug: 'pathways',
+    num: '03',
+    label: 'Energy Systems',
+    mobileLabel: 'Energy',
+    title: 'The Three Metabolic Pathways',
+    blurb: 'Phosphagen, glycolytic, oxidative. Slide through effort duration and watch the dominant engine change.',
+    accent: PAL.glycolytic,
+  },
+  {
+    key: 'definition',
+    slug: 'definition',
+    num: '04',
+    label: 'Work Capacity',
+    mobileLabel: 'Capacity',
+    title: 'Work Capacity Across Broad Time and Modal Domains',
+    blurb: 'Fitness, defined. Plot power against duration, average across domains, and measure the area.',
+    accent: PAL.yellowGreen,
+  },
+  {
+    key: 'continuum',
+    slug: 'continuum',
+    num: '05',
+    label: 'Sickness-Wellness-Fitness',
+    mobileLabel: 'Continuum',
+    title: 'The Sickness, Wellness, Fitness Continuum',
+    blurb: 'Every health marker rides one continuum. Push them all toward fitness and health follows.',
+    accent: PAL.fit,
+  },
+  {
+    key: 'health',
+    slug: 'health',
+    num: '06',
+    label: 'Health Across a Lifetime',
+    mobileLabel: 'Health',
+    title: 'Sustained Work Capacity Across a Lifetime Is Health',
+    blurb: 'Stack every age of your life into one surface. Health is the volume you keep under it.',
+    accent: PAL.robust,
+  },
+]
+
+export const moduleByKey = (k: ModuleKey): ModuleMeta => MODULES.find((m) => m.key === k)!
+
+/* ------------------------ 01 - ten physical skills ---------------------- */
+export type SkillClass = 'trained' | 'practiced' | 'both'
+
+export interface Skill {
+  name: string
+  classification: SkillClass
+  definition: string
+}
+
+/** Glassman's ten, canonical order + canonical definitions. */
+export const SKILLS: Skill[] = [
+  { name: 'Strength', classification: 'trained', definition: 'The ability of a muscular unit to apply force.' },
+  { name: 'Stamina', classification: 'trained', definition: 'Processing, delivering, storing, and using energy.' },
+  { name: 'Endurance', classification: 'trained', definition: 'Gathering, processing, and delivering oxygen.' },
+  { name: 'Flexibility', classification: 'trained', definition: 'Maximizing the range of motion at a given joint.' },
+  { name: 'Power', classification: 'both', definition: 'Applying maximum force in minimum time.' },
+  { name: 'Speed', classification: 'both', definition: 'Minimizing the cycle time of a repeated movement.' },
+  { name: 'Coordination', classification: 'practiced', definition: 'Combining several movement patterns into one.' },
+  { name: 'Agility', classification: 'practiced', definition: 'Minimizing transition time between movement patterns.' },
+  { name: 'Balance', classification: 'practiced', definition: 'Controlling the center of gravity over a base.' },
+  { name: 'Accuracy', classification: 'practiced', definition: 'Controlling movement toward a target or intensity.' },
+]
+
+export const SKILL_NAMES = SKILLS.map((s) => s.name)
+
+export interface Archetype {
+  name: string
+  blurb: string
+  /** Exactly ten values 0..10, one per skill in SKILLS order. */
+  profile: number[]
+}
+
+/**
+ * A balanced CrossFitter plus twelve specialists. Ratings researched against
+ * NSCA sport-demand profiles and adversarially checked (no inverted ratings;
+ * Powerlifter power softened to 6 for grindy low-velocity lifts; Gymnast
+ * stamina to 6). Generalist is the flattest (smallest range) shape.
+ */
+export const ARCHETYPES: Archetype[] = [
+  { name: 'Generalist CrossFitter', blurb: 'Broadly excellent. The most balanced shape on the wheel, with no peaks and no gaps.', profile: [8, 8, 8, 7, 8, 8, 8, 7, 8, 7] },
+  { name: 'Olympic Weightlifter', blurb: 'Explosive full-body power through the snatch and clean and jerk.', profile: [9, 5, 3, 8, 10, 7, 8, 6, 8, 7] },
+  { name: 'Powerlifter', blurb: 'Maximal absolute strength in three lifts, with little metabolic demand.', profile: [10, 5, 2, 4, 6, 4, 5, 3, 5, 4] },
+  { name: 'Marathoner', blurb: 'An aerobic engine built for hours of sustained locomotion.', profile: [3, 9, 10, 5, 3, 5, 5, 4, 5, 4] },
+  { name: '100m Sprinter', blurb: 'Pure ground-contact power and top-end speed over a few seconds.', profile: [8, 5, 3, 7, 10, 10, 8, 7, 7, 6] },
+  { name: 'Artistic Gymnast', blurb: 'Mastery of coordination, balance, and relative strength.', profile: [7, 6, 5, 10, 9, 7, 10, 9, 10, 9] },
+  { name: 'Strongman', blurb: 'Brute maximal and odd-object strength over short, heavy bouts.', profile: [10, 7, 4, 4, 9, 5, 6, 4, 6, 5] },
+  { name: 'Competitive Swimmer', blurb: 'Aerobic horsepower with refined aquatic coordination and flexibility.', profile: [7, 9, 9, 9, 7, 7, 8, 5, 6, 6] },
+  { name: 'Rower', blurb: 'Sustained power-endurance from a strong aerobic engine.', profile: [8, 9, 9, 6, 7, 6, 7, 4, 6, 6] },
+  { name: 'Tactical / Military', blurb: 'A broadly capable hybrid built for unpredictable load-bearing work.', profile: [8, 8, 8, 6, 7, 7, 8, 7, 7, 7] },
+  { name: 'Bodybuilder', blurb: 'Maximal muscle size and symmetry with modest conditioning.', profile: [8, 5, 3, 5, 6, 4, 5, 3, 5, 5] },
+  { name: 'Team-sport Athlete', blurb: 'A repeat-sprint athlete blending agility, speed, and game accuracy.', profile: [6, 8, 8, 6, 7, 8, 8, 9, 8, 8] },
+  { name: 'Sedentary Adult', blurb: 'An untrained baseline across nearly every physical skill.', profile: [2, 2, 2, 3, 2, 2, 3, 2, 3, 3] },
+]
+
+/* ------------------------ 02 - the hopper ------------------------------ */
+export type DomainKey = 'weightlifting' | 'gymnastics' | 'monostructural' | 'oddObject' | 'unknown'
+
+export interface HopperDomain {
+  key: DomainKey
+  label: string
+  color: string
+  tasks: string[]
+}
+
+export const HOPPER_DOMAINS: HopperDomain[] = [
+  { key: 'weightlifting', label: 'Weightlifting', color: PAL.weightlifting, tasks: ['1RM Back Squat', 'Heavy Clean and Jerk', '5RM Deadlift', 'Max Overhead Press', '3RM Snatch'] },
+  { key: 'gymnastics', label: 'Gymnastics', color: PAL.gymnastics, tasks: ['Max Strict Pull-ups', 'Handstand Walk 50 ft', 'First Muscle-up', '20 Pistol Squats', 'Max Toes-to-bar'] },
+  { key: 'monostructural', label: 'Monostructural', color: PAL.monostructural, tasks: ['5k Run', '2k Row', '4-min Max-cal Bike', '1 Mile Run', '500 m Row Sprint'] },
+  { key: 'oddObject', label: 'Odd object / real world', color: PAL.oddObject, tasks: ['Carry a person 200 m', 'Sandbag to shoulder', 'Flip a heavy tire', 'Yoke Carry 50 ft', 'Sled Push 40 m'] },
+  { key: 'unknown', label: 'Unknown / unknowable', color: PAL.unknown, tasks: ['Climb 6 flights with bags', 'Sprint to catch a bus', 'Push a stalled car', 'Lift a fallen branch', 'Carry a child uphill'] },
+]
+
+/** Roster scored 0..100 per modal domain. Generalist broad; specialists spike. */
+export interface RosterAthlete {
+  name: string
+  /** Archetype key used to pose the procedural figure. */
+  build: 'generalist' | 'weightlifter' | 'endurance' | 'gymnast' | 'strongman' | 'sprinter'
+  domain: Record<DomainKey, number>
+}
+
+export const HOPPER_ROSTER: RosterAthlete[] = [
+  { name: 'Generalist CrossFitter', build: 'generalist', domain: { weightlifting: 78, gymnastics: 80, monostructural: 80, oddObject: 80, unknown: 82 } },
+  { name: 'Olympic Weightlifter', build: 'weightlifter', domain: { weightlifting: 95, gymnastics: 58, monostructural: 35, oddObject: 60, unknown: 50 } },
+  { name: 'Marathoner', build: 'endurance', domain: { weightlifting: 22, gymnastics: 40, monostructural: 96, oddObject: 38, unknown: 52 } },
+  { name: 'Gymnast', build: 'gymnast', domain: { weightlifting: 55, gymnastics: 97, monostructural: 50, oddObject: 52, unknown: 60 } },
+  { name: 'Strongman', build: 'strongman', domain: { weightlifting: 88, gymnastics: 40, monostructural: 38, oddObject: 95, unknown: 66 } },
+  { name: 'Sprinter', build: 'sprinter', domain: { weightlifting: 60, gymnastics: 58, monostructural: 55, oddObject: 55, unknown: 58 } },
+]
+
+/* --------------------- 03 - metabolic pathways ------------------------- */
+export type EnergyKey = 'phosphagen' | 'glycolytic' | 'oxidative'
+
+export interface EnergySystem {
+  key: EnergyKey
+  name: string
+  fuel: string
+  duration: string
+  atpRate: string
+  atpYield: string
+  description: string
+  color: string
+}
+
+export const ENERGY_SYSTEMS: EnergySystem[] = [
+  {
+    key: 'phosphagen',
+    name: 'Phosphagen',
+    fuel: 'Stored ATP and creatine phosphate',
+    duration: '0 to 10 sec',
+    atpRate: 'Highest power',
+    atpYield: 'Smallest tank',
+    description: 'An anaerobic, alactic reaction that rebuilds ATP without oxygen or lactate. Immediate, explosive power, but the store is tiny and largely spent within 10 to 15 seconds of all-out effort.',
+    color: PAL.phosphagen,
+  },
+  {
+    key: 'glycolytic',
+    name: 'Glycolytic',
+    fuel: 'Muscle glycogen and blood glucose',
+    duration: '10 sec to 2 min',
+    atpRate: 'High power',
+    atpYield: 'Moderate tank',
+    description: 'Anaerobic breakdown of carbohydrate to lactate. Takes over as the phosphagens fall and peaks near 15 to 30 seconds; capacity is capped by the acid it accumulates.',
+    color: PAL.glycolytic,
+  },
+  {
+    key: 'oxidative',
+    name: 'Oxidative',
+    fuel: 'Carbohydrate and fat with oxygen',
+    duration: '2 min and beyond',
+    atpRate: 'Lowest power',
+    atpYield: 'Nearly unlimited',
+    description: 'Aerobic combustion of fuel with oxygen. Slow to ramp but enormous in capacity, it overtakes the anaerobic systems past about 75 seconds and exceeds 90 percent of supply within the hour.',
+    color: PAL.oxidative,
+  },
+]
+
+export interface CrossoverPoint {
+  seconds: number
+  phosphagen: number
+  glycolytic: number
+  oxidative: number
+}
+
+/** Percent contribution by duration (sums 100). Anchored to Gastin 2001. */
+export const ENERGY_CROSSOVER: CrossoverPoint[] = [
+  { seconds: 3, phosphagen: 88, glycolytic: 10, oxidative: 2 },
+  { seconds: 6, phosphagen: 72, glycolytic: 23, oxidative: 5 },
+  { seconds: 10, phosphagen: 53, glycolytic: 40, oxidative: 7 },
+  { seconds: 15, phosphagen: 40, glycolytic: 50, oxidative: 10 },
+  { seconds: 30, phosphagen: 23, glycolytic: 49, oxidative: 28 },
+  { seconds: 50, phosphagen: 14, glycolytic: 44, oxidative: 42 },
+  { seconds: 60, phosphagen: 12, glycolytic: 43, oxidative: 45 },
+  { seconds: 75, phosphagen: 9, glycolytic: 40, oxidative: 51 },
+  { seconds: 90, phosphagen: 8, glycolytic: 36, oxidative: 56 },
+  { seconds: 120, phosphagen: 6, glycolytic: 31, oxidative: 63 },
+  { seconds: 180, phosphagen: 4, glycolytic: 23, oxidative: 73 },
+  { seconds: 240, phosphagen: 3, glycolytic: 18, oxidative: 79 },
+  { seconds: 300, phosphagen: 2, glycolytic: 15, oxidative: 83 },
+  { seconds: 430, phosphagen: 2, glycolytic: 11, oxidative: 87 },
+  { seconds: 600, phosphagen: 1, glycolytic: 9, oxidative: 90 },
+  { seconds: 1320, phosphagen: 1, glycolytic: 4, oxidative: 95 },
+  { seconds: 3600, phosphagen: 1, glycolytic: 2, oxidative: 97 },
+]
+
+export interface EffortBenchmark {
+  name: string
+  seconds: number
+  dominant: EnergyKey
+}
+
+export const ENERGY_BENCHMARKS: EffortBenchmark[] = [
+  { name: '1RM Lift', seconds: 3, dominant: 'phosphagen' },
+  { name: '100m Sprint', seconds: 10, dominant: 'phosphagen' },
+  { name: '400m', seconds: 50, dominant: 'glycolytic' },
+  { name: '500m Row', seconds: 95, dominant: 'oxidative' },
+  { name: 'Fran', seconds: 240, dominant: 'oxidative' },
+  { name: '1 Mile Run', seconds: 360, dominant: 'oxidative' },
+  { name: '2k Row', seconds: 430, dominant: 'oxidative' },
+  { name: '5k Run', seconds: 1320, dominant: 'oxidative' },
+  { name: 'Marathon', seconds: 12600, dominant: 'oxidative' },
+]
+
+/* ------------------- 04 - work capacity (definition) ------------------- */
+export const POWER_DURATIONS = [1, 10, 60, 300, 1080, 3600]
+export const POWER_DURATION_LABELS = ['1 s', '10 s', '1 min', '5 min', '18 min', '1 hr']
+
+export interface PowerCurve {
+  name: string
+  /** Relative power 0..1 at each POWER_DURATIONS entry. */
+  samples: number[]
+}
+
+export const POWER_CURVES: PowerCurve[] = [
+  { name: 'Generalist CrossFitter', samples: [0.78, 0.8, 0.82, 0.8, 0.75, 0.7] },
+  { name: '100m Sprinter', samples: [0.97, 0.95, 0.7, 0.4, 0.25, 0.18] },
+  { name: 'Marathoner', samples: [0.3, 0.35, 0.5, 0.75, 0.93, 0.97] },
+  { name: 'Sedentary Adult', samples: [0.25, 0.22, 0.2, 0.18, 0.15, 0.12] },
+]
+
+export const POWER_TASKS: { name: string; seconds: number }[] = [
+  { name: '1RM clean', seconds: 3 },
+  { name: '400 m run', seconds: 60 },
+  { name: 'Fran', seconds: 180 },
+  { name: '2k row', seconds: 430 },
+  { name: '5k run', seconds: 1320 },
+]
+
+export const POWER_CONCEPT =
+  'Work capacity is just average power: force times distance over time. At each effort duration there is a highest average power you can hold, and as duration grows that sustainable power falls, from a near-2000-watt burst down to a few hundred watts for a marathon. The sustained part of that curve follows the Critical Power model, P(t) = CP + W prime / t. CrossFit adds one move: average the curve across every modal domain. Fitness is the area under that averaged curve. A specialist wins one point on the axis. The generalist wins the integral.'
+
+export const MODAL_DOMAINS: { name: string; color: string }[] = [
+  { name: 'Weightlifting', color: PAL.weightlifting },
+  { name: 'Gymnastics', color: PAL.gymnastics },
+  { name: 'Mono / cardio', color: PAL.monostructural },
+  { name: 'Odd object', color: PAL.oddObject },
+  { name: 'Unknown', color: PAL.unknown },
+]
+
+/* ----------------- 05 - sickness wellness fitness ---------------------- */
+export interface Biomarker {
+  name: string
+  unit: string
+  betterDirection: 'higher' | 'lower'
+  sick: number
+  well: number
+  fit: number
+  elite: number
+}
+
+/** The L1 continuum markers, each on its own axis. Young-adult reference scale. */
+export const BIOMARKERS: Biomarker[] = [
+  { name: 'Resting heart rate', unit: 'bpm', betterDirection: 'lower', sick: 100, well: 70, fit: 55, elite: 45 },
+  { name: 'Systolic blood pressure', unit: 'mmHg', betterDirection: 'lower', sick: 160, well: 120, fit: 110, elite: 105 },
+  { name: 'Body fat', unit: '%', betterDirection: 'lower', sick: 40, well: 20, fit: 12, elite: 8 },
+  { name: 'VO2 max', unit: 'ml/kg/min', betterDirection: 'higher', sick: 25, well: 40, fit: 50, elite: 60 },
+  { name: 'HDL cholesterol', unit: 'mg/dL', betterDirection: 'higher', sick: 35, well: 50, fit: 62, elite: 70 },
+  { name: 'Triglycerides', unit: 'mg/dL', betterDirection: 'lower', sick: 250, well: 120, fit: 90, elite: 60 },
+  { name: 'Fasting glucose', unit: 'mg/dL', betterDirection: 'lower', sick: 130, well: 90, fit: 82, elite: 75 },
+  { name: 'Bone density', unit: 'T-score', betterDirection: 'higher', sick: -2.5, well: 0, fit: 1, elite: 2 },
+  { name: 'Relative strength', unit: 'x BW deadlift', betterDirection: 'higher', sick: 0.5, well: 1, fit: 2, elite: 2.75 },
+  { name: 'Flexibility', unit: 'cm sit-reach', betterDirection: 'higher', sick: -15, well: 0, fit: 10, elite: 18 },
+]
+
+/** The L1 canonical worked examples (Glassman's own anchor values). */
+export const CONTINUUM_EXAMPLES = [
+  'Blood pressure: 160/95 is pathological, 120/70 is healthy, 105/55 is an athlete.',
+  'Body fat: 40 percent is pathological, 20 percent is healthy, 10 percent is fit.',
+  'The same ordering holds for bone density, triglycerides, HDL, and dozens more.',
+]
+
+export interface ContinuumProfile {
+  name: string
+  /** 0..1 position toward fitness per marker, in BIOMARKERS order. */
+  positions: number[]
+}
+
+export const CONTINUUM_PROFILES: ContinuumProfile[] = [
+  { name: 'Sedentary', positions: [0.1, 0.15, 0.1, 0.1, 0.2, 0.15, 0.2, 0.25, 0.1, 0.2] },
+  { name: 'Average / well', positions: [0.5, 0.5, 0.5, 0.45, 0.5, 0.5, 0.5, 0.5, 0.45, 0.5] },
+  { name: 'CrossFit athlete', positions: [0.9, 0.85, 0.9, 0.9, 0.85, 0.9, 0.85, 0.85, 0.95, 0.85] },
+]
+
+/** Value at a marker for a 0..1 position toward fitness (interpolates bands). */
+export function markerValueAt(m: Biomarker, pos: number): number {
+  const stops = [0, 0.5, 0.82, 1] // sick, well, fit, elite
+  const vals = [m.sick, m.well, m.fit, m.elite]
+  const p = clamp(pos, 0, 1)
+  for (let i = 0; i < stops.length - 1; i++) {
+    if (p <= stops[i + 1]) {
+      const t = (p - stops[i]) / (stops[i + 1] - stops[i])
+      return lerp(vals[i], vals[i + 1], t)
+    }
+  }
+  return vals[vals.length - 1]
+}
+
+/* --------------------- 06 - health across age -------------------------- */
+export const DURATION_SHAPE_TRAINED = [0.86, 0.8, 0.7, 0.58, 0.5, 0.44]
+export const DURATION_SHAPE_SEDENTARY = [0.3, 0.26, 0.2, 0.15, 0.12, 0.1]
+
+export interface AgingProfile {
+  name: string
+  trajectory: string
+  peak: number
+  independentThrough: string
+  ampAt: (age: number) => number
+  /** How far the body sits toward the "trained" duration shape, 0..1. */
+  modality: number
+}
+
+/** Tuned so each curve crosses the independence floor near its researched age. */
+export const AGING_PROFILES: AgingProfile[] = [
+  {
+    name: 'Lifelong trainer',
+    trajectory: 'Peaks near 30 and descends gently, staying well above the line into old age. Capacity at 80 can resemble a sedentary person at 50.',
+    peak: 1,
+    independentThrough: '90+',
+    ampAt: (a) => Math.max(a < 32 ? 1 : 1 - (0.05 * (a - 32)) / 10, 0.3),
+    modality: 1,
+  },
+  {
+    name: 'Average',
+    trajectory: 'A moderate peak and a steady decline that crosses the line in the late seventies.',
+    peak: 0.65,
+    independentThrough: '78',
+    ampAt: (a) => Math.max(a < 28 ? 0.65 : 0.65 * (1 - (0.1 * (a - 28)) / 10), 0.08),
+    modality: 0.5,
+  },
+  {
+    name: 'Sedentary',
+    trajectory: 'A low peak and an early, steep fall. The power ridge collapses first and independence is lost early.',
+    peak: 0.45,
+    independentThrough: '70',
+    ampAt: (a) => Math.max(a < 24 ? 0.45 : 0.45 * (1 - (0.16 * (a - 24)) / 10), 0.05),
+    modality: 0.18,
+  },
+  {
+    name: 'Starts at 50',
+    trajectory: 'Sedentary, then training at 50 lifts the whole surface sharply and pushes the crossing years later.',
+    peak: 0.7,
+    independentThrough: '85+',
+    ampAt: (a) => {
+      const sed = Math.max(a < 24 ? 0.45 : 0.45 * (1 - (0.16 * (a - 24)) / 10), 0.05)
+      const tr = Math.max(a < 32 ? 0.78 : 0.78 - (0.045 * (a - 32)) / 10, 0.3)
+      const k = smoothstep(48, 55, a)
+      return lerp(sed, tr, k)
+    },
+    modality: 0.5,
+  },
+]
+
+/** Frailty floor: below this, daily tasks start to exceed capacity. */
+export const INDEPENDENCE_LINE = 0.1
+
+/** Relative capacity at duration u (0..1) and age, for an aging profile. */
+export function agingCapacity(u: number, age: number, p: AgingProfile): number {
+  const valT = clamp(catmull1(DURATION_SHAPE_TRAINED, u * 5), 0, 1.05)
+  const valS = clamp(catmull1(DURATION_SHAPE_SEDENTARY, u * 5), 0, 1.05)
+  const shape = lerp(valS, valT, p.modality)
+  return clamp(shape * p.ampAt(age), 0, 1.05)
+}
+
+/* ----------------------------- copy ------------------------------------ */
+export const INTRO_TEXT =
+  'In the October 2002 CrossFit Journal essay "What Is Fitness?", Greg Glassman set out to do what he argued no authority had bothered to do: give a clear, usable, measurable definition of fitness. He built it from four complementary models and one definition, later codified as work capacity across broad time and modal domains. This lesson walks through each model as presented in that article and the official CrossFit Level 1 Training Guide, ending with the idea that sustaining that capacity across a lifetime is health.'
+
+export const DEFINITION_TEXT =
+  'CrossFit defines fitness as work capacity across broad time and modal domains. Plot power against the duration of effort, average that power across many tasks and many time intervals, and the area under the resulting curve is your fitness. It is measurable, it is observable, and it leaves no room for opinion. Tell me how much weight moves, how far it moves, and how long it takes, and you have a valid measure of fitness.'
+
+export const HUNDRED_WORDS =
+  'Eat meat and vegetables, nuts and seeds, some fruit, little starch, and no sugar. Keep intake to levels that will support exercise but not body fat. Practice and train major lifts: deadlift, clean, squat, presses, clean and jerk, and snatch. Master the basics of gymnastics: pull-ups, dips, rope climbs, push-ups, sit-ups, presses to handstands, pirouettes, flips, splits, and holds. Bike, run, swim, row, and the like, hard and fast. Five or six days per week mix these elements in as many combinations and patterns as creativity will allow. Routine is the enemy. Keep workouts short and intense. Regularly learn and play new sports.'
+
+export interface ModuleCopy {
+  eyebrow: string
+  body: string
+  keyPoints: string[]
+}
+
+/** Faithful per-module explanation (from the verified research workflow). */
+export const MODULE_COPY: Record<ModuleKey, ModuleCopy> = {
+  skills: {
+    eyebrow: 'Standard 1',
+    body: "CrossFit's first model holds that there are ten recognized general physical skills, and you are as fit as you are competent in each. A program develops fitness to the extent it improves all ten. The skills are won by different means: four respond to training, a measurable organic change in the body; four respond to practice, a change in the nervous system; power and speed draw on both.",
+    keyPoints: [
+      'Strength, stamina, endurance, and flexibility improve through training (organic change).',
+      'Coordination, agility, balance, and accuracy improve through practice (neurological change).',
+      'Power and speed come from both training and practice.',
+      'You are only as fit as you are competent across all ten, so ignoring some under-develops fitness.',
+    ],
+  },
+  hopper: {
+    eyebrow: 'Standard 2',
+    body: 'The second model says fitness is performing well at any and every task imaginable. Picture a hopper loaded with an infinite number of physical challenges, with no selective mechanism, and imagine being asked to perform feats drawn from it at random. Your fitness is your capacity to perform well at those tasks relative to others. This is why CrossFit prizes the generalist and distrusts specialization.',
+    keyPoints: [
+      'Imagine an infinite hopper of challenges drawn at random, with no say in what you get.',
+      'Fitness is your capacity at randomly drawn tasks relative to other people.',
+      'It demands performing well even at unfamiliar tasks combined in endless ways.',
+      'Nature serves unforeseeable challenges, so the training stimulus must stay broad and varied.',
+    ],
+  },
+  pathways: {
+    eyebrow: 'Standard 3',
+    body: 'The third model is built on the three metabolic engines that power all human action. Each dominates a different range of power and duration. Total fitness requires training all three, and balancing them is what determines the how and why of the metabolic conditioning CrossFit does. Favoring one or two, and over-training the oxidative engine, are the two most common faults in fitness training.',
+    keyPoints: [
+      'The phosphagen pathway dominates the highest-power efforts under about 10 seconds.',
+      'The glycolytic pathway covers moderate work up to a couple of minutes and makes lactate.',
+      'The oxidative pathway runs low-power efforts beyond several minutes with vast capacity.',
+      'Balanced conditioning trains all three; over-training one is a fault.',
+    ],
+  },
+  definition: {
+    eyebrow: 'The Definition',
+    body: 'Here the models combine into a number: work capacity across broad time and modal domains. Plot power on the vertical axis and duration on the horizontal, average power across efforts at intervals like 10 seconds, 1 minute, and 1 hour, and the area under the curve is your fitness. The ten skills set its height, the hopper supplies the domains, the pathways are the time axis. A specialist owns one zone; the generalist defends the whole curve.',
+    keyPoints: [
+      'Power is force times distance over time, fully measurable.',
+      'Average the curve across every modal domain.',
+      'Fitness is the area under that averaged curve.',
+      'CrossFit calls increasing this work capacity the goal; VO2 max and the rest are correlates.',
+    ],
+  },
+  continuum: {
+    eyebrow: 'Standard 4',
+    body: 'In the Level 1 guide this becomes the fourth model: nearly every measurable value of health sits on one continuum from sickness, through wellness, to fitness. A blood pressure of 160/95 is pathological, 120/70 is healthy, and 105/55 is an athlete. The same ordering holds across dozens of markers. Sickness, wellness, and fitness are measures of the same thing, so fitness is super-wellness, and a regimen that does not support health is not CrossFit.',
+    keyPoints: [
+      'Nearly every health marker rides one sick to fit continuum.',
+      'Wellness is the midpoint, not the goal.',
+      'Fitness pushes every marker as far from sickness as it goes.',
+      'Pursuing fitness is a hedge against disease, so it is preventive medicine.',
+    ],
+  },
+  health: {
+    eyebrow: 'The Synthesis',
+    body: 'Add a third axis to the fitness curve: age. Every age of your life has its own power-duration curve. Stack them and the three-dimensional solid that results is health. Health is sustaining a high work capacity across a whole life, not merely living a long time. Maximize the area under the curve and hold it for as long as you can. Stop training and the surface sinks toward the independence line, where daily tasks exceed capacity. Start at any age and it lifts.',
+    keyPoints: [
+      'Health is sustained work capacity across a lifetime, the volume under the surface.',
+      'VO2 max falls about 10 percent per decade after 30, far slower in trained people.',
+      'Strength and especially power decline fastest after 50 without training.',
+      'Resistance and power training reclaim capacity at any age, even into the 90s.',
+    ],
+  },
+}
+
+export interface Source {
+  title: string
+  url: string
+  for: ModuleKey[]
+}
+
+const ALL: ModuleKey[] = ['skills', 'hopper', 'pathways', 'definition', 'continuum', 'health']
+
+/** Verified citations (all resolved 200 OK in research). */
+export const SOURCES: Source[] = [
+  { title: 'Greg Glassman, "What Is Fitness?" CrossFit Journal, Issue 2, October 2002', url: 'https://library.crossfit.com/free/pdf/CFJ-trial.pdf', for: ALL },
+  { title: '"What Is Fitness?" CrossFit Journal article page', url: 'https://journal.crossfit.com/article/what-is-fitness', for: ALL },
+  { title: 'CrossFit Level 1 Training Guide (official L1 book)', url: 'https://library.crossfit.com/free/pdf/CFJ_English_Level1_TrainingGuide.pdf', for: ALL },
+  { title: '"What Is Fitness?" Part 4: The Sickness-Wellness-Fitness Continuum', url: 'https://www.crossfit.com/essentials/what-is-fitness-part-4-sickness-wellness-fitness-continuum', for: ['continuum'] },
+  { title: 'Gastin, "Energy System Interaction and Relative Contribution During Maximal Exercise," Sports Med 2001', url: 'https://pubmed.ncbi.nlm.nih.gov/11475319/', for: ['pathways', 'definition'] },
+  { title: 'Vanhatalo et al., "Critical Power: An Important Fatigue Threshold," MSSE 2016', url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC5070974/', for: ['definition'] },
+  { title: 'Glassman, "Volume Under the Curve: A 3D Definition of Fitness and Health," CrossFit Journal 2009', url: 'https://journal.crossfit.com/2009/02/crossfits-new-definition-of-fitness-volume-under-the-curve-1.tpl', for: ['definition', 'health'] },
+  { title: 'Fleg et al., "Accelerated Longitudinal Decline of Aerobic Capacity," Circulation 2005 (BLSA)', url: 'https://www.ahajournals.org/doi/10.1161/circulationaha.105.545459', for: ['health'] },
+  { title: 'Alcazar et al., "Relative Muscle Power Threshold to Rise from a Chair," MSSE 2021', url: 'https://journals.lww.com/acsm-msse/fulltext/2021/11000/threshold_of_relative_muscle_power_required_to.1.aspx', for: ['health'] },
+]
+
+export const sourcesFor = (k: ModuleKey): Source[] => SOURCES.filter((s) => s.for.includes(k))
+
+/** Cross-links into the rest of the PA tool family (main app + Games). */
+export interface CrossLink {
+  label: string
+  href: string
+  note: string
+}
+
+export const CROSS_LINKS: Record<ModuleKey, CrossLink[]> = {
+  skills: [
+    { label: '10 Physical Skills in 25 years of WODs', href: '/', note: 'How real daily programming distributes across the ten skills.' },
+    { label: 'Capacity Lab', href: '/games/capacity', note: 'The ten skills measured on real CrossFit Games athletes.' },
+  ],
+  hopper: [
+    { label: 'Hopper Readiness', href: '/', note: 'How completely the daily programming fills the hopper.' },
+    { label: 'Games Almanac', href: '/games', note: 'The hopper drawn live at the CrossFit Games, 2007 to today.' },
+  ],
+  pathways: [{ label: 'Energy Systems in the data', href: '/', note: 'The three pathways across the full WOD archive.' }],
+  definition: [
+    { label: 'Work Capacity analysis', href: '/', note: 'Work capacity measured across 25 years of WODs.' },
+    { label: 'Capacity Lab', href: '/games/capacity', note: 'Power-duration curves fit to real Games results.' },
+  ],
+  continuum: [{ label: 'Methodology and Sources', href: '/', note: 'How the app grounds its claims in evidence.' }],
+  health: [{ label: 'Capacity Lab', href: '/games/capacity', note: 'Capacity across broad time and modal domains, measured.' }],
+}

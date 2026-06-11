@@ -86,6 +86,12 @@ function TopBar() {
 
         <div className="flex items-center gap-2 shrink-0">
           <a
+            href="/fitness"
+            className="games-condensed hidden lg:block uppercase tracking-[0.1em] text-[12px] font-semibold px-3 py-1.5 rounded-lg border border-[var(--panel-border)] text-[var(--text-secondary)] hover:border-[#91C640]/50 hover:text-[#91C640] transition-colors"
+          >
+            What Is Fitness?
+          </a>
+          <a
             href="/"
             className="games-condensed hidden sm:block uppercase tracking-[0.1em] text-[12px] font-semibold px-3 py-1.5 rounded-lg border border-[var(--panel-border)] text-[var(--text-secondary)] hover:border-[#91C640]/50 hover:text-[#91C640] transition-colors"
           >

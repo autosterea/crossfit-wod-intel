@@ -163,6 +163,20 @@ export default function Sidebar({ data }: { data: CrossFitData }) {
           </div>
         </a>
 
+        {/* What Is Fitness? lesson cross-link — standalone page at /fitness */}
+        <a
+          href="/fitness"
+          className="mx-2 mt-2 px-3 py-2 rounded-lg border border-[#019644]/40 bg-gradient-to-r from-[#019644]/15 to-[#91C640]/10 hover:from-[#019644]/25 hover:to-[#91C640]/20 transition-colors group block"
+        >
+          <div className="flex items-center justify-between gap-2">
+            <div className="min-w-0">
+              <div className="text-[11px] font-bold text-[#91C640] truncate">What Is Fitness?</div>
+              <div className="text-[8px] text-[var(--text-muted)] uppercase tracking-wider">The interactive 3D lesson →</div>
+            </div>
+            <span className="shrink-0 text-[8px] font-bold px-1.5 py-0.5 rounded bg-[#91C640]/20 text-[#91C640] group-hover:bg-[#91C640]/30">NEW</span>
+          </div>
+        </a>
+
         <nav className="flex-1 py-1">
           {sections.map((section) => (
             <div key={section.title}>

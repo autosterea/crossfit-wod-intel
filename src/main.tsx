@@ -8,12 +8,14 @@ import './index.css'
 // loads the Games Almanac (incl. its own data) — never both.
 const App = lazy(() => import('./App.tsx'))
 const GamesApp = lazy(() => import('./games/GamesApp.tsx'))
+const FitnessApp = lazy(() => import('./fitness/FitnessApp.tsx'))
 
-// /games is a standalone page (CrossFit Games analysis) served by the same
-// SPA bundle — Caddy's `try_files {path} /index.html` routes it here.
-const isGames =
-  window.location.pathname.replace(/\/+$/, '') === '/games' ||
-  window.location.pathname.startsWith('/games/')
+// /games and /fitness are standalone pages served by the same SPA bundle —
+// Caddy's `try_files {path} /index.html` routes them here. Each is lazy so a
+// visitor only downloads the chunk for the route they land on.
+const path = window.location.pathname.replace(/\/+$/, '')
+const isGames = path === '/games' || window.location.pathname.startsWith('/games/')
+const isFitness = path === '/fitness' || window.location.pathname.startsWith('/fitness/')
 
 class RootErrorBoundary extends Component<{ children: ReactNode }, { error: Error | null }> {
   state = { error: null as Error | null }
@@ -52,7 +54,9 @@ function BootFallback() {
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <RootErrorBoundary>
-      <Suspense fallback={<BootFallback />}>{isGames ? <GamesApp /> : <App />}</Suspense>
+      <Suspense fallback={<BootFallback />}>
+        {isGames ? <GamesApp /> : isFitness ? <FitnessApp /> : <App />}
+      </Suspense>
     </RootErrorBoundary>
   </StrictMode>,
 )

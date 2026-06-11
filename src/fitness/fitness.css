@@ -1,0 +1,536 @@
+/* =========================================================================
+   "What Is Fitness?" interactive lesson - design system.
+   Loaded only with the /fitness chunk. Persistence Athletics palette.
+   The 3D stage + its floating glass panels stay dark in BOTH themes for GL
+   readability (house rule); the below-the-fold content uses theme tokens.
+   ========================================================================= */
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@400;500;600;700&display=swap');
+
+:root {
+  --wf-accent: #91c640; /* PA yellow-green - accent text/borders on dark */
+  --wf-accent-solid: #019644; /* PA sea-green - solid fills with white text */
+  --wf-ink: #070a0e;
+  --wf-chalk: #eef3f6;
+  --wf-muted: #8ea0a8;
+  --wf-line: rgba(238, 243, 246, 0.1);
+  --wf-glass: rgba(12, 18, 22, 0.72);
+}
+
+/* ---------- Display type (reuses Games fonts already bundled if present) --- */
+.wf-display {
+  font-family: 'Anton', 'Poppins', sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  line-height: 0.94;
+  text-transform: uppercase;
+}
+.wf-condensed {
+  font-family: 'Barlow Condensed', 'Poppins', sans-serif;
+  letter-spacing: 0.04em;
+}
+.wf-mono {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+/* ---------- Top bar ---------- */
+.wf-topbar {
+  backdrop-filter: blur(14px);
+  background: color-mix(in srgb, var(--app-bg) 82%, transparent);
+  border-bottom: 1px solid var(--panel-border-subtle);
+}
+
+/* ---------- The interactive stage ---------- */
+.wf-stage {
+  position: relative;
+  width: 100%;
+  height: clamp(440px, 72vh, 860px);
+  border-radius: 20px;
+  overflow: hidden;
+  touch-action: none;
+  background:
+    radial-gradient(1100px 700px at 72% -12%, #11331f 0%, rgba(17, 51, 31, 0) 60%),
+    radial-gradient(900px 600px at 0% 112%, #0c2417 0%, rgba(12, 36, 23, 0) 55%),
+    var(--wf-ink);
+  border: 1px solid rgba(145, 198, 64, 0.18);
+  cursor: grab;
+}
+.wf-stage:active {
+  cursor: grabbing;
+}
+.wf-stage canvas {
+  display: block;
+  outline: none;
+}
+
+/* ---------- Floating glass panels (always dark, over the canvas) ---------- */
+.wf-glass {
+  position: absolute;
+  z-index: 5;
+  background: var(--wf-glass);
+  border: 1px solid var(--wf-line);
+  border-radius: 16px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+  color: var(--wf-chalk);
+}
+
+.wf-info {
+  top: 16px;
+  left: 16px;
+  width: min(360px, calc(100% - 32px));
+  padding: 16px 18px;
+}
+.wf-info .wf-eyebrow {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--wf-accent);
+  margin-bottom: 6px;
+}
+.wf-info h2 {
+  font-family: 'Anton', 'Poppins', sans-serif;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  font-size: 19px;
+  line-height: 1.04;
+  margin: 0 0 8px;
+}
+.wf-info p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.55;
+  color: #cdd8d2;
+}
+.wf-info-toggle {
+  display: none;
+  position: absolute;
+  top: 9px;
+  right: 9px;
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  border: 1px solid var(--wf-line);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--wf-muted);
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 1;
+  padding: 0;
+}
+.wf-info-toggle .chev {
+  transition: transform 0.2s ease;
+  display: block;
+}
+.wf-info.collapsed .wf-info-toggle .chev {
+  transform: rotate(-180deg);
+}
+
+.wf-controls-wrap {
+  bottom: 16px;
+  right: 16px;
+  width: min(360px, calc(100% - 32px));
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.wf-sheet-handle {
+  display: none;
+  appearance: none;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px 4px;
+  width: 100%;
+}
+.wf-sheet-handle .grab {
+  width: 38px;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.28);
+}
+.wf-controls {
+  padding: 16px 18px;
+  max-height: min(62vh, 540px);
+  overflow: auto;
+}
+.wf-controls::-webkit-scrollbar {
+  width: 5px;
+}
+.wf-controls::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 3px;
+}
+
+.wf-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  transform: translateX(-50%);
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 10.5px;
+  color: var(--wf-muted);
+  background: rgba(7, 10, 14, 0.55);
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--wf-line);
+  pointer-events: none;
+  letter-spacing: 0.04em;
+  z-index: 4;
+  backdrop-filter: blur(4px);
+}
+
+/* ---------- Control widgets ---------- */
+.wf-c-head {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--wf-muted);
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.wf-row {
+  margin: 0 0 11px;
+}
+.wf-row .wf-rl {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 5px;
+  gap: 10px;
+}
+.wf-row .wf-name {
+  font-size: 12.5px;
+  color: #d7e0da;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.wf-row .wf-val {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 12px;
+  color: var(--wf-chalk);
+}
+.wf-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex: none;
+}
+
+.wf-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  outline: none;
+  cursor: pointer;
+}
+.wf-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: var(--wf-accent);
+  border: 2px solid #15201a;
+  cursor: grab;
+  box-shadow: 0 0 0 3px rgba(145, 198, 64, 0.18);
+}
+.wf-range::-moz-range-thumb {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: var(--wf-accent);
+  border: 2px solid #15201a;
+  cursor: grab;
+}
+
+.wf-btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin: 4px 0 12px;
+}
+.wf-btn {
+  appearance: none;
+  border: 1px solid var(--wf-line);
+  background: rgba(255, 255, 255, 0.04);
+  color: #d7e0da;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 12px;
+  padding: 7px 11px;
+  border-radius: 9px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.wf-btn:hover {
+  border-color: rgba(145, 198, 64, 0.45);
+  color: var(--wf-chalk);
+}
+.wf-btn.primary {
+  background: var(--wf-accent-solid);
+  color: #fff;
+  border-color: var(--wf-accent-solid);
+  font-weight: 600;
+}
+.wf-btn.active {
+  background: rgba(145, 198, 64, 0.16);
+  border-color: rgba(145, 198, 64, 0.5);
+  color: var(--wf-accent);
+}
+
+.wf-readout {
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid var(--wf-line);
+  border-radius: 11px;
+  padding: 11px 13px;
+  margin-bottom: 11px;
+}
+.wf-readout .big {
+  font-family: 'Anton', 'Poppins', sans-serif;
+  font-weight: 400;
+  font-size: 24px;
+  letter-spacing: 0.01em;
+  line-height: 1;
+}
+.wf-readout .lbl {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--wf-muted);
+}
+.wf-readout .sub {
+  font-size: 12px;
+  color: #c2ccc6;
+  margin-top: 3px;
+}
+
+.wf-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 13px;
+  margin-top: 4px;
+}
+.wf-legend .item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: #c2ccc6;
+}
+
+.wf-bar-row {
+  margin: 8px 0;
+}
+.wf-bar-top {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  margin-bottom: 4px;
+  color: #d7e0da;
+}
+.wf-bar-top .s {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+}
+.wf-track {
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.09);
+  overflow: hidden;
+}
+.wf-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+.wf-pct-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+.wf-pct {
+  flex: 1;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid var(--wf-line);
+  border-radius: 10px;
+  padding: 8px 4px;
+}
+.wf-pct .p {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-weight: 600;
+  font-size: 16px;
+}
+.wf-pct .n {
+  font-size: 10px;
+  color: var(--wf-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-top: 2px;
+}
+
+/* ---------- Below-the-fold editorial (theme-aware) ---------- */
+.wf-hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+  background:
+    radial-gradient(120% 120% at 86% -20%, rgba(1, 150, 68, 0.34) 0%, transparent 52%),
+    radial-gradient(90% 90% at 8% 120%, rgba(145, 198, 64, 0.16) 0%, transparent 58%),
+    linear-gradient(160deg, #0b1410 0%, #07090b 100%);
+  border: 1px solid rgba(145, 198, 64, 0.22);
+}
+.wf-hero-ink {
+  color: #f4f6f2;
+}
+.wf-hero-dim {
+  color: rgba(244, 246, 242, 0.66);
+}
+.wf-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+
+.wf-card {
+  position: relative;
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 16px;
+  transition: border-color 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+}
+.wf-card-link:hover {
+  border-color: color-mix(in srgb, #91c640 42%, var(--panel-border));
+  box-shadow: 0 10px 34px -18px rgba(1, 150, 68, 0.5);
+  transform: translateY(-2px);
+}
+
+.wf-bignum {
+  font-family: 'Anton', 'Poppins', sans-serif;
+  line-height: 0.86;
+  letter-spacing: 0.01em;
+  background: linear-gradient(180deg, #b6e36a 0%, #91c640 55%, #019644 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.wf-sec-no {
+  font-family: 'Anton', 'Poppins', sans-serif;
+  color: transparent;
+  -webkit-text-stroke: 1px color-mix(in srgb, #91c640 55%, transparent);
+}
+
+/* ---------- Entrance ---------- */
+@keyframes wf-rise {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.wf-rise {
+  opacity: 0;
+  animation: wf-rise 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.wf-rise-1 { animation-delay: 0.05s; }
+.wf-rise-2 { animation-delay: 0.15s; }
+.wf-rise-3 { animation-delay: 0.25s; }
+.wf-rise-4 { animation-delay: 0.36s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .wf-rise {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 760px) {
+  .wf-stage {
+    height: 70vh;
+    border-radius: 16px;
+  }
+  .wf-info {
+    top: 8px;
+    left: 8px;
+    right: 8px;
+    width: auto;
+    padding: 11px 46px 11px 14px;
+  }
+  .wf-info h2 {
+    font-size: 16px;
+  }
+  .wf-info.collapsed p {
+    display: none;
+  }
+  .wf-info-toggle {
+    display: flex;
+  }
+  .wf-controls-wrap {
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    width: auto;
+    max-height: 46vh;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .wf-controls-wrap.collapsed .wf-controls {
+    display: none;
+  }
+  .wf-sheet-handle {
+    display: flex;
+  }
+  .wf-controls {
+    max-height: 40vh;
+    padding: 2px 14px 14px;
+  }
+  .wf-hint {
+    display: none;
+  }
+  /* The continuum stacks 10 axes in depth; its in-scene labels overlap on a
+     narrow viewport, so hide them on mobile (the controls sheet lists every
+     marker name + value). */
+  .wf-cont-label,
+  .wf-cont-value {
+    display: none !important;
+  }
+  .wf-range {
+    height: 6px;
+  }
+  .wf-range::-webkit-slider-thumb {
+    width: 22px;
+    height: 22px;
+  }
+  .wf-range::-moz-range-thumb {
+    width: 22px;
+    height: 22px;
+  }
+  .wf-btn {
+    padding: 9px 12px;
+    font-size: 12.5px;
+  }
+}
