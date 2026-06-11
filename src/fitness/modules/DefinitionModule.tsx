@@ -559,9 +559,9 @@ function Axes() {
           mono
         />
       ))}
-      {/* One small axis caption in the bottom margin (merges effort duration +
-          log time); the full explanation lives in the About panel + page text. */}
-      <Label text="effort duration  (log time ->)" position={[0, -1.6, 0]} worldHeight={0.46} color={PAL.muted} mono fontPx={28} weight="700" />
+      {/* Bottom axis title - a crisp white pill (matches the Energy Systems
+          module) so the log-time axis is clearly NAMED, not just bare seconds. */}
+      <HtmlLabel text="Effort duration (log)" position={[0, -1.75, 0]} color={PAL.muted} fontSize={12} mono />
 
       {/* Y axis: relative power, higher = more. Small WHITE reference pill tucked
           just OUTSIDE the left axis, not over the curve or fill. */}
@@ -575,8 +575,8 @@ function Axes() {
           mono
         />
       ))}
-      {/* Y axis title in the top-left margin, small. */}
-      <Label text="power output" position={[X0 - 0.1, YS + 0.9, 0]} worldHeight={0.46} color={PAL.muted} mono fontPx={28} weight="700" />
+      {/* Y axis title in the top-left margin - matching crisp white pill. */}
+      <HtmlLabel text="Power output" position={[X0 + 0.6, YS + 0.9, 0]} color={PAL.muted} fontSize={12} mono />
     </group>
   )
 }
