@@ -1,4 +1,5 @@
 import { useStore } from '../stores/useStore'
+import { navigateTab, pathForTab } from '../appRouting'
 import type { CrossFitData } from '../types'
 import ThemeToggle from './ThemeToggle'
 
@@ -101,7 +102,7 @@ function YearRangeFilter() {
 }
 
 export default function Sidebar({ data }: { data: CrossFitData }) {
-  const { activeTab, setActiveTab, sidebarOpen, setSidebarOpen } = useStore()
+  const { activeTab, sidebarOpen, setSidebarOpen } = useStore()
 
   return (
     <>
@@ -130,7 +131,7 @@ export default function Sidebar({ data }: { data: CrossFitData }) {
         w-64 sm:w-56 transition-transform duration-200 ease-in-out
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
-        <button onClick={() => { setActiveTab('hero' as any); setSidebarOpen(false) }} className="w-full text-left p-3 border-b border-[var(--panel-border-subtle)] hover:bg-[var(--panel-bg-hover)] transition-colors">
+        <a href="/" onClick={(e) => { e.preventDefault(); navigateTab('hero'); setSidebarOpen(false) }} className="block w-full text-left p-3 border-b border-[var(--panel-border-subtle)] hover:bg-[var(--panel-bg-hover)] transition-colors">
           <div className="flex items-center gap-2">
             <div className="w-6 h-6 rounded-full bg-white p-0.5 shrink-0">
               <img src="/pa-logo.png" alt="Persistence Athletics" className="w-full h-full object-contain rounded-full" />
@@ -145,7 +146,7 @@ export default function Sidebar({ data }: { data: CrossFitData }) {
           <p className="text-[9px] text-[var(--text-muted)] mt-1.5 font-mono">
             {data.overview.total_workouts.toLocaleString()} WODs | {data.overview.years_covered}y
           </p>
-        </button>
+        </a>
 
         <YearRangeFilter />
 
@@ -184,9 +185,10 @@ export default function Sidebar({ data }: { data: CrossFitData }) {
                 {section.title}
               </div>
               {section.tabs.map((tab) => (
-                <button
+                <a
                   key={tab.id}
-                  onClick={() => { setActiveTab(tab.id as any); setSidebarOpen(false) }}
+                  href={pathForTab(tab.id)}
+                  onClick={(e) => { e.preventDefault(); navigateTab(tab.id); setSidebarOpen(false) }}
                   className={`w-full flex items-center gap-2 px-3 py-1.5 text-[11px] transition-all duration-150 ${
                     activeTab === tab.id
                       ? 'bg-[#91C640]/10 text-[#91C640] border-r-2 border-[#91C640]'
@@ -197,7 +199,7 @@ export default function Sidebar({ data }: { data: CrossFitData }) {
                     <path strokeLinecap="round" strokeLinejoin="round" d={tab.icon} />
                   </svg>
                   <span className="truncate">{tab.label}</span>
-                </button>
+                </a>
               ))}
             </div>
           ))}

@@ -206,6 +206,27 @@ const YEARS = {
 export function allRoutes() {
   const routes = [...STATIC]
 
+  // Main WOD-app analysis tabs (now real indexable URLs; see src/appRouting.ts).
+  const appTabs = readJson('../src/data/app-routes.json')
+  for (const r of appTabs) {
+    routes.push({
+      path: '/' + r.slug,
+      title: r.title,
+      description: r.description,
+      ogType: 'website',
+      image: OG,
+      priority: r.slug === 'todays-wod' ? 0.9 : 0.6,
+      changefreq: r.slug === 'todays-wod' ? 'daily' : 'monthly',
+      jsonLd: graph({
+        '@type': 'WebPage',
+        name: r.title.split(' | ')[0],
+        url: SITE + '/' + r.slug,
+        isPartOf: { '@id': SITE + '/#website' },
+        description: r.description,
+      }),
+    })
+  }
+
   // Fitness modules.
   for (const [slug, [title, description]] of Object.entries(FITNESS)) {
     routes.push({

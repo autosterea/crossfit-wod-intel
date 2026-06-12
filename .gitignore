@@ -30,3 +30,4 @@ open_*.json
 qf_*.html
 qf_*.txt
 *.local.json
+.claude/

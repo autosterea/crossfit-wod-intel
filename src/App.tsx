@@ -1,5 +1,6 @@
-import { lazy, Suspense, useMemo, Component, type ReactNode } from 'react'
+import { lazy, Suspense, useMemo, useEffect, Component, type ReactNode } from 'react'
 import { useStore } from './stores/useStore'
+import { tabForPath, navigateTab } from './appRouting'
 import rawData from './data/crossfit-data.json'
 import type { CrossFitData } from './types'
 import { analyzeData } from './utils/analysis'
@@ -168,6 +169,13 @@ function App() {
     catch (e) { console.error('runAdvancedAnalysis failed:', e); return null }
   }, [filteredData, yearRange])
 
+  // Keep the active tab in sync with the URL on browser back/forward.
+  useEffect(() => {
+    const onPop = () => useStore.getState().setActiveTab(tabForPath(window.location.pathname))
+    window.addEventListener('popstate', onPop)
+    return () => window.removeEventListener('popstate', onPop)
+  }, [])
+
   if (activeTab === 'hero') {
     return <Hero />
   }
@@ -225,7 +233,7 @@ function App() {
               <span>Platform by</span>
               <a href="https://autosterea.com" target="_blank" rel="noopener noreferrer" className="text-[var(--text-muted)] hover:text-[var(--text-tertiary)] transition-colors">Autosterea</a>
               <span className="text-[var(--text-muted)]">|</span>
-              <button onClick={() => useStore.getState().setActiveTab('methodology')} className="text-[var(--text-muted)] hover:text-[var(--text-tertiary)] transition-colors cursor-pointer">Methodology</button>
+              <button onClick={() => navigateTab('methodology')} className="text-[var(--text-muted)] hover:text-[var(--text-tertiary)] transition-colors cursor-pointer">Methodology</button>
             </div>
             <div className="text-[11px] sm:text-[10px] text-[var(--text-muted)] leading-relaxed max-w-xl mx-auto">
               <p>Workout data sourced from <a href="https://www.crossfit.com" target="_blank" rel="noopener noreferrer" className="text-[var(--text-muted)] hover:text-[var(--text-tertiary)]">crossfit.com</a>. CrossFit is a registered trademark of CrossFit, LLC. This project is not affiliated with, endorsed by, or sponsored by CrossFit, LLC. All workout data is publicly available and used for educational and analytical purposes only.</p>

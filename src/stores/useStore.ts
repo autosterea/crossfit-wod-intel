@@ -1,6 +1,7 @@
 import { create } from 'zustand'
+import appRoutes from '../data/app-routes.json'
 
-type Tab =
+export type Tab =
   | 'hero'
   | 'daily'
   | 'overview'
@@ -54,12 +55,22 @@ const initialTheme: Theme = (() => {
   return 'dark'
 })()
 
+/** Initial tab derived from the URL so deep links + prerendered routes land on
+ *  the right view with no flash (e.g. /dashboard -> overview, / -> hero). */
+const initialTab: Tab = (() => {
+  if (typeof window === 'undefined') return 'hero'
+  const seg = window.location.pathname.replace(/^\/+|\/+$/g, '')
+  if (!seg) return 'hero'
+  const found = (appRoutes as { tab: string; slug: string }[]).find((r) => r.slug === seg)
+  return (found ? found.tab : 'hero') as Tab
+})()
+
 if (typeof document !== 'undefined') {
   document.documentElement.setAttribute('data-theme', initialTheme)
 }
 
 export const useStore = create<AppStore>((set) => ({
-  activeTab: 'hero',
+  activeTab: initialTab,
   setActiveTab: (tab) => set({ activeTab: tab }),
   selectedMovement: null,
   setSelectedMovement: (m) => set({ selectedMovement: m }),
