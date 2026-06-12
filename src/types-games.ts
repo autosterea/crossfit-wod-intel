@@ -237,6 +237,41 @@ export interface GamesAthlete2026 {
   photoUrl?: string | null
 }
 
+// ---- Per-athlete media: verified videos + cited prep notes, keyed by slug ----
+// (lives in athletes-2026-media.json; every video is oEmbed-verified, every
+// prep note has a fetched source. See scripts/athlete-media-pilot workflow.)
+export type AthleteVideoKind =
+  | 'interview'
+  | 'road-to-games'
+  | 'training'
+  | 'feature'
+  | 'competition'
+  | 'podcast'
+  | 'profile'
+  | 'other'
+
+export interface AthleteVideo {
+  videoId: string
+  url: string
+  title: string
+  channel: string
+  kind: AthleteVideoKind
+}
+
+export interface AthletePrepNote {
+  text: string
+  sourceUrl: string
+  sourceTitle: string
+}
+
+export interface AthleteMedia {
+  videos: AthleteVideo[]
+  prepNotes: AthletePrepNote[]
+  links: { label: string; url: string }[]
+}
+
+export type AthleteMediaMap = Record<string, AthleteMedia>
+
 export interface Athletes2026Data {
   meta: {
     generated: string

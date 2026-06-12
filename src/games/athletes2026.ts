@@ -1,10 +1,31 @@
 import rawAthletes from '../data/games/athletes-2026.json'
-import type { Athletes2026Data, GamesAthlete2026 } from '../types-games'
+import rawMedia from '../data/games/athletes-2026-media.json'
+import type { Athletes2026Data, GamesAthlete2026, AthleteMedia, AthleteMediaMap } from '../types-games'
 
 export const A2026: Athletes2026Data = rawAthletes as unknown as Athletes2026Data
 
 export const allAthletes2026: GamesAthlete2026[] = [...A2026.men, ...A2026.women]
 export const athleteBySlug = new Map(allAthletes2026.map((a) => [a.slug, a]))
+
+/** Verified per-athlete media (videos + cited prep notes), keyed by slug. */
+export const ATHLETE_MEDIA: AthleteMediaMap = rawMedia as unknown as AthleteMediaMap
+export const mediaForAthlete = (slug: string): AthleteMedia | undefined => ATHLETE_MEDIA[slug]
+
+/** YouTube thumbnail URL for a video id (no extra request to verify - the id
+ *  is already oEmbed-confirmed when it reaches here). */
+export const youtubeThumb = (videoId: string): string => `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`
+
+/** Short human label for a video kind. */
+export const VIDEO_KIND_LABEL: Record<string, string> = {
+  interview: 'Interview',
+  'road-to-games': 'Road to the Games',
+  training: 'Training',
+  feature: 'Feature',
+  competition: 'Competition',
+  podcast: 'Podcast',
+  profile: 'Profile',
+  other: 'Watch',
+}
 
 /** Country name -> ISO2 (for flag emoji) for the nations present in the field. */
 const COUNTRY_ISO: Record<string, string> = {

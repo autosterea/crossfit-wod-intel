@@ -1,4 +1,4 @@
-import { athleteBySlug, countryFlag, youtubeEmbed, allAthletes2026 } from './athletes2026'
+import { athleteBySlug, countryFlag, youtubeEmbed, allAthletes2026, mediaForAthlete, youtubeThumb, VIDEO_KIND_LABEL } from './athletes2026'
 import { useGamesStore } from './gamesStore'
 import AthleteAvatar from './AthleteAvatar'
 import type { GamesAthlete2026 } from '../types-games'
@@ -39,6 +39,7 @@ export default function AthleteProfile() {
   }
 
   const embed = youtubeEmbed(a.interviewUrl)
+  const media = mediaForAthlete(a.slug)
   const sameDivision = allAthletes2026.filter((x) => x.division === a.division)
   const idx = sameDivision.findIndex((x) => x.slug === a.slug)
   const next = sameDivision[(idx + 1) % sameDivision.length]
@@ -121,6 +122,23 @@ export default function AthleteProfile() {
         <p className="mt-2 text-[10.5px] text-[var(--text-muted)]">Semifinal results are within the athlete's own event (the ~10 Semifinals aren't comparable to each other).</p>
       </section>
 
+      {/* Latest / road to the Games - verified, cited prep notes */}
+      {media?.prepNotes && media.prepNotes.length > 0 && (
+        <section className="mb-6">
+          <div className="games-condensed text-[10px] uppercase tracking-[0.16em] text-[#91C640] mb-2">Latest, road to the Games</div>
+          <ul className="space-y-2.5">
+            {media.prepNotes.map((n, i) => (
+              <li key={i} className="rounded-xl p-3.5 bg-[var(--panel-bg-2)] border border-[var(--panel-border-subtle)]">
+                <p className="text-[13px] leading-relaxed text-[var(--text-secondary)]">{n.text}</p>
+                <a href={n.sourceUrl} target="_blank" rel="noopener noreferrer" className="mt-1.5 inline-flex items-center gap-1 text-[11px] text-[#91C640] hover:underline">
+                  Source: <span className="truncate max-w-[240px] inline-block align-bottom">{n.sourceTitle}</span> ↗
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
       {/* Interview */}
       <section className="mb-6">
         <div className="games-condensed text-[10px] uppercase tracking-[0.16em] text-[#91C640] mb-2">Dave Castro interview</div>
@@ -141,6 +159,41 @@ export default function AthleteProfile() {
           </div>
         )}
       </section>
+
+      {/* Watch - verified videos (oEmbed-confirmed real) */}
+      {media?.videos && media.videos.length > 0 && (
+        <section className="mb-6">
+          <div className="games-condensed text-[10px] uppercase tracking-[0.16em] text-[#91C640] mb-2">Watch</div>
+          <div className="grid sm:grid-cols-2 gap-2.5">
+            {media.videos.map((v) => (
+              <a key={v.videoId} href={v.url} target="_blank" rel="noopener noreferrer" className="cap-card group overflow-hidden block">
+                <div className="relative" style={{ aspectRatio: '16 / 9' }}>
+                  <img src={youtubeThumb(v.videoId)} alt={v.title} loading="lazy" className="w-full h-full object-cover" />
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/25 group-hover:bg-black/10 transition-colors">
+                    <span className="w-11 h-11 rounded-full bg-black/65 flex items-center justify-center text-white text-base pl-0.5">▶</span>
+                  </div>
+                  <span className="absolute top-2 left-2 games-chip text-[9px]" style={{ background: 'rgba(1,150,68,0.9)', color: '#fff' }}>{VIDEO_KIND_LABEL[v.kind] ?? 'Watch'}</span>
+                </div>
+                <div className="p-2.5">
+                  <div className="text-[12.5px] font-semibold text-[var(--text-primary)] leading-snug" style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{v.title}</div>
+                  <div className="text-[10.5px] text-[var(--text-muted)] mt-0.5 truncate">{v.channel}</div>
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Follow / profile links */}
+      {media?.links && media.links.length > 0 && (
+        <section className="mb-6 flex flex-wrap gap-2">
+          {media.links.map((l) => (
+            <a key={l.url} href={l.url} target="_blank" rel="noopener noreferrer" className="games-chip" style={{ background: 'var(--panel-bg-2)', color: 'var(--text-secondary)', border: '1px solid var(--panel-border)' }}>
+              {l.label} ↗
+            </a>
+          ))}
+        </section>
+      )}
 
       {/* Footer nav */}
       <div className="flex items-center justify-between gap-3 mb-4">
