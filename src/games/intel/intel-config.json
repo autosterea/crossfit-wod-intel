@@ -1,0 +1,98 @@
+{
+  "_doc": "Single source of truth for the Athlete Intelligence engine (scripts/build-athlete-intel-2026.mjs) AND the client-side what-if simulator. Imported by both (Node readFileSync + TS resolveJsonModule) so the two CANNOT drift. Every weight is a designed constant grounded in the CrossFit L1 framework and the NSCA-researched ARCHETYPES/ENERGY_CROSSOVER in src/fitness/fitnessData.ts. An event's 10-skill demand vector = modality + load + timeDomain component weights, summed then normalized. No fabricated athlete data lives here; these are taxonomy weights only.",
+
+  "skillOrder": ["Strength", "Stamina", "Endurance", "Flexibility", "Power", "Speed", "Coordination", "Agility", "Balance", "Accuracy"],
+  "unmeasuredSkills": ["Flexibility"],
+  "_unmeasuredNote": "Flexibility has no signal in competition results (no ROM data exists for the field). It is shown as 'not measured from competition data', never fabricated.",
+
+  "modalityDemand": {
+    "_doc": "Per-modality skill emphasis (0..1), one row per CrossFit modal domain. Grounded in the ARCHETYPES: Olympic Weightlifter [Str9,Pow10,Coord8], Marathoner [End10,Sta9], Artistic Gymnast [Coord10,Bal10,Acc9,Agi9].",
+    "M": [0.1, 0.9, 1.0, 0.1, 0.2, 0.6, 0.3, 0.2, 0.2, 0.2],
+    "G": [0.6, 0.4, 0.2, 0.5, 0.6, 0.4, 1.0, 0.8, 0.9, 0.8],
+    "W": [1.0, 0.3, 0.0, 0.2, 0.9, 0.3, 0.6, 0.2, 0.4, 0.5]
+  },
+
+  "loadDemand": {
+    "_doc": "Additive emphasis by load level. Heavy/max amplify Strength+Power; bodyweight shifts toward relative strength + body control.",
+    "max": [0.9, 0.0, 0.0, 0.1, 0.6, 0.0, 0.3, 0.0, 0.2, 0.3],
+    "heavy": [0.8, 0.1, 0.0, 0.1, 0.5, 0.1, 0.2, 0.1, 0.2, 0.2],
+    "moderate": [0.3, 0.3, 0.1, 0.0, 0.2, 0.2, 0.1, 0.1, 0.1, 0.1],
+    "light": [0.1, 0.4, 0.3, 0.0, 0.1, 0.3, 0.1, 0.1, 0.0, 0.0],
+    "none": [0.2, 0.3, 0.2, 0.1, 0.1, 0.2, 0.3, 0.2, 0.2, 0.1]
+  },
+
+  "timeDomainDemand": {
+    "_doc": "Additive emphasis by time domain. Sprint favors Power+Speed (phosphagen/glycolytic); endurance favors Endurance+Stamina (oxidative).",
+    "sprint": [0.2, 0.1, 0.0, 0.0, 0.6, 0.6, 0.2, 0.2, 0.1, 0.1],
+    "short": [0.2, 0.3, 0.1, 0.0, 0.4, 0.4, 0.1, 0.1, 0.1, 0.1],
+    "medium": [0.1, 0.6, 0.3, 0.0, 0.1, 0.2, 0.1, 0.1, 0.0, 0.0],
+    "long": [0.0, 0.5, 0.7, 0.0, 0.0, 0.1, 0.1, 0.0, 0.0, 0.0],
+    "endurance": [0.0, 0.4, 1.0, 0.0, 0.0, 0.1, 0.0, 0.0, 0.0, 0.0]
+  },
+
+  "timeDomainSeconds": {
+    "_doc": "Representative effort duration (s) per time domain, used to look up the Gastin energy-system split for events without a measured winner time. Strength/max events map to the phosphagen end.",
+    "sprint": 150,
+    "short": 450,
+    "medium": 900,
+    "long": 1500,
+    "endurance": 3000,
+    "maxLoad": 6
+  },
+
+  "energyCrossover": {
+    "_doc": "Gastin 2001 % energy-system contribution by effort duration (s), copied verbatim from ENERGY_CROSSOVER in src/fitness/fitnessData.ts. Linearly interpolated by the engine. Each row sums to 100.",
+    "seconds": [3, 6, 10, 15, 30, 50, 60, 75, 90, 120, 180, 240, 300, 430, 600, 1320, 3600],
+    "phosphagen": [88, 72, 53, 40, 23, 14, 12, 9, 8, 6, 4, 3, 2, 2, 1, 1, 1],
+    "glycolytic": [10, 23, 40, 50, 49, 44, 43, 40, 36, 31, 23, 18, 15, 11, 9, 4, 2],
+    "oxidative": [2, 5, 7, 10, 28, 42, 45, 51, 56, 63, 73, 79, 83, 87, 90, 95, 97]
+  },
+
+  "modalBuckets": {
+    "_doc": "Hopper-readiness axes (extends CapacityView MODAL_BUCKETS with a 'sprint' time axis). An event belongs to a bucket per the test described; an event can be in several. perf per bucket = mean placement-percentile across the athlete's events in that bucket.",
+    "mono": { "label": "Metabolic", "modalityIncludes": "M" },
+    "gym": { "label": "Gymnastics", "modalityIncludes": "G" },
+    "weight": { "label": "Weightlifting", "modalityIncludes": "W" },
+    "heavy": { "label": "Heavy", "loadLevelIn": ["heavy", "max"] },
+    "light": { "label": "Bodyweight", "loadLevelIn": ["none", "light"] },
+    "sprint": { "label": "Sprint", "timeDomainIn": ["sprint", "short"] },
+    "engine": { "label": "Long Engine", "timeDomainIn": ["medium", "long", "endurance"] }
+  },
+
+  "skillFromAxes": {
+    "_doc": "The 10 general physical skills derived from the differentiated competition AXES (modal-domain + load + time perf). Each skill = weighted mean of the athlete's perf on the named axes. Weights grounded in the L1 skill definitions: Strength<-heavy/weightlifting load, Endurance/Stamina<-long engine + metabolic, Power<-weightlifting+sprint, Speed<-sprint+metabolic, the practiced skills (Coordination/Agility/Balance/Accuracy)<-gymnastics(+weightlifting technique). Flexibility has no axis (unmeasured).",
+    "Strength": { "heavy": 0.55, "weight": 0.45 },
+    "Stamina": { "engine": 0.45, "mono": 0.35, "light": 0.2 },
+    "Endurance": { "engine": 0.65, "mono": 0.35 },
+    "Power": { "weight": 0.4, "sprint": 0.4, "heavy": 0.2 },
+    "Speed": { "sprint": 0.6, "mono": 0.4 },
+    "Coordination": { "gym": 0.6, "weight": 0.4 },
+    "Agility": { "gym": 0.6, "sprint": 0.4 },
+    "Balance": { "gym": 1.0 },
+    "Accuracy": { "gym": 0.5, "weight": 0.5 }
+  },
+
+  "projectionBlend": {
+    "_doc": "Projected expected-output for an athlete on an event = measuredWeight * the athlete's measured modal-bucket rel for the event's dominant modality + similarityWeight * 100 * cosine(athlete skill vector, event demand vector). Measured results are stronger evidence than skill-vector similarity, hence 0.6/0.4. Displayed in the UI.",
+    "measuredWeight": 0.6,
+    "similarityWeight": 0.4
+  },
+
+  "seasonRankWeights": {
+    "_doc": "SeasonRank blend. season = 2026 Open+QF capacity z-score; priorForm = decayed capacity of last 1-2 Games (0 for rookies, with widened confidence band, never imputed); age = gentle multiplier from the aging curve peaking ~24-30. Every weight shown in the UI methodology.",
+    "season": 0.5,
+    "priorForm": 0.3,
+    "age": 0.2,
+    "priorGamesDecay": 0.6,
+    "agePeakLow": 24,
+    "agePeakHigh": 30,
+    "ageFalloffPerYear": 0.012
+  },
+
+  "confidenceThresholds": {
+    "_doc": "high = strong season data AND prior-Games depth; low = thin/rookie or mostly placement-fallback.",
+    "highMinScoredFrac": 0.6,
+    "highMinGamesEvents": 20,
+    "lowMaxGamesEvents": 0
+  }
+}

@@ -143,6 +143,16 @@ const STATIC = [
     }),
   },
   {
+    path: '/games/2026/intel',
+    title: 'Athlete Intelligence: 2026 CrossFit Games Projections | Persistence Athletics',
+    description:
+      'A data-grounded model of the 2026 CrossFit Games field. Projected leaderboard, 10 physical skills, energy systems and a what-if workout simulator, built from every official competition result.',
+    ogType: 'website',
+    image: OG_GAMES,
+    priority: 0.85,
+    jsonLd: graph({ '@type': 'CollectionPage', name: 'Athlete Intelligence', url: `${SITE}/games/2026/intel`, isPartOf: { '@id': `${SITE}/#website` } }),
+  },
+  {
     path: '/games/cards',
     title: '2026 Games Athlete Card Studio | Persistence Athletics',
     description: 'Internal tool for building shareable 2026 CrossFit Games athlete cards in the Persistence Athletics layout.',

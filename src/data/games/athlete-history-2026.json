@@ -1,0 +1,7766 @@
+{
+  "generatedFrom": "c3po Games leaderboards 2011-2025",
+  "note": "Prior CrossFit Games per-event records for the 2026 individual cohort, joined by athlete name. Verbatim official data; rookies have no entry.",
+  "cohortSize": 60,
+  "athletesWithHistory": 37,
+  "matchedGamesAppearances": 109,
+  "meta": {
+    "Colten Mertens": {
+      "age": 28,
+      "country": "United States"
+    },
+    "Peter Ellis": {
+      "age": 24,
+      "country": "Australia"
+    },
+    "Jeffrey Adler": {
+      "age": 32,
+      "country": "Canada"
+    },
+    "Jonne Koski": {
+      "age": 31,
+      "country": "Finland"
+    },
+    "Nika Maisuradze": {
+      "age": 26,
+      "country": "Georgia"
+    },
+    "James Sprague": {
+      "age": 24,
+      "country": "United States"
+    },
+    "Harry Lightfoot": {
+      "age": 27,
+      "country": "United Kingdom"
+    },
+    "Jay Crouch": {
+      "age": 27,
+      "country": "Australia"
+    },
+    "Enrico Zenoni": {
+      "age": 28,
+      "country": "Italy"
+    },
+    "Saxon Panchik": {
+      "age": 30,
+      "country": "United States"
+    },
+    "Dallin Pepper": {
+      "age": 24,
+      "country": "United States"
+    },
+    "Victor Hoffer": {
+      "age": 23,
+      "country": "France"
+    },
+    "Justin Medeiros": {
+      "age": 27,
+      "country": "United States"
+    },
+    "Quinn Robinson": {
+      "age": 29,
+      "country": "United States"
+    },
+    "Nate Ackermann": {
+      "age": 22,
+      "country": "United States"
+    },
+    "William Leahy IV": {
+      "age": 25,
+      "country": "United States"
+    },
+    "Chris Ibarra": {
+      "age": 26,
+      "country": "United States"
+    },
+    "Alex Kotoulas": {
+      "age": 33,
+      "country": "Greece"
+    },
+    "Ben Fowler": {
+      "age": 25,
+      "country": "New Zealand"
+    },
+    "Fabian Hermans": {
+      "age": 29,
+      "country": "Netherlands"
+    },
+    "Joel Molinia": {
+      "age": 26,
+      "country": "Australia"
+    },
+    "Colin Bosshard": {
+      "age": 25,
+      "country": "Switzerland"
+    },
+    "Sven Geens": {
+      "age": 34,
+      "country": "Belgium"
+    },
+    "Moritz Fiebig": {
+      "age": 31,
+      "country": "Germany"
+    },
+    "Tom Kingdon": {
+      "age": 24,
+      "country": "United Kingdom"
+    },
+    "Jayson Hopper": {
+      "age": 28,
+      "country": "United States"
+    },
+    "Aniol Ekai": {
+      "age": 29,
+      "country": "Spain"
+    },
+    "Tudor Magda": {
+      "age": 23,
+      "country": "United States"
+    },
+    "Bjarni Leifs": {
+      "age": 22,
+      "country": "Iceland"
+    },
+    "Thomas Stroier": {
+      "age": 30,
+      "country": "Denmark"
+    },
+    "Lucy Campbell": {
+      "age": 30,
+      "country": "United Kingdom"
+    },
+    "Mirjam von Rohr": {
+      "age": 24,
+      "country": "Switzerland"
+    },
+    "Leah Støren": {
+      "age": 22,
+      "country": "Norway"
+    },
+    "Emma Lawson": {
+      "age": 21,
+      "country": "Canada"
+    },
+    "Morgane Thyssens": {
+      "age": 23,
+      "country": "Belgium"
+    },
+    "Vår Thurmann-Moe": {
+      "age": 27,
+      "country": "Norway"
+    },
+    "Claudia Gluck": {
+      "age": 27,
+      "country": "France"
+    },
+    "Carolyne Prevost": {
+      "age": 36,
+      "country": "Canada"
+    },
+    "Tayla Howe": {
+      "age": 29,
+      "country": "United Kingdom"
+    },
+    "Rebecca Fuselier": {
+      "age": 26,
+      "country": "United States"
+    },
+    "Aline Wirz": {
+      "age": 32,
+      "country": "Switzerland"
+    },
+    "Aimee Cringle": {
+      "age": 27,
+      "country": "United Kingdom"
+    },
+    "Ella Wilkinson": {
+      "age": 26,
+      "country": "United Kingdom"
+    },
+    "Elena Carratalá": {
+      "age": 32,
+      "country": "Spain"
+    },
+    "Paige Rodgers": {
+      "age": 23,
+      "country": "United States"
+    },
+    "Maddi Foutz": {
+      "age": 27,
+      "country": "United States"
+    },
+    "Bergrós Björnsdóttir": {
+      "age": 19,
+      "country": "Iceland"
+    },
+    "Siria Meha": {
+      "age": 27,
+      "country": "Albania"
+    },
+    "Lydia Fish": {
+      "age": 22,
+      "country": "United States"
+    },
+    "Grace Walton": {
+      "age": 25,
+      "country": "Australia"
+    },
+    "Afroditi Grigoriadi": {
+      "age": 24,
+      "country": "Greece"
+    },
+    "Danielle Brandon": {
+      "age": 30,
+      "country": "United States"
+    },
+    "Miley Wade": {
+      "age": 18,
+      "country": "United States"
+    },
+    "Laura Plaza Gonzalez": {
+      "age": 24,
+      "country": "Spain"
+    },
+    "Kyra Milligan": {
+      "age": 29,
+      "country": "United States"
+    },
+    "Jennifer Muir": {
+      "age": 26,
+      "country": "United Kingdom"
+    },
+    "Olivia Geisthardt": {
+      "age": 27,
+      "country": "United States"
+    },
+    "Haley Adams": {
+      "age": 25,
+      "country": "United States"
+    },
+    "Hattie Kanyo": {
+      "age": 34,
+      "country": "Canada"
+    },
+    "Anikha Greer": {
+      "age": 23,
+      "country": "Canada"
+    }
+  },
+  "history": {
+    "Jonne Koski": {
+      "games": [
+        {
+          "year": 2014,
+          "division": "men",
+          "overallRank": 32,
+          "fieldSize": 43,
+          "events": [
+            {
+              "eventId": "2014-01",
+              "place": 2,
+              "score": "31:33.94"
+            },
+            {
+              "eventId": "2014-02",
+              "place": 28,
+              "score": "317 lb"
+            },
+            {
+              "eventId": "2014-03",
+              "place": 42,
+              "score": "41:06.77"
+            },
+            {
+              "eventId": "2014-04",
+              "place": 29,
+              "score": "1:10.46"
+            },
+            {
+              "eventId": "2014-05",
+              "place": 11,
+              "score": "1:35.41"
+            },
+            {
+              "eventId": "2014-06",
+              "place": 41,
+              "score": "6:53.46"
+            },
+            {
+              "eventId": "2014-07",
+              "place": 32,
+              "score": "16:24.53"
+            },
+            {
+              "eventId": "2014-08",
+              "place": 34,
+              "score": "3:02.47"
+            },
+            {
+              "eventId": "2014-09",
+              "place": 19,
+              "score": "19 pt"
+            },
+            {
+              "eventId": "2014-10",
+              "place": 36,
+              "score": "7:37.69"
+            },
+            {
+              "eventId": "2014-11",
+              "place": 16,
+              "score": "7:36.9"
+            }
+          ]
+        },
+        {
+          "year": 2015,
+          "division": "men",
+          "overallRank": 9,
+          "fieldSize": 40,
+          "events": [
+            {
+              "eventId": "2015-01",
+              "place": 1,
+              "score": "42:16.87"
+            },
+            {
+              "eventId": "2015-02",
+              "place": 8,
+              "score": "11:22.00"
+            },
+            {
+              "eventId": "2015-03",
+              "place": 5,
+              "score": "41:14.12"
+            },
+            {
+              "eventId": "2015-04",
+              "place": 36,
+              "score": "36 pt"
+            },
+            {
+              "eventId": "2015-05",
+              "place": 10,
+              "score": "10:37.14"
+            },
+            {
+              "eventId": "2015-06",
+              "place": 26,
+              "score": ":20.70"
+            },
+            {
+              "eventId": "2015-07",
+              "place": 18,
+              "score": ":20.37"
+            },
+            {
+              "eventId": "2015-08",
+              "place": 20,
+              "score": "8:37.90"
+            },
+            {
+              "eventId": "2015-09",
+              "place": 23,
+              "score": "307 lb"
+            },
+            {
+              "eventId": "2015-10",
+              "place": 9,
+              "score": "5:30.59"
+            },
+            {
+              "eventId": "2015-11",
+              "place": 11,
+              "score": "13:35.64"
+            },
+            {
+              "eventId": "2015-12",
+              "place": 14,
+              "score": "CAP+8"
+            },
+            {
+              "eventId": "2015-13",
+              "place": 21,
+              "score": "CAP+2"
+            }
+          ]
+        },
+        {
+          "year": 2016,
+          "division": "men",
+          "overallRank": 40,
+          "fieldSize": 40,
+          "events": [
+            {
+              "eventId": "2016-01",
+              "place": 24,
+              "score": "39:44.77"
+            },
+            {
+              "eventId": "2016-02",
+              "place": 35,
+              "score": "475 lb"
+            },
+            {
+              "eventId": "2016-03",
+              "place": 40,
+              "score": "5:48.12"
+            },
+            {
+              "eventId": "2016-04",
+              "place": 1,
+              "score": "6:54.85"
+            }
+          ]
+        },
+        {
+          "year": 2017,
+          "division": "men",
+          "overallRank": 9,
+          "fieldSize": 39,
+          "events": [
+            {
+              "eventId": "2017-01",
+              "place": 2,
+              "score": "29:16.00"
+            },
+            {
+              "eventId": "2017-02",
+              "place": 3,
+              "score": "20:08.49"
+            },
+            {
+              "eventId": "2017-03",
+              "place": 9,
+              "score": "9:09.60"
+            },
+            {
+              "eventId": "2017-04",
+              "place": 5,
+              "score": "5 pt"
+            },
+            {
+              "eventId": "2017-05",
+              "place": 33,
+              "score": "247 lb"
+            },
+            {
+              "eventId": "2017-06",
+              "place": 2,
+              "score": "11:05.64"
+            },
+            {
+              "eventId": "2017-07",
+              "place": 33,
+              "score": "4:39.77"
+            },
+            {
+              "eventId": "2017-08",
+              "place": 25,
+              "score": "6:21.38"
+            },
+            {
+              "eventId": "2017-09",
+              "place": 30,
+              "score": "CAP+8"
+            },
+            {
+              "eventId": "2017-10",
+              "place": 19,
+              "score": "9:55.36"
+            },
+            {
+              "eventId": "2017-11",
+              "place": 14,
+              "score": "17:30.57"
+            },
+            {
+              "eventId": "2017-12",
+              "place": 20,
+              "score": "CAP+4"
+            },
+            {
+              "eventId": "2017-13",
+              "place": 9,
+              "score": "CAP+10"
+            }
+          ]
+        },
+        {
+          "year": 2019,
+          "division": "men",
+          "overallRank": 37,
+          "fieldSize": 50,
+          "events": [
+            {
+              "eventId": "2019-01",
+              "place": 30,
+              "score": "18:18.68"
+            },
+            {
+              "eventId": "2019-02",
+              "place": 3,
+              "score": "5:47.38"
+            },
+            {
+              "eventId": "2019-03",
+              "place": 43,
+              "score": "28:27.80"
+            },
+            {
+              "eventId": "2019-04",
+              "place": 37,
+              "score": "2:21.92"
+            }
+          ]
+        },
+        {
+          "year": 2020,
+          "division": "men",
+          "overallRank": 7,
+          "fieldSize": 30,
+          "events": [
+            {
+              "eventId": "2020-01",
+              "place": 10,
+              "score": "4:10"
+            },
+            {
+              "eventId": "2020-02",
+              "place": 15,
+              "score": "396 lb"
+            },
+            {
+              "eventId": "2020-03",
+              "place": 3,
+              "score": "3:29"
+            },
+            {
+              "eventId": "2020-04",
+              "place": 16,
+              "score": "2:59.30"
+            },
+            {
+              "eventId": "2020-05",
+              "place": 22,
+              "score": "21:39"
+            },
+            {
+              "eventId": "2020-06",
+              "place": 4,
+              "score": "1:27"
+            },
+            {
+              "eventId": "2020-07",
+              "place": 13,
+              "score": "10:16"
+            },
+            {
+              "eventId": "2020-08",
+              "place": 7,
+              "score": "410"
+            },
+            {
+              "eventId": "2020-09",
+              "place": 0,
+              "score": null
+            },
+            {
+              "eventId": "2020-10",
+              "place": 0,
+              "score": null
+            },
+            {
+              "eventId": "2020-11",
+              "place": 0,
+              "score": null
+            },
+            {
+              "eventId": "2020-12",
+              "place": 0,
+              "score": null
+            },
+            {
+              "eventId": "2020-13",
+              "place": 0,
+              "score": null
+            },
+            {
+              "eventId": "2020-14",
+              "place": 0,
+              "score": null
+            },
+            {
+              "eventId": "2020-15",
+              "place": 0,
+              "score": null
+            },
+            {
+              "eventId": "2020-16",
+              "place": 0,
+              "score": null
+            },
+            {
+              "eventId": "2020-17",
+              "place": 0,
+              "score": null
+            },
+            {
+              "eventId": "2020-18",
+              "place": 0,
+              "score": null
+            },
+            {
+              "eventId": "2020-19",
+              "place": 0,
+              "score": null
+            },
+            {
+              "eventId": "2020-20",
+              "place": 0,
+              "score": null
+            }
+          ]
+        },
+        {
+          "year": 2021,
+          "division": "men",
+          "overallRank": 6,
+          "fieldSize": 40,
+          "events": [
+            {
+              "eventId": "2021-01",
+              "place": 1,
+              "score": "1:06:44.23"
+            },
+            {
+              "eventId": "2021-02",
+              "place": 11,
+              "score": "09:02.46"
+            },
+            {
+              "eventId": "2021-03",
+              "place": 13,
+              "score": "01:18.30"
+            },
+            {
+              "eventId": "2021-04",
+              "place": 9,
+              "score": "16:32.51"
+            },
+            {
+              "eventId": "2021-05",
+              "place": 6,
+              "score": "12:12.03"
+            },
+            {
+              "eventId": "2021-06",
+              "place": 25,
+              "score": "CAP+2"
+            },
+            {
+              "eventId": "2021-07",
+              "place": 24,
+              "score": "07:29.34"
+            },
+            {
+              "eventId": "2021-08",
+              "place": 9,
+              "score": "03:02.13"
+            },
+            {
+              "eventId": "2021-09",
+              "place": 7,
+              "score": "03:46.09"
+            },
+            {
+              "eventId": "2021-10",
+              "place": 15,
+              "score": "22:09.25"
+            },
+            {
+              "eventId": "2021-11",
+              "place": 4,
+              "score": "259 rep"
+            },
+            {
+              "eventId": "2021-12",
+              "place": 17,
+              "score": "260.0 lb"
+            },
+            {
+              "eventId": "2021-13",
+              "place": 14,
+              "score": "07:58.21"
+            },
+            {
+              "eventId": "2021-14",
+              "place": 7,
+              "score": "CAP+8"
+            },
+            {
+              "eventId": "2021-15",
+              "place": 3,
+              "score": "07:00.66"
+            }
+          ]
+        },
+        {
+          "year": 2022,
+          "division": "men",
+          "overallRank": 15,
+          "fieldSize": 40,
+          "events": [
+            {
+              "eventId": "2022-01",
+              "place": 2,
+              "score": "36:49.34"
+            },
+            {
+              "eventId": "2022-02",
+              "place": 30,
+              "score": "07:39.13"
+            },
+            {
+              "eventId": "2022-03",
+              "place": 34,
+              "score": "7 rep"
+            },
+            {
+              "eventId": "2022-04",
+              "place": 7,
+              "score": "7 pt"
+            },
+            {
+              "eventId": "2022-05",
+              "place": 15,
+              "score": "CAP+6"
+            },
+            {
+              "eventId": "2022-06",
+              "place": 34,
+              "score": "42:38.24"
+            },
+            {
+              "eventId": "2022-07",
+              "place": 12,
+              "score": "14:25.59"
+            },
+            {
+              "eventId": "2022-08",
+              "place": 14,
+              "score": "08:41.16"
+            },
+            {
+              "eventId": "2022-09",
+              "place": 3,
+              "score": "154 cal"
+            },
+            {
+              "eventId": "2022-10",
+              "place": 31,
+              "score": "04:44.40"
+            },
+            {
+              "eventId": "2022-11",
+              "place": 30,
+              "score": "290 lb"
+            },
+            {
+              "eventId": "2022-12",
+              "place": 10,
+              "score": "07:01.54"
+            },
+            {
+              "eventId": "2022-13",
+              "place": 19,
+              "score": "02:52.45"
+            },
+            {
+              "eventId": "2022-14",
+              "place": 7,
+              "score": "08:32.94"
+            }
+          ]
+        },
+        {
+          "year": 2023,
+          "division": "men",
+          "overallRank": 6,
+          "fieldSize": 40,
+          "events": [
+            {
+              "eventId": "2023-01",
+              "place": 1,
+              "score": "7 rep"
+            },
+            {
+              "eventId": "2023-02",
+              "place": 26,
+              "score": "CAP+1"
+            },
+            {
+              "eventId": "2023-03",
+              "place": 11,
+              "score": "05:13.49"
+            },
+            {
+              "eventId": "2023-04",
+              "place": 14,
+              "score": "15:55.07"
+            },
+            {
+              "eventId": "2023-05",
+              "place": 16,
+              "score": "05:19.54"
+            },
+            {
+              "eventId": "2023-06",
+              "place": 20,
+              "score": "08:34.95"
+            },
+            {
+              "eventId": "2023-07",
+              "place": 20,
+              "score": "18:14.71"
+            },
+            {
+              "eventId": "2023-08",
+              "place": 2,
+              "score": "07:45.38"
+            },
+            {
+              "eventId": "2023-09",
+              "place": 24,
+              "score": "582 lb"
+            },
+            {
+              "eventId": "2023-10",
+              "place": 2,
+              "score": "07:31.43"
+            },
+            {
+              "eventId": "2023-11",
+              "place": 3,
+              "score": "08:02.29"
+            },
+            {
+              "eventId": "2023-12",
+              "place": 4,
+              "score": "07:08.92"
+            }
+          ]
+        },
+        {
+          "year": 2025,
+          "division": "men",
+          "overallRank": 21,
+          "fieldSize": 30,
+          "events": [
+            {
+              "eventId": "2025-01",
+              "place": 27,
+              "score": "53:25.00"
+            },
+            {
+              "eventId": "2025-02",
+              "place": 19,
+              "score": "07:46.93"
+            },
+            {
+              "eventId": "2025-03",
+              "place": 18,
+              "score": "08:27.09"
+            },
+            {
+              "eventId": "2025-04",
+              "place": 28,
+              "score": "CAP+2"
+            },
+            {
+              "eventId": "2025-05",
+              "place": 25,
+              "score": "450 lb"
+            },
+            {
+              "eventId": "2025-06",
+              "place": 10,
+              "score": "03:19.40"
+            },
+            {
+              "eventId": "2025-07",
+              "place": 17,
+              "score": "05:05.29"
+            },
+            {
+              "eventId": "2025-08",
+              "place": 10,
+              "score": "09:24.55"
+            },
+            {
+              "eventId": "2025-09",
+              "place": 17,
+              "score": "02:56.83"
+            },
+            {
+              "eventId": "2025-10",
+              "place": 15,
+              "score": "09:37.90"
+            }
+          ]
+        }
+      ]
+    },
+    "Saxon Panchik": {
+      "games": [
+        {
+          "year": 2018,
+          "division": "men",
+          "overallRank": 19,
+          "fieldSize": 40,
+          "events": [
+            {
+              "eventId": "2018-01",
+              "place": 27,
+              "score": "19:57.50"
+            },
+            {
+              "eventId": "2018-02",
+              "place": 17,
+              "score": "2:34.39"
+            },
+            {
+              "eventId": "2018-03",
+              "place": 27,
+              "score": "1125 lb"
+            },
+            {
+              "eventId": "2018-04",
+              "place": 34,
+              "score": "3:05:35.00"
+            },
+            {
+              "eventId": "2018-05",
+              "place": 23,
+              "score": "10:23.88"
+            },
+            {
+              "eventId": "2018-06",
+              "place": 14,
+              "score": "14 pt"
+            },
+            {
+              "eventId": "2018-07",
+              "place": 22,
+              "score": "CAP+15"
+            },
+            {
+              "eventId": "2018-08",
+              "place": 8,
+              "score": "27:37.12"
+            },
+            {
+              "eventId": "2018-09",
+              "place": 2,
+              "score": "9:37.01"
+            },
+            {
+              "eventId": "2018-10",
+              "place": 27,
+              "score": "3:52.83"
+            },
+            {
+              "eventId": "2018-11",
+              "place": 13,
+              "score": "4:32.63"
+            },
+            {
+              "eventId": "2018-12",
+              "place": 26,
+              "score": "15:36.00"
+            },
+            {
+              "eventId": "2018-13",
+              "place": 12,
+              "score": "2:23.06"
+            },
+            {
+              "eventId": "2018-14",
+              "place": 18,
+              "score": "5:43.70"
+            }
+          ]
+        },
+        {
+          "year": 2019,
+          "division": "men",
+          "overallRank": 9,
+          "fieldSize": 50,
+          "events": [
+            {
+              "eventId": "2019-01",
+              "place": 20,
+              "score": "17:11.38"
+            },
+            {
+              "eventId": "2019-02",
+              "place": 19,
+              "score": "6:42.90"
+            },
+            {
+              "eventId": "2019-03",
+              "place": 46,
+              "score": "28:52.94"
+            },
+            {
+              "eventId": "2019-04",
+              "place": 8,
+              "score": "1:40.37"
+            },
+            {
+              "eventId": "2019-05",
+              "place": 8,
+              "score": "600 rep"
+            },
+            {
+              "eventId": "2019-06",
+              "place": 1,
+              "score": "20 pt"
+            },
+            {
+              "eventId": "2019-07",
+              "place": 10,
+              "score": "CAP+134"
+            },
+            {
+              "eventId": "2019-08",
+              "place": 6,
+              "score": "355.0 lb"
+            },
+            {
+              "eventId": "2019-09",
+              "place": 6,
+              "score": "29:35.41"
+            },
+            {
+              "eventId": "2019-10",
+              "place": 9,
+              "score": "4:41.66"
+            },
+            {
+              "eventId": "2019-11",
+              "place": 7,
+              "score": "3:42.24"
+            },
+            {
+              "eventId": "2019-12",
+              "place": 8,
+              "score": "10:06.60"
+            }
+          ]
+        },
+        {
+          "year": 2020,
+          "division": "men",
+          "overallRank": 21,
+          "fieldSize": 30,
+          "events": [
+            {
+              "eventId": "2020-01",
+              "place": 28,
+              "score": "4:58"
+            },
+            {
+              "eventId": "2020-02",
+              "place": 18,
+              "score": "391 lb"
+            },
+            {
+              "eventId": "2020-03",
+              "place": 13,
+              "score": "4:44"
+            },
+            {
+              "eventId": "2020-04",
+              "place": 19,
+              "score": "3:00.70"
+            },
+            {
+              "eventId": "2020-05",
+              "place": 16,
+              "score": "20:36"
+            },
+            {
+              "eventId": "2020-06",
+              "place": 11,
+              "score": "1:14"
+            },
+            {
+              "eventId": "2020-07",
+              "place": 8,
+              "score": "9:50"
+            },
+            {
+              "eventId": "2020-08",
+              "place": 21,
+              "score": "305"
+            },
+            {
+              "eventId": "2020-09",
+              "place": 0,
+              "score": null
+            },
+            {
+              "eventId": "2020-10",
+              "place": 0,
+              "score": null
+            },
+            {
+              "eventId": "2020-11",
+              "place": 0,
+              "score": null
+            },
+            {
+              "eventId": "2020-12",
+              "place": 0,
+              "score": null
+            },
+            {
+              "eventId": "2020-13",
+              "place": 0,
+              "score": null
+            },
+            {
+              "eventId": "2020-14",
+              "place": 0,
+              "score": null
+            },
+            {
+              "eventId": "2020-15",
+              "place": 0,
+              "score": null
+            },
+            {
+              "eventId": "2020-16",
+              "place": 0,
+              "score": null
+            },
+            {
+              "eventId": "2020-17",
+              "place": 0,
+              "score": null
+            },
+            {
+              "eventId": "2020-18",
+              "place": 0,
+              "score": null
+            },
+            {
+              "eventId": "2020-19",
+              "place": 0,
+              "score": null
+            },
+            {
+              "eventId": "2020-20",
+              "place": 0,
+              "score": null
+            }
+          ]
+        },
+        {
+          "year": 2021,
+          "division": "men",
+          "overallRank": 5,
+          "fieldSize": 40,
+          "events": [
+            {
+              "eventId": "2021-01",
+              "place": 20,
+              "score": "1:14:00.84"
+            },
+            {
+              "eventId": "2021-02",
+              "place": 14,
+              "score": "09:11.03"
+            },
+            {
+              "eventId": "2021-03",
+              "place": 4,
+              "score": "01:15.94"
+            },
+            {
+              "eventId": "2021-04",
+              "place": 4,
+              "score": "15:17.35"
+            },
+            {
+              "eventId": "2021-05",
+              "place": 9,
+              "score": "12:21.05"
+            },
+            {
+              "eventId": "2021-06",
+              "place": 5,
+              "score": "05:53.66"
+            },
+            {
+              "eventId": "2021-07",
+              "place": 5,
+              "score": "05:43.34"
+            },
+            {
+              "eventId": "2021-08",
+              "place": 7,
+              "score": "02:57.28"
+            },
+            {
+              "eventId": "2021-09",
+              "place": 29,
+              "score": "04:25.76"
+            },
+            {
+              "eventId": "2021-10",
+              "place": 18,
+              "score": "22:35.57"
+            },
+            {
+              "eventId": "2021-11",
+              "place": 13,
+              "score": "214 rep"
+            },
+            {
+              "eventId": "2021-12",
+              "place": 5,
+              "score": "285.0 lb"
+            },
+            {
+              "eventId": "2021-13",
+              "place": 19,
+              "score": "11:43.43"
+            },
+            {
+              "eventId": "2021-14",
+              "place": 3,
+              "score": "CAP+3"
+            },
+            {
+              "eventId": "2021-15",
+              "place": 2,
+              "score": "06:47.09"
+            }
+          ]
+        },
+        {
+          "year": 2022,
+          "division": "men",
+          "overallRank": 11,
+          "fieldSize": 40,
+          "events": [
+            {
+              "eventId": "2022-01",
+              "place": 13,
+              "score": "38:07.01"
+            },
+            {
+              "eventId": "2022-02",
+              "place": 3,
+              "score": "06:59.06"
+            },
+            {
+              "eventId": "2022-03",
+              "place": 2,
+              "score": "17 rep"
+            },
+            {
+              "eventId": "2022-04",
+              "place": 32,
+              "score": "32 pt"
+            },
+            {
+              "eventId": "2022-05",
+              "place": 32,
+              "score": "CAP+20"
+            },
+            {
+              "eventId": "2022-06",
+              "place": 12,
+              "score": "35:05.62"
+            },
+            {
+              "eventId": "2022-07",
+              "place": 1,
+              "score": "12:40.00"
+            },
+            {
+              "eventId": "2022-08",
+              "place": 11,
+              "score": "08:15.05"
+            },
+            {
+              "eventId": "2022-09",
+              "place": 14,
+              "score": "146 cal"
+            },
+            {
+              "eventId": "2022-10",
+              "place": 23,
+              "score": "04:31.52"
+            },
+            {
+              "eventId": "2022-11",
+              "place": 6,
+              "score": "330 lb"
+            },
+            {
+              "eventId": "2022-12",
+              "place": 22,
+              "score": "08:33.91"
+            },
+            {
+              "eventId": "2022-13",
+              "place": 18,
+              "score": "02:48.93"
+            },
+            {
+              "eventId": "2022-14",
+              "place": 20,
+              "score": "09:20.60"
+            }
+          ]
+        },
+        {
+          "year": 2024,
+          "division": "men",
+          "overallRank": 11,
+          "fieldSize": 39,
+          "events": [
+            {
+              "eventId": "2024-01",
+              "place": 6,
+              "score": "38:50.81"
+            },
+            {
+              "eventId": "2024-02",
+              "place": 14,
+              "score": "16:31.97"
+            },
+            {
+              "eventId": "2024-03",
+              "place": 28,
+              "score": "03:14.20"
+            },
+            {
+              "eventId": "2024-04",
+              "place": 13,
+              "score": "13 pt"
+            },
+            {
+              "eventId": "2024-05",
+              "place": 23,
+              "score": "53:09.00"
+            },
+            {
+              "eventId": "2024-06",
+              "place": 30,
+              "score": "30 pt"
+            },
+            {
+              "eventId": "2024-07",
+              "place": 1,
+              "score": "06:20.80"
+            },
+            {
+              "eventId": "2024-08",
+              "place": 7,
+              "score": "07:25.93"
+            },
+            {
+              "eventId": "2024-09",
+              "place": 10,
+              "score": "02:37.91"
+            },
+            {
+              "eventId": "2024-10",
+              "place": 10,
+              "score": "05:36.99"
+            }
+          ]
+        }
+      ]
+    },
+    "Jeffrey Adler": {
+      "games": [
+        {
+          "year": 2019,
+          "division": "men",
+          "overallRank": 33,
+          "fieldSize": 50,
+          "events": [
+            {
+              "eventId": "2019-01",
+              "place": 5,
+              "score": "16:17.71"
+            },
+            {
+              "eventId": "2019-02",
+              "place": 38,
+              "score": "7:07.99"
+            },
+            {
+              "eventId": "2019-03",
+              "place": 21,
+              "score": "26:20.03"
+            },
+            {
+              "eventId": "2019-04",
+              "place": 39,
+              "score": "2:38.04"
+            }
+          ]
+        },
+        {
+          "year": 2020,
+          "division": "men",
+          "overallRank": 5,
+          "fieldSize": 30,
+          "events": [
+            {
+              "eventId": "2020-01",
+              "place": 6,
+              "score": "4:00"
+            },
+            {
+              "eventId": "2020-02",
+              "place": 7,
+              "score": "418 lb"
+            },
+            {
+              "eventId": "2020-03",
+              "place": 15,
+              "score": "4:47"
+            },
+            {
+              "eventId": "2020-04",
+              "place": 11,
+              "score": "2:57.30"
+            },
+            {
+              "eventId": "2020-05",
+              "place": 6,
+              "score": "19:36"
+            },
+            {
+              "eventId": "2020-06",
+              "place": 27,
+              "score": ":36"
+            },
+            {
+              "eventId": "2020-07",
+              "place": 9,
+              "score": "9:51"
+            },
+            {
+              "eventId": "2020-08",
+              "place": 5,
+              "score": "420"
+            },
+            {
+              "eventId": "2020-09",
+              "place": 4,
+              "score": "14:03.42"
+            },
+            {
+              "eventId": "2020-10",
+              "place": 4,
+              "score": "3:20.87"
+            },
+            {
+              "eventId": "2020-11",
+              "place": 1,
+              "score": "1244 lb"
+            },
+            {
+              "eventId": "2020-12",
+              "place": 5,
+              "score": "1:54.39"
+            },
+            {
+              "eventId": "2020-13",
+              "place": 4,
+              "score": "1:00:17.95"
+            },
+            {
+              "eventId": "2020-14",
+              "place": 5,
+              "score": "4:03.03"
+            },
+            {
+              "eventId": "2020-15",
+              "place": 2,
+              "score": "75 pt"
+            },
+            {
+              "eventId": "2020-16",
+              "place": 2,
+              "score": "12:56.35"
+            },
+            {
+              "eventId": "2020-17",
+              "place": 3,
+              "score": "8:40.17"
+            },
+            {
+              "eventId": "2020-18",
+              "place": 5,
+              "score": "9:43.30"
+            },
+            {
+              "eventId": "2020-19",
+              "place": 5,
+              "score": "1:05.64"
+            },
+            {
+              "eventId": "2020-20",
+              "place": 4,
+              "score": "57:28.45"
+            }
+          ]
+        },
+        {
+          "year": 2021,
+          "division": "men",
+          "overallRank": 13,
+          "fieldSize": 40,
+          "events": [
+            {
+              "eventId": "2021-01",
+              "place": 21,
+              "score": "1:14:39.13"
+            },
+            {
+              "eventId": "2021-02",
+              "place": 25,
+              "score": "09:55.27"
+            },
+            {
+              "eventId": "2021-03",
+              "place": 19,
+              "score": "01:19.12"
+            },
+            {
+              "eventId": "2021-04",
+              "place": 14,
+              "score": "17:13.36"
+            },
+            {
+              "eventId": "2021-05",
+              "place": 32,
+              "score": "14:04.22"
+            },
+            {
+              "eventId": "2021-06",
+              "place": 1,
+              "score": "05:45.01"
+            },
+            {
+              "eventId": "2021-07",
+              "place": 2,
+              "score": "04:59.78"
+            },
+            {
+              "eventId": "2021-08",
+              "place": 26,
+              "score": "CAP"
+            },
+            {
+              "eventId": "2021-09",
+              "place": 24,
+              "score": "04:09.91"
+            },
+            {
+              "eventId": "2021-10",
+              "place": 8,
+              "score": "21:43.00"
+            },
+            {
+              "eventId": "2021-11",
+              "place": 9,
+              "score": "245 rep"
+            },
+            {
+              "eventId": "2021-12",
+              "place": 12,
+              "score": "275.0 lb"
+            },
+            {
+              "eventId": "2021-13",
+              "place": 4,
+              "score": "04:49.49"
+            },
+            {
+              "eventId": "2021-14",
+              "place": 13,
+              "score": "CAP+18"
+            },
+            {
+              "eventId": "2021-15",
+              "place": 10,
+              "score": "07:28.15"
+            }
+          ]
+        },
+        {
+          "year": 2022,
+          "division": "men",
+          "overallRank": 5,
+          "fieldSize": 40,
+          "events": [
+            {
+              "eventId": "2022-01",
+              "place": 4,
+              "score": "37:06.17"
+            },
+            {
+              "eventId": "2022-02",
+              "place": 12,
+              "score": "07:09.44"
+            },
+            {
+              "eventId": "2022-03",
+              "place": 1,
+              "score": "19 rep"
+            },
+            {
+              "eventId": "2022-04",
+              "place": 11,
+              "score": "11 pt"
+            },
+            {
+              "eventId": "2022-05",
+              "place": 38,
+              "score": "CAP+36"
+            },
+            {
+              "eventId": "2022-06",
+              "place": 6,
+              "score": "33:16.60"
+            },
+            {
+              "eventId": "2022-07",
+              "place": 13,
+              "score": "14:42.25"
+            },
+            {
+              "eventId": "2022-08",
+              "place": 18,
+              "score": "09:19.82"
+            },
+            {
+              "eventId": "2022-09",
+              "place": 13,
+              "score": "146 cal"
+            },
+            {
+              "eventId": "2022-10",
+              "place": 9,
+              "score": "04:14.48"
+            },
+            {
+              "eventId": "2022-11",
+              "place": 16,
+              "score": "310 lb"
+            },
+            {
+              "eventId": "2022-12",
+              "place": 16,
+              "score": "07:36.55"
+            },
+            {
+              "eventId": "2022-13",
+              "place": 1,
+              "score": "01:17.40"
+            },
+            {
+              "eventId": "2022-14",
+              "place": 6,
+              "score": "08:27.51"
+            }
+          ]
+        },
+        {
+          "year": 2023,
+          "division": "men",
+          "overallRank": 1,
+          "fieldSize": 40,
+          "events": [
+            {
+              "eventId": "2023-01",
+              "place": 2,
+              "score": "7 rep"
+            },
+            {
+              "eventId": "2023-02",
+              "place": 25,
+              "score": "17:59.34"
+            },
+            {
+              "eventId": "2023-03",
+              "place": 15,
+              "score": "05:57.78"
+            },
+            {
+              "eventId": "2023-04",
+              "place": 8,
+              "score": "14:33.78"
+            },
+            {
+              "eventId": "2023-05",
+              "place": 8,
+              "score": "04:59.86"
+            },
+            {
+              "eventId": "2023-06",
+              "place": 1,
+              "score": "07:56.58"
+            },
+            {
+              "eventId": "2023-07",
+              "place": 2,
+              "score": "16:46.48"
+            },
+            {
+              "eventId": "2023-08",
+              "place": 7,
+              "score": "07:57.16"
+            },
+            {
+              "eventId": "2023-09",
+              "place": 4,
+              "score": "642 lb"
+            },
+            {
+              "eventId": "2023-10",
+              "place": 1,
+              "score": "07:28.70"
+            },
+            {
+              "eventId": "2023-11",
+              "place": 7,
+              "score": "08:38.44"
+            },
+            {
+              "eventId": "2023-12",
+              "place": 5,
+              "score": "07:09.74"
+            }
+          ]
+        },
+        {
+          "year": 2024,
+          "division": "men",
+          "overallRank": 36,
+          "fieldSize": 39,
+          "events": [
+            {
+              "eventId": "2024-01",
+              "place": 21,
+              "score": "41:48.65"
+            },
+            {
+              "eventId": "2024-02",
+              "place": 36,
+              "score": "DNS"
+            },
+            {
+              "eventId": "2024-03",
+              "place": 35,
+              "score": "DNS"
+            },
+            {
+              "eventId": "2024-04",
+              "place": 34,
+              "score": "DNS"
+            },
+            {
+              "eventId": "2024-05",
+              "place": 33,
+              "score": "DNS"
+            },
+            {
+              "eventId": "2024-06",
+              "place": 33,
+              "score": "DNS"
+            },
+            {
+              "eventId": "2024-07",
+              "place": 32,
+              "score": "DNS"
+            },
+            {
+              "eventId": "2024-08",
+              "place": 31,
+              "score": null
+            },
+            {
+              "eventId": "2024-09",
+              "place": 30,
+              "score": null
+            },
+            {
+              "eventId": "2024-10",
+              "place": 30,
+              "score": null
+            }
+          ]
+        },
+        {
+          "year": 2025,
+          "division": "men",
+          "overallRank": 8,
+          "fieldSize": 30,
+          "events": [
+            {
+              "eventId": "2025-01",
+              "place": 1,
+              "score": "46:16.00"
+            },
+            {
+              "eventId": "2025-02",
+              "place": 11,
+              "score": "06:58.32"
+            },
+            {
+              "eventId": "2025-03",
+              "place": 6,
+              "score": "05:57.38"
+            },
+            {
+              "eventId": "2025-04",
+              "place": 7,
+              "score": "17:42.92"
+            },
+            {
+              "eventId": "2025-05",
+              "place": 17,
+              "score": "470 lb"
+            },
+            {
+              "eventId": "2025-06",
+              "place": 9,
+              "score": "03:19.20"
+            },
+            {
+              "eventId": "2025-07",
+              "place": 14,
+              "score": "04:58.32"
+            },
+            {
+              "eventId": "2025-08",
+              "place": 13,
+              "score": "09:46.70"
+            },
+            {
+              "eventId": "2025-09",
+              "place": 6,
+              "score": "02:43.76"
+            },
+            {
+              "eventId": "2025-10",
+              "place": 8,
+              "score": "08:38.42"
+            }
+          ]
+        }
+      ]
+    },
+    "Haley Adams": {
+      "games": [
+        {
+          "year": 2019,
+          "division": "women",
+          "overallRank": 6,
+          "fieldSize": 50,
+          "events": [
+            {
+              "eventId": "2019-01",
+              "place": 4,
+              "score": "19:00.73"
+            },
+            {
+              "eventId": "2019-02",
+              "place": 18,
+              "score": "7:20.43"
+            },
+            {
+              "eventId": "2019-03",
+              "place": 6,
+              "score": "28:34.89"
+            },
+            {
+              "eventId": "2019-04",
+              "place": 34,
+              "score": "2:28.77"
+            },
+            {
+              "eventId": "2019-05",
+              "place": 8,
+              "score": "605 rep"
+            },
+            {
+              "eventId": "2019-06",
+              "place": 6,
+              "score": "15 pt"
+            },
+            {
+              "eventId": "2019-07",
+              "place": 6,
+              "score": "17:28.35"
+            },
+            {
+              "eventId": "2019-08",
+              "place": 10,
+              "score": "0.0 lb"
+            },
+            {
+              "eventId": "2019-09",
+              "place": 2,
+              "score": "28:18.50"
+            },
+            {
+              "eventId": "2019-10",
+              "place": 5,
+              "score": "5:45.49"
+            },
+            {
+              "eventId": "2019-11",
+              "place": 5,
+              "score": "3:33.52"
+            },
+            {
+              "eventId": "2019-12",
+              "place": 8,
+              "score": "10:40.00"
+            }
+          ]
+        },
+        {
+          "year": 2020,
+          "division": "women",
+          "overallRank": 4,
+          "fieldSize": 30,
+          "events": [
+            {
+              "eventId": "2020-01",
+              "place": 5,
+              "score": "4:36"
+            },
+            {
+              "eventId": "2020-02",
+              "place": 26,
+              "score": "230 lb"
+            },
+            {
+              "eventId": "2020-03",
+              "place": 12,
+              "score": "3:40"
+            },
+            {
+              "eventId": "2020-04",
+              "place": 6,
+              "score": "3:21.30"
+            },
+            {
+              "eventId": "2020-05",
+              "place": 4,
+              "score": "18:53"
+            },
+            {
+              "eventId": "2020-06",
+              "place": 4,
+              "score": "1:59"
+            },
+            {
+              "eventId": "2020-07",
+              "place": 4,
+              "score": "9:19"
+            },
+            {
+              "eventId": "2020-08",
+              "place": 3,
+              "score": "497"
+            },
+            {
+              "eventId": "2020-09",
+              "place": 2,
+              "score": "13:17.79"
+            },
+            {
+              "eventId": "2020-10",
+              "place": 3,
+              "score": "3:24.49"
+            },
+            {
+              "eventId": "2020-11",
+              "place": 4,
+              "score": "712 lb"
+            },
+            {
+              "eventId": "2020-12",
+              "place": 3,
+              "score": "1:24.25"
+            },
+            {
+              "eventId": "2020-13",
+              "place": 2,
+              "score": "1:02:16.23"
+            },
+            {
+              "eventId": "2020-14",
+              "place": 5,
+              "score": "4:21.20"
+            },
+            {
+              "eventId": "2020-15",
+              "place": 5,
+              "score": "15 pt"
+            },
+            {
+              "eventId": "2020-16",
+              "place": 2,
+              "score": "14:53.61"
+            },
+            {
+              "eventId": "2020-17",
+              "place": 5,
+              "score": "10:18.46"
+            },
+            {
+              "eventId": "2020-18",
+              "place": 2,
+              "score": "8:40.41"
+            },
+            {
+              "eventId": "2020-19",
+              "place": 4,
+              "score": "1:14.93"
+            },
+            {
+              "eventId": "2020-20",
+              "place": 4,
+              "score": "52:56.60"
+            }
+          ]
+        },
+        {
+          "year": 2021,
+          "division": "women",
+          "overallRank": 5,
+          "fieldSize": 40,
+          "events": [
+            {
+              "eventId": "2021-01",
+              "place": 5,
+              "score": "1:11:37.80"
+            },
+            {
+              "eventId": "2021-02",
+              "place": 5,
+              "score": "10:22.46"
+            },
+            {
+              "eventId": "2021-03",
+              "place": 3,
+              "score": "01:25.74"
+            },
+            {
+              "eventId": "2021-04",
+              "place": 11,
+              "score": "16:53.11"
+            },
+            {
+              "eventId": "2021-05",
+              "place": 3,
+              "score": "12:03.29"
+            },
+            {
+              "eventId": "2021-06",
+              "place": 25,
+              "score": "06:57.66"
+            },
+            {
+              "eventId": "2021-07",
+              "place": 33,
+              "score": "CAP+9"
+            },
+            {
+              "eventId": "2021-08",
+              "place": 2,
+              "score": "02:04.47"
+            },
+            {
+              "eventId": "2021-09",
+              "place": 8,
+              "score": "04:46.60"
+            },
+            {
+              "eventId": "2021-10",
+              "place": 3,
+              "score": "21:36.45"
+            },
+            {
+              "eventId": "2021-11",
+              "place": 14,
+              "score": "161 rep"
+            },
+            {
+              "eventId": "2021-12",
+              "place": 16,
+              "score": "175.0 lb"
+            },
+            {
+              "eventId": "2021-13",
+              "place": 12,
+              "score": "11:10.28"
+            },
+            {
+              "eventId": "2021-14",
+              "place": 10,
+              "score": "CAP+13"
+            },
+            {
+              "eventId": "2021-15",
+              "place": 4,
+              "score": "07:27.29"
+            }
+          ]
+        },
+        {
+          "year": 2022,
+          "division": "women",
+          "overallRank": 9,
+          "fieldSize": 40,
+          "events": [
+            {
+              "eventId": "2022-01",
+              "place": 1,
+              "score": "38:23.74"
+            },
+            {
+              "eventId": "2022-02",
+              "place": 1,
+              "score": "06:59.46"
+            },
+            {
+              "eventId": "2022-03",
+              "place": 17,
+              "score": "9 rep"
+            },
+            {
+              "eventId": "2022-04",
+              "place": 9,
+              "score": "9 pt"
+            },
+            {
+              "eventId": "2022-05",
+              "place": 18,
+              "score": "CAP+3"
+            },
+            {
+              "eventId": "2022-06",
+              "place": 5,
+              "score": "35:51.51"
+            },
+            {
+              "eventId": "2022-07",
+              "place": 4,
+              "score": "13:41.11"
+            },
+            {
+              "eventId": "2022-08",
+              "place": 18,
+              "score": "CAP+3"
+            },
+            {
+              "eventId": "2022-09",
+              "place": 6,
+              "score": "129 cal"
+            },
+            {
+              "eventId": "2022-10",
+              "place": 21,
+              "score": "04:34.86"
+            },
+            {
+              "eventId": "2022-11",
+              "place": 32,
+              "score": "190 lb"
+            },
+            {
+              "eventId": "2022-12",
+              "place": 23,
+              "score": "10:38.47"
+            },
+            {
+              "eventId": "2022-13",
+              "place": 26,
+              "score": "CAP+8"
+            },
+            {
+              "eventId": "2022-14",
+              "place": 5,
+              "score": "08:56.87"
+            }
+          ]
+        },
+        {
+          "year": 2024,
+          "division": "women",
+          "overallRank": 5,
+          "fieldSize": 40,
+          "events": [
+            {
+              "eventId": "2024-01",
+              "place": 7,
+              "score": "41:41.34"
+            },
+            {
+              "eventId": "2024-02",
+              "place": 3,
+              "score": "13:56.77"
+            },
+            {
+              "eventId": "2024-03",
+              "place": 8,
+              "score": "03:16.76"
+            },
+            {
+              "eventId": "2024-04",
+              "place": 2,
+              "score": "2 pt"
+            },
+            {
+              "eventId": "2024-05",
+              "place": 3,
+              "score": "47:46.00"
+            },
+            {
+              "eventId": "2024-06",
+              "place": 31,
+              "score": "31 pt"
+            },
+            {
+              "eventId": "2024-07",
+              "place": 17,
+              "score": "08:58.00"
+            },
+            {
+              "eventId": "2024-08",
+              "place": 3,
+              "score": "07:49.22"
+            },
+            {
+              "eventId": "2024-09",
+              "place": 12,
+              "score": "02:47.22"
+            },
+            {
+              "eventId": "2024-10",
+              "place": 8,
+              "score": "05:40.23"
+            }
+          ]
+        },
+        {
+          "year": 2025,
+          "division": "women",
+          "overallRank": 19,
+          "fieldSize": 30,
+          "events": [
+            {
+              "eventId": "2025-01",
+              "place": 4,
+              "score": "52:02.00"
+            },
+            {
+              "eventId": "2025-02",
+              "place": 17,
+              "score": "08:28.92"
+            },
+            {
+              "eventId": "2025-03",
+              "place": 25,
+              "score": "CAP+5"
+            },
+            {
+              "eventId": "2025-04",
+              "place": 2,
+              "score": "17:01.34"
+            },
+            {
+              "eventId": "2025-05",
+              "place": 29,
+              "score": "265 lb"
+            },
+            {
+              "eventId": "2025-06",
+              "place": 11,
+              "score": "04:07.88"
+            },
+            {
+              "eventId": "2025-07",
+              "place": 21,
+              "score": "06:21.71"
+            },
+            {
+              "eventId": "2025-08",
+              "place": 16,
+              "score": "12:04.81"
+            },
+            {
+              "eventId": "2025-09",
+              "place": 24,
+              "score": "03:20.04"
+            },
+            {
+              "eventId": "2025-10",
+              "place": 12,
+              "score": "10:49.26"
+            }
+          ]
+        }
+      ]
+    },
+    "Danielle Brandon": {
+      "games": [
+        {
+          "year": 2019,
+          "division": "women",
+          "overallRank": 10,
+          "fieldSize": 50,
+          "events": [
+            {
+              "eventId": "2019-01",
+              "place": 22,
+              "score": "CAP+9"
+            },
+            {
+              "eventId": "2019-02",
+              "place": 1,
+              "score": "6:16.17"
+            },
+            {
+              "eventId": "2019-03",
+              "place": 28,
+              "score": "31:16.72"
+            },
+            {
+              "eventId": "2019-04",
+              "place": 5,
+              "score": "1:36.93"
+            },
+            {
+              "eventId": "2019-05",
+              "place": 24,
+              "score": "491 rep"
+            },
+            {
+              "eventId": "2019-06",
+              "place": 8,
+              "score": "13 pt"
+            }
+          ]
+        },
+        {
+          "year": 2020,
+          "division": "women",
+          "overallRank": 15,
+          "fieldSize": 30,
+          "events": [
+            {
+              "eventId": "2020-01",
+              "place": 19,
+              "score": "5:21"
+            },
+            {
+              "eventId": "2020-02",
+              "place": 23,
+              "score": "244 lb"
+            },
+            {
+              "eventId": "2020-03",
+              "place": 13,
+              "score": "3:42"
+            },
+            {
+              "eventId": "2020-04",
+              "place": 20,
+              "score": "3:30.60"
+            },
+            {
+              "eventId": "2020-05",
+              "place": 15,
+              "score": "20:55"
+            },
+            {
+              "eventId": "2020-06",
+              "place": 3,
+              "score": "2:12"
+            },
+            {
+              "eventId": "2020-07",
+              "place": 18,
+              "score": "10:55"
+            },
+            {
+              "eventId": "2020-08",
+              "place": 15,
+              "score": "314"
+            },
+            {
+              "eventId": "2020-09",
+              "place": 0,
+              "score": null
+            },
+            {
+              "eventId": "2020-10",
+              "place": 0,
+              "score": null
+            },
+            {
+              "eventId": "2020-11",
+              "place": 0,
+              "score": null
+            },
+            {
+              "eventId": "2020-12",
+              "place": 0,
+              "score": null
+            },
+            {
+              "eventId": "2020-13",
+              "place": 0,
+              "score": null
+            },
+            {
+              "eventId": "2020-14",
+              "place": 0,
+              "score": null
+            },
+            {
+              "eventId": "2020-15",
+              "place": 0,
+              "score": null
+            },
+            {
+              "eventId": "2020-16",
+              "place": 0,
+              "score": null
+            },
+            {
+              "eventId": "2020-17",
+              "place": 0,
+              "score": null
+            },
+            {
+              "eventId": "2020-18",
+              "place": 0,
+              "score": null
+            },
+            {
+              "eventId": "2020-19",
+              "place": 0,
+              "score": null
+            },
+            {
+              "eventId": "2020-20",
+              "place": 0,
+              "score": null
+            }
+          ]
+        },
+        {
+          "year": 2021,
+          "division": "women",
+          "overallRank": 11,
+          "fieldSize": 40,
+          "events": [
+            {
+              "eventId": "2021-01",
+              "place": 15,
+              "score": "1:15:13.20"
+            },
+            {
+              "eventId": "2021-02",
+              "place": 6,
+              "score": "10:22.76"
+            },
+            {
+              "eventId": "2021-03",
+              "place": 5,
+              "score": "01:27.20"
+            },
+            {
+              "eventId": "2021-04",
+              "place": 16,
+              "score": "17:16.51"
+            },
+            {
+              "eventId": "2021-05",
+              "place": 17,
+              "score": "13:21.58"
+            },
+            {
+              "eventId": "2021-06",
+              "place": 21,
+              "score": "06:41.57"
+            },
+            {
+              "eventId": "2021-07",
+              "place": 24,
+              "score": "06:58.50"
+            },
+            {
+              "eventId": "2021-08",
+              "place": 1,
+              "score": "01:43.91"
+            },
+            {
+              "eventId": "2021-09",
+              "place": 28,
+              "score": "05:43.01"
+            },
+            {
+              "eventId": "2021-10",
+              "place": 14,
+              "score": "24:13.18"
+            },
+            {
+              "eventId": "2021-11",
+              "place": 2,
+              "score": "226 rep"
+            },
+            {
+              "eventId": "2021-12",
+              "place": 5,
+              "score": "190.0 lb"
+            },
+            {
+              "eventId": "2021-13",
+              "place": 14,
+              "score": "11:15.74"
+            },
+            {
+              "eventId": "2021-14",
+              "place": 4,
+              "score": "06:41.85"
+            },
+            {
+              "eventId": "2021-15",
+              "place": 14,
+              "score": "08:17.73"
+            }
+          ]
+        },
+        {
+          "year": 2022,
+          "division": "women",
+          "overallRank": 4,
+          "fieldSize": 40,
+          "events": [
+            {
+              "eventId": "2022-01",
+              "place": 27,
+              "score": "43:40.00"
+            },
+            {
+              "eventId": "2022-02",
+              "place": 12,
+              "score": "07:40.22"
+            },
+            {
+              "eventId": "2022-03",
+              "place": 2,
+              "score": "15 rep"
+            },
+            {
+              "eventId": "2022-04",
+              "place": 1,
+              "score": "1 pt"
+            },
+            {
+              "eventId": "2022-05",
+              "place": 6,
+              "score": "10:48.71"
+            },
+            {
+              "eventId": "2022-06",
+              "place": 6,
+              "score": "36:05.00"
+            },
+            {
+              "eventId": "2022-07",
+              "place": 5,
+              "score": "13:41.83"
+            },
+            {
+              "eventId": "2022-08",
+              "place": 28,
+              "score": "CAP+29"
+            },
+            {
+              "eventId": "2022-09",
+              "place": 12,
+              "score": "124 cal"
+            },
+            {
+              "eventId": "2022-10",
+              "place": 4,
+              "score": "04:08.80"
+            },
+            {
+              "eventId": "2022-11",
+              "place": 15,
+              "score": "200 lb"
+            },
+            {
+              "eventId": "2022-12",
+              "place": 14,
+              "score": "09:05.16"
+            },
+            {
+              "eventId": "2022-13",
+              "place": 25,
+              "score": "CAP+6"
+            },
+            {
+              "eventId": "2022-14",
+              "place": 6,
+              "score": "09:10.18"
+            }
+          ]
+        },
+        {
+          "year": 2023,
+          "division": "women",
+          "overallRank": 9,
+          "fieldSize": 40,
+          "events": [
+            {
+              "eventId": "2023-01",
+              "place": 21,
+              "score": "6 rep"
+            },
+            {
+              "eventId": "2023-02",
+              "place": 21,
+              "score": "17:45.91"
+            },
+            {
+              "eventId": "2023-03",
+              "place": 1,
+              "score": "03:12.75"
+            },
+            {
+              "eventId": "2023-04",
+              "place": 20,
+              "score": "CAP+14"
+            },
+            {
+              "eventId": "2023-05",
+              "place": 17,
+              "score": "CAP+12"
+            },
+            {
+              "eventId": "2023-06",
+              "place": 11,
+              "score": "08:56.63"
+            },
+            {
+              "eventId": "2023-07",
+              "place": 11,
+              "score": "18:42.71"
+            },
+            {
+              "eventId": "2023-08",
+              "place": 10,
+              "score": "08:37.85"
+            },
+            {
+              "eventId": "2023-09",
+              "place": 26,
+              "score": "382 lb"
+            },
+            {
+              "eventId": "2023-10",
+              "place": 7,
+              "score": "09:58.90"
+            },
+            {
+              "eventId": "2023-11",
+              "place": 2,
+              "score": "08:48.42"
+            },
+            {
+              "eventId": "2023-12",
+              "place": 8,
+              "score": "08:20.26"
+            }
+          ]
+        },
+        {
+          "year": 2024,
+          "division": "women",
+          "overallRank": 7,
+          "fieldSize": 40,
+          "events": [
+            {
+              "eventId": "2024-01",
+              "place": 10,
+              "score": "42:13.70"
+            },
+            {
+              "eventId": "2024-02",
+              "place": 37,
+              "score": "18:26.67"
+            },
+            {
+              "eventId": "2024-03",
+              "place": 4,
+              "score": "03:13.68"
+            },
+            {
+              "eventId": "2024-04",
+              "place": 7,
+              "score": "7 pt"
+            },
+            {
+              "eventId": "2024-05",
+              "place": 25,
+              "score": "57:12.00"
+            },
+            {
+              "eventId": "2024-06",
+              "place": 22,
+              "score": "22 pt"
+            },
+            {
+              "eventId": "2024-07",
+              "place": 5,
+              "score": "06:51.80"
+            },
+            {
+              "eventId": "2024-08",
+              "place": 7,
+              "score": "07:59.26"
+            },
+            {
+              "eventId": "2024-09",
+              "place": 8,
+              "score": "02:40.67"
+            },
+            {
+              "eventId": "2024-10",
+              "place": 5,
+              "score": "05:22.85"
+            }
+          ]
+        },
+        {
+          "year": 2025,
+          "division": "women",
+          "overallRank": 4,
+          "fieldSize": 30,
+          "events": [
+            {
+              "eventId": "2025-01",
+              "place": 8,
+              "score": "53:34.00"
+            },
+            {
+              "eventId": "2025-02",
+              "place": 2,
+              "score": "06:28.63"
+            },
+            {
+              "eventId": "2025-03",
+              "place": 24,
+              "score": "CAP+5"
+            },
+            {
+              "eventId": "2025-04",
+              "place": 8,
+              "score": "18:27.85"
+            },
+            {
+              "eventId": "2025-05",
+              "place": 30,
+              "score": "265 lb"
+            },
+            {
+              "eventId": "2025-06",
+              "place": 4,
+              "score": "03:58.11"
+            },
+            {
+              "eventId": "2025-07",
+              "place": 12,
+              "score": "06:07.18"
+            },
+            {
+              "eventId": "2025-08",
+              "place": 8,
+              "score": "10:30.13"
+            },
+            {
+              "eventId": "2025-09",
+              "place": 3,
+              "score": "02:42.32"
+            },
+            {
+              "eventId": "2025-10",
+              "place": 2,
+              "score": "09:13.77"
+            }
+          ]
+        }
+      ]
+    },
+    "Carolyne Prevost": {
+      "games": [
+        {
+          "year": 2019,
+          "division": "women",
+          "overallRank": 12,
+          "fieldSize": 50,
+          "events": [
+            {
+              "eventId": "2019-01",
+              "place": 33,
+              "score": "CAP+11"
+            },
+            {
+              "eventId": "2019-02",
+              "place": 38,
+              "score": "8:34.48"
+            },
+            {
+              "eventId": "2019-03",
+              "place": 18,
+              "score": "29:59.12"
+            },
+            {
+              "eventId": "2019-04",
+              "place": 7,
+              "score": "1:42.94"
+            },
+            {
+              "eventId": "2019-05",
+              "place": 16,
+              "score": "549 rep"
+            },
+            {
+              "eventId": "2019-06",
+              "place": 2,
+              "score": "19 pt"
+            }
+          ]
+        },
+        {
+          "year": 2021,
+          "division": "women",
+          "overallRank": 27,
+          "fieldSize": 40,
+          "events": [
+            {
+              "eventId": "2021-01",
+              "place": 26,
+              "score": "1:18:04.07"
+            },
+            {
+              "eventId": "2021-02",
+              "place": 20,
+              "score": "11:56.23"
+            },
+            {
+              "eventId": "2021-03",
+              "place": 25,
+              "score": "01:32.44"
+            },
+            {
+              "eventId": "2021-04",
+              "place": 26,
+              "score": "19:18.65"
+            },
+            {
+              "eventId": "2021-05",
+              "place": 29,
+              "score": "14:41.74"
+            },
+            {
+              "eventId": "2021-06",
+              "place": 20,
+              "score": "06:41.43"
+            },
+            {
+              "eventId": "2021-07",
+              "place": 8,
+              "score": "05:57.82"
+            },
+            {
+              "eventId": "2021-08",
+              "place": 17,
+              "score": "04:10.23"
+            },
+            {
+              "eventId": "2021-09",
+              "place": 22,
+              "score": "05:26.64"
+            },
+            {
+              "eventId": "2021-10",
+              "place": 25,
+              "score": "25:23.55"
+            },
+            {
+              "eventId": "2021-11",
+              "place": 21,
+              "score": null
+            },
+            {
+              "eventId": "2021-12",
+              "place": 21,
+              "score": null
+            },
+            {
+              "eventId": "2021-13",
+              "place": 20,
+              "score": null
+            },
+            {
+              "eventId": "2021-14",
+              "place": 20,
+              "score": null
+            },
+            {
+              "eventId": "2021-15",
+              "place": 20,
+              "score": null
+            }
+          ]
+        },
+        {
+          "year": 2022,
+          "division": "women",
+          "overallRank": 23,
+          "fieldSize": 40,
+          "events": [
+            {
+              "eventId": "2022-01",
+              "place": 15,
+              "score": "40:34.50"
+            },
+            {
+              "eventId": "2022-02",
+              "place": 19,
+              "score": "07:52.14"
+            },
+            {
+              "eventId": "2022-03",
+              "place": 38,
+              "score": "2 rep"
+            },
+            {
+              "eventId": "2022-04",
+              "place": 13,
+              "score": "13 pt"
+            },
+            {
+              "eventId": "2022-05",
+              "place": 14,
+              "score": "CAP"
+            },
+            {
+              "eventId": "2022-06",
+              "place": 15,
+              "score": "39:53.20"
+            },
+            {
+              "eventId": "2022-07",
+              "place": 20,
+              "score": "15:54.22"
+            },
+            {
+              "eventId": "2022-08",
+              "place": 27,
+              "score": "CAP+28"
+            },
+            {
+              "eventId": "2022-09",
+              "place": 33,
+              "score": "102 cal"
+            },
+            {
+              "eventId": "2022-10",
+              "place": 15,
+              "score": "04:27.24"
+            },
+            {
+              "eventId": "2022-11",
+              "place": 30,
+              "score": "190 lb"
+            },
+            {
+              "eventId": "2022-12",
+              "place": 28,
+              "score": "13:45.51"
+            },
+            {
+              "eventId": "2022-13",
+              "place": 13,
+              "score": "02:26.17"
+            },
+            {
+              "eventId": "2022-14",
+              "place": 15,
+              "score": "10:09.60"
+            }
+          ]
+        },
+        {
+          "year": 2025,
+          "division": "women",
+          "overallRank": 24,
+          "fieldSize": 30,
+          "events": [
+            {
+              "eventId": "2025-01",
+              "place": 23,
+              "score": "57:54.00"
+            },
+            {
+              "eventId": "2025-02",
+              "place": 26,
+              "score": "09:42.73"
+            },
+            {
+              "eventId": "2025-03",
+              "place": 21,
+              "score": "CAP+1"
+            },
+            {
+              "eventId": "2025-04",
+              "place": 19,
+              "score": "20:35.98"
+            },
+            {
+              "eventId": "2025-05",
+              "place": 13,
+              "score": "315 lb"
+            },
+            {
+              "eventId": "2025-06",
+              "place": 21,
+              "score": "04:27.77"
+            },
+            {
+              "eventId": "2025-07",
+              "place": 14,
+              "score": "06:09.90"
+            },
+            {
+              "eventId": "2025-08",
+              "place": 21,
+              "score": "13:37.93"
+            },
+            {
+              "eventId": "2025-09",
+              "place": 20,
+              "score": "03:11.11"
+            },
+            {
+              "eventId": "2025-10",
+              "place": 25,
+              "score": "12:38.35"
+            }
+          ]
+        }
+      ]
+    },
+    "Justin Medeiros": {
+      "games": [
+        {
+          "year": 2020,
+          "division": "men",
+          "overallRank": 3,
+          "fieldSize": 30,
+          "events": [
+            {
+              "eventId": "2020-01",
+              "place": 10,
+              "score": "4:10"
+            },
+            {
+              "eventId": "2020-02",
+              "place": 3,
+              "score": "437 lb"
+            },
+            {
+              "eventId": "2020-03",
+              "place": 19,
+              "score": "5:07"
+            },
+            {
+              "eventId": "2020-04",
+              "place": 15,
+              "score": "2:59.00"
+            },
+            {
+              "eventId": "2020-05",
+              "place": 2,
+              "score": "18:19"
+            },
+            {
+              "eventId": "2020-06",
+              "place": 11,
+              "score": "1:14"
+            },
+            {
+              "eventId": "2020-07",
+              "place": 4,
+              "score": "9:09"
+            },
+            {
+              "eventId": "2020-08",
+              "place": 3,
+              "score": "480"
+            },
+            {
+              "eventId": "2020-09",
+              "place": 2,
+              "score": "13:15.16"
+            },
+            {
+              "eventId": "2020-10",
+              "place": 5,
+              "score": "3:21.09"
+            },
+            {
+              "eventId": "2020-11",
+              "place": 5,
+              "score": "1192 lb"
+            },
+            {
+              "eventId": "2020-12",
+              "place": 2,
+              "score": "1:26.19"
+            },
+            {
+              "eventId": "2020-13",
+              "place": 2,
+              "score": "58:17.48"
+            },
+            {
+              "eventId": "2020-14",
+              "place": 3,
+              "score": "3:18.51"
+            },
+            {
+              "eventId": "2020-15",
+              "place": 5,
+              "score": "15 pt"
+            },
+            {
+              "eventId": "2020-16",
+              "place": 3,
+              "score": "13:20.52"
+            },
+            {
+              "eventId": "2020-17",
+              "place": 5,
+              "score": "8:59.33"
+            },
+            {
+              "eventId": "2020-18",
+              "place": 3,
+              "score": "8:52.93"
+            },
+            {
+              "eventId": "2020-19",
+              "place": 3,
+              "score": "1:01.97"
+            },
+            {
+              "eventId": "2020-20",
+              "place": 3,
+              "score": "53:18.87"
+            }
+          ]
+        },
+        {
+          "year": 2021,
+          "division": "men",
+          "overallRank": 1,
+          "fieldSize": 40,
+          "events": [
+            {
+              "eventId": "2021-01",
+              "place": 5,
+              "score": "1:10:54.31"
+            },
+            {
+              "eventId": "2021-02",
+              "place": 15,
+              "score": "09:13.54"
+            },
+            {
+              "eventId": "2021-03",
+              "place": 11,
+              "score": "01:18.21"
+            },
+            {
+              "eventId": "2021-04",
+              "place": 2,
+              "score": "14:50.28"
+            },
+            {
+              "eventId": "2021-05",
+              "place": 4,
+              "score": "12:05.77"
+            },
+            {
+              "eventId": "2021-06",
+              "place": 6,
+              "score": "05:59.86"
+            },
+            {
+              "eventId": "2021-07",
+              "place": 7,
+              "score": "05:56.71"
+            },
+            {
+              "eventId": "2021-08",
+              "place": 2,
+              "score": "02:15.33"
+            },
+            {
+              "eventId": "2021-09",
+              "place": 9,
+              "score": "03:48.63"
+            },
+            {
+              "eventId": "2021-10",
+              "place": 6,
+              "score": "21:36.01"
+            },
+            {
+              "eventId": "2021-11",
+              "place": 10,
+              "score": "230 rep"
+            },
+            {
+              "eventId": "2021-12",
+              "place": 7,
+              "score": "285.0 lb"
+            },
+            {
+              "eventId": "2021-13",
+              "place": 3,
+              "score": "04:46.59"
+            },
+            {
+              "eventId": "2021-14",
+              "place": 2,
+              "score": "06:41.27"
+            },
+            {
+              "eventId": "2021-15",
+              "place": 1,
+              "score": "06:36.59"
+            }
+          ]
+        },
+        {
+          "year": 2022,
+          "division": "men",
+          "overallRank": 1,
+          "fieldSize": 40,
+          "events": [
+            {
+              "eventId": "2022-01",
+              "place": 3,
+              "score": "36:53.65"
+            },
+            {
+              "eventId": "2022-02",
+              "place": 18,
+              "score": "07:12.80"
+            },
+            {
+              "eventId": "2022-03",
+              "place": 5,
+              "score": "16 rep"
+            },
+            {
+              "eventId": "2022-04",
+              "place": 3,
+              "score": "3 pt"
+            },
+            {
+              "eventId": "2022-05",
+              "place": 12,
+              "score": "CAP+3"
+            },
+            {
+              "eventId": "2022-06",
+              "place": 8,
+              "score": "34:08.32"
+            },
+            {
+              "eventId": "2022-07",
+              "place": 2,
+              "score": "13:09.31"
+            },
+            {
+              "eventId": "2022-08",
+              "place": 5,
+              "score": "07:29.07"
+            },
+            {
+              "eventId": "2022-09",
+              "place": 7,
+              "score": "151 cal"
+            },
+            {
+              "eventId": "2022-10",
+              "place": 3,
+              "score": "04:01.83"
+            },
+            {
+              "eventId": "2022-11",
+              "place": 5,
+              "score": "330 lb"
+            },
+            {
+              "eventId": "2022-12",
+              "place": 5,
+              "score": "06:46.48"
+            },
+            {
+              "eventId": "2022-13",
+              "place": 3,
+              "score": "01:32.82"
+            },
+            {
+              "eventId": "2022-14",
+              "place": 4,
+              "score": "08:26.34"
+            }
+          ]
+        },
+        {
+          "year": 2023,
+          "division": "men",
+          "overallRank": 13,
+          "fieldSize": 40,
+          "events": [
+            {
+              "eventId": "2023-01",
+              "place": 29,
+              "score": "7 rep"
+            },
+            {
+              "eventId": "2023-02",
+              "place": 37,
+              "score": "CAP+8"
+            },
+            {
+              "eventId": "2023-03",
+              "place": 2,
+              "score": "04:03.63"
+            },
+            {
+              "eventId": "2023-04",
+              "place": 7,
+              "score": "14:31.17"
+            },
+            {
+              "eventId": "2023-05",
+              "place": 3,
+              "score": "04:51.88"
+            },
+            {
+              "eventId": "2023-06",
+              "place": 30,
+              "score": "08:51.24"
+            },
+            {
+              "eventId": "2023-07",
+              "place": 15,
+              "score": "17:51.20"
+            },
+            {
+              "eventId": "2023-08",
+              "place": 19,
+              "score": "08:25.82"
+            },
+            {
+              "eventId": "2023-09",
+              "place": 15,
+              "score": "621 lb"
+            },
+            {
+              "eventId": "2023-10",
+              "place": 6,
+              "score": "07:56.03"
+            },
+            {
+              "eventId": "2023-11",
+              "place": 9,
+              "score": "08:57.93"
+            },
+            {
+              "eventId": "2023-12",
+              "place": 3,
+              "score": "07:00.01"
+            }
+          ]
+        },
+        {
+          "year": 2024,
+          "division": "men",
+          "overallRank": 8,
+          "fieldSize": 39,
+          "events": [
+            {
+              "eventId": "2024-01",
+              "place": 11,
+              "score": "40:00.00"
+            },
+            {
+              "eventId": "2024-02",
+              "place": 4,
+              "score": "14:27.76"
+            },
+            {
+              "eventId": "2024-03",
+              "place": 26,
+              "score": "03:12.93"
+            },
+            {
+              "eventId": "2024-04",
+              "place": 25,
+              "score": "25 pt"
+            },
+            {
+              "eventId": "2024-05",
+              "place": 12,
+              "score": "49:46.00"
+            },
+            {
+              "eventId": "2024-06",
+              "place": 1,
+              "score": "1 pt"
+            },
+            {
+              "eventId": "2024-07",
+              "place": 5,
+              "score": "07:56.36"
+            },
+            {
+              "eventId": "2024-08",
+              "place": 10,
+              "score": "07:34.06"
+            },
+            {
+              "eventId": "2024-09",
+              "place": 15,
+              "score": "02:40.73"
+            },
+            {
+              "eventId": "2024-10",
+              "place": 12,
+              "score": "05:43.93"
+            }
+          ]
+        },
+        {
+          "year": 2025,
+          "division": "men",
+          "overallRank": 7,
+          "fieldSize": 30,
+          "events": [
+            {
+              "eventId": "2025-01",
+              "place": 12,
+              "score": "50:05.00"
+            },
+            {
+              "eventId": "2025-02",
+              "place": 2,
+              "score": "06:06.81"
+            },
+            {
+              "eventId": "2025-03",
+              "place": 4,
+              "score": "05:41.58"
+            },
+            {
+              "eventId": "2025-04",
+              "place": 9,
+              "score": "18:08.40"
+            },
+            {
+              "eventId": "2025-05",
+              "place": 5,
+              "score": "505 lb"
+            },
+            {
+              "eventId": "2025-06",
+              "place": 13,
+              "score": "03:23.16"
+            },
+            {
+              "eventId": "2025-07",
+              "place": 10,
+              "score": "04:45.51"
+            },
+            {
+              "eventId": "2025-08",
+              "place": 23,
+              "score": "11:28.96"
+            },
+            {
+              "eventId": "2025-09",
+              "place": 12,
+              "score": "02:53.26"
+            },
+            {
+              "eventId": "2025-10",
+              "place": 1,
+              "score": "07:53.42"
+            }
+          ]
+        }
+      ]
+    },
+    "Jay Crouch": {
+      "games": [
+        {
+          "year": 2020,
+          "division": "men",
+          "overallRank": 18,
+          "fieldSize": 30,
+          "events": [
+            {
+              "eventId": "2020-01",
+              "place": 22,
+              "score": "4:36"
+            },
+            {
+              "eventId": "2020-02",
+              "place": 11,
+              "score": "412 lb"
+            },
+            {
+              "eventId": "2020-03",
+              "place": 5,
+              "score": "3:45"
+            },
+            {
+              "eventId": "2020-04",
+              "place": 20,
+              "score": "3:01.60"
+            },
+            {
+              "eventId": "2020-05",
+              "place": 17,
+              "score": "20:59"
+            },
+            {
+              "eventId": "2020-06",
+              "place": 20,
+              "score": "1:00"
+            },
+            {
+              "eventId": "2020-07",
+              "place": 14,
+              "score": "10:22"
+            },
+            {
+              "eventId": "2020-08",
+              "place": 18,
+              "score": "320"
+            },
+            {
+              "eventId": "2020-09",
+              "place": 0,
+              "score": null
+            },
+            {
+              "eventId": "2020-10",
+              "place": 0,
+              "score": null
+            },
+            {
+              "eventId": "2020-11",
+              "place": 0,
+              "score": null
+            },
+            {
+              "eventId": "2020-12",
+              "place": 0,
+              "score": null
+            },
+            {
+              "eventId": "2020-13",
+              "place": 0,
+              "score": null
+            },
+            {
+              "eventId": "2020-14",
+              "place": 0,
+              "score": null
+            },
+            {
+              "eventId": "2020-15",
+              "place": 0,
+              "score": null
+            },
+            {
+              "eventId": "2020-16",
+              "place": 0,
+              "score": null
+            },
+            {
+              "eventId": "2020-17",
+              "place": 0,
+              "score": null
+            },
+            {
+              "eventId": "2020-18",
+              "place": 0,
+              "score": null
+            },
+            {
+              "eventId": "2020-19",
+              "place": 0,
+              "score": null
+            },
+            {
+              "eventId": "2020-20",
+              "place": 0,
+              "score": null
+            }
+          ]
+        },
+        {
+          "year": 2021,
+          "division": "men",
+          "overallRank": 22,
+          "fieldSize": 40,
+          "events": [
+            {
+              "eventId": "2021-01",
+              "place": 18,
+              "score": "1:13:37.00"
+            },
+            {
+              "eventId": "2021-02",
+              "place": 23,
+              "score": "09:44.32"
+            },
+            {
+              "eventId": "2021-03",
+              "place": 31,
+              "score": "01:22.21"
+            },
+            {
+              "eventId": "2021-04",
+              "place": 5,
+              "score": "15:18.65"
+            },
+            {
+              "eventId": "2021-05",
+              "place": 27,
+              "score": "13:36.90"
+            },
+            {
+              "eventId": "2021-06",
+              "place": 7,
+              "score": "CAP"
+            },
+            {
+              "eventId": "2021-07",
+              "place": 20,
+              "score": "06:48.06"
+            },
+            {
+              "eventId": "2021-08",
+              "place": 15,
+              "score": "03:53.81"
+            },
+            {
+              "eventId": "2021-09",
+              "place": 28,
+              "score": "04:20.88"
+            },
+            {
+              "eventId": "2021-10",
+              "place": 10,
+              "score": "21:49.25"
+            },
+            {
+              "eventId": "2021-11",
+              "place": 21,
+              "score": null
+            },
+            {
+              "eventId": "2021-12",
+              "place": 21,
+              "score": null
+            },
+            {
+              "eventId": "2021-13",
+              "place": 21,
+              "score": null
+            },
+            {
+              "eventId": "2021-14",
+              "place": 21,
+              "score": null
+            },
+            {
+              "eventId": "2021-15",
+              "place": 21,
+              "score": null
+            }
+          ]
+        },
+        {
+          "year": 2022,
+          "division": "men",
+          "overallRank": 28,
+          "fieldSize": 40,
+          "events": [
+            {
+              "eventId": "2022-01",
+              "place": 19,
+              "score": "38:46.87"
+            },
+            {
+              "eventId": "2022-02",
+              "place": 25,
+              "score": "07:26.95"
+            },
+            {
+              "eventId": "2022-03",
+              "place": 16,
+              "score": "13 rep"
+            },
+            {
+              "eventId": "2022-04",
+              "place": 22,
+              "score": "22 pt"
+            },
+            {
+              "eventId": "2022-05",
+              "place": 14,
+              "score": "CAP+6"
+            },
+            {
+              "eventId": "2022-06",
+              "place": 22,
+              "score": "38:10.42"
+            },
+            {
+              "eventId": "2022-07",
+              "place": 23,
+              "score": "15:12.94"
+            },
+            {
+              "eventId": "2022-08",
+              "place": 25,
+              "score": "CAP+7"
+            },
+            {
+              "eventId": "2022-09",
+              "place": 27,
+              "score": "137 cal"
+            },
+            {
+              "eventId": "2022-10",
+              "place": 20,
+              "score": "04:24.24"
+            },
+            {
+              "eventId": "2022-11",
+              "place": 36,
+              "score": "280 lb"
+            },
+            {
+              "eventId": "2022-12",
+              "place": 28,
+              "score": "09:18.47"
+            },
+            {
+              "eventId": "2022-13",
+              "place": 12,
+              "score": "02:06.97"
+            },
+            {
+              "eventId": "2022-14",
+              "place": 22,
+              "score": "09:23.41"
+            }
+          ]
+        },
+        {
+          "year": 2023,
+          "division": "men",
+          "overallRank": 8,
+          "fieldSize": 40,
+          "events": [
+            {
+              "eventId": "2023-01",
+              "place": 3,
+              "score": "7 rep"
+            },
+            {
+              "eventId": "2023-02",
+              "place": 10,
+              "score": "16:17.00"
+            },
+            {
+              "eventId": "2023-03",
+              "place": 4,
+              "score": "04:27.72"
+            },
+            {
+              "eventId": "2023-04",
+              "place": 22,
+              "score": "CAP+1"
+            },
+            {
+              "eventId": "2023-05",
+              "place": 22,
+              "score": "05:33.46"
+            },
+            {
+              "eventId": "2023-06",
+              "place": 8,
+              "score": "08:18.36"
+            },
+            {
+              "eventId": "2023-07",
+              "place": 6,
+              "score": "17:08.62"
+            },
+            {
+              "eventId": "2023-08",
+              "place": 10,
+              "score": "08:03.51"
+            },
+            {
+              "eventId": "2023-09",
+              "place": 19,
+              "score": "610 lb"
+            },
+            {
+              "eventId": "2023-10",
+              "place": 20,
+              "score": "09:34.77"
+            },
+            {
+              "eventId": "2023-11",
+              "place": 8,
+              "score": "08:45.65"
+            },
+            {
+              "eventId": "2023-12",
+              "place": 6,
+              "score": "07:11.94"
+            }
+          ]
+        },
+        {
+          "year": 2024,
+          "division": "men",
+          "overallRank": 12,
+          "fieldSize": 39,
+          "events": [
+            {
+              "eventId": "2024-01",
+              "place": 13,
+              "score": "40:18.96"
+            },
+            {
+              "eventId": "2024-02",
+              "place": 10,
+              "score": "15:49.98"
+            },
+            {
+              "eventId": "2024-03",
+              "place": 12,
+              "score": "02:53.42"
+            },
+            {
+              "eventId": "2024-04",
+              "place": 6,
+              "score": "6 pt"
+            },
+            {
+              "eventId": "2024-05",
+              "place": 8,
+              "score": "48:40.00"
+            },
+            {
+              "eventId": "2024-06",
+              "place": 16,
+              "score": "16 pt"
+            },
+            {
+              "eventId": "2024-07",
+              "place": 3,
+              "score": "07:24.83"
+            },
+            {
+              "eventId": "2024-08",
+              "place": 19,
+              "score": "07:51.35"
+            },
+            {
+              "eventId": "2024-09",
+              "place": 30,
+              "score": "WD"
+            },
+            {
+              "eventId": "2024-10",
+              "place": 30,
+              "score": "WD"
+            }
+          ]
+        },
+        {
+          "year": 2025,
+          "division": "men",
+          "overallRank": 6,
+          "fieldSize": 30,
+          "events": [
+            {
+              "eventId": "2025-01",
+              "place": 5,
+              "score": "47:50.00"
+            },
+            {
+              "eventId": "2025-02",
+              "place": 3,
+              "score": "06:15.59"
+            },
+            {
+              "eventId": "2025-03",
+              "place": 5,
+              "score": "05:53.23"
+            },
+            {
+              "eventId": "2025-04",
+              "place": 1,
+              "score": "16:28.57"
+            },
+            {
+              "eventId": "2025-05",
+              "place": 14,
+              "score": "485 lb"
+            },
+            {
+              "eventId": "2025-06",
+              "place": 16,
+              "score": "03:24.32"
+            },
+            {
+              "eventId": "2025-07",
+              "place": 12,
+              "score": "04:49.66"
+            },
+            {
+              "eventId": "2025-08",
+              "place": 6,
+              "score": "08:38.88"
+            },
+            {
+              "eventId": "2025-09",
+              "place": 7,
+              "score": "02:44.44"
+            },
+            {
+              "eventId": "2025-10",
+              "place": 7,
+              "score": "08:27.94"
+            }
+          ]
+        }
+      ]
+    },
+    "Jayson Hopper": {
+      "games": [
+        {
+          "year": 2021,
+          "division": "men",
+          "overallRank": 19,
+          "fieldSize": 40,
+          "events": [
+            {
+              "eventId": "2021-01",
+              "place": 12,
+              "score": "1:12:56.12"
+            },
+            {
+              "eventId": "2021-02",
+              "place": 33,
+              "score": "11:23.50"
+            },
+            {
+              "eventId": "2021-03",
+              "place": 7,
+              "score": "01:17.26"
+            },
+            {
+              "eventId": "2021-04",
+              "place": 24,
+              "score": "20:31.47"
+            },
+            {
+              "eventId": "2021-05",
+              "place": 33,
+              "score": "14:19.31"
+            },
+            {
+              "eventId": "2021-06",
+              "place": 11,
+              "score": "CAP+1"
+            },
+            {
+              "eventId": "2021-07",
+              "place": 8,
+              "score": "05:59.57"
+            },
+            {
+              "eventId": "2021-08",
+              "place": 30,
+              "score": "CAP+7"
+            },
+            {
+              "eventId": "2021-09",
+              "place": 8,
+              "score": "03:47.58"
+            },
+            {
+              "eventId": "2021-10",
+              "place": 7,
+              "score": "21:42.22"
+            },
+            {
+              "eventId": "2021-11",
+              "place": 15,
+              "score": "207 rep"
+            },
+            {
+              "eventId": "2021-12",
+              "place": 14,
+              "score": "270.0 lb"
+            },
+            {
+              "eventId": "2021-13",
+              "place": 10,
+              "score": "07:51.59"
+            },
+            {
+              "eventId": "2021-14",
+              "place": 17,
+              "score": "CAP+31"
+            },
+            {
+              "eventId": "2021-15",
+              "place": 17,
+              "score": "08:08.35"
+            }
+          ]
+        },
+        {
+          "year": 2022,
+          "division": "men",
+          "overallRank": 7,
+          "fieldSize": 40,
+          "events": [
+            {
+              "eventId": "2022-01",
+              "place": 18,
+              "score": "38:46.82"
+            },
+            {
+              "eventId": "2022-02",
+              "place": 8,
+              "score": "07:06.45"
+            },
+            {
+              "eventId": "2022-03",
+              "place": 4,
+              "score": "16 rep"
+            },
+            {
+              "eventId": "2022-04",
+              "place": 28,
+              "score": "28 pt"
+            },
+            {
+              "eventId": "2022-05",
+              "place": 29,
+              "score": "CAP+17"
+            },
+            {
+              "eventId": "2022-06",
+              "place": 5,
+              "score": "33:04.11"
+            },
+            {
+              "eventId": "2022-07",
+              "place": 30,
+              "score": "16:10.64"
+            },
+            {
+              "eventId": "2022-08",
+              "place": 2,
+              "score": "06:57.82"
+            },
+            {
+              "eventId": "2022-09",
+              "place": 22,
+              "score": "141 cal"
+            },
+            {
+              "eventId": "2022-10",
+              "place": 11,
+              "score": "04:15.87"
+            },
+            {
+              "eventId": "2022-11",
+              "place": 4,
+              "score": "340 lb"
+            },
+            {
+              "eventId": "2022-12",
+              "place": 6,
+              "score": "06:48.56"
+            },
+            {
+              "eventId": "2022-13",
+              "place": 8,
+              "score": "01:52.14"
+            },
+            {
+              "eventId": "2022-14",
+              "place": 11,
+              "score": "08:46.56"
+            }
+          ]
+        },
+        {
+          "year": 2023,
+          "division": "men",
+          "overallRank": 31,
+          "fieldSize": 40,
+          "events": [
+            {
+              "eventId": "2023-01",
+              "place": 33,
+              "score": "7 rep"
+            },
+            {
+              "eventId": "2023-02",
+              "place": 11,
+              "score": "16:26.61"
+            },
+            {
+              "eventId": "2023-03",
+              "place": 38,
+              "score": "CAP+17"
+            },
+            {
+              "eventId": "2023-04",
+              "place": 19,
+              "score": "17:42.95"
+            },
+            {
+              "eventId": "2023-05",
+              "place": 14,
+              "score": "05:10.66"
+            },
+            {
+              "eventId": "2023-06",
+              "place": 37,
+              "score": "09:39.51"
+            },
+            {
+              "eventId": "2023-07",
+              "place": 31,
+              "score": null
+            },
+            {
+              "eventId": "2023-08",
+              "place": 31,
+              "score": null
+            },
+            {
+              "eventId": "2023-09",
+              "place": 31,
+              "score": null
+            },
+            {
+              "eventId": "2023-10",
+              "place": 21,
+              "score": null
+            },
+            {
+              "eventId": "2023-11",
+              "place": 21,
+              "score": null
+            },
+            {
+              "eventId": "2023-12",
+              "place": 21,
+              "score": null
+            }
+          ]
+        },
+        {
+          "year": 2024,
+          "division": "men",
+          "overallRank": 4,
+          "fieldSize": 39,
+          "events": [
+            {
+              "eventId": "2024-01",
+              "place": 19,
+              "score": "41:38.45"
+            },
+            {
+              "eventId": "2024-02",
+              "place": 2,
+              "score": "14:16.68"
+            },
+            {
+              "eventId": "2024-03",
+              "place": 1,
+              "score": "02:32.48"
+            },
+            {
+              "eventId": "2024-04",
+              "place": 12,
+              "score": "12 pt"
+            },
+            {
+              "eventId": "2024-05",
+              "place": 9,
+              "score": "49:04.00"
+            },
+            {
+              "eventId": "2024-06",
+              "place": 12,
+              "score": "12 pt"
+            },
+            {
+              "eventId": "2024-07",
+              "place": 10,
+              "score": "08:37.48"
+            },
+            {
+              "eventId": "2024-08",
+              "place": 1,
+              "score": "07:04.19"
+            },
+            {
+              "eventId": "2024-09",
+              "place": 6,
+              "score": "02:35.57"
+            },
+            {
+              "eventId": "2024-10",
+              "place": 18,
+              "score": "05:57.79"
+            }
+          ]
+        },
+        {
+          "year": 2025,
+          "division": "men",
+          "overallRank": 1,
+          "fieldSize": 30,
+          "events": [
+            {
+              "eventId": "2025-01",
+              "place": 8,
+              "score": "48:54.00"
+            },
+            {
+              "eventId": "2025-02",
+              "place": 4,
+              "score": "06:33.43"
+            },
+            {
+              "eventId": "2025-03",
+              "place": 1,
+              "score": "05:34.90"
+            },
+            {
+              "eventId": "2025-04",
+              "place": 4,
+              "score": "17:22.91"
+            },
+            {
+              "eventId": "2025-05",
+              "place": 6,
+              "score": "500 lb"
+            },
+            {
+              "eventId": "2025-06",
+              "place": 17,
+              "score": "03:24.78"
+            },
+            {
+              "eventId": "2025-07",
+              "place": 8,
+              "score": "04:42.05"
+            },
+            {
+              "eventId": "2025-08",
+              "place": 2,
+              "score": "08:26.17"
+            },
+            {
+              "eventId": "2025-09",
+              "place": 11,
+              "score": "02:50.72"
+            },
+            {
+              "eventId": "2025-10",
+              "place": 3,
+              "score": "07:57.48"
+            }
+          ]
+        }
+      ]
+    },
+    "Colten Mertens": {
+      "games": [
+        {
+          "year": 2021,
+          "division": "men",
+          "overallRank": 31,
+          "fieldSize": 40,
+          "events": [
+            {
+              "eventId": "2021-01",
+              "place": 34,
+              "score": "1:19:36.84"
+            },
+            {
+              "eventId": "2021-02",
+              "place": 26,
+              "score": "09:55.34"
+            },
+            {
+              "eventId": "2021-03",
+              "place": 37,
+              "score": "01:35.92"
+            },
+            {
+              "eventId": "2021-04",
+              "place": 15,
+              "score": "17:13.37"
+            },
+            {
+              "eventId": "2021-05",
+              "place": 29,
+              "score": "13:39.47"
+            },
+            {
+              "eventId": "2021-06",
+              "place": 28,
+              "score": "CAP+2"
+            },
+            {
+              "eventId": "2021-07",
+              "place": 17,
+              "score": "06:38.43"
+            },
+            {
+              "eventId": "2021-08",
+              "place": 23,
+              "score": "04:39.22"
+            },
+            {
+              "eventId": "2021-09",
+              "place": 26,
+              "score": "04:16.71"
+            },
+            {
+              "eventId": "2021-10",
+              "place": 31,
+              "score": null
+            },
+            {
+              "eventId": "2021-11",
+              "place": 21,
+              "score": null
+            },
+            {
+              "eventId": "2021-12",
+              "place": 21,
+              "score": null
+            },
+            {
+              "eventId": "2021-13",
+              "place": 21,
+              "score": null
+            },
+            {
+              "eventId": "2021-14",
+              "place": 21,
+              "score": null
+            },
+            {
+              "eventId": "2021-15",
+              "place": 21,
+              "score": null
+            }
+          ]
+        },
+        {
+          "year": 2022,
+          "division": "men",
+          "overallRank": 32,
+          "fieldSize": 40,
+          "events": [
+            {
+              "eventId": "2022-01",
+              "place": 34,
+              "score": "41:02.32"
+            },
+            {
+              "eventId": "2022-02",
+              "place": 38,
+              "score": "08:12.95"
+            },
+            {
+              "eventId": "2022-03",
+              "place": 32,
+              "score": "8 rep"
+            },
+            {
+              "eventId": "2022-04",
+              "place": 16,
+              "score": "16 pt"
+            },
+            {
+              "eventId": "2022-05",
+              "place": 3,
+              "score": "09:24.49"
+            },
+            {
+              "eventId": "2022-06",
+              "place": 36,
+              "score": "43:32.09"
+            },
+            {
+              "eventId": "2022-07",
+              "place": 32,
+              "score": "16:41.86"
+            },
+            {
+              "eventId": "2022-08",
+              "place": 8,
+              "score": "07:55.89"
+            },
+            {
+              "eventId": "2022-09",
+              "place": 37,
+              "score": "127 cal"
+            },
+            {
+              "eventId": "2022-10",
+              "place": 24,
+              "score": "04:36.05"
+            },
+            {
+              "eventId": "2022-11",
+              "place": 37,
+              "score": "280 lb"
+            },
+            {
+              "eventId": "2022-12",
+              "place": 31,
+              "score": null
+            },
+            {
+              "eventId": "2022-13",
+              "place": 30,
+              "score": null
+            },
+            {
+              "eventId": "2022-14",
+              "place": 30,
+              "score": null
+            }
+          ]
+        },
+        {
+          "year": 2023,
+          "division": "men",
+          "overallRank": 18,
+          "fieldSize": 40,
+          "events": [
+            {
+              "eventId": "2023-01",
+              "place": 23,
+              "score": "7 rep"
+            },
+            {
+              "eventId": "2023-02",
+              "place": 22,
+              "score": "17:47.74"
+            },
+            {
+              "eventId": "2023-03",
+              "place": 14,
+              "score": "05:41.72"
+            },
+            {
+              "eventId": "2023-04",
+              "place": 11,
+              "score": "15:11.23"
+            },
+            {
+              "eventId": "2023-05",
+              "place": 1,
+              "score": "04:30.60"
+            },
+            {
+              "eventId": "2023-06",
+              "place": 17,
+              "score": "08:29.18"
+            },
+            {
+              "eventId": "2023-07",
+              "place": 23,
+              "score": "18:33.79"
+            },
+            {
+              "eventId": "2023-08",
+              "place": 20,
+              "score": "08:26.38"
+            },
+            {
+              "eventId": "2023-09",
+              "place": 22,
+              "score": "597 lb"
+            },
+            {
+              "eventId": "2023-10",
+              "place": 19,
+              "score": "09:28.90"
+            },
+            {
+              "eventId": "2023-11",
+              "place": 14,
+              "score": "09:05.53"
+            },
+            {
+              "eventId": "2023-12",
+              "place": 10,
+              "score": "07:42.89"
+            }
+          ]
+        },
+        {
+          "year": 2025,
+          "division": "men",
+          "overallRank": 12,
+          "fieldSize": 30,
+          "events": [
+            {
+              "eventId": "2025-01",
+              "place": 26,
+              "score": "53:11.00"
+            },
+            {
+              "eventId": "2025-02",
+              "place": 20,
+              "score": "07:47.63"
+            },
+            {
+              "eventId": "2025-03",
+              "place": 10,
+              "score": "06:52.11"
+            },
+            {
+              "eventId": "2025-04",
+              "place": 19,
+              "score": "19:12.13"
+            },
+            {
+              "eventId": "2025-05",
+              "place": 1,
+              "score": "570 lb"
+            },
+            {
+              "eventId": "2025-06",
+              "place": 11,
+              "score": "03:20.17"
+            },
+            {
+              "eventId": "2025-07",
+              "place": 2,
+              "score": "04:27.63"
+            },
+            {
+              "eventId": "2025-08",
+              "place": 17,
+              "score": "10:03.86"
+            },
+            {
+              "eventId": "2025-09",
+              "place": 14,
+              "score": "02:55.23"
+            },
+            {
+              "eventId": "2025-10",
+              "place": 21,
+              "score": "09:54.31"
+            }
+          ]
+        }
+      ]
+    },
+    "Dallin Pepper": {
+      "games": [
+        {
+          "year": 2022,
+          "division": "men",
+          "overallRank": 19,
+          "fieldSize": 40,
+          "events": [
+            {
+              "eventId": "2022-01",
+              "place": 12,
+              "score": "37:56.00"
+            },
+            {
+              "eventId": "2022-02",
+              "place": 31,
+              "score": "07:40.03"
+            },
+            {
+              "eventId": "2022-03",
+              "place": 22,
+              "score": "12 rep"
+            },
+            {
+              "eventId": "2022-04",
+              "place": 14,
+              "score": "14 pt"
+            },
+            {
+              "eventId": "2022-05",
+              "place": 39,
+              "score": "CAP+37"
+            },
+            {
+              "eventId": "2022-06",
+              "place": 18,
+              "score": "36:08.59"
+            },
+            {
+              "eventId": "2022-07",
+              "place": 21,
+              "score": "15:04.08"
+            },
+            {
+              "eventId": "2022-08",
+              "place": 37,
+              "score": "CAP+62"
+            },
+            {
+              "eventId": "2022-09",
+              "place": 2,
+              "score": "156 cal"
+            },
+            {
+              "eventId": "2022-10",
+              "place": 4,
+              "score": "04:06.23"
+            },
+            {
+              "eventId": "2022-11",
+              "place": 24,
+              "score": "300 lb"
+            },
+            {
+              "eventId": "2022-12",
+              "place": 15,
+              "score": "07:29.97"
+            },
+            {
+              "eventId": "2022-13",
+              "place": 17,
+              "score": "02:32.58"
+            },
+            {
+              "eventId": "2022-14",
+              "place": 13,
+              "score": "08:52.64"
+            }
+          ]
+        },
+        {
+          "year": 2023,
+          "division": "men",
+          "overallRank": 5,
+          "fieldSize": 40,
+          "events": [
+            {
+              "eventId": "2023-01",
+              "place": 8,
+              "score": "7 rep"
+            },
+            {
+              "eventId": "2023-02",
+              "place": 13,
+              "score": "16:33.15"
+            },
+            {
+              "eventId": "2023-03",
+              "place": 17,
+              "score": "06:27.82"
+            },
+            {
+              "eventId": "2023-04",
+              "place": 4,
+              "score": "13:57.83"
+            },
+            {
+              "eventId": "2023-05",
+              "place": 29,
+              "score": "CAP"
+            },
+            {
+              "eventId": "2023-06",
+              "place": 18,
+              "score": "08:30.75"
+            },
+            {
+              "eventId": "2023-07",
+              "place": 25,
+              "score": "18:55.08"
+            },
+            {
+              "eventId": "2023-08",
+              "place": 5,
+              "score": "07:55.53"
+            },
+            {
+              "eventId": "2023-09",
+              "place": 8,
+              "score": "629 lb"
+            },
+            {
+              "eventId": "2023-10",
+              "place": 7,
+              "score": "07:56.62"
+            },
+            {
+              "eventId": "2023-11",
+              "place": 5,
+              "score": "08:17.85"
+            },
+            {
+              "eventId": "2023-12",
+              "place": 1,
+              "score": "06:44.79"
+            }
+          ]
+        },
+        {
+          "year": 2024,
+          "division": "men",
+          "overallRank": 2,
+          "fieldSize": 39,
+          "events": [
+            {
+              "eventId": "2024-01",
+              "place": 15,
+              "score": "40:44.36"
+            },
+            {
+              "eventId": "2024-02",
+              "place": 3,
+              "score": "14:26.50"
+            },
+            {
+              "eventId": "2024-03",
+              "place": 2,
+              "score": "02:37.48"
+            },
+            {
+              "eventId": "2024-04",
+              "place": 22,
+              "score": "22 pt"
+            },
+            {
+              "eventId": "2024-05",
+              "place": 5,
+              "score": "47:16.00"
+            },
+            {
+              "eventId": "2024-06",
+              "place": 6,
+              "score": "6 pt"
+            },
+            {
+              "eventId": "2024-07",
+              "place": 11,
+              "score": "08:37.85"
+            },
+            {
+              "eventId": "2024-08",
+              "place": 5,
+              "score": "07:17.25"
+            },
+            {
+              "eventId": "2024-09",
+              "place": 2,
+              "score": "02:31.58"
+            },
+            {
+              "eventId": "2024-10",
+              "place": 7,
+              "score": "05:26.30"
+            }
+          ]
+        },
+        {
+          "year": 2025,
+          "division": "men",
+          "overallRank": 4,
+          "fieldSize": 30,
+          "events": [
+            {
+              "eventId": "2025-01",
+              "place": 15,
+              "score": "51:15.00"
+            },
+            {
+              "eventId": "2025-02",
+              "place": 6,
+              "score": "06:45.85"
+            },
+            {
+              "eventId": "2025-03",
+              "place": 11,
+              "score": "07:14.57"
+            },
+            {
+              "eventId": "2025-04",
+              "place": 6,
+              "score": "17:41.29"
+            },
+            {
+              "eventId": "2025-05",
+              "place": 8,
+              "score": "495 lb"
+            },
+            {
+              "eventId": "2025-06",
+              "place": 4,
+              "score": "03:17.56"
+            },
+            {
+              "eventId": "2025-07",
+              "place": 7,
+              "score": "04:41.68"
+            },
+            {
+              "eventId": "2025-08",
+              "place": 5,
+              "score": "08:36.50"
+            },
+            {
+              "eventId": "2025-09",
+              "place": 3,
+              "score": "02:39.98"
+            },
+            {
+              "eventId": "2025-10",
+              "place": 6,
+              "score": "08:21.31"
+            }
+          ]
+        }
+      ]
+    },
+    "Enrico Zenoni": {
+      "games": [
+        {
+          "year": 2022,
+          "division": "men",
+          "overallRank": 29,
+          "fieldSize": 40,
+          "events": [
+            {
+              "eventId": "2022-01",
+              "place": 22,
+              "score": "38:59.83"
+            },
+            {
+              "eventId": "2022-02",
+              "place": 26,
+              "score": "07:27.37"
+            },
+            {
+              "eventId": "2022-03",
+              "place": 27,
+              "score": "10 rep"
+            },
+            {
+              "eventId": "2022-04",
+              "place": 20,
+              "score": "20 pt"
+            },
+            {
+              "eventId": "2022-05",
+              "place": 10,
+              "score": "CAP+2"
+            },
+            {
+              "eventId": "2022-06",
+              "place": 38,
+              "score": "44:36.30"
+            },
+            {
+              "eventId": "2022-07",
+              "place": 11,
+              "score": "14:18.12"
+            },
+            {
+              "eventId": "2022-08",
+              "place": 4,
+              "score": "07:07.08"
+            },
+            {
+              "eventId": "2022-09",
+              "place": 39,
+              "score": "121 cal"
+            },
+            {
+              "eventId": "2022-10",
+              "place": 39,
+              "score": "05:56.29"
+            },
+            {
+              "eventId": "2022-11",
+              "place": 34,
+              "score": "290 lb"
+            },
+            {
+              "eventId": "2022-12",
+              "place": 23,
+              "score": "08:42.03"
+            },
+            {
+              "eventId": "2022-13",
+              "place": 28,
+              "score": "CAP+4"
+            },
+            {
+              "eventId": "2022-14",
+              "place": 26,
+              "score": "09:45.15"
+            }
+          ]
+        },
+        {
+          "year": 2025,
+          "division": "men",
+          "overallRank": 22,
+          "fieldSize": 30,
+          "events": [
+            {
+              "eventId": "2025-01",
+              "place": 17,
+              "score": "51:29.00"
+            },
+            {
+              "eventId": "2025-02",
+              "place": 15,
+              "score": "07:13.82"
+            },
+            {
+              "eventId": "2025-03",
+              "place": 15,
+              "score": "07:22.12"
+            },
+            {
+              "eventId": "2025-04",
+              "place": 18,
+              "score": "19:02.83"
+            },
+            {
+              "eventId": "2025-05",
+              "place": 30,
+              "score": "415 lb"
+            },
+            {
+              "eventId": "2025-06",
+              "place": 18,
+              "score": "03:25.16"
+            },
+            {
+              "eventId": "2025-07",
+              "place": 22,
+              "score": "05:18.37"
+            },
+            {
+              "eventId": "2025-08",
+              "place": 8,
+              "score": "09:22.79"
+            },
+            {
+              "eventId": "2025-09",
+              "place": 30,
+              "score": "03:31.26"
+            },
+            {
+              "eventId": "2025-10",
+              "place": 20,
+              "score": "09:47.55"
+            }
+          ]
+        }
+      ]
+    },
+    "Tudor Magda": {
+      "games": [
+        {
+          "year": 2022,
+          "division": "men",
+          "overallRank": 34,
+          "fieldSize": 40,
+          "events": [
+            {
+              "eventId": "2022-01",
+              "place": 38,
+              "score": "42:33.48"
+            },
+            {
+              "eventId": "2022-02",
+              "place": 33,
+              "score": "07:47.20"
+            },
+            {
+              "eventId": "2022-03",
+              "place": 9,
+              "score": "15 rep"
+            },
+            {
+              "eventId": "2022-04",
+              "place": 40,
+              "score": "40 pt"
+            },
+            {
+              "eventId": "2022-05",
+              "place": 35,
+              "score": "CAP+21"
+            },
+            {
+              "eventId": "2022-06",
+              "place": 29,
+              "score": "39:38.38"
+            },
+            {
+              "eventId": "2022-07",
+              "place": 36,
+              "score": "17:07.66"
+            },
+            {
+              "eventId": "2022-08",
+              "place": 12,
+              "score": "08:28.21"
+            },
+            {
+              "eventId": "2022-09",
+              "place": 28,
+              "score": "136 cal"
+            },
+            {
+              "eventId": "2022-10",
+              "place": 8,
+              "score": "04:12.96"
+            },
+            {
+              "eventId": "2022-11",
+              "place": 31,
+              "score": "290 lb"
+            },
+            {
+              "eventId": "2022-12",
+              "place": 31,
+              "score": null
+            },
+            {
+              "eventId": "2022-13",
+              "place": 30,
+              "score": null
+            },
+            {
+              "eventId": "2022-14",
+              "place": 30,
+              "score": null
+            }
+          ]
+        },
+        {
+          "year": 2025,
+          "division": "men",
+          "overallRank": 10,
+          "fieldSize": 30,
+          "events": [
+            {
+              "eventId": "2025-01",
+              "place": 20,
+              "score": "51:59.00"
+            },
+            {
+              "eventId": "2025-02",
+              "place": 8,
+              "score": "06:47.43"
+            },
+            {
+              "eventId": "2025-03",
+              "place": 9,
+              "score": "06:38.05"
+            },
+            {
+              "eventId": "2025-04",
+              "place": 10,
+              "score": "18:11.84"
+            },
+            {
+              "eventId": "2025-05",
+              "place": 21,
+              "score": "460 lb"
+            },
+            {
+              "eventId": "2025-06",
+              "place": 14,
+              "score": "03:23.65"
+            },
+            {
+              "eventId": "2025-07",
+              "place": 26,
+              "score": "05:26.50"
+            },
+            {
+              "eventId": "2025-08",
+              "place": 3,
+              "score": "08:27.34"
+            },
+            {
+              "eventId": "2025-09",
+              "place": 2,
+              "score": "02:36.02"
+            },
+            {
+              "eventId": "2025-10",
+              "place": 12,
+              "score": "09:16.42"
+            }
+          ]
+        }
+      ]
+    },
+    "Moritz Fiebig": {
+      "games": [
+        {
+          "year": 2022,
+          "division": "men",
+          "overallRank": 36,
+          "fieldSize": 40,
+          "events": [
+            {
+              "eventId": "2022-01",
+              "place": 9,
+              "score": "37:29.71"
+            },
+            {
+              "eventId": "2022-02",
+              "place": 34,
+              "score": "07:47.28"
+            },
+            {
+              "eventId": "2022-03",
+              "place": 38,
+              "score": "4 rep"
+            },
+            {
+              "eventId": "2022-04",
+              "place": 23,
+              "score": "23 pt"
+            },
+            {
+              "eventId": "2022-05",
+              "place": 34,
+              "score": "CAP+21"
+            },
+            {
+              "eventId": "2022-06",
+              "place": 25,
+              "score": "38:44.32"
+            },
+            {
+              "eventId": "2022-07",
+              "place": 37,
+              "score": "17:09.27"
+            },
+            {
+              "eventId": "2022-08",
+              "place": 27,
+              "score": "CAP+31"
+            },
+            {
+              "eventId": "2022-09",
+              "place": 24,
+              "score": "139 cal"
+            },
+            {
+              "eventId": "2022-10",
+              "place": 32,
+              "score": "04:48.35"
+            },
+            {
+              "eventId": "2022-11",
+              "place": 22,
+              "score": "310 lb"
+            },
+            {
+              "eventId": "2022-12",
+              "place": 31,
+              "score": null
+            },
+            {
+              "eventId": "2022-13",
+              "place": 30,
+              "score": null
+            },
+            {
+              "eventId": "2022-14",
+              "place": 30,
+              "score": null
+            }
+          ]
+        },
+        {
+          "year": 2023,
+          "division": "men",
+          "overallRank": 21,
+          "fieldSize": 40,
+          "events": [
+            {
+              "eventId": "2023-01",
+              "place": 7,
+              "score": "7 rep"
+            },
+            {
+              "eventId": "2023-02",
+              "place": 5,
+              "score": "15:25.18"
+            },
+            {
+              "eventId": "2023-03",
+              "place": 19,
+              "score": "06:29.10"
+            },
+            {
+              "eventId": "2023-04",
+              "place": 35,
+              "score": "CAP+14"
+            },
+            {
+              "eventId": "2023-05",
+              "place": 18,
+              "score": "05:23.54"
+            },
+            {
+              "eventId": "2023-06",
+              "place": 35,
+              "score": "09:06.76"
+            },
+            {
+              "eventId": "2023-07",
+              "place": 28,
+              "score": "20:57.61"
+            },
+            {
+              "eventId": "2023-08",
+              "place": 29,
+              "score": "09:08.88"
+            },
+            {
+              "eventId": "2023-09",
+              "place": 4,
+              "score": "642 lb"
+            },
+            {
+              "eventId": "2023-10",
+              "place": 21,
+              "score": null
+            },
+            {
+              "eventId": "2023-11",
+              "place": 21,
+              "score": null
+            },
+            {
+              "eventId": "2023-12",
+              "place": 21,
+              "score": null
+            }
+          ]
+        },
+        {
+          "year": 2024,
+          "division": "men",
+          "overallRank": 33,
+          "fieldSize": 39,
+          "events": [
+            {
+              "eventId": "2024-01",
+              "place": 22,
+              "score": "42:00.44"
+            },
+            {
+              "eventId": "2024-02",
+              "place": 28,
+              "score": "18:05.00"
+            },
+            {
+              "eventId": "2024-03",
+              "place": 31,
+              "score": "03:17.23"
+            },
+            {
+              "eventId": "2024-04",
+              "place": 31,
+              "score": "31 pt"
+            },
+            {
+              "eventId": "2024-05",
+              "place": 33,
+              "score": "DNS"
+            },
+            {
+              "eventId": "2024-06",
+              "place": 33,
+              "score": "DNS"
+            },
+            {
+              "eventId": "2024-07",
+              "place": 32,
+              "score": "DNS"
+            },
+            {
+              "eventId": "2024-08",
+              "place": 31,
+              "score": null
+            },
+            {
+              "eventId": "2024-09",
+              "place": 30,
+              "score": null
+            },
+            {
+              "eventId": "2024-10",
+              "place": 30,
+              "score": null
+            }
+          ]
+        },
+        {
+          "year": 2025,
+          "division": "men",
+          "overallRank": 19,
+          "fieldSize": 30,
+          "events": [
+            {
+              "eventId": "2025-01",
+              "place": 25,
+              "score": "53:02.00"
+            },
+            {
+              "eventId": "2025-02",
+              "place": 30,
+              "score": "CAP+18"
+            },
+            {
+              "eventId": "2025-03",
+              "place": 26,
+              "score": "09:49.31"
+            },
+            {
+              "eventId": "2025-04",
+              "place": 24,
+              "score": "20:51.34"
+            },
+            {
+              "eventId": "2025-05",
+              "place": 14,
+              "score": "485 lb"
+            },
+            {
+              "eventId": "2025-06",
+              "place": 8,
+              "score": "03:18.98"
+            },
+            {
+              "eventId": "2025-07",
+              "place": 9,
+              "score": "04:43.70"
+            },
+            {
+              "eventId": "2025-08",
+              "place": 11,
+              "score": "09:39.43"
+            },
+            {
+              "eventId": "2025-09",
+              "place": 15,
+              "score": "02:55.68"
+            },
+            {
+              "eventId": "2025-10",
+              "place": 11,
+              "score": "09:09.70"
+            }
+          ]
+        }
+      ]
+    },
+    "Emma Lawson": {
+      "games": [
+        {
+          "year": 2022,
+          "division": "women",
+          "overallRank": 6,
+          "fieldSize": 40,
+          "events": [
+            {
+              "eventId": "2022-01",
+              "place": 3,
+              "score": "38:30.48"
+            },
+            {
+              "eventId": "2022-02",
+              "place": 9,
+              "score": "07:33.66"
+            },
+            {
+              "eventId": "2022-03",
+              "place": 4,
+              "score": "13 rep"
+            },
+            {
+              "eventId": "2022-04",
+              "place": 3,
+              "score": "3 pt"
+            },
+            {
+              "eventId": "2022-05",
+              "place": 16,
+              "score": "CAP"
+            },
+            {
+              "eventId": "2022-06",
+              "place": 11,
+              "score": "38:08.40"
+            },
+            {
+              "eventId": "2022-07",
+              "place": 3,
+              "score": "13:29.56"
+            },
+            {
+              "eventId": "2022-08",
+              "place": 9,
+              "score": "09:43.37"
+            },
+            {
+              "eventId": "2022-09",
+              "place": 15,
+              "score": "123 cal"
+            },
+            {
+              "eventId": "2022-10",
+              "place": 10,
+              "score": "04:20.22"
+            },
+            {
+              "eventId": "2022-11",
+              "place": 33,
+              "score": "180 lb"
+            },
+            {
+              "eventId": "2022-12",
+              "place": 24,
+              "score": "10:40.60"
+            },
+            {
+              "eventId": "2022-13",
+              "place": 21,
+              "score": "CAP+2"
+            },
+            {
+              "eventId": "2022-14",
+              "place": 14,
+              "score": "10:06.95"
+            }
+          ]
+        },
+        {
+          "year": 2023,
+          "division": "women",
+          "overallRank": 2,
+          "fieldSize": 40,
+          "events": [
+            {
+              "eventId": "2023-01",
+              "place": 1,
+              "score": "7 rep"
+            },
+            {
+              "eventId": "2023-02",
+              "place": 15,
+              "score": "17:13.59"
+            },
+            {
+              "eventId": "2023-03",
+              "place": 13,
+              "score": "05:16.28"
+            },
+            {
+              "eventId": "2023-04",
+              "place": 4,
+              "score": "17:35.41"
+            },
+            {
+              "eventId": "2023-05",
+              "place": 9,
+              "score": "CAP+4"
+            },
+            {
+              "eventId": "2023-06",
+              "place": 5,
+              "score": "08:44.92"
+            },
+            {
+              "eventId": "2023-07",
+              "place": 7,
+              "score": "18:31.60"
+            },
+            {
+              "eventId": "2023-08",
+              "place": 1,
+              "score": "07:48.64"
+            },
+            {
+              "eventId": "2023-09",
+              "place": 7,
+              "score": "433 lb"
+            },
+            {
+              "eventId": "2023-10",
+              "place": 6,
+              "score": "09:49.49"
+            },
+            {
+              "eventId": "2023-11",
+              "place": 10,
+              "score": "10:06.92"
+            },
+            {
+              "eventId": "2023-12",
+              "place": 9,
+              "score": "08:21.07"
+            }
+          ]
+        },
+        {
+          "year": 2024,
+          "division": "women",
+          "overallRank": 16,
+          "fieldSize": 40,
+          "events": [
+            {
+              "eventId": "2024-01",
+              "place": 23,
+              "score": "46:04.27"
+            },
+            {
+              "eventId": "2024-02",
+              "place": 21,
+              "score": "16:30.94"
+            },
+            {
+              "eventId": "2024-03",
+              "place": 9,
+              "score": "03:17.06"
+            },
+            {
+              "eventId": "2024-04",
+              "place": 13,
+              "score": "13 pt"
+            },
+            {
+              "eventId": "2024-05",
+              "place": 26,
+              "score": "57:24.00"
+            },
+            {
+              "eventId": "2024-06",
+              "place": 5,
+              "score": "5 pt"
+            },
+            {
+              "eventId": "2024-07",
+              "place": 16,
+              "score": "08:51.01"
+            },
+            {
+              "eventId": "2024-08",
+              "place": 14,
+              "score": "08:12.65"
+            },
+            {
+              "eventId": "2024-09",
+              "place": 24,
+              "score": "03:17.90"
+            },
+            {
+              "eventId": "2024-10",
+              "place": 16,
+              "score": "06:27.09"
+            }
+          ]
+        }
+      ]
+    },
+    "Lucy Campbell": {
+      "games": [
+        {
+          "year": 2022,
+          "division": "women",
+          "overallRank": 16,
+          "fieldSize": 40,
+          "events": [
+            {
+              "eventId": "2022-01",
+              "place": 8,
+              "score": "39:43.56"
+            },
+            {
+              "eventId": "2022-02",
+              "place": 7,
+              "score": "07:28.74"
+            },
+            {
+              "eventId": "2022-03",
+              "place": 14,
+              "score": "10 rep"
+            },
+            {
+              "eventId": "2022-04",
+              "place": 39,
+              "score": "39 pt"
+            },
+            {
+              "eventId": "2022-05",
+              "place": 34,
+              "score": "CAP+22"
+            },
+            {
+              "eventId": "2022-06",
+              "place": 20,
+              "score": "40:32.53"
+            },
+            {
+              "eventId": "2022-07",
+              "place": 13,
+              "score": "15:00.85"
+            },
+            {
+              "eventId": "2022-08",
+              "place": 11,
+              "score": "10:40.04"
+            },
+            {
+              "eventId": "2022-09",
+              "place": 1,
+              "score": "137 cal"
+            },
+            {
+              "eventId": "2022-10",
+              "place": 19,
+              "score": "04:33.17"
+            },
+            {
+              "eventId": "2022-11",
+              "place": 25,
+              "score": "200 lb"
+            },
+            {
+              "eventId": "2022-12",
+              "place": 13,
+              "score": "08:55.05"
+            },
+            {
+              "eventId": "2022-13",
+              "place": 26,
+              "score": "CAP+8"
+            },
+            {
+              "eventId": "2022-14",
+              "place": 1,
+              "score": "08:29.53"
+            }
+          ]
+        },
+        {
+          "year": 2025,
+          "division": "women",
+          "overallRank": 2,
+          "fieldSize": 30,
+          "events": [
+            {
+              "eventId": "2025-01",
+              "place": 3,
+              "score": "51:36.00"
+            },
+            {
+              "eventId": "2025-02",
+              "place": 10,
+              "score": "07:22.74"
+            },
+            {
+              "eventId": "2025-03",
+              "place": 6,
+              "score": "10:32.11"
+            },
+            {
+              "eventId": "2025-04",
+              "place": 1,
+              "score": "16:33.05"
+            },
+            {
+              "eventId": "2025-05",
+              "place": 23,
+              "score": "295 lb"
+            },
+            {
+              "eventId": "2025-06",
+              "place": 5,
+              "score": "04:00.11"
+            },
+            {
+              "eventId": "2025-07",
+              "place": 1,
+              "score": "05:09.60"
+            },
+            {
+              "eventId": "2025-08",
+              "place": 17,
+              "score": "12:24.06"
+            },
+            {
+              "eventId": "2025-09",
+              "place": 12,
+              "score": "03:01.65"
+            },
+            {
+              "eventId": "2025-10",
+              "place": 5,
+              "score": "09:54.16"
+            }
+          ]
+        }
+      ]
+    },
+    "Paige Rodgers": {
+      "games": [
+        {
+          "year": 2022,
+          "division": "women",
+          "overallRank": 25,
+          "fieldSize": 40,
+          "events": [
+            {
+              "eventId": "2022-01",
+              "place": 32,
+              "score": "43:53.46"
+            },
+            {
+              "eventId": "2022-02",
+              "place": 22,
+              "score": "07:57.31"
+            },
+            {
+              "eventId": "2022-03",
+              "place": 23,
+              "score": "8 rep"
+            },
+            {
+              "eventId": "2022-04",
+              "place": 19,
+              "score": "19 pt"
+            },
+            {
+              "eventId": "2022-05",
+              "place": 27,
+              "score": "CAP+14"
+            },
+            {
+              "eventId": "2022-06",
+              "place": 37,
+              "score": "51:02.37"
+            },
+            {
+              "eventId": "2022-07",
+              "place": 24,
+              "score": "16:17.00"
+            },
+            {
+              "eventId": "2022-08",
+              "place": 6,
+              "score": "09:24.43"
+            },
+            {
+              "eventId": "2022-09",
+              "place": 14,
+              "score": "123 cal"
+            },
+            {
+              "eventId": "2022-10",
+              "place": 16,
+              "score": "04:30.73"
+            },
+            {
+              "eventId": "2022-11",
+              "place": 35,
+              "score": "180 lb"
+            },
+            {
+              "eventId": "2022-12",
+              "place": 26,
+              "score": "10:45.56"
+            },
+            {
+              "eventId": "2022-13",
+              "place": 24,
+              "score": "CAP+5"
+            },
+            {
+              "eventId": "2022-14",
+              "place": 12,
+              "score": "09:55.34"
+            }
+          ]
+        },
+        {
+          "year": 2023,
+          "division": "women",
+          "overallRank": 10,
+          "fieldSize": 40,
+          "events": [
+            {
+              "eventId": "2023-01",
+              "place": 14,
+              "score": "6 rep"
+            },
+            {
+              "eventId": "2023-02",
+              "place": 20,
+              "score": "17:43.40"
+            },
+            {
+              "eventId": "2023-03",
+              "place": 3,
+              "score": "03:56.62"
+            },
+            {
+              "eventId": "2023-04",
+              "place": 19,
+              "score": "CAP+14"
+            },
+            {
+              "eventId": "2023-05",
+              "place": 28,
+              "score": "CAP+16"
+            },
+            {
+              "eventId": "2023-06",
+              "place": 7,
+              "score": "08:50.70"
+            },
+            {
+              "eventId": "2023-07",
+              "place": 24,
+              "score": "20:12.60"
+            },
+            {
+              "eventId": "2023-08",
+              "place": 17,
+              "score": "08:50.10"
+            },
+            {
+              "eventId": "2023-09",
+              "place": 10,
+              "score": "426 lb"
+            },
+            {
+              "eventId": "2023-10",
+              "place": 4,
+              "score": "09:41.97"
+            },
+            {
+              "eventId": "2023-11",
+              "place": 4,
+              "score": "09:18.73"
+            },
+            {
+              "eventId": "2023-12",
+              "place": 10,
+              "score": "08:26.31"
+            }
+          ]
+        }
+      ]
+    },
+    "Rebecca Fuselier": {
+      "games": [
+        {
+          "year": 2022,
+          "division": "women",
+          "overallRank": 30,
+          "fieldSize": 40,
+          "events": [
+            {
+              "eventId": "2022-01",
+              "place": 33,
+              "score": "43:54.05"
+            },
+            {
+              "eventId": "2022-02",
+              "place": 18,
+              "score": "07:50.21"
+            },
+            {
+              "eventId": "2022-03",
+              "place": 36,
+              "score": "3 rep"
+            },
+            {
+              "eventId": "2022-04",
+              "place": 2,
+              "score": "2 pt"
+            },
+            {
+              "eventId": "2022-05",
+              "place": 11,
+              "score": "11:49.34"
+            },
+            {
+              "eventId": "2022-06",
+              "place": 39,
+              "score": "54:42.90"
+            },
+            {
+              "eventId": "2022-07",
+              "place": 19,
+              "score": "15:48.00"
+            },
+            {
+              "eventId": "2022-08",
+              "place": 24,
+              "score": "CAP+26"
+            },
+            {
+              "eventId": "2022-09",
+              "place": 36,
+              "score": "74 cal"
+            },
+            {
+              "eventId": "2022-10",
+              "place": 38,
+              "score": "05:48.29"
+            },
+            {
+              "eventId": "2022-11",
+              "place": 39,
+              "score": "160 lb"
+            },
+            {
+              "eventId": "2022-12",
+              "place": 30,
+              "score": "17:25.77"
+            },
+            {
+              "eventId": "2022-13",
+              "place": 30,
+              "score": "CAP+9"
+            },
+            {
+              "eventId": "2022-14",
+              "place": 29,
+              "score": "CAP+80"
+            }
+          ]
+        }
+      ]
+    },
+    "Elena Carratalá": {
+      "games": [
+        {
+          "year": 2022,
+          "division": "women",
+          "overallRank": 38,
+          "fieldSize": 40,
+          "events": [
+            {
+              "eventId": "2022-01",
+              "place": 40,
+              "score": "CAP+7"
+            },
+            {
+              "eventId": "2022-02",
+              "place": 14,
+              "score": "07:47.10"
+            },
+            {
+              "eventId": "2022-03",
+              "place": 22,
+              "score": "8 rep"
+            },
+            {
+              "eventId": "2022-04",
+              "place": 35,
+              "score": "35 pt"
+            },
+            {
+              "eventId": "2022-05",
+              "place": 39,
+              "score": "CAP+30"
+            },
+            {
+              "eventId": "2022-06",
+              "place": 36,
+              "score": "48:39.41"
+            },
+            {
+              "eventId": "2022-07",
+              "place": 29,
+              "score": "16:59.00"
+            },
+            {
+              "eventId": "2022-08",
+              "place": 26,
+              "score": "CAP+27"
+            },
+            {
+              "eventId": "2022-09",
+              "place": 35,
+              "score": "78 cal"
+            },
+            {
+              "eventId": "2022-10",
+              "place": 31,
+              "score": "05:08.01"
+            },
+            {
+              "eventId": "2022-11",
+              "place": 36,
+              "score": "180 lb"
+            },
+            {
+              "eventId": "2022-12",
+              "place": 31,
+              "score": null
+            },
+            {
+              "eventId": "2022-13",
+              "place": 31,
+              "score": null
+            },
+            {
+              "eventId": "2022-14",
+              "place": 31,
+              "score": null
+            }
+          ]
+        }
+      ]
+    },
+    "James Sprague": {
+      "games": [
+        {
+          "year": 2023,
+          "division": "men",
+          "overallRank": 25,
+          "fieldSize": 40,
+          "events": [
+            {
+              "eventId": "2023-01",
+              "place": 9,
+              "score": "7 rep"
+            },
+            {
+              "eventId": "2023-02",
+              "place": 12,
+              "score": "16:27.65"
+            },
+            {
+              "eventId": "2023-03",
+              "place": 23,
+              "score": "CAP+1"
+            },
+            {
+              "eventId": "2023-04",
+              "place": 31,
+              "score": "CAP+14"
+            },
+            {
+              "eventId": "2023-05",
+              "place": 34,
+              "score": "CAP+10"
+            },
+            {
+              "eventId": "2023-06",
+              "place": 24,
+              "score": "08:45.15"
+            },
+            {
+              "eventId": "2023-07",
+              "place": 13,
+              "score": "17:43.72"
+            },
+            {
+              "eventId": "2023-08",
+              "place": 16,
+              "score": "08:22.99"
+            },
+            {
+              "eventId": "2023-09",
+              "place": 26,
+              "score": "572 lb"
+            },
+            {
+              "eventId": "2023-10",
+              "place": 21,
+              "score": null
+            },
+            {
+              "eventId": "2023-11",
+              "place": 21,
+              "score": null
+            },
+            {
+              "eventId": "2023-12",
+              "place": 21,
+              "score": null
+            }
+          ]
+        },
+        {
+          "year": 2024,
+          "division": "men",
+          "overallRank": 1,
+          "fieldSize": 39,
+          "events": [
+            {
+              "eventId": "2024-01",
+              "place": 7,
+              "score": "39:26.02"
+            },
+            {
+              "eventId": "2024-02",
+              "place": 7,
+              "score": "15:05.66"
+            },
+            {
+              "eventId": "2024-03",
+              "place": 4,
+              "score": "02:42.10"
+            },
+            {
+              "eventId": "2024-04",
+              "place": 4,
+              "score": "4 pt"
+            },
+            {
+              "eventId": "2024-05",
+              "place": 1,
+              "score": "43:58.00"
+            },
+            {
+              "eventId": "2024-06",
+              "place": 21,
+              "score": "21 pt"
+            },
+            {
+              "eventId": "2024-07",
+              "place": 17,
+              "score": "09:40.03"
+            },
+            {
+              "eventId": "2024-08",
+              "place": 2,
+              "score": "07:07.98"
+            },
+            {
+              "eventId": "2024-09",
+              "place": 5,
+              "score": "02:34.85"
+            },
+            {
+              "eventId": "2024-10",
+              "place": 4,
+              "score": "05:22.54"
+            }
+          ]
+        },
+        {
+          "year": 2025,
+          "division": "men",
+          "overallRank": 3,
+          "fieldSize": 30,
+          "events": [
+            {
+              "eventId": "2025-01",
+              "place": 7,
+              "score": "48:24.00"
+            },
+            {
+              "eventId": "2025-02",
+              "place": 14,
+              "score": "07:11.79"
+            },
+            {
+              "eventId": "2025-03",
+              "place": 8,
+              "score": "06:11.92"
+            },
+            {
+              "eventId": "2025-04",
+              "place": 3,
+              "score": "17:01.62"
+            },
+            {
+              "eventId": "2025-05",
+              "place": 18,
+              "score": "465 lb"
+            },
+            {
+              "eventId": "2025-06",
+              "place": 1,
+              "score": "03:10.72"
+            },
+            {
+              "eventId": "2025-07",
+              "place": 3,
+              "score": "04:38.85"
+            },
+            {
+              "eventId": "2025-08",
+              "place": 7,
+              "score": "09:00.22"
+            },
+            {
+              "eventId": "2025-09",
+              "place": 5,
+              "score": "02:42.78"
+            },
+            {
+              "eventId": "2025-10",
+              "place": 2,
+              "score": "07:53.90"
+            }
+          ]
+        }
+      ]
+    },
+    "Aniol Ekai": {
+      "games": [
+        {
+          "year": 2024,
+          "division": "men",
+          "overallRank": 18,
+          "fieldSize": 39,
+          "events": [
+            {
+              "eventId": "2024-01",
+              "place": 28,
+              "score": "42:57.40"
+            },
+            {
+              "eventId": "2024-02",
+              "place": 16,
+              "score": "16:35.47"
+            },
+            {
+              "eventId": "2024-03",
+              "place": 18,
+              "score": "02:59.03"
+            },
+            {
+              "eventId": "2024-04",
+              "place": 15,
+              "score": "15 pt"
+            },
+            {
+              "eventId": "2024-05",
+              "place": 20,
+              "score": "51:54.00"
+            },
+            {
+              "eventId": "2024-06",
+              "place": 13,
+              "score": "13 pt"
+            },
+            {
+              "eventId": "2024-07",
+              "place": 23,
+              "score": "CAP+5"
+            },
+            {
+              "eventId": "2024-08",
+              "place": 11,
+              "score": "07:34.37"
+            },
+            {
+              "eventId": "2024-09",
+              "place": 7,
+              "score": "02:35.91"
+            },
+            {
+              "eventId": "2024-10",
+              "place": 11,
+              "score": "05:41.26"
+            }
+          ]
+        }
+      ]
+    },
+    "Chris Ibarra": {
+      "games": [
+        {
+          "year": 2024,
+          "division": "men",
+          "overallRank": 19,
+          "fieldSize": 39,
+          "events": [
+            {
+              "eventId": "2024-01",
+              "place": 9,
+              "score": "39:32.16"
+            },
+            {
+              "eventId": "2024-02",
+              "place": 15,
+              "score": "16:34.95"
+            },
+            {
+              "eventId": "2024-03",
+              "place": 23,
+              "score": "03:06.50"
+            },
+            {
+              "eventId": "2024-04",
+              "place": 14,
+              "score": "14 pt"
+            },
+            {
+              "eventId": "2024-05",
+              "place": 15,
+              "score": "51:14.00"
+            },
+            {
+              "eventId": "2024-06",
+              "place": 24,
+              "score": "24 pt"
+            },
+            {
+              "eventId": "2024-07",
+              "place": 14,
+              "score": "08:52.66"
+            },
+            {
+              "eventId": "2024-08",
+              "place": 18,
+              "score": "07:49.95"
+            },
+            {
+              "eventId": "2024-09",
+              "place": 13,
+              "score": "02:40.01"
+            },
+            {
+              "eventId": "2024-10",
+              "place": 14,
+              "score": "05:50.87"
+            }
+          ]
+        },
+        {
+          "year": 2025,
+          "division": "men",
+          "overallRank": 13,
+          "fieldSize": 30,
+          "events": [
+            {
+              "eventId": "2025-01",
+              "place": 9,
+              "score": "49:06.00"
+            },
+            {
+              "eventId": "2025-02",
+              "place": 17,
+              "score": "07:22.80"
+            },
+            {
+              "eventId": "2025-03",
+              "place": 16,
+              "score": "07:39.73"
+            },
+            {
+              "eventId": "2025-04",
+              "place": 17,
+              "score": "18:45.76"
+            },
+            {
+              "eventId": "2025-05",
+              "place": 26,
+              "score": "450 lb"
+            },
+            {
+              "eventId": "2025-06",
+              "place": 25,
+              "score": "03:42.59"
+            },
+            {
+              "eventId": "2025-07",
+              "place": 5,
+              "score": "04:39.74"
+            },
+            {
+              "eventId": "2025-08",
+              "place": 12,
+              "score": "09:45.83"
+            },
+            {
+              "eventId": "2025-09",
+              "place": 13,
+              "score": "02:54.54"
+            },
+            {
+              "eventId": "2025-10",
+              "place": 9,
+              "score": "08:47.22"
+            }
+          ]
+        }
+      ]
+    },
+    "Harry Lightfoot": {
+      "games": [
+        {
+          "year": 2024,
+          "division": "men",
+          "overallRank": 21,
+          "fieldSize": 39,
+          "events": [
+            {
+              "eventId": "2024-01",
+              "place": 24,
+              "score": "42:32.75"
+            },
+            {
+              "eventId": "2024-02",
+              "place": 20,
+              "score": "17:07.43"
+            },
+            {
+              "eventId": "2024-03",
+              "place": 7,
+              "score": "02:49.91"
+            },
+            {
+              "eventId": "2024-04",
+              "place": 27,
+              "score": "27 pt"
+            },
+            {
+              "eventId": "2024-05",
+              "place": 10,
+              "score": "49:44.00"
+            },
+            {
+              "eventId": "2024-06",
+              "place": 18,
+              "score": "18 pt"
+            },
+            {
+              "eventId": "2024-07",
+              "place": 18,
+              "score": "09:42.34"
+            },
+            {
+              "eventId": "2024-08",
+              "place": 17,
+              "score": "07:47.25"
+            },
+            {
+              "eventId": "2024-09",
+              "place": 16,
+              "score": "02:41.17"
+            },
+            {
+              "eventId": "2024-10",
+              "place": 16,
+              "score": "05:54.38"
+            }
+          ]
+        },
+        {
+          "year": 2025,
+          "division": "men",
+          "overallRank": 11,
+          "fieldSize": 30,
+          "events": [
+            {
+              "eventId": "2025-01",
+              "place": 10,
+              "score": "49:36.00"
+            },
+            {
+              "eventId": "2025-02",
+              "place": 5,
+              "score": "06:44.56"
+            },
+            {
+              "eventId": "2025-03",
+              "place": 3,
+              "score": "05:41.48"
+            },
+            {
+              "eventId": "2025-04",
+              "place": 12,
+              "score": "18:23.90"
+            },
+            {
+              "eventId": "2025-05",
+              "place": 12,
+              "score": "485 lb"
+            },
+            {
+              "eventId": "2025-06",
+              "place": 19,
+              "score": "03:28.67"
+            },
+            {
+              "eventId": "2025-07",
+              "place": 18,
+              "score": "05:10.21"
+            },
+            {
+              "eventId": "2025-08",
+              "place": 18,
+              "score": "10:38.29"
+            },
+            {
+              "eventId": "2025-09",
+              "place": 23,
+              "score": "03:04.53"
+            },
+            {
+              "eventId": "2025-10",
+              "place": 13,
+              "score": "09:31.23"
+            }
+          ]
+        }
+      ]
+    },
+    "Peter Ellis": {
+      "games": [
+        {
+          "year": 2024,
+          "division": "men",
+          "overallRank": 31,
+          "fieldSize": 39,
+          "events": [
+            {
+              "eventId": "2024-01",
+              "place": 26,
+              "score": "42:35.95"
+            },
+            {
+              "eventId": "2024-02",
+              "place": 25,
+              "score": "17:32.08"
+            },
+            {
+              "eventId": "2024-03",
+              "place": 29,
+              "score": "03:14.37"
+            },
+            {
+              "eventId": "2024-04",
+              "place": 23,
+              "score": "23 pt"
+            },
+            {
+              "eventId": "2024-05",
+              "place": 30,
+              "score": "56:27.00"
+            },
+            {
+              "eventId": "2024-06",
+              "place": 27,
+              "score": "27 pt"
+            },
+            {
+              "eventId": "2024-07",
+              "place": 21,
+              "score": "CAP+1"
+            },
+            {
+              "eventId": "2024-08",
+              "place": 31,
+              "score": null
+            },
+            {
+              "eventId": "2024-09",
+              "place": 30,
+              "score": null
+            },
+            {
+              "eventId": "2024-10",
+              "place": 30,
+              "score": null
+            }
+          ]
+        },
+        {
+          "year": 2025,
+          "division": "men",
+          "overallRank": 28,
+          "fieldSize": 30,
+          "events": [
+            {
+              "eventId": "2025-01",
+              "place": 28,
+              "score": "54:12.00"
+            },
+            {
+              "eventId": "2025-02",
+              "place": 24,
+              "score": "08:26.37"
+            },
+            {
+              "eventId": "2025-03",
+              "place": 17,
+              "score": "07:39.78"
+            },
+            {
+              "eventId": "2025-04",
+              "place": 27,
+              "score": "21:48.13"
+            },
+            {
+              "eventId": "2025-05",
+              "place": 24,
+              "score": "450 lb"
+            },
+            {
+              "eventId": "2025-06",
+              "place": 24,
+              "score": "03:41.17"
+            },
+            {
+              "eventId": "2025-07",
+              "place": 21,
+              "score": "05:17.80"
+            },
+            {
+              "eventId": "2025-08",
+              "place": 30,
+              "score": "CAP+17"
+            },
+            {
+              "eventId": "2025-09",
+              "place": 29,
+              "score": "03:19.36"
+            },
+            {
+              "eventId": "2025-10",
+              "place": 22,
+              "score": "CAP+1"
+            }
+          ]
+        }
+      ]
+    },
+    "Victor Hoffer": {
+      "games": [
+        {
+          "year": 2024,
+          "division": "men",
+          "overallRank": 38,
+          "fieldSize": 39,
+          "events": [
+            {
+              "eventId": "2024-01",
+              "place": 38,
+              "score": "WD"
+            },
+            {
+              "eventId": "2024-02",
+              "place": 36,
+              "score": null
+            },
+            {
+              "eventId": "2024-03",
+              "place": 35,
+              "score": null
+            },
+            {
+              "eventId": "2024-04",
+              "place": 34,
+              "score": null
+            },
+            {
+              "eventId": "2024-05",
+              "place": 33,
+              "score": null
+            },
+            {
+              "eventId": "2024-06",
+              "place": 33,
+              "score": null
+            },
+            {
+              "eventId": "2024-07",
+              "place": 32,
+              "score": null
+            },
+            {
+              "eventId": "2024-08",
+              "place": 31,
+              "score": null
+            },
+            {
+              "eventId": "2024-09",
+              "place": 30,
+              "score": null
+            },
+            {
+              "eventId": "2024-10",
+              "place": 30,
+              "score": null
+            }
+          ]
+        }
+      ]
+    },
+    "Claudia Gluck": {
+      "games": [
+        {
+          "year": 2024,
+          "division": "women",
+          "overallRank": 12,
+          "fieldSize": 40,
+          "events": [
+            {
+              "eventId": "2024-01",
+              "place": 33,
+              "score": "48:01.68"
+            },
+            {
+              "eventId": "2024-02",
+              "place": 7,
+              "score": "15:12.86"
+            },
+            {
+              "eventId": "2024-03",
+              "place": 11,
+              "score": "03:21.87"
+            },
+            {
+              "eventId": "2024-04",
+              "place": 14,
+              "score": "14 pt"
+            },
+            {
+              "eventId": "2024-05",
+              "place": 32,
+              "score": "1:00:45.00"
+            },
+            {
+              "eventId": "2024-06",
+              "place": 21,
+              "score": "21 pt"
+            },
+            {
+              "eventId": "2024-07",
+              "place": 6,
+              "score": "07:16.22"
+            },
+            {
+              "eventId": "2024-08",
+              "place": 25,
+              "score": "08:55.88"
+            },
+            {
+              "eventId": "2024-09",
+              "place": 4,
+              "score": "02:34.12"
+            },
+            {
+              "eventId": "2024-10",
+              "place": 3,
+              "score": "05:10.75"
+            }
+          ]
+        },
+        {
+          "year": 2025,
+          "division": "women",
+          "overallRank": 14,
+          "fieldSize": 30,
+          "events": [
+            {
+              "eventId": "2025-01",
+              "place": 25,
+              "score": "58:13.00"
+            },
+            {
+              "eventId": "2025-02",
+              "place": 6,
+              "score": "07:06.90"
+            },
+            {
+              "eventId": "2025-03",
+              "place": 8,
+              "score": "10:37.31"
+            },
+            {
+              "eventId": "2025-04",
+              "place": 21,
+              "score": "20:46.95"
+            },
+            {
+              "eventId": "2025-05",
+              "place": 8,
+              "score": "325 lb"
+            },
+            {
+              "eventId": "2025-06",
+              "place": 10,
+              "score": "04:06.63"
+            },
+            {
+              "eventId": "2025-07",
+              "place": 3,
+              "score": "05:27.14"
+            },
+            {
+              "eventId": "2025-08",
+              "place": 18,
+              "score": "12:25.60"
+            },
+            {
+              "eventId": "2025-09",
+              "place": 27,
+              "score": "03:33.24"
+            },
+            {
+              "eventId": "2025-10",
+              "place": 19,
+              "score": "11:16.62"
+            }
+          ]
+        }
+      ]
+    },
+    "Aimee Cringle": {
+      "games": [
+        {
+          "year": 2024,
+          "division": "women",
+          "overallRank": 13,
+          "fieldSize": 40,
+          "events": [
+            {
+              "eventId": "2024-01",
+              "place": 21,
+              "score": "45:43.32"
+            },
+            {
+              "eventId": "2024-02",
+              "place": 10,
+              "score": "15:26.26"
+            },
+            {
+              "eventId": "2024-03",
+              "place": 10,
+              "score": "03:20.28"
+            },
+            {
+              "eventId": "2024-04",
+              "place": 3,
+              "score": "3 pt"
+            },
+            {
+              "eventId": "2024-05",
+              "place": 5,
+              "score": "48:46.00"
+            },
+            {
+              "eventId": "2024-06",
+              "place": 19,
+              "score": "18 pt"
+            },
+            {
+              "eventId": "2024-07",
+              "place": 21,
+              "score": "09:26.15"
+            },
+            {
+              "eventId": "2024-08",
+              "place": 11,
+              "score": "08:06.22"
+            },
+            {
+              "eventId": "2024-09",
+              "place": 25,
+              "score": "03:18.15"
+            },
+            {
+              "eventId": "2024-10",
+              "place": 27,
+              "score": "CAP+6"
+            }
+          ]
+        },
+        {
+          "year": 2025,
+          "division": "women",
+          "overallRank": 8,
+          "fieldSize": 30,
+          "events": [
+            {
+              "eventId": "2025-01",
+              "place": 2,
+              "score": "50:16.00"
+            },
+            {
+              "eventId": "2025-02",
+              "place": 3,
+              "score": "06:38.19"
+            },
+            {
+              "eventId": "2025-03",
+              "place": 29,
+              "score": "CAP+11"
+            },
+            {
+              "eventId": "2025-04",
+              "place": 9,
+              "score": "18:28.81"
+            },
+            {
+              "eventId": "2025-05",
+              "place": 18,
+              "score": "300 lb"
+            },
+            {
+              "eventId": "2025-06",
+              "place": 9,
+              "score": "04:06.04"
+            },
+            {
+              "eventId": "2025-07",
+              "place": 5,
+              "score": "05:39.63"
+            },
+            {
+              "eventId": "2025-08",
+              "place": 4,
+              "score": "10:08.00"
+            },
+            {
+              "eventId": "2025-09",
+              "place": 16,
+              "score": "03:06.65"
+            },
+            {
+              "eventId": "2025-10",
+              "place": 27,
+              "score": "12:52.90"
+            }
+          ]
+        }
+      ]
+    },
+    "Grace Walton": {
+      "games": [
+        {
+          "year": 2024,
+          "division": "women",
+          "overallRank": 14,
+          "fieldSize": 40,
+          "events": [
+            {
+              "eventId": "2024-01",
+              "place": 5,
+              "score": "40:58.27"
+            },
+            {
+              "eventId": "2024-02",
+              "place": 17,
+              "score": "16:19.73"
+            },
+            {
+              "eventId": "2024-03",
+              "place": 1,
+              "score": "03:03.59"
+            },
+            {
+              "eventId": "2024-04",
+              "place": 25,
+              "score": "25 pt"
+            },
+            {
+              "eventId": "2024-05",
+              "place": 18,
+              "score": "53:20.00"
+            },
+            {
+              "eventId": "2024-06",
+              "place": 13,
+              "score": "13 pt"
+            },
+            {
+              "eventId": "2024-07",
+              "place": 20,
+              "score": "09:21.63"
+            },
+            {
+              "eventId": "2024-08",
+              "place": 17,
+              "score": "08:20.59"
+            },
+            {
+              "eventId": "2024-09",
+              "place": 16,
+              "score": "03:02.00"
+            },
+            {
+              "eventId": "2024-10",
+              "place": 30,
+              "score": "CAP+20"
+            }
+          ]
+        },
+        {
+          "year": 2025,
+          "division": "women",
+          "overallRank": 15,
+          "fieldSize": 30,
+          "events": [
+            {
+              "eventId": "2025-01",
+              "place": 10,
+              "score": "53:35.91"
+            },
+            {
+              "eventId": "2025-02",
+              "place": 13,
+              "score": "07:50.60"
+            },
+            {
+              "eventId": "2025-03",
+              "place": 26,
+              "score": "CAP+10"
+            },
+            {
+              "eventId": "2025-04",
+              "place": 5,
+              "score": "18:00.39"
+            },
+            {
+              "eventId": "2025-05",
+              "place": 11,
+              "score": "315 lb"
+            },
+            {
+              "eventId": "2025-06",
+              "place": 24,
+              "score": "04:40.69"
+            },
+            {
+              "eventId": "2025-07",
+              "place": 23,
+              "score": "06:33.43"
+            },
+            {
+              "eventId": "2025-08",
+              "place": 2,
+              "score": "09:32.20"
+            },
+            {
+              "eventId": "2025-09",
+              "place": 13,
+              "score": "03:03.78"
+            },
+            {
+              "eventId": "2025-10",
+              "place": 18,
+              "score": "11:10.94"
+            }
+          ]
+        }
+      ]
+    },
+    "Hattie Kanyo": {
+      "games": [
+        {
+          "year": 2024,
+          "division": "women",
+          "overallRank": 18,
+          "fieldSize": 40,
+          "events": [
+            {
+              "eventId": "2024-01",
+              "place": 18,
+              "score": "44:30.69"
+            },
+            {
+              "eventId": "2024-02",
+              "place": 24,
+              "score": "16:59.11"
+            },
+            {
+              "eventId": "2024-03",
+              "place": 12,
+              "score": "03:25.14"
+            },
+            {
+              "eventId": "2024-04",
+              "place": 8,
+              "score": "8 pt"
+            },
+            {
+              "eventId": "2024-05",
+              "place": 30,
+              "score": "58:19.00"
+            },
+            {
+              "eventId": "2024-06",
+              "place": 18,
+              "score": "18 pt"
+            },
+            {
+              "eventId": "2024-07",
+              "place": 12,
+              "score": "08:29.08"
+            },
+            {
+              "eventId": "2024-08",
+              "place": 18,
+              "score": "08:24.88"
+            },
+            {
+              "eventId": "2024-09",
+              "place": 21,
+              "score": "03:10.91"
+            },
+            {
+              "eventId": "2024-10",
+              "place": 19,
+              "score": "06:33.95"
+            }
+          ]
+        },
+        {
+          "year": 2025,
+          "division": "women",
+          "overallRank": 23,
+          "fieldSize": 30,
+          "events": [
+            {
+              "eventId": "2025-01",
+              "place": 13,
+              "score": "55:10.00"
+            },
+            {
+              "eventId": "2025-02",
+              "place": 15,
+              "score": "07:57.76"
+            },
+            {
+              "eventId": "2025-03",
+              "place": 17,
+              "score": "12:16.41"
+            },
+            {
+              "eventId": "2025-04",
+              "place": 22,
+              "score": "20:59.20"
+            },
+            {
+              "eventId": "2025-05",
+              "place": 19,
+              "score": "300 lb"
+            },
+            {
+              "eventId": "2025-06",
+              "place": 18,
+              "score": "04:19.95"
+            },
+            {
+              "eventId": "2025-07",
+              "place": 17,
+              "score": "06:16.04"
+            },
+            {
+              "eventId": "2025-08",
+              "place": 27,
+              "score": "CAP+12"
+            },
+            {
+              "eventId": "2025-09",
+              "place": 14,
+              "score": "03:03.82"
+            },
+            {
+              "eventId": "2025-10",
+              "place": 28,
+              "score": "12:54.82"
+            }
+          ]
+        }
+      ]
+    },
+    "Kyra Milligan": {
+      "games": [
+        {
+          "year": 2024,
+          "division": "women",
+          "overallRank": 22,
+          "fieldSize": 40,
+          "events": [
+            {
+              "eventId": "2024-01",
+              "place": 40,
+              "score": "57:18.76"
+            },
+            {
+              "eventId": "2024-02",
+              "place": 29,
+              "score": "17:40.05"
+            },
+            {
+              "eventId": "2024-03",
+              "place": 33,
+              "score": "03:47.51"
+            },
+            {
+              "eventId": "2024-04",
+              "place": 32,
+              "score": "32 pt"
+            },
+            {
+              "eventId": "2024-05",
+              "place": 24,
+              "score": "57:08.00"
+            },
+            {
+              "eventId": "2024-06",
+              "place": 2,
+              "score": "2 pt"
+            },
+            {
+              "eventId": "2024-07",
+              "place": 13,
+              "score": "08:29.45"
+            },
+            {
+              "eventId": "2024-08",
+              "place": 21,
+              "score": "08:31.28"
+            },
+            {
+              "eventId": "2024-09",
+              "place": 3,
+              "score": "02:33.77"
+            },
+            {
+              "eventId": "2024-10",
+              "place": 14,
+              "score": "06:11.99"
+            }
+          ]
+        }
+      ]
+    },
+    "Colin Bosshard": {
+      "games": [
+        {
+          "year": 2025,
+          "division": "men",
+          "overallRank": 17,
+          "fieldSize": 30,
+          "events": [
+            {
+              "eventId": "2025-01",
+              "place": 13,
+              "score": "50:29.00"
+            },
+            {
+              "eventId": "2025-02",
+              "place": 7,
+              "score": "06:45.95"
+            },
+            {
+              "eventId": "2025-03",
+              "place": 27,
+              "score": "CAP+3"
+            },
+            {
+              "eventId": "2025-04",
+              "place": 21,
+              "score": "20:04.22"
+            },
+            {
+              "eventId": "2025-05",
+              "place": 27,
+              "score": "445 lb"
+            },
+            {
+              "eventId": "2025-06",
+              "place": 6,
+              "score": "03:18.23"
+            },
+            {
+              "eventId": "2025-07",
+              "place": 15,
+              "score": "05:01.42"
+            },
+            {
+              "eventId": "2025-08",
+              "place": 15,
+              "score": "09:56.50"
+            },
+            {
+              "eventId": "2025-09",
+              "place": 18,
+              "score": "02:57.60"
+            },
+            {
+              "eventId": "2025-10",
+              "place": 19,
+              "score": "09:47.05"
+            }
+          ]
+        }
+      ]
+    },
+    "William Leahy IV": {
+      "games": [
+        {
+          "year": 2025,
+          "division": "men",
+          "overallRank": 26,
+          "fieldSize": 30,
+          "events": [
+            {
+              "eventId": "2025-01",
+              "place": 22,
+              "score": "52:33.00"
+            },
+            {
+              "eventId": "2025-02",
+              "place": 26,
+              "score": "08:34.39"
+            },
+            {
+              "eventId": "2025-03",
+              "place": 23,
+              "score": "09:35.84"
+            },
+            {
+              "eventId": "2025-04",
+              "place": 16,
+              "score": "18:42.35"
+            },
+            {
+              "eventId": "2025-05",
+              "place": 11,
+              "score": "485 lb"
+            },
+            {
+              "eventId": "2025-06",
+              "place": 23,
+              "score": "03:40.19"
+            },
+            {
+              "eventId": "2025-07",
+              "place": 16,
+              "score": "05:01.47"
+            },
+            {
+              "eventId": "2025-08",
+              "place": 25,
+              "score": "12:07.11"
+            },
+            {
+              "eventId": "2025-09",
+              "place": 27,
+              "score": "03:08.89"
+            },
+            {
+              "eventId": "2025-10",
+              "place": 29,
+              "score": "CAP+10"
+            }
+          ]
+        }
+      ]
+    },
+    "Mirjam von Rohr": {
+      "games": [
+        {
+          "year": 2025,
+          "division": "women",
+          "overallRank": 7,
+          "fieldSize": 30,
+          "events": [
+            {
+              "eventId": "2025-01",
+              "place": 6,
+              "score": "52:58.00"
+            },
+            {
+              "eventId": "2025-02",
+              "place": 8,
+              "score": "07:19.56"
+            },
+            {
+              "eventId": "2025-03",
+              "place": 20,
+              "score": "CAP+1"
+            },
+            {
+              "eventId": "2025-04",
+              "place": 15,
+              "score": "19:48.17"
+            },
+            {
+              "eventId": "2025-05",
+              "place": 1,
+              "score": "360 lb"
+            },
+            {
+              "eventId": "2025-06",
+              "place": 15,
+              "score": "04:14.66"
+            },
+            {
+              "eventId": "2025-07",
+              "place": 7,
+              "score": "05:47.35"
+            },
+            {
+              "eventId": "2025-08",
+              "place": 14,
+              "score": "11:56.70"
+            },
+            {
+              "eventId": "2025-09",
+              "place": 9,
+              "score": "03:00.41"
+            },
+            {
+              "eventId": "2025-10",
+              "place": 20,
+              "score": "11:19.96"
+            }
+          ]
+        }
+      ]
+    },
+    "Anikha Greer": {
+      "games": [
+        {
+          "year": 2025,
+          "division": "women",
+          "overallRank": 9,
+          "fieldSize": 30,
+          "events": [
+            {
+              "eventId": "2025-01",
+              "place": 27,
+              "score": "58:59.00"
+            },
+            {
+              "eventId": "2025-02",
+              "place": 7,
+              "score": "07:14.07"
+            },
+            {
+              "eventId": "2025-03",
+              "place": 10,
+              "score": "10:52.26"
+            },
+            {
+              "eventId": "2025-04",
+              "place": 20,
+              "score": "20:43.21"
+            },
+            {
+              "eventId": "2025-05",
+              "place": 2,
+              "score": "355 lb"
+            },
+            {
+              "eventId": "2025-06",
+              "place": 16,
+              "score": "04:18.05"
+            },
+            {
+              "eventId": "2025-07",
+              "place": 13,
+              "score": "06:08.70"
+            },
+            {
+              "eventId": "2025-08",
+              "place": 20,
+              "score": "13:15.03"
+            },
+            {
+              "eventId": "2025-09",
+              "place": 8,
+              "score": "02:59.25"
+            },
+            {
+              "eventId": "2025-10",
+              "place": 4,
+              "score": "09:48.58"
+            }
+          ]
+        }
+      ]
+    },
+    "Lydia Fish": {
+      "games": [
+        {
+          "year": 2025,
+          "division": "women",
+          "overallRank": 13,
+          "fieldSize": 30,
+          "events": [
+            {
+              "eventId": "2025-01",
+              "place": 12,
+              "score": "54:22.00"
+            },
+            {
+              "eventId": "2025-02",
+              "place": 5,
+              "score": "07:06.76"
+            },
+            {
+              "eventId": "2025-03",
+              "place": 2,
+              "score": "09:30.58"
+            },
+            {
+              "eventId": "2025-04",
+              "place": 11,
+              "score": "18:57.91"
+            },
+            {
+              "eventId": "2025-05",
+              "place": 27,
+              "score": "280 lb"
+            },
+            {
+              "eventId": "2025-06",
+              "place": 20,
+              "score": "04:26.56"
+            },
+            {
+              "eventId": "2025-07",
+              "place": 19,
+              "score": "06:19.01"
+            },
+            {
+              "eventId": "2025-08",
+              "place": 11,
+              "score": "11:23.91"
+            },
+            {
+              "eventId": "2025-09",
+              "place": 26,
+              "score": "03:24.77"
+            },
+            {
+              "eventId": "2025-10",
+              "place": 8,
+              "score": "10:28.60"
+            }
+          ]
+        }
+      ]
+    },
+    "Jennifer Muir": {
+      "games": [
+        {
+          "year": 2025,
+          "division": "women",
+          "overallRank": 20,
+          "fieldSize": 30,
+          "events": [
+            {
+              "eventId": "2025-01",
+              "place": 11,
+              "score": "53:48.00"
+            },
+            {
+              "eventId": "2025-02",
+              "place": 29,
+              "score": "CAP+10"
+            },
+            {
+              "eventId": "2025-03",
+              "place": 18,
+              "score": "12:41.73"
+            },
+            {
+              "eventId": "2025-04",
+              "place": 18,
+              "score": "20:30.15"
+            },
+            {
+              "eventId": "2025-05",
+              "place": 2,
+              "score": "355 lb"
+            },
+            {
+              "eventId": "2025-06",
+              "place": 26,
+              "score": "04:47.07"
+            },
+            {
+              "eventId": "2025-07",
+              "place": 24,
+              "score": "06:35.15"
+            },
+            {
+              "eventId": "2025-08",
+              "place": 29,
+              "score": "CAP+53"
+            },
+            {
+              "eventId": "2025-09",
+              "place": 4,
+              "score": "02:48.91"
+            },
+            {
+              "eventId": "2025-10",
+              "place": 22,
+              "score": "11:27.02"
+            }
+          ]
+        }
+      ]
+    },
+    "Siria Meha": {
+      "games": [
+        {
+          "year": 2025,
+          "division": "women",
+          "overallRank": 26,
+          "fieldSize": 30,
+          "events": [
+            {
+              "eventId": "2025-01",
+              "place": 20,
+              "score": "57:32.00"
+            },
+            {
+              "eventId": "2025-02",
+              "place": 20,
+              "score": "08:45.12"
+            },
+            {
+              "eventId": "2025-03",
+              "place": 3,
+              "score": "09:41.98"
+            },
+            {
+              "eventId": "2025-04",
+              "place": 29,
+              "score": "23:09.86"
+            },
+            {
+              "eventId": "2025-05",
+              "place": 17,
+              "score": "300 lb"
+            },
+            {
+              "eventId": "2025-06",
+              "place": 28,
+              "score": "05:06.83"
+            },
+            {
+              "eventId": "2025-07",
+              "place": 27,
+              "score": "07:21.20"
+            },
+            {
+              "eventId": "2025-08",
+              "place": 24,
+              "score": "14:34.85"
+            },
+            {
+              "eventId": "2025-09",
+              "place": 28,
+              "score": "03:35.57"
+            },
+            {
+              "eventId": "2025-10",
+              "place": 23,
+              "score": "11:39.02"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

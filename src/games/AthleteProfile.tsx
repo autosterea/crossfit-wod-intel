@@ -1,6 +1,7 @@
 import { athleteBySlug, countryFlag, youtubeEmbed, allAthletes2026, mediaForAthlete, youtubeThumb, VIDEO_KIND_LABEL } from './athletes2026'
 import { useGamesStore } from './gamesStore'
 import AthleteAvatar from './AthleteAvatar'
+import IntelProfile from './intel/IntelProfile'
 import type { GamesAthlete2026 } from '../types-games'
 
 const ord = (n: number) => (n % 100 >= 11 && n % 100 <= 13 ? 'th' : n % 10 === 1 ? 'st' : n % 10 === 2 ? 'nd' : n % 10 === 3 ? 'rd' : 'th')
@@ -30,10 +31,14 @@ export default function AthleteProfile() {
   const a: GamesAthlete2026 | undefined = route.slug ? athleteBySlug.get(route.slug) : undefined
 
   if (!a) {
+    // Athlete is in the projection cohort (top-30 Open) but not yet in the
+    // curated 2026 bio file (which holds the in-person qualifiers until the
+    // field locks ~June 16). Render the data-grounded intel profile so the
+    // page is useful and the leaderboard never links to a dead end.
     return (
-      <div className="text-center py-24">
-        <div className="games-display text-2xl text-[var(--text-primary)] mb-2">Athlete not found</div>
-        <button onClick={() => navigate({ view: 'hub', year: 2026 })} className="text-[#91C640] text-sm">← Back to the 2026 hub</button>
+      <div className="pt-6 max-w-3xl mx-auto">
+        <button onClick={() => navigate({ view: 'intel', year: 2026 })} className="games-condensed text-[12px] uppercase tracking-[0.1em] text-[var(--text-tertiary)] hover:text-[#91C640] mb-2">← Athlete Intelligence</button>
+        {route.slug ? <IntelProfile slug={route.slug} showHeader /> : null}
       </div>
     )
   }
@@ -183,6 +188,9 @@ export default function AthleteProfile() {
           </div>
         </section>
       )}
+
+      {/* Athlete Intelligence (competition-derived profile) */}
+      <IntelProfile slug={a.slug} />
 
       {/* Follow / profile links */}
       {media?.links && media.links.length > 0 && (
