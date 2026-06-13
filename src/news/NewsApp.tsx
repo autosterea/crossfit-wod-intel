@@ -30,6 +30,30 @@ interface NewsFeed {
   items: NewsItem[]
 }
 
+// Official leaderboard snapshot, produced from the sanctioned c3po API by a
+// scheduled remote routine (the VPS itself is firewalled out of c3po) and
+// written verbatim to /news-official.json. See scripts/fetch-official-standings.mjs.
+interface OfficialRow {
+  rank: number
+  name: string
+  country: string
+  countryCode: string
+  points: string | null
+}
+interface OfficialBoardData {
+  updatedAt: string
+  season: number
+  stage: string
+  stageLabel: string
+  status: 'live' | 'final'
+  eventsCompleted: number | null
+  eventsTotal: number | null
+  source: string
+  sourceLabel: string
+  publicUrl?: string
+  divisions: { men: OfficialRow[]; women: OfficialRow[] }
+}
+
 type NewsCategory =
   | 'semifinals'
   | 'qualification'
@@ -182,6 +206,123 @@ function Notice({ title, body }: { title: string; body: string }) {
   )
 }
 
+/** ISO-3166 alpha-2 (e.g. "US") to a flag emoji. Falls back to the code. */
+function flagEmoji(code: string): string {
+  if (!code || code.length !== 2 || !/^[a-z]{2}$/i.test(code)) return ''
+  const A = 0x1f1e6
+  const up = code.toUpperCase()
+  return String.fromCodePoint(A + (up.charCodeAt(0) - 65), A + (up.charCodeAt(1) - 65))
+}
+
+const RANK_ACCENT: Record<number, string> = {
+  1: '#fbbf24', // gold
+  2: '#cbd5e1', // silver
+  3: '#d8a06b', // bronze
+}
+
+function OfficialRowLine({ row }: { row: OfficialRow }) {
+  const accent = RANK_ACCENT[row.rank]
+  const flag = flagEmoji(row.countryCode)
+  return (
+    <div className="flex items-center gap-3 py-2 px-1 border-b border-[var(--panel-border-subtle)] last:border-b-0">
+      <div
+        className="games-display text-base w-7 text-center shrink-0 leading-none"
+        style={{ color: accent || 'var(--text-muted)' }}
+      >
+        {row.rank}
+      </div>
+      <div className="flex-1 min-w-0 flex items-center gap-2">
+        {flag && <span className="text-sm shrink-0">{flag}</span>}
+        <span className="text-[14px] font-semibold text-[var(--text-primary)] truncate">{row.name}</span>
+        <span className="games-condensed text-[10px] uppercase tracking-[0.08em] text-[var(--text-muted)] hidden sm:inline truncate">
+          {row.country}
+        </span>
+      </div>
+      {row.points != null && (
+        <div className="games-condensed text-[12px] text-[var(--text-secondary)] tabular-nums shrink-0">
+          {row.points} <span className="text-[10px] text-[var(--text-muted)]">pts</span>
+        </div>
+      )}
+    </div>
+  )
+}
+
+function OfficialBoard({ board }: { board: OfficialBoardData }) {
+  const [div, setDiv] = useState<'men' | 'women'>('men')
+  const rows = board.divisions[div] ?? []
+  const progress =
+    board.eventsCompleted != null && board.eventsTotal != null
+      ? `${board.eventsCompleted} of ${board.eventsTotal} events`
+      : board.eventsCompleted != null
+        ? `${board.eventsCompleted} events scored`
+        : null
+  const statusChip =
+    board.status === 'live'
+      ? { label: 'Live', bg: 'rgba(1,150,68,0.18)', fg: '#3fbf78' }
+      : { label: 'Final', bg: 'var(--panel-bg-2)', fg: 'var(--text-secondary)' }
+
+  return (
+    <section className="mb-8 games-rise games-rise-1">
+      <div className="games-event-card p-4 sm:p-5 border-[#91C640]/30">
+        <div className="flex items-center gap-2 flex-wrap mb-1">
+          <span className="games-chip" style={{ background: 'rgba(1,150,68,0.18)', color: '#3fbf78' }}>
+            Official
+          </span>
+          <span className="games-chip" style={{ background: statusChip.bg, color: statusChip.fg }}>
+            {statusChip.label}
+          </span>
+          {progress && (
+            <span className="games-condensed text-[11px] uppercase tracking-[0.1em] text-[var(--text-muted)]">
+              {progress}
+            </span>
+          )}
+        </div>
+
+        <h2 className="games-display text-2xl text-[var(--text-primary)] leading-none mb-3">
+          {board.stageLabel} <span className="text-[#91C640]">Leaderboard</span>
+        </h2>
+
+        {/* Division toggle */}
+        <div className="inline-flex rounded-lg border border-[var(--panel-border)] overflow-hidden mb-2">
+          {(['men', 'women'] as const).map((d) => (
+            <button
+              key={d}
+              onClick={() => setDiv(d)}
+              className={`games-condensed uppercase tracking-[0.1em] text-[11px] font-semibold px-4 py-1.5 transition-colors ${
+                div === d
+                  ? 'bg-[#91C640] text-black'
+                  : 'text-[var(--text-secondary)] hover:text-[#91C640]'
+              }`}
+            >
+              {d}
+            </button>
+          ))}
+        </div>
+
+        <div className="mt-1">
+          {rows.map((r) => (
+            <OfficialRowLine key={`${div}-${r.rank}-${r.name}`} row={r} />
+          ))}
+        </div>
+
+        <div className="flex items-center justify-between flex-wrap gap-2 mt-3">
+          <span className="games-condensed text-[11px] uppercase tracking-[0.1em] text-[var(--text-muted)]">
+            Source: {board.sourceLabel.replace(/\s*\(.*\)$/, '')} . Updated {relativeTime(board.updatedAt)}
+          </span>
+          <a
+            href={board.publicUrl || 'https://games.crossfit.com/leaderboard'}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="games-condensed text-[11px] uppercase tracking-[0.1em] font-semibold text-[#91C640] hover:text-[#a8d35e] transition-colors"
+          >
+            Full leaderboard &rarr;
+          </a>
+        </div>
+      </div>
+    </section>
+  )
+}
+
 function ItemCard({ item, index }: { item: NewsItem; index: number }) {
   const cat = categoryStyle(item.category)
   const t = item.publishedAt || `${item.date}T12:00:00`
@@ -223,6 +364,23 @@ interface DateGroup {
 export default function NewsApp() {
   const [status, setStatus] = useState<'loading' | 'ok' | 'empty' | 'error'>('loading')
   const [feed, setFeed] = useState<NewsFeed | null>(null)
+  const [board, setBoard] = useState<OfficialBoardData | null>(null)
+
+  // Official leaderboard snapshot (separate, structured artifact from the
+  // remote routine). Best-effort: absent/404 before the first run is fine.
+  useEffect(() => {
+    let cancelled = false
+    fetch(`/news-official.json?t=${Date.now()}`, { cache: 'no-store' })
+      .then((r) => (r.ok ? (r.json() as Promise<OfficialBoardData>) : null))
+      .then((data) => {
+        if (cancelled || !data?.divisions?.men?.length) return
+        setBoard(data)
+      })
+      .catch(() => {})
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   useEffect(() => {
     document.title = 'CrossFit News and Results | Persistence Athletics'
@@ -294,6 +452,8 @@ export default function NewsApp() {
             </p>
           )}
         </section>
+
+        {board && <OfficialBoard board={board} />}
 
         {status === 'loading' && <Spinner />}
 
