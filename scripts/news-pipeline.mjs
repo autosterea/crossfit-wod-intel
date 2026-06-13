@@ -114,11 +114,25 @@ const FEEDS = [
     broad: true,
     reliability: 'medium',
   },
-  // NOTE: the official crossfit.com/sport sitemap was dropped as a source - it
-  // has no titles (only slug-derived headlines) and mixes evergreen/marketing
-  // pages in. The same official announcements are covered, with real headlines,
-  // by the RSS sources + the CrossFit Games YouTube channel above. parseSitemap
-  // is kept for if we re-add it later with per-article <title> fetching.
+  {
+    name: 'BoxLife',
+    url: 'https://www.boxlifemagazine.com/feed/',
+    kind: 'rss',
+    broad: true,
+    reliability: 'medium',
+  },
+  {
+    // PRIMARY official source: CrossFit.com sport news. It has no RSS, so we
+    // parse the sport sitemap and fetch each recent article's REAL headline +
+    // description (fetchArticleMeta) - no more crude slug titles. broad:false
+    // (official, keep all recent) but the EXCLUDE noise filter still applies,
+    // so evergreen/marketing pages (vacation guides, documentaries) are dropped.
+    name: 'CrossFit.com Sport',
+    url: 'https://www.crossfit.com/sport-sitemap.xml',
+    kind: 'sitemap',
+    broad: false,
+    reliability: 'official',
+  },
 ]
 
 // "official + high" feeds we rely on for the source-health alert.
@@ -164,6 +178,9 @@ const EXCLUDE_RE = new RegExp(
     '\\brecipe\\b', 'supplement guide', 'buyer.?s guide',
     'best .{0,30}(?:shoes?|barbells?|equipment|kettlebells?) (?:for|of)\\b',
     'biggest mistake', 'gym owner', 'grow your gym', 'how to start a',
+    // evergreen / marketing pages that show up in the official sport sitemap
+    '\\bvacation\\b', 'documentary now available', 'guide to a ', '\\bmerch\\b',
+    'merchandise', '\\bapparel\\b', 'shop the', 'now available to (?:rent|purchase)',
   ].join('|'),
   'i',
 )
@@ -421,6 +438,30 @@ function parseSitemap(xml) {
   return items
 }
 
+/**
+ * Fetch an article page and pull its REAL headline (og:title or <title>) plus a
+ * short description, for sitemap sources that carry no titles. Strips a trailing
+ * site-name suffix (" | CrossFit"). Returns null on any failure so the caller
+ * skips the item (which also serves as a liveness check on the URL).
+ */
+async function fetchArticleMeta(url) {
+  try {
+    const res = await fetchWithTimeout(url, { timeout: FEED_TIMEOUT_MS })
+    if (!res.ok) return null
+    const html = (await res.text()).slice(0, 80000)
+    const og = html.match(/<meta[^>]+property=["']og:title["'][^>]+content=["']([^"']+)["']/i)
+    const tt = html.match(/<title[^>]*>([\s\S]*?)<\/title>/i)
+    let title = decodeEntities(stripCdata(og?.[1] || tt?.[1] || '')).replace(/\s+/g, ' ').trim()
+    title = title.replace(/\s*[|–—-]\s*CrossFit(?: Games)?\s*$/i, '').trim()
+    const ogd = html.match(/<meta[^>]+property=["']og:description["'][^>]+content=["']([^"']+)["']/i)
+    const md = html.match(/<meta[^>]+name=["']description["'][^>]+content=["']([^"']+)["']/i)
+    const summary = clip(decodeEntities(stripCdata(ogd?.[1] || md?.[1] || '')).replace(/\s+/g, ' ').trim(), 220)
+    return title ? { title, summary } : null
+  } catch {
+    return null
+  }
+}
+
 function titleCaseSlug(slug) {
   const small = new Set(['a', 'an', 'and', 'the', 'of', 'to', 'in', 'on', 'for', 'at', 'vs', 'by'])
   const words = slug
@@ -539,19 +580,25 @@ async function main() {
       // Age filter (skip undated only when we cannot place them in window).
       const pubMs = it.publishedAt ? Date.parse(it.publishedAt) : NaN
       if (!Number.isNaN(pubMs) && pubMs < cutoffMs) continue
-      if (Number.isNaN(pubMs)) {
-        // Undated: official/high feeds may legitimately omit dates; keep them
-        // and stamp "now" so they enter the window. Broad medium feeds without
-        // a date are dropped (we cannot confirm recency).
-        if (feed.broad) continue
+      if (Number.isNaN(pubMs) && feed.broad) continue // undated broad item: cannot confirm recency
+
+      // Sitemap sources (crossfit.com/sport) carry no titles. Fetch the real
+      // headline for items we have NOT already published (already-seen URLs are
+      // deduped out anyway, so skip the fetch). A failed fetch => skip the item.
+      if (feed.kind === 'sitemap') {
+        if (ledger[canonicalizeUrl(it.link)]) continue
+        const meta = await fetchArticleMeta(it.link)
+        if (!meta) continue
+        it.title = meta.title
+        if (meta.summary) it.summary = meta.summary
       }
 
-      // Relevance + noise filter for broad sources only.
-      if (feed.broad) {
-        const hay = `${it.title} ${it.summary}`
-        if (!RELEVANCE_RE.test(hay)) continue
-        if (EXCLUDE_RE.test(hay)) continue
-      }
+      const hay = `${it.title} ${it.summary}`
+      // Noise filter (commerce/evergreen/marketing) applies to ALL sources.
+      if (EXCLUDE_RE.test(hay)) continue
+      // Relevance keyword filter for broad sources only (official/Games feeds
+      // keep all recent items).
+      if (feed.broad && !RELEVANCE_RE.test(hay)) continue
 
       candidates.push({
         feed,
@@ -580,18 +627,25 @@ async function main() {
 
   log(`candidates=${candidates.length} new(after dedupe)=${newByCanon.size}`)
 
-  // LINK-VERIFY each NEW item: GET (follow redirects), keep only on 200.
+  // LINK-VERIFY each NEW item: GET (follow redirects). Drop ONLY on a
+  // definitive "gone" status (404/410) - a real article from a real feed must
+  // NOT be nuked by a transient blip (timeout, 5xx, rate-limit, bot-wall), or
+  // we silently lose legitimate news on a slow day.
   const verifiedNew = []
   for (const c of newByCanon.values()) {
-    let alive = false
+    let drop = false
     try {
       const res = await fetchWithTimeout(c.sourceUrl, { method: 'GET', timeout: VERIFY_TIMEOUT_MS })
-      alive = res.status === 200
-      if (!alive) log(`  verify drop ${c.sourceUrl} -> HTTP ${res.status}`)
+      if (res.status === 404 || res.status === 410) {
+        drop = true
+        log(`  verify DROP (dead ${res.status}) ${c.sourceUrl}`)
+      } else if (res.status !== 200) {
+        log(`  verify keep (transient HTTP ${res.status}) ${c.sourceUrl}`)
+      }
     } catch (err) {
-      log(`  verify error ${c.sourceUrl}: ${err.message}`)
+      log(`  verify keep (transient: ${err.message}) ${c.sourceUrl}`)
     }
-    if (!alive) continue
+    if (drop) continue
 
     const item = {
       id: idForUrl(c.canon),
