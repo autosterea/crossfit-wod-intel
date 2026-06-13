@@ -49,7 +49,7 @@ const LEDGER_PATH = join(NEWS_DATA, 'seen.json')
 
 const MAX_AGE_DAYS = 35
 const MAX_AGE_MS = MAX_AGE_DAYS * 24 * 60 * 60 * 1000
-const FEED_TIMEOUT_MS = 20000
+const FEED_TIMEOUT_MS = 30000 // some feeds (Morning Chalk Up ~420KB/200 items) are slow
 const VERIFY_TIMEOUT_MS = 15000
 
 // A real browser User-Agent: several feeds (notably BarBend) 404 to non-browser
@@ -93,13 +93,10 @@ const FEEDS = [
     broad: false, // Games-only category feed: keep all recent
     reliability: 'high',
   },
-  {
-    name: 'BarBend',
-    url: 'https://barbend.com/crossfit/feed/',
-    kind: 'rss',
-    broad: true,
-    reliability: 'high',
-  },
+  // NOTE: BarBend (barbend.com/crossfit/feed/) consistently 404s the VPS
+  // (edge/IP block on the datacenter, confirmed 2026-06-13), so it was dropped
+  // to keep source-health meaningful. Its CrossFit coverage overlaps the other
+  // high sources anyway.
   {
     name: 'BOXROX',
     url: 'https://www.boxrox.com/crossfit/feed/',
@@ -548,18 +545,25 @@ async function main() {
   for (const feed of FEEDS) {
     let ok = false
     let fetched = []
-    try {
-      const res = await fetchWithTimeout(feed.url, { timeout: FEED_TIMEOUT_MS })
-      if (!res.ok) throw new Error(`HTTP ${res.status}`)
-      const body = await res.text()
-      if (!body || body.length < 50) throw new Error('empty body')
-      const raw = feed.kind === 'sitemap' ? parseSitemap(body) : parseRss(body, feed)
-      ok = true
-      fetched = raw
-      log(`feed OK ${feed.name}: ${raw.length} raw items`)
-    } catch (err) {
-      log(`feed FAIL ${feed.name}: ${err.message}`)
+    let lastErr
+    // Up to 2 attempts: heavy/slow feeds (Morning Chalk Up) and flaky CDNs
+    // sometimes abort or 504 once, then succeed on a retry.
+    for (let attempt = 1; attempt <= 2 && !ok; attempt++) {
+      try {
+        const res = await fetchWithTimeout(feed.url, { timeout: FEED_TIMEOUT_MS })
+        if (!res.ok) throw new Error(`HTTP ${res.status}`)
+        const body = await res.text()
+        if (!body || body.length < 50) throw new Error('empty body')
+        const raw = feed.kind === 'sitemap' ? parseSitemap(body) : parseRss(body, feed)
+        ok = true
+        fetched = raw
+        log(`feed OK ${feed.name}: ${raw.length} raw items${attempt > 1 ? ' (retry)' : ''}`)
+      } catch (err) {
+        lastErr = err
+        if (attempt < 2) await new Promise((r) => setTimeout(r, 1500))
+      }
     }
+    if (!ok) log(`feed FAIL ${feed.name}: ${lastErr?.message || 'unknown'}`)
 
     const prior = priorHealth.get(feed.name)
     sourceHealth.push({
