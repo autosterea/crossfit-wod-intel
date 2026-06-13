@@ -25,7 +25,7 @@
  *   node scripts/fetch-official-standings.mjs --out PATH # custom output path
  */
 
-import { writeFileSync } from 'node:fs'
+import { writeFileSync, readFileSync, existsSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { dirname, resolve } from 'node:path'
 
@@ -134,6 +134,17 @@ async function tryStage(stage) {
   return null
 }
 
+/**
+ * Everything in the snapshot EXCEPT the wall-clock timestamp, so we can detect
+ * whether the standings actually changed and avoid timestamp-only churn (the
+ * recurring routine would otherwise commit a no-op every run).
+ */
+function signature(snap) {
+  if (!snap) return null
+  const { updatedAt: _omit, ...rest } = snap
+  return JSON.stringify(rest)
+}
+
 async function main() {
   for (const stage of STAGES) {
     const snapshot = await tryStage(stage)
@@ -145,6 +156,23 @@ async function main() {
           `[official-standings] DRY: ${stage.label} - men #1 ${snapshot.divisions.men[0].name}, women #1 ${snapshot.divisions.women[0].name}`,
         )
         return
+      }
+      // Skip the write when only the timestamp would change, so callers can use
+      // exit code to decide whether to commit (0 = wrote a real change).
+      if (existsSync(OUT)) {
+        let prev = null
+        try {
+          prev = JSON.parse(readFileSync(OUT, 'utf8'))
+        } catch {
+          prev = null
+        }
+        if (prev && signature(prev) === signature(snapshot)) {
+          console.log(
+            `[official-standings] no change (${stage.label}, men #1 ${snapshot.divisions.men[0].name}); leaving snapshot untouched`,
+          )
+          process.exitCode = 3
+          return
+        }
       }
       writeFileSync(OUT, json + '\n')
       console.log(
