@@ -573,15 +573,14 @@ function AxisRig({ onPick }: { onPick: (t: number) => void }) {
         </line>
       ))}
 
-      {/* Small power-axis title at the FAR LEFT, OUTSIDE the ribbons (sitting
-          on the vertical axis line, not floating over the data). The verbose
-          helper sentences ("higher = more power", "power falls as effort lasts
-          longer") were removed: that explanation already lives in the About
-          panel and the page copy below the stage, and the big pills were
-          covering the ribbons. */}
+      {/* Power-axis title lifted ABOVE the plot (well over the tallest ribbon
+          and its name labels) so it never covers the Phosphagen / Glycolytic /
+          Oxidative labels, and nudged inboard so the pill does not clip the
+          left edge. The verbose helper sentences were removed earlier (that
+          explanation lives in the About panel + page copy below the stage). */}
       <PillLabel
         text="POWER OUTPUT"
-        position={[Y_AXIS_X - 0.1, HS + 1.0, 0]}
+        position={[Y_AXIS_X + 1.2, HS + 2.4, 0]}
         fontSize={12}
       />
 
