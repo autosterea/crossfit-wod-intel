@@ -9,13 +9,15 @@ import './index.css'
 const App = lazy(() => import('./App.tsx'))
 const GamesApp = lazy(() => import('./games/GamesApp.tsx'))
 const FitnessApp = lazy(() => import('./fitness/FitnessApp.tsx'))
+const NewsApp = lazy(() => import('./news/NewsApp.tsx'))
 
-// /games and /fitness are standalone pages served by the same SPA bundle —
-// Caddy's `try_files {path} /index.html` routes them here. Each is lazy so a
-// visitor only downloads the chunk for the route they land on.
+// /games, /fitness and /news are standalone pages served by the same SPA
+// bundle — Caddy's `try_files {path} /index.html` routes them here. Each is
+// lazy so a visitor only downloads the chunk for the route they land on.
 const path = window.location.pathname.replace(/\/+$/, '')
 const isGames = path === '/games' || window.location.pathname.startsWith('/games/')
 const isFitness = path === '/fitness' || window.location.pathname.startsWith('/fitness/')
+const isNews = path === '/news' || window.location.pathname.startsWith('/news/')
 
 class RootErrorBoundary extends Component<{ children: ReactNode }, { error: Error | null }> {
   state = { error: null as Error | null }
@@ -55,7 +57,7 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <RootErrorBoundary>
       <Suspense fallback={<BootFallback />}>
-        {isGames ? <GamesApp /> : isFitness ? <FitnessApp /> : <App />}
+        {isGames ? <GamesApp /> : isFitness ? <FitnessApp /> : isNews ? <NewsApp /> : <App />}
       </Suspense>
     </RootErrorBoundary>
   </StrictMode>,

@@ -151,6 +151,23 @@ const STATIC = [
     noindex: true,
   },
   {
+    path: '/news',
+    title: 'CrossFit News and Results | Persistence Athletics',
+    description:
+      'Year-round CrossFit Games and competition news, updated daily. Qualifications, withdrawals, semifinal results and the road to the 2026 Games in one running feed.',
+    ogType: 'website',
+    image: OG_GAMES,
+    priority: 0.8,
+    changefreq: 'daily',
+    jsonLd: graph({
+      '@type': 'CollectionPage',
+      name: 'CrossFit News and Results',
+      url: `${SITE}/news`,
+      description: 'Year-round CrossFit Games and competition news, updated daily.',
+      isPartOf: { '@id': `${SITE}/#website` },
+    }),
+  },
+  {
     path: '/fitness',
     title: 'What Is Fitness? Interactive Lesson | Persistence Athletics',
     description:
