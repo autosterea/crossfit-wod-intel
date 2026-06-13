@@ -121,18 +121,12 @@ const FEEDS = [
     broad: true,
     reliability: 'medium',
   },
-  {
-    // PRIMARY official source: CrossFit.com sport news. It has no RSS, so we
-    // parse the sport sitemap and fetch each recent article's REAL headline +
-    // description (fetchArticleMeta) - no more crude slug titles. broad:false
-    // (official, keep all recent) but the EXCLUDE noise filter still applies,
-    // so evergreen/marketing pages (vacation guides, documentaries) are dropped.
-    name: 'CrossFit.com Sport',
-    url: 'https://www.crossfit.com/sport-sitemap.xml',
-    kind: 'sitemap',
-    broad: false,
-    reliability: 'official',
-  },
+  // NOTE: crossfit.com/sport (official articles) is NOT fetchable from the VPS -
+  // Cloudflare returns 403 to the datacenter IP regardless of User-Agent (an IP
+  // block, confirmed 2026-06-13). The official backbone is therefore the
+  // CrossFit Games YouTube feed above (which works), plus the news sites'
+  // coverage of official announcements. parseSitemap + fetchArticleMeta are
+  // kept for a future fetch-via-proxy path if ever wanted.
 ]
 
 // "official + high" feeds we rely on for the source-health alert.
