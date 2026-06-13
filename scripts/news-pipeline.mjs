@@ -831,7 +831,11 @@ function buildNewsletterEmail(newItems) {
     </div>
     <div style="border-top:1px solid #e6ebe8;margin:16px 28px 0 28px;"></div>`
 
-  const rows = newItems
+  // Cap the emailed list so a busy day (or the first backlog run) stays a
+  // scannable digest, not a wall; the full running feed is one tap away.
+  const EMAIL_MAX = 12
+  const shown = newItems.slice(0, EMAIL_MAX)
+  const rows = shown
     .map((it) => {
       const label = CATEGORY_LABEL[it.category] || 'News'
       return `
@@ -850,7 +854,15 @@ function buildNewsletterEmail(newItems) {
     })
     .join('')
 
-  const inner = `${topLine}<div style="padding-top:4px;">${rows}</div>`
+  const more = newItems.length > EMAIL_MAX ? `+ ${newItems.length - EMAIL_MAX} more. ` : ''
+  const cta = `
+    <div style="padding:18px 28px 26px 28px;text-align:center;">
+      <a href="https://wod.persistenceathletics.com/news" target="_blank" rel="noopener noreferrer"
+         style="display:inline-block;background:${PA_GREEN};color:#fff;text-decoration:none;font-weight:700;font-size:14px;padding:11px 22px;border-radius:8px;">
+        ${more}See the full running feed</a>
+    </div>`
+
+  const inner = `${topLine}<div style="padding-top:4px;">${rows}</div>${cta}`
   return emailShell(inner)
 }
 
