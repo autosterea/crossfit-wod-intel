@@ -161,6 +161,14 @@ export default function IntelProfile({ slug, showHeader = false }: { slug: strin
         {a.dataDepth.seasonEvents} 2026 season tests{a.dataDepth.gamesEvents ? ` + ${a.dataDepth.gamesEvents} prior Games event scores` : ''}, processed through the L1 fitness model. Skills and energy systems are performance profiles, not lab measurements.
       </p>
 
+      {/* PA-voice scouting read (grounded in the numbers above) */}
+      {a.narrative && (
+        <div className="mb-5 pl-3.5 border-l-2 border-[#91C640]/60">
+          <p className="text-[14.5px] leading-relaxed text-[var(--text-primary)]">{a.narrative}</p>
+          <div className="games-condensed text-[10px] uppercase tracking-[0.14em] text-[var(--text-muted)] mt-1.5">Persistence Athletics scouting read</div>
+        </div>
+      )}
+
       {/* Headline stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
         {[

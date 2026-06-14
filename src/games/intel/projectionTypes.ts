@@ -56,6 +56,7 @@ export interface Benchmark {
 export interface AthleteIntel {
   slug: string
   name: string
+  narrative: string | null
   division: 'men' | 'women'
   country: string | null
   age: number | null

@@ -135,6 +135,12 @@ try {
   /* optional: profile renders without it */
 }
 const benchmarksByName = benchmarksFile.benchmarks ?? {}
+let narrativesBySlug = {}
+try {
+  narrativesBySlug = readJson('src/data/games/athlete-narratives-2026.json').narratives ?? {}
+} catch {
+  /* optional: PA-voice scouting blurbs, added by the narrative workflow */
+}
 
 /** Parse a self-reported benchmark value -> comparable numeric + direction. */
 function parseBenchmark(value) {
@@ -504,6 +510,7 @@ for (const div of ['men', 'women']) {
       slug,
       name: a.name,
       division: div,
+      narrative: narrativesBySlug[slug] ?? null,
       country: am?.country ?? c3poMeta[a.name]?.country ?? null,
       age: am?.age ?? c3poMeta[a.name]?.age ?? null,
       capacity: a.capacity,
