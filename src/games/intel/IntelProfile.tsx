@@ -151,6 +151,11 @@ export default function IntelProfile({ slug, showHeader = false }: { slug: strin
         <h2 className="games-display text-2xl text-[var(--text-primary)] leading-none">
           Athlete <span className="text-[#91C640]">Intelligence</span>
         </h2>
+        {a.status === 'qualified' ? (
+          <span className="games-chip" style={{ background: 'rgba(1,150,68,0.18)', color: 'var(--accent-success)' }}>Qualified</span>
+        ) : (
+          <span className="games-chip" style={{ background: 'rgba(245,158,11,0.16)', color: 'var(--accent-amber)' }}>In the hunt</span>
+        )}
         <span className="games-chip" style={{ background: conf.bg, color: conf.fg }}>{conf.label}</span>
         {a.seasonRank.rookie && (
           <span className="games-chip" style={{ background: 'rgba(96,165,250,0.16)', color: 'var(--accent-blue)' }}>Games rookie</span>

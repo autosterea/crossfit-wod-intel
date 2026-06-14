@@ -84,13 +84,29 @@ async function main() {
   ]) {
     for (const a of list ?? []) cohortByNorm.set(norm(a.name), { name: a.name, division })
   }
-  console.error(`[history] cohort: ${cohortByNorm.size} athletes`)
-
-  // Resolve competitorId for each cohort member from the 2026 Open leaderboard
-  // (top pages cover the whole top-30 cohort).
-  const idToName = new Map() // competitorId -> results-2026 name
+  // Extend the cohort with the extra confirmed qualifiers (outside the Open
+  // top-30) so they also get prior-Games history. Their competitorIds are
+  // already known, so seed idToName directly.
+  const idToName = new Map() // competitorId -> 2026 cohort name
   const resolved = new Set()
   const meta = {} // name -> { age, country } from the official 2026 Open entrant record
+  try {
+    const extra = JSON.parse(readFileSync(resolve(REPO, 'src/data/games/extra-qualifiers-2026.json'), 'utf8')).athletes
+    for (const a of Object.values(extra)) {
+      cohortByNorm.set(norm(a.name), { name: a.name, division: a.division })
+      if (a.competitorId) {
+        idToName.set(String(a.competitorId), a.name)
+        resolved.add(a.name)
+        meta[a.name] = { age: null, country: a.country || null }
+      }
+    }
+  } catch {
+    /* extra-qualifiers optional */
+  }
+  console.error(`[history] cohort: ${cohortByNorm.size} athletes`)
+
+  // Resolve competitorId for each remaining cohort member from the 2026 Open
+  // leaderboard (top pages cover the Open top-30 cohort).
   for (const [division, div] of [
     ['men', 1],
     ['women', 2],

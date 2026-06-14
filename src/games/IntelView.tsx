@@ -55,16 +55,17 @@ function Toggle<T extends string>({ value, onChange, options }: { value: T; onCh
 }
 
 /* ---------------------------- leaderboard -------------------------------- */
-function Leaderboard({ data, division }: { data: ProjectionData; division: Division }) {
+function Leaderboard({ data, division, qualifiedOnly }: { data: ProjectionData; division: Division; qualifiedOnly: boolean }) {
   const navigate = useGamesStore((s) => s.navigate)
-  const list = useMemo(
+  const full = useMemo(
     () =>
       Object.values(data.athletes)
         .filter((a) => a.division === division)
         .sort((a, b) => a.seasonRank.rank - b.seasonRank.rank),
     [data, division],
   )
-  const field = list.length
+  const field = full.length // bands are scaled to the full division field
+  const list = qualifiedOnly ? full.filter((a) => a.status === 'qualified') : full
 
   return (
     <div>
@@ -90,7 +91,8 @@ function Leaderboard({ data, division }: { data: ProjectionData; division: Divis
                 <div className="flex items-center gap-2">
                   <span className="text-[14px] font-semibold text-[var(--text-primary)] truncate">{a.name}</span>
                   <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: CONF_DOT[a.confidence] }} title={`${a.confidence} confidence`} />
-                  {a.seasonRank.rookie && <span className="text-[9px] uppercase tracking-wider text-[var(--accent-blue)]">rookie</span>}
+                  {a.status === 'contender' && <span className="text-[9px] uppercase tracking-wider text-[var(--accent-amber)] shrink-0">in the hunt</span>}
+                  {a.seasonRank.rookie && <span className="text-[9px] uppercase tracking-wider text-[var(--accent-blue)] shrink-0">rookie</span>}
                 </div>
                 {/* confidence band visual */}
                 <div className="relative h-1.5 mt-1.5 rounded-full bg-[var(--panel-bg-2)]">
@@ -218,6 +220,7 @@ export default function IntelView() {
   const [status, setStatus] = useState<'loading' | 'ok' | 'error'>('loading')
   const [division, setDivision] = useState<Division>('men')
   const [tab, setTab] = useState<Tab>('leaderboard')
+  const [qualOnly, setQualOnly] = useState(false)
 
   useEffect(() => {
     let cancelled = false
@@ -254,17 +257,22 @@ export default function IntelView() {
         </p>
         {data.fieldProvisional && (
           <div className="mt-3 inline-flex items-center gap-2 text-[11px] px-3 py-1.5 rounded-lg" style={{ background: 'rgba(245,158,11,0.14)', color: 'var(--accent-amber)' }}>
-            Field provisional - the 30+30 locks after the online Semifinal (~June 16). Cohort = top 30 per division by Open + Quarterfinals.
+            Field provisional - 23+23 confirmed from the in-person Semifinals; the final 7+7 and full 30+30 lock after the online Semifinal (~June 16). Contenders are marked.
           </div>
         )}
       </section>
 
       <div className="flex items-center justify-between gap-3 flex-wrap mb-5">
         <Toggle value={tab} onChange={setTab} options={[{ key: 'leaderboard', label: 'Projected Leaderboard' }, { key: 'simulator', label: 'What-If Simulator' }]} />
-        <Toggle value={division} onChange={setDivision} options={[{ key: 'men', label: 'Men' }, { key: 'women', label: 'Women' }]} />
+        <div className="flex items-center gap-2">
+          {tab === 'leaderboard' && (
+            <Toggle value={qualOnly ? 'q' : 'all'} onChange={(v) => setQualOnly(v === 'q')} options={[{ key: 'all', label: 'All' }, { key: 'q', label: 'Qualified' }]} />
+          )}
+          <Toggle value={division} onChange={setDivision} options={[{ key: 'men', label: 'Men' }, { key: 'women', label: 'Women' }]} />
+        </div>
       </div>
 
-      {tab === 'leaderboard' ? <Leaderboard data={data} division={division} /> : <Simulator data={data} division={division} />}
+      {tab === 'leaderboard' ? <Leaderboard data={data} division={division} qualifiedOnly={qualOnly} /> : <Simulator data={data} division={division} />}
 
       <p className="text-[10px] text-[var(--text-muted)] leading-relaxed mt-8 max-w-2xl">
         Method: each athlete's fingerprint is their placement percentile (percent of field beaten) across the 2026 Open and

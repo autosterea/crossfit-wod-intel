@@ -53,11 +53,14 @@ export interface Benchmark {
   pct: number | null // field percentile (100 = best)
 }
 
+export type QualStatus = 'qualified' | 'contender'
+
 export interface AthleteIntel {
   slug: string
   name: string
   narrative: string | null
   division: 'men' | 'women'
+  status: QualStatus
   country: string | null
   age: number | null
   capacity: number // career field-percentile capacity across all events

@@ -1,0 +1,931 @@
+{
+  "generated": "2026-06-14T17:55:58.817Z",
+  "note": "Confirmed 2026 qualifiers (athletes-2026.json) who fell outside the Open top-30 results cohort. Their 2026 Open + Quarterfinals per-event results, fetched verbatim from c3po so the intel engine can cover the full field.",
+  "count": 21,
+  "athletes": {
+    "Ricky Garard": {
+      "name": "Ricky Garard",
+      "slug": "ricky-garard",
+      "division": "men",
+      "country": "Australia",
+      "competitorId": "40955",
+      "events": [
+        {
+          "eventId": "2026-open-01",
+          "place": 173,
+          "score": "335 reps"
+        },
+        {
+          "eventId": "2026-open-02",
+          "place": 105,
+          "score": "7:26"
+        },
+        {
+          "eventId": "2026-open-03",
+          "place": 17,
+          "score": "285 reps"
+        },
+        {
+          "eventId": "2026-qf-01",
+          "place": 20,
+          "score": "6:11"
+        },
+        {
+          "eventId": "2026-qf-02",
+          "place": 1,
+          "score": "6:21"
+        },
+        {
+          "eventId": "2026-qf-03",
+          "place": 19,
+          "score": "4:09"
+        },
+        {
+          "eventId": "2026-qf-04",
+          "place": 57,
+          "score": "10:18"
+        }
+      ]
+    },
+    "Austin Hatfield": {
+      "name": "Austin Hatfield",
+      "slug": "austin-hatfield",
+      "division": "men",
+      "country": "United States",
+      "competitorId": "947291",
+      "events": [
+        {
+          "eventId": "2026-open-01",
+          "place": 232,
+          "score": "331 reps"
+        },
+        {
+          "eventId": "2026-open-02",
+          "place": 84,
+          "score": "7:20"
+        },
+        {
+          "eventId": "2026-open-03",
+          "place": 48,
+          "score": "274 reps"
+        },
+        {
+          "eventId": "2026-qf-01",
+          "place": 5,
+          "score": "5:56"
+        },
+        {
+          "eventId": "2026-qf-02",
+          "place": 10,
+          "score": "6:57"
+        },
+        {
+          "eventId": "2026-qf-03",
+          "place": 19,
+          "score": "4:09"
+        },
+        {
+          "eventId": "2026-qf-04",
+          "place": 5,
+          "score": "9:40"
+        }
+      ]
+    },
+    "Bayley Martin": {
+      "name": "Bayley Martin",
+      "slug": "bayley-martin",
+      "division": "men",
+      "country": "New Zealand",
+      "competitorId": "479759",
+      "events": [
+        {
+          "eventId": "2026-open-01",
+          "place": 132,
+          "score": "339 reps"
+        },
+        {
+          "eventId": "2026-open-02",
+          "place": 99,
+          "score": "7:24"
+        },
+        {
+          "eventId": "2026-open-03",
+          "place": 168,
+          "score": "261 reps"
+        },
+        {
+          "eventId": "2026-qf-01",
+          "place": 2,
+          "score": "5:52"
+        },
+        {
+          "eventId": "2026-qf-02",
+          "place": 19,
+          "score": "7:10"
+        },
+        {
+          "eventId": "2026-qf-03",
+          "place": 29,
+          "score": "4:13"
+        },
+        {
+          "eventId": "2026-qf-04",
+          "place": 253,
+          "score": "10:59"
+        }
+      ]
+    },
+    "Dylan Hamming": {
+      "name": "Dylan Hamming",
+      "slug": "dylan-hamming",
+      "division": "men",
+      "country": "United States",
+      "competitorId": "422637",
+      "events": [
+        {
+          "eventId": "2026-open-01",
+          "place": 189,
+          "score": "334 reps"
+        },
+        {
+          "eventId": "2026-open-02",
+          "place": 199,
+          "score": "7:46"
+        },
+        {
+          "eventId": "2026-open-03",
+          "place": 85,
+          "score": "269 reps"
+        },
+        {
+          "eventId": "2026-qf-01",
+          "place": 113,
+          "score": "6:28"
+        },
+        {
+          "eventId": "2026-qf-02",
+          "place": 412,
+          "score": "8:52"
+        },
+        {
+          "eventId": "2026-qf-03",
+          "place": 15,
+          "score": "4:07"
+        },
+        {
+          "eventId": "2026-qf-04",
+          "place": 94,
+          "score": "10:29"
+        }
+      ]
+    },
+    "Henrik Haapalainen": {
+      "name": "Henrik Haapalainen",
+      "slug": "henrik-haapalainen",
+      "division": "men",
+      "country": "Finland",
+      "competitorId": "680734",
+      "events": [
+        {
+          "eventId": "2026-open-01",
+          "place": 508,
+          "score": "318 reps"
+        },
+        {
+          "eventId": "2026-open-02",
+          "place": 99,
+          "score": "7:24"
+        },
+        {
+          "eventId": "2026-open-03",
+          "place": 282,
+          "score": "256 reps"
+        },
+        {
+          "eventId": "2026-qf-01",
+          "place": 299,
+          "score": "6:47"
+        },
+        {
+          "eventId": "2026-qf-02",
+          "place": 190,
+          "score": "8:16"
+        },
+        {
+          "eventId": "2026-qf-03",
+          "place": 163,
+          "score": "4:34"
+        },
+        {
+          "eventId": "2026-qf-04",
+          "place": 54,
+          "score": "10:16"
+        }
+      ]
+    },
+    "Roman Khrennikov": {
+      "name": "Roman Khrennikov",
+      "slug": "roman-khrennikov",
+      "division": "men",
+      "country": "Russia",
+      "competitorId": "975774",
+      "events": [
+        {
+          "eventId": "2026-open-01",
+          "place": 610,
+          "score": "315 reps"
+        },
+        {
+          "eventId": "2026-open-02",
+          "place": 102,
+          "score": "7:25"
+        },
+        {
+          "eventId": "2026-open-03",
+          "place": 183,
+          "score": "260 reps"
+        },
+        {
+          "eventId": "2026-qf-01",
+          "place": 64,
+          "score": "6:21"
+        },
+        {
+          "eventId": "2026-qf-02",
+          "place": 10,
+          "score": "6:57"
+        },
+        {
+          "eventId": "2026-qf-03",
+          "place": 43,
+          "score": "4:16"
+        },
+        {
+          "eventId": "2026-qf-04",
+          "place": 57,
+          "score": "10:18"
+        }
+      ]
+    },
+    "Calum Clements": {
+      "name": "Calum Clements",
+      "slug": "calum-clements",
+      "division": "men",
+      "country": "Spain",
+      "competitorId": "771441",
+      "events": [
+        {
+          "eventId": "2026-open-01",
+          "place": 627,
+          "score": "315 reps"
+        },
+        {
+          "eventId": "2026-open-02",
+          "place": 84,
+          "score": "7:20"
+        },
+        {
+          "eventId": "2026-open-03",
+          "place": 350,
+          "score": "254 reps"
+        },
+        {
+          "eventId": "2026-qf-01",
+          "place": 327,
+          "score": "6:49"
+        },
+        {
+          "eventId": "2026-qf-02",
+          "place": 12,
+          "score": "6:58"
+        },
+        {
+          "eventId": "2026-qf-03",
+          "place": 81,
+          "score": "4:24"
+        },
+        {
+          "eventId": "2026-qf-04",
+          "place": 141,
+          "score": "10:40"
+        }
+      ]
+    },
+    "Kalyan Souza": {
+      "name": "Kalyan Souza",
+      "slug": "kalyan-souza",
+      "division": "men",
+      "country": "Brazil",
+      "competitorId": "2064040",
+      "events": [
+        {
+          "eventId": "2026-open-01",
+          "place": 207,
+          "score": "333 reps"
+        },
+        {
+          "eventId": "2026-open-02",
+          "place": 148,
+          "score": "7:37"
+        },
+        {
+          "eventId": "2026-open-03",
+          "place": 2031,
+          "score": "231 reps"
+        },
+        {
+          "eventId": "2026-qf-01",
+          "place": 246,
+          "score": "6:42"
+        },
+        {
+          "eventId": "2026-qf-02",
+          "place": 621,
+          "score": "9:20"
+        },
+        {
+          "eventId": "2026-qf-03",
+          "place": 99,
+          "score": "4:27"
+        },
+        {
+          "eventId": "2026-qf-04",
+          "place": 606,
+          "score": "11:40"
+        }
+      ]
+    },
+    "Benjamin Reyes": {
+      "name": "Benjamin Reyes",
+      "slug": "benjamin-reyes",
+      "division": "men",
+      "country": "Chile",
+      "competitorId": "1398324",
+      "events": [
+        {
+          "eventId": "2026-open-01",
+          "place": 2122,
+          "score": "294 reps"
+        },
+        {
+          "eventId": "2026-open-02",
+          "place": 182,
+          "score": "7:43"
+        },
+        {
+          "eventId": "2026-open-03",
+          "place": 141,
+          "score": "264 reps"
+        },
+        {
+          "eventId": "2026-qf-01",
+          "place": 103,
+          "score": "6:27"
+        },
+        {
+          "eventId": "2026-qf-02",
+          "place": 177,
+          "score": "8:13"
+        },
+        {
+          "eventId": "2026-qf-03",
+          "place": 487,
+          "score": "5:03"
+        },
+        {
+          "eventId": "2026-qf-04",
+          "place": 122,
+          "score": "10:36"
+        }
+      ]
+    },
+    "Luis Cuellar": {
+      "name": "Luis Cuellar",
+      "slug": "luis-cuellar",
+      "division": "men",
+      "country": "Spain",
+      "competitorId": "1774373",
+      "events": [
+        {
+          "eventId": "2026-open-01",
+          "place": 1632,
+          "score": "298 reps"
+        },
+        {
+          "eventId": "2026-open-02",
+          "place": 292,
+          "score": "8:03"
+        },
+        {
+          "eventId": "2026-open-03",
+          "place": 477,
+          "score": "250 reps"
+        },
+        {
+          "eventId": "2026-qf-01",
+          "place": 85,
+          "score": "6:24"
+        },
+        {
+          "eventId": "2026-qf-02",
+          "place": 323,
+          "score": "8:39"
+        },
+        {
+          "eventId": "2026-qf-03",
+          "place": 163,
+          "score": "4:34"
+        },
+        {
+          "eventId": "2026-qf-04",
+          "place": 115,
+          "score": "10:34"
+        }
+      ]
+    },
+    "Ty Jenkins": {
+      "name": "Ty Jenkins",
+      "slug": "ty-jenkins",
+      "division": "men",
+      "country": "United States",
+      "competitorId": "1967193",
+      "events": [
+        {
+          "eventId": "2026-open-01",
+          "place": 180,
+          "score": "334 reps"
+        },
+        {
+          "eventId": "2026-open-02",
+          "place": 110,
+          "score": "7:27"
+        },
+        {
+          "eventId": "2026-open-03",
+          "place": 90,
+          "score": "268 reps"
+        },
+        {
+          "eventId": "2026-qf-01",
+          "place": 202,
+          "score": "6:39"
+        },
+        {
+          "eventId": "2026-qf-02",
+          "place": 323,
+          "score": "8:39"
+        },
+        {
+          "eventId": "2026-qf-03",
+          "place": 251,
+          "score": "4:43"
+        },
+        {
+          "eventId": "2026-qf-04",
+          "place": 195,
+          "score": "10:51"
+        }
+      ]
+    },
+    "Gabriela Migala": {
+      "name": "Gabriela Migala",
+      "slug": "gabriela-migala",
+      "division": "women",
+      "country": "Poland",
+      "competitorId": "764556",
+      "events": [
+        {
+          "eventId": "2026-open-01",
+          "place": 43,
+          "score": "11:38"
+        },
+        {
+          "eventId": "2026-open-02",
+          "place": 92,
+          "score": "8:26"
+        },
+        {
+          "eventId": "2026-open-03",
+          "place": 78,
+          "score": "15:58"
+        },
+        {
+          "eventId": "2026-qf-01",
+          "place": 22,
+          "score": "6:28"
+        },
+        {
+          "eventId": "2026-qf-02",
+          "place": 107,
+          "score": "7:58"
+        },
+        {
+          "eventId": "2026-qf-03",
+          "place": 64,
+          "score": "4:39"
+        },
+        {
+          "eventId": "2026-qf-04",
+          "place": 23,
+          "score": "10:51"
+        }
+      ]
+    },
+    "Abigail Domit": {
+      "name": "Abigail Domit",
+      "slug": "abigail-domit",
+      "division": "women",
+      "country": "United States",
+      "competitorId": "2077209",
+      "events": [
+        {
+          "eventId": "2026-open-01",
+          "place": 108,
+          "score": "353 reps"
+        },
+        {
+          "eventId": "2026-open-02",
+          "place": 22,
+          "score": "7:32"
+        },
+        {
+          "eventId": "2026-open-03",
+          "place": 122,
+          "score": "279 reps"
+        },
+        {
+          "eventId": "2026-qf-01",
+          "place": 26,
+          "score": "6:29"
+        },
+        {
+          "eventId": "2026-qf-02",
+          "place": 100,
+          "score": "7:55"
+        },
+        {
+          "eventId": "2026-qf-03",
+          "place": 34,
+          "score": "4:29"
+        },
+        {
+          "eventId": "2026-qf-04",
+          "place": 23,
+          "score": "10:51"
+        }
+      ]
+    },
+    "Lucy McGonigle": {
+      "name": "Lucy McGonigle",
+      "slug": "lucy-mcgonigle",
+      "division": "women",
+      "country": "Ireland",
+      "competitorId": "1984229",
+      "events": [
+        {
+          "eventId": "2026-open-01",
+          "place": 226,
+          "score": "335 reps"
+        },
+        {
+          "eventId": "2026-open-02",
+          "place": 27,
+          "score": "7:36"
+        },
+        {
+          "eventId": "2026-open-03",
+          "place": 3,
+          "score": "14:01"
+        },
+        {
+          "eventId": "2026-qf-01",
+          "place": 5,
+          "score": "6:16"
+        },
+        {
+          "eventId": "2026-qf-02",
+          "place": 11,
+          "score": "6:54"
+        },
+        {
+          "eventId": "2026-qf-03",
+          "place": 21,
+          "score": "4:22"
+        },
+        {
+          "eventId": "2026-qf-04",
+          "place": 36,
+          "score": "10:59"
+        }
+      ]
+    },
+    "Olivia Kerstetter": {
+      "name": "Olivia Kerstetter",
+      "slug": "olivia-kerstetter",
+      "division": "women",
+      "country": "United States",
+      "competitorId": "1269411",
+      "events": [
+        {
+          "eventId": "2026-open-01",
+          "place": 112,
+          "score": "351 reps"
+        },
+        {
+          "eventId": "2026-open-02",
+          "place": 54,
+          "score": "7:59"
+        },
+        {
+          "eventId": "2026-open-03",
+          "place": 93,
+          "score": "285 reps"
+        },
+        {
+          "eventId": "2026-qf-01",
+          "place": 40,
+          "score": "6:36"
+        },
+        {
+          "eventId": "2026-qf-02",
+          "place": 62,
+          "score": "7:34"
+        },
+        {
+          "eventId": "2026-qf-03",
+          "place": 11,
+          "score": "4:17"
+        },
+        {
+          "eventId": "2026-qf-04",
+          "place": 1,
+          "score": "10:13"
+        }
+      ]
+    },
+    "Elisa Fuliano": {
+      "name": "Elisa Fuliano",
+      "slug": "elisa-fuliano",
+      "division": "women",
+      "country": "Italy",
+      "competitorId": "1983424",
+      "events": [
+        {
+          "eventId": "2026-open-01",
+          "place": 43,
+          "score": "11:38"
+        },
+        {
+          "eventId": "2026-open-02",
+          "place": 38,
+          "score": "7:47"
+        },
+        {
+          "eventId": "2026-open-03",
+          "place": 236,
+          "score": "270 reps"
+        },
+        {
+          "eventId": "2026-qf-01",
+          "place": 54,
+          "score": "6:40"
+        },
+        {
+          "eventId": "2026-qf-02",
+          "place": 28,
+          "score": "7:08"
+        },
+        {
+          "eventId": "2026-qf-03",
+          "place": 193,
+          "score": "5:04"
+        },
+        {
+          "eventId": "2026-qf-04",
+          "place": 56,
+          "score": "11:11"
+        }
+      ]
+    },
+    "Alex Gazan": {
+      "name": "Alex Gazan",
+      "slug": "alex-gazan",
+      "division": "women",
+      "country": "United States",
+      "competitorId": "1232297",
+      "events": [
+        {
+          "eventId": "2026-open-01",
+          "place": 86,
+          "score": "11:55"
+        },
+        {
+          "eventId": "2026-open-02",
+          "place": 30,
+          "score": "7:40"
+        },
+        {
+          "eventId": "2026-open-03",
+          "place": 347,
+          "score": "264 reps"
+        },
+        {
+          "eventId": "2026-qf-01",
+          "place": 75,
+          "score": "6:46"
+        },
+        {
+          "eventId": "2026-qf-02",
+          "place": 98,
+          "score": "7:54"
+        },
+        {
+          "eventId": "2026-qf-03",
+          "place": 24,
+          "score": "4:26"
+        },
+        {
+          "eventId": "2026-qf-04",
+          "place": 8,
+          "score": "10:39"
+        }
+      ]
+    },
+    "Rachel Noel": {
+      "name": "Rachel Noel",
+      "slug": "rachel-noel",
+      "division": "women",
+      "country": "United States",
+      "competitorId": "1460972",
+      "events": [
+        {
+          "eventId": "2026-open-01",
+          "place": 110,
+          "score": "352 reps"
+        },
+        {
+          "eventId": "2026-open-02",
+          "place": 70,
+          "score": "8:12"
+        },
+        {
+          "eventId": "2026-open-03",
+          "place": 396,
+          "score": "261 reps"
+        },
+        {
+          "eventId": "2026-qf-01",
+          "place": 186,
+          "score": "7:00"
+        },
+        {
+          "eventId": "2026-qf-02",
+          "place": 541,
+          "score": "9:52"
+        },
+        {
+          "eventId": "2026-qf-03",
+          "place": 95,
+          "score": "4:46"
+        },
+        {
+          "eventId": "2026-qf-04",
+          "place": 2383,
+          "score": "16:51"
+        }
+      ]
+    },
+    "Hannah Black": {
+      "name": "Hannah Black",
+      "slug": "hannah-black",
+      "division": "women",
+      "country": "United States",
+      "competitorId": "864249",
+      "events": [
+        {
+          "eventId": "2026-open-01",
+          "place": 214,
+          "score": "336 reps"
+        },
+        {
+          "eventId": "2026-open-02",
+          "place": 158,
+          "score": "8:58"
+        },
+        {
+          "eventId": "2026-open-03",
+          "place": 406,
+          "score": "261 reps"
+        },
+        {
+          "eventId": "2026-qf-01",
+          "place": 155,
+          "score": "6:56"
+        },
+        {
+          "eventId": "2026-qf-02",
+          "place": 175,
+          "score": "8:26"
+        },
+        {
+          "eventId": "2026-qf-03",
+          "place": 77,
+          "score": "4:42"
+        },
+        {
+          "eventId": "2026-qf-04",
+          "place": 587,
+          "score": "13:14"
+        }
+      ]
+    },
+    "Ellie Turner": {
+      "name": "Ellie Turner",
+      "slug": "ellie-turner",
+      "division": "women",
+      "country": "Australia",
+      "competitorId": "1119323",
+      "events": [
+        {
+          "eventId": "2026-open-01",
+          "place": 8,
+          "score": "11:10"
+        },
+        {
+          "eventId": "2026-open-02",
+          "place": 42,
+          "score": "7:52"
+        },
+        {
+          "eventId": "2026-open-03",
+          "place": 175,
+          "score": "275 reps"
+        },
+        {
+          "eventId": "2026-qf-01",
+          "place": 22,
+          "score": "6:28"
+        },
+        {
+          "eventId": "2026-qf-02",
+          "place": 22,
+          "score": "7:02"
+        },
+        {
+          "eventId": "2026-qf-03",
+          "place": 3412,
+          "score": "8:53"
+        },
+        {
+          "eventId": "2026-qf-04",
+          "place": 31,
+          "score": "10:57"
+        }
+      ]
+    },
+    "Madeline Sturt": {
+      "name": "Madeline Sturt",
+      "slug": "madeline-sturt",
+      "division": "women",
+      "country": "Australia",
+      "competitorId": "21556",
+      "events": [
+        {
+          "eventId": "2026-open-01",
+          "place": 205,
+          "score": "337 reps"
+        },
+        {
+          "eventId": "2026-open-02",
+          "place": 7,
+          "score": "6:54"
+        },
+        {
+          "eventId": "2026-open-03",
+          "place": 73,
+          "score": "15:53"
+        },
+        {
+          "eventId": "2026-qf-01",
+          "place": 28,
+          "score": "6:31"
+        },
+        {
+          "eventId": "2026-qf-02",
+          "place": 18,
+          "score": "6:59"
+        },
+        {
+          "eventId": "2026-qf-03",
+          "place": 2,
+          "score": "4:04"
+        },
+        {
+          "eventId": "2026-qf-04",
+          "place": 123,
+          "score": "11:43"
+        }
+      ]
+    }
+  }
+}

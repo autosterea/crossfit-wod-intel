@@ -217,6 +217,28 @@ const qfS = stage2026('quarterfinals')
 const events2026 = [...openS.events, ...qfS.events]
 const eventMeta2026 = new Map(events2026.map((e) => [e.id, e]))
 
+// Merge the EXTRA confirmed qualifiers (athletes-2026.json members who finished
+// outside the Open top-30, so they were absent from results/2026.json). Their
+// 2026 Open + QF per-event results were fetched into extra-qualifiers-2026.json.
+// This makes the intel cohort the FULL field, not just the Open top-30.
+const extraByDivision = { men: [], women: [] }
+try {
+  const extra = readJson('src/data/games/extra-qualifiers-2026.json').athletes
+  for (const a of Object.values(extra)) {
+    if (!extraByDivision[a.division]) continue
+    extraByDivision[a.division].push(a.name)
+    const openEvts = (a.events || []).filter((e) => e.eventId.startsWith('2026-open'))
+    const qfEvts = (a.events || []).filter((e) => e.eventId.startsWith('2026-qf'))
+    if (openEvts.length) openS.cells[a.division].set(a.name, openEvts)
+    if (qfEvts.length) qfS.cells[a.division].set(a.name, qfEvts)
+  }
+} catch {
+  /* extra-qualifiers optional */
+}
+// Qualification status: confirmed in-person qualifiers (in athletes-2026.json)
+// vs contenders (Open top-30 still fighting through the online Semifinal).
+const qualifiedNames = new Set([...(athletes2026.men ?? []), ...(athletes2026.women ?? [])].map((a) => a.name))
+
 /* For each 2026 event, compute the cohort reference (best output) + placement
    ranking per division, so rel mirrors CapacityView (margin where timed). */
 function buildEventRefs(div) {
@@ -247,7 +269,10 @@ function buildEventRefs(div) {
 /* ----------------------------- the engine -------------------------------- */
 function buildDivision(div) {
   const refs = buildEventRefs(div)
-  const cohortNames = (results2026.stages.open.divisions[div] ?? []).map((a) => a.name)
+  const cohortNames = [
+    ...(results2026.stages.open.divisions[div] ?? []).map((a) => a.name),
+    ...(extraByDivision[div] ?? []),
+  ]
 
   // PER-EVENT METRIC = placement percentile within that event's OWN field
   // (2026 events: within the 30-cohort; prior Games: within that Games' field).
@@ -510,6 +535,7 @@ for (const div of ['men', 'women']) {
       slug,
       name: a.name,
       division: div,
+      status: qualifiedNames.has(a.name) ? 'qualified' : 'contender',
       narrative: narrativesBySlug[slug] ?? null,
       country: am?.country ?? c3poMeta[a.name]?.country ?? null,
       age: am?.age ?? c3poMeta[a.name]?.age ?? null,
@@ -528,7 +554,10 @@ for (const div of ['men', 'women']) {
       strengths: a.strengths,
       weaknesses: a.weaknesses,
       gamesHistory: a.gamesHistory,
-      bestGamesFinish: a.gamesHistory.length ? Math.min(...a.gamesHistory.map((g) => g.overallRank)) : null,
+      bestGamesFinish: (() => {
+        const f = a.gamesHistory.map((g) => g.overallRank).filter((r) => r >= 1)
+        return f.length ? Math.min(...f) : null
+      })(),
       benchmarks: (benchmarksByName[a.name] ?? []).map((b) => {
         const r = benchRanks.get(b.name)?.get(a.name)
         return { name: b.name, value: b.value, kind: b.kind, fieldRank: r?.rank ?? null, fieldOf: r?.of ?? null, pct: r?.pct ?? null }

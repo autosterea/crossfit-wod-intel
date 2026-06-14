@@ -96,6 +96,17 @@ async function main() {
       await sleep(120)
     }
   }
+  // Add the extra confirmed qualifiers (outside the Open top-30) by their known
+  // competitorIds so they get benchmark stats too.
+  try {
+    const extra = JSON.parse(readFileSync(resolve(REPO, 'src/data/games/extra-qualifiers-2026.json'), 'utf8')).athletes
+    for (const a of Object.values(extra)) {
+      cohort.set(norm(a.name), a.name)
+      if (a.competitorId && !idByName.has(a.name)) idByName.set(a.name, String(a.competitorId))
+    }
+  } catch {
+    /* extra-qualifiers optional */
+  }
   console.error(`[benchmarks] resolved ${idByName.size}/${cohort.size} competitorIds`)
 
   const benchmarks = {}
