@@ -1,0 +1,1172 @@
+{
+  "generated": "2026-06-14T03:48:54.905Z",
+  "source": "games.crossfit.com athlete profiles (#benchmarkStats), self-reported by athletes",
+  "note": "Real, official, but SELF-REPORTED 1RM lifts and benchmark WOD scores. Blank/unreported stats are omitted. Label as self-reported in the UI; keep separate from competition-derived metrics.",
+  "cohortSize": 60,
+  "athletesWithBenchmarks": 29,
+  "benchmarks": {
+    "Colten Mertens": [
+      {
+        "name": "Back Squat 1RM",
+        "value": "555 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Clean & Jerk 1RM",
+        "value": "335 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Deadlift 1RM",
+        "value": "545 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Squat Snatch 1RM",
+        "value": "275 lb",
+        "kind": "lift"
+      }
+    ],
+    "Jeffrey Adler": [
+      {
+        "name": "Back Squat 1RM",
+        "value": "475 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Clean & Jerk 1RM",
+        "value": "377 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Deadlift 1RM",
+        "value": "567 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Fight Gone Bad",
+        "value": "511 reps",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Filthy 50",
+        "value": "15:17",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Fran",
+        "value": "02:02",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Grace",
+        "value": "01:16",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Helen",
+        "value": "07:18",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Pull-ups",
+        "value": "54 reps",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Run 400m",
+        "value": "00:59",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Run 5k",
+        "value": "19:15",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Squat Snatch 1RM",
+        "value": "290 lb",
+        "kind": "lift"
+      }
+    ],
+    "Jonne Koski": [
+      {
+        "name": "Back Squat 1RM",
+        "value": "470 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Bench Press 1RM",
+        "value": "335 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Clean & Jerk 1RM",
+        "value": "345 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Deadlift 1RM",
+        "value": "540 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Front Squat 1RM",
+        "value": "405 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Squat Snatch 1RM",
+        "value": "280 lb",
+        "kind": "lift"
+      }
+    ],
+    "James Sprague": [
+      {
+        "name": "Back Squat 1RM",
+        "value": "465 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "CHAD1000x",
+        "value": "43:50",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Clean & Jerk 1RM",
+        "value": "355 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Deadlift 1RM",
+        "value": "550 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Fight Gone Bad",
+        "value": "520 reps",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Filthy 50",
+        "value": "17:30",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Fran",
+        "value": "02:10",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Grace",
+        "value": "01:05",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Helen",
+        "value": "07:02",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Pull-ups",
+        "value": "72 reps",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Run 400m",
+        "value": "00:59",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Run 5k",
+        "value": "18:00",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Squat Snatch 1RM",
+        "value": "285 lb",
+        "kind": "lift"
+      }
+    ],
+    "Harry Lightfoot": [
+      {
+        "name": "Back Squat 1RM",
+        "value": "474 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Clean & Jerk 1RM",
+        "value": "355 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Deadlift 1RM",
+        "value": "551 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Squat Snatch 1RM",
+        "value": "287 lb",
+        "kind": "lift"
+      }
+    ],
+    "Enrico Zenoni": [
+      {
+        "name": "Back Squat 1RM",
+        "value": "205 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "CHAD1000x",
+        "value": "53:04",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Clean & Jerk 1RM",
+        "value": "160 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Deadlift 1RM",
+        "value": "230 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Fran",
+        "value": "02:30",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Grace",
+        "value": "01:50",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Run 400m",
+        "value": "00:59",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Run 5k",
+        "value": "20:00",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Squat Snatch 1RM",
+        "value": "130 kg",
+        "kind": "lift"
+      }
+    ],
+    "Saxon Panchik": [
+      {
+        "name": "Back Squat 1RM",
+        "value": "475 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Clean & Jerk 1RM",
+        "value": "360 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Deadlift 1RM",
+        "value": "535 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Fran",
+        "value": "02:01",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Grace",
+        "value": "01:09",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Helen",
+        "value": "07:18",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Pull-ups",
+        "value": "62 reps",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Run 400m",
+        "value": "00:52",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Run 5k",
+        "value": "17:45",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Squat Snatch 1RM",
+        "value": "295 lb",
+        "kind": "lift"
+      }
+    ],
+    "Dallin Pepper": [
+      {
+        "name": "Back Squat 1RM",
+        "value": "495 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Clean & Jerk 1RM",
+        "value": "385 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Deadlift 1RM",
+        "value": "550 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Fight Gone Bad",
+        "value": "403 reps",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Fran",
+        "value": "02:07",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Grace",
+        "value": "01:58",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Pull-ups",
+        "value": "50 reps",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Squat Snatch 1RM",
+        "value": "308 lb",
+        "kind": "lift"
+      }
+    ],
+    "Quinn Robinson": [
+      {
+        "name": "Back Squat 1RM",
+        "value": "500 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Bench Press 1RM",
+        "value": "325 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Clean & Jerk 1RM",
+        "value": "350 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Deadlift 1RM",
+        "value": "530 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Front Squat 1RM",
+        "value": "425 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Power Clean 1RM",
+        "value": "335 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Power Snatch 1RM",
+        "value": "230 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Squat Clean 1RM",
+        "value": "370 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Squat Snatch 1RM",
+        "value": "265 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Thruster 1RM",
+        "value": "275 lb",
+        "kind": "lift"
+      }
+    ],
+    "Alex Kotoulas": [
+      {
+        "name": "Back Squat 1RM",
+        "value": "190 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Clean & Jerk 1RM",
+        "value": "150 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Deadlift 1RM",
+        "value": "240 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Squat Snatch 1RM",
+        "value": "125 kg",
+        "kind": "lift"
+      }
+    ],
+    "Moritz Fiebig": [
+      {
+        "name": "Back Squat 1RM",
+        "value": "220 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Clean & Jerk 1RM",
+        "value": "171 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Deadlift 1RM",
+        "value": "260 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Squat Snatch 1RM",
+        "value": "135 kg",
+        "kind": "lift"
+      }
+    ],
+    "Tom Kingdon": [
+      {
+        "name": "Back Squat 1RM",
+        "value": "210 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Bench Press 1RM",
+        "value": "150 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "CHAD1000x",
+        "value": "55:19",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Clean & Jerk 1RM",
+        "value": "161 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Deadlift 1RM",
+        "value": "260 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Front Squat 1RM",
+        "value": "190 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Overhead Squat 1RM",
+        "value": "170 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Power Clean 1RM",
+        "value": "160 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Power Snatch 1RM",
+        "value": "120 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Pull-ups",
+        "value": "1 reps",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Push Jerk 1RM",
+        "value": "170 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Run 5k",
+        "value": "18:50",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Shoulder Press 1RM",
+        "value": "90 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Squat Clean 1RM",
+        "value": "171 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Squat Snatch 1RM",
+        "value": "140 kg",
+        "kind": "lift"
+      }
+    ],
+    "Jayson Hopper": [
+      {
+        "name": "Back Squat 1RM",
+        "value": "500 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Clean & Jerk 1RM",
+        "value": "365 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Deadlift 1RM",
+        "value": "585 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Fran",
+        "value": "02:15",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Grace",
+        "value": "02:00",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Run 400m",
+        "value": "00:52",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Run 5k",
+        "value": "18:30",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Squat Snatch 1RM",
+        "value": "305 lb",
+        "kind": "lift"
+      }
+    ],
+    "Aniol Ekai": [
+      {
+        "name": "Back Squat 1RM",
+        "value": "220 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Clean & Jerk 1RM",
+        "value": "172 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Deadlift 1RM",
+        "value": "245 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Grace",
+        "value": "01:10",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Pull-ups",
+        "value": "60 reps",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Run 400m",
+        "value": "00:55",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Run 5k",
+        "value": "19:10",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Squat Snatch 1RM",
+        "value": "134 kg",
+        "kind": "lift"
+      }
+    ],
+    "Tudor Magda": [
+      {
+        "name": "Back Squat 1RM",
+        "value": "475 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Clean & Jerk 1RM",
+        "value": "385 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Deadlift 1RM",
+        "value": "605 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Double-Unders",
+        "value": "1017 reps",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Helen",
+        "value": "07:22",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Power Snatch 1RM",
+        "value": "280 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Pull-ups",
+        "value": "65 reps",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Run 5k",
+        "value": "18:50",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Squat Snatch 1RM",
+        "value": "333 lb",
+        "kind": "lift"
+      }
+    ],
+    "Bjarni Leifs": [
+      {
+        "name": "Back Squat 1RM",
+        "value": "240 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Back Squat 3RM",
+        "value": "220 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Back Squat 5RM",
+        "value": "210 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Bench Press 1RM",
+        "value": "155 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Clean & Jerk 1RM",
+        "value": "145 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Deadlift 1RM",
+        "value": "250 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Front Squat 1RM",
+        "value": "180 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Front Squat 3RM",
+        "value": "180 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Hang Power Clean 1RM",
+        "value": "130 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Hang Power Snatch 1RM",
+        "value": "100 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Hang Squat Clean 1RM",
+        "value": "140 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Hang Squat Snatch 1RM",
+        "value": "110 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Overhead Squat 1RM",
+        "value": "150 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Power Clean 1RM",
+        "value": "140 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Power Snatch 1RM",
+        "value": "105 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Push Jerk 1RM",
+        "value": "130 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Push Press 1RM",
+        "value": "120 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Row 2000m",
+        "value": "06:24",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Shoulder Press 1RM",
+        "value": "80 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Split Jerk 1RM",
+        "value": "150 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Squat Clean 1RM",
+        "value": "160 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Squat Snatch 1RM",
+        "value": "112 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Thruster 1RM",
+        "value": "120 kg",
+        "kind": "lift"
+      }
+    ],
+    "Lucy Campbell": [
+      {
+        "name": "Back Squat 1RM",
+        "value": "135 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Clean & Jerk 1RM",
+        "value": "94 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Deadlift 1RM",
+        "value": "160 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Run 5k",
+        "value": "20:17",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Squat Snatch 1RM",
+        "value": "83 kg",
+        "kind": "lift"
+      }
+    ],
+    "Leah Støren": [
+      {
+        "name": "Bar Muscle-ups",
+        "value": "61 reps",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Deadlift 1RM",
+        "value": "365 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Pull-ups",
+        "value": "82 reps",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Run 5k",
+        "value": "19:22",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Toes-to-Bar",
+        "value": "72 reps",
+        "kind": "benchmark"
+      }
+    ],
+    "Emma Lawson": [
+      {
+        "name": "Back Squat 1RM",
+        "value": "315 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Clean & Jerk 1RM",
+        "value": "240 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Deadlift 1RM",
+        "value": "345 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Squat Snatch 1RM",
+        "value": "192 lb",
+        "kind": "lift"
+      }
+    ],
+    "Morgane Thyssens": [
+      {
+        "name": "Back Squat 1RM",
+        "value": "140 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Bench Press 1RM",
+        "value": "90 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Clean & Jerk 1RM",
+        "value": "114 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Deadlift 1RM",
+        "value": "160 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Fran",
+        "value": "02:33",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Front Squat 1RM",
+        "value": "125 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Overhead Squat 1RM",
+        "value": "110 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Power Clean 1RM",
+        "value": "130 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Pull-ups",
+        "value": "50 reps",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Squat Snatch 1RM",
+        "value": "95 kg",
+        "kind": "lift"
+      }
+    ],
+    "Carolyne Prevost": [
+      {
+        "name": "Back Squat 1RM",
+        "value": "330 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "CHAD1000x",
+        "value": "59:09",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Clean & Jerk 1RM",
+        "value": "230 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Deadlift 1RM",
+        "value": "405 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Fight Gone Bad",
+        "value": "464 reps",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Fran",
+        "value": "02:02",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Grace",
+        "value": "01:17",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Marco",
+        "value": "04:54",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Murph",
+        "value": "34:26",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Power Clean 1RM",
+        "value": "225 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Pull-ups",
+        "value": "60 reps",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Randy",
+        "value": "02:25",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Row 1000m",
+        "value": "03:20",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Row 100m",
+        "value": "00:18",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Ship",
+        "value": "15:58",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Squat Clean 1RM",
+        "value": "260 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Squat Snatch 1RM",
+        "value": "190 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Thruster 1RM",
+        "value": "197 lb",
+        "kind": "lift"
+      }
+    ],
+    "Rebecca Fuselier": [
+      {
+        "name": "Back Squat 1RM",
+        "value": "285 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Clean & Jerk 1RM",
+        "value": "220 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Deadlift 1RM",
+        "value": "305 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Fran",
+        "value": "01:59",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Pull-ups",
+        "value": "86 reps",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Squat Snatch 1RM",
+        "value": "180 lb",
+        "kind": "lift"
+      }
+    ],
+    "Aimee Cringle": [
+      {
+        "name": "Deadlift 1RM",
+        "value": "185 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Run 400m",
+        "value": "57:48",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Squat Snatch 1RM",
+        "value": "89 kg",
+        "kind": "lift"
+      }
+    ],
+    "Elena Carratalá": [
+      {
+        "name": "Back Squat 1RM",
+        "value": "140 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Clean & Jerk 1RM",
+        "value": "105 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Deadlift 1RM",
+        "value": "160 kg",
+        "kind": "lift"
+      },
+      {
+        "name": "Fran",
+        "value": "02:10",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Grace",
+        "value": "01:50",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Run 400m",
+        "value": "01:00",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Run 5k",
+        "value": "20:00",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Squat Snatch 1RM",
+        "value": "90 kg",
+        "kind": "lift"
+      }
+    ],
+    "Paige Rodgers": [
+      {
+        "name": "Clean & Jerk 1RM",
+        "value": "235 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Squat Snatch 1RM",
+        "value": "195 lb",
+        "kind": "lift"
+      }
+    ],
+    "Danielle Brandon": [
+      {
+        "name": "Clean & Jerk 1RM",
+        "value": "240 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Squat Snatch 1RM",
+        "value": "210 lb",
+        "kind": "lift"
+      }
+    ],
+    "Kyra Milligan": [
+      {
+        "name": "Back Squat 1RM",
+        "value": "340 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Deadlift 1RM",
+        "value": "395 lb",
+        "kind": "lift"
+      }
+    ],
+    "Haley Adams": [
+      {
+        "name": "Back Squat 1RM",
+        "value": "255 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Clean & Jerk 1RM",
+        "value": "205 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Deadlift 1RM",
+        "value": "300 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Run 5k",
+        "value": "20:04",
+        "kind": "benchmark"
+      },
+      {
+        "name": "Squat Snatch 1RM",
+        "value": "175 lb",
+        "kind": "lift"
+      }
+    ],
+    "Hattie Kanyo": [
+      {
+        "name": "Back Squat 1RM",
+        "value": "305 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Clean & Jerk 1RM",
+        "value": "235 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Deadlift 1RM",
+        "value": "315 lb",
+        "kind": "lift"
+      },
+      {
+        "name": "Squat Snatch 1RM",
+        "value": "200 lb",
+        "kind": "lift"
+      }
+    ]
+  }
+}

@@ -35,37 +35,65 @@ export interface SimMovement {
   modality: 'M' | 'G' | 'W'
 }
 
-// A curated palette of common CrossFit Games movements with their modal domain.
-// (M = metabolic/monostructural, G = gymnastics, W = weightlifting.)
+// A comprehensive palette of the movements seen most often at the CrossFit
+// Games, grouped by modal domain (M = monostructural, G = gymnastics,
+// W = weightlifting/odd-object). Used by the what-if simulator.
+export const MODALITY_GROUPS: { key: 'M' | 'G' | 'W'; label: string }[] = [
+  { key: 'M', label: 'Monostructural' },
+  { key: 'G', label: 'Gymnastics' },
+  { key: 'W', label: 'Weightlifting' },
+]
+
 export const SIM_MOVEMENTS: SimMovement[] = [
+  // Monostructural / cardio
   { name: 'Run', modality: 'M' },
   { name: 'Row', modality: 'M' },
   { name: 'Echo Bike', modality: 'M' },
+  { name: 'Bike Erg', modality: 'M' },
   { name: 'Ski Erg', modality: 'M' },
   { name: 'Swim', modality: 'M' },
   { name: 'Double Unders', modality: 'M' },
+  { name: 'Shuttle Run', modality: 'M' },
+  { name: 'Sled Push', modality: 'M' },
+  { name: 'Sled Pull', modality: 'M' },
+  // Gymnastics / bodyweight
   { name: 'Pull-up', modality: 'G' },
   { name: 'Chest-to-bar', modality: 'G' },
-  { name: 'Muscle-up', modality: 'G' },
-  { name: 'Handstand Push-up', modality: 'G' },
+  { name: 'Bar Muscle-up', modality: 'G' },
+  { name: 'Ring Muscle-up', modality: 'G' },
+  { name: 'Strict HSPU', modality: 'G' },
+  { name: 'Kipping HSPU', modality: 'G' },
   { name: 'Handstand Walk', modality: 'G' },
   { name: 'Toes-to-bar', modality: 'G' },
   { name: 'Burpee', modality: 'G' },
+  { name: 'Burpee Box Jump-over', modality: 'G' },
   { name: 'Pistol Squat', modality: 'G' },
   { name: 'Rope Climb', modality: 'G' },
+  { name: 'Legless Rope Climb', modality: 'G' },
   { name: 'Wall Walk', modality: 'G' },
+  { name: 'GHD Sit-up', modality: 'G' },
+  { name: 'Box Jump', modality: 'G' },
+  { name: 'Ring Dip', modality: 'G' },
+  // Weightlifting / odd object
   { name: 'Snatch', modality: 'W' },
   { name: 'Clean and Jerk', modality: 'W' },
+  { name: 'Clean', modality: 'W' },
   { name: 'Deadlift', modality: 'W' },
   { name: 'Back Squat', modality: 'W' },
+  { name: 'Front Squat', modality: 'W' },
   { name: 'Overhead Squat', modality: 'W' },
   { name: 'Thruster', modality: 'W' },
   { name: 'Shoulder to Overhead', modality: 'W' },
+  { name: 'Push Press', modality: 'W' },
   { name: 'Wall Ball', modality: 'W' },
   { name: 'Kettlebell Swing', modality: 'W' },
   { name: 'Dumbbell Snatch', modality: 'W' },
+  { name: 'Dumbbell Box Step-up', modality: 'W' },
+  { name: 'Devil Press', modality: 'W' },
+  { name: 'Sandbag Clean', modality: 'W' },
   { name: 'Sandbag Carry', modality: 'W' },
   { name: 'Yoke Carry', modality: 'W' },
+  { name: 'Farmers Carry', modality: 'W' },
 ]
 
 export interface SimEvent {

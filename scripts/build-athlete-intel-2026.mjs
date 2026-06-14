@@ -128,6 +128,29 @@ const historyFile = readJson('src/data/games/athlete-history-2026.json')
 const history = historyFile.history
 const c3poMeta = historyFile.meta ?? {} // name -> { age, country } from official 2026 Open entrant
 const gamesData = readJson('src/data/games-data.json')
+let benchmarksFile = { benchmarks: {} }
+try {
+  benchmarksFile = readJson('src/data/games/athlete-benchmarks-2026.json')
+} catch {
+  /* optional: profile renders without it */
+}
+const benchmarksByName = benchmarksFile.benchmarks ?? {}
+
+/** Parse a self-reported benchmark value -> comparable numeric + direction. */
+function parseBenchmark(value) {
+  const v = String(value)
+  let m = v.match(/([\d.]+)\s*lb/i)
+  if (m) return { numeric: parseFloat(m[1]), dir: 'higher' }
+  m = v.match(/([\d.]+)\s*kg/i)
+  if (m) return { numeric: parseFloat(m[1]) * 2.20462, dir: 'higher' }
+  m = v.match(/([\d.]+)\s*reps/i)
+  if (m) return { numeric: parseFloat(m[1]), dir: 'higher' }
+  m = v.match(/^(\d+):(\d{2})(?::(\d{2}))?$/)
+  if (m) return { numeric: m[3] != null ? +m[1] * 3600 + +m[2] * 60 + +m[3] : +m[1] * 60 + +m[2], dir: 'lower' }
+  m = v.match(/([\d.]+)/)
+  if (m) return { numeric: parseFloat(m[1]), dir: 'higher' }
+  return null
+}
 const athletes2026 = readJson('src/data/games/athletes-2026.json')
 
 // Historical event classification map: eventId -> {modality,timeDomain,loadLevel,format,winM,winW}
@@ -451,6 +474,28 @@ const out = {
 let totalEvents = 0
 for (const div of ['men', 'women']) {
   const built = buildDivision(div)
+
+  // Benchmark field-ranking WITHIN this division: for each reported stat name,
+  // rank everyone who reported it (kg normalized to lb; times lower-is-better).
+  const benchRanks = new Map() // `${benchName}` -> Map(name -> { rank, of, pct })
+  const byStat = new Map() // benchName -> [{ name, numeric, dir }]
+  for (const a of built) {
+    for (const b of benchmarksByName[a.name] ?? []) {
+      const p = parseBenchmark(b.value)
+      if (!p) continue
+      if (!byStat.has(b.name)) byStat.set(b.name, [])
+      byStat.get(b.name).push({ name: a.name, numeric: p.numeric, dir: p.dir })
+    }
+  }
+  for (const [statName, entries] of byStat) {
+    const sorted = [...entries].sort((x, y) => (x.dir === 'lower' ? x.numeric - y.numeric : y.numeric - x.numeric))
+    const of = sorted.length
+    sorted.forEach((e, i) => {
+      if (!benchRanks.has(statName)) benchRanks.set(statName, new Map())
+      benchRanks.get(statName).set(e.name, { rank: i + 1, of, pct: of > 1 ? Math.round(((of - i - 1) / (of - 1)) * 100) : 100 })
+    })
+  }
+
   for (const a of built) {
     const am = metaByName.get(a.name)
     const slug = am?.slug || slugify(a.name)
@@ -477,6 +522,10 @@ for (const div of ['men', 'women']) {
       weaknesses: a.weaknesses,
       gamesHistory: a.gamesHistory,
       bestGamesFinish: a.gamesHistory.length ? Math.min(...a.gamesHistory.map((g) => g.overallRank)) : null,
+      benchmarks: (benchmarksByName[a.name] ?? []).map((b) => {
+        const r = benchRanks.get(b.name)?.get(a.name)
+        return { name: b.name, value: b.value, kind: b.kind, fieldRank: r?.rank ?? null, fieldOf: r?.of ?? null, pct: r?.pct ?? null }
+      }),
       confidence: a.confidence,
       dataDepth: {
         seasonEvents: a.evlist.filter((e) => e.year === 2026).length,

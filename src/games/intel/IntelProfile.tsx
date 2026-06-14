@@ -13,7 +13,7 @@ import {
   Tooltip,
 } from 'recharts'
 import { loadProjection, MODAL_LABEL } from './projectionData'
-import type { AthleteIntel } from './projectionTypes'
+import type { AthleteIntel, Benchmark } from './projectionTypes'
 import { Panel } from '../ui'
 
 const PA_GREEN = '#91C640'
@@ -22,6 +22,60 @@ const CONF_STYLE: Record<string, { label: string; bg: string; fg: string }> = {
   high: { label: 'High confidence', bg: 'rgba(1,150,68,0.18)', fg: '#3fbf78' },
   medium: { label: 'Medium confidence', bg: 'rgba(245,158,11,0.18)', fg: '#fbbf24' },
   low: { label: 'Low confidence / thin data', bg: 'rgba(148,163,184,0.16)', fg: 'var(--text-secondary)' },
+}
+
+function rankTone(pct: number | null): { color: string; bg: string } {
+  if (pct == null) return { color: 'var(--text-muted)', bg: 'var(--panel-bg-2)' }
+  if (pct >= 70) return { color: '#3fbf78', bg: 'rgba(1,150,68,0.16)' }
+  if (pct <= 30) return { color: '#fbbf24', bg: 'rgba(245,158,11,0.16)' }
+  return { color: 'var(--text-secondary)', bg: 'var(--panel-bg-2)' }
+}
+
+function BenchmarkTile({ b }: { b: Benchmark }) {
+  const tone = rankTone(b.pct)
+  const rankLabel = b.fieldRank == null ? null : b.fieldRank === 1 ? 'best in field' : `#${b.fieldRank} of ${b.fieldOf}`
+  return (
+    <div className="flex items-center justify-between gap-2 py-1.5 px-2 rounded-lg" style={{ background: 'var(--panel-bg-2)' }}>
+      <div className="min-w-0">
+        <div className="text-[12px] text-[var(--text-secondary)] truncate">{b.name}</div>
+        <div className="games-condensed text-[16px] text-[var(--text-primary)] leading-none tabular-nums">{b.value}</div>
+      </div>
+      {rankLabel && (
+        <span className="games-condensed text-[10px] uppercase tracking-[0.06em] px-2 py-1 rounded shrink-0" style={{ background: tone.bg, color: tone.color }}>
+          {rankLabel}
+        </span>
+      )}
+    </div>
+  )
+}
+
+function Benchmarks({ items }: { items: Benchmark[] }) {
+  if (!items.length) return null
+  const lifts = items.filter((b) => b.kind === 'lift')
+  const wods = items.filter((b) => b.kind === 'benchmark')
+  return (
+    <Panel className="p-4 mb-4">
+      <div className="flex items-baseline justify-between gap-2 mb-1">
+        <h3 className="games-condensed uppercase tracking-[0.12em] text-[12px] text-[var(--text-tertiary)]">Benchmarks</h3>
+        <span className="text-[10px] text-[var(--text-muted)]">self-reported on official CrossFit profile</span>
+      </div>
+      <p className="text-[10px] text-[var(--text-muted)] mb-3">Green = top third of the field, amber = bottom third. Rank is within division among athletes who reported each mark.</p>
+      <div className="grid sm:grid-cols-2 gap-4">
+        {lifts.length > 0 && (
+          <div>
+            <div className="games-condensed text-[10px] uppercase tracking-[0.1em] text-[#91C640] mb-1.5">Strength (1RM)</div>
+            <div className="space-y-1.5">{lifts.map((b) => <BenchmarkTile key={b.name} b={b} />)}</div>
+          </div>
+        )}
+        {wods.length > 0 && (
+          <div>
+            <div className="games-condensed text-[10px] uppercase tracking-[0.1em] text-[#60a5fa] mb-1.5">Benchmark WODs</div>
+            <div className="space-y-1.5">{wods.map((b) => <BenchmarkTile key={b.name} b={b} />)}</div>
+          </div>
+        )}
+      </div>
+    </Panel>
+  )
 }
 
 function Bar({ label, value, color, sub }: { label: string; value: number | null; color: string; sub?: string }) {
@@ -122,6 +176,9 @@ export default function IntelProfile({ slug, showHeader = false }: { slug: strin
           </Panel>
         ))}
       </div>
+
+      {/* Benchmarks (self-reported lifts + classic WODs) */}
+      <Benchmarks items={a.benchmarks ?? []} />
 
       <div className="grid md:grid-cols-2 gap-4">
         {/* 10 physical skills radar */}

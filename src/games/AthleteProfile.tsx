@@ -82,6 +82,9 @@ export default function AthleteProfile() {
         </div>
       </section>
 
+      {/* Athlete Intelligence (competition-derived profile) - lead with the analysis */}
+      <IntelProfile slug={a.slug} />
+
       {/* Storyline */}
       {a.storyline && (
         <section className="mb-5">
@@ -188,9 +191,6 @@ export default function AthleteProfile() {
           </div>
         </section>
       )}
-
-      {/* Athlete Intelligence (competition-derived profile) */}
-      <IntelProfile slug={a.slug} />
 
       {/* Follow / profile links */}
       {media?.links && media.links.length > 0 && (

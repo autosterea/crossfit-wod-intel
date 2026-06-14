@@ -44,6 +44,15 @@ export interface SeasonRank {
 export type ModalKey = 'mono' | 'gym' | 'weight' | 'heavy' | 'light' | 'sprint' | 'engine'
 export type Confidence = 'high' | 'medium' | 'low'
 
+export interface Benchmark {
+  name: string
+  value: string // as reported, e.g. "555 lb", "02:10", "520 reps"
+  kind: 'lift' | 'benchmark'
+  fieldRank: number | null // rank within division among reporters
+  fieldOf: number | null
+  pct: number | null // field percentile (100 = best)
+}
+
 export interface AthleteIntel {
   slug: string
   name: string
@@ -62,6 +71,7 @@ export interface AthleteIntel {
   weaknesses: BucketScore[]
   gamesHistory: GamesAppearance[]
   bestGamesFinish: number | null
+  benchmarks: Benchmark[]
   confidence: Confidence
   dataDepth: { seasonEvents: number; gamesAppearances: number; gamesEvents: number; totalEvents: number }
   fingerprint: { skillRaw: (number | null)[]; modal: Record<ModalKey, number | null> }

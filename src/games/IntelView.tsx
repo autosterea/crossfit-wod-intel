@@ -8,6 +8,7 @@ import {
   eventBuckets,
   confidenceBand,
   SIM_MOVEMENTS,
+  MODALITY_GROUPS,
   MODAL_LABEL,
   type SimEvent,
   type TimeDomain,
@@ -144,18 +145,23 @@ function Simulator({ data, division }: { data: ProjectionData; division: Divisio
         {/* builder */}
         <Panel className="p-4">
           <h3 className="games-condensed uppercase tracking-[0.12em] text-[12px] text-[var(--text-tertiary)] mb-2">Movements</h3>
-          <div className="flex flex-wrap gap-1.5 mb-4">
-            {SIM_MOVEMENTS.map((m) => (
-              <button
-                key={m.name}
-                onClick={() => togglePick(m.name)}
-                className="games-chip transition-colors"
-                style={picked.includes(m.name) ? { background: '#91C640', color: '#0a0a0a' } : { background: 'var(--panel-bg-2)', color: 'var(--text-secondary)', border: '1px solid var(--panel-border)' }}
-              >
-                {m.name}
-              </button>
-            ))}
-          </div>
+          {MODALITY_GROUPS.map((g) => (
+            <div key={g.key} className="mb-3">
+              <div className="games-condensed text-[10px] uppercase tracking-[0.1em] text-[#60a5fa] mb-1.5">{g.label}</div>
+              <div className="flex flex-wrap gap-1.5">
+                {SIM_MOVEMENTS.filter((m) => m.modality === g.key).map((m) => (
+                  <button
+                    key={m.name}
+                    onClick={() => togglePick(m.name)}
+                    className="games-chip transition-colors"
+                    style={picked.includes(m.name) ? { background: '#91C640', color: '#0a0a0a' } : { background: 'var(--panel-bg-2)', color: 'var(--text-secondary)', border: '1px solid var(--panel-border)' }}
+                  >
+                    {m.name}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
           <h3 className="games-condensed uppercase tracking-[0.12em] text-[12px] text-[var(--text-tertiary)] mb-2">Time domain</h3>
           <div className="mb-4"><Toggle value={timeDomain} onChange={setTimeDomain} options={TIME_DOMAINS} /></div>
           <h3 className="games-condensed uppercase tracking-[0.12em] text-[12px] text-[var(--text-tertiary)] mb-2">Load</h3>
