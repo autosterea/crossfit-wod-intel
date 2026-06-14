@@ -169,6 +169,8 @@ function FitnessFooter() {
           <span>|</span>
           <a href="/games" className="hover:text-[var(--text-tertiary)] transition-colors">Games Almanac</a>
           <span>|</span>
+          <a href="/news" className="hover:text-[var(--text-tertiary)] transition-colors">CrossFit Now</a>
+          <span>|</span>
           <span>Platform by</span>
           <a href="https://autosterea.com" target="_blank" rel="noopener noreferrer" className="hover:text-[var(--text-tertiary)] transition-colors">Autosterea</a>
         </div>

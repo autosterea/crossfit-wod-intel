@@ -84,6 +84,12 @@ function TopBar() {
               {n.label}
             </button>
           ))}
+          <a
+            href="/news"
+            className="games-condensed uppercase tracking-[0.1em] text-[13px] font-semibold px-3 py-1.5 rounded-lg transition-colors text-[var(--text-secondary)] hover:text-[#91C640]"
+          >
+            News
+          </a>
         </nav>
 
         <div className="flex items-center gap-2 shrink-0">
@@ -116,6 +122,7 @@ function TopBar() {
               {n.mobileLabel ?? n.label}
             </button>
           ))}
+          <a href="/news" className="games-condensed uppercase tracking-[0.08em] text-[12px] font-semibold px-1.5 text-[var(--text-secondary)]">News</a>
         </div>
       </div>
     </header>
@@ -140,6 +147,8 @@ function GamesFooter() {
         <div className="flex items-center justify-center gap-2 text-[10px] text-[var(--text-muted)]">
           <span>Platform by</span>
           <a href="https://autosterea.com" target="_blank" rel="noopener noreferrer" className="hover:text-[var(--text-tertiary)] transition-colors">Autosterea</a>
+          <span>|</span>
+          <a href="/news" className="hover:text-[var(--text-tertiary)] transition-colors">CrossFit Now</a>
           <span>|</span>
           <a href="/" className="hover:text-[var(--text-tertiary)] transition-colors">Daily WOD Intelligence</a>
         </div>
