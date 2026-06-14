@@ -42,6 +42,16 @@
   --input-bg: #12121a;
   --input-border: #1e1e3a;
   --code-bg: #0a0a14;
+  /* Theme-aware semantic accents: bright on dark, darkened for contrast on light.
+     Use these for accent TEXT/icons on themed panels (chip backgrounds can stay
+     translucent). Do NOT use in fixed-dark contexts (3D scenes, Card Studio PNGs,
+     chart series on dark canvases) - keep literal hex there. */
+  --accent-amber: #f59e0b;
+  --accent-gold: #f5a623;
+  --accent-blue: #60a5fa;
+  --accent-red: #f87171;
+  --accent-success: #3fbf78;
+  --accent-purple: #c084fc;
 }
 
 :root[data-theme="light"] {
@@ -66,6 +76,13 @@
   --input-bg: #ffffff;
   --input-border: #cbd5e1;
   --code-bg: #f1f5f9;
+  /* Darker accent shades so accent text stays readable on white surfaces. */
+  --accent-amber: #b45309;
+  --accent-gold: #b45309;
+  --accent-blue: #2563eb;
+  --accent-red: #dc2626;
+  --accent-success: #15803d;
+  --accent-purple: #7c3aed;
 }
 
 * {

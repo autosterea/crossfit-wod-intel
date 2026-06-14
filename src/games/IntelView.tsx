@@ -19,7 +19,7 @@ import type { ProjectionData } from './intel/projectionTypes'
 type Division = 'men' | 'women'
 type Tab = 'leaderboard' | 'simulator'
 
-const CONF_DOT: Record<string, string> = { high: '#3fbf78', medium: '#fbbf24', low: '#94a3b8' }
+const CONF_DOT: Record<string, string> = { high: 'var(--accent-success)', medium: 'var(--accent-amber)', low: '#94a3b8' }
 const TIME_DOMAINS: { key: TimeDomain; label: string }[] = [
   { key: 'sprint', label: 'Sprint (<2 min)' },
   { key: 'short', label: 'Short (2-6 min)' },
@@ -90,7 +90,7 @@ function Leaderboard({ data, division }: { data: ProjectionData; division: Divis
                 <div className="flex items-center gap-2">
                   <span className="text-[14px] font-semibold text-[var(--text-primary)] truncate">{a.name}</span>
                   <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: CONF_DOT[a.confidence] }} title={`${a.confidence} confidence`} />
-                  {a.seasonRank.rookie && <span className="text-[9px] uppercase tracking-wider text-[#60a5fa]">rookie</span>}
+                  {a.seasonRank.rookie && <span className="text-[9px] uppercase tracking-wider text-[var(--accent-blue)]">rookie</span>}
                 </div>
                 {/* confidence band visual */}
                 <div className="relative h-1.5 mt-1.5 rounded-full bg-[var(--panel-bg-2)]">
@@ -147,7 +147,7 @@ function Simulator({ data, division }: { data: ProjectionData; division: Divisio
           <h3 className="games-condensed uppercase tracking-[0.12em] text-[12px] text-[var(--text-tertiary)] mb-2">Movements</h3>
           {MODALITY_GROUPS.map((g) => (
             <div key={g.key} className="mb-3">
-              <div className="games-condensed text-[10px] uppercase tracking-[0.1em] text-[#60a5fa] mb-1.5">{g.label}</div>
+              <div className="games-condensed text-[10px] uppercase tracking-[0.1em] text-[var(--accent-blue)] mb-1.5">{g.label}</div>
               <div className="flex flex-wrap gap-1.5">
                 {SIM_MOVEMENTS.filter((m) => m.modality === g.key).map((m) => (
                   <button
@@ -171,7 +171,7 @@ function Simulator({ data, division }: { data: ProjectionData; division: Divisio
             <h3 className="games-condensed uppercase tracking-[0.12em] text-[12px] text-[var(--text-tertiary)] mb-2">What you built</h3>
             <div className="flex flex-wrap gap-1.5 mb-2">
               {buckets.map((b) => (
-                <span key={b} className="games-chip" style={{ background: 'rgba(96,165,250,0.16)', color: '#60a5fa' }}>{MODAL_LABEL[b]}</span>
+                <span key={b} className="games-chip" style={{ background: 'rgba(96,165,250,0.16)', color: 'var(--accent-blue)' }}>{MODAL_LABEL[b]}</span>
               ))}
             </div>
             {topDemands.map((d) => (
@@ -253,7 +253,7 @@ export default function IntelView() {
           official competition result. Every number traces to real events; nothing is invented.
         </p>
         {data.fieldProvisional && (
-          <div className="mt-3 inline-flex items-center gap-2 text-[11px] px-3 py-1.5 rounded-lg" style={{ background: 'rgba(245,158,11,0.14)', color: '#fbbf24' }}>
+          <div className="mt-3 inline-flex items-center gap-2 text-[11px] px-3 py-1.5 rounded-lg" style={{ background: 'rgba(245,158,11,0.14)', color: 'var(--accent-amber)' }}>
             Field provisional - the 30+30 locks after the online Semifinal (~June 16). Cohort = top 30 per division by Open + Quarterfinals.
           </div>
         )}

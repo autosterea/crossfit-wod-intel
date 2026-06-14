@@ -19,15 +19,15 @@ import { Panel } from '../ui'
 const PA_GREEN = '#91C640'
 const ENERGY_COLOR = { phosphagen: '#f43f5e', glycolytic: '#f59e0b', oxidative: '#38bdf8' }
 const CONF_STYLE: Record<string, { label: string; bg: string; fg: string }> = {
-  high: { label: 'High confidence', bg: 'rgba(1,150,68,0.18)', fg: '#3fbf78' },
-  medium: { label: 'Medium confidence', bg: 'rgba(245,158,11,0.18)', fg: '#fbbf24' },
+  high: { label: 'High confidence', bg: 'rgba(1,150,68,0.18)', fg: 'var(--accent-success)' },
+  medium: { label: 'Medium confidence', bg: 'rgba(245,158,11,0.18)', fg: 'var(--accent-amber)' },
   low: { label: 'Low confidence / thin data', bg: 'rgba(148,163,184,0.16)', fg: 'var(--text-secondary)' },
 }
 
 function rankTone(pct: number | null): { color: string; bg: string } {
   if (pct == null) return { color: 'var(--text-muted)', bg: 'var(--panel-bg-2)' }
-  if (pct >= 70) return { color: '#3fbf78', bg: 'rgba(1,150,68,0.16)' }
-  if (pct <= 30) return { color: '#fbbf24', bg: 'rgba(245,158,11,0.16)' }
+  if (pct >= 70) return { color: 'var(--accent-success)', bg: 'rgba(1,150,68,0.16)' }
+  if (pct <= 30) return { color: 'var(--accent-amber)', bg: 'rgba(245,158,11,0.16)' }
   return { color: 'var(--text-secondary)', bg: 'var(--panel-bg-2)' }
 }
 
@@ -69,7 +69,7 @@ function Benchmarks({ items }: { items: Benchmark[] }) {
         )}
         {wods.length > 0 && (
           <div>
-            <div className="games-condensed text-[10px] uppercase tracking-[0.1em] text-[#60a5fa] mb-1.5">Benchmark WODs</div>
+            <div className="games-condensed text-[10px] uppercase tracking-[0.1em] text-[var(--accent-blue)] mb-1.5">Benchmark WODs</div>
             <div className="space-y-1.5">{wods.map((b) => <BenchmarkTile key={b.name} b={b} />)}</div>
           </div>
         )}
@@ -153,7 +153,7 @@ export default function IntelProfile({ slug, showHeader = false }: { slug: strin
         </h2>
         <span className="games-chip" style={{ background: conf.bg, color: conf.fg }}>{conf.label}</span>
         {a.seasonRank.rookie && (
-          <span className="games-chip" style={{ background: 'rgba(96,165,250,0.16)', color: '#60a5fa' }}>Games rookie</span>
+          <span className="games-chip" style={{ background: 'rgba(96,165,250,0.16)', color: 'var(--accent-blue)' }}>Games rookie</span>
         )}
       </div>
       <p className="text-[12px] text-[var(--text-muted)] leading-relaxed mb-4 max-w-2xl">
@@ -247,7 +247,7 @@ export default function IntelProfile({ slug, showHeader = false }: { slug: strin
       {/* Strengths / weaknesses */}
       <div className="grid sm:grid-cols-2 gap-4 mt-4">
         <Panel className="p-4">
-          <h3 className="games-condensed uppercase tracking-[0.12em] text-[12px] text-[#3fbf78] mb-2">Strengths</h3>
+          <h3 className="games-condensed uppercase tracking-[0.12em] text-[12px] text-[var(--accent-success)] mb-2">Strengths</h3>
           {a.strengths.map((s) => (
             <div key={s.key} className="mb-2.5 last:mb-0">
               <div className="flex items-baseline justify-between">
@@ -261,7 +261,7 @@ export default function IntelProfile({ slug, showHeader = false }: { slug: strin
           ))}
         </Panel>
         <Panel className="p-4">
-          <h3 className="games-condensed uppercase tracking-[0.12em] text-[12px] text-[#f87171] mb-2">Relative weaknesses</h3>
+          <h3 className="games-condensed uppercase tracking-[0.12em] text-[12px] text-[var(--accent-red)] mb-2">Relative weaknesses</h3>
           {a.weaknesses.map((s) => (
             <div key={s.key} className="mb-2.5 last:mb-0">
               <div className="flex items-baseline justify-between">

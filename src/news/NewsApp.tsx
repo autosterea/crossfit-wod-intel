@@ -65,13 +65,13 @@ type NewsCategory =
   | 'other'
 
 const CATEGORY_STYLE: Record<NewsCategory, { label: string; bg: string; fg: string }> = {
-  semifinals: { label: 'Semifinals', bg: 'rgba(145,198,64,0.16)', fg: '#91C640' },
-  qualification: { label: 'Qualification', bg: 'rgba(1,150,68,0.18)', fg: '#3fbf78' },
-  withdrawal: { label: 'Withdrawal', bg: 'rgba(239,68,68,0.16)', fg: '#f87171' },
-  athlete: { label: 'Athlete', bg: 'rgba(96,165,250,0.16)', fg: '#60a5fa' },
-  video: { label: 'Video', bg: 'rgba(168,85,247,0.16)', fg: '#c084fc' },
-  schedule: { label: 'Schedule', bg: 'rgba(245,158,11,0.16)', fg: '#f59e0b' },
-  results: { label: 'Results', bg: 'rgba(245,158,11,0.2)', fg: '#fbbf24' },
+  semifinals: { label: 'Semifinals', bg: 'rgba(145,198,64,0.16)', fg: 'var(--accent-success)' },
+  qualification: { label: 'Qualification', bg: 'rgba(1,150,68,0.18)', fg: 'var(--accent-success)' },
+  withdrawal: { label: 'Withdrawal', bg: 'rgba(239,68,68,0.16)', fg: 'var(--accent-red)' },
+  athlete: { label: 'Athlete', bg: 'rgba(96,165,250,0.16)', fg: 'var(--accent-blue)' },
+  video: { label: 'Video', bg: 'rgba(168,85,247,0.16)', fg: 'var(--accent-purple)' },
+  schedule: { label: 'Schedule', bg: 'rgba(245,158,11,0.16)', fg: 'var(--accent-amber)' },
+  results: { label: 'Results', bg: 'rgba(245,158,11,0.2)', fg: 'var(--accent-amber)' },
   other: { label: 'News', bg: 'var(--panel-bg-2)', fg: 'var(--text-secondary)' },
 }
 
@@ -215,7 +215,7 @@ function flagEmoji(code: string): string {
 }
 
 const RANK_ACCENT: Record<number, string> = {
-  1: '#fbbf24', // gold
+  1: 'var(--accent-gold)', // gold
   2: '#cbd5e1', // silver
   3: '#d8a06b', // bronze
 }
@@ -258,14 +258,14 @@ function OfficialBoard({ board }: { board: OfficialBoardData }) {
         : null
   const statusChip =
     board.status === 'live'
-      ? { label: 'Live', bg: 'rgba(1,150,68,0.18)', fg: '#3fbf78' }
+      ? { label: 'Live', bg: 'rgba(1,150,68,0.18)', fg: 'var(--accent-success)' }
       : { label: 'Final', bg: 'var(--panel-bg-2)', fg: 'var(--text-secondary)' }
 
   return (
     <section className="mb-8 games-rise games-rise-1">
       <div className="games-event-card p-4 sm:p-5 border-[#91C640]/30">
         <div className="flex items-center gap-2 flex-wrap mb-1">
-          <span className="games-chip" style={{ background: 'rgba(1,150,68,0.18)', color: '#3fbf78' }}>
+          <span className="games-chip" style={{ background: 'rgba(1,150,68,0.18)', color: 'var(--accent-success)' }}>
             Official
           </span>
           <span className="games-chip" style={{ background: statusChip.bg, color: statusChip.fg }}>
@@ -333,7 +333,7 @@ function ItemCard({ item, index }: { item: NewsItem; index: number }) {
           {cat.label}
         </span>
         {item.reliability === 'official' && (
-          <span className="games-chip" style={{ background: 'rgba(1,150,68,0.18)', color: '#3fbf78' }}>
+          <span className="games-chip" style={{ background: 'rgba(1,150,68,0.18)', color: 'var(--accent-success)' }}>
             Official
           </span>
         )}
@@ -477,7 +477,7 @@ export default function NewsApp() {
               <div className="flex items-center gap-3 mb-3">
                 <h2 className="games-display text-xl text-[var(--text-primary)] leading-none">{g.label}</h2>
                 {g.date === today && (
-                  <span className="games-chip" style={{ background: 'rgba(1,150,68,0.18)', color: '#3fbf78' }}>
+                  <span className="games-chip" style={{ background: 'rgba(1,150,68,0.18)', color: 'var(--accent-success)' }}>
                     Live
                   </span>
                 )}

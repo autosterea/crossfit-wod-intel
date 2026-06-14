@@ -66,8 +66,8 @@ export default function AthleteProfile() {
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2 flex-wrap">
               <h1 className="games-display text-2xl sm:text-3xl text-[var(--text-primary)] leading-none">{a.name}</h1>
-              {a.isFormerChampion && <span className="games-chip" style={{ background: 'rgba(245,158,11,0.18)', color: '#f59e0b' }}>🏆 Champion</span>}
-              {a.isRookie && <span className="games-chip" style={{ background: 'rgba(96,165,250,0.16)', color: '#60a5fa' }}>Rookie</span>}
+              {a.isFormerChampion && <span className="games-chip" style={{ background: 'rgba(245,158,11,0.18)', color: 'var(--accent-gold)' }}>🏆 Champion</span>}
+              {a.isRookie && <span className="games-chip" style={{ background: 'rgba(96,165,250,0.16)', color: 'var(--accent-blue)' }}>Rookie</span>}
             </div>
             <div className="text-[13px] text-[var(--text-secondary)] mt-1">
               {countryFlag(a.country)} {a.country}{a.hometown ? ` · ${a.hometown}` : ''}

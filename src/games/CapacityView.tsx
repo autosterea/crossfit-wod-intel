@@ -654,7 +654,7 @@ export default function CapacityView() {
 
       {activeStage && yearResults?.stages?.[activeStage]?.projected && (
         <div className="mb-5 rounded-xl px-4 py-3 text-[12.5px] leading-relaxed" style={{ background: 'rgba(245,158,11,0.1)', border: '1px solid rgba(245,158,11,0.3)', color: 'var(--text-secondary)' }}>
-          <span className="games-condensed uppercase tracking-[0.1em] font-semibold text-[#f59e0b]">Projection &middot; </span>
+          <span className="games-condensed uppercase tracking-[0.1em] font-semibold text-[var(--accent-amber)]">Projection &middot; </span>
           This is 2026 season form, all 7 Open and Quarterfinal tests combined, for the 30 Open standouts, a data-driven
           proxy for Games form. It is not the official Games field: the 30+30 field locks after the online Semifinal
           (June 11-15), and the Games run July 24-26 in San Jose. Live event-by-event data will replace this as scores are posted.
@@ -673,7 +673,7 @@ export default function CapacityView() {
           is exactly the inverse of time). No model, fully comparable. Ranked here against the field average of{' '}
           <span className="text-[#91C640] font-semibold">{model.fieldAvg.toFixed(1)}</span>.
           {!model.outputBased && (
-            <span className="text-[#f59e0b]"> For this year the official archive is missing many event scores, so the score falls back to field placement where a time or load was not recorded.</span>
+            <span className="text-[var(--accent-amber)]"> For this year the official archive is missing many event scores, so the score falls back to field placement where a time or load was not recorded.</span>
           )}
         </p>
         <div className="space-y-1.5">
@@ -785,20 +785,20 @@ export default function CapacityView() {
           {effMode === 'power' && (
             <div className="mt-2 flex flex-wrap gap-x-5 gap-y-1 text-[10.5px]">
               <span className="cap-energy-band" style={{ color: '#f43f5e' }}>&lt;2 min &middot; phosphagen / glycolytic</span>
-              <span className="cap-energy-band" style={{ color: '#f59e0b' }}>2-8 min &middot; glycolytic / oxidative</span>
+              <span className="cap-energy-band" style={{ color: 'var(--accent-amber)' }}>2-8 min &middot; glycolytic / oxidative</span>
               <span className="cap-energy-band" style={{ color: '#60a5fa' }}>&gt;8 min &middot; oxidative engine</span>
             </div>
           )}
           <div className="mt-3 pt-3 border-t border-[var(--panel-border-subtle)] flex flex-wrap gap-x-4 gap-y-1.5">
             {model.timedInfo.map((m) => (
               <span key={m.ev.id} className="text-[11px] text-[var(--text-muted)]">
-                <span className="font-mono text-[#91C640]">{fmtMin(m.winSec! / 60)}</span> {m.ev.name}{!m.eligible && <span className="text-[#f59e0b]"> *</span>}
+                <span className="font-mono text-[#91C640]">{fmtMin(m.winSec! / 60)}</span> {m.ev.name}{!m.eligible && <span className="text-[var(--accent-amber)]"> *</span>}
               </span>
             ))}
           </div>
           {effMode === 'power' && (
             <div className="mt-2 text-[10.5px] leading-relaxed text-[var(--text-muted)]">
-              <span className="text-[#f59e0b]">*</span> Hollow dots shown but excluded from the fit:{' '}
+              <span className="text-[var(--accent-amber)]">*</span> Hollow dots shown but excluded from the fit:{' '}
               {model.underMeasuredNames.length > 0 && <>skill/grip-limited ({model.underMeasuredNames.join(', ')})</>}
               {model.beyondNames.length > 0 && <> and beyond the 2-20 min model window ({model.beyondNames.join(', ')})</>}.
             </div>

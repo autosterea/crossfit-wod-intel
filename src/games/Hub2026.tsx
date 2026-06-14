@@ -44,7 +44,7 @@ function AthleteCard({ a, index }: { a: GamesAthlete2026; index: number }) {
               <span className="truncate">{semiWin ? '★ ' : ''}{a.semifinalEvent2026}</span>
             </span>
           )}
-          {a.isRookie && <span className="games-chip shrink-0" style={{ background: 'rgba(96,165,250,0.16)', color: '#60a5fa' }}>Rookie</span>}
+          {a.isRookie && <span className="games-chip shrink-0" style={{ background: 'rgba(96,165,250,0.16)', color: 'var(--accent-blue)' }}>Rookie</span>}
           {a.interviewUrl && <span className="shrink-0" title="Interview available">🎙️</span>}
         </div>
       </div>
@@ -106,7 +106,7 @@ export default function Hub2026() {
       {/* FIELD STATUS */}
       {!A2026.meta.fieldLocked && (
         <div className="mb-6 rounded-xl px-4 py-3 text-[12.5px] leading-relaxed" style={{ background: 'rgba(245,158,11,0.1)', border: '1px solid rgba(245,158,11,0.3)', color: 'var(--text-secondary)' }}>
-          <span className="games-condensed uppercase tracking-[0.1em] font-semibold text-[#f59e0b]">Field forming · </span>
+          <span className="games-condensed uppercase tracking-[0.1em] font-semibold text-[var(--accent-amber)]">Field forming · </span>
           {A2026.meta.fieldNote}
         </div>
       )}
