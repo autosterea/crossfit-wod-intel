@@ -215,9 +215,9 @@ function flagEmoji(code: string): string {
 }
 
 const RANK_ACCENT: Record<number, string> = {
-  1: 'var(--accent-gold)', // gold
-  2: '#cbd5e1', // silver
-  3: '#d8a06b', // bronze
+  1: 'var(--medal-gold)', // gold
+  2: 'var(--medal-silver)', // silver
+  3: 'var(--medal-bronze)', // bronze
 }
 
 function OfficialRowLine({ row }: { row: OfficialRow }) {

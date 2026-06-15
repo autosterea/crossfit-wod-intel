@@ -4,6 +4,7 @@ import { Panel } from './ui'
 import {
   loadProjection,
   projectEvent,
+  projectDraw,
   eventDemand,
   eventBuckets,
   confidenceBand,
@@ -121,6 +122,7 @@ function Simulator({ data, division }: { data: ProjectionData; division: Divisio
   const [picked, setPicked] = useState<string[]>(['Run', 'Clean and Jerk'])
   const [timeDomain, setTimeDomain] = useState<TimeDomain>('medium')
   const [load, setLoad] = useState<LoadLevel>('moderate')
+  const [draw, setDraw] = useState<{ ev: SimEvent; label: string }[]>([]) // Hopper: a multi-event draw
 
   const togglePick = (n: string) => setPicked((p) => (p.includes(n) ? p.filter((x) => x !== n) : [...p, n]))
 
@@ -133,7 +135,13 @@ function Simulator({ data, division }: { data: ProjectionData; division: Divisio
   const buckets = useMemo(() => eventBuckets(ev), [ev])
   const athletes = useMemo(() => Object.values(data.athletes).filter((a) => a.division === division), [data, division])
   const projected = useMemo(() => projectEvent(athletes, ev), [athletes, ev])
+  const drawResult = useMemo(() => (draw.length ? projectDraw(athletes, draw.map((d) => d.ev)) : null), [athletes, draw])
   const topDemands = [...demand].sort((a, b) => b.weight - a.weight).slice(0, 4)
+  const addToDraw = () => {
+    if (!picked.length) return
+    const label = `${picked.slice(0, 2).join(' + ')}${picked.length > 2 ? ` +${picked.length - 2}` : ''} . ${timeDomain}`
+    setDraw((d) => (d.length >= 6 ? d : [...d, { ev, label }]))
+  }
 
   return (
     <div>
@@ -185,12 +193,51 @@ function Simulator({ data, division }: { data: ProjectionData; division: Divisio
               </div>
             ))}
           </div>
+
+          {/* Hopper draw: stack several workouts and project the combined standings */}
+          <div className="mt-4 pt-3 border-t border-[var(--panel-border-subtle)]">
+            <div className="flex items-center justify-between gap-2 mb-2">
+              <h3 className="games-condensed uppercase tracking-[0.12em] text-[12px] text-[var(--text-tertiary)]">Hopper draw {draw.length > 0 && `(${draw.length})`}</h3>
+              <button onClick={addToDraw} disabled={!picked.length || draw.length >= 6} className="games-condensed text-[10px] uppercase tracking-[0.08em] font-semibold px-2.5 py-1 rounded transition-colors" style={{ background: 'rgba(145,198,64,0.16)', color: '#91C640', opacity: !picked.length || draw.length >= 6 ? 0.4 : 1 }}>+ Add this workout</button>
+            </div>
+            <p className="text-[10px] text-[var(--text-muted)] mb-2">Stack 2 to 6 events like a real Games weekend; the standings on the right become the combined finish across the whole draw.</p>
+            {draw.length === 0 ? (
+              <p className="text-[10px] text-[var(--text-muted)]">No events drawn yet.</p>
+            ) : (
+              <div className="flex flex-wrap gap-1.5">
+                {draw.map((d, i) => (
+                  <button key={i} onClick={() => setDraw((arr) => arr.filter((_, j) => j !== i))} className="games-chip" style={{ background: 'var(--panel-bg-2)', color: 'var(--text-secondary)', border: '1px solid var(--panel-border)' }}>
+                    {i + 1}. {d.label} &times;
+                  </button>
+                ))}
+                <button onClick={() => setDraw([])} className="games-chip" style={{ background: 'rgba(245,158,11,0.12)', color: 'var(--accent-amber)' }}>clear</button>
+              </div>
+            )}
+          </div>
         </Panel>
 
         {/* projected order */}
         <Panel className="p-4">
-          <h3 className="games-condensed uppercase tracking-[0.12em] text-[12px] text-[var(--text-tertiary)] mb-2">Projected finish ({division})</h3>
-          {picked.length === 0 ? (
+          <h3 className="games-condensed uppercase tracking-[0.12em] text-[12px] text-[var(--text-tertiary)] mb-2">
+            {drawResult ? `Projected after the ${draw.length}-event draw (${division})` : `Projected finish (${division})`}
+          </h3>
+          {drawResult ? (
+            <div className="space-y-1">
+              {drawResult.slice(0, 15).map((r, i) => (
+                <button
+                  key={r.athlete.slug}
+                  onClick={() => navigate({ view: 'athlete', year: 2026, slug: r.athlete.slug })}
+                  className="w-full text-left flex items-center gap-2.5 py-1.5 px-2 rounded-lg hover:bg-[var(--panel-bg-hover)] transition-colors"
+                >
+                  <span className="games-display text-base w-6 text-center shrink-0" style={{ color: i < 3 ? '#91C640' : 'var(--text-muted)' }}>{i + 1}</span>
+                  <span className="text-[13px] font-semibold text-[var(--text-primary)] flex-1 truncate">{r.athlete.name}</span>
+                  <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: CONF_DOT[r.athlete.confidence] }} />
+                  <span className="games-condensed text-[11px] text-[var(--text-muted)] tabular-nums">{r.points} pts</span>
+                </button>
+              ))}
+              <p className="text-[10px] text-[var(--text-muted)] pt-1">Points = sum of projected event finishes across the draw (lower is better), the way the Games scores a weekend.</p>
+            </div>
+          ) : picked.length === 0 ? (
             <p className="text-[12px] text-[var(--text-muted)] py-6 text-center">Pick at least one movement.</p>
           ) : (
             <div className="space-y-1">
