@@ -1,7 +1,7 @@
 {
-  "generated": "2026-06-14T17:55:58.817Z",
+  "generated": "2026-06-16T13:25:11.223Z",
   "note": "Confirmed 2026 qualifiers (athletes-2026.json) who fell outside the Open top-30 results cohort. Their 2026 Open + Quarterfinals per-event results, fetched verbatim from c3po so the intel engine can cover the full field.",
-  "count": 21,
+  "count": 31,
   "athletes": {
     "Ricky Garard": {
       "name": "Ricky Garard",
@@ -487,6 +487,182 @@
         }
       ]
     },
+    "Guilherme Malheiros": {
+      "name": "Guilherme Malheiros",
+      "slug": "guilherme-malheiros",
+      "division": "men",
+      "country": "Brazil",
+      "competitorId": "686308",
+      "events": [
+        {
+          "eventId": "2026-open-01",
+          "place": 194,
+          "score": "334 reps"
+        },
+        {
+          "eventId": "2026-open-02",
+          "place": 64,
+          "score": "7:14"
+        },
+        {
+          "eventId": "2026-open-03",
+          "place": 486,
+          "score": "250 reps"
+        },
+        {
+          "eventId": "2026-qf-01",
+          "place": 25,
+          "score": "6:12"
+        },
+        {
+          "eventId": "2026-qf-02",
+          "place": 51,
+          "score": "7:36"
+        },
+        {
+          "eventId": "2026-qf-03",
+          "place": 8,
+          "score": "4:00"
+        },
+        {
+          "eventId": "2026-qf-04",
+          "place": 57,
+          "score": "10:18"
+        }
+      ]
+    },
+    "Nick Mathew": {
+      "name": "Nick Mathew",
+      "slug": "nick-mathew",
+      "division": "men",
+      "country": "United States",
+      "competitorId": "843041",
+      "events": [
+        {
+          "eventId": "2026-open-01",
+          "place": 76,
+          "score": "346 reps"
+        },
+        {
+          "eventId": "2026-open-02",
+          "place": 175,
+          "score": "7:42"
+        },
+        {
+          "eventId": "2026-open-03",
+          "place": 174,
+          "score": "261 reps"
+        },
+        {
+          "eventId": "2026-qf-01",
+          "place": 85,
+          "score": "6:24"
+        },
+        {
+          "eventId": "2026-qf-02",
+          "place": 79,
+          "score": "7:47"
+        },
+        {
+          "eventId": "2026-qf-03",
+          "place": 87,
+          "score": "4:25"
+        },
+        {
+          "eventId": "2026-qf-04",
+          "place": 195,
+          "score": "10:51"
+        }
+      ]
+    },
+    "Spencer Panchik": {
+      "name": "Spencer Panchik",
+      "slug": "spencer-panchik",
+      "division": "men",
+      "country": "United States",
+      "competitorId": "162712",
+      "events": [
+        {
+          "eventId": "2026-open-01",
+          "place": 697,
+          "score": "313 reps"
+        },
+        {
+          "eventId": "2026-open-02",
+          "place": 116,
+          "score": "7:28"
+        },
+        {
+          "eventId": "2026-open-03",
+          "place": 1333,
+          "score": "236 reps"
+        },
+        {
+          "eventId": "2026-qf-01",
+          "place": 25,
+          "score": "6:12"
+        },
+        {
+          "eventId": "2026-qf-02",
+          "place": 21,
+          "score": "7:11"
+        },
+        {
+          "eventId": "2026-qf-03",
+          "place": 4,
+          "score": "3:58"
+        },
+        {
+          "eventId": "2026-qf-04",
+          "place": 28,
+          "score": "10:06"
+        }
+      ]
+    },
+    "Patrick Vellner": {
+      "name": "Patrick Vellner",
+      "slug": "patrick-vellner",
+      "division": "men",
+      "country": "Canada",
+      "competitorId": "158264",
+      "events": [
+        {
+          "eventId": "2026-open-01",
+          "place": 584,
+          "score": "316 reps"
+        },
+        {
+          "eventId": "2026-open-02",
+          "place": 254,
+          "score": "7:57"
+        },
+        {
+          "eventId": "2026-open-03",
+          "place": 425,
+          "score": "252 reps"
+        },
+        {
+          "eventId": "2026-qf-01",
+          "place": 75,
+          "score": "6:23"
+        },
+        {
+          "eventId": "2026-qf-02",
+          "place": 15,
+          "score": "7:05"
+        },
+        {
+          "eventId": "2026-qf-03",
+          "place": 4,
+          "score": "3:58"
+        },
+        {
+          "eventId": "2026-qf-04",
+          "place": 225,
+          "score": "10:55"
+        }
+      ]
+    },
     "Gabriela Migala": {
       "name": "Gabriela Migala",
       "slug": "gabriela-migala",
@@ -924,6 +1100,255 @@
           "eventId": "2026-qf-04",
           "place": 123,
           "score": "11:43"
+        }
+      ]
+    },
+    "Alexis Raptis": {
+      "name": "Alexis Raptis",
+      "slug": "alexis-raptis",
+      "division": "women",
+      "country": "United States",
+      "competitorId": "503582",
+      "events": [
+        {
+          "eventId": "2026-open-01",
+          "place": 189,
+          "score": "339 reps"
+        },
+        {
+          "eventId": "2026-open-02",
+          "place": 24,
+          "score": "7:33"
+        },
+        {
+          "eventId": "2026-open-03",
+          "place": 57,
+          "score": "15:42"
+        },
+        {
+          "eventId": "2026-qf-01",
+          "place": 52,
+          "score": "6:39"
+        },
+        {
+          "eventId": "2026-qf-02",
+          "place": 50,
+          "score": "7:29"
+        },
+        {
+          "eventId": "2026-qf-03",
+          "place": 8,
+          "score": "4:14"
+        },
+        {
+          "eventId": "2026-qf-04",
+          "place": 6,
+          "score": "10:34"
+        }
+      ]
+    },
+    "Erica Folo": {
+      "name": "Erica Folo",
+      "slug": "erica-folo",
+      "division": "women",
+      "country": "Canada",
+      "competitorId": "601487",
+      "events": [
+        {
+          "eventId": "2026-qf-01",
+          "place": 584,
+          "score": "7:41"
+        },
+        {
+          "eventId": "2026-qf-02",
+          "place": 633,
+          "score": "10:07"
+        },
+        {
+          "eventId": "2026-qf-03",
+          "place": 227,
+          "score": "5:10"
+        },
+        {
+          "eventId": "2026-qf-04",
+          "place": 290,
+          "score": "12:26"
+        }
+      ]
+    },
+    "Matilde Garnes": {
+      "name": "Matilde Garnes",
+      "slug": "matilde-garnes",
+      "division": "women",
+      "country": "Norway",
+      "competitorId": "831149",
+      "events": [
+        {
+          "eventId": "2026-open-01",
+          "place": 235,
+          "score": "335 reps"
+        },
+        {
+          "eventId": "2026-open-02",
+          "place": 3,
+          "score": "6:40"
+        },
+        {
+          "eventId": "2026-open-03",
+          "place": 254,
+          "score": "269 reps"
+        },
+        {
+          "eventId": "2026-qf-01",
+          "place": 273,
+          "score": "7:15"
+        },
+        {
+          "eventId": "2026-qf-02",
+          "place": 37,
+          "score": "7:20"
+        },
+        {
+          "eventId": "2026-qf-03",
+          "place": 4,
+          "score": "4:09"
+        },
+        {
+          "eventId": "2026-qf-04",
+          "place": 82,
+          "score": "11:24"
+        }
+      ]
+    },
+    "Jess Green": {
+      "name": "Jess Green",
+      "slug": "jess-green",
+      "division": "women",
+      "country": "Australia",
+      "competitorId": "1794300",
+      "events": [
+        {
+          "eventId": "2026-open-01",
+          "place": 139,
+          "score": "345 reps"
+        },
+        {
+          "eventId": "2026-open-02",
+          "place": 12,
+          "score": "7:00"
+        },
+        {
+          "eventId": "2026-open-03",
+          "place": 46,
+          "score": "15:32"
+        },
+        {
+          "eventId": "2026-qf-01",
+          "place": 141,
+          "score": "6:55"
+        },
+        {
+          "eventId": "2026-qf-02",
+          "place": 3,
+          "score": "6:35"
+        },
+        {
+          "eventId": "2026-qf-03",
+          "place": 48,
+          "score": "4:36"
+        },
+        {
+          "eventId": "2026-qf-04",
+          "place": 51,
+          "score": "11:07"
+        }
+      ]
+    },
+    "Arielle Loewen": {
+      "name": "Arielle Loewen",
+      "slug": "arielle-loewen",
+      "division": "women",
+      "country": "United States",
+      "competitorId": "132258",
+      "events": [
+        {
+          "eventId": "2026-open-01",
+          "place": 82,
+          "score": "11:53"
+        },
+        {
+          "eventId": "2026-open-02",
+          "place": 10,
+          "score": "6:58"
+        },
+        {
+          "eventId": "2026-open-03",
+          "place": 152,
+          "score": "277 reps"
+        },
+        {
+          "eventId": "2026-qf-01",
+          "place": 22,
+          "score": "6:28"
+        },
+        {
+          "eventId": "2026-qf-02",
+          "place": 8,
+          "score": "6:52"
+        },
+        {
+          "eventId": "2026-qf-03",
+          "place": 10,
+          "score": "4:15"
+        },
+        {
+          "eventId": "2026-qf-04",
+          "place": 21,
+          "score": "10:50"
+        }
+      ]
+    },
+    "Janie Cheverie": {
+      "name": "Janie Cheverie",
+      "slug": "janie-cheverie",
+      "division": "women",
+      "country": "Canada",
+      "competitorId": "2204010",
+      "events": [
+        {
+          "eventId": "2026-open-01",
+          "place": 431,
+          "score": "323 reps"
+        },
+        {
+          "eventId": "2026-open-02",
+          "place": 64,
+          "score": "8:07"
+        },
+        {
+          "eventId": "2026-open-03",
+          "place": 37,
+          "score": "15:26"
+        },
+        {
+          "eventId": "2026-qf-01",
+          "place": 34,
+          "score": "6:34"
+        },
+        {
+          "eventId": "2026-qf-02",
+          "place": 168,
+          "score": "8:25"
+        },
+        {
+          "eventId": "2026-qf-03",
+          "place": 28,
+          "score": "4:27"
+        },
+        {
+          "eventId": "2026-qf-04",
+          "place": 63,
+          "score": "11:16"
         }
       ]
     }

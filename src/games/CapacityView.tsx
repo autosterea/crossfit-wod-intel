@@ -655,10 +655,37 @@ export default function CapacityView() {
       {activeStage && yearResults?.stages?.[activeStage]?.projected && (
         <div className="mb-5 rounded-xl px-4 py-3 text-[12.5px] leading-relaxed" style={{ background: 'rgba(245,158,11,0.1)', border: '1px solid rgba(245,158,11,0.3)', color: 'var(--text-secondary)' }}>
           <span className="games-condensed uppercase tracking-[0.1em] font-semibold text-[var(--accent-amber)]">Projection &middot; </span>
-          This is 2026 season form, all 7 Open and Quarterfinal tests combined, for the 30 Open standouts, a data-driven
-          proxy for Games form. It is not the official Games field: the 30+30 field locks after the online Semifinal
-          (June 11-15), and the Games run July 24-26 in San Jose. Live event-by-event data will replace this as scores are posted.
+          The field is locked: 30 men and 30 women have qualified. This is 2026 season form, all 7 Open and Quarterfinal
+          tests combined and re-based onto the actual qualified field, a data-driven proxy for Games form (each athlete also
+          carries their Semifinal route below). It is not a Games result: the Games run July 24-26 at the SAP Center in San
+          Jose. Live event-by-event data will replace this as scores are posted.
         </div>
+      )}
+
+      {activeStage && yearResults?.stages?.[activeStage]?.projected &&
+        model.rows.some((r) => r.athlete.semifinalEvent) && (
+        <section className="mb-12">
+          <SectionTag no="00" kicker="How the field was set" title="Road to the Games"
+            right={<span className="games-condensed text-[11px] uppercase tracking-[0.1em] text-[var(--text-muted)] text-right hidden sm:block">Open &rarr; Quarterfinals<br />&rarr; Semifinal route</span>} />
+          <div className="rounded-2xl overflow-hidden" style={{ border: '1px solid var(--panel-border)' }}>
+            <div className="grid grid-cols-[2rem_1fr_3rem_3rem_1fr] sm:grid-cols-[2.5rem_1fr_4rem_4rem_1.4fr] gap-2 px-3 py-2 games-condensed text-[10px] uppercase tracking-[0.1em] text-[var(--text-muted)]" style={{ background: 'var(--panel-bg-2)' }}>
+              <span className="text-center">#</span><span>Athlete</span><span className="text-center">Open</span><span className="text-center">QF</span><span>Semifinal</span>
+            </div>
+            {[...model.rows].sort((a, b) => a.athlete.rank - b.athlete.rank).map((r, i) => (
+              <div key={r.athlete.name} className="grid grid-cols-[2rem_1fr_3rem_3rem_1fr] sm:grid-cols-[2.5rem_1fr_4rem_4rem_1.4fr] gap-2 px-3 py-1.5 items-center text-[12px]"
+                style={{ background: i % 2 ? 'transparent' : 'var(--panel-bg)', borderTop: '1px solid var(--panel-border-subtle)' }}>
+                <span className="games-display text-center text-[var(--text-tertiary)]">{r.athlete.rank}</span>
+                <span className="games-condensed font-semibold truncate text-[var(--text-primary)]">{r.athlete.name}</span>
+                <span className="text-center font-mono text-[var(--text-secondary)]">{r.athlete.openRank ?? '-'}</span>
+                <span className="text-center font-mono text-[var(--text-secondary)]">{r.athlete.qfRank ?? '-'}</span>
+                <span className="truncate text-[var(--text-tertiary)]">
+                  <span className="text-[#91C640]">{r.athlete.semifinalFinish ?? ''}</span>{r.athlete.semifinalEvent ? ` ${r.athlete.semifinalEvent}` : ''}
+                </span>
+              </div>
+            ))}
+          </div>
+          <div className="mt-2 text-[10.5px] text-[var(--text-muted)] games-condensed uppercase tracking-[0.08em]"># = projected-form rank within the qualified field. Semifinal routes are not cross-comparable (different events); shown for context only.</div>
+        </section>
       )}
 
       <AthleteLegend rows={model.rows} selected={selected} toggle={toggle} setSelected={setSelectedState} />

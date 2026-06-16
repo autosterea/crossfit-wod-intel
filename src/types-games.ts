@@ -146,6 +146,11 @@ export interface GamesAthleteResult {
   totalPoints: number
   /** Real overall finish at the stage (e.g. global QF rank), when different from cohort rank */
   officialRank?: number | null
+  /** 2026 projected (games) stage: the athlete's road to San Jose */
+  openRank?: number | null
+  qfRank?: number | null
+  semifinalEvent?: string | null
+  semifinalFinish?: string | null
   events: GamesAthleteEventResult[]
 }
 

@@ -104,9 +104,14 @@ export default function Hub2026() {
       </section>
 
       {/* FIELD STATUS */}
-      {!A2026.meta.fieldLocked && (
+      {!A2026.meta.fieldLocked ? (
         <div className="mb-6 rounded-xl px-4 py-3 text-[12.5px] leading-relaxed" style={{ background: 'rgba(245,158,11,0.1)', border: '1px solid rgba(245,158,11,0.3)', color: 'var(--text-secondary)' }}>
           <span className="games-condensed uppercase tracking-[0.1em] font-semibold text-[var(--accent-amber)]">Field forming · </span>
+          {A2026.meta.fieldNote}
+        </div>
+      ) : (
+        <div className="mb-6 rounded-xl px-4 py-3 text-[12.5px] leading-relaxed" style={{ background: 'rgba(1,150,68,0.1)', border: '1px solid rgba(1,150,68,0.35)', color: 'var(--text-secondary)' }}>
+          <span className="games-condensed uppercase tracking-[0.1em] font-semibold text-[#019644]">Field set · </span>
           {A2026.meta.fieldNote}
         </div>
       )}

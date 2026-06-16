@@ -1,11 +1,11 @@
 {
   "meta": {
-    "generated": "2026-06-09",
+    "generated": "2026-06-16",
     "gamesDates": "July 24-26, 2026",
     "venue": "SAP Center",
     "city": "San Jose, California",
-    "fieldNote": "23 men and 23 women have qualified from the in-person Semifinals. The final 7 per division come from the online Individual Semifinal (June 11-15); the full field locks around June 16.",
-    "fieldLocked": false
+    "fieldNote": "The 2026 CrossFit Games individual field is set: 30 men and 30 women. 23 per division qualified at the in-person licensed Semifinals (plus the NorCal Classic), and the final 7 per division came through the online Individual Semifinal (June 11-15). Online Semifinal results are unofficial pending CrossFit video review (finalized June 29).",
+    "fieldLocked": true
   },
   "interviewSeries": {
     "series": "Dave Castro 2026 CrossFit Games athlete interviews",
@@ -939,6 +939,327 @@
         }
       ],
       "crossfitAthleteId": "1967193"
+    },
+    {
+      "name": "Guilherme Malheiros",
+      "slug": "guilherme-malheiros",
+      "division": "men",
+      "country": "Brazil",
+      "age": 26,
+      "birthYear": null,
+      "hometown": "Macae, Rio de Janeiro, Brazil",
+      "affiliate": "CrossFit Mayhem",
+      "heightCm": 177,
+      "weightKg": 88,
+      "gamesAppearances": 4,
+      "firstGamesYear": 2019,
+      "bestGamesFinish": "7th (2021)",
+      "isFormerChampion": false,
+      "isRookie": false,
+      "openRank2026": 124,
+      "qfRank2026": 11,
+      "semifinalEvent2026": "Individual Online Semifinal",
+      "semifinalFinish2026": "1st (won the event)",
+      "qualified": true,
+      "storyline": "Brazil's Gui Malheiros, a former teen Games champion out of Macae, trains on the Mayhem program and owns a career-best 7th at the 2021 Games. After a quiet 2024 (35th), he reset and won the 2026 online Individual Semifinal outright to book his return to San Jose.",
+      "nickname": "Gui",
+      "instagramHandle": "@guimalheiros162",
+      "interviewUrl": null,
+      "photoUrl": "/athletes/guilherme-malheiros.webp",
+      "finishes": [
+        {
+          "year": 2019,
+          "place": 48
+        },
+        {
+          "year": 2021,
+          "place": 7
+        },
+        {
+          "year": 2022,
+          "place": 10
+        },
+        {
+          "year": 2024,
+          "place": 35
+        }
+      ],
+      "crossfitAthleteId": "686308"
+    },
+    {
+      "name": "Quinn Robinson",
+      "slug": "quinn-robinson",
+      "division": "men",
+      "country": "United States",
+      "age": 29,
+      "birthYear": null,
+      "hometown": "Wilmington, North Carolina",
+      "affiliate": "CrossFit Trivium",
+      "heightCm": 183,
+      "weightKg": 91,
+      "gamesAppearances": 0,
+      "firstGamesYear": 2026,
+      "bestGamesFinish": null,
+      "isFormerChampion": false,
+      "isRookie": true,
+      "openRank2026": 14,
+      "qfRank2026": 166,
+      "semifinalEvent2026": "Individual Online Semifinal",
+      "semifinalFinish2026": "2nd",
+      "qualified": true,
+      "storyline": "An individual rookie who has reached the Games only on a team before (12th in 2024), Robinson trains at CrossFit Trivium near Nashville. After leading early at the Syndicate Crown and just missing, he took the online route and finished 2nd in the 2026 Individual Semifinal as the only rookie in a qualifying spot.",
+      "nickname": null,
+      "instagramHandle": null,
+      "interviewUrl": null,
+      "photoUrl": "/athletes/quinn-robinson.webp",
+      "finishes": [],
+      "crossfitAthleteId": "1986035"
+    },
+    {
+      "name": "Nick Mathew",
+      "slug": "nick-mathew",
+      "division": "men",
+      "country": "United States",
+      "age": 32,
+      "birthYear": null,
+      "hometown": "Minnetonka, Minnesota",
+      "affiliate": "CrossFit Tonka",
+      "heightCm": 175,
+      "weightKg": 91,
+      "gamesAppearances": 3,
+      "firstGamesYear": 2022,
+      "bestGamesFinish": "14th (2022)",
+      "isFormerChampion": false,
+      "isRookie": false,
+      "openRank2026": 67,
+      "qfRank2026": 56,
+      "semifinalEvent2026": "Individual Online Semifinal",
+      "semifinalFinish2026": "3rd",
+      "qualified": true,
+      "storyline": "The head coach at CrossFit Tonka in Minnetonka, Minnesota, Mathew was the 2022 Games Rookie of the Year (14th) and has added two more individual trips since. He finished 3rd in the 2026 online Individual Semifinal to lock in his fourth Games appearance.",
+      "nickname": null,
+      "instagramHandle": "@coachnmathew",
+      "interviewUrl": null,
+      "photoUrl": "/athletes/nick-mathew.webp",
+      "finishes": [
+        {
+          "year": 2022,
+          "place": 14
+        },
+        {
+          "year": 2023,
+          "place": 19
+        },
+        {
+          "year": 2025,
+          "place": 20
+        }
+      ],
+      "crossfitAthleteId": "843041"
+    },
+    {
+      "name": "Justin Medeiros",
+      "slug": "justin-medeiros",
+      "division": "men",
+      "country": "United States",
+      "age": 27,
+      "birthYear": 1999,
+      "hometown": "Lodi, California",
+      "affiliate": "CrossFit Fort Vancouver",
+      "heightCm": 175,
+      "weightKg": 88,
+      "gamesAppearances": 6,
+      "firstGamesYear": 2020,
+      "bestGamesFinish": "1st (2021, 2022)",
+      "isFormerChampion": true,
+      "isRookie": false,
+      "openRank2026": 13,
+      "qfRank2026": 13,
+      "semifinalEvent2026": "Individual Online Semifinal",
+      "semifinalFinish2026": "4th",
+      "qualified": true,
+      "storyline": "The two-time Fittest Man on Earth (2021 and 2022 champion) from Lodi, California now trains in Vancouver, Washington. After withdrawing from the Legends Championship, Medeiros took the online route and finished 4th in the 2026 Individual Semifinal, returning to chase a third title in San Jose.",
+      "nickname": null,
+      "instagramHandle": "@justinmedeiros34",
+      "interviewUrl": null,
+      "photoUrl": "/athletes/justin-medeiros.webp",
+      "finishes": [
+        {
+          "year": 2020,
+          "place": 3
+        },
+        {
+          "year": 2021,
+          "place": 1
+        },
+        {
+          "year": 2022,
+          "place": 1
+        },
+        {
+          "year": 2023,
+          "place": 13
+        },
+        {
+          "year": 2024,
+          "place": 8
+        },
+        {
+          "year": 2025,
+          "place": 7
+        }
+      ],
+      "crossfitAthleteId": "811708"
+    },
+    {
+      "name": "Spencer Panchik",
+      "slug": "spencer-panchik",
+      "division": "men",
+      "country": "United States",
+      "age": 30,
+      "birthYear": null,
+      "hometown": "Mentor, Ohio",
+      "affiliate": "CrossFit Mentality",
+      "heightCm": 173,
+      "weightKg": 86,
+      "gamesAppearances": 2,
+      "firstGamesYear": 2022,
+      "bestGamesFinish": "17th (2023)",
+      "isFormerChampion": false,
+      "isRookie": false,
+      "openRank2026": 428,
+      "qfRank2026": 4,
+      "semifinalEvent2026": "Individual Online Semifinal",
+      "semifinalFinish2026": "5th",
+      "qualified": true,
+      "storyline": "The youngest of the competing Panchik brothers, Spencer trains out of his brother Scott's CrossFit Mentality affiliate in Mentor, Ohio. A two-time individual Games athlete (20th in 2022, 17th in 2023), he booked his 2026 return by placing 5th in the online Individual Semifinal after missing the in-person qualifying spots.",
+      "nickname": null,
+      "instagramHandle": "@spencer_panchik",
+      "interviewUrl": null,
+      "photoUrl": "/athletes/spencer-panchik.webp",
+      "finishes": [
+        {
+          "year": 2022,
+          "place": 20
+        },
+        {
+          "year": 2023,
+          "place": 17
+        }
+      ],
+      "crossfitAthleteId": "162712"
+    },
+    {
+      "name": "Colten Mertens",
+      "slug": "colten-mertens",
+      "division": "men",
+      "country": "United States",
+      "age": 28,
+      "birthYear": null,
+      "hometown": "Hillsboro, Iowa",
+      "affiliate": "CrossFit Teo",
+      "heightCm": 163,
+      "weightKg": 86,
+      "gamesAppearances": 4,
+      "firstGamesYear": 2021,
+      "bestGamesFinish": "12th (2025)",
+      "isFormerChampion": false,
+      "isRookie": false,
+      "openRank2026": 1,
+      "qfRank2026": 7,
+      "semifinalEvent2026": "Individual Online Semifinal",
+      "semifinalFinish2026": "6th",
+      "qualified": true,
+      "storyline": "An Iowa hog farmer who lifts before sunrise on the family farm, Mertens is a four-time individual Games athlete who climbed to 12th in 2025 and won the 2026 worldwide CrossFit Open. Strength is his calling card despite his shorter frame. He punched his ticket with a 6th-place finish in the online Individual Semifinal.",
+      "nickname": "Iron Hog",
+      "instagramHandle": "@colten_mertens",
+      "interviewUrl": null,
+      "photoUrl": "/athletes/colten-mertens.webp",
+      "finishes": [
+        {
+          "year": 2021,
+          "place": 31
+        },
+        {
+          "year": 2022,
+          "place": 32
+        },
+        {
+          "year": 2023,
+          "place": 18
+        },
+        {
+          "year": 2025,
+          "place": 12
+        }
+      ],
+      "crossfitAthleteId": "676693"
+    },
+    {
+      "name": "Patrick Vellner",
+      "slug": "patrick-vellner",
+      "division": "men",
+      "country": "Canada",
+      "age": 36,
+      "birthYear": 1990,
+      "hometown": "Red Deer, Alberta, Canada",
+      "affiliate": "CrossFit Wonderland",
+      "heightCm": 180,
+      "weightKg": 88,
+      "gamesAppearances": 9,
+      "firstGamesYear": 2016,
+      "bestGamesFinish": "2nd (2018)",
+      "isFormerChampion": false,
+      "isRookie": false,
+      "openRank2026": 211,
+      "qfRank2026": 41,
+      "semifinalEvent2026": "Individual Online Semifinal",
+      "semifinalFinish2026": "7th",
+      "qualified": true,
+      "storyline": "One of the most decorated men in the sport, the chiropractor from Red Deer, Alberta has stood on the Games podium five times, including three runner-up finishes. Now 36 and in what he has called his final season, he secured his 2026 berth with a 7th-place finish in the online Individual Semifinal, one more shot at the title that has eluded him.",
+      "nickname": "Pat",
+      "instagramHandle": "@pvellner",
+      "interviewUrl": null,
+      "photoUrl": "/athletes/patrick-vellner.webp",
+      "finishes": [
+        {
+          "year": 2016,
+          "place": 3
+        },
+        {
+          "year": 2017,
+          "place": 3
+        },
+        {
+          "year": 2018,
+          "place": 2
+        },
+        {
+          "year": 2019,
+          "place": 16
+        },
+        {
+          "year": 2020,
+          "place": 9
+        },
+        {
+          "year": 2021,
+          "place": 2
+        },
+        {
+          "year": 2022,
+          "place": 6
+        },
+        {
+          "year": 2023,
+          "place": 2
+        },
+        {
+          "year": 2024,
+          "place": 5
+        }
+      ],
+      "crossfitAthleteId": "158264"
     }
   ],
   "women": [
@@ -1507,10 +1828,10 @@
       "isRookie": false,
       "openRank2026": 91,
       "qfRank2026": 25,
-      "semifinalEvent2026": "Individual Online Semifinal",
-      "semifinalFinish2026": null,
+      "semifinalEvent2026": "Northern California Classic",
+      "semifinalFinish2026": "1st (588 pts, won the event)",
       "qualified": true,
-      "storyline": "The Las Vegas-based 2023 Games breakout (5th, Most Improved) is fighting back from a 2024-25 stretup derailed by a car-accident leg fracture that forced her out of the 2025 Games. Coming through the North America West Quarterfinal (6th), she is set to contest the Individual Online Semifinal (June 11-15) - which had not yet been held as of this writing - in a comeback bid to return to the Games floor.",
+      "storyline": "The Las Vegas-based 2023 Games breakout (5th, Most Improved) fought back from a 2024-25 stretch derailed by a car-accident leg fracture that cost her the 2025 Games. She completed the comeback by winning the 2026 Northern California Classic Semifinal with 588 points, never finishing outside the top 10 across seven events.",
       "nickname": null,
       "instagramHandle": "@alexgazan_",
       "interviewUrl": null,
@@ -1543,16 +1864,16 @@
       "heightCm": null,
       "weightKg": null,
       "gamesAppearances": 0,
-      "firstGamesYear": null,
+      "firstGamesYear": 2026,
       "bestGamesFinish": null,
       "isFormerChampion": false,
       "isRookie": true,
       "openRank2026": 112,
       "qfRank2026": 632,
-      "semifinalEvent2026": "Individual Online Semifinal",
-      "semifinalFinish2026": null,
+      "semifinalEvent2026": "Northern California Classic",
+      "semifinalFinish2026": "2nd (578 pts, won 4 events)",
       "qualified": true,
-      "storyline": "A Utah-based CF-L2 coach at CrossFit 801, Noel reached the 2025 individual Semifinal (66th) and is chasing a maiden Games berth through the 2026 Individual Online Semifinal (June 11-15), which had not yet been contested as of this writing. As an underdog still on the qualification bubble, her confirmed Games status and rookie debut are not yet certain.",
+      "storyline": "A Utah-based CrossFit L2 coach at CrossFit 801, Noel reached the 2025 individual Semifinal and broke through in 2026 by finishing 2nd at the Northern California Classic, winning four of seven events to edge in by 10 points. She earns her maiden Games berth as a rookie.",
       "nickname": null,
       "instagramHandle": "@rachelknoel",
       "interviewUrl": null,
@@ -1812,6 +2133,265 @@
         }
       ],
       "crossfitAthleteId": "21556"
+    },
+    {
+      "name": "Alexis Raptis",
+      "slug": "alexis-raptis",
+      "division": "women",
+      "country": "United States",
+      "age": 27,
+      "birthYear": null,
+      "hometown": "Michigan, United States",
+      "affiliate": "Novi CrossFit",
+      "heightCm": 165,
+      "weightKg": 70,
+      "gamesAppearances": 4,
+      "firstGamesYear": 2022,
+      "bestGamesFinish": "6th (2023)",
+      "isFormerChampion": false,
+      "isRookie": false,
+      "openRank2026": 56,
+      "qfRank2026": 13,
+      "semifinalEvent2026": "Individual Online Semifinal",
+      "semifinalFinish2026": "1st (won the event)",
+      "qualified": true,
+      "storyline": "A four-time individual Games veteran with back-to-back 6th-place finishes in 2023 and 2024, Raptis came to CrossFit from gymnastics and trains out of Novi CrossFit in Michigan. She won the 2026 online Individual Semifinal outright as the top qualifier of the cohort.",
+      "nickname": null,
+      "instagramHandle": "@alexis_raptis",
+      "interviewUrl": null,
+      "photoUrl": "/athletes/alexis-raptis.webp",
+      "finishes": [
+        {
+          "year": 2022,
+          "place": 10
+        },
+        {
+          "year": 2023,
+          "place": 6
+        },
+        {
+          "year": 2024,
+          "place": 6
+        },
+        {
+          "year": 2025,
+          "place": 10
+        }
+      ],
+      "crossfitAthleteId": "503582"
+    },
+    {
+      "name": "Erica Folo",
+      "slug": "erica-folo",
+      "division": "women",
+      "country": "Canada",
+      "age": 25,
+      "birthYear": null,
+      "hometown": "Burlington, Ontario, Canada",
+      "affiliate": "CrossFit Connection",
+      "heightCm": 157,
+      "weightKg": 60,
+      "gamesAppearances": 0,
+      "firstGamesYear": 2026,
+      "bestGamesFinish": null,
+      "isFormerChampion": false,
+      "isRookie": true,
+      "openRank2026": null,
+      "qfRank2026": 318,
+      "semifinalEvent2026": "Individual Online Semifinal",
+      "semifinalFinish2026": "2nd",
+      "qualified": true,
+      "storyline": "A Burlington, Ontario native who started CrossFit at 14 at CrossFit Connection after a background in sprinting, Folo is a fast-rising prospect tipped as a future face of the sport. She finished 2nd in the 2026 online Individual Semifinal to secure her first individual Games berth as a rookie.",
+      "nickname": "Yolo Folo",
+      "instagramHandle": "@erica_folo",
+      "interviewUrl": null,
+      "photoUrl": "/athletes/erica-folo.webp",
+      "finishes": [],
+      "crossfitAthleteId": "601487"
+    },
+    {
+      "name": "Matilde Garnes",
+      "slug": "matilde-garnes",
+      "division": "women",
+      "country": "Norway",
+      "age": 30,
+      "birthYear": null,
+      "hometown": "Oslo, Norway",
+      "affiliate": "CrossFit Oslo Kriger",
+      "heightCm": 174,
+      "weightKg": 70,
+      "gamesAppearances": 2,
+      "firstGamesYear": 2022,
+      "bestGamesFinish": "19th (2022)",
+      "isFormerChampion": false,
+      "isRookie": false,
+      "openRank2026": 96,
+      "qfRank2026": 61,
+      "semifinalEvent2026": "Individual Online Semifinal",
+      "semifinalFinish2026": "4th (3rd qualifying spot)",
+      "qualified": true,
+      "storyline": "Norway's Matilde Garnes trains at CrossFit Oslo Kriger and is a multiple-time iF3 functional fitness world champion with two prior individual Games trips (19th in 2022). She finished 4th in the 2026 online Individual Semifinal and claimed the final automatic qualifying spot once Alex Gazan's place was reassigned, Gazan having already qualified via the NorCal Classic.",
+      "nickname": null,
+      "instagramHandle": "@matildegarnes",
+      "interviewUrl": null,
+      "photoUrl": "/athletes/matilde-garnes.webp",
+      "finishes": [
+        {
+          "year": 2022,
+          "place": 19
+        },
+        {
+          "year": 2023,
+          "place": 33
+        }
+      ],
+      "crossfitAthleteId": "831149"
+    },
+    {
+      "name": "Jess Green",
+      "slug": "jess-green",
+      "division": "women",
+      "country": "Australia",
+      "age": 27,
+      "birthYear": null,
+      "hometown": null,
+      "affiliate": "CrossFit Chocolate Box",
+      "heightCm": 169,
+      "weightKg": 69,
+      "gamesAppearances": 0,
+      "firstGamesYear": 2026,
+      "bestGamesFinish": null,
+      "isFormerChampion": false,
+      "isRookie": true,
+      "openRank2026": 33,
+      "qfRank2026": 32,
+      "semifinalEvent2026": "Individual Online Semifinal",
+      "semifinalFinish2026": "5th (tie)",
+      "qualified": true,
+      "storyline": "Australia's Jess Green represents CrossFit Chocolate Box on Sydney's Northern Beaches and built momentum through 2026, placing 3rd in Oceania at Quarterfinals. She finished tied for 5th in the online Individual Semifinal to earn her first individual Games appearance as a rookie.",
+      "nickname": null,
+      "instagramHandle": null,
+      "interviewUrl": null,
+      "photoUrl": "/athletes/jess-green.webp",
+      "finishes": [],
+      "crossfitAthleteId": "1794300"
+    },
+    {
+      "name": "Arielle Loewen",
+      "slug": "arielle-loewen",
+      "division": "women",
+      "country": "United States",
+      "age": 32,
+      "birthYear": 1993,
+      "hometown": "Midland, Texas",
+      "affiliate": null,
+      "heightCm": 160,
+      "weightKg": 68,
+      "gamesAppearances": 5,
+      "firstGamesYear": 2021,
+      "bestGamesFinish": "3rd (2023)",
+      "isFormerChampion": false,
+      "isRookie": false,
+      "openRank2026": 45,
+      "qfRank2026": 2,
+      "semifinalEvent2026": "Individual Online Semifinal",
+      "semifinalFinish2026": "5th (tie)",
+      "qualified": true,
+      "storyline": "A Midland, Texas native who self-coaches from her garage gym, Loewen is one of the sport's most consistent veterans, with a 2023 Games podium (3rd) and a 5th-place finish in 2025. After skipping the in-person Semifinals, she went all-in on the 2026 online Individual Semifinal and qualified, finishing tied for 5th.",
+      "nickname": null,
+      "instagramHandle": "@arielleloewen",
+      "interviewUrl": null,
+      "photoUrl": "/athletes/arielle-loewen.webp",
+      "finishes": [
+        {
+          "year": 2021,
+          "place": 14
+        },
+        {
+          "year": 2022,
+          "place": 11
+        },
+        {
+          "year": 2023,
+          "place": 3
+        },
+        {
+          "year": 2024,
+          "place": 31
+        },
+        {
+          "year": 2025,
+          "place": 5
+        }
+      ],
+      "crossfitAthleteId": "132258"
+    },
+    {
+      "name": "Claudia Gluck",
+      "slug": "claudia-gluck",
+      "division": "women",
+      "country": "France",
+      "age": 27,
+      "birthYear": null,
+      "hometown": "Ohlungen, Alsace, France",
+      "affiliate": "CrossFit Grillen",
+      "heightCm": 160,
+      "weightKg": 64,
+      "gamesAppearances": 2,
+      "firstGamesYear": 2024,
+      "bestGamesFinish": "12th (2024)",
+      "isFormerChampion": false,
+      "isRookie": false,
+      "openRank2026": 7,
+      "qfRank2026": 8,
+      "semifinalEvent2026": "Individual Online Semifinal",
+      "semifinalFinish2026": "5th (tie)",
+      "qualified": true,
+      "storyline": "France's top female CrossFitter, Gluck trains in Alsace and broke through with a 12th-place Games rookie season in 2024 followed by 14th in 2025. She was sharp all 2026, taking 7th in the worldwide Open, then locked her third straight Games trip by finishing tied for 5th in the online Individual Semifinal.",
+      "nickname": null,
+      "instagramHandle": "@claudia_glk",
+      "interviewUrl": null,
+      "photoUrl": "/athletes/claudia-gluck.webp",
+      "finishes": [
+        {
+          "year": 2024,
+          "place": 12
+        },
+        {
+          "year": 2025,
+          "place": 14
+        }
+      ],
+      "crossfitAthleteId": "951375"
+    },
+    {
+      "name": "Janie Cheverie",
+      "slug": "janie-cheverie",
+      "division": "women",
+      "country": "Canada",
+      "age": 23,
+      "birthYear": null,
+      "hometown": null,
+      "affiliate": null,
+      "heightCm": 160,
+      "weightKg": null,
+      "gamesAppearances": 0,
+      "firstGamesYear": 2026,
+      "bestGamesFinish": null,
+      "isFormerChampion": false,
+      "isRookie": true,
+      "openRank2026": 106,
+      "qfRank2026": 44,
+      "semifinalEvent2026": "Individual Online Semifinal",
+      "semifinalFinish2026": "8th (final qualifying spot)",
+      "qualified": true,
+      "storyline": "A 23-year-old Canadian rookie from the North America West region, Cheverie trains at home under Brute Strength coaching and earned her first Games berth through the 2026 online Individual Semifinal. She placed 8th but claimed the final qualifying spot after Alex Gazan, who finished higher, had already qualified via the NorCal Classic.",
+      "nickname": null,
+      "instagramHandle": "@janiecheverie",
+      "interviewUrl": null,
+      "photoUrl": "/athletes/janie-cheverie.webp",
+      "finishes": [],
+      "crossfitAthleteId": "2204010"
     }
   ]
 }
