@@ -12,6 +12,8 @@ import {
   MODALITY_GROUPS,
   MODAL_LABEL,
   type SimEvent,
+  type SimResult,
+  type DrawResult,
   type TimeDomain,
   type LoadLevel,
 } from './intel/projectionData'
@@ -20,7 +22,7 @@ import type { ProjectionData } from './intel/projectionTypes'
 type Division = 'men' | 'women'
 type Tab = 'leaderboard' | 'simulator'
 
-const CONF_DOT: Record<string, string> = { high: 'var(--accent-success)', medium: 'var(--accent-amber)', low: '#94a3b8' }
+const CONF_DOT: Record<string, string> = { high: 'var(--accent-success)', medium: 'var(--accent-amber)', low: 'var(--text-tertiary)' }
 const TIME_DOMAINS: { key: TimeDomain; label: string }[] = [
   { key: 'sprint', label: 'Sprint (<2 min)' },
   { key: 'short', label: 'Short (2-6 min)' },
@@ -36,7 +38,11 @@ const LOADS: { key: LoadLevel; label: string }[] = [
   { key: 'max', label: 'Max effort' },
 ]
 
-const ord = (n: number) => `${n}${n === 1 ? 'st' : n === 2 ? 'nd' : n === 3 ? 'rd' : 'th'}`
+const ord = (n: number) => {
+  const t = n % 100
+  const s = t >= 11 && t <= 13 ? 'th' : n % 10 === 1 ? 'st' : n % 10 === 2 ? 'nd' : n % 10 === 3 ? 'rd' : 'th'
+  return `${n}${s}`
+}
 
 function Toggle<T extends string>({ value, onChange, options }: { value: T; onChange: (v: T) => void; options: { key: T; label: string }[] }) {
   return (
@@ -131,12 +137,19 @@ function Simulator({ data, division }: { data: ProjectionData; division: Divisio
     return { modality: ['M', 'G', 'W'].filter((m) => mods.has(m)).join('') || 'M', timeDomain, loadLevel: load }
   }, [picked, timeDomain, load])
 
+  const [expanded, setExpanded] = useState<string | null>(null)
+  const [showMethod, setShowMethod] = useState(false)
+
   const demand = useMemo(() => eventDemand(ev), [ev])
   const buckets = useMemo(() => eventBuckets(ev), [ev])
   const athletes = useMemo(() => Object.values(data.athletes).filter((a) => a.division === division), [data, division])
   const projected = useMemo(() => projectEvent(athletes, ev), [athletes, ev])
   const drawResult = useMemo(() => (draw.length ? projectDraw(athletes, draw.map((d) => d.ev)) : null), [athletes, draw])
   const topDemands = [...demand].sort((a, b) => b.weight - a.weight).slice(0, 4)
+  const vitals = (a: (typeof athletes)[number]) =>
+    [a.weightKg ? `${a.weightKg} kg` : null, a.heightCm ? `${a.heightCm} cm` : null, a.bestGamesFinish ? `best Games ${ord(a.bestGamesFinish)}` : a.seasonRank.rookie ? 'Games rookie' : null]
+      .filter(Boolean)
+      .join('  ·  ')
   const addToDraw = () => {
     if (!picked.length) return
     const label = `${picked.slice(0, 2).join(' + ')}${picked.length > 2 ? ` +${picked.length - 2}` : ''} . ${timeDomain}`
@@ -218,41 +231,99 @@ function Simulator({ data, division }: { data: ProjectionData; division: Divisio
 
         {/* projected order */}
         <Panel className="p-4">
-          <h3 className="games-condensed uppercase tracking-[0.12em] text-[12px] text-[var(--text-tertiary)] mb-2">
-            {drawResult ? `Projected after the ${draw.length}-event draw (${division})` : `Projected finish (${division})`}
-          </h3>
-          {drawResult ? (
-            <div className="space-y-1">
-              {drawResult.slice(0, 15).map((r, i) => (
-                <button
-                  key={r.athlete.slug}
-                  onClick={() => navigate({ view: 'athlete', year: 2026, slug: r.athlete.slug })}
-                  className="w-full text-left flex items-center gap-2.5 py-1.5 px-2 rounded-lg hover:bg-[var(--panel-bg-hover)] transition-colors"
-                >
-                  <span className="games-display text-base w-6 text-center shrink-0" style={{ color: i < 3 ? '#91C640' : 'var(--text-muted)' }}>{i + 1}</span>
-                  <span className="text-[13px] font-semibold text-[var(--text-primary)] flex-1 truncate">{r.athlete.name}</span>
-                  <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: CONF_DOT[r.athlete.confidence] }} />
-                  <span className="games-condensed text-[11px] text-[var(--text-muted)] tabular-nums">{r.points} pts</span>
-                </button>
-              ))}
-              <p className="text-[10px] text-[var(--text-muted)] pt-1">Points = sum of projected event finishes across the draw (lower is better), the way the Games scores a weekend.</p>
+          <div className="flex items-center justify-between gap-2 mb-1">
+            <h3 className="games-condensed uppercase tracking-[0.12em] text-[12px] text-[var(--text-tertiary)]">
+              {drawResult ? `Projected after the ${draw.length}-event draw` : 'Projected finish'} · all {athletes.length} {division}
+            </h3>
+            <button
+              onClick={() => setShowMethod((s) => !s)}
+              className="games-condensed text-[10px] uppercase tracking-[0.08em] font-semibold px-2 py-1 rounded shrink-0 transition-colors"
+              style={{ background: showMethod ? '#91C640' : 'rgba(145,198,64,0.16)', color: showMethod ? '#0a0a0a' : '#91C640' }}
+            >
+              How is this computed?
+            </button>
+          </div>
+
+          {showMethod && (
+            <div className="mb-3 rounded-lg p-3 text-[11px] leading-relaxed" style={{ background: 'var(--panel-bg-2)', color: 'var(--text-secondary)' }}>
+              The workout you built is first classified into the fitness domains it taxes (the "What you built" panel). Each
+              athlete is then scored by their <strong>measured placement percentile</strong> - the percent of the field they have
+              actually beaten - on exactly those domains, averaged from their real 2026 Open, Quarterfinals and every prior
+              CrossFit Games result. Higher means more proven on this kind of work. Tap any athlete to see the domains and the
+              measured scores behind their number. Height and weight are shown for context; the projection is driven by measured
+              performance, not an assumed bodyweight formula, so nothing is invented.
             </div>
-          ) : picked.length === 0 ? (
+          )}
+
+          {!drawResult && picked.length === 0 ? (
             <p className="text-[12px] text-[var(--text-muted)] py-6 text-center">Pick at least one movement.</p>
           ) : (
-            <div className="space-y-1">
-              {projected.slice(0, 15).map((r, i) => (
-                <button
-                  key={r.athlete.slug}
-                  onClick={() => navigate({ view: 'athlete', year: 2026, slug: r.athlete.slug })}
-                  className="w-full text-left flex items-center gap-2.5 py-1.5 px-2 rounded-lg hover:bg-[var(--panel-bg-hover)] transition-colors"
-                >
-                  <span className="games-display text-base w-6 text-center shrink-0" style={{ color: i < 3 ? '#91C640' : 'var(--text-muted)' }}>{i + 1}</span>
-                  <span className="text-[13px] font-semibold text-[var(--text-primary)] flex-1 truncate">{r.athlete.name}</span>
-                  <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: CONF_DOT[r.athlete.confidence] }} />
-                  <span className="games-condensed text-[12px] text-[var(--text-secondary)] tabular-nums">{r.expected}</span>
-                </button>
-              ))}
+            <div className="space-y-1 max-h-[520px] overflow-y-auto pr-1">
+              {(drawResult ?? projected).map((r, i) => {
+                const isOpen = expanded === r.athlete.slug
+                const single = !drawResult ? (r as SimResult) : null
+                return (
+                  <div key={r.athlete.slug} className="rounded-lg" style={{ background: isOpen ? 'var(--panel-bg-2)' : 'transparent' }}>
+                    <button
+                      onClick={() => setExpanded(isOpen ? null : r.athlete.slug)}
+                      className="w-full text-left flex items-center gap-2.5 py-1.5 px-2 rounded-lg hover:bg-[var(--panel-bg-hover)] transition-colors"
+                    >
+                      <span className="games-display text-base w-6 text-center shrink-0" style={{ color: i < 3 ? '#91C640' : 'var(--text-muted)' }}>{i + 1}</span>
+                      <span className="text-[13px] font-semibold text-[var(--text-primary)] flex-1 truncate">{r.athlete.name}</span>
+                      <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: CONF_DOT[r.athlete.confidence] }} title={`${r.athlete.confidence} data confidence`} />
+                      {drawResult ? (
+                        <span className="games-condensed text-[11px] text-[var(--text-muted)] tabular-nums">{(r as DrawResult).points} pts</span>
+                      ) : (
+                        <span className="games-condensed text-[12px] text-[var(--text-secondary)] tabular-nums w-9 text-right" title={single!.usedCapacityFallback ? 'career capacity (no measured score on these exact domains)' : undefined}>{single!.expected}{single!.usedCapacityFallback ? '*' : ''}</span>
+                      )}
+                      <span className="text-[10px] text-[var(--text-muted)] w-3 shrink-0">{isOpen ? '▾' : '▸'}</span>
+                    </button>
+
+                    {isOpen && (
+                      <div className="px-3 pb-3 pt-1">
+                        <div className="text-[10.5px] text-[var(--text-muted)] mb-2">{vitals(r.athlete) || 'vitals not on file'}</div>
+                        {single ? (
+                          single.parts.length ? (
+                            <>
+                              <div className="games-condensed text-[10px] uppercase tracking-[0.1em] text-[var(--text-tertiary)] mb-1.5">How this score is built</div>
+                              {single.parts.map((p) => (
+                                <div key={p.key} className="flex items-center gap-2 mb-1">
+                                  <span className="text-[11px] text-[var(--text-secondary)] w-24 shrink-0">{p.label}</span>
+                                  <div className="flex-1 h-1.5 rounded-full bg-[var(--panel-border)] overflow-hidden">
+                                    <div className="h-full rounded-full bg-[#91C640]" style={{ width: `${p.value}%` }} />
+                                  </div>
+                                  <span className="games-condensed text-[11px] text-[var(--text-secondary)] tabular-nums w-8 text-right">{p.value}</span>
+                                </div>
+                              ))}
+                              <div className="text-[11px] text-[var(--text-secondary)] mt-2">
+                                Projected score = average of {single.parts.length} measured domain{single.parts.length > 1 ? 's' : ''} ={' '}
+                                <strong className="text-[#91C640]">{single.expected}</strong> <span className="text-[var(--text-muted)]">(percent of field beaten)</span>
+                              </div>
+                            </>
+                          ) : (
+                            <div className="text-[11px] text-[var(--text-secondary)]">No measured result on these exact domains, so the model falls back to this athlete's career capacity of <strong className="text-[#91C640]">{single.expected}</strong>.</div>
+                          )
+                        ) : (
+                          <>
+                            <div className="games-condensed text-[10px] uppercase tracking-[0.1em] text-[var(--text-tertiary)] mb-1.5">Projected finish per drawn event</div>
+                            {(r as DrawResult).perEvent.map((place, j) => (
+                              <div key={j} className="flex items-center justify-between gap-2 text-[11px] mb-0.5">
+                                <span className="text-[var(--text-secondary)] truncate">{j + 1}. {draw[j]?.label ?? `event ${j + 1}`}</span>
+                                <span className="games-condensed text-[#91C640] tabular-nums shrink-0">{ord(place)}</span>
+                              </div>
+                            ))}
+                            <div className="text-[11px] text-[var(--text-secondary)] mt-2">Total = <strong className="text-[#91C640]">{(r as DrawResult).points} pts</strong> (sum of finishes, lower is better)</div>
+                          </>
+                        )}
+                        <button onClick={() => navigate({ view: 'athlete', year: 2026, slug: r.athlete.slug })} className="games-condensed text-[10px] uppercase tracking-[0.08em] font-semibold text-[#91C640] mt-2 hover:underline">
+                          View full profile &rarr;
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )
+              })}
+              {drawResult && <p className="text-[10px] text-[var(--text-muted)] pt-1">Points = sum of projected event finishes across the draw (lower is better), the way the Games scores a weekend.</p>}
             </div>
           )}
         </Panel>

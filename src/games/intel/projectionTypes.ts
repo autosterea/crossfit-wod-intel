@@ -63,6 +63,8 @@ export interface AthleteIntel {
   status: QualStatus
   country: string | null
   age: number | null
+  heightCm: number | null
+  weightKg: number | null
   capacity: number // career field-percentile capacity across all events
   seasonCapacity: number // 2026 Open+QF only
   consistency: number

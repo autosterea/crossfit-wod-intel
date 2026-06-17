@@ -557,6 +557,8 @@ for (const div of ['men', 'women']) {
       narrative: narrativesBySlug[slug] ?? null,
       country: am?.country ?? c3poMeta[a.name]?.country ?? null,
       age: am?.age ?? c3poMeta[a.name]?.age ?? null,
+      heightCm: am?.heightCm ?? null,
+      weightKg: am?.weightKg ?? null,
       capacity: a.capacity,
       seasonCapacity: a.seasonCapacity,
       consistency: a.consistency,

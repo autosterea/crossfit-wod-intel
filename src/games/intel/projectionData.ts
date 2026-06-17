@@ -128,9 +128,16 @@ export function eventDemand(ev: SimEvent): { skill: string; weight: number }[] {
   return SKILL_ORDER.map((skill, k) => ({ skill, weight: Math.round((v[k] / max) * 100) }))
 }
 
+export interface SimPart {
+  key: ModalKey
+  label: string
+  value: number // this athlete's measured placement-percentile on this taxed domain
+}
 export interface SimResult {
   athlete: AthleteIntel
   expected: number // projected placement-percentile on this event (0-100)
+  parts: SimPart[] // the taxed domains + the athlete's measured score on each (the inputs to expected)
+  usedCapacityFallback: boolean // true when the athlete had no measured score on any taxed domain
 }
 
 /**
@@ -138,19 +145,29 @@ export interface SimResult {
  * the mean of their MEASURED placement-percentile on the axes the event taxes.
  * This is grounded entirely in their real competition record - no invented
  * numbers - and is consistent with how the build engine derives the fingerprint.
+ * `parts` exposes exactly which domains were averaged and each athlete's measured
+ * score on them, so the UI can show how the projection was computed.
  */
 export function projectEvent(athletes: AthleteIntel[], ev: SimEvent): SimResult[] {
   const buckets = eventBuckets(ev)
   const scored = athletes.map((a) => {
-    const vals = buckets.map((b) => a.modal[b]).filter((v): v is number => v != null)
-    const expected = vals.length ? vals.reduce((x, y) => x + y, 0) / vals.length : a.capacity
-    return { athlete: a, expected: Math.round(expected * 10) / 10 }
+    const parts: SimPart[] = buckets
+      .map((b) => ({ key: b, label: MODAL_LABEL[b], value: a.modal[b] }))
+      .filter((p): p is SimPart => p.value != null)
+    const expected = parts.length ? parts.reduce((x, y) => x + y.value, 0) / parts.length : a.capacity
+    return { athlete: a, expected: Math.round(expected * 10) / 10, parts, usedCapacityFallback: parts.length === 0 }
   })
   return scored.sort((x, y) => y.expected - x.expected)
 }
 
+export interface DrawResult {
+  athlete: AthleteIntel
+  points: number
+  perEvent: number[]
+}
+
 /** Project a multi-event "draw" (Hopper mode): sum projected points across events. */
-export function projectDraw(athletes: AthleteIntel[], events: SimEvent[]): { athlete: AthleteIntel; points: number; perEvent: number[] }[] {
+export function projectDraw(athletes: AthleteIntel[], events: SimEvent[]): DrawResult[] {
   const perEventResults = events.map((ev) => projectEvent(athletes, ev))
   const pointsBySlug = new Map<string, { points: number; perEvent: number[] }>()
   athletes.forEach((a) => pointsBySlug.set(a.slug, { points: 0, perEvent: [] }))

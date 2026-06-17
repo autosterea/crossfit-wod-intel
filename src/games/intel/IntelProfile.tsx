@@ -18,6 +18,11 @@ import { Panel } from '../ui'
 
 const PA_GREEN = '#91C640'
 const ENERGY_COLOR = { phosphagen: '#f43f5e', glycolytic: '#f59e0b', oxidative: '#38bdf8' }
+const ordinal = (n: number) => {
+  const t = n % 100
+  const s = t >= 11 && t <= 13 ? 'th' : n % 10 === 1 ? 'st' : n % 10 === 2 ? 'nd' : n % 10 === 3 ? 'rd' : 'th'
+  return `${n}${s}`
+}
 const CONF_STYLE: Record<string, { label: string; bg: string; fg: string }> = {
   high: { label: 'High confidence', bg: 'rgba(1,150,68,0.18)', fg: 'var(--accent-success)' },
   medium: { label: 'Medium confidence', bg: 'rgba(245,158,11,0.18)', fg: 'var(--accent-amber)' },
@@ -180,7 +185,7 @@ export default function IntelProfile({ slug, showHeader = false }: { slug: strin
           { stat: `#${a.seasonRank.rank}`, label: 'Projected season rank', sub: `${a.division} field` },
           { stat: `${a.capacity}`, label: 'Capacity score', sub: 'percentile, all events' },
           { stat: `${a.consistency}`, label: 'Consistency', sub: '100 - variability' },
-          { stat: a.bestGamesFinish ? `${a.bestGamesFinish}${a.bestGamesFinish === 1 ? 'st' : a.bestGamesFinish === 2 ? 'nd' : a.bestGamesFinish === 3 ? 'rd' : 'th'}` : '-', label: 'Best Games finish', sub: a.gamesHistory.length ? `${a.gamesHistory.length} appearances` : 'no Games yet' },
+          { stat: a.bestGamesFinish ? ordinal(a.bestGamesFinish) : '-', label: 'Best Games finish', sub: a.gamesHistory.length ? `${a.gamesHistory.length} appearances` : 'no Games yet' },
         ].map((s) => (
           <Panel key={s.label} className="p-3">
             <div className="games-display text-2xl text-[#91C640] leading-none">{s.stat}</div>
@@ -274,7 +279,7 @@ export default function IntelProfile({ slug, showHeader = false }: { slug: strin
                 <span className="games-condensed text-[11px] text-[var(--text-muted)]">{s.pct}th percentile</span>
               </div>
               <div className="text-[10px] text-[var(--text-muted)] mt-0.5">
-                {s.drivingEvents.map((e) => `${e.event} (${e.place}${e.place === 1 ? 'st' : e.place === 2 ? 'nd' : e.place === 3 ? 'rd' : 'th'})`).join(' . ')}
+                {s.drivingEvents.map((e) => `${e.event} (${ordinal(e.place)})`).join(' . ')}
               </div>
             </div>
           ))}
