@@ -134,7 +134,7 @@ export default function Hub2026() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
           {roster.map((a, i) => <AthleteCard key={a.slug} a={a} index={i} />)}
         </div>
-        <p className="mt-3 text-[11px] text-[var(--text-muted)]">Tap an athlete for their full profile, journey, and interview. {division === 'men' ? A2026.men.length : A2026.women.length} qualified so far; 7 more join from the online Semifinal.</p>
+        <p className="mt-3 text-[11px] text-[var(--text-muted)]">Tap an athlete for their full profile, journey, and interview. The field is set: {division === 'men' ? A2026.men.length : A2026.women.length} {division} headed to San Jose.</p>
       </section>
 
       {/* INTERVIEWS */}

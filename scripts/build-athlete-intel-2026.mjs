@@ -239,6 +239,21 @@ try {
 // vs contenders (Open top-30 still fighting through the online Semifinal).
 const qualifiedNames = new Set([...(athletes2026.men ?? []), ...(athletes2026.women ?? [])].map((a) => a.name))
 
+// FIELD LOCK: once the 30+30 field is set (athletes-2026.json meta.fieldLocked),
+// the cohort IS the Games field. Drop the Open contenders who did not qualify so
+// the projected leaderboard and every within-cohort percentile rank against the
+// 60 athletes who will actually be in San Jose - not a 91-deep proxy pool.
+const fieldLocked = !!athletes2026.meta?.fieldLocked
+if (fieldLocked) {
+  for (const div of ['men', 'women']) {
+    for (const stage of [openS, qfS]) {
+      for (const name of [...stage.cells[div].keys()]) {
+        if (!qualifiedNames.has(name)) stage.cells[div].delete(name)
+      }
+    }
+  }
+}
+
 /* For each 2026 event, compute the cohort reference (best output) + placement
    ranking per division, so rel mirrors CapacityView (margin where timed). */
 function buildEventRefs(div) {
@@ -269,10 +284,12 @@ function buildEventRefs(div) {
 /* ----------------------------- the engine -------------------------------- */
 function buildDivision(div) {
   const refs = buildEventRefs(div)
-  const cohortNames = [
+  let cohortNames = [
     ...(results2026.stages.open.divisions[div] ?? []).map((a) => a.name),
     ...(extraByDivision[div] ?? []),
   ]
+  if (fieldLocked) cohortNames = cohortNames.filter((n) => qualifiedNames.has(n))
+  cohortNames = [...new Set(cohortNames)]
 
   // PER-EVENT METRIC = placement percentile within that event's OWN field
   // (2026 events: within the 30-cohort; prior Games: within that Games' field).
@@ -488,9 +505,10 @@ function buildDivision(div) {
 const out = {
   generated: new Date().toISOString(),
   season: 2026,
-  fieldProvisional: (results2026.status || '').includes('open') || (results2026.status || '').includes('qf'),
-  fieldNote:
-    'Cohort = top 30 per division by 2026 Open+Quarterfinals. The Games field locks after the online Semifinal (~June 16); this profile regenerates when results/2026.json updates.',
+  fieldProvisional: !fieldLocked && ((results2026.status || '').includes('open') || (results2026.status || '').includes('qf')),
+  fieldNote: fieldLocked
+    ? 'The 2026 individual field is locked: 30 men and 30 women. Every percentile and rank is computed within this 60-athlete Games field, from their official 2026 Open + Quarterfinals results and all prior Games.'
+    : 'Cohort = top 30 per division by 2026 Open+Quarterfinals. The Games field locks after the online Semifinal (~June 16); this profile regenerates when results/2026.json updates.',
   method: {
     skillOrder: SKILLS,
     unmeasuredSkills: CFG.unmeasuredSkills,

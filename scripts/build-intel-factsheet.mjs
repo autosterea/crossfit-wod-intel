@@ -20,6 +20,19 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 const REPO = resolve(__dirname, '..')
 const P = JSON.parse(readFileSync(resolve(REPO, 'public/projection-2026.json'), 'utf8')).athletes
 
+// Qualification route (semifinal/competition + finish) from athletes-2026.json,
+// keyed by slug, so narratives can cite HOW the athlete reached San Jose.
+const A2026 = JSON.parse(readFileSync(resolve(REPO, 'src/data/games/athletes-2026.json'), 'utf8'))
+const routeBySlug = {}
+for (const a of [...(A2026.men ?? []), ...(A2026.women ?? [])]) {
+  routeBySlug[a.slug] = {
+    event: a.semifinalEvent2026 || null,
+    finish: a.semifinalFinish2026 || null,
+    rookie: !!a.isRookie,
+    former: !!a.isFormerChampion,
+  }
+}
+
 const ord = (n) => {
   const s = ['th', 'st', 'nd', 'rd']
   const v = n % 100
@@ -50,8 +63,13 @@ for (const [slug, a] of Object.entries(P)) {
   const bL = (a.benchmarks || []).filter((b) => b.fieldRank && b.pct <= 30).slice(0, 2)
   const f = []
   f.push(`Division: ${a.division}, age ${a.age ?? 'unknown'}. Status: ${a.status === 'qualified' ? 'CONFIRMED 2026 qualifier' : 'contender still fighting through the online Semifinal'}.${a.seasonRank.rookie ? ' GAMES ROOKIE (never competed at the individual Games).' : ''}`)
+  const rt = routeBySlug[slug]
+  if (rt && (rt.event || rt.finish)) {
+    f.push(`Qualification route to the 2026 Games: ${[rt.event, rt.finish].filter(Boolean).join(' ')}. (Use this verbatim; do not infer or embellish the route.)`)
+  }
   f.push(`Model projects #${a.seasonRank.rank} of ${N[a.division]} in the ${a.division} field (data-confidence ${a.confidence}). Capacity ${a.capacity} = average percent of the field beaten across all events; consistency ${a.consistency}.`)
-  f.push(`STRENGTHS (best domains, with a real event): ${a.strengths.map((s) => `${s.label} [${ord(s.pct)} pctile, e.g. ${s.drivingEvents[0] ? `${s.drivingEvents[0].event} finished ${ord(s.drivingEvents[0].place)}` : ''}]`).join('; ')}.`)
+  const driveStr = (d) => (d ? (d.place >= 1 ? `${d.event} finished ${ord(d.place)}` : `${d.event} (${Math.round(d.perf)}th pctile)`) : '')
+  f.push(`STRENGTHS (best domains, with a real event): ${a.strengths.map((s) => `${s.label} [${ord(s.pct)} pctile, e.g. ${driveStr(s.drivingEvents[0])}]`).join('; ')}.`)
   f.push(`RELATIVE WEAKNESSES (their OWN softest domains; for an elite athlete these can still be high percentiles): ${a.weaknesses.map((s) => `${s.label} [${ord(s.pct)} pctile vs field]`).join('; ')}.`)
   f.push(`10-skill read: strongest = ${top.map((s) => s.skill).join(', ')}; softest = ${bot.map((s) => s.skill).join(', ')}.`)
   f.push(`Energy systems (percent of field beaten): phosphagen ${a.energy.phosphagen}, glycolytic ${a.energy.glycolytic}, oxidative ${a.energy.oxidative}.`)

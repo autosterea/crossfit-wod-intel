@@ -302,9 +302,13 @@ export default function IntelView() {
           A continuously-updating, fully data-grounded model of the 2026 field: who is projected to do what, built from every
           official competition result. Every number traces to real events; nothing is invented.
         </p>
-        {data.fieldProvisional && (
+        {data.fieldProvisional ? (
           <div className="mt-3 inline-flex items-center gap-2 text-[11px] px-3 py-1.5 rounded-lg" style={{ background: 'rgba(245,158,11,0.14)', color: 'var(--accent-amber)' }}>
             Field provisional - 23+23 confirmed from the in-person Semifinals; the final 7+7 and full 30+30 lock after the online Semifinal (~June 16). Contenders are marked.
+          </div>
+        ) : (
+          <div className="mt-3 inline-flex items-center gap-2 text-[11px] px-3 py-1.5 rounded-lg" style={{ background: 'rgba(1,150,68,0.14)', color: '#019644' }}>
+            Field locked - 30 men and 30 women. Every rank and percentile is computed within the 60-athlete Games field.
           </div>
         )}
       </section>
@@ -312,7 +316,7 @@ export default function IntelView() {
       <div className="flex items-center justify-between gap-3 flex-wrap mb-5">
         <Toggle value={tab} onChange={setTab} options={[{ key: 'leaderboard', label: 'Projected Leaderboard' }, { key: 'simulator', label: 'What-If Simulator' }]} />
         <div className="flex items-center gap-2">
-          {tab === 'leaderboard' && (
+          {tab === 'leaderboard' && Object.values(data.athletes).some((a) => a.status === 'contender') && (
             <Toggle value={qualOnly ? 'q' : 'all'} onChange={(v) => setQualOnly(v === 'q')} options={[{ key: 'all', label: 'All' }, { key: 'q', label: 'Qualified' }]} />
           )}
           <Toggle value={division} onChange={setDivision} options={[{ key: 'men', label: 'Men' }, { key: 'women', label: 'Women' }]} />
