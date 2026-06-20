@@ -463,7 +463,7 @@ function HeadToHead({ model }: { model: Model }) {
         ) : (
           <>
             <span className="font-semibold" style={{ color: gap > 0 ? A.color : B.color }}>{gap > 0 ? A.athlete.name : B.athlete.name}</span>{' '}
-            held <span className="font-semibold text-[#91C640]">{Math.abs(gap).toFixed(1)} points</span> more output capacity across the ten tests, and won{' '}
+            held <span className="font-semibold text-[#91C640]">{Math.abs(gap).toFixed(1)} points</span> more output capacity across the {perEvent.length} tests, and won{' '}
             <span className="font-semibold">{gap > 0 ? aWins : bWins}</span> of {perEvent.length} events head to head
             {(gap > 0 ? A.cp : B.cp) != null && <> on a {(gap > 0 ? A.cp : B.cp)!.toLocaleString()} W engine</>}.
           </>
@@ -507,7 +507,12 @@ export default function CapacityView() {
   const [mode, setMode] = useState<CurveMode>('power')
   const [stageKey, setStageKey] = useState<string | null>(null)
   const [openScorecard, setOpenScorecard] = useState<string | null>(null)
-  const activeStage = stageKeys.length ? (stageKey && yearResults!.stages![stageKey] ? stageKey : stageKeys[0]) : null
+  // Default the 2026 view to the COMBINED season stage (all Open + QF tests) rather
+  // than just Open, so the comparator / curve / capacity score use the full season.
+  const defaultStage = stageKeys.find((k) => yearResults?.stages?.[k]?.projected) ?? stageKeys[0]
+  const activeStage = stageKeys.length ? (stageKey && yearResults!.stages![stageKey] ? stageKey : defaultStage) : null
+  // Show the combined season first in the toggle, then Open, then Quarterfinals.
+  const orderedStageKeys = [...stageKeys].sort((a, b) => (yearResults?.stages?.[b]?.projected ? 1 : 0) - (yearResults?.stages?.[a]?.projected ? 1 : 0))
 
   // Build a source-agnostic context: a Games year (raw events + results) or a 2026 stage.
   const ctx: CapContext | null = useMemo(() => {
@@ -616,7 +621,7 @@ export default function CapacityView() {
             </div>
             {stageKeys.length > 0 && (
               <div className="mt-3 flex items-center gap-1 flex-wrap">
-                {stageKeys.map((sk) => {
+                {orderedStageKeys.map((sk) => {
                   const st = yearResults!.stages![sk]
                   const on = sk === activeStage
                   return (
@@ -753,7 +758,7 @@ export default function CapacityView() {
       {/* ===== 01 LEADERBOARD ===== */}
       <section className="mb-12">
         <SectionTag no="01" kicker="Operationalizing the definition" title="The Capacity Leaderboard"
-          right={<span className="games-condensed text-[11px] uppercase tracking-[0.1em] text-[var(--text-muted)] text-right hidden sm:block">score = mean % of best output<br />across all ten tests</span>} />
+          right={<span className="games-condensed text-[11px] uppercase tracking-[0.1em] text-[var(--text-muted)] text-right hidden sm:block">score = mean % of best output<br />across all {ctx?.events.length ?? ''} tests</span>} />
         <p className="text-[12.5px] text-[var(--text-secondary)] -mt-2 mb-4 max-w-3xl">
           The Capacity Score is the cleanest one-number answer to "who had more total work capacity": the average
           share of the best output an athlete produced across every event (same work for all finishers, so output
@@ -1032,7 +1037,7 @@ export default function CapacityView() {
       {/* Methodology */}
       <div className="text-[11px] leading-relaxed text-[var(--text-muted)] max-w-3xl mb-4 space-y-1.5">
         <p>
-          Capacity Score: mean share of best output across all ten events (timed: winning time over athlete time;
+          Capacity Score: mean share of best output across all {ctx?.events.length ?? ''} events (timed: winning time over athlete time;
           1RM: lift over best lift; capped: completed fraction discounted by the cap). Power-Duration: each event's
           work is estimated in metabolic-equivalent kJ; the Critical Power model W = W' + CP x t is fit to the
           engine-limited events in the 2-20 min window. Capacity, modal, hopper, and decisive analyses follow the

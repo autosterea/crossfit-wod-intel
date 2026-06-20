@@ -223,7 +223,7 @@ async function run() {
       out.forEach((a, i) => (a.rank = i + 1))
       return out
     }
-    return { label: 'Projected Form', projected: true, events, divisions: { men: divisionFor(data.men.athletes), women: divisionFor(data.women.athletes) }, sources: data.men.sources }
+    return { label: 'Season', projected: true, events, divisions: { men: divisionFor(data.men.athletes), women: divisionFor(data.women.athletes) }, sources: data.men.sources }
   }
 
   const out = {
