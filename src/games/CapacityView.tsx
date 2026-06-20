@@ -20,6 +20,15 @@ import { CHART_TOOLTIP_STYLE, G, yearByNum } from './gamesData'
 import { useGamesStore } from './gamesStore'
 import { Chip, Panel } from './ui'
 import type { GamesAthleteResult, GamesYearResults } from '../types-games'
+import semifinalsData from '../data/games/semifinals-2026.json'
+import athletes2026 from '../data/games/athletes-2026.json'
+
+// name -> slug + the 2026 semifinal per-athlete data (online = official c3po per-event,
+// in-person = researched/verified per-event where available, else overall finish).
+const NAME_TO_SLUG: Record<string, string> = {}
+for (const a of [...(athletes2026 as { men: { name: string; slug: string }[] }).men, ...(athletes2026 as { women: { name: string; slug: string }[] }).women]) NAME_TO_SLUG[a.name] = a.slug
+type SemiEntry = { event: string | null; official?: boolean; fieldSize?: number | null; overallRank?: number | string; overallFinish?: string | null; perEvent: { n: number; label?: string; score?: string; place: number | null }[]; sourceUrl?: string }
+const SEMI_2026 = (semifinalsData as unknown as { athletes: Record<string, SemiEntry> }).athletes
 
 type Division = 'men' | 'women'
 type CurveMode = 'power' | 'relative'
@@ -42,7 +51,10 @@ const fmtMin = (min: number) => {
   const s = Math.round((min - m) * 60)
   return `${m}:${String(s).padStart(2, '0')}`
 }
-const ord = (n: number) => (n === 1 ? 'st' : n === 2 ? 'nd' : n === 3 ? 'rd' : 'th')
+const ord = (n: number) => {
+  const t = n % 100
+  return t >= 11 && t <= 13 ? 'th' : n % 10 === 1 ? 'st' : n % 10 === 2 ? 'nd' : n % 10 === 3 ? 'rd' : 'th'
+}
 const parseLoadLb = (s: string | null): number | null => {
   const m = s?.match(/([\d.]+)\s*lb/i)
   return m ? parseFloat(m[1]) : null
@@ -494,6 +506,7 @@ export default function CapacityView() {
   const [division, setDivision] = useState<Division>('men')
   const [mode, setMode] = useState<CurveMode>('power')
   const [stageKey, setStageKey] = useState<string | null>(null)
+  const [openScorecard, setOpenScorecard] = useState<string | null>(null)
   const activeStage = stageKeys.length ? (stageKey && yearResults!.stages![stageKey] ? stageKey : stageKeys[0]) : null
 
   // Build a source-agnostic context: a Games year (raw events + results) or a 2026 stage.
@@ -671,20 +684,67 @@ export default function CapacityView() {
             <div className="grid grid-cols-[2rem_1fr_3rem_3rem_1fr] sm:grid-cols-[2.5rem_1fr_4rem_4rem_1.4fr] gap-2 px-3 py-2 games-condensed text-[10px] uppercase tracking-[0.1em] text-[var(--text-muted)]" style={{ background: 'var(--panel-bg-2)' }}>
               <span className="text-center">#</span><span>Athlete</span><span className="text-center">Open</span><span className="text-center">QF</span><span>Semifinal</span>
             </div>
-            {[...model.rows].sort((a, b) => a.athlete.rank - b.athlete.rank).map((r, i) => (
-              <div key={r.athlete.name} className="grid grid-cols-[2rem_1fr_3rem_3rem_1fr] sm:grid-cols-[2.5rem_1fr_4rem_4rem_1.4fr] gap-2 px-3 py-1.5 items-center text-[12px]"
-                style={{ background: i % 2 ? 'transparent' : 'var(--panel-bg)', borderTop: '1px solid var(--panel-border-subtle)' }}>
-                <span className="games-display text-center text-[var(--text-tertiary)]">{r.athlete.rank}</span>
-                <span className="games-condensed font-semibold truncate text-[var(--text-primary)]">{r.athlete.name}</span>
-                <span className="text-center font-mono text-[var(--text-secondary)]">{r.athlete.openRank ?? '-'}</span>
-                <span className="text-center font-mono text-[var(--text-secondary)]">{r.athlete.qfRank ?? '-'}</span>
-                <span className="truncate text-[var(--text-tertiary)]">
-                  <span className="text-[#91C640]">{r.athlete.semifinalFinish ?? ''}</span>{r.athlete.semifinalEvent ? ` ${r.athlete.semifinalEvent}` : ''}
-                </span>
-              </div>
-            ))}
+            {[...model.rows].sort((a, b) => a.athlete.rank - b.athlete.rank).map((r, i) => {
+              const name = r.athlete.name
+              const isOpen = openScorecard === name
+              const stageScore = (sk: string) => {
+                const st = yearResults?.stages?.[sk]
+                if (!st) return [] as { name: string; place: number; score: string }[]
+                const row = (st.divisions[division] as GamesAthleteResult[]).find((a) => a.name === name)
+                if (!row) return []
+                const meta = new Map((st.events as { id: string; name: string }[]).map((e) => [e.id, e.name]))
+                return row.events.map((ev) => ({ name: meta.get(ev.eventId) ?? ev.eventId, place: ev.place, score: ev.score }))
+              }
+              const semi = SEMI_2026[NAME_TO_SLUG[name]]
+              return (
+                <div key={name} style={{ background: i % 2 ? 'transparent' : 'var(--panel-bg)', borderTop: '1px solid var(--panel-border-subtle)' }}>
+                  <button onClick={() => setOpenScorecard(isOpen ? null : name)}
+                    className="w-full grid grid-cols-[2rem_1fr_3rem_3rem_1fr] sm:grid-cols-[2.5rem_1fr_4rem_4rem_1.4fr] gap-2 px-3 py-1.5 items-center text-[12px] text-left hover:bg-[var(--panel-bg-hover)] transition-colors">
+                    <span className="games-display text-center text-[var(--text-tertiary)]">{r.athlete.rank}</span>
+                    <span className="games-condensed font-semibold truncate text-[var(--text-primary)]">{name} <span className="text-[var(--text-muted)] font-normal">{isOpen ? '▾' : '▸'}</span></span>
+                    <span className="text-center font-mono text-[var(--text-secondary)]">{r.athlete.openRank ?? '-'}</span>
+                    <span className="text-center font-mono text-[var(--text-secondary)]">{r.athlete.qfRank ?? '-'}</span>
+                    <span className="truncate text-[var(--text-tertiary)]">
+                      <span className="text-[#91C640]">{r.athlete.semifinalFinish ?? ''}</span>{r.athlete.semifinalEvent ? ` ${r.athlete.semifinalEvent}` : ''}
+                    </span>
+                  </button>
+                  {isOpen && (
+                    <div className="px-3 pb-3 pt-1 grid sm:grid-cols-3 gap-3" style={{ background: 'var(--panel-bg-2)' }}>
+                      {([['open', 'Open'], ['quarterfinals', 'Quarterfinals']] as const).map(([sk, label]) => (
+                        <div key={sk}>
+                          <div className="games-condensed text-[10px] uppercase tracking-[0.1em] text-[var(--accent-blue)] mb-1">{label}</div>
+                          {stageScore(sk).map((e, k) => (
+                            <div key={k} className="flex items-baseline justify-between gap-2 text-[11px] mb-0.5">
+                              <span className="text-[var(--text-secondary)] truncate">{e.name}</span>
+                              <span className="shrink-0"><span className="text-[#91C640] games-condensed">{e.place}{ord(e.place)}</span> <span className="text-[var(--text-muted)] font-mono">{e.score}</span></span>
+                            </div>
+                          ))}
+                          <div className="text-[9.5px] text-[var(--text-muted)] mt-0.5">placement within the 30-athlete field</div>
+                        </div>
+                      ))}
+                      <div>
+                        <div className="games-condensed text-[10px] uppercase tracking-[0.1em] text-[var(--accent-amber)] mb-1">Semifinal{semi?.event ? `: ${semi.event}` : ''}</div>
+                        {semi && semi.perEvent && semi.perEvent.length ? (
+                          <>
+                            {semi.perEvent.map((e, k) => (
+                              <div key={k} className="flex items-baseline justify-between gap-2 text-[11px] mb-0.5">
+                                <span className="text-[var(--text-secondary)] truncate">{e.label || `Event ${e.n}`}</span>
+                                <span className="shrink-0"><span className="text-[#91C640] games-condensed">{e.place ?? '-'}{e.place ? ord(e.place) : ''}</span> {e.score ? <span className="text-[var(--text-muted)] font-mono">{e.score}</span> : null}</span>
+                              </div>
+                            ))}
+                            <div className="text-[9.5px] text-[var(--text-muted)] mt-0.5">{semi.fieldSize ? `placement among ${semi.fieldSize}` : 'within this event'}{semi.official === false ? ' · unofficial pending review' : ''}</div>
+                          </>
+                        ) : (
+                          <div className="text-[11px] text-[var(--text-secondary)]">Finished <span className="text-[#91C640]">{semi?.overallFinish ?? r.athlete.semifinalFinish ?? '-'}</span>. Per-event detail not published for this event.</div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )
+            })}
           </div>
-          <div className="mt-2 text-[10.5px] text-[var(--text-muted)] games-condensed uppercase tracking-[0.08em]"># = projected-form rank within the qualified field. Semifinal routes are not cross-comparable (different events); shown for context only.</div>
+          <div className="mt-2 text-[10.5px] text-[var(--text-muted)] games-condensed uppercase tracking-[0.08em]">Tap an athlete for their full 2026 scorecard. # = season-form rank within the qualified field (Open + Quarterfinals, the comparable tests). Semifinals were 11 different events, so they are NOT cross-comparable; shown per athlete for context.</div>
         </section>
       )}
 

@@ -1,0 +1,2666 @@
+{
+  "generated": "2026-06-20T18:16:47.660Z",
+  "source": "Online Individual Semifinal = official c3po (competition semifinals/2026, id 266); licensed in-person events researched + verified from official event results.",
+  "note": "Per-athlete 2026 Semifinal results. Semifinal EVENTS DIFFER per athlete (11 licensed events + the online semifinal), so these are NOT cross-comparable for a single capacity ranking - shown as per-athlete context. Online results are unofficial pending CrossFit video review (final June 29).",
+  "athletes": {
+    "guilherme-malheiros": {
+      "event": "Individual Online Semifinal",
+      "official": false,
+      "source": "c3po semifinals/2026 (online)",
+      "fieldSize": 465,
+      "overallRank": "1",
+      "perEvent": [
+        {
+          "n": 1,
+          "score": "6:28",
+          "place": 7
+        },
+        {
+          "n": 2,
+          "score": "8:31",
+          "place": 3
+        },
+        {
+          "n": 3,
+          "score": "13:29",
+          "place": 3
+        },
+        {
+          "n": 4,
+          "score": "3:33",
+          "place": 1
+        },
+        {
+          "n": 5,
+          "score": "4:10",
+          "place": 15
+        }
+      ]
+    },
+    "quinn-robinson": {
+      "event": "Individual Online Semifinal",
+      "official": false,
+      "source": "c3po semifinals/2026 (online)",
+      "fieldSize": 465,
+      "overallRank": "2",
+      "perEvent": [
+        {
+          "n": 1,
+          "score": "6:13",
+          "place": 4
+        },
+        {
+          "n": 2,
+          "score": "8:18",
+          "place": 1
+        },
+        {
+          "n": 3,
+          "score": "14:35",
+          "place": 14
+        },
+        {
+          "n": 4,
+          "score": "3:42",
+          "place": 4
+        },
+        {
+          "n": 5,
+          "score": "4:16",
+          "place": 20
+        }
+      ]
+    },
+    "nick-mathew": {
+      "event": "Individual Online Semifinal",
+      "official": false,
+      "source": "c3po semifinals/2026 (online)",
+      "fieldSize": 465,
+      "overallRank": "3",
+      "perEvent": [
+        {
+          "n": 1,
+          "score": "7:00",
+          "place": 21
+        },
+        {
+          "n": 2,
+          "score": "9:12",
+          "place": 14
+        },
+        {
+          "n": 3,
+          "score": "14:06",
+          "place": 9
+        },
+        {
+          "n": 4,
+          "score": "3:46",
+          "place": 8
+        },
+        {
+          "n": 5,
+          "score": "3:53",
+          "place": 3
+        }
+      ]
+    },
+    "justin-medeiros": {
+      "event": "Individual Online Semifinal",
+      "official": false,
+      "source": "c3po semifinals/2026 (online)",
+      "fieldSize": 465,
+      "overallRank": "4",
+      "perEvent": [
+        {
+          "n": 1,
+          "score": "6:26",
+          "place": 6
+        },
+        {
+          "n": 2,
+          "score": "8:50",
+          "place": 7
+        },
+        {
+          "n": 3,
+          "score": "13:22",
+          "place": 1
+        },
+        {
+          "n": 4,
+          "score": "4:13",
+          "place": 34
+        },
+        {
+          "n": 5,
+          "score": "4:00",
+          "place": 8
+        }
+      ]
+    },
+    "spencer-panchik": {
+      "event": "Individual Online Semifinal",
+      "official": false,
+      "source": "c3po semifinals/2026 (online)",
+      "fieldSize": 465,
+      "overallRank": "5",
+      "perEvent": [
+        {
+          "n": 1,
+          "score": "6:09",
+          "place": 3
+        },
+        {
+          "n": 2,
+          "score": "9:26",
+          "place": 20
+        },
+        {
+          "n": 3,
+          "score": "14:25",
+          "place": 11
+        },
+        {
+          "n": 4,
+          "score": "3:57",
+          "place": 19
+        },
+        {
+          "n": 5,
+          "score": "3:55",
+          "place": 4
+        }
+      ]
+    },
+    "colten-mertens": {
+      "event": "Individual Online Semifinal",
+      "official": false,
+      "source": "c3po semifinals/2026 (online)",
+      "fieldSize": 465,
+      "overallRank": "6",
+      "perEvent": [
+        {
+          "n": 1,
+          "score": "7:03",
+          "place": 25
+        },
+        {
+          "n": 2,
+          "score": "8:41",
+          "place": 5
+        },
+        {
+          "n": 3,
+          "score": "15:08",
+          "place": 25
+        },
+        {
+          "n": 4,
+          "score": "3:46",
+          "place": 8
+        },
+        {
+          "n": 5,
+          "score": "3:13",
+          "place": 1
+        }
+      ]
+    },
+    "patrick-vellner": {
+      "event": "Individual Online Semifinal",
+      "official": false,
+      "source": "c3po semifinals/2026 (online)",
+      "fieldSize": 465,
+      "overallRank": "7",
+      "perEvent": [
+        {
+          "n": 1,
+          "score": "6:31",
+          "place": 9
+        },
+        {
+          "n": 2,
+          "score": "8:26",
+          "place": 2
+        },
+        {
+          "n": 3,
+          "score": "15:56",
+          "place": 36
+        },
+        {
+          "n": 4,
+          "score": "3:45",
+          "place": 6
+        },
+        {
+          "n": 5,
+          "score": "4:07",
+          "place": 12
+        }
+      ]
+    },
+    "alexis-raptis": {
+      "event": "Individual Online Semifinal",
+      "official": false,
+      "source": "c3po semifinals/2026 (online)",
+      "fieldSize": 476,
+      "overallRank": "1",
+      "perEvent": [
+        {
+          "n": 1,
+          "score": "6:55",
+          "place": 5
+        },
+        {
+          "n": 2,
+          "score": "10:08",
+          "place": 13
+        },
+        {
+          "n": 3,
+          "score": "14:18",
+          "place": 1
+        },
+        {
+          "n": 4,
+          "score": "4:07",
+          "place": 7
+        },
+        {
+          "n": 5,
+          "score": "5:15",
+          "place": 14
+        }
+      ]
+    },
+    "erica-folo": {
+      "event": "Individual Online Semifinal",
+      "official": false,
+      "source": "c3po semifinals/2026 (online)",
+      "fieldSize": 476,
+      "overallRank": "2",
+      "perEvent": [
+        {
+          "n": 1,
+          "score": "7:03",
+          "place": 6
+        },
+        {
+          "n": 2,
+          "score": "9:59",
+          "place": 7
+        },
+        {
+          "n": 3,
+          "score": "15:23",
+          "place": 7
+        },
+        {
+          "n": 4,
+          "score": "4:23",
+          "place": 19
+        },
+        {
+          "n": 5,
+          "score": "5:15",
+          "place": 14
+        }
+      ]
+    },
+    "matilde-garnes": {
+      "event": "Individual Online Semifinal",
+      "official": false,
+      "source": "c3po semifinals/2026 (online)",
+      "fieldSize": 476,
+      "overallRank": "4",
+      "perEvent": [
+        {
+          "n": 1,
+          "score": "7:17",
+          "place": 9
+        },
+        {
+          "n": 2,
+          "score": "10:15",
+          "place": 21
+        },
+        {
+          "n": 3,
+          "score": "16:07",
+          "place": 17
+        },
+        {
+          "n": 4,
+          "score": "4:07",
+          "place": 7
+        },
+        {
+          "n": 5,
+          "score": "4:54",
+          "place": 8
+        }
+      ]
+    },
+    "jess-green": {
+      "event": "Individual Online Semifinal",
+      "official": false,
+      "source": "c3po semifinals/2026 (online)",
+      "fieldSize": 476,
+      "overallRank": "5",
+      "perEvent": [
+        {
+          "n": 1,
+          "score": "6:19",
+          "place": 1
+        },
+        {
+          "n": 2,
+          "score": "10:09",
+          "place": 14
+        },
+        {
+          "n": 3,
+          "score": "14:31",
+          "place": 2
+        },
+        {
+          "n": 4,
+          "score": "4:43",
+          "place": 35
+        },
+        {
+          "n": 5,
+          "score": "5:04",
+          "place": 11
+        }
+      ]
+    },
+    "arielle-loewen": {
+      "event": "Individual Online Semifinal",
+      "official": false,
+      "source": "c3po semifinals/2026 (online)",
+      "fieldSize": 476,
+      "overallRank": "5",
+      "perEvent": [
+        {
+          "n": 1,
+          "score": "8:52",
+          "place": 50
+        },
+        {
+          "n": 2,
+          "score": "9:44",
+          "place": 4
+        },
+        {
+          "n": 3,
+          "score": "14:33",
+          "place": 3
+        },
+        {
+          "n": 4,
+          "score": "3:59",
+          "place": 4
+        },
+        {
+          "n": 5,
+          "score": "4:26",
+          "place": 2
+        }
+      ]
+    },
+    "claudia-gluck": {
+      "event": "Individual Online Semifinal",
+      "official": false,
+      "source": "c3po semifinals/2026 (online)",
+      "fieldSize": 476,
+      "overallRank": "5",
+      "perEvent": [
+        {
+          "n": 1,
+          "score": "7:26",
+          "place": 11
+        },
+        {
+          "n": 2,
+          "score": "10:03",
+          "place": 10
+        },
+        {
+          "n": 3,
+          "score": "16:19",
+          "place": 19
+        },
+        {
+          "n": 4,
+          "score": "4:24",
+          "place": 20
+        },
+        {
+          "n": 5,
+          "score": "4:34",
+          "place": 3
+        }
+      ]
+    },
+    "janie-cheverie": {
+      "event": "Individual Online Semifinal",
+      "official": false,
+      "source": "c3po semifinals/2026 (online)",
+      "fieldSize": 476,
+      "overallRank": "8",
+      "perEvent": [
+        {
+          "n": 1,
+          "score": "7:33",
+          "place": 13
+        },
+        {
+          "n": 2,
+          "score": "10:13",
+          "place": 18
+        },
+        {
+          "n": 3,
+          "score": "15:37",
+          "place": 9
+        },
+        {
+          "n": 4,
+          "score": "4:28",
+          "place": 23
+        },
+        {
+          "n": 5,
+          "score": "5:05",
+          "place": 12
+        }
+      ]
+    },
+    "james-sprague": {
+      "event": "Legends Championship",
+      "official": true,
+      "source": "researched + verified from official event results",
+      "overallFinish": "2nd",
+      "perEvent": [
+        {
+          "n": 1,
+          "label": "Event 1",
+          "score": "18:29.06 (10:08)",
+          "place": 1
+        },
+        {
+          "n": 2,
+          "label": "Event 2",
+          "score": "03:47.33 (00:34)",
+          "place": 4
+        },
+        {
+          "n": 3,
+          "label": "Event 3",
+          "score": "06:36.69 (02:09)",
+          "place": 4
+        },
+        {
+          "n": 4,
+          "label": "Event 4",
+          "score": "07:20.90 (02:09)",
+          "place": 3
+        },
+        {
+          "n": 5,
+          "label": "Final Workout",
+          "score": "10:04.00 (03:28)",
+          "place": 1
+        }
+      ],
+      "fieldSize": 23,
+      "sourceUrl": "https://competitioncorner.net/api2/v1/leaderboard/20036/tab/male_132270?start=0&end=50&athletesOnly=false"
+    },
+    "jayson-hopper": {
+      "event": "French Throwdown",
+      "official": true,
+      "source": "researched + verified from official event results",
+      "overallFinish": "1st",
+      "perEvent": [
+        {
+          "n": 1,
+          "label": "Event 1",
+          "score": "20:09.8",
+          "place": 1
+        },
+        {
+          "n": 2,
+          "label": "Event 2",
+          "score": "10:52.7",
+          "place": 2
+        },
+        {
+          "n": 3,
+          "label": "Event 3",
+          "score": "08:27.7",
+          "place": 2
+        },
+        {
+          "n": 4,
+          "label": "Event 4",
+          "score": "07:55.0",
+          "place": 1
+        },
+        {
+          "n": 5,
+          "label": "Event 5 (Part A)",
+          "score": "160 kg",
+          "place": 5
+        },
+        {
+          "n": 6,
+          "label": "Event 5 (Part B)",
+          "score": "08:18.7",
+          "place": 9
+        },
+        {
+          "n": 7,
+          "label": "Event 6",
+          "score": "03:33.3",
+          "place": 2
+        }
+      ],
+      "fieldSize": 40,
+      "sourceUrl": "https://competitioncorner.net/api2/v1/leaderboard/20465/division/135379"
+    },
+    "jeffrey-adler": {
+      "event": "Mayhem Classic",
+      "official": true,
+      "source": "researched + verified from official event results",
+      "overallFinish": "3rd",
+      "perEvent": [
+        {
+          "n": 1,
+          "label": "Event 1",
+          "score": "30:23",
+          "place": 1
+        },
+        {
+          "n": 2,
+          "label": "Event 2",
+          "score": "4:15.52",
+          "place": 2
+        },
+        {
+          "n": 3,
+          "label": "Event 3",
+          "score": "10:55.60",
+          "place": 5
+        },
+        {
+          "n": 4,
+          "label": "Event 4",
+          "score": "11:05.12",
+          "place": 5
+        },
+        {
+          "n": 5,
+          "label": "Event 5",
+          "score": "9:28.96",
+          "place": 8
+        },
+        {
+          "n": 6,
+          "label": "Event 6",
+          "score": "3:11.94",
+          "place": 1
+        }
+      ],
+      "fieldSize": 20,
+      "sourceUrl": "https://compete.strongest.com/api/p/divisions/PKVMGE/leaderboard/"
+    },
+    "jay-crouch": {
+      "event": "Torian Pro",
+      "official": true,
+      "source": "researched + verified from official event results",
+      "overallFinish": "2nd",
+      "perEvent": [
+        {
+          "n": 1,
+          "label": "E1 Kuta",
+          "score": "19:57.91",
+          "place": 3
+        },
+        {
+          "n": 2,
+          "label": "E2 Regional Redux",
+          "score": "02:23.15",
+          "place": 11
+        },
+        {
+          "n": 3,
+          "label": "E3 Heavy Hann",
+          "score": "08:43.21",
+          "place": 3
+        },
+        {
+          "n": 4,
+          "label": "E4 One For The Money",
+          "score": "03:49.62",
+          "place": 3
+        },
+        {
+          "n": 5,
+          "label": "E5 Two For The Show",
+          "score": "04:44.11",
+          "place": 2
+        },
+        {
+          "n": 6,
+          "label": "E6 King Arthur II",
+          "score": "13:19.91",
+          "place": 1
+        },
+        {
+          "n": 7,
+          "label": "E7 Final",
+          "score": "02:18.60",
+          "place": 3
+        }
+      ],
+      "sourceUrl": "https://competitioncorner.net/api2/v1/leaderboard/20696/division/137143?start=0&end=60&athletesOnly=true",
+      "fieldSize": 38
+    },
+    "saxon-panchik": {
+      "event": "Syndicate Crown",
+      "official": true,
+      "source": "researched + verified from official event results",
+      "overallFinish": "1st",
+      "perEvent": [
+        {
+          "n": 1,
+          "label": "Ball Till You Fall",
+          "place": 10
+        },
+        {
+          "n": 2,
+          "label": "Combo Climb",
+          "score": "12:08.78",
+          "place": 1
+        },
+        {
+          "n": 3,
+          "label": "Bicarb",
+          "place": 7
+        },
+        {
+          "n": 4,
+          "label": "Semifinal Nate",
+          "score": "11:58.22",
+          "place": 1
+        },
+        {
+          "n": 5,
+          "label": "Trip Advisory",
+          "score": "08:21.65",
+          "place": 2
+        },
+        {
+          "n": 6,
+          "label": "Perfect Square",
+          "place": 10
+        }
+      ],
+      "fieldSize": 40,
+      "sourceUrl": "https://www.boxrox.com/2026-syndicate-crown-recap-10-key-takeaways/"
+    },
+    "dallin-pepper": {
+      "event": "Legends Championship",
+      "official": true,
+      "source": "researched + verified from official event results",
+      "overallFinish": "1st",
+      "perEvent": [
+        {
+          "n": 1,
+          "label": "Event 1",
+          "score": "18:52.02 (10:23)",
+          "place": 2
+        },
+        {
+          "n": 2,
+          "label": "Event 2",
+          "score": "03:27.35 (00:34)",
+          "place": 1
+        },
+        {
+          "n": 3,
+          "label": "Event 3",
+          "score": "06:22.63 (01:46)",
+          "place": 1
+        },
+        {
+          "n": 4,
+          "label": "Event 4",
+          "score": "06:56.63 (02:01)",
+          "place": 2
+        },
+        {
+          "n": 5,
+          "label": "Final Workout",
+          "score": "10:41.66 (03:38)",
+          "place": 2
+        }
+      ],
+      "fieldSize": 23,
+      "sourceUrl": "https://competitioncorner.net/api2/v1/leaderboard/20036/tab/male_132270?start=0&end=50&athletesOnly=false"
+    },
+    "victor-hoffer": {
+      "event": "Mayhem Classic",
+      "official": true,
+      "source": "researched + verified from official event results",
+      "overallFinish": "1st",
+      "perEvent": [
+        {
+          "n": 1,
+          "label": "Event 1",
+          "score": "33:26",
+          "place": 7
+        },
+        {
+          "n": 2,
+          "label": "Event 2",
+          "score": "4:58.17",
+          "place": 5
+        },
+        {
+          "n": 3,
+          "label": "Event 3",
+          "score": "10:08.20",
+          "place": 3
+        },
+        {
+          "n": 4,
+          "label": "Event 4",
+          "score": "10:25.77",
+          "place": 2
+        },
+        {
+          "n": 5,
+          "label": "Event 5",
+          "score": "7:34.43",
+          "place": 1
+        },
+        {
+          "n": 6,
+          "label": "Event 6",
+          "score": "3:17.26",
+          "place": 3
+        }
+      ],
+      "fieldSize": 20,
+      "sourceUrl": "https://compete.strongest.com/api/p/divisions/PKVMGE/leaderboard/"
+    },
+    "ben-fowler": {
+      "event": "REBEL Renegade Games",
+      "official": true,
+      "source": "researched + verified from official event results",
+      "overallFinish": "1st",
+      "perEvent": [
+        {
+          "n": 1,
+          "label": "Event 1",
+          "score": "00:02:43",
+          "place": 1
+        },
+        {
+          "n": 2,
+          "label": "Event 2",
+          "score": "00:10:47",
+          "place": 1
+        },
+        {
+          "n": 3,
+          "label": "Event 3",
+          "score": "00:07:32",
+          "place": 2
+        },
+        {
+          "n": 4,
+          "label": "Event 4 (DU)",
+          "score": "323 reps",
+          "place": 5
+        },
+        {
+          "n": 5,
+          "label": "Event 4 (RMU)",
+          "score": "28 reps",
+          "place": 2
+        },
+        {
+          "n": 6,
+          "label": "Event 4 (FS)",
+          "score": "19 reps",
+          "place": 5
+        },
+        {
+          "n": 7,
+          "label": "Event 5",
+          "score": "00:21:24",
+          "place": 2
+        },
+        {
+          "n": 8,
+          "label": "Event 6",
+          "score": "00:05:08",
+          "place": 3
+        },
+        {
+          "n": 9,
+          "label": "Event 7",
+          "score": "123kg",
+          "place": 13
+        },
+        {
+          "n": 10,
+          "label": "Event 8",
+          "score": "00:05:02",
+          "place": 2
+        },
+        {
+          "n": 11,
+          "label": "Event 9",
+          "score": "00:03:17",
+          "place": 3
+        }
+      ],
+      "fieldSize": 40,
+      "sourceUrl": "https://scoreit.co.za/leaderboard/a6abdd53-c3d8-11f0-ac5f-001dd8e74eca/The%20REBEL%20Renegade%20Games%202026%20(Individual)"
+    },
+    "moritz-fiebig": {
+      "event": "French Throwdown",
+      "official": true,
+      "source": "researched + verified from official event results",
+      "overallFinish": "2nd",
+      "perEvent": [
+        {
+          "n": 1,
+          "label": "Event 1",
+          "score": "21:04.9",
+          "place": 8
+        },
+        {
+          "n": 2,
+          "label": "Event 2",
+          "score": "10:32.0",
+          "place": 1
+        },
+        {
+          "n": 3,
+          "label": "Event 3",
+          "score": "08:43.1",
+          "place": 5
+        },
+        {
+          "n": 4,
+          "label": "Event 4",
+          "score": "08:27.8",
+          "place": 4
+        },
+        {
+          "n": 5,
+          "label": "Event 5 (Part A)",
+          "score": "155 kg",
+          "place": 11
+        },
+        {
+          "n": 6,
+          "label": "Event 5 (Part B)",
+          "score": "08:05.9",
+          "place": 6
+        },
+        {
+          "n": 7,
+          "label": "Event 6",
+          "score": "03:50.5",
+          "place": 8
+        }
+      ],
+      "fieldSize": 40,
+      "sourceUrl": "https://competitioncorner.net/api2/v1/leaderboard/20465/division/135379"
+    },
+    "aniol-ekai": {
+      "event": "MAD Fitness Festival",
+      "official": true,
+      "source": "researched + verified from official event results",
+      "overallFinish": "1st",
+      "perEvent": [
+        {
+          "n": 1,
+          "label": "MAD X",
+          "score": "29:32",
+          "place": 2
+        },
+        {
+          "n": 2,
+          "label": "FASTFOOT",
+          "score": "7:33",
+          "place": 4
+        },
+        {
+          "n": 3,
+          "label": "CARCELERO",
+          "score": "8:02.50",
+          "place": 2
+        },
+        {
+          "n": 4,
+          "label": "THE LADDER",
+          "score": "132kg",
+          "place": 3
+        },
+        {
+          "n": 5,
+          "label": "BEADED SANDBAG",
+          "score": "30",
+          "place": 1
+        },
+        {
+          "n": 6,
+          "label": "CALATRAVA",
+          "score": "3:50",
+          "place": 9
+        }
+      ],
+      "sourceUrl": "https://www.boxrox.com/mad-fitness-festival-2026-recap-10-stories-from-spain/"
+    },
+    "tudor-magda": {
+      "event": "Northern California Classic",
+      "official": true,
+      "source": "researched + verified from official event results",
+      "overallFinish": "1st",
+      "perEvent": [
+        {
+          "n": 1,
+          "label": "Quad Trio",
+          "score": "16:02.63 (13:48.00)",
+          "place": 4
+        },
+        {
+          "n": 2,
+          "label": "NorKalsu II",
+          "score": "11:44.64 (03:38.00)",
+          "place": 7
+        },
+        {
+          "n": 3,
+          "label": "The Mountain",
+          "score": "34:06.08 (03:25.47)",
+          "place": 1
+        },
+        {
+          "n": 4,
+          "label": "Sand Trap",
+          "score": "03:40.26 (01:03.00)",
+          "place": 12
+        },
+        {
+          "n": 5,
+          "label": "Bar Exam",
+          "score": "03:04.88 (02:18)",
+          "place": 3
+        },
+        {
+          "n": 6,
+          "label": "Lopsided",
+          "score": "04:40.47 (02:35.00)",
+          "place": 4
+        },
+        {
+          "n": 7,
+          "label": "Toe Tag",
+          "score": "06:01.27 (03:47.00)",
+          "place": 1
+        }
+      ],
+      "sourceUrl": "https://competitioncorner.net/api2/v1/leaderboard/19409/tab/male_126090?start=0&end=100"
+    },
+    "ricky-garard": {
+      "event": "Torian Pro",
+      "official": true,
+      "source": "researched + verified from official event results",
+      "overallFinish": "1st",
+      "perEvent": [
+        {
+          "n": 1,
+          "label": "E1 Kuta",
+          "score": "19:25.34",
+          "place": 1
+        },
+        {
+          "n": 2,
+          "label": "E2 Regional Redux",
+          "score": "01:44.12",
+          "place": 3
+        },
+        {
+          "n": 3,
+          "label": "E3 Heavy Hann",
+          "score": "09:04.22",
+          "place": 5
+        },
+        {
+          "n": 4,
+          "label": "E4 One For The Money",
+          "score": "03:52.78",
+          "place": 4
+        },
+        {
+          "n": 5,
+          "label": "E5 Two For The Show",
+          "score": "05:22.23",
+          "place": 4
+        },
+        {
+          "n": 6,
+          "label": "E6 King Arthur II",
+          "score": "15:14.95",
+          "place": 3
+        },
+        {
+          "n": 7,
+          "label": "E7 Final",
+          "score": "02:17.56",
+          "place": 2
+        }
+      ],
+      "sourceUrl": "https://competitioncorner.net/api2/v1/leaderboard/20696/division/137143?start=0&end=60&athletesOnly=true",
+      "fieldSize": 38
+    },
+    "nika-maisuradze": {
+      "event": "French Throwdown",
+      "official": true,
+      "source": "researched + verified from official event results",
+      "overallFinish": "3rd",
+      "perEvent": [
+        {
+          "n": 1,
+          "label": "Event 1",
+          "score": "20:47.9",
+          "place": 4
+        },
+        {
+          "n": 2,
+          "label": "Event 2",
+          "score": "11:36.0",
+          "place": 10
+        },
+        {
+          "n": 3,
+          "label": "Event 3",
+          "score": "08:36.3",
+          "place": 4
+        },
+        {
+          "n": 4,
+          "label": "Event 4",
+          "score": "08:37.3",
+          "place": 6
+        },
+        {
+          "n": 5,
+          "label": "Event 5 (Part A)",
+          "score": "162 kg",
+          "place": 3
+        },
+        {
+          "n": 6,
+          "label": "Event 5 (Part B)",
+          "score": "07:55.1",
+          "place": 4
+        },
+        {
+          "n": 7,
+          "label": "Event 6",
+          "score": "03:48.1",
+          "place": 6
+        }
+      ],
+      "fieldSize": 40,
+      "sourceUrl": "https://competitioncorner.net/api2/v1/leaderboard/20465/division/135379"
+    },
+    "austin-hatfield": {
+      "event": "Syndicate Crown",
+      "official": true,
+      "source": "researched + verified from official event results",
+      "overallFinish": "3rd",
+      "perEvent": [
+        {
+          "n": 1,
+          "label": "Ball Till You Fall",
+          "place": 3
+        },
+        {
+          "n": 2,
+          "label": "Combo Climb",
+          "place": 6
+        },
+        {
+          "n": 3,
+          "label": "Bicarb",
+          "score": "05:09.28",
+          "place": 3
+        },
+        {
+          "n": 4,
+          "label": "Semifinal Nate",
+          "score": "12:57.45",
+          "place": 3
+        },
+        {
+          "n": 5,
+          "label": "Trip Advisory",
+          "place": 5
+        },
+        {
+          "n": 6,
+          "label": "Perfect Square",
+          "place": 15
+        }
+      ],
+      "fieldSize": 40,
+      "sourceUrl": "https://www.boxrox.com/2026-syndicate-crown-recap-10-key-takeaways/"
+    },
+    "bayley-martin": {
+      "event": "Torian Pro",
+      "official": true,
+      "source": "researched + verified from official event results",
+      "overallFinish": "3rd",
+      "perEvent": [
+        {
+          "n": 1,
+          "label": "E1 Kuta",
+          "score": "22:01.94",
+          "place": 15
+        },
+        {
+          "n": 2,
+          "label": "E2 Regional Redux",
+          "score": "01:33.20",
+          "place": 2
+        },
+        {
+          "n": 3,
+          "label": "E3 Heavy Hann",
+          "score": "09:15.97",
+          "place": 8
+        },
+        {
+          "n": 4,
+          "label": "E4 One For The Money",
+          "score": "03:35.24",
+          "place": 1
+        },
+        {
+          "n": 5,
+          "label": "E5 Two For The Show",
+          "score": "05:50.64",
+          "place": 6
+        },
+        {
+          "n": 6,
+          "label": "E6 King Arthur II",
+          "score": "14:32.53",
+          "place": 2
+        },
+        {
+          "n": 7,
+          "label": "E7 Final",
+          "score": "02:24.72",
+          "place": 5
+        }
+      ],
+      "sourceUrl": "https://competitioncorner.net/api2/v1/leaderboard/20696/division/137143?start=0&end=60&athletesOnly=true",
+      "fieldSize": 38
+    },
+    "dylan-hamming": {
+      "event": "Northern California Classic",
+      "official": true,
+      "source": "researched + verified from official event results",
+      "overallFinish": "2nd",
+      "perEvent": [
+        {
+          "n": 1,
+          "label": "Quad Trio",
+          "score": "15:47.87 (13:39.00)",
+          "place": 1
+        },
+        {
+          "n": 2,
+          "label": "NorKalsu II",
+          "score": "CAP +114 (03:04.00)",
+          "place": 24
+        },
+        {
+          "n": 3,
+          "label": "The Mountain",
+          "score": "34:13.60 (03:22.93)",
+          "place": 5
+        },
+        {
+          "n": 4,
+          "label": "Sand Trap",
+          "score": "03:29.12 (01:03.00)",
+          "place": 5
+        },
+        {
+          "n": 5,
+          "label": "Bar Exam",
+          "score": "03:04.12 (02:13)",
+          "place": 2
+        },
+        {
+          "n": 6,
+          "label": "Lopsided",
+          "score": "05:26.63 (03:01.00)",
+          "place": 27
+        },
+        {
+          "n": 7,
+          "label": "Toe Tag",
+          "score": "07:32.31 (04:34.00)",
+          "place": 5
+        }
+      ],
+      "sourceUrl": "https://competitioncorner.net/api2/v1/leaderboard/19409/tab/male_126090?start=0&end=100"
+    },
+    "henrik-haapalainen": {
+      "event": "Far East Throwdown",
+      "official": true,
+      "source": "athletes-2026.json (overall finish; per-event pending research)",
+      "overallFinish": "1st",
+      "perEvent": [],
+      "fieldSize": 30,
+      "sourceUrl": "https://fitnessvolt.com/2026-far-east-throwdown-crossfit-semifinal-results/"
+    },
+    "roman-khrennikov": {
+      "event": "Mayhem Classic",
+      "official": true,
+      "source": "researched + verified from official event results",
+      "overallFinish": "2nd",
+      "perEvent": [
+        {
+          "n": 1,
+          "label": "Event 1",
+          "score": "32:25",
+          "place": 4
+        },
+        {
+          "n": 2,
+          "label": "Event 2",
+          "score": "4:25.96",
+          "place": 4
+        },
+        {
+          "n": 3,
+          "label": "Event 3",
+          "score": "11:27.78",
+          "place": 7
+        },
+        {
+          "n": 4,
+          "label": "Event 4",
+          "score": "10:21.87",
+          "place": 1
+        },
+        {
+          "n": 5,
+          "label": "Event 5",
+          "score": "8:02.21",
+          "place": 3
+        },
+        {
+          "n": 6,
+          "label": "Event 6",
+          "score": "3:17.14",
+          "place": 2
+        }
+      ],
+      "fieldSize": 20,
+      "sourceUrl": "https://compete.strongest.com/api/p/divisions/PKVMGE/leaderboard/"
+    },
+    "calum-clements": {
+      "event": "MAD Fitness Festival",
+      "official": true,
+      "source": "researched + verified from official event results",
+      "overallFinish": "3rd",
+      "perEvent": [
+        {
+          "n": 1,
+          "label": "MAD X",
+          "score": "31:11",
+          "place": 15
+        },
+        {
+          "n": 2,
+          "label": "FASTFOOT",
+          "score": "8:07",
+          "place": 17
+        },
+        {
+          "n": 3,
+          "label": "CARCELERO",
+          "score": "8:10",
+          "place": 3
+        },
+        {
+          "n": 4,
+          "label": "THE LADDER",
+          "score": "130kg",
+          "place": 7
+        },
+        {
+          "n": 5,
+          "label": "BEADED SANDBAG",
+          "score": "30",
+          "place": 1
+        },
+        {
+          "n": 6,
+          "label": "CALATRAVA",
+          "score": "3:22",
+          "place": 1
+        }
+      ],
+      "sourceUrl": "https://www.boxrox.com/mad-fitness-festival-2026-recap-10-stories-from-spain/"
+    },
+    "kalyan-souza": {
+      "event": "Copa Sur",
+      "official": true,
+      "source": "researched + verified from official event results",
+      "overallFinish": "1st",
+      "perEvent": [
+        {
+          "n": 1,
+          "label": "IE1 - MOVE MAX",
+          "score": "18:48",
+          "place": 6
+        },
+        {
+          "n": 2,
+          "label": "IE2 - SNATCH",
+          "score": "300 lb",
+          "place": 4
+        },
+        {
+          "n": 3,
+          "label": "IE3 - SQUAT SKILLS",
+          "score": "CAP +93",
+          "place": 13
+        },
+        {
+          "n": 4,
+          "label": "IE4 - GTO",
+          "score": "07:25 (06:09)",
+          "place": 2
+        },
+        {
+          "n": 5,
+          "label": "IE5 MU BIATHLON",
+          "score": "07:39",
+          "place": 2
+        },
+        {
+          "n": 6,
+          "label": "IE6 - LAST ONE STANDING",
+          "score": "5 (00:57.5)",
+          "place": 3
+        }
+      ],
+      "fieldSize": 30,
+      "sourceUrl": "https://competitioncorner.net/api2/v1/leaderboard/20044/tab/male_132361"
+    },
+    "benjamin-reyes": {
+      "event": "Copa Sur",
+      "official": true,
+      "source": "researched + verified from official event results",
+      "overallFinish": "2nd",
+      "perEvent": [
+        {
+          "n": 1,
+          "label": "IE1 - MOVE MAX",
+          "score": "18:35",
+          "place": 4
+        },
+        {
+          "n": 2,
+          "label": "IE2 - SNATCH",
+          "score": "295 lb",
+          "place": 7
+        },
+        {
+          "n": 3,
+          "label": "IE3 - SQUAT SKILLS",
+          "score": "10:54",
+          "place": 8
+        },
+        {
+          "n": 4,
+          "label": "IE4 - GTO",
+          "score": "09:01 (07:42)",
+          "place": 7
+        },
+        {
+          "n": 5,
+          "label": "IE5 MU BIATHLON",
+          "score": "07:47",
+          "place": 4
+        },
+        {
+          "n": 6,
+          "label": "IE6 - LAST ONE STANDING",
+          "score": "6 (00:56.5)",
+          "place": 1
+        }
+      ],
+      "fieldSize": 30,
+      "sourceUrl": "https://competitioncorner.net/api2/v1/leaderboard/20044/tab/male_132361"
+    },
+    "luis-cuellar": {
+      "event": "MAD Fitness Festival",
+      "official": true,
+      "source": "researched + verified from official event results",
+      "overallFinish": "2nd",
+      "perEvent": [
+        {
+          "n": 1,
+          "label": "MAD X",
+          "score": "30:38",
+          "place": 7
+        },
+        {
+          "n": 2,
+          "label": "FASTFOOT",
+          "score": "7:52",
+          "place": 9
+        },
+        {
+          "n": 3,
+          "label": "CARCELERO",
+          "score": "CAP+79",
+          "place": 9
+        },
+        {
+          "n": 4,
+          "label": "THE LADDER",
+          "score": "132kg",
+          "place": 3
+        },
+        {
+          "n": 5,
+          "label": "BEADED SANDBAG",
+          "score": "29",
+          "place": 3
+        },
+        {
+          "n": 6,
+          "label": "CALATRAVA",
+          "score": "3:47",
+          "place": 7
+        }
+      ],
+      "sourceUrl": "https://www.boxrox.com/mad-fitness-festival-2026-recap-10-stories-from-spain/"
+    },
+    "ty-jenkins": {
+      "event": "Syndicate Crown",
+      "official": true,
+      "source": "researched + verified from official event results",
+      "overallFinish": "2nd",
+      "perEvent": [
+        {
+          "n": 1,
+          "label": "Ball Till You Fall",
+          "score": "20:40.32",
+          "place": 1
+        },
+        {
+          "n": 2,
+          "label": "Combo Climb",
+          "score": "12:35.26",
+          "place": 3
+        },
+        {
+          "n": 3,
+          "label": "Bicarb",
+          "place": 12
+        },
+        {
+          "n": 4,
+          "label": "Semifinal Nate",
+          "place": 10
+        },
+        {
+          "n": 5,
+          "label": "Trip Advisory",
+          "score": "08:07.10",
+          "place": 1
+        },
+        {
+          "n": 6,
+          "label": "Perfect Square",
+          "place": 8
+        }
+      ],
+      "fieldSize": 40,
+      "sourceUrl": "https://www.boxrox.com/2026-syndicate-crown-recap-10-key-takeaways/"
+    },
+    "lucy-campbell": {
+      "event": "Mayhem Classic",
+      "official": true,
+      "source": "researched + verified from official event results",
+      "overallFinish": "3rd",
+      "perEvent": [
+        {
+          "n": 1,
+          "label": "Event 1",
+          "score": "34:53",
+          "place": 4
+        },
+        {
+          "n": 2,
+          "label": "Event 2",
+          "score": "4:05.69",
+          "place": 9
+        },
+        {
+          "n": 3,
+          "label": "Event 3",
+          "score": "10:19.94",
+          "place": 1
+        },
+        {
+          "n": 4,
+          "label": "Event 4",
+          "score": "14:23.81",
+          "place": 9
+        },
+        {
+          "n": 5,
+          "label": "Event 5",
+          "score": "11:53.44",
+          "place": 12
+        },
+        {
+          "n": 6,
+          "label": "Event 6",
+          "score": "3:33.81",
+          "place": 1
+        }
+      ],
+      "fieldSize": 20,
+      "sourceUrl": "https://compete.strongest.com/api/p/divisions/ZWCJHE/leaderboard/"
+    },
+    "mirjam-von-rohr": {
+      "event": "French Throwdown",
+      "official": true,
+      "source": "researched + verified from official event results",
+      "overallFinish": "1st",
+      "perEvent": [
+        {
+          "n": 1,
+          "label": "Event 1",
+          "score": "23:02.1",
+          "place": 7
+        },
+        {
+          "n": 2,
+          "label": "Event 2",
+          "score": "12:00.5",
+          "place": 2
+        },
+        {
+          "n": 3,
+          "label": "Event 3",
+          "score": "07:28.0",
+          "place": 1
+        },
+        {
+          "n": 4,
+          "label": "Event 4",
+          "score": "08:28.0",
+          "place": 7
+        },
+        {
+          "n": 5,
+          "label": "Event 5 (Part A)",
+          "score": "113 kg",
+          "place": 1
+        },
+        {
+          "n": 6,
+          "label": "Event 5 (Part B)",
+          "score": "08:38.6",
+          "place": 6
+        },
+        {
+          "n": 7,
+          "label": "Event 6",
+          "score": "03:56.8",
+          "place": 1
+        }
+      ],
+      "fieldSize": 40,
+      "sourceUrl": "https://competitioncorner.net/api2/v1/leaderboard/20465/division/135380"
+    },
+    "aimee-cringle": {
+      "event": "French Throwdown",
+      "official": true,
+      "source": "researched + verified from official event results",
+      "overallFinish": "2nd",
+      "perEvent": [
+        {
+          "n": 1,
+          "label": "Event 1",
+          "score": "21:47.5",
+          "place": 1
+        },
+        {
+          "n": 2,
+          "label": "Event 2",
+          "score": "11:34.0",
+          "place": 1
+        },
+        {
+          "n": 3,
+          "label": "Event 3",
+          "score": "08:39.9",
+          "place": 9
+        },
+        {
+          "n": 4,
+          "label": "Event 4",
+          "score": "07:44.0",
+          "place": 2
+        },
+        {
+          "n": 5,
+          "label": "Event 5 (Part A)",
+          "score": "102 kg",
+          "place": 11
+        },
+        {
+          "n": 6,
+          "label": "Event 5 (Part B)",
+          "score": "08:53.1",
+          "place": 9
+        },
+        {
+          "n": 7,
+          "label": "Event 6",
+          "score": "04:02.7",
+          "place": 2
+        }
+      ],
+      "fieldSize": 40,
+      "sourceUrl": "https://competitioncorner.net/api2/v1/leaderboard/20465/division/135380"
+    },
+    "ella-wilkinson": {
+      "event": "MAD Fitness Festival",
+      "official": true,
+      "source": "researched + verified from official event results",
+      "overallFinish": "3rd",
+      "perEvent": [
+        {
+          "n": 1,
+          "label": "MAD X",
+          "score": "30:15",
+          "place": 1
+        },
+        {
+          "n": 2,
+          "label": "FASTFOOT",
+          "score": "7:28",
+          "place": 3
+        },
+        {
+          "n": 3,
+          "label": "CARCELERO",
+          "score": "CAP +83",
+          "place": 8
+        },
+        {
+          "n": 4,
+          "label": "THE LADDER",
+          "score": "80kg",
+          "place": 24
+        },
+        {
+          "n": 5,
+          "label": "BEADED SANDBAG",
+          "score": "23",
+          "place": 2
+        },
+        {
+          "n": 6,
+          "label": "CALATRAVA",
+          "score": "3:18",
+          "place": 3
+        }
+      ],
+      "sourceUrl": "https://www.boxrox.com/mad-fitness-festival-2026-recap-10-stories-from-spain/"
+    },
+    "paige-rodgers": {
+      "event": "Mayhem Classic",
+      "official": true,
+      "source": "researched + verified from official event results",
+      "overallFinish": "1st",
+      "perEvent": [
+        {
+          "n": 1,
+          "label": "Event 1",
+          "score": "36:20",
+          "place": 9
+        },
+        {
+          "n": 2,
+          "label": "Event 2",
+          "score": "2:49.98",
+          "place": 2
+        },
+        {
+          "n": 3,
+          "label": "Event 3",
+          "score": "10:56.04",
+          "place": 2
+        },
+        {
+          "n": 4,
+          "label": "Event 4",
+          "score": "10:57.87",
+          "place": 3
+        },
+        {
+          "n": 5,
+          "label": "Event 5",
+          "score": "7:23.10",
+          "place": 1
+        },
+        {
+          "n": 6,
+          "label": "Event 6",
+          "score": "3:39.32",
+          "place": 3
+        }
+      ],
+      "fieldSize": 20,
+      "sourceUrl": "https://compete.strongest.com/api/p/divisions/ZWCJHE/leaderboard/"
+    },
+    "siria-meha": {
+      "event": "Far East Throwdown",
+      "official": true,
+      "source": "researched + verified from official event results",
+      "overallFinish": "1st",
+      "perEvent": [
+        {
+          "n": 1,
+          "label": "Event 1 - Row/DB Thrusters/Worm Burpees/Rope Climbs (22min cap)",
+          "score": "17:25.0",
+          "place": 1
+        },
+        {
+          "n": 2,
+          "label": "Event 2 - Chest to Bars + Snatch Ladder (7min cap)",
+          "score": "03:02.0",
+          "place": 2
+        },
+        {
+          "n": 3,
+          "label": "Event 3 - HS Walk/Muscle Ups/Clean & Jerks 3RFT (10min cap)",
+          "score": "07:12.0",
+          "place": 1
+        },
+        {
+          "n": 4,
+          "label": "Event 4 - Double Unders/HSPU/DB Deadlifts/Farmer Lunges 2RFT (12min cap)",
+          "score": "09:23.0",
+          "place": 1
+        },
+        {
+          "n": 5,
+          "label": "Event 5 - Ski/T2B/Bar Muscle-Ups 5RFT (10min cap)",
+          "score": "07:19.0",
+          "place": 1
+        },
+        {
+          "n": 6,
+          "label": "Event 6 - Box Jump Overs/Goblet Squats/Hang Cleans (7min cap)",
+          "score": "02:55.0",
+          "place": 2
+        }
+      ],
+      "fieldSize": 30,
+      "sourceUrl": "https://fitnessvolt.com/2026-far-east-throwdown-crossfit-semifinal-results/"
+    },
+    "lydia-fish": {
+      "event": "Syndicate Crown",
+      "official": true,
+      "source": "researched + verified from official event results",
+      "overallFinish": "1st",
+      "perEvent": [
+        {
+          "n": 1,
+          "label": "Ball Till You Fall",
+          "score": "20:45.07",
+          "place": 1
+        },
+        {
+          "n": 2,
+          "label": "Combo Climb",
+          "score": "14:08.22",
+          "place": 2
+        },
+        {
+          "n": 3,
+          "label": "Bicarb",
+          "place": 4
+        },
+        {
+          "n": 4,
+          "label": "Semifinal Nate",
+          "score": "13:07.68",
+          "place": 1
+        },
+        {
+          "n": 5,
+          "label": "Trip Advisory",
+          "score": "08:34.63",
+          "place": 2
+        },
+        {
+          "n": 6,
+          "label": "Perfect Square",
+          "place": 6
+        }
+      ],
+      "fieldSize": 40,
+      "sourceUrl": "https://www.boxrox.com/2026-syndicate-crown-recap-10-key-takeaways/"
+    },
+    "danielle-brandon": {
+      "event": "Syndicate Crown",
+      "official": true,
+      "source": "researched + verified from official event results",
+      "overallFinish": "3rd",
+      "perEvent": [
+        {
+          "n": 1,
+          "label": "Ball Till You Fall",
+          "score": "21:40.22",
+          "place": 8
+        },
+        {
+          "n": 2,
+          "label": "Combo Climb",
+          "place": 6
+        },
+        {
+          "n": 3,
+          "label": "Bicarb",
+          "place": 13
+        },
+        {
+          "n": 4,
+          "label": "Semifinal Nate",
+          "place": 15
+        },
+        {
+          "n": 5,
+          "label": "Trip Advisory",
+          "score": "08:20.25",
+          "place": 1
+        },
+        {
+          "n": 6,
+          "label": "Perfect Square",
+          "score": "01:58.96",
+          "place": 3
+        }
+      ],
+      "fieldSize": 40,
+      "sourceUrl": "https://www.boxrox.com/2026-syndicate-crown-recap-10-key-takeaways/"
+    },
+    "miley-wade": {
+      "event": "Copa Sur",
+      "official": true,
+      "source": "researched + verified from official event results",
+      "overallFinish": "2nd",
+      "perEvent": [
+        {
+          "n": 1,
+          "label": "IE1 - MOVE MAX",
+          "score": "17:09",
+          "place": 1
+        },
+        {
+          "n": 2,
+          "label": "IE2 - SNATCH",
+          "score": "195 lb",
+          "place": 5
+        },
+        {
+          "n": 3,
+          "label": "IE3 - SQUAT SKILLS",
+          "score": "07:13",
+          "place": 6
+        },
+        {
+          "n": 4,
+          "label": "IE4 - GTO",
+          "score": "06:08 (05:16)",
+          "place": 9
+        },
+        {
+          "n": 5,
+          "label": "IE5 MU BIATHLON",
+          "score": "08:16",
+          "place": 3
+        },
+        {
+          "n": 6,
+          "label": "IE6 - LAST ONE STANDING",
+          "score": "5 (01:02.0)",
+          "place": 3
+        }
+      ],
+      "fieldSize": 30,
+      "sourceUrl": "https://competitioncorner.net/api2/v1/leaderboard/20044/tab/female_132362"
+    },
+    "anikha-greer": {
+      "event": "Copa Sur",
+      "official": true,
+      "source": "researched + verified from official event results",
+      "overallFinish": "1st",
+      "perEvent": [
+        {
+          "n": 1,
+          "label": "IE1 - MOVE MAX",
+          "score": "18:02",
+          "place": 4
+        },
+        {
+          "n": 2,
+          "label": "IE2 - SNATCH",
+          "score": "200 lb",
+          "place": 3
+        },
+        {
+          "n": 3,
+          "label": "IE3 - SQUAT SKILLS",
+          "score": "04:27",
+          "place": 1
+        },
+        {
+          "n": 4,
+          "label": "IE4 - GTO",
+          "score": "04:34 (03:46)",
+          "place": 1
+        },
+        {
+          "n": 5,
+          "label": "IE5 MU BIATHLON",
+          "score": "08:07",
+          "place": 1
+        },
+        {
+          "n": 6,
+          "label": "IE6 - LAST ONE STANDING",
+          "score": "6 (00:58.0)",
+          "place": 1
+        }
+      ],
+      "fieldSize": 30,
+      "sourceUrl": "https://competitioncorner.net/api2/v1/leaderboard/20044/tab/female_132362"
+    },
+    "gabriela-migala": {
+      "event": "MAD Fitness Festival",
+      "official": true,
+      "source": "researched + verified from official event results",
+      "overallFinish": "1st",
+      "perEvent": [
+        {
+          "n": 1,
+          "label": "MAD X",
+          "score": "31:41",
+          "place": 2
+        },
+        {
+          "n": 2,
+          "label": "FASTFOOT",
+          "score": "7:40",
+          "place": 4
+        },
+        {
+          "n": 3,
+          "label": "CARCELERO",
+          "score": "7:36",
+          "place": 1
+        },
+        {
+          "n": 4,
+          "label": "THE LADDER",
+          "score": "87kg",
+          "place": 3
+        },
+        {
+          "n": 5,
+          "label": "BEADED SANDBAG",
+          "score": "15",
+          "place": 10
+        },
+        {
+          "n": 6,
+          "label": "CALATRAVA",
+          "score": "3:41",
+          "place": 9
+        }
+      ],
+      "sourceUrl": "https://www.boxrox.com/mad-fitness-festival-2026-recap-10-stories-from-spain/"
+    },
+    "abigail-domit": {
+      "event": "Legends Championship",
+      "official": true,
+      "source": "researched + verified from official event results",
+      "overallFinish": "2nd",
+      "perEvent": [
+        {
+          "n": 1,
+          "label": "Event 1",
+          "score": "17:56.83 (09:48)",
+          "place": 5
+        },
+        {
+          "n": 2,
+          "label": "Event 2",
+          "score": "04:09.22 (00:40)",
+          "place": 6
+        },
+        {
+          "n": 3,
+          "label": "Event 3",
+          "score": "05:58.00 (01:39)",
+          "place": 2
+        },
+        {
+          "n": 4,
+          "label": "Event 4",
+          "score": "07:54.77 (02:19)",
+          "place": 5
+        },
+        {
+          "n": 5,
+          "label": "Final Workout",
+          "score": "10:10.26 (03:55)",
+          "place": 4
+        }
+      ],
+      "fieldSize": 23,
+      "sourceUrl": "https://competitioncorner.net/api2/v1/leaderboard/20036/tab/female_132271?start=0&end=50&athletesOnly=false"
+    },
+    "lucy-mcgonigle": {
+      "event": "MAD Fitness Festival",
+      "official": true,
+      "source": "researched + verified from official event results",
+      "overallFinish": "2nd",
+      "perEvent": [
+        {
+          "n": 1,
+          "label": "MAD X",
+          "score": "34:05",
+          "place": 17
+        },
+        {
+          "n": 2,
+          "label": "FASTFOOT",
+          "score": "7:27",
+          "place": 1
+        },
+        {
+          "n": 3,
+          "label": "CARCELERO",
+          "score": "8:21",
+          "place": 3
+        },
+        {
+          "n": 4,
+          "label": "THE LADDER",
+          "score": "87kg",
+          "place": 1
+        },
+        {
+          "n": 5,
+          "label": "BEADED SANDBAG",
+          "score": "16",
+          "place": 8
+        },
+        {
+          "n": 6,
+          "label": "CALATRAVA",
+          "score": "3:24",
+          "place": 4
+        }
+      ],
+      "sourceUrl": "https://www.boxrox.com/mad-fitness-festival-2026-recap-10-stories-from-spain/"
+    },
+    "olivia-kerstetter": {
+      "event": "Legends Championship",
+      "official": true,
+      "source": "researched + verified from official event results",
+      "overallFinish": "1st",
+      "perEvent": [
+        {
+          "n": 1,
+          "label": "Event 1",
+          "score": "17:28.78 (09:14)",
+          "place": 1
+        },
+        {
+          "n": 2,
+          "label": "Event 2",
+          "score": "03:34.08 (00:33)",
+          "place": 2
+        },
+        {
+          "n": 3,
+          "label": "Event 3",
+          "score": "05:30.65 (01:34)",
+          "place": 1
+        },
+        {
+          "n": 4,
+          "label": "Event 4",
+          "score": "07:41.19 (02:20)",
+          "place": 3
+        },
+        {
+          "n": 5,
+          "label": "Final Workout",
+          "score": "10:13.45 (03:36)",
+          "place": 5
+        }
+      ],
+      "fieldSize": 23,
+      "sourceUrl": "https://competitioncorner.net/api2/v1/leaderboard/20036/tab/female_132271?start=0&end=50&athletesOnly=false"
+    },
+    "elisa-fuliano": {
+      "event": "French Throwdown",
+      "official": true,
+      "source": "researched + verified from official event results",
+      "overallFinish": "3rd",
+      "perEvent": [
+        {
+          "n": 1,
+          "label": "Event 1",
+          "score": "23:26.6",
+          "place": 12
+        },
+        {
+          "n": 2,
+          "label": "Event 2",
+          "score": "12:57.5",
+          "place": 4
+        },
+        {
+          "n": 3,
+          "label": "Event 3",
+          "score": "08:19.0",
+          "place": 5
+        },
+        {
+          "n": 4,
+          "label": "Event 4",
+          "score": "08:15.5",
+          "place": 5
+        },
+        {
+          "n": 5,
+          "label": "Event 5 (Part A)",
+          "score": "108 kg",
+          "place": 4
+        },
+        {
+          "n": 6,
+          "label": "Event 5 (Part B)",
+          "score": "08:34.9",
+          "place": 5
+        },
+        {
+          "n": 7,
+          "label": "Event 6",
+          "score": "04:14.5",
+          "place": 3
+        }
+      ],
+      "fieldSize": 40,
+      "sourceUrl": "https://competitioncorner.net/api2/v1/leaderboard/20465/division/135380"
+    },
+    "alex-gazan": {
+      "event": "Northern California Classic",
+      "official": true,
+      "source": "researched + verified from official event results",
+      "overallFinish": "1st",
+      "perEvent": [
+        {
+          "n": 1,
+          "label": "Quad Trio",
+          "score": "16:11.91 (13:42.00)",
+          "place": 3
+        },
+        {
+          "n": 2,
+          "label": "NorKalsu II",
+          "score": "11:37.65 (03:24.00)",
+          "place": 2
+        },
+        {
+          "n": 3,
+          "label": "The Mountain",
+          "score": "34:20.60 (03:51.00)",
+          "place": 8
+        },
+        {
+          "n": 4,
+          "label": "Sand Trap",
+          "score": "03:59.39 (01:11.00)",
+          "place": 2
+        },
+        {
+          "n": 5,
+          "label": "Bar Exam",
+          "score": "02:13.40 (01:33)",
+          "place": 2
+        },
+        {
+          "n": 6,
+          "label": "Lopsided",
+          "score": "04:57.47 (03:01.00)",
+          "place": 9
+        },
+        {
+          "n": 7,
+          "label": "Toe Tag",
+          "score": "07:47.94 (04:53.00)",
+          "place": 7
+        }
+      ],
+      "sourceUrl": "https://competitioncorner.net/api2/v1/leaderboard/19409/tab/female_126091?start=0&end=100"
+    },
+    "rachel-noel": {
+      "event": "Northern California Classic",
+      "official": true,
+      "source": "researched + verified from official event results",
+      "overallFinish": "2nd",
+      "perEvent": [
+        {
+          "n": 1,
+          "label": "Quad Trio",
+          "score": "15:07.39 (12:46.00)",
+          "place": 1
+        },
+        {
+          "n": 2,
+          "label": "NorKalsu II",
+          "score": "CAP +110 (04:03.00)",
+          "place": 18
+        },
+        {
+          "n": 3,
+          "label": "The Mountain",
+          "score": "33:13.30 (03:45.14)",
+          "place": 1
+        },
+        {
+          "n": 4,
+          "label": "Sand Trap",
+          "score": "03:53.44 (01:17.00)",
+          "place": 1
+        },
+        {
+          "n": 5,
+          "label": "Bar Exam",
+          "score": "02:05.68 (01:31)",
+          "place": 1
+        },
+        {
+          "n": 6,
+          "label": "Lopsided",
+          "score": "04:44.97 (02:37.00)",
+          "place": 4
+        },
+        {
+          "n": 7,
+          "label": "Toe Tag",
+          "score": "CAP +91 (07:05.00)",
+          "place": 24
+        }
+      ],
+      "sourceUrl": "https://competitioncorner.net/api2/v1/leaderboard/19409/tab/female_126091?start=0&end=100"
+    },
+    "hannah-black": {
+      "event": "REBEL Renegade Games",
+      "official": true,
+      "source": "researched + verified from official event results",
+      "overallFinish": "1st",
+      "perEvent": [
+        {
+          "n": 1,
+          "label": "Event 1",
+          "score": "00:03:05",
+          "place": 4
+        },
+        {
+          "n": 2,
+          "label": "Event 2",
+          "score": "00:14:28",
+          "place": 3
+        },
+        {
+          "n": 3,
+          "label": "Event 3",
+          "score": "00:07:14",
+          "place": 2
+        },
+        {
+          "n": 4,
+          "label": "Event 4 (DU)",
+          "score": "321 reps",
+          "place": 3
+        },
+        {
+          "n": 5,
+          "label": "Event 4 (RMU)",
+          "score": "20 reps",
+          "place": 2
+        },
+        {
+          "n": 6,
+          "label": "Event 4 (FS)",
+          "score": "18 reps",
+          "place": 4
+        },
+        {
+          "n": 7,
+          "label": "Event 5",
+          "score": "00:23:42",
+          "place": 2
+        },
+        {
+          "n": 8,
+          "label": "Event 6",
+          "score": "00:04:23",
+          "place": 2
+        },
+        {
+          "n": 9,
+          "label": "Event 7",
+          "score": "96kg",
+          "place": 1
+        },
+        {
+          "n": 10,
+          "label": "Event 8",
+          "score": "00:06:56",
+          "place": 3
+        },
+        {
+          "n": 11,
+          "label": "Event 9",
+          "score": "00:02:50",
+          "place": 2
+        }
+      ],
+      "fieldSize": 40,
+      "sourceUrl": "https://scoreit.co.za/leaderboard/a6abdd53-c3d8-11f0-ac5f-001dd8e74eca/The%20REBEL%20Renegade%20Games%202026%20(Individual)"
+    },
+    "ellie-turner": {
+      "event": "Torian Pro",
+      "official": true,
+      "source": "researched + verified from official event results",
+      "overallFinish": "2nd",
+      "perEvent": [
+        {
+          "n": 1,
+          "label": "E1 Kuta",
+          "score": "20:10.26",
+          "place": 1
+        },
+        {
+          "n": 2,
+          "label": "E2 Regional Redux",
+          "score": "02:23.31",
+          "place": 5
+        },
+        {
+          "n": 3,
+          "label": "E3 Heavy Hann",
+          "score": "09:06.20",
+          "place": 3
+        },
+        {
+          "n": 4,
+          "label": "E4 One For The Money",
+          "score": "04:13.12",
+          "place": 2
+        },
+        {
+          "n": 5,
+          "label": "E5 Two For The Show",
+          "score": "07:54.76",
+          "place": 21
+        },
+        {
+          "n": 6,
+          "label": "E6 King Arthur II",
+          "score": "15:59.00",
+          "place": 6
+        },
+        {
+          "n": 7,
+          "label": "E7 Final",
+          "score": "02:36.93",
+          "place": 2
+        }
+      ],
+      "sourceUrl": "https://competitioncorner.net/api2/v1/leaderboard/20696/division/137144?start=0&end=60&athletesOnly=true",
+      "fieldSize": 38
+    },
+    "emma-lawson": {
+      "event": "Mayhem Classic",
+      "official": true,
+      "source": "researched + verified from official event results",
+      "overallFinish": "2nd",
+      "perEvent": [
+        {
+          "n": 1,
+          "label": "Event 1",
+          "score": "33:52",
+          "place": 3
+        },
+        {
+          "n": 2,
+          "label": "Event 2",
+          "score": "3:56.61",
+          "place": 8
+        },
+        {
+          "n": 3,
+          "label": "Event 3",
+          "score": "11:05.21",
+          "place": 5
+        },
+        {
+          "n": 4,
+          "label": "Event 4",
+          "score": "14:06.29",
+          "place": 6
+        },
+        {
+          "n": 5,
+          "label": "Event 5",
+          "score": "7:38.83",
+          "place": 2
+        },
+        {
+          "n": 6,
+          "label": "Event 6",
+          "score": "3:39.28",
+          "place": 2
+        }
+      ],
+      "fieldSize": 20,
+      "sourceUrl": "https://compete.strongest.com/api/p/divisions/ZWCJHE/leaderboard/"
+    },
+    "haley-adams": {
+      "event": "Syndicate Crown",
+      "official": true,
+      "source": "researched + verified from official event results",
+      "overallFinish": "2nd",
+      "perEvent": [
+        {
+          "n": 1,
+          "label": "Ball Till You Fall",
+          "score": "21:21.34",
+          "place": 5
+        },
+        {
+          "n": 2,
+          "label": "Combo Climb",
+          "score": "14:04.40",
+          "place": 1
+        },
+        {
+          "n": 3,
+          "label": "Bicarb",
+          "score": "05:27.33",
+          "place": 1
+        },
+        {
+          "n": 4,
+          "label": "Semifinal Nate",
+          "place": 8
+        },
+        {
+          "n": 5,
+          "label": "Trip Advisory",
+          "place": 19
+        },
+        {
+          "n": 6,
+          "label": "Perfect Square",
+          "place": 11
+        }
+      ],
+      "fieldSize": 40,
+      "sourceUrl": "https://www.boxrox.com/2026-syndicate-crown-recap-10-key-takeaways/"
+    },
+    "kyra-milligan": {
+      "event": "Torian Pro",
+      "official": true,
+      "source": "researched + verified from official event results",
+      "overallFinish": "3rd",
+      "perEvent": [
+        {
+          "n": 1,
+          "label": "E1 Kuta",
+          "score": "23:46.60",
+          "place": 21
+        },
+        {
+          "n": 2,
+          "label": "E2 Regional Redux",
+          "score": "02:00.60",
+          "place": 2
+        },
+        {
+          "n": 3,
+          "label": "E3 Heavy Hann",
+          "score": "08:38.28",
+          "place": 1
+        },
+        {
+          "n": 4,
+          "label": "E4 One For The Money",
+          "score": "04:33.98",
+          "place": 5
+        },
+        {
+          "n": 5,
+          "label": "E5 Two For The Show",
+          "score": "06:10.98",
+          "place": 7
+        },
+        {
+          "n": 6,
+          "label": "E6 King Arthur II",
+          "score": "14:16.10",
+          "place": 1
+        },
+        {
+          "n": 7,
+          "label": "E7 Final",
+          "score": "02:47.96",
+          "place": 8
+        }
+      ],
+      "sourceUrl": "https://competitioncorner.net/api2/v1/leaderboard/20696/division/137144?start=0&end=60&athletesOnly=true",
+      "fieldSize": 38
+    },
+    "madeline-sturt": {
+      "event": "Torian Pro",
+      "official": true,
+      "source": "researched + verified from official event results",
+      "overallFinish": "1st",
+      "perEvent": [
+        {
+          "n": 1,
+          "label": "E1 Kuta",
+          "score": "21:27.81",
+          "place": 6
+        },
+        {
+          "n": 2,
+          "label": "E2 Regional Redux",
+          "score": "03:00.81",
+          "place": 14
+        },
+        {
+          "n": 3,
+          "label": "E3 Heavy Hann",
+          "score": "09:29.98",
+          "place": 5
+        },
+        {
+          "n": 4,
+          "label": "E4 One For The Money",
+          "score": "04:16.93",
+          "place": 3
+        },
+        {
+          "n": 5,
+          "label": "E5 Two For The Show",
+          "score": "05:49.20",
+          "place": 3
+        },
+        {
+          "n": 6,
+          "label": "E6 King Arthur II",
+          "score": "14:54.53",
+          "place": 3
+        },
+        {
+          "n": 7,
+          "label": "E7 Final",
+          "score": "02:38.20",
+          "place": 4
+        }
+      ],
+      "sourceUrl": "https://competitioncorner.net/api2/v1/leaderboard/20696/division/137144?start=0&end=60&athletesOnly=true",
+      "fieldSize": 38
+    }
+  }
+}
