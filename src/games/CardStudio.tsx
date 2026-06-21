@@ -305,7 +305,7 @@ function captionFor(t: Template, a: GamesAthlete2026 | undefined, b: GamesAthlet
   if (t === 'form') {
     return `📊 WHO'S HOTTEST RIGHT NOW (${division.toUpperCase()})\n\nOpen + Quarterfinals combined, all 7 tests. This is season form, not a prediction. The Games floor decides the rest.\n\nFull analytics: link in bio\n\n${HASHTAGS}`
   }
-  return `🚨 THE 2026 CROSSFIT GAMES. EVERY ATHLETE. EVERY NUMBER. ONE PLACE.\n\nWe built the most complete tracker of the 2026 season - free, no login:\n🏆 All ${allAthletes2026.length} qualified athletes (so far) - full profiles, photos, complete Games history\n🛣️ Every road to San Jose: Open → Quarterfinals → Semifinal\n🎙️ Dave Castro's athlete interviews, embedded as they drop\n📊 Analytics nobody else has\n\n7 more men + 7 more women punch their ticket at the Online Semifinal (June 11-15). The field locks June 16. We'll have it the same day.\n\nSan Jose. July 24-26. ${daysToGames()} days.\n\n🔗 Link in bio\n\n${HASHTAGS}`
+  return `🚨 THE 2026 CROSSFIT GAMES FIELD IS SET. EVERY ATHLETE. EVERY NUMBER. ONE PLACE.\n\n30 men + 30 women have punched their ticket to San Jose. We built the most complete tracker of the 2026 season - free, no login:\n🏆 All 60 qualified athletes - full profiles, photos, complete Games history\n🛣️ Every road to San Jose: Open → Quarterfinals → Semifinal, scored event by event\n🎙️ Dave Castro's athlete interviews, embedded as they drop\n📊 Capacity analytics + a projected leaderboard nobody else has\n\nSan Jose. July 24-26. ${daysToGames()} days.\n\n🔗 Link in bio\n\n${HASHTAGS}`
 }
 
 // ---------- Studio shell ----------
@@ -382,7 +382,7 @@ export default function CardStudio() {
         {/* Preview (scaled) */}
         <div className="rounded-2xl border border-[var(--panel-border)] overflow-hidden" style={{ width: 378, height: 472.5 }}>
           <div style={{ transform: 'scale(0.35)', transformOrigin: 'top left' }}>
-            <div ref={cardRef}>
+            <div ref={cardRef} data-testid="card-canvas">
               {template === 'spotlight' && <SpotlightCard a={a} />}
               {template === 'cover' && <CoverCard />}
               {template === 'h2h' && <H2HCard a={a} b={b} />}
