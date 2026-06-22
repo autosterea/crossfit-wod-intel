@@ -12,13 +12,50 @@ import type { GamesData, GamesAthlete2026 } from '../types-games'
 const G = rawGames as unknown as GamesData
 
 type Division = 'men' | 'women'
-type Template = 'spotlight' | 'cover' | 'h2h' | 'form'
+type Template = 'spotlight' | 'cover' | 'h2h' | 'form' | 'news'
 
 const TEMPLATES: { id: Template; label: string }[] = [
   { id: 'spotlight', label: 'Athlete Spotlight' },
   { id: 'cover', label: 'Field / Countdown Cover' },
   { id: 'h2h', label: 'Head to Head' },
   { id: 'form', label: 'Season Form Top 10' },
+  { id: 'news', label: 'News / Announcement' },
+]
+
+// Curated, source-verified news cards. Every claim here is grounded in a real,
+// linked story already in the /news feed - keep it that way (null > wrong).
+type NewsItem = { id: string; label: string; kicker: string; headline: string; sub: string; bullets: string[]; takeaway: string; source: string }
+const NEWS: NewsItem[] = [
+  {
+    id: 'swimming',
+    label: 'Swimming returns',
+    kicker: 'Games News',
+    headline: 'SWIMMING\nIS BACK',
+    sub: 'Swimming returns to the 2026 CrossFit Games.',
+    bullets: ['Confirmed back in the Games field', 'A true test across broad time and modal domains', 'Already built into our What-If simulator'],
+    takeaway: 'Build a swim workout and see who the model favors. Link in bio.',
+    source: 'The Barbell Spin',
+  },
+  {
+    id: '20-events',
+    label: '20 events / 4 days',
+    kicker: 'The Format',
+    headline: '20 EVENTS.\n4 DAYS.',
+    sub: 'The most scored events in CrossFit Games history.',
+    bullets: ['20 scored events (previous record: 15)', 'Four days of competition', 'SAP Center, San Jose - weekend of July 24-26'],
+    takeaway: 'Every event, every athlete, tracked all season. Link in bio.',
+    source: 'CrossFit Games',
+  },
+  {
+    id: 'programming-teaser',
+    label: 'Castro programming clues',
+    kicker: 'Programming',
+    headline: 'CASTRO\nDROPS CLUES',
+    sub: 'A new behind-the-scenes teaser from the Aromas ranch.',
+    bullets: ['Dave Castro and crew scouting the terrain', 'Movement combos hinted (some may be misdirection)', 'Castro: weighing handing off event programming'],
+    takeaway: 'Full breakdowns and season analytics. Link in bio.',
+    source: 'CrossFit Games / CF Network',
+  },
 ]
 
 const HUB_URL = 'wod.persistenceathletics.com/games/2026'
@@ -292,9 +329,38 @@ function FormCard({ division }: { division: Division }) {
   )
 }
 
+function NewsCard({ item }: { item: NewsItem }) {
+  return (
+    <div style={cardBg}>
+      <CardHeader />
+      <div style={{ padding: '40px 56px 0' }}>
+        <div style={{ fontSize: 28, letterSpacing: 5, textTransform: 'uppercase', color: GREEN, fontWeight: 600 }}>{item.kicker}</div>
+        <div style={{ fontFamily: "'Anton', sans-serif", fontSize: 116, textTransform: 'uppercase', lineHeight: 0.92, marginTop: 14, whiteSpace: 'pre-line' }}>{item.headline}</div>
+        <div style={{ fontSize: 36, color: INK, marginTop: 22, lineHeight: 1.25, maxWidth: 900 }}>{item.sub}</div>
+      </div>
+      <div style={{ padding: '38px 56px 0' }}>
+        {item.bullets.map((b, i) => (
+          <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 18, padding: '15px 0', borderTop: i ? '1px solid rgba(244,246,242,0.12)' : 'none' }}>
+            <div style={{ width: 15, height: 15, borderRadius: 999, background: GREEN, marginTop: 11, flexShrink: 0 }} />
+            <div style={{ fontSize: 33, color: 'rgba(244,246,242,0.92)', lineHeight: 1.2 }}>{b}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{ margin: '34px 56px 0', background: 'rgba(145,198,64,0.12)', border: '1px solid rgba(145,198,64,0.4)', borderRadius: 18, padding: '26px 30px' }}>
+        <div style={{ fontSize: 31, color: INK, lineHeight: 1.3 }}>{item.takeaway}</div>
+      </div>
+      <div style={{ padding: '22px 56px 0', fontSize: 23, color: DIM, letterSpacing: 1 }}>Source: {item.source}</div>
+      <CardFooter />
+    </div>
+  )
+}
+
 // ---------- Captions ----------
 
-function captionFor(t: Template, a: GamesAthlete2026 | undefined, b: GamesAthlete2026 | undefined, division: Division): string {
+function captionFor(t: Template, a: GamesAthlete2026 | undefined, b: GamesAthlete2026 | undefined, division: Division, news?: NewsItem): string {
+  if (t === 'news' && news) {
+    return `🚨 ${news.sub.toUpperCase()}\n\n${news.bullets.map((x) => `• ${x}`).join('\n')}\n\n${news.takeaway}\n\nSource: ${news.source}\n\n${HASHTAGS}`
+  }
   const tagLine = (x?: GamesAthlete2026) => (x?.instagramHandle ? ` ${x.instagramHandle}` : '')
   if (t === 'spotlight' && a) {
     return `🎯 ATHLETE SPOTLIGHT: ${a.name.toUpperCase()} ${countryFlag(a.country)}\n\n${a.storyline ?? ''}\n\n${a.gamesAppearances ? `${a.gamesAppearances}x Games athlete` : 'Games rookie'}${a.bestGamesFinish ? ` · best finish ${a.bestGamesFinish}` : ''}\nRoad to San Jose: Open #${a.openRank2026 ?? '-'} · QF #${a.qfRank2026 ?? '-'} · ${a.semifinalEvent2026 ?? 'Semifinal'} ${a.semifinalFinish2026?.replace(/\s*\(.*\)/, '') ?? ''}\n\nFull profile, every athlete, every stat: link in bio${tagLine(a)}\n\n${HASHTAGS}`
@@ -317,12 +383,14 @@ export default function CardStudio() {
   const roster = division === 'men' ? A2026.men : A2026.women
   const [slugA, setSlugA] = useState(params.get('a') || roster[0].slug)
   const [slugB, setSlugB] = useState(params.get('b') || roster[1].slug)
+  const [newsId, setNewsId] = useState(params.get('n') || NEWS[0].id)
   const [busy, setBusy] = useState(false)
   const cardRef = useRef<HTMLDivElement>(null)
 
   const a = useMemo(() => allAthletes2026.find((x) => x.slug === slugA) ?? roster[0], [slugA, roster])
   const b = useMemo(() => allAthletes2026.find((x) => x.slug === slugB) ?? roster[1], [slugB, roster])
-  const caption = captionFor(template, a, b, division)
+  const newsItem = useMemo(() => NEWS.find((x) => x.id === newsId) ?? NEWS[0], [newsId])
+  const caption = captionFor(template, a, b, division, newsItem)
 
   const download = async () => {
     if (!cardRef.current || busy) return
@@ -332,7 +400,7 @@ export default function CardStudio() {
       await toPng(cardRef.current, { width: 1080, height: 1350, pixelRatio: 1, cacheBust: true })
       const url = await toPng(cardRef.current, { width: 1080, height: 1350, pixelRatio: 1, cacheBust: true })
       const link = document.createElement('a')
-      link.download = template === 'spotlight' ? `${a.slug}-spotlight.png` : template === 'h2h' ? `${a.slug}-vs-${b.slug}.png` : `${template}-${division}.png`
+      link.download = template === 'spotlight' ? `${a.slug}-spotlight.png` : template === 'h2h' ? `${a.slug}-vs-${b.slug}.png` : template === 'news' ? `news-${newsItem.id}.png` : `${template}-${division}.png`
       link.href = url
       link.click()
     } finally {
@@ -372,6 +440,11 @@ export default function CardStudio() {
             {roster.map((x) => <option key={x.slug} value={x.slug}>{x.name}</option>)}
           </select>
         )}
+        {template === 'news' && (
+          <select value={newsId} onChange={(e) => setNewsId(e.target.value)} className="bg-[var(--input-bg)] border border-[var(--input-border)] rounded-lg px-3 py-2 text-sm text-[var(--text-primary)]">
+            {NEWS.map((x) => <option key={x.id} value={x.id}>{x.label}</option>)}
+          </select>
+        )}
         <button onClick={download} disabled={busy} data-testid="download-card"
           className="games-condensed uppercase tracking-[0.1em] font-semibold text-[13px] px-5 py-2 rounded-lg bg-[#019644] text-white hover:bg-[#01a94d] transition-colors disabled:opacity-50">
           {busy ? 'Rendering...' : 'Download PNG'}
@@ -387,6 +460,7 @@ export default function CardStudio() {
               {template === 'cover' && <CoverCard />}
               {template === 'h2h' && <H2HCard a={a} b={b} />}
               {template === 'form' && <FormCard division={division} />}
+              {template === 'news' && <NewsCard item={newsItem} />}
             </div>
           </div>
         </div>
