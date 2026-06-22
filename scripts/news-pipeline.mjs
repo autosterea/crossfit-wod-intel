@@ -613,57 +613,69 @@ async function main() {
 
   // Dedupe candidates against the ledger AND each other (same article from two
   // feeds appears once). First feed in FEEDS order wins (official/high first).
+  // newByCanon = genuinely NEW (not in ledger, not already shown) -> drives the
+  // newsletter email + ledger. readdByCanon = currently-live items that are in
+  // the ledger but missing from the displayed feed (orphaned on a past run);
+  // these get reconciled back into the feed for DISPLAY only (no email), so the
+  // feed always reflects what is actually live in the sources.
   const newByCanon = new Map()
+  const readdByCanon = new Map()
   for (const c of candidates) {
     const canon = canonicalizeUrl(c.sourceUrl)
     if (!canon) continue
-    if (ledger[canon]) continue // already posted in a prior run
     if (existingCanon.has(canon)) continue // already in running list
-    if (newByCanon.has(canon)) continue // duplicate within this run
-    newByCanon.set(canon, { ...c, canon })
+    if (newByCanon.has(canon) || readdByCanon.has(canon)) continue // dup within run
+    if (ledger[canon]) readdByCanon.set(canon, { ...c, canon })
+    else newByCanon.set(canon, { ...c, canon })
   }
 
-  log(`candidates=${candidates.length} new(after dedupe)=${newByCanon.size}`)
+  log(`candidates=${candidates.length} new(after dedupe)=${newByCanon.size} readd(orphaned)=${readdByCanon.size}`)
 
   // LINK-VERIFY each NEW item: GET (follow redirects). Drop ONLY on a
   // definitive "gone" status (404/410) - a real article from a real feed must
   // NOT be nuked by a transient blip (timeout, 5xx, rate-limit, bot-wall), or
   // we silently lose legitimate news on a slow day.
-  const verifiedNew = []
-  for (const c of newByCanon.values()) {
-    let drop = false
-    try {
-      const res = await fetchWithTimeout(c.sourceUrl, { method: 'GET', timeout: VERIFY_TIMEOUT_MS })
-      if (res.status === 404 || res.status === 410) {
-        drop = true
-        log(`  verify DROP (dead ${res.status}) ${c.sourceUrl}`)
-      } else if (res.status !== 200) {
-        log(`  verify keep (transient HTTP ${res.status}) ${c.sourceUrl}`)
+  const buildVerified = async (entries, labelNew) => {
+    const out = []
+    for (const c of entries) {
+      let drop = false
+      try {
+        const res = await fetchWithTimeout(c.sourceUrl, { method: 'GET', timeout: VERIFY_TIMEOUT_MS })
+        if (res.status === 404 || res.status === 410) {
+          drop = true
+          log(`  verify DROP (dead ${res.status}) ${c.sourceUrl}`)
+        } else if (res.status !== 200) {
+          log(`  verify keep (transient HTTP ${res.status}) ${c.sourceUrl}`)
+        }
+      } catch (err) {
+        log(`  verify keep (transient: ${err.message}) ${c.sourceUrl}`)
       }
-    } catch (err) {
-      log(`  verify keep (transient: ${err.message}) ${c.sourceUrl}`)
+      if (drop) continue
+      const item = {
+        id: idForUrl(c.canon),
+        headline: c.headline,
+        summary: c.summary,
+        sourceName: c.feed.name,
+        sourceUrl: c.sourceUrl,
+        date: ymd(c.publishedAt),
+        publishedAt: c.publishedAt,
+        category: 'other',
+        reliability: c.feed.reliability,
+      }
+      item.category = assignCategory(item, c.feed)
+      out.push(item)
     }
-    if (drop) continue
-
-    const item = {
-      id: idForUrl(c.canon),
-      headline: c.headline,
-      summary: c.summary,
-      sourceName: c.feed.name,
-      sourceUrl: c.sourceUrl,
-      date: ymd(c.publishedAt),
-      publishedAt: c.publishedAt,
-      category: 'other',
-      reliability: c.feed.reliability,
-    }
-    item.category = assignCategory(item, c.feed)
-    verifiedNew.push(item)
+    return out
   }
 
-  log(`verified new items=${verifiedNew.length}`)
+  const verifiedNew = await buildVerified([...newByCanon.values()], true)
+  const reconciled = await buildVerified([...readdByCanon.values()], false)
 
-  // Merge new items into the running list, cap to last 120 days, newest first.
-  const merged = [...verifiedNew, ...(existing.items || [])]
+  log(`verified new items=${verifiedNew.length} reconciled (re-added to feed)=${reconciled.length}`)
+
+  // Merge: new + reconciled-orphans + existing running list. Reconciled items are
+  // shown but were already in the ledger, so they do NOT trigger the newsletter.
+  const merged = [...verifiedNew, ...reconciled, ...(existing.items || [])]
   // Dedupe merged by id (in case an existing item lacked a ledger entry).
   const seenId = new Set()
   const capped = []
