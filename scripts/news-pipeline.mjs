@@ -291,8 +291,14 @@ function canonicalizeUrl(raw) {
   try {
     const u = new URL(s)
     u.hash = ''
+    const host = u.hostname.toLowerCase()
+    // Preserve the video id for YouTube watch URLs: the id lives in ?v=, and a
+    // blanket search-strip would collapse EVERY watch video to one key
+    // (youtube.com/watch), so only the first one ever seen could enter the feed.
+    const ytV = host.includes('youtube.com') && u.pathname === '/watch' ? u.searchParams.get('v') : null
     u.search = ''
-    u.hostname = u.hostname.toLowerCase()
+    if (ytV) u.searchParams.set('v', ytV)
+    u.hostname = host
     let out = u.toString()
     if (out.endsWith('/') && u.pathname !== '/') out = out.slice(0, -1)
     return out
@@ -676,15 +682,20 @@ async function main() {
   // Merge: new + reconciled-orphans + existing running list. Reconciled items are
   // shown but were already in the ledger, so they do NOT trigger the newsletter.
   const merged = [...verifiedNew, ...reconciled, ...(existing.items || [])]
-  // Dedupe merged by id (in case an existing item lacked a ledger entry).
+  // Dedupe merged by id AND canonical URL (the latter catches an item whose id
+  // changed because canonicalization changed, e.g. the YouTube ?v= fix above).
   const seenId = new Set()
+  const seenCanon = new Set()
   const capped = []
   for (const it of merged) {
     if (!it || !it.id) continue
     if (seenId.has(it.id)) continue
+    const canon = canonicalizeUrl(it.sourceUrl)
+    if (canon && seenCanon.has(canon)) continue
     const pubMs = it.publishedAt ? Date.parse(it.publishedAt) : NaN
     if (!Number.isNaN(pubMs) && pubMs < cutoffMs) continue
     seenId.add(it.id)
+    if (canon) seenCanon.add(canon)
     capped.push(it)
   }
   capped.sort((a, b) => {
