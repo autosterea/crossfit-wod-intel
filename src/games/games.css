@@ -301,3 +301,7 @@
   color: transparent;
   -webkit-text-stroke: 1px color-mix(in srgb, #91c640 55%, transparent);
 }
+
+/* Hide scrollbar on the mobile games nav row while keeping it scrollable. */
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }

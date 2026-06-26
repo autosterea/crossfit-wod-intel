@@ -16,6 +16,7 @@ const Hub2026 = lazy(() => import('./Hub2026'))
 const AthleteProfile = lazy(() => import('./AthleteProfile'))
 const CardStudio = lazy(() => import('./CardStudio'))
 const IntelView = lazy(() => import('./IntelView'))
+const AnalysisView = lazy(() => import('./analysis/AnalysisView'))
 
 class ViewErrorBoundary extends Component<{ children: ReactNode; name: string }, { error: Error | null }> {
   state = { error: null as Error | null }
@@ -41,9 +42,10 @@ class ViewErrorBoundary extends Component<{ children: ReactNode; name: string },
   }
 }
 
-const NAV: { view: 'hub' | 'home' | 'evolution' | 'movements' | 'lore' | 'capacity' | 'intel'; label: string; mobileLabel?: string }[] = [
+const NAV: { view: 'hub' | 'home' | 'evolution' | 'movements' | 'lore' | 'capacity' | 'intel' | 'analysis'; label: string; mobileLabel?: string }[] = [
   { view: 'hub', label: '2026 Games', mobileLabel: '2026' },
   { view: 'intel', label: 'Intelligence', mobileLabel: 'Intel' },
+  { view: 'analysis', label: 'The Breakdown', mobileLabel: 'Breakdown' },
   { view: 'home', label: 'Timeline' },
   { view: 'evolution', label: 'Evolution' },
   { view: 'movements', label: 'Movements' },
@@ -109,20 +111,20 @@ function TopBar() {
         </div>
       </div>
 
-      {/* Mobile nav row */}
+      {/* Mobile nav row (scrollable so all sections fit without squishing) */}
       <div className="md:hidden border-t border-[var(--panel-border-subtle)]">
-        <div className="flex items-center justify-around h-10">
+        <div className="flex items-center gap-1 h-10 overflow-x-auto px-3 no-scrollbar">
           {NAV.map((n) => (
             <button
               key={n.view}
               onClick={() => navigate({ view: n.view, year: null })}
-              className="games-condensed uppercase tracking-[0.08em] text-[12px] font-semibold px-1.5"
+              className="games-condensed uppercase tracking-[0.08em] text-[12px] font-semibold px-2 shrink-0 whitespace-nowrap"
               style={{ color: route.view === n.view ? '#91C640' : 'var(--text-secondary)' }}
             >
               {n.mobileLabel ?? n.label}
             </button>
           ))}
-          <a href="/news" className="games-condensed uppercase tracking-[0.08em] text-[12px] font-semibold px-1.5 text-[var(--text-secondary)]">News</a>
+          <a href="/news" className="games-condensed uppercase tracking-[0.08em] text-[12px] font-semibold px-2 shrink-0 whitespace-nowrap text-[var(--text-secondary)]">News</a>
         </div>
       </div>
     </header>
@@ -202,7 +204,7 @@ export default function GamesApp() {
       ) : (
         <>
           {route.view === 'home' && <GamesHero />}
-          {route.view !== 'hub' && route.view !== 'athlete' && route.view !== 'cards' && route.view !== 'intel' && <YearRibbon />}
+          {route.view !== 'hub' && route.view !== 'athlete' && route.view !== 'cards' && route.view !== 'intel' && route.view !== 'analysis' && <YearRibbon />}
           <main className="max-w-6xl mx-auto px-4 pb-8">
             <Suspense fallback={<ViewLoading />}>
               <ViewErrorBoundary name={route.view} key={route.view === 'year' ? `year-${route.year}` : route.view}>
@@ -211,6 +213,7 @@ export default function GamesApp() {
                 {route.view === 'intel' && <IntelView />}
                 {route.view === 'athlete' && <AthleteProfile key={route.slug} />}
                 {route.view === 'cards' && <CardStudio />}
+                {route.view === 'analysis' && <AnalysisView key={route.slug ?? 'index'} />}
                 {route.view === 'year' && <YearView key={route.year} />}
                 {route.view === 'evolution' && <EvolutionView />}
                 {route.view === 'movements' && <MovementsView />}

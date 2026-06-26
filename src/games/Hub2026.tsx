@@ -116,6 +116,22 @@ export default function Hub2026() {
         </div>
       )}
 
+      {/* THE BREAKDOWN + INTELLIGENCE promo (surface the analytics features) */}
+      <section className="mb-8 grid sm:grid-cols-2 gap-3">
+        <button onClick={() => navigate({ view: 'analysis', year: 2026 })}
+          className="cap-card p-4 text-left hover:border-[#91C640]/40 transition-colors">
+          <div className="games-condensed text-[10.5px] uppercase tracking-[0.16em] text-[#91C640] mb-1">New · The Breakdown</div>
+          <div className="games-display text-xl text-[var(--text-primary)] leading-tight mb-1">Data-grounded analysis</div>
+          <p className="text-[12.5px] text-[var(--text-secondary)] leading-relaxed">Who has the engine to win San Jose. What swimming and cycling change. Every read built from the numbers. <span className="text-[#91C640]">Read &rarr;</span></p>
+        </button>
+        <button onClick={() => navigate({ view: 'intel', year: 2026 })}
+          className="cap-card p-4 text-left hover:border-[#91C640]/40 transition-colors">
+          <div className="games-condensed text-[10.5px] uppercase tracking-[0.16em] text-[#91C640] mb-1">Athlete Intelligence</div>
+          <div className="games-display text-xl text-[var(--text-primary)] leading-tight mb-1">The projected leaderboard</div>
+          <p className="text-[12.5px] text-[var(--text-secondary)] leading-relaxed">Every athlete's skills, energy systems and projected finish, plus a what-if workout simulator. <span className="text-[#91C640]">Explore &rarr;</span></p>
+        </button>
+      </section>
+
       {/* ROSTER */}
       <section id="roster" className="games-anchor mb-10">
         <div className="flex items-end justify-between gap-3 mb-4">

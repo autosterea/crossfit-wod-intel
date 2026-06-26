@@ -1,0 +1,268 @@
+[
+  {
+    "slug": "who-has-the-engine-to-win-san-jose",
+    "title": "Who Actually Has the Engine to Win San Jose?",
+    "dek": "The aerobic engines most likely to hold up across 20 events and 4 days.",
+    "category": "Analysis",
+    "date": "2026-06-26",
+    "author": "Ravikant Dewangan",
+    "readMin": 4,
+    "summary": "The 2026 CrossFit Games qualifiers with the strongest aerobic engine, ranked by oxidative, monostructural and sustained-output performance percentiles from official competition results.",
+    "blocks": [
+      {
+        "type": "p",
+        "text": "San Jose is 20 scored events over 4 days, July 24-26. That format does not reward one big lift or one fast sprint. It rewards the athlete whose output holds up on day four the same way it did on day one. So before we argue about who wins, ask a narrower question: who actually has the engine to survive it? The numbers below answer that, using only aerobic-system, monostructural, and sustained-output performance profiles."
+      },
+      {
+        "type": "h2",
+        "text": "The Men: Two Names Tied at the Top"
+      },
+      {
+        "type": "p",
+        "text": "Justin Medeiros and Roman Khrennikov share the highest oxidative score in the men's field at **79.3**. They get there differently. Khrennikov pairs that with the best monostructural mark of any man here at 80.7 and a sustained-output score of 78.5, the engine of a two-time Games runner-up who grinds rather than fades. Medeiros sits a hair behind on the machine work (77.8) but his profile is the most balanced of the group, with capacity at 78.9 and a Games title already on the record."
+      },
+      {
+        "type": "ranked",
+        "title": "Men's engine profile (placement percentiles)",
+        "rows": [
+          {
+            "name": "Roman Khrennikov",
+            "value": "79.3 oxidative",
+            "note": "Top mono in the field (80.7); engine 78.5. Proj. rank 15, best Games 2nd."
+          },
+          {
+            "name": "Justin Medeiros",
+            "value": "79.3 oxidative",
+            "note": "Most balanced: engine 77.4, capacity 78.9. Proj. rank 7, former champion."
+          },
+          {
+            "name": "Ricky Garard",
+            "value": "75.0 oxidative",
+            "note": "Engine 75.3, mono 76.7. Proj. rank 11, best Games 2nd."
+          },
+          {
+            "name": "Patrick Vellner",
+            "value": "74.6 oxidative",
+            "note": "Strong aerobic (74.6) but engine drops to 65.5. Proj. rank 21."
+          },
+          {
+            "name": "James Sprague",
+            "value": "71.5 oxidative",
+            "note": "Engine 73.6 outruns capacity (70.2). Proj. rank 4, the top engine-to-projection gap."
+          },
+          {
+            "name": "Dallin Pepper",
+            "value": "71.0 oxidative",
+            "note": "Engine 68.0, mono 69.7. Proj. rank 5, best Games 2nd."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "text": "The interesting case is James Sprague. His oxidative number (71.5) is fifth among these men, but his projected rank of 4 is the best in the group. His engine score of 73.6 actually outruns his overall capacity of 70.2, which tells you the aerobic side is carrying him further than his average event finish suggests. Khrennikov is the inverse: the best engine among the men attached to a projected rank of 15, a reminder that a profile is not a placement. Patrick Vellner is the one to flag with caution. The aerobic read is strong at 74.6, but his sustained-output score sags to 65.5, the lowest of the six, the kind of split that gets found in a 20-event grind."
+      },
+      {
+        "type": "h2",
+        "text": "The Women: The Champion Type Versus the Top Seed"
+      },
+      {
+        "type": "p",
+        "text": "On the women's side the oxidative leader is Haley Adams at **76.0**, and she does not stop there. Her sustained-output score of 81.9 is the highest engine number in either division, paired with a 79.3 on the machines. A four-time Games athlete, she profiles as the kind of competitor a long format favors. What stands out is the gap: Adams projects 13th overall, yet no one in this group has a bigger engine. The format she is walking into is the one that should narrow that gap."
+      },
+      {
+        "type": "ranked",
+        "title": "Women's engine profile (placement percentiles)",
+        "rows": [
+          {
+            "name": "Haley Adams",
+            "value": "76.0 oxidative",
+            "note": "Field-best engine (81.9), mono 79.3. Proj. rank 13, best Games 4th."
+          },
+          {
+            "name": "Lucy Campbell",
+            "value": "74.5 oxidative",
+            "note": "Engine 80.4; proj. rank 2, the top seed here."
+          },
+          {
+            "name": "Danielle Brandon",
+            "value": "73.8 oxidative",
+            "note": "Mono 74.6 but engine drops to 67.2. Proj. rank 4, best Games 4th."
+          },
+          {
+            "name": "Emma Lawson",
+            "value": "73.7 oxidative",
+            "note": "Even profile: engine 74.9, mono 75.9. Proj. rank 9."
+          },
+          {
+            "name": "Mirjam von Rohr",
+            "value": "71.3 oxidative",
+            "note": "Engine 81.7 against a 71.3 aerobic read. Proj. rank 1, best Games 7th."
+          }
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Lucy Campbell carries the highest projected rank in this group at 2, and her engine backs it: 80.4 on sustained output, second only to Adams. The standout split belongs to Mirjam von Rohr. Her oxidative score is the lowest of the five women at 71.3, but her engine reads 81.7, near the top of the field, and she projects first overall. That is a profile built on holding output rather than topping the aerobic ladder. Worth a note on Danielle Brandon: solid machine work at 74.6, but her engine of 67.2 is the lowest among these women, the same fade-risk pattern we flagged on the men's side."
+      },
+      {
+        "type": "h2",
+        "text": "What the Engine Tells You About San Jose"
+      },
+      {
+        "type": "list",
+        "items": [
+          "The aerobic leaders, Medeiros and Khrennikov for the men, Adams for the women, depend least on a single good day.",
+          "Two athletes have engines that outrank their projected finish: Sprague (engine 73.6, proj. rank 4) and von Rohr (engine 81.7, proj. rank 1). In a 20-event format, that sustained output tends to show up late, not early.",
+          "The fade risk lives in the engine column, not the oxidative one: Vellner (65.5) and Brandon (67.2) read well aerobically but lowest on sustained output among their peers."
+        ]
+      },
+      {
+        "type": "callout",
+        "title": "How to read these numbers",
+        "text": "Every figure here is a placement percentile, the percent of a 60-athlete field beaten, computed from official 2026 Open and Quarterfinals results plus all prior CrossFit Games. Oxidative is an aerobic-system performance score, mono is the monostructural machine domain, and engine is sustained output. These are competition-derived performance profiles, not lab measurements, and projected ranks are profiles, not predictions."
+      }
+    ],
+    "sources": [
+      {
+        "label": "Persistence Athletics - Athlete Intelligence model (the source of every number)",
+        "url": "https://wod.persistenceathletics.com/games/2026/intel"
+      }
+    ],
+    "tracesTo": "public/projection-2026.json (oxidative, modal.engine, modal.mono, capacity, seasonRank) - derived from official 2026 Open + Quarterfinals + prior Games."
+  },
+  {
+    "slug": "swimming-and-cycling-are-back-whose-profile-wins",
+    "title": "Swimming and Cycling Are Back. Whose Profile Wins?",
+    "dek": "Two monostructural events return. The model says who that helps.",
+    "category": "Analysis",
+    "date": "2026-06-26",
+    "author": "Ravikant Dewangan",
+    "readMin": 3,
+    "summary": "Swimming and cycling return to the 2026 CrossFit Games. A profile-fit read of which qualifiers the monostructural and engine demands reward, built from the Persistence Athletics model.",
+    "blocks": [
+      {
+        "type": "p",
+        "text": "CrossFit confirmed it this offseason: swimming is back at the 2026 Games (reported by The Barbell Spin), and cycling returns too (per CrossFit Games). The format is 20 scored events across four days in San Jose, July 24 to 26. Both tests pull on the same two places: the monostructural domain (cardio and machines) and the engine, sustained output over time. So which profiles get rewarded, and which suddenly have a problem to solve?"
+      },
+      {
+        "type": "p",
+        "text": "One honest caveat first. **There is no swim event in this data**, and nobody here has a measured swim split. What we have are placement percentiles from the 2026 Open, Quarterfinals, and every prior Games. Treat the swim read as a proxy: a strong monostructural and engine score says an athlete moves efficiently and holds output when the clock gets long, which is most of what open-water work demands. The cycling read is firmer, because that is squarely machine and engine territory the data covers."
+      },
+      {
+        "type": "h2",
+        "text": "Men: whose profile fits"
+      },
+      {
+        "type": "p",
+        "text": "At the top of the men's board, Roman Khrennikov pairs an 80.7 monostructural percentile with a 78.5 engine for a 79.6 fit, a heavy-engine build that does not flinch at long cardio. But keep fit and overall projection separate: Khrennikov fits best while projecting 15th, while Jeffrey Adler sits fifth here yet carries the strongest projected finish at second."
+      },
+      {
+        "type": "ranked",
+        "title": "Men's best swim-bike profile fit",
+        "rows": [
+          {
+            "name": "Roman Khrennikov",
+            "value": "79.6 fit",
+            "note": "80.7 mono, 78.5 engine; proj 15th. Heaviest mono read here."
+          },
+          {
+            "name": "Justin Medeiros",
+            "value": "77.6 fit",
+            "note": "77.8 mono, 77.4 engine; proj 7th. Balanced."
+          },
+          {
+            "name": "Ricky Garard",
+            "value": "76.0 fit",
+            "note": "76.7 mono, 75.3 engine; proj 11th."
+          },
+          {
+            "name": "James Sprague",
+            "value": "73.6 fit",
+            "note": "73.5 mono, 73.6 engine; proj 4th. Even split."
+          },
+          {
+            "name": "Jeffrey Adler",
+            "value": "72.7 fit",
+            "note": "71.7 mono, 73.6 engine; proj 2nd. Best projection here."
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Women: whose profile fits"
+      },
+      {
+        "type": "p",
+        "text": "On the women's side, the cleanest fit belongs to Haley Adams at 80.6, the highest in either division, on a 79.3 monostructural and a field-leading 81.9 engine. The rest run engine-driven: Lucy Campbell and Mirjam von Rohr both clear 80 on engine while their monostructural numbers sit lower, holding output even where raw machine speed is not the headline. Same split, von Rohr projects first overall despite ranking third on fit."
+      },
+      {
+        "type": "ranked",
+        "title": "Women's best swim-bike profile fit",
+        "rows": [
+          {
+            "name": "Haley Adams",
+            "value": "80.6 fit",
+            "note": "79.3 mono, 81.9 engine; proj 13th. Top fit and engine."
+          },
+          {
+            "name": "Lucy Campbell",
+            "value": "76.5 fit",
+            "note": "72.6 mono, 80.4 engine; proj 2nd. Engine carries it."
+          },
+          {
+            "name": "Mirjam von Rohr",
+            "value": "75.4 fit",
+            "note": "69.0 mono, 81.7 engine; proj 1st. Best projection overall."
+          },
+          {
+            "name": "Emma Lawson",
+            "value": "75.4 fit",
+            "note": "75.9 mono, 74.9 engine; proj 9th. More mono-leaning."
+          },
+          {
+            "name": "Aimee Cringle",
+            "value": "74.4 fit",
+            "note": "75.0 mono, 73.7 engine; proj 7th. Even across both."
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Who feels the pressure"
+      },
+      {
+        "type": "p",
+        "text": "The flip side is a matter of principle, not a name to mock. Added long cardio hits the load, strength, and skill-leaning profiles hardest, whose edge lives in a heavy barbell or a high-skill gymnastics piece rather than sustained output. That is a specialization, not a flaw. But a swim-bike menu narrows the room a specialist has to bank points, so the cardio days are where offseason work goes."
+      },
+      {
+        "type": "list",
+        "items": [
+          "Reward: balanced builds high in mono and engine, like Khrennikov (79.6) and Adams (80.6).",
+          "Engine-first works too: von Rohr and Campbell clear 80 on engine despite lower mono.",
+          "Pressure: load, strength, and skill profiles have less room to bank points on cardio days.",
+          "Reminder: fit ranks the swim-bike days, not the whole event; Adler and von Rohr project best overall."
+        ]
+      },
+      {
+        "type": "callout",
+        "title": "Methodology",
+        "text": "Every number is a placement percentile, the percent of the 60-athlete field an athlete has beaten, computed from official 2026 Open and Quarterfinals results plus all prior CrossFit Games. Monostructural is the cardio and machine domain; engine is sustained output; fit is the swim-bike read built from those two. These are competition-derived performance profiles, not lab measurements. Critically, there is no swim event in the data, so the swim portion is a profile-fit proxy via monostructural and engine performance, not measured swim ability."
+      }
+    ],
+    "sources": [
+      {
+        "label": "Swimming to Return to 2026 CrossFit Games (The Barbell Spin)",
+        "url": "https://thebarbellspin.com/crossfit-games/swimming-to-return-to-2026-crossfit-games/"
+      },
+      {
+        "label": "Cycling is Back for the 2026 CrossFit Games (CrossFit Games)",
+        "url": "https://www.youtube.com/shorts/DJd0kta9vz0"
+      },
+      {
+        "label": "Persistence Athletics - Athlete Intelligence model",
+        "url": "https://wod.persistenceathletics.com/games/2026/intel"
+      }
+    ],
+    "tracesTo": "public/projection-2026.json (modal.mono, modal.engine -> fit). Event returns sourced from The Barbell Spin (swimming) and CrossFit Games (cycling). Swim is a profile-fit proxy: no swim event exists in the data."
+  }
+]

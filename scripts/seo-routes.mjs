@@ -339,5 +339,42 @@ export function allRoutes() {
     })
   }
 
+  // The Breakdown: analysis index + per-article pages (grounded in the model).
+  routes.push({
+    path: '/games/analysis',
+    title: 'The Breakdown: 2026 CrossFit Games Analysis | Persistence Athletics',
+    description: 'Data-grounded analysis of the 2026 CrossFit Games. Every read built from official competition results and the Persistence Athletics model.',
+    ogType: 'website',
+    image: OG_GAMES,
+    priority: 0.7,
+    changefreq: 'weekly',
+    jsonLd: graph({ '@type': 'Blog', name: 'The Breakdown', url: `${SITE}/games/analysis`, isPartOf: { '@id': `${SITE}/#website` } }),
+  })
+  try {
+    const posts = readJson('../src/data/games/analysis-posts.json')
+    for (const post of posts) {
+      if (!post.slug || !post.title) continue
+      routes.push({
+        path: `/games/analysis/${post.slug}`,
+        title: clean(`${post.title} | The Breakdown`),
+        description: clip(post.summary || post.dek || '', 155),
+        ogType: 'article',
+        image: OG_GAMES,
+        priority: 0.6,
+        changefreq: 'monthly',
+        jsonLd: graph({
+          '@type': 'Article',
+          headline: post.title,
+          url: `${SITE}/games/analysis/${post.slug}`,
+          datePublished: post.date,
+          author: { '@type': 'Person', name: post.author || 'Ravikant Dewangan' },
+          publisher: { '@id': `${SITE}/#org` },
+          description: post.summary || post.dek || '',
+          isPartOf: { '@type': 'Blog', name: 'The Breakdown', url: `${SITE}/games/analysis` },
+        }),
+      })
+    }
+  } catch { /* posts optional */ }
+
   return routes
 }
