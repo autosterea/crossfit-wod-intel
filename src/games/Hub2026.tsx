@@ -116,6 +116,16 @@ export default function Hub2026() {
         </div>
       )}
 
+      {/* THE 20 EVENTS tracker (timely hook as reveals roll out) */}
+      <button onClick={() => navigate({ view: 'events', year: 2026 })}
+        className="w-full mb-3 rounded-xl px-4 py-3.5 text-left flex items-center justify-between gap-3 transition-colors"
+        style={{ background: 'rgba(145,198,64,0.1)', border: '1px solid rgba(145,198,64,0.3)' }}>
+        <div className="min-w-0">
+          <div className="games-condensed text-[10.5px] uppercase tracking-[0.16em] text-[#91C640] mb-0.5">The 20 Events &middot; tracker</div>
+          <div className="text-[13px] text-[var(--text-secondary)] leading-snug">20 scored events across 4 days, the most in Games history. Swimming and cycling are back. Follow every reveal as it drops. <span className="text-[#91C640] whitespace-nowrap">See what we know &rarr;</span></div>
+        </div>
+      </button>
+
       {/* THE BREAKDOWN + INTELLIGENCE promo (surface the analytics features) */}
       <section className="mb-8 grid sm:grid-cols-2 gap-3">
         <button onClick={() => navigate({ view: 'analysis', year: 2026 })}

@@ -1,5 +1,93 @@
 [
   {
+    "slug": "what-dave-castro-told-us-about-the-2026-games",
+    "title": "What Dave Castro Has Already Told Us About the 2026 Games",
+    "dek": "The hopper is back for a live Friday-night draw, swimming moves to a pool, and the Ranch is lurking. A sourced rundown of every reveal and tease.",
+    "category": "Interview Notes",
+    "date": "2026-06-27",
+    "author": "Ravikant Dewangan",
+    "readMin": 4,
+    "summary": "A sourced rundown of what Dave Castro has revealed and teased about the 2026 CrossFit Games programming: the returning hopper, a pool swim, cycling, the Rogue Pig and Snail, and the Ranch.",
+    "blocks": [
+      {
+        "type": "p",
+        "text": "Dave Castro tells you about the Games for months before they start, in teasers, ranch videos and offhand comments. The trick is separating what is **confirmed** from what is a hint, because he plants misdirection on purpose. Here is what we actually know about the 2026 programming, with the source on every line."
+      },
+      {
+        "type": "h2",
+        "text": "The headline: the original hopper returns"
+      },
+      {
+        "type": "p",
+        "text": "Castro announced that the original Games hopper, the old peanut roaster used to pick the very first workout at the Ranch in 2007, is back. A workout gets **drawn live from it on the morning of Friday, July 24** and tested on the individuals under the lights at SAP Center that night. Athletes reacted fast: Taylor Self called it sick, and Jayson Hopper wrote, \"let me pull from it, its only right.\""
+      },
+      {
+        "type": "h2",
+        "text": "Confirmed"
+      },
+      {
+        "type": "list",
+        "items": [
+          "**Swimming is back, in a pool.** Not open water. Presented by TYR, most likely at the Morgan Hill Outdoor Sport Center, the 2020 Games swim venue.",
+          "**Cycling returns** as part of the individual off-site opening, in the Games tradition of a Ride bike test. Distance and bike not yet announced.",
+          "**The competition is four days for individuals: Wednesday July 22 through Sunday July 26.** It opens at off-site Bay Area locations on the 22nd, livestreamed but not open to the public, before three arena days at SAP Center.",
+          "**The Rogue Pig and Snail return.** The Pig is a heavy rubber-encased block; the Snail is shaped like a hay bale but partly filled with sand that shifts as it rolls.",
+          "**20 scored events, the most in Games history**, on the Games 20th anniversary."
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Teased (read with caution)"
+      },
+      {
+        "type": "list",
+        "items": [
+          "**Big Bob, on the street.** Walking SAP Center, Castro floated a team drag race \"sprinting Big Bob down Barack Obama\" Boulevard, calling it epic. A hint, not a confirmation.",
+          "**An outdoor run on closed roads.** He measured a turnaround about 200 yards down Barack Obama Boulevard with a trundle wheel, hinting at a roughly 400-yard looped street course.",
+          "**Extra days at the Ranch.** Castro said three SAP Center days does not mean a three-day Games: there \"could be additional days that are not available for spectators to watch,\" read widely as non-spectator competition at the Aromas ranch.",
+          "**A possibly-new movement.** Asked if 2026 brings a new movement, he said he does not believe truly new movements exist, but on a previously-unprogrammed one answered \"Possibly.\"",
+          "**A programming handoff.** On a CF Network show he said he is considering handing event programming to someone else this year, without naming who."
+        ]
+      },
+      {
+        "type": "p",
+        "text": "The throughline is the Ranch. Two Behind the Scenes videos show Castro testing 2026 events with athlete Rafael Sancen at Aromas in the weeks before the Games, so whatever lands in San Jose is being prototyped on the same dirt where the hopper was first drawn in 2007."
+      },
+      {
+        "type": "callout",
+        "title": "How to read this",
+        "text": "Every item here is attributed to a real source linked below. Confirmed means CrossFit has officially stated it; teased means Castro hinted at it and it may be misdirection. Quotes are reproduced from the cited coverage, not from a transcript. Treat the teased items as possibilities, not programming."
+      }
+    ],
+    "sources": [
+      {
+        "label": "CF Network News - the returning hopper + programming handoff",
+        "url": "https://cfnetworknews.com/news"
+      },
+      {
+        "label": "Swimming to Return to 2026 CrossFit Games (The Barbell Spin)",
+        "url": "https://thebarbellspin.com/crossfit-games/swimming-to-return-to-2026-crossfit-games/"
+      },
+      {
+        "label": "2026 Games to Kick Off July 22 with Multiple Off-Sites (CrossFit Games)",
+        "url": "https://games.crossfit.com/article/2026-crossfit-games-to-kick-off-on-july-22-with-multiple-off-sites"
+      },
+      {
+        "label": "Is Dave Castro Bringing Back the Big Bob? (The Barbell Spin)",
+        "url": "https://thebarbellspin.com/crossfit-games/is-dave-castro-bringing-back-the-big-bob-to-the-2026-crossfit-games/"
+      },
+      {
+        "label": "Castro Hints 2026 Games Could Return to the Ranch (The Barbell Spin)",
+        "url": "https://thebarbellspin.com/crossfit-games/dave-castro-hints-that-2026-crossfit-games-could-return-to-the-ranch/"
+      },
+      {
+        "label": "Behind the Scenes: Programming the 2026 Games (CrossFit Games)",
+        "url": "https://games.crossfit.com/video/behind-the-scenes-programming-the-2026-crossfit-games-episode-1"
+      }
+    ],
+    "tracesTo": "Cited news coverage of Dave Castro 2026 reveals (CF Network News, The Barbell Spin, CrossFit Games official). Researched + adversarially verified against each source URL. No transcript scraping; quotes reproduced from cited coverage."
+  },
+  {
     "slug": "who-has-the-engine-to-win-san-jose",
     "title": "Who Actually Has the Engine to Win San Jose?",
     "dek": "The aerobic engines most likely to hold up across 20 events and 4 days.",

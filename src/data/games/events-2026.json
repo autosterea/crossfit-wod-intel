@@ -1,0 +1,167 @@
+{
+  "meta": {
+    "total": 20,
+    "days": 4,
+    "venue": "SAP Center",
+    "city": "San Jose, California",
+    "dates": "July 24-26, 2026",
+    "note": "The 2026 CrossFit Games will score 20 events across 4 days (July 22-26), the most in Games history. Individuals open at off-site Bay Area locations on Wednesday, July 22 before three arena days at SAP Center. CrossFit reveals the official numbered events closer to and during the competition. This tracker follows every confirmed, revealed and teased element as it drops, with the source.",
+    "updated": "2026-06-27"
+  },
+  "items": [
+    {
+      "name": "Swimming held in a pool (not ocean), TYR-presented, at Morgan Hill",
+      "status": "confirmed",
+      "kind": "event",
+      "summary": "CrossFit confirmed the returning swim event will be held in a pool rather than open water, presented by TYR Sport as Official Swim Partner, most likely Wednesday at the Morgan Hill Outdoor Sport Center (the 2020 Games swim venue). This is a specific upgrade to the bare 'swimming returns' fact.",
+      "source": {
+        "label": "The Barbell Spin",
+        "url": "https://thebarbellspin.com/crossfit-games/swimming-to-return-to-2026-crossfit-games/"
+      },
+      "date": "2026-06-19"
+    },
+    {
+      "name": "Individual competition opens with off-site events July 22 across the Bay Area",
+      "status": "confirmed",
+      "kind": "format",
+      "summary": "CrossFit confirmed individual athletes begin on Wednesday, July 22 at multiple off-site Bay Area locations (not open to the general public but livestreamed; select sites open to Rx+ Experience holders), making it a four-day individual competition ahead of the SAP Center arena days.",
+      "source": {
+        "label": "CrossFit Games",
+        "url": "https://games.crossfit.com/article/2026-crossfit-games-to-kick-off-on-july-22-with-multiple-off-sites"
+      },
+      "date": "2026-06"
+    },
+    {
+      "name": "Cycling as an individual off-site opener ('Ride')",
+      "status": "revealed",
+      "kind": "event",
+      "summary": "CrossFit indicated cycling returns as part of the individual off-site programming, framed around the Games' history of opening 'Ride' bike tests. Exact 2026 distance/bike were not announced; only the return of road cycling for individuals is stated.",
+      "source": {
+        "label": "CrossFit Games",
+        "url": "https://games.crossfit.com/article/individual-athletes-kick-games-ride"
+      },
+      "date": "2026-06"
+    },
+    {
+      "name": "Big Bob sled drag race",
+      "status": "teased",
+      "kind": "equipment",
+      "summary": "In the 'Making of the 2026 Games' SAP Center walkthrough, Dave Castro floated bringing back the Big Bob sled, musing about a team drag race 'sprinting Big Bob down Barack Obama' Boulevard, calling it 'epic.' Explicitly a hint, possibly misdirection.",
+      "source": {
+        "label": "The Barbell Spin",
+        "url": "https://thebarbellspin.com/crossfit-games/is-dave-castro-bringing-back-the-big-bob-to-the-2026-crossfit-games/"
+      },
+      "date": "2026-05-15"
+    },
+    {
+      "name": "Outdoor running on Barack Obama Boulevard / ~400-yard loop",
+      "status": "teased",
+      "kind": "movement",
+      "summary": "During the SAP walkthrough Castro used a trundle wheel to measure from the arena floor out onto the street and noted a turnaround ~200 yards down Barack Obama Boulevard, hinting at an outdoor run / roughly 400-yard looped course using closed public roads (Sharks Way / Barack Obama Blvd).",
+      "source": {
+        "label": "The Barbell Spin",
+        "url": "https://thebarbellspin.com/crossfit-games/is-dave-castro-bringing-back-the-big-bob-to-the-2026-crossfit-games/"
+      },
+      "date": "2026-05-15"
+    },
+    {
+      "name": "Extra competition day at The Ranch (Aromas), non-spectator",
+      "status": "teased",
+      "kind": "format",
+      "summary": "Castro hinted the 2026 Games may run more than the three SAP Center days, with additional non-spectator competition potentially at The Ranch in Aromas, CA: 'The Games might be three days... they also might be more than three days,' with extra days not available for spectators.",
+      "source": {
+        "label": "The Barbell Spin",
+        "url": "https://thebarbellspin.com/crossfit-games/dave-castro-hints-that-2026-crossfit-games-could-return-to-the-ranch/"
+      },
+      "date": "2025-10-27"
+    },
+    {
+      "name": "Possible previously-unprogrammed movement in 2026 ('Possibly')",
+      "status": "teased",
+      "kind": "movement",
+      "summary": "Asked whether the 2026 Open/Games would feature a new movement, Castro said he doesn't believe truly 'new' movements exist but, on whether a previously-unprogrammed movement could appear, answered 'Possibly' (and joked cornrows would not return). A deliberate non-commitment.",
+      "source": {
+        "label": "The Barbell Spin",
+        "url": "https://thebarbellspin.com/crossfit-games/will-the-2026-crossfit-open-have-a-new-movement-dave-castro-answers/"
+      },
+      "date": "2026-01-21"
+    },
+    {
+      "name": "Behind the Scenes: event testing at The Ranch with Rafael Sancen",
+      "status": "revealed",
+      "kind": "format",
+      "summary": "CrossFit's 'Behind the Scenes: Programming the 2026 CrossFit Games' video series shows Castro testing candidate 2026 events at The Ranch with athlete Rafael Sancen in the weeks before the Games, confirming active event prototyping though specific movements aren't itemized.",
+      "source": {
+        "label": "CrossFit Games",
+        "url": "https://games.crossfit.com/video/behind-the-scenes-programming-the-2026-crossfit-games-episode-1"
+      },
+      "date": "2026-06"
+    },
+    {
+      "name": "Rogue Pig and Snail descriptions",
+      "status": "confirmed",
+      "kind": "equipment",
+      "summary": "The returning implements are described by CrossFit/Wikipedia as the 'Pig' (a heavy block encased in rubber) and the 'Snail' (an object shaped like a bale of hay but partly filled with sand that shifts as it's rolled), giving the concrete form of the confirmed 2026 equipment.",
+      "source": {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/CrossFit_Games"
+      },
+      "date": "2026-06"
+    },
+    {
+      "name": "Individuals compete across 4 days: July 22 (Wed) through July 26 (Sun)",
+      "status": "confirmed",
+      "kind": "format",
+      "summary": "The Individual division begins competition Wednesday, July 22, and finishes Sunday, July 26 — a four-day competition window. Teams begin a day later, Thursday, July 23, and also finish July 26.",
+      "source": {
+        "label": "CrossFit Games (official) — 2026 Games to Kick Off on July 22 with Multiple Off-Sites",
+        "url": "https://games.crossfit.com/article/2026-crossfit-games-to-kick-off-on-july-22-with-multiple-off-sites"
+      },
+      "date": "2026-06-27"
+    },
+    {
+      "name": "Individual Games open at multiple Bay Area off-site locations (July 22)",
+      "status": "confirmed",
+      "kind": "format",
+      "summary": "The first Individual events on July 22 take place at multiple off-site locations across the Bay Area, not at SAP Center. These off-sites are not open to the general public but are livestreamed; select off-sites are open to Rx+ Experience holders.",
+      "source": {
+        "label": "CrossFit Games (official) — 2026 Games to Kick Off on July 22 with Multiple Off-Sites",
+        "url": "https://games.crossfit.com/article/2026-crossfit-games-to-kick-off-on-july-22-with-multiple-off-sites"
+      },
+      "date": "2026-06-27"
+    },
+    {
+      "name": "Second San Jose venue: McEnery Convention Center for Masters/Teenage/Adaptive",
+      "status": "confirmed",
+      "kind": "format",
+      "summary": "Beyond SAP Center, the San Jose McEnery Convention Center serves as a secondary 2026 Games venue, hosting the Masters, Teenage, and Adaptive divisions during the same competition window.",
+      "source": {
+        "label": "CrossFit Games (official) — Schedule: 2026 Games",
+        "url": "https://games.crossfit.com/finals/schedule"
+      },
+      "date": "2026-06-27"
+    },
+    {
+      "name": "Tickets cover only 3 days at SAP Center (July 24-26), not the full 4-day field schedule",
+      "status": "confirmed",
+      "kind": "format",
+      "summary": "SAP Center hosts events Friday, July 24 through Sunday, July 26. The Arena Ticket Package is a three-day ticket (July 24-26) granting a reserved seat for all events held inside SAP Center; the earlier off-site days are not part of the arena ticket.",
+      "source": {
+        "label": "CrossFit Games (official) — 2026 Games to Kick Off on July 22 with Multiple Off-Sites",
+        "url": "https://games.crossfit.com/article/2026-crossfit-games-to-kick-off-on-july-22-with-multiple-off-sites"
+      },
+      "date": "2026-06-27"
+    },
+    {
+      "name": "Arena Ticket Package sold via Sharks/SAP Center ticketing, on sale March 24, 2026",
+      "status": "confirmed",
+      "kind": "format",
+      "summary": "Tickets to the 2026 CrossFit Games arena events are purchased through the San Jose Sharks + SAP Center ticketing page (Ticketmaster), with single and multi-day options. The three-day Arena Ticket Package went on sale March 24, 2026.",
+      "source": {
+        "label": "CrossFit Games (official) — 2026 Games to Kick Off on July 22 with Multiple Off-Sites",
+        "url": "https://games.crossfit.com/article/2026-crossfit-games-to-kick-off-on-july-22-with-multiple-off-sites"
+      },
+      "date": "2026-06-27"
+    }
+  ]
+}

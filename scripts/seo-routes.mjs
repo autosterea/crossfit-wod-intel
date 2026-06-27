@@ -339,6 +339,18 @@ export function allRoutes() {
     })
   }
 
+  // The 2026 Events tracker.
+  routes.push({
+    path: '/games/2026/events',
+    title: 'The 20 Events: 2026 CrossFit Games Tracker | Persistence Athletics',
+    description: 'The 2026 CrossFit Games will score 20 events across 4 days. Track every confirmed, revealed and teased event, movement and piece of equipment as the programming drops.',
+    ogType: 'website',
+    image: OG_GAMES,
+    priority: 0.7,
+    changefreq: 'daily',
+    jsonLd: graph({ '@type': 'CollectionPage', name: 'The 20 Events - 2026 CrossFit Games', url: `${SITE}/games/2026/events`, isPartOf: { '@id': `${SITE}/#website` } }),
+  })
+
   // The Breakdown: analysis index + per-article pages (grounded in the model).
   routes.push({
     path: '/games/analysis',

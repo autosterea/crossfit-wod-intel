@@ -17,6 +17,7 @@ const AthleteProfile = lazy(() => import('./AthleteProfile'))
 const CardStudio = lazy(() => import('./CardStudio'))
 const IntelView = lazy(() => import('./IntelView'))
 const AnalysisView = lazy(() => import('./analysis/AnalysisView'))
+const EventsView = lazy(() => import('./events/EventsView'))
 
 class ViewErrorBoundary extends Component<{ children: ReactNode; name: string }, { error: Error | null }> {
   state = { error: null as Error | null }
@@ -204,7 +205,7 @@ export default function GamesApp() {
       ) : (
         <>
           {route.view === 'home' && <GamesHero />}
-          {route.view !== 'hub' && route.view !== 'athlete' && route.view !== 'cards' && route.view !== 'intel' && route.view !== 'analysis' && <YearRibbon />}
+          {route.view !== 'hub' && route.view !== 'athlete' && route.view !== 'cards' && route.view !== 'intel' && route.view !== 'analysis' && route.view !== 'events' && <YearRibbon />}
           <main className="max-w-6xl mx-auto px-4 pb-8">
             <Suspense fallback={<ViewLoading />}>
               <ViewErrorBoundary name={route.view} key={route.view === 'year' ? `year-${route.year}` : route.view}>
@@ -214,6 +215,7 @@ export default function GamesApp() {
                 {route.view === 'athlete' && <AthleteProfile key={route.slug} />}
                 {route.view === 'cards' && <CardStudio />}
                 {route.view === 'analysis' && <AnalysisView key={route.slug ?? 'index'} />}
+                {route.view === 'events' && <EventsView />}
                 {route.view === 'year' && <YearView key={route.year} />}
                 {route.view === 'evolution' && <EvolutionView />}
                 {route.view === 'movements' && <MovementsView />}
