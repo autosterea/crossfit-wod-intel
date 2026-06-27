@@ -166,10 +166,11 @@ export default function Hub2026() {
       {/* INTERVIEWS */}
       {interviewCount > 0 && (
         <section className="mb-10">
-          <div className="games-condensed text-[11px] uppercase tracking-[0.2em] text-[#91C640] mb-1">Latest</div>
-          <h2 className="games-display text-2xl sm:text-3xl text-[var(--text-primary)] mb-4">Athlete Interviews</h2>
+          <div className="games-condensed text-[11px] uppercase tracking-[0.2em] text-[#91C640] mb-1">Dave Castro · {interviewCount} so far</div>
+          <h2 className="games-display text-2xl sm:text-3xl text-[var(--text-primary)] mb-1">Athlete Interviews</h2>
+          <p className="text-[11px] text-[var(--text-muted)] mb-4">Every verified Dave Castro 2026 interview, added automatically as new ones drop.</p>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
-            {[...A2026.men, ...A2026.women].filter((a) => a.interviewUrl).slice(0, 12).map((a) => (
+            {[...A2026.men, ...A2026.women].filter((a) => a.interviewUrl).map((a) => (
               <button key={a.slug} onClick={() => navigate({ view: 'athlete', year: 2026, slug: a.slug })}
                 className="cap-card p-3 flex items-center gap-2 text-left">
                 <AthleteAvatar athlete={a} size={40} rounded="rounded-lg" />
