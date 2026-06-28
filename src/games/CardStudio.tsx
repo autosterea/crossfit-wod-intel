@@ -12,7 +12,7 @@ import type { GamesData, GamesAthlete2026 } from '../types-games'
 const G = rawGames as unknown as GamesData
 
 type Division = 'men' | 'women'
-type Template = 'spotlight' | 'cover' | 'h2h' | 'form' | 'news'
+type Template = 'spotlight' | 'cover' | 'h2h' | 'form' | 'news' | 'carousel'
 
 const TEMPLATES: { id: Template; label: string }[] = [
   { id: 'spotlight', label: 'Athlete Spotlight' },
@@ -20,6 +20,32 @@ const TEMPLATES: { id: Template; label: string }[] = [
   { id: 'h2h', label: 'Head to Head' },
   { id: 'form', label: 'Season Form Top 10' },
   { id: 'news', label: 'News / Announcement' },
+  { id: 'carousel', label: 'Carousel (multi-slide)' },
+]
+
+// Multi-slide IG carousels. Every fact is grounded in the sourced events tracker
+// and the cited Castro coverage (see /games/2026/events). cover -> points -> cta.
+type Slide =
+  | { type: 'cover'; kicker: string; headline: string; sub: string }
+  | { type: 'point'; num: number; kicker: string; headline: string; body: string; source: string }
+  | { type: 'cta'; headline: string; body: string }
+type Carousel = { id: string; label: string; caption: string; slides: Slide[] }
+const CAROUSELS: Carousel[] = [
+  {
+    id: 'castro-reveals',
+    label: 'What Castro has told us',
+    caption:
+      "🚨 EVERYTHING DAVE CASTRO HAS TOLD US ABOUT THE 2026 GAMES (so far).\n\nThe original hopper is BACK, drawn live July 24. Swimming returns in a pool. Cycling's back. The Pig and Snail return. And Big Bob might race down a San Jose street.\n\nSwipe through, then get the full sourced rundown (confirmed vs teased) at the link in bio. We track every reveal as it drops.\n\nClips/quotes via @davecastro6289, CF Network, The Barbell Spin.",
+    slides: [
+      { type: 'cover', kicker: 'The 2026 Games', headline: 'WHAT CASTRO\nHAS TOLD US', sub: 'Every reveal and tease about the 2026 CrossFit Games programming. Swipe right.' },
+      { type: 'point', num: 1, kicker: 'The Headline', headline: 'THE HOPPER\nRETURNS', body: 'The original 2007 peanut-roaster hopper is back. A workout gets drawn LIVE from it on the morning of Friday, July 24, then tested under the lights at SAP Center that night.', source: 'CF Network News' },
+      { type: 'point', num: 2, kicker: 'Confirmed', headline: 'SWIMMING,\nIN A POOL', body: 'Not open water. The swim returns presented by TYR, most likely at the Morgan Hill Outdoor Sport Center, the 2020 Games swim venue.', source: 'The Barbell Spin' },
+      { type: 'point', num: 3, kicker: 'Confirmed', headline: 'CYCLING\nIS BACK', body: 'Road cycling returns as part of the individual off-site opening on July 22, in the Games tradition of a Ride bike test.', source: 'CrossFit Games' },
+      { type: 'point', num: 4, kicker: 'Confirmed', headline: 'PIG & SNAIL\nRETURN', body: 'The Rogue odd-objects are back: the Pig, a heavy rubber-encased block, and the Snail, a hay-bale shape part-filled with sand that shifts as it rolls.', source: 'CrossFit Games' },
+      { type: 'point', num: 5, kicker: 'Teased - take with caution', headline: 'BIG BOB.\nTHE RANCH.', body: 'Castro floated a Big Bob drag race down Barack Obama Boulevard, and hinted at extra non-spectator competition days at the Aromas ranch. Hints, not confirmations.', source: 'The Barbell Spin' },
+      { type: 'cta', headline: 'FOLLOW EVERY\nREVEAL', body: 'A sourced tracker of all 20 events and everything Castro has said, updated as it drops. Confirmed vs teased, with the receipts.' },
+    ],
+  },
 ]
 
 // Curated, source-verified news cards. Every claim here is grounded in a real,
@@ -55,6 +81,36 @@ const NEWS: NewsItem[] = [
     bullets: ['Dave Castro and crew scouting the terrain', 'Movement combos hinted (some may be misdirection)', 'Castro: weighing handing off event programming'],
     takeaway: 'Full breakdowns and season analytics. Link in bio.',
     source: 'CrossFit Games / CF Network',
+  },
+  {
+    id: 'hopper-returns',
+    label: 'The hopper returns',
+    kicker: 'Games News',
+    headline: 'THE HOPPER\nIS BACK',
+    sub: 'The original 2007 hopper returns for a live Friday-night draw.',
+    bullets: ['The old peanut-roaster used at the first 2007 Games', 'A workout drawn LIVE from it on Friday, July 24', 'Tested that night under the lights at SAP Center'],
+    takeaway: 'Every reveal, tracked and sourced. Link in bio.',
+    source: 'CF Network News',
+  },
+  {
+    id: 'the-breakdown',
+    label: 'Promo: The Breakdown',
+    kicker: 'New on the site',
+    headline: 'THE\nBREAKDOWN',
+    sub: 'Data-grounded analysis of the 2026 Games. No takes without the numbers.',
+    bullets: ['Who actually has the engine to win San Jose', 'What swimming and cycling change, by profile', 'Every number traces to the model'],
+    takeaway: 'Read the first breakdowns. Link in bio.',
+    source: 'Persistence Athletics',
+  },
+  {
+    id: 'events-tracker',
+    label: 'Promo: 20 Events tracker',
+    kicker: 'New on the site',
+    headline: 'THE 20\nEVENTS',
+    sub: 'A live tracker of the 2026 Games programming as it gets revealed.',
+    bullets: ['20 scored events across 4 days, the most ever', 'Confirmed, revealed and teased, each with its source', 'Updated as every event drops'],
+    takeaway: 'Follow every reveal. Link in bio.',
+    source: 'Persistence Athletics',
   },
 ]
 
@@ -355,9 +411,61 @@ function NewsCard({ item }: { item: NewsItem }) {
   )
 }
 
+function SlideDots({ index, total }: { index: number; total: number }) {
+  return (
+    <div style={{ display: 'flex', justifyContent: 'center', gap: 10, padding: '0 56px' }}>
+      {Array.from({ length: total }).map((_, i) => (
+        <div key={i} style={{ width: i === index ? 34 : 12, height: 12, borderRadius: 999, background: i === index ? GREEN : 'rgba(244,246,242,0.22)' }} />
+      ))}
+    </div>
+  )
+}
+
+function CarouselSlide({ slide, index, total }: { slide: Slide; index: number; total: number }) {
+  return (
+    <div style={cardBg}>
+      <CardHeader />
+      {slide.type === 'cover' && (
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 56px' }}>
+          <div style={{ fontSize: 28, letterSpacing: 5, textTransform: 'uppercase', color: GREEN, fontWeight: 600 }}>{slide.kicker}</div>
+          <div style={{ fontFamily: "'Anton', sans-serif", fontSize: 120, textTransform: 'uppercase', lineHeight: 0.92, marginTop: 16, whiteSpace: 'pre-line' }}>{slide.headline}</div>
+          <div style={{ fontSize: 36, color: INK, marginTop: 26, lineHeight: 1.3, maxWidth: 880 }}>{slide.sub}</div>
+          <div style={{ marginTop: 40, fontSize: 30, color: GREEN, letterSpacing: 2, textTransform: 'uppercase', fontWeight: 600 }}>Swipe &rarr;</div>
+        </div>
+      )}
+      {slide.type === 'point' && (
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 56px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 22 }}>
+            <div style={{ width: 86, height: 86, borderRadius: 20, background: GREEN, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: "'Anton', sans-serif", fontSize: 50, color: '#0a0a0a' }}>{slide.num}</div>
+            <div style={{ fontSize: 27, letterSpacing: 3, textTransform: 'uppercase', color: slide.kicker.toLowerCase().includes('teased') ? '#f5b82e' : GREEN, fontWeight: 600 }}>{slide.kicker}</div>
+          </div>
+          <div style={{ fontFamily: "'Anton', sans-serif", fontSize: 104, textTransform: 'uppercase', lineHeight: 0.94, whiteSpace: 'pre-line' }}>{slide.headline}</div>
+          <div style={{ fontSize: 37, color: 'rgba(244,246,242,0.92)', marginTop: 28, lineHeight: 1.32, maxWidth: 920 }}>{slide.body}</div>
+          <div style={{ marginTop: 26, fontSize: 23, color: DIM, letterSpacing: 1 }}>Source: {slide.source}</div>
+        </div>
+      )}
+      {slide.type === 'cta' && (
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 56px' }}>
+          <div style={{ fontFamily: "'Anton', sans-serif", fontSize: 110, textTransform: 'uppercase', lineHeight: 0.94, whiteSpace: 'pre-line' }}>{slide.headline}</div>
+          <div style={{ fontSize: 37, color: INK, marginTop: 26, lineHeight: 1.32, maxWidth: 900 }}>{slide.body}</div>
+          <div style={{ marginTop: 38, background: 'rgba(145,198,64,0.12)', border: '1px solid rgba(145,198,64,0.4)', borderRadius: 18, padding: '26px 30px' }}>
+            <div style={{ fontSize: 33, color: GREEN, fontWeight: 600 }}>Link in bio &middot; {HANDLE}</div>
+            <div style={{ fontSize: 26, color: DIM, marginTop: 6 }}>{HUB_URL}/events</div>
+          </div>
+        </div>
+      )}
+      <div style={{ paddingBottom: 28 }}><SlideDots index={index} total={total} /></div>
+      <CardFooter />
+    </div>
+  )
+}
+
 // ---------- Captions ----------
 
-function captionFor(t: Template, a: GamesAthlete2026 | undefined, b: GamesAthlete2026 | undefined, division: Division, news?: NewsItem): string {
+function captionFor(t: Template, a: GamesAthlete2026 | undefined, b: GamesAthlete2026 | undefined, division: Division, news?: NewsItem, carousel?: Carousel): string {
+  if (t === 'carousel' && carousel) {
+    return `${carousel.caption}\n\n${HASHTAGS}`
+  }
   if (t === 'news' && news) {
     return `🚨 ${news.sub.toUpperCase()}\n\n${news.bullets.map((x) => `• ${x}`).join('\n')}\n\n${news.takeaway}\n\nSource: ${news.source}\n\n${HASHTAGS}`
   }
@@ -384,13 +492,17 @@ export default function CardStudio() {
   const [slugA, setSlugA] = useState(params.get('a') || roster[0].slug)
   const [slugB, setSlugB] = useState(params.get('b') || roster[1].slug)
   const [newsId, setNewsId] = useState(params.get('n') || NEWS[0].id)
+  const [carouselId, setCarouselId] = useState(params.get('c') || CAROUSELS[0].id)
+  const [slideIdx, setSlideIdx] = useState(Number(params.get('s') || 0))
   const [busy, setBusy] = useState(false)
   const cardRef = useRef<HTMLDivElement>(null)
 
   const a = useMemo(() => allAthletes2026.find((x) => x.slug === slugA) ?? roster[0], [slugA, roster])
   const b = useMemo(() => allAthletes2026.find((x) => x.slug === slugB) ?? roster[1], [slugB, roster])
   const newsItem = useMemo(() => NEWS.find((x) => x.id === newsId) ?? NEWS[0], [newsId])
-  const caption = captionFor(template, a, b, division, newsItem)
+  const carousel = useMemo(() => CAROUSELS.find((x) => x.id === carouselId) ?? CAROUSELS[0], [carouselId])
+  const slideClamped = Math.max(0, Math.min(slideIdx, carousel.slides.length - 1))
+  const caption = captionFor(template, a, b, division, newsItem, carousel)
 
   const download = async () => {
     if (!cardRef.current || busy) return
@@ -400,7 +512,7 @@ export default function CardStudio() {
       await toPng(cardRef.current, { width: 1080, height: 1350, pixelRatio: 1, cacheBust: true })
       const url = await toPng(cardRef.current, { width: 1080, height: 1350, pixelRatio: 1, cacheBust: true })
       const link = document.createElement('a')
-      link.download = template === 'spotlight' ? `${a.slug}-spotlight.png` : template === 'h2h' ? `${a.slug}-vs-${b.slug}.png` : template === 'news' ? `news-${newsItem.id}.png` : `${template}-${division}.png`
+      link.download = template === 'spotlight' ? `${a.slug}-spotlight.png` : template === 'h2h' ? `${a.slug}-vs-${b.slug}.png` : template === 'news' ? `news-${newsItem.id}.png` : template === 'carousel' ? `carousel-${carousel.id}-${String(slideClamped + 1).padStart(2, '0')}.png` : `${template}-${division}.png`
       link.href = url
       link.click()
     } finally {
@@ -445,6 +557,18 @@ export default function CardStudio() {
             {NEWS.map((x) => <option key={x.id} value={x.id}>{x.label}</option>)}
           </select>
         )}
+        {template === 'carousel' && (
+          <>
+            <select value={carouselId} onChange={(e) => { setCarouselId(e.target.value); setSlideIdx(0) }} className="bg-[var(--input-bg)] border border-[var(--input-border)] rounded-lg px-3 py-2 text-sm text-[var(--text-primary)]">
+              {CAROUSELS.map((x) => <option key={x.id} value={x.id}>{x.label}</option>)}
+            </select>
+            <div className="flex items-center gap-1">
+              <button onClick={() => setSlideIdx((s) => Math.max(0, s - 1))} className="games-condensed px-3 py-2 rounded-lg border border-[var(--panel-border)] text-[var(--text-secondary)]">&larr;</button>
+              <span className="games-condensed text-[13px] text-[var(--text-secondary)] w-16 text-center">{slideClamped + 1} / {carousel.slides.length}</span>
+              <button onClick={() => setSlideIdx((s) => Math.min(carousel.slides.length - 1, s + 1))} className="games-condensed px-3 py-2 rounded-lg border border-[var(--panel-border)] text-[var(--text-secondary)]">&rarr;</button>
+            </div>
+          </>
+        )}
         <button onClick={download} disabled={busy} data-testid="download-card"
           className="games-condensed uppercase tracking-[0.1em] font-semibold text-[13px] px-5 py-2 rounded-lg bg-[#019644] text-white hover:bg-[#01a94d] transition-colors disabled:opacity-50">
           {busy ? 'Rendering...' : 'Download PNG'}
@@ -461,6 +585,7 @@ export default function CardStudio() {
               {template === 'h2h' && <H2HCard a={a} b={b} />}
               {template === 'form' && <FormCard division={division} />}
               {template === 'news' && <NewsCard item={newsItem} />}
+              {template === 'carousel' && <CarouselSlide slide={carousel.slides[slideClamped]} index={slideClamped} total={carousel.slides.length} />}
             </div>
           </div>
         </div>
