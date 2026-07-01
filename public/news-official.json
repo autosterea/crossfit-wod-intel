@@ -1,157 +1,157 @@
 {
-  "updatedAt": "2026-06-13T22:47:29.951Z",
+  "updatedAt": "2026-07-01T11:17:50.191Z",
   "season": 2026,
-  "stage": "open",
-  "stageLabel": "2026 CrossFit Open",
-  "status": "final",
-  "eventsCompleted": 3,
-  "eventsTotal": 3,
-  "source": "https://c3po.crossfit.com/api/leaderboards/v2/competitions/open/2026/leaderboards?division=1&sort=0&page=1",
+  "stage": "games",
+  "stageLabel": "2026 CrossFit Games",
+  "status": "live",
+  "eventsCompleted": null,
+  "eventsTotal": null,
+  "source": "https://c3po.crossfit.com/api/leaderboards/v2/competitions/games/2026/leaderboards?division=1&sort=0&page=1",
   "sourceLabel": "Official CrossFit Games leaderboard (c3po.crossfit.com)",
   "publicUrl": "https://games.crossfit.com/leaderboard",
   "divisions": {
     "men": [
       {
-        "rank": 1,
+        "rank": 0,
+        "name": "Luis Cuellar",
+        "country": "Spain",
+        "countryCode": "ES",
+        "points": "0"
+      },
+      {
+        "rank": 0,
+        "name": "Calum Clements",
+        "country": "Spain",
+        "countryCode": "ES",
+        "points": "0"
+      },
+      {
+        "rank": 0,
+        "name": "Dylan Hamming",
+        "country": "United States",
+        "countryCode": "US",
+        "points": "0"
+      },
+      {
+        "rank": 0,
+        "name": "Guilherme Malheiros",
+        "country": "Brazil",
+        "countryCode": "BR",
+        "points": "0"
+      },
+      {
+        "rank": 0,
+        "name": "Patrick Vellner",
+        "country": "Canada",
+        "countryCode": "CA",
+        "points": "0"
+      },
+      {
+        "rank": 0,
+        "name": "Nick Mathew",
+        "country": "United States",
+        "countryCode": "US",
+        "points": "0"
+      },
+      {
+        "rank": 0,
+        "name": "Henrik Haapalainen",
+        "country": "Finland",
+        "countryCode": "FI",
+        "points": "0"
+      },
+      {
+        "rank": 0,
+        "name": "Quinn Robinson",
+        "country": "United States",
+        "countryCode": "US",
+        "points": "0"
+      },
+      {
+        "rank": 0,
         "name": "Colten Mertens",
         "country": "United States",
         "countryCode": "US",
-        "points": "9"
+        "points": "0"
       },
       {
-        "rank": 2,
-        "name": "Peter Ellis",
-        "country": "Australia",
-        "countryCode": "AU",
-        "points": "20"
-      },
-      {
-        "rank": 3,
-        "name": "Jeffrey Adler",
-        "country": "Canada",
-        "countryCode": "CA",
-        "points": "26"
-      },
-      {
-        "rank": 4,
-        "name": "Jonne Koski",
-        "country": "Finland",
-        "countryCode": "FI",
-        "points": "36"
-      },
-      {
-        "rank": 5,
-        "name": "Nika Maisuradze",
-        "country": "Georgia",
-        "countryCode": "GE",
-        "points": "37"
-      },
-      {
-        "rank": 6,
-        "name": "James Sprague",
-        "country": "United States",
-        "countryCode": "US",
-        "points": "40"
-      },
-      {
-        "rank": 7,
-        "name": "Harry Lightfoot",
-        "country": "United Kingdom",
-        "countryCode": "GB",
-        "points": "43"
-      },
-      {
-        "rank": 8,
-        "name": "Jay Crouch",
-        "country": "Australia",
-        "countryCode": "AU",
-        "points": "66"
-      },
-      {
-        "rank": 9,
-        "name": "Enrico Zenoni",
-        "country": "Italy",
-        "countryCode": "IT",
-        "points": "86"
-      },
-      {
-        "rank": 10,
-        "name": "Saxon Panchik",
-        "country": "United States",
-        "countryCode": "US",
-        "points": "96"
+        "rank": 0,
+        "name": "Aniol Ekai",
+        "country": "Spain",
+        "countryCode": "ES",
+        "points": "0"
       }
     ],
     "women": [
       {
-        "rank": 1,
+        "rank": 0,
+        "name": "Olivia Kerstetter",
+        "country": "United States",
+        "countryCode": "US",
+        "points": "0"
+      },
+      {
+        "rank": 0,
+        "name": "Erica Folo",
+        "country": "Canada",
+        "countryCode": "CA",
+        "points": "0"
+      },
+      {
+        "rank": 0,
+        "name": "Haley Adams",
+        "country": "United States",
+        "countryCode": "US",
+        "points": "0"
+      },
+      {
+        "rank": 0,
+        "name": "Holly Tynan",
+        "country": "Ireland",
+        "countryCode": "IE",
+        "points": "0"
+      },
+      {
+        "rank": 0,
+        "name": "Elisa Fuliano",
+        "country": "Italy",
+        "countryCode": "IT",
+        "points": "0"
+      },
+      {
+        "rank": 0,
+        "name": "Aimee Cringle",
+        "country": "United Kingdom",
+        "countryCode": "GB",
+        "points": "0"
+      },
+      {
+        "rank": 0,
+        "name": "Matilde Garnes",
+        "country": "Norway",
+        "countryCode": "NO",
+        "points": "0"
+      },
+      {
+        "rank": 0,
+        "name": "Ella Wilkinson",
+        "country": "United Kingdom",
+        "countryCode": "GB",
+        "points": "0"
+      },
+      {
+        "rank": 0,
         "name": "Lucy Campbell",
         "country": "United Kingdom",
         "countryCode": "GB",
-        "points": "16"
+        "points": "0"
       },
       {
-        "rank": 2,
-        "name": "Mirjam von Rohr",
-        "country": "Switzerland",
-        "countryCode": "CH",
-        "points": "18"
-      },
-      {
-        "rank": 3,
-        "name": "Leah Støren",
-        "country": "Norway",
-        "countryCode": "NO",
-        "points": "48"
-      },
-      {
-        "rank": 4,
-        "name": "Emma Lawson",
-        "country": "Canada",
-        "countryCode": "CA",
-        "points": "51"
-      },
-      {
-        "rank": 5,
-        "name": "Morgane Thyssens",
-        "country": "Belgium",
-        "countryCode": "BE",
-        "points": "64"
-      },
-      {
-        "rank": 6,
-        "name": "Vår Thurmann-Moe",
-        "country": "Norway",
-        "countryCode": "NO",
-        "points": "85"
-      },
-      {
-        "rank": 7,
-        "name": "Claudia Gluck",
-        "country": "France",
-        "countryCode": "FR",
-        "points": "89"
-      },
-      {
-        "rank": 8,
-        "name": "Carolyne Prevost",
-        "country": "Canada",
-        "countryCode": "CA",
-        "points": "93"
-      },
-      {
-        "rank": 9,
-        "name": "Tayla Howe",
-        "country": "United Kingdom",
-        "countryCode": "GB",
-        "points": "104"
-      },
-      {
-        "rank": 10,
-        "name": "Rebecca Fuselier",
+        "rank": 0,
+        "name": "Hannah Black",
         "country": "United States",
         "countryCode": "US",
-        "points": "114"
+        "points": "0"
       }
     ]
   }
