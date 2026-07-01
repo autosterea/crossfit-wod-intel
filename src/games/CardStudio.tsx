@@ -77,6 +77,16 @@ const NEWS: NewsItem[] = [
     source: 'The Barbell Spin',
   },
   {
+    id: 'swim-25m',
+    label: 'Swim: 25m pool',
+    kicker: 'Confirmed',
+    headline: '25-METER\nPOOL',
+    sub: 'The Games swim is set: 25-meter pool lengths, presented by TYR.',
+    bullets: ['A pool, not open water', '25-meter lengths confirmed', 'Part of the individual off-site opening'],
+    takeaway: 'Every event detail, tracked as it drops. Link in bio.',
+    source: 'The Barbell Spin',
+  },
+  {
     id: '20-events',
     label: '20 events / 4 days',
     kicker: 'The Format',

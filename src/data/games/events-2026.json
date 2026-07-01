@@ -6,9 +6,20 @@
     "city": "San Jose, California",
     "dates": "July 24-26, 2026",
     "note": "The 2026 CrossFit Games will score 20 events across 4 days (July 22-26), the most in Games history. Individuals open at off-site Bay Area locations on Wednesday, July 22 before three arena days at SAP Center. CrossFit reveals the official numbered events closer to and during the competition. This tracker follows every confirmed, revealed and teased element as it drops, with the source.",
-    "updated": "2026-06-27"
+    "updated": "2026-07-01"
   },
   "items": [
+    {
+      "name": "Pool swim confirmed at 25-meter lengths",
+      "status": "confirmed",
+      "kind": "event",
+      "summary": "CrossFit confirmed the returning swim will be contested in 25-meter pool lengths, a further specific on the pool (not open water) swim event presented by TYR.",
+      "source": {
+        "label": "The Barbell Spin",
+        "url": "https://thebarbellspin.com/crossfit-games/pool-swim-at-crossfit-games-will-be-25-meter-lengths/"
+      },
+      "date": "2026-06-29"
+    },
     {
       "name": "Swimming held in a pool (not ocean), TYR-presented, at Morgan Hill",
       "status": "confirmed",
