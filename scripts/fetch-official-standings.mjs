@@ -105,7 +105,12 @@ async function tryStage(stage) {
         break
       }
       const rows = mapRows(data)
-      if (!rows.length) {
+      // A stage only counts as having REAL standings if at least one athlete is
+      // actually ranked (rank >= 1). Before a competition scores its first event
+      // the field can be loaded into c3po with every overallRank = 0 - that is a
+      // placeholder, not a leaderboard, so we skip it and cascade to the next
+      // stage (e.g. the finished Open) rather than publish a rank-0 order.
+      if (!rows.length || !rows.some((r) => r.rank >= 1)) {
         ok = false
         break
       }
