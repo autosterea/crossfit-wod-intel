@@ -1,4 +1,5 @@
-import { Suspense, lazy, useEffect, Component, type ReactNode } from 'react'
+import { Suspense, useEffect, Component, type ReactNode } from 'react'
+import { lazyReload as lazy } from '../lazyReload'
 import './games.css'
 import ThemeToggle from '../components/ThemeToggle'
 import { useGamesStore } from './gamesStore'

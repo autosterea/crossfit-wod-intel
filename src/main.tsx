@@ -1,15 +1,17 @@
 /* eslint-disable react-refresh/only-export-components -- entry point, never hot-refreshed */
-import { StrictMode, lazy, Suspense, Component, type ReactNode } from 'react'
+import { StrictMode, Suspense, Component, type ReactNode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
+import { lazyReload } from './lazyReload'
 
 // Both apps are lazy so each route only downloads its own bundle:
 // '/' loads the main app (incl. the 2.6MB daily-WOD dataset), '/games'
-// loads the Games Almanac (incl. its own data) — never both.
-const App = lazy(() => import('./App.tsx'))
-const GamesApp = lazy(() => import('./games/GamesApp.tsx'))
-const FitnessApp = lazy(() => import('./fitness/FitnessApp.tsx'))
-const NewsApp = lazy(() => import('./news/NewsApp.tsx'))
+// loads the Games Almanac (incl. its own data) — never both. lazyReload self-heals
+// a stale-chunk failure after a deploy by reloading once (see src/lazyReload.ts).
+const App = lazyReload(() => import('./App.tsx'))
+const GamesApp = lazyReload(() => import('./games/GamesApp.tsx'))
+const FitnessApp = lazyReload(() => import('./fitness/FitnessApp.tsx'))
+const NewsApp = lazyReload(() => import('./news/NewsApp.tsx'))
 
 // /games, /fitness and /news are standalone pages served by the same SPA
 // bundle — Caddy's `try_files {path} /index.html` routes them here. Each is
