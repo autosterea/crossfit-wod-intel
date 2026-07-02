@@ -3,10 +3,15 @@ name: Publish redirect to GitHub Pages
 # The app moved to https://wod.persistenceathletics.com/ on 2026-05-31.
 # This workflow publishes a tiny redirect page to GH Pages so any old
 # inbound links still find the new site.
+#
+# MANUAL-ONLY (2026-07-02): the redirect page is already published and lives on
+# GH Pages permanently. Running this on every push added no value and kept
+# failing on GitHub's Pages backend (deployments stuck in "queued"), sending a
+# failure email each push. It now runs only when triggered by hand from the
+# Actions tab, which is all the near-dead old URL ever needs.
 
 on:
-  push:
-    branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: read
