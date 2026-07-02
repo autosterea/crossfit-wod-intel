@@ -12,7 +12,7 @@ import type { GamesData, GamesAthlete2026 } from '../types-games'
 const G = rawGames as unknown as GamesData
 
 type Division = 'men' | 'women'
-type Template = 'spotlight' | 'cover' | 'h2h' | 'form' | 'news' | 'carousel'
+type Template = 'spotlight' | 'cover' | 'h2h' | 'form' | 'news' | 'carousel' | 'picks'
 
 const TEMPLATES: { id: Template; label: string }[] = [
   { id: 'spotlight', label: 'Athlete Spotlight' },
@@ -21,6 +21,35 @@ const TEMPLATES: { id: Template; label: string }[] = [
   { id: 'form', label: 'Season Form Top 10' },
   { id: 'news', label: 'News / Announcement' },
   { id: 'carousel', label: 'Carousel (multi-slide)' },
+  { id: 'picks', label: 'Event picks (model top 5)' },
+]
+
+// Model-favored top 5 per event. Every number/reason is grounded in the projection
+// model (mean measured percentile on the domains the event taxes). A fit read.
+type Pick = { name: string; value: string; why: string }
+type PickSet = { id: string; label: string; eventKicker: string; eventLine: string; note: string; men: Pick[]; women: Pick[] }
+const PICKS: PickSet[] = [
+  {
+    id: 'event1',
+    label: 'Event 1 - The 2007 Hopper',
+    eventKicker: 'Event 1 - The 2007 Hopper',
+    eventLine: '1,000m row, then 5 rounds: 25 pull-ups + 7 push jerks (135/85). For time.',
+    note: 'Model fit read, not a result prediction.',
+    men: [
+      { name: 'Roman Khrennikov', value: '80', why: '90th-pct bodyweight, 81 metabolic. Built to grind the pull-up volume.' },
+      { name: 'Justin Medeiros', value: '78', why: 'The complete package: 80 weightlifting, 77 gymnastics. Two-time champ.' },
+      { name: 'Ricky Garard', value: '75', why: '77 metabolic and bodyweight. Motors through the middle.' },
+      { name: 'Patrick Vellner', value: '73', why: '78 gymnastics, 77 weightlifting. The pull-ups and jerks suit him.' },
+      { name: 'James Sprague', value: '73', why: '79 bodyweight, young engine. Fast hands on the barbell.' },
+    ],
+    women: [
+      { name: 'Haley Adams', value: '79', why: '82 engine, 85 bodyweight. The biggest engine in the field.' },
+      { name: 'Lucy Campbell', value: '78', why: '83 gymnastics, 80 engine. The pull-ups are her room.' },
+      { name: 'Emma Lawson', value: '76', why: 'Balanced: 80 bodyweight, 76 gymnastics, 75 engine.' },
+      { name: 'Mirjam von Rohr', value: '75', why: '82 engine, projected #1 overall. Holds output late.' },
+      { name: 'Danielle Brandon', value: '73', why: '78 bodyweight, 75 gymnastics. Sharp on the rig.' },
+    ],
+  },
 ]
 
 // Multi-slide IG carousels. Every fact is grounded in the sourced events tracker
@@ -445,6 +474,35 @@ function FormCard({ division }: { division: Division }) {
   )
 }
 
+function PicksCard({ set, division }: { set: PickSet; division: Division }) {
+  const rows = division === 'men' ? set.men : set.women
+  return (
+    <div style={cardBg}>
+      <CardHeader />
+      <div style={{ padding: '30px 56px 0' }}>
+        <div style={{ fontSize: 24, letterSpacing: 4, textTransform: 'uppercase', color: GREEN }}>{set.eventKicker}</div>
+        <div style={{ fontFamily: "'Anton', sans-serif", fontSize: 66, textTransform: 'uppercase', lineHeight: 0.98, marginTop: 8 }}>Model's Top 5<br /><span style={{ color: GREEN }}>{division}</span></div>
+        <div style={{ fontSize: 23, color: DIM, marginTop: 12, lineHeight: 1.3 }}>{set.eventLine}</div>
+      </div>
+      <div style={{ padding: '26px 56px 0' }}>
+        {rows.map((r, i) => (
+          <div key={r.name} style={{ display: 'flex', alignItems: 'center', gap: 18, padding: '14px 0', borderTop: i ? '1px solid rgba(244,246,242,0.1)' : 'none' }}>
+            <div style={{ fontFamily: "'Anton', sans-serif", fontSize: 40, width: 44, color: i < 3 ? GREEN : DIM, textAlign: 'center' }}>{i + 1}</div>
+            <RoundPhoto name={r.name} size={78} />
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ fontFamily: "'Anton', sans-serif", fontSize: 34, textTransform: 'uppercase', lineHeight: 1 }}>{r.name}</div>
+              <div style={{ fontSize: 22, color: 'rgba(244,246,242,0.8)', marginTop: 4, lineHeight: 1.25 }}>{r.why}</div>
+            </div>
+            <div style={{ fontFamily: "'Anton', sans-serif", fontSize: 40, color: GREEN }}>{r.value}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{ padding: '18px 56px 0', fontSize: 21, color: DIM, letterSpacing: 0.5 }}>Score = percent of the field beaten on the domains this event taxes. {set.note}</div>
+      <CardFooter />
+    </div>
+  )
+}
+
 function NewsCard({ item }: { item: NewsItem }) {
   return (
     <div style={cardBg}>
@@ -522,7 +580,11 @@ function CarouselSlide({ slide, index, total }: { slide: Slide; index: number; t
 
 // ---------- Captions ----------
 
-function captionFor(t: Template, a: GamesAthlete2026 | undefined, b: GamesAthlete2026 | undefined, division: Division, news?: NewsItem, carousel?: Carousel): string {
+function captionFor(t: Template, a: GamesAthlete2026 | undefined, b: GamesAthlete2026 | undefined, division: Division, news?: NewsItem, carousel?: Carousel, pickSet?: PickSet): string {
+  if (t === 'picks' && pickSet) {
+    const rows = division === 'men' ? pickSet.men : pickSet.women
+    return `🎯 ${pickSet.eventKicker.toUpperCase()} - THE MODEL'S TOP 5 (${division.toUpperCase()})\n\n${pickSet.eventLine}\n\n${rows.map((r, i) => `${i + 1}. ${r.name}`).join('\n')}\n\nWho you got? This is a model read of who fits the workout, not a result prediction. Full breakdown + every athlete at the link in bio.\n\n${HASHTAGS}`
+  }
   if (t === 'carousel' && carousel) {
     return `${carousel.caption}\n\n${HASHTAGS}`
   }
@@ -554,6 +616,7 @@ export default function CardStudio() {
   const [newsId, setNewsId] = useState(params.get('n') || NEWS[0].id)
   const [carouselId, setCarouselId] = useState(params.get('c') || CAROUSELS[0].id)
   const [slideIdx, setSlideIdx] = useState(Number(params.get('s') || 0))
+  const [pickId, setPickId] = useState(params.get('p') || PICKS[0].id)
   const [busy, setBusy] = useState(false)
   const cardRef = useRef<HTMLDivElement>(null)
 
@@ -562,7 +625,8 @@ export default function CardStudio() {
   const newsItem = useMemo(() => NEWS.find((x) => x.id === newsId) ?? NEWS[0], [newsId])
   const carousel = useMemo(() => CAROUSELS.find((x) => x.id === carouselId) ?? CAROUSELS[0], [carouselId])
   const slideClamped = Math.max(0, Math.min(slideIdx, carousel.slides.length - 1))
-  const caption = captionFor(template, a, b, division, newsItem, carousel)
+  const pickSet = useMemo(() => PICKS.find((x) => x.id === pickId) ?? PICKS[0], [pickId])
+  const caption = captionFor(template, a, b, division, newsItem, carousel, pickSet)
 
   const download = async () => {
     if (!cardRef.current || busy) return
@@ -588,7 +652,7 @@ export default function CardStudio() {
       await toPng(cardRef.current, { width: 1080, height: 1350, pixelRatio: 1 })
       const url = await toPng(cardRef.current, { width: 1080, height: 1350, pixelRatio: 1 })
       const link = document.createElement('a')
-      link.download = template === 'spotlight' ? `${a.slug}-spotlight.png` : template === 'h2h' ? `${a.slug}-vs-${b.slug}.png` : template === 'news' ? `news-${newsItem.id}.png` : template === 'carousel' ? `carousel-${carousel.id}-${String(slideClamped + 1).padStart(2, '0')}.png` : `${template}-${division}.png`
+      link.download = template === 'spotlight' ? `${a.slug}-spotlight.png` : template === 'h2h' ? `${a.slug}-vs-${b.slug}.png` : template === 'news' ? `news-${newsItem.id}.png` : template === 'carousel' ? `carousel-${carousel.id}-${String(slideClamped + 1).padStart(2, '0')}.png` : template === 'picks' ? `picks-${pickSet.id}-${division}.png` : `${template}-${division}.png`
       link.href = url
       link.click()
     } finally {
@@ -633,6 +697,11 @@ export default function CardStudio() {
             {NEWS.map((x) => <option key={x.id} value={x.id}>{x.label}</option>)}
           </select>
         )}
+        {template === 'picks' && (
+          <select value={pickId} onChange={(e) => setPickId(e.target.value)} className="bg-[var(--input-bg)] border border-[var(--input-border)] rounded-lg px-3 py-2 text-sm text-[var(--text-primary)]">
+            {PICKS.map((x) => <option key={x.id} value={x.id}>{x.label}</option>)}
+          </select>
+        )}
         {template === 'carousel' && (
           <>
             <select value={carouselId} onChange={(e) => { setCarouselId(e.target.value); setSlideIdx(0) }} className="bg-[var(--input-bg)] border border-[var(--input-border)] rounded-lg px-3 py-2 text-sm text-[var(--text-primary)]">
@@ -662,6 +731,7 @@ export default function CardStudio() {
               {template === 'form' && <FormCard division={division} />}
               {template === 'news' && <NewsCard item={newsItem} />}
               {template === 'carousel' && <CarouselSlide slide={carousel.slides[slideClamped]} index={slideClamped} total={carousel.slides.length} />}
+              {template === 'picks' && <PicksCard set={pickSet} division={division} />}
             </div>
           </div>
         </div>

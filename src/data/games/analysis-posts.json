@@ -1,5 +1,115 @@
 [
   {
+    "slug": "event-1-the-2007-hopper-whose-profile-fits",
+    "title": "Event 1 Is the 2007 Hopper. Whose Profile Fits It?",
+    "dek": "The first event revives the 2007 opener. We modeled whose profile the row, pull-ups and push jerks reward.",
+    "category": "Event Preview",
+    "date": "2026-07-02",
+    "author": "Ravikant Dewangan",
+    "readMin": 3,
+    "summary": "Event 1 of the 2026 CrossFit Games is The 2007 Hopper: a 1,000m row then 5 rounds of 25 pull-ups and 7 push jerks. We modeled whose profile the workout rewards, with a data-grounded top 5 for men and women.",
+    "blocks": [
+      {
+        "type": "p",
+        "text": "Event 1 pulls a fossil out of the vault. It is **The 2007 Hopper**, the workout that opened the very first CrossFit Games: a 1,000-meter row, then 5 rounds of 25 pull-ups and 7 push jerks, for time. The barbell sits at 135 lb for the men and 85 lb for the women. Everything else is you against gravity. The row and the pull-ups carry no load at all. Individuals kick it off Wednesday, July 22, 2026. Read the pieces and the shape is clear: this is a medium-length grind, not a sprint and not a marathon. The 2007 winner needed about 13 minutes; when the field ran it back in 2013 the top time dropped to 8:33. The engine gets lit early on the rower, then the day becomes a math problem, 125 total pull-ups against 35 light push jerks. The barbell is almost a formality. Whoever can cycle pull-ups in big unbroken chunks while breathing hard controls this."
+      },
+      {
+        "type": "h2",
+        "text": "The Men: Two Co-Favorites, One Light Barbell"
+      },
+      {
+        "type": "p",
+        "text": "The model likes **Roman Khrennikov** and **Justin Medeiros** at the top, and they sit within about two points of each other. Treat them as co-favorites, because the order hinges on how much you weight that light barbell. Khrennikov leads on the strength of a **90 Bodyweight** score paired with an **81 Metabolic** and a **79 Long Engine**, the exact three things this workout hammers. Medeiros trails by a hair with the more even card: **80 Weightlifting**, **77 Gymnastics**, **78 Metabolic**. If the 135 lb push jerk matters more than the fatigue math suggests, Medeiros closes the gap and passes him. Behind the two, Ricky Garard, Patrick Vellner, and James Sprague are bunched. Garard's profile is balanced with no soft spot on the bodyweight side (77). Vellner owns the best gymnastics number in this group at 78 but the lowest long engine at 66, so a longer grind works against him. Sprague, the youngest read here, is carried by a 79 Bodyweight and steady metabolic work."
+      },
+      {
+        "type": "ranked",
+        "title": "Men's Best-Fit Top 5 (Projected Event Percentile)",
+        "rows": [
+          {
+            "name": "Roman Khrennikov",
+            "value": "79.8",
+            "note": "Bodyweight 90 leads the field, backed by Metabolic 81 and Long Engine 79. Co-favorite."
+          },
+          {
+            "name": "Justin Medeiros",
+            "value": "77.8",
+            "note": "Most balanced card: Weightlifting 80, Gymnastics 77, Metabolic 78. Co-favorite if the barbell is weighted."
+          },
+          {
+            "name": "Ricky Garard",
+            "value": "74.7",
+            "note": "No weak domain, Metabolic 77 and Bodyweight 77 hold up under the pull-up volume."
+          },
+          {
+            "name": "Patrick Vellner",
+            "value": "73.4",
+            "note": "Top gymnastics of the group at 78, but Long Engine 66 is the drag on a medium grind."
+          },
+          {
+            "name": "James Sprague",
+            "value": "73.1",
+            "note": "Bodyweight 79 and Metabolic 74 fit the pull-up load; Weightlifting 67 is the low mark."
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "The Women: Engine and Grip Up Top"
+      },
+      {
+        "type": "p",
+        "text": "On the women's side **Haley Adams** heads the read, and it is not close on the domains that count. Her **85 Bodyweight** and **82 Long Engine** are built for 125 pull-ups inside a medium time cap, and a 79 Metabolic keeps her moving between sets. Lucy Campbell is right behind with the best pure gymnastics score in the group at **83**, plus an 80 Long Engine, so the pull-ups should come fast and stay smooth. Emma Lawson is the steady one, nothing below 75 across the taxed domains, which is why she lands third. Mirjam von Rohr is the interesting name: she matches Adams' **82 Long Engine** and posts a 79 Bodyweight, but her 69 Metabolic and 70 Gymnastics keep her fourth on this specific workout. Danielle Brandon rounds out the five with solid all-around marks dragged down by a 67 Long Engine, the one number that a medium grind will find."
+      },
+      {
+        "type": "ranked",
+        "title": "Women's Best-Fit Top 5 (Projected Event Percentile)",
+        "rows": [
+          {
+            "name": "Haley Adams",
+            "value": "78.6",
+            "note": "Bodyweight 85 and Long Engine 82 are ideal for the pull-up volume; Metabolic 79 backs it."
+          },
+          {
+            "name": "Lucy Campbell",
+            "value": "77.5",
+            "note": "Best gymnastics in the group at 83, with Long Engine 80 to keep the sets unbroken."
+          },
+          {
+            "name": "Emma Lawson",
+            "value": "75.5",
+            "note": "Even card with no weak domain: Metabolic 76, Gymnastics 76, Bodyweight 80."
+          },
+          {
+            "name": "Mirjam von Rohr",
+            "value": "74.6",
+            "note": "Long Engine 82 and Bodyweight 79 fit, but Metabolic 69 and Gymnastics 70 cap the read."
+          },
+          {
+            "name": "Danielle Brandon",
+            "value": "73.4",
+            "note": "Balanced marks near 75, but Long Engine 67 is exposed on a medium grind."
+          }
+        ]
+      },
+      {
+        "type": "callout",
+        "title": "How to Read This",
+        "text": "These are not predictions of the result. Each ranking is an athlete's mean measured placement percentile, the percent of the 60-athlete field they beat, on exactly the domains this event taxes: Metabolic, Gymnastics, Bodyweight, and Long Engine, with weightlifting kept light. The scores come from the official 2026 Open, Quarterfinals, and all prior Games. The event line tells you what the workout is; the top-five tells you whose profile fits it. On the men's side Khrennikov (79.8) and Medeiros (77.8) sit within about two points, so treat them as co-favorites and let the light barbell decide the order. A great fit still has to be executed on the floor Wednesday."
+      }
+    ],
+    "sources": [
+      {
+        "label": "Event 1 official workout - CrossFit Games",
+        "url": "https://games.crossfit.com/workouts/finals/2026/1"
+      },
+      {
+        "label": "Persistence Athletics - Athlete Intelligence model",
+        "url": "https://wod.persistenceathletics.com/games/2026/intel"
+      }
+    ],
+    "tracesTo": "Event 1 movements/reps/loads from the official games.crossfit.com/workouts/finals/2026/1 page (researched + verified). Top-5 fit = projectEvent over public/projection-2026.json (mean measured percentile on the domains the event taxes: modality MGW, medium, light)."
+  },
+  {
     "slug": "what-dave-castro-told-us-about-the-2026-games",
     "title": "What Dave Castro Has Already Told Us About the 2026 Games",
     "dek": "The hopper is back for a live Friday-night draw, swimming moves to a pool, and the Ranch is lurking. A sourced rundown of every reveal and tease.",

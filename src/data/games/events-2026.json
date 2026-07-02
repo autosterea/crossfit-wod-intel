@@ -6,9 +6,21 @@
     "city": "San Jose, California",
     "dates": "July 24-26, 2026",
     "note": "The 2026 CrossFit Games will score 20 events across 4 days (July 22-26), the most in Games history. Individuals open at off-site Bay Area locations on Wednesday, July 22 before three arena days at SAP Center. CrossFit reveals the official numbered events closer to and during the competition. This tracker follows every confirmed, revealed and teased element as it drops, with the source.",
-    "updated": "2026-07-01"
+    "updated": "2026-07-02"
   },
   "items": [
+    {
+      "name": "Event 1: The 2007 Hopper",
+      "status": "confirmed",
+      "kind": "event",
+      "num": 1,
+      "summary": "The first event is a revival of the inaugural 2007 Games opener: a 1,000-meter row, then 5 rounds of 25 pull-ups and 7 push jerks (135 lb men / 85 lb women), for time. Scheduled for the individual start day, Wednesday July 22.",
+      "source": {
+        "label": "CrossFit Games (official workout page)",
+        "url": "https://games.crossfit.com/workouts/finals/2026/1"
+      },
+      "date": "2026-07-02"
+    },
     {
       "name": "Pool swim confirmed at 25-meter lengths",
       "status": "confirmed",
