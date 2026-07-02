@@ -12,6 +12,8 @@ interface EventItem {
   source: { label: string; url: string }
   date?: string
   num?: number | null
+  shortName?: string
+  analysisSlug?: string
 }
 interface EventsData {
   meta: { total: number; days: number; venue: string; city: string; dates: string; note: string; updated: string }
@@ -54,12 +56,18 @@ function EventCard({ e }: { e: EventItem }) {
 
 export default function EventsView() {
   const navigate = useGamesStore((s) => s.navigate)
+  // Numbered official events fill the 20-slot grid; everything else is a "revealed
+  // programming element" (swimming, cycling, teased ideas) shown as context below.
+  const byNum = useMemo(() => {
+    const m = new Map<number, EventItem>()
+    for (const e of D.items) if (e.num) m.set(e.num, e)
+    return m
+  }, [])
   const groups = useMemo(() => {
     const g: Record<Status, EventItem[]> = { confirmed: [], revealed: [], teased: [], rumored: [] }
-    for (const e of D.items) (g[e.status] ?? g.rumored).push(e)
+    for (const e of D.items) if (!e.num) (g[e.status] ?? g.rumored).push(e)
     return g
   }, [])
-  const confirmedCount = groups.confirmed.length + groups.revealed.length
 
   return (
     <div className="pt-6">
@@ -84,6 +92,42 @@ export default function EventsView() {
         </div>
       </section>
 
+      {/* THE 20 EVENTS - numbered slots, fill in as CrossFit releases them */}
+      <section className="mb-9">
+        <div className="flex items-baseline justify-between gap-3 mb-3">
+          <h2 className="games-display text-2xl text-[var(--text-primary)]">The 20 events</h2>
+          <span className="games-condensed text-[12px] uppercase tracking-[0.08em] text-[#91C640]">{byNum.size} of 20 announced</span>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+          {Array.from({ length: 20 }, (_, i) => i + 1).map((n) => {
+            const ev = byNum.get(n)
+            if (!ev) {
+              return (
+                <div key={n} className="rounded-xl p-3" style={{ border: '1px dashed var(--panel-border)' }}>
+                  <div className="games-display text-lg text-[var(--text-muted)]">{n}</div>
+                  <div className="text-[11.5px] text-[var(--text-muted)] mt-0.5">To be revealed</div>
+                </div>
+              )
+            }
+            const clickable = !!ev.analysisSlug
+            return (
+              <button
+                key={n}
+                onClick={() => ev.analysisSlug && navigate({ view: 'analysis', year: 2026, slug: ev.analysisSlug })}
+                disabled={!clickable}
+                className="cap-card p-3 text-left"
+                style={{ borderColor: 'rgba(145,198,64,0.45)', cursor: clickable ? 'pointer' : 'default' }}
+              >
+                <div className="games-display text-lg text-[#91C640]">{n}</div>
+                <div className="text-[12.5px] font-semibold text-[var(--text-primary)] leading-tight mt-0.5">{ev.shortName ?? ev.name}</div>
+                <div className="text-[10px] mt-1" style={{ color: 'var(--accent-success)' }}>Confirmed{clickable ? ' · breakdown →' : ''}</div>
+              </button>
+            )
+          })}
+        </div>
+        <p className="text-[11px] text-[var(--text-muted)] mt-3">CrossFit reveals the events over time. Announced events fill in here (tap for the full breakdown); the rest drop closer to and during the Games.</p>
+      </section>
+
       {D.items.length === 0 ? (
         <Panel className="p-8 text-center">
           <div className="games-display text-xl text-[var(--text-primary)] mb-2">Tracking what gets revealed</div>
@@ -91,7 +135,8 @@ export default function EventsView() {
         </Panel>
       ) : (
         <>
-          <p className="text-[12px] text-[var(--text-muted)] mb-5">{confirmedCount} programming element{confirmedCount === 1 ? '' : 's'} revealed so far. The official numbered events drop closer to and during the Games.</p>
+          <h2 className="games-display text-xl text-[var(--text-primary)] mb-1">Programming revealed so far</h2>
+          <p className="text-[12px] text-[var(--text-muted)] mb-5">Confirmed and teased elements CrossFit has shown beyond the numbered events, each with its source.</p>
           {ORDER.map((st) =>
             groups[st].length ? (
               <section key={st} className="mb-8">

@@ -89,6 +89,21 @@ const CAROUSELS: Carousel[] = [
       { type: 'cta', headline: 'READ THE\nBREAKDOWN', body: 'The full engine analysis, every athlete and every number, is on the site. Data-grounded, no takes without the numbers.' },
     ],
   },
+  {
+    id: 'event1-preview',
+    label: 'Event 1 - The 2007 Hopper',
+    caption:
+      "🚨 EVENT 1 = THE 2007 HOPPER. The first event of the 2026 Games revives the very first event in CrossFit Games history.\n\n1,000m row, then 5 rounds of 25 pull-ups + 7 push jerks (135/85). For time.\n\nSwipe for the workout, what it demands, and our model's top 5 for men and women. It's a model read of who FITS the workout, not a result prediction. Full breakdown at the link in bio.\n\nEvent source: the official CrossFit Games workout page.",
+    slides: [
+      { type: 'cover', kicker: 'Event 1', headline: 'THE 2007\nHOPPER', sub: 'The first event of the 2026 Games revives the very first event in Games history. Swipe.' },
+      { type: 'point', num: 1, kicker: 'The Workout', headline: 'FOR\nTIME', body: '1,000-meter row, then 5 rounds of: 25 pull-ups and 7 push jerks (135 lb men / 85 lb women). Individual start day, Wednesday July 22.', source: 'CrossFit Games (official workout page)' },
+      { type: 'point', num: 2, kicker: 'What it demands', headline: 'ENGINE +\nRIG', body: 'A medium grind: a 1,000m row, then a big pile of pull-ups (125 total) and a light, fast barbell. Aerobic engine and gymnastics stamina decide this one, not raw strength.', source: 'Persistence Athletics model' },
+      { type: 'point', num: 3, kicker: "Model's top 5 - Men", headline: 'MEN', body: '1. Khrennikov  2. Medeiros  3. Garard  4. Vellner  5. Sprague. Khrennikov and Medeiros are co-favorites, split by how you weight the light barbell.', source: 'Persistence Athletics model' },
+      { type: 'point', num: 4, kicker: "Model's top 5 - Women", headline: 'WOMEN', body: '1. Adams  2. Campbell  3. Lawson  4. von Rohr  5. Brandon. Adams brings the biggest engine in the field; Campbell the best gymnastics.', source: 'Persistence Athletics model' },
+      { type: 'point', num: 5, kicker: 'The history', headline: 'BORN AT\nTHE RANCH', body: 'A revival of the opener from the very first CrossFit Games in 2007, held at the Aromas ranch. Fitting, since the original hopper returns this year to draw a workout live.', source: 'CrossFit Games history' },
+      { type: 'cta', headline: 'FULL\nBREAKDOWN', body: 'Every athlete, every number, and the model read on Event 1 is on the site. A fit read, not a result prediction.' },
+    ],
+  },
 ]
 
 // Curated, source-verified news cards. Every claim here is grounded in a real,
