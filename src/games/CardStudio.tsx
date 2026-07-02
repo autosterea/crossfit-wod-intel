@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { toPng } from 'html-to-image'
 import { A2026, allAthletes2026, countryFlag, initials, monogramColor } from './athletes2026'
 import photosExtra from '../data/games/photos-extra.json'
@@ -167,10 +167,40 @@ function photoFor(name: string): string | null {
   return allAthletes2026.find((x) => x.name.toLowerCase() === k)?.photoUrl ?? EXTRA[k] ?? null
 }
 
+// Load an image as an inline data URL (fresh fetch, bypasses the browser cache).
+// This is what makes the html-to-image export reliable: the photo is embedded in
+// the DOM, so there is no cross-origin canvas taint, no stale-cache (e.g. an old
+// headshot), and no race between clicking Download and the image finishing load.
+function useObjectImage(url: string | null): string | null {
+  const [dataUrl, setDataUrl] = useState<string | null>(null)
+  useEffect(() => {
+    let cancelled = false
+    setDataUrl(null)
+    if (!url) return
+    fetch(url, { cache: 'reload' })
+      .then((r) => (r.ok ? r.blob() : Promise.reject(new Error(String(r.status)))))
+      .then(
+        (blob) =>
+          new Promise<string>((res, rej) => {
+            const fr = new FileReader()
+            fr.onload = () => res(fr.result as string)
+            fr.onerror = rej
+            fr.readAsDataURL(blob)
+          }),
+      )
+      .then((d) => !cancelled && setDataUrl(d))
+      .catch(() => !cancelled && setDataUrl(null))
+    return () => {
+      cancelled = true
+    }
+  }, [url])
+  return dataUrl
+}
+
 function RoundPhoto({ name, size }: { name: string; size: number }) {
-  const url = photoFor(name)
-  return url ? (
-    <img src={url} alt="" crossOrigin="anonymous" style={{ width: size, height: size, objectFit: 'cover', objectPosition: 'center 22%', borderRadius: 999 }} />
+  const data = useObjectImage(photoFor(name))
+  return data ? (
+    <img src={data} alt="" style={{ width: size, height: size, objectFit: 'cover', objectPosition: 'center 22%', borderRadius: 999 }} />
   ) : (
     <div style={{ width: size, height: size, borderRadius: 999, background: monogramColor(name), display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: "'Anton', sans-serif", fontSize: size * 0.36, color: '#fff' }}>
       {initials(name)}
@@ -216,10 +246,22 @@ function CardFooter() {
 }
 
 function Photo({ a, size, radius = 28 }: { a: GamesAthlete2026; size: number; radius?: number }) {
-  return a.photoUrl ? (
-    <img src={a.photoUrl} alt="" crossOrigin="anonymous" style={{ width: size, height: size * 1.18, objectFit: 'cover', objectPosition: 'center 20%', borderRadius: radius, border: `3px solid rgba(145,198,64,0.5)` }} />
+  const data = useObjectImage(a.photoUrl ?? null)
+  return data ? (
+    <img src={data} alt="" style={{ width: size, height: size * 1.18, objectFit: 'cover', objectPosition: 'center 20%', borderRadius: radius, border: `3px solid rgba(145,198,64,0.5)` }} />
   ) : (
     <div style={{ width: size, height: size * 1.18, borderRadius: radius, background: DGREEN, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: "'Anton', sans-serif", fontSize: size * 0.32, color: '#fff' }}>
+      {a.name.split(' ').map((p) => p[0]).join('').slice(0, 2)}
+    </div>
+  )
+}
+
+function GridPhoto({ a }: { a: GamesAthlete2026 }) {
+  const data = useObjectImage(a.photoUrl ?? null)
+  return data ? (
+    <img src={data} alt="" style={{ width: 88, height: 88, objectFit: 'cover', objectPosition: 'center 22%', borderRadius: 999, border: `2px solid rgba(145,198,64,0.45)` }} />
+  ) : (
+    <div style={{ width: 88, height: 88, borderRadius: 999, background: DGREEN, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: "'Anton', sans-serif", fontSize: 30, color: '#fff', margin: '0 auto' }}>
       {a.name.split(' ').map((p) => p[0]).join('').slice(0, 2)}
     </div>
   )
@@ -322,13 +364,7 @@ function CoverCard() {
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 14, justifyContent: 'center', padding: '40px 70px 0' }}>
         {all.map((a) => (
           <div key={a.slug} style={{ width: 92, textAlign: 'center' }}>
-            {a.photoUrl ? (
-              <img src={a.photoUrl} alt="" crossOrigin="anonymous" style={{ width: 88, height: 88, objectFit: 'cover', objectPosition: 'center 22%', borderRadius: 999, border: `2px solid rgba(145,198,64,0.45)` }} />
-            ) : (
-              <div style={{ width: 88, height: 88, borderRadius: 999, background: DGREEN, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: "'Anton', sans-serif", fontSize: 30, color: '#fff', margin: '0 auto' }}>
-                {a.name.split(' ').map((p) => p[0]).join('').slice(0, 2)}
-              </div>
-            )}
+            <GridPhoto a={a} />
           </div>
         ))}
       </div>
@@ -532,9 +568,25 @@ export default function CardStudio() {
     if (!cardRef.current || busy) return
     setBusy(true)
     try {
-      // double-render to ensure fonts/images settle
-      await toPng(cardRef.current, { width: 1080, height: 1350, pixelRatio: 1, cacheBust: true })
-      const url = await toPng(cardRef.current, { width: 1080, height: 1350, pixelRatio: 1, cacheBust: true })
+      // Wait for every image in the card to be fully loaded + decoded before we
+      // rasterize, so a card is never exported with a missing/half-loaded photo
+      // (photos are inline data URLs via useObjectImage, so this settles fast).
+      const imgs = Array.from(cardRef.current.querySelectorAll('img'))
+      await Promise.all(
+        imgs.map((img) =>
+          img.complete && img.naturalWidth > 0
+            ? Promise.resolve()
+            : new Promise<void>((res) => {
+                img.onload = () => res()
+                img.onerror = () => res()
+              }),
+        ),
+      )
+      await Promise.all(imgs.map((img) => img.decode?.().catch(() => {})))
+      await new Promise((r) => setTimeout(r, 120))
+      // double-render to ensure fonts settle
+      await toPng(cardRef.current, { width: 1080, height: 1350, pixelRatio: 1 })
+      const url = await toPng(cardRef.current, { width: 1080, height: 1350, pixelRatio: 1 })
       const link = document.createElement('a')
       link.download = template === 'spotlight' ? `${a.slug}-spotlight.png` : template === 'h2h' ? `${a.slug}-vs-${b.slug}.png` : template === 'news' ? `news-${newsItem.id}.png` : template === 'carousel' ? `carousel-${carousel.id}-${String(slideClamped + 1).padStart(2, '0')}.png` : `${template}-${division}.png`
       link.href = url
