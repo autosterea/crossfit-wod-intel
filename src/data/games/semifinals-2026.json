@@ -343,40 +343,6 @@
         }
       ]
     },
-    "jess-green": {
-      "event": "Individual Online Semifinal",
-      "official": false,
-      "source": "c3po semifinals/2026 (online)",
-      "fieldSize": 476,
-      "overallRank": "5",
-      "perEvent": [
-        {
-          "n": 1,
-          "score": "6:19",
-          "place": 1
-        },
-        {
-          "n": 2,
-          "score": "10:09",
-          "place": 14
-        },
-        {
-          "n": 3,
-          "score": "14:31",
-          "place": 2
-        },
-        {
-          "n": 4,
-          "score": "4:43",
-          "place": 35
-        },
-        {
-          "n": 5,
-          "score": "5:04",
-          "place": 11
-        }
-      ]
-    },
     "arielle-loewen": {
       "event": "Individual Online Semifinal",
       "official": false,
@@ -408,40 +374,6 @@
           "n": 5,
           "score": "4:26",
           "place": 2
-        }
-      ]
-    },
-    "claudia-gluck": {
-      "event": "Individual Online Semifinal",
-      "official": false,
-      "source": "c3po semifinals/2026 (online)",
-      "fieldSize": 476,
-      "overallRank": "5",
-      "perEvent": [
-        {
-          "n": 1,
-          "score": "7:26",
-          "place": 11
-        },
-        {
-          "n": 2,
-          "score": "10:03",
-          "place": 10
-        },
-        {
-          "n": 3,
-          "score": "16:19",
-          "place": 19
-        },
-        {
-          "n": 4,
-          "score": "4:24",
-          "place": 20
-        },
-        {
-          "n": 5,
-          "score": "4:34",
-          "place": 3
         }
       ]
     },
@@ -2661,6 +2593,74 @@
       ],
       "sourceUrl": "https://competitioncorner.net/api2/v1/leaderboard/20696/division/137144?start=0&end=60&athletesOnly=true",
       "fieldSize": 38
+    },
+    "bergros-bjornsdottir": {
+      "event": "Individual Online Semifinal",
+      "official": false,
+      "source": "c3po semifinals/2026 (online)",
+      "fieldSize": 476,
+      "overallRank": "7",
+      "perEvent": [
+        {
+          "n": 1,
+          "score": "8:04",
+          "place": 22
+        },
+        {
+          "n": 2,
+          "score": "10:12",
+          "place": 16
+        },
+        {
+          "n": 3,
+          "score": "15:56",
+          "place": 13
+        },
+        {
+          "n": 4,
+          "score": "4:07",
+          "place": 7
+        },
+        {
+          "n": 5,
+          "score": "5:23",
+          "place": 19
+        }
+      ]
+    },
+    "holly-tynan": {
+      "event": "Individual Online Semifinal",
+      "official": false,
+      "source": "c3po semifinals/2026 (online)",
+      "fieldSize": 476,
+      "overallRank": "8",
+      "perEvent": [
+        {
+          "n": 1,
+          "score": "6:58",
+          "place": 4
+        },
+        {
+          "n": 2,
+          "score": "10:00",
+          "place": 7
+        },
+        {
+          "n": 3,
+          "score": "18:35",
+          "place": 41
+        },
+        {
+          "n": 4,
+          "score": "4:13",
+          "place": 14
+        },
+        {
+          "n": 5,
+          "score": "5:21",
+          "place": 17
+        }
+      ]
     }
   }
 }

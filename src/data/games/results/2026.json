@@ -866,7 +866,7 @@
           {
             "name": "Lucy Campbell",
             "country": "United Kingdom",
-            "totalPoints": 9,
+            "totalPoints": 8,
             "officialRank": "1",
             "events": [
               {
@@ -877,9 +877,9 @@
               },
               {
                 "eventId": "2026-open-02",
-                "place": 3,
+                "place": 2,
                 "score": "6:50",
-                "points": 3
+                "points": 2
               },
               {
                 "eventId": "2026-open-03",
@@ -893,7 +893,7 @@
           {
             "name": "Mirjam von Rohr",
             "country": "Switzerland",
-            "totalPoints": 12,
+            "totalPoints": 10,
             "officialRank": "2",
             "events": [
               {
@@ -904,9 +904,9 @@
               },
               {
                 "eventId": "2026-open-02",
-                "place": 10,
+                "place": 8,
                 "score": "7:15",
-                "points": 10
+                "points": 8
               },
               {
                 "eventId": "2026-open-03",
@@ -920,20 +920,20 @@
           {
             "name": "Emma Lawson",
             "country": "Canada",
-            "totalPoints": 17,
+            "totalPoints": 16,
             "officialRank": "4",
             "events": [
               {
                 "eventId": "2026-open-01",
-                "place": 5,
+                "place": 6,
                 "score": "11:33",
-                "points": 5
+                "points": 6
               },
               {
                 "eventId": "2026-open-02",
-                "place": 9,
+                "place": 7,
                 "score": "7:02",
-                "points": 9
+                "points": 7
               },
               {
                 "eventId": "2026-open-03",
@@ -945,36 +945,9 @@
             "rank": 3
           },
           {
-            "name": "Claudia Gluck",
-            "country": "France",
-            "totalPoints": 19,
-            "officialRank": "7",
-            "events": [
-              {
-                "eventId": "2026-open-01",
-                "place": 9,
-                "score": "11:41",
-                "points": 9
-              },
-              {
-                "eventId": "2026-open-02",
-                "place": 1,
-                "score": "6:33",
-                "points": 1
-              },
-              {
-                "eventId": "2026-open-03",
-                "place": 9,
-                "score": "15:27",
-                "points": 9
-              }
-            ],
-            "rank": 4
-          },
-          {
             "name": "Aimee Cringle",
             "country": "United Kingdom",
-            "totalPoints": 30,
+            "totalPoints": 27,
             "officialRank": "12",
             "events": [
               {
@@ -985,15 +958,42 @@
               },
               {
                 "eventId": "2026-open-02",
-                "place": 6,
+                "place": 5,
                 "score": "6:57",
-                "points": 6
+                "points": 5
               },
               {
                 "eventId": "2026-open-03",
-                "place": 12,
+                "place": 10,
                 "score": "15:36",
-                "points": 12
+                "points": 10
+              }
+            ],
+            "rank": 4
+          },
+          {
+            "name": "Paige Rodgers",
+            "country": "United States",
+            "totalPoints": 31,
+            "officialRank": "15",
+            "events": [
+              {
+                "eventId": "2026-open-01",
+                "place": 11,
+                "score": "11:44",
+                "points": 11
+              },
+              {
+                "eventId": "2026-open-02",
+                "place": 9,
+                "score": "7:17",
+                "points": 9
+              },
+              {
+                "eventId": "2026-open-03",
+                "place": 11,
+                "score": "15:38",
+                "points": 11
               }
             ],
             "rank": 5
@@ -1001,20 +1001,20 @@
           {
             "name": "Kyra Milligan",
             "country": "United States",
-            "totalPoints": 34,
+            "totalPoints": 32,
             "officialRank": "25",
             "events": [
               {
                 "eventId": "2026-open-01",
-                "place": 24,
+                "place": 23,
                 "score": "345 reps",
-                "points": 24
+                "points": 23
               },
               {
                 "eventId": "2026-open-02",
-                "place": 5,
+                "place": 4,
                 "score": "6:56",
-                "points": 5
+                "points": 4
               },
               {
                 "eventId": "2026-open-03",
@@ -1026,63 +1026,36 @@
             "rank": 6
           },
           {
-            "name": "Paige Rodgers",
-            "country": "United States",
+            "name": "Ella Wilkinson",
+            "country": "United Kingdom",
             "totalPoints": 35,
-            "officialRank": "15",
+            "officialRank": "13",
             "events": [
               {
                 "eventId": "2026-open-01",
-                "place": 11,
-                "score": "11:44",
-                "points": 11
+                "place": 7,
+                "score": "11:36",
+                "points": 7
               },
               {
                 "eventId": "2026-open-02",
-                "place": 11,
-                "score": "7:17",
-                "points": 11
+                "place": 16,
+                "score": "7:40",
+                "points": 16
               },
               {
                 "eventId": "2026-open-03",
-                "place": 13,
-                "score": "15:38",
-                "points": 13
+                "place": 12,
+                "score": "15:41",
+                "points": 12
               }
             ],
             "rank": 7
           },
           {
-            "name": "Ella Wilkinson",
-            "country": "United Kingdom",
-            "totalPoints": 38,
-            "officialRank": "13",
-            "events": [
-              {
-                "eventId": "2026-open-01",
-                "place": 6,
-                "score": "11:36",
-                "points": 6
-              },
-              {
-                "eventId": "2026-open-02",
-                "place": 18,
-                "score": "7:40",
-                "points": 18
-              },
-              {
-                "eventId": "2026-open-03",
-                "place": 14,
-                "score": "15:41",
-                "points": 14
-              }
-            ],
-            "rank": 8
-          },
-          {
             "name": "Siria Meha",
             "country": "Albania",
-            "totalPoints": 38,
+            "totalPoints": 36,
             "officialRank": "18",
             "events": [
               {
@@ -1093,9 +1066,9 @@
               },
               {
                 "eventId": "2026-open-02",
-                "place": 12,
+                "place": 10,
                 "score": "7:27",
-                "points": 12
+                "points": 10
               },
               {
                 "eventId": "2026-open-03",
@@ -1104,66 +1077,39 @@
                 "points": 7
               }
             ],
-            "rank": 9
+            "rank": 8
           },
           {
             "name": "Anikha Greer",
             "country": "Canada",
-            "totalPoints": 39,
+            "totalPoints": 37,
             "officialRank": "30",
             "events": [
               {
                 "eventId": "2026-open-01",
-                "place": 4,
+                "place": 5,
                 "score": "11:33",
-                "points": 4
+                "points": 5
               },
               {
                 "eventId": "2026-open-02",
-                "place": 13,
-                "score": "7:28",
-                "points": 13
-              },
-              {
-                "eventId": "2026-open-03",
-                "place": 22,
-                "score": "277 reps",
-                "points": 22
-              }
-            ],
-            "rank": 10
-          },
-          {
-            "name": "Jess Green",
-            "country": "Australia",
-            "totalPoints": 42,
-            "officialRank": "33",
-            "events": [
-              {
-                "eventId": "2026-open-01",
-                "place": 23,
-                "score": "345 reps",
-                "points": 23
-              },
-              {
-                "eventId": "2026-open-02",
-                "place": 8,
-                "score": "7:00",
-                "points": 8
-              },
-              {
-                "eventId": "2026-open-03",
                 "place": 11,
-                "score": "15:32",
+                "score": "7:28",
                 "points": 11
+              },
+              {
+                "eventId": "2026-open-03",
+                "place": 21,
+                "score": "277 reps",
+                "points": 21
               }
             ],
-            "rank": 11
+            "rank": 9
           },
           {
             "name": "Danielle Brandon",
             "country": "United States",
-            "totalPoints": 43,
+            "totalPoints": 39,
             "officialRank": "22",
             "events": [
               {
@@ -1174,23 +1120,50 @@
               },
               {
                 "eventId": "2026-open-02",
-                "place": 14,
+                "place": 12,
                 "score": "7:30",
-                "points": 14
+                "points": 12
+              },
+              {
+                "eventId": "2026-open-03",
+                "place": 17,
+                "score": "286 reps",
+                "points": 17
+              }
+            ],
+            "rank": 10
+          },
+          {
+            "name": "Bergrós Björnsdóttir",
+            "country": "Iceland",
+            "totalPoints": 40,
+            "officialRank": "17",
+            "events": [
+              {
+                "eventId": "2026-open-01",
+                "place": 3,
+                "score": "10:55",
+                "points": 3
+              },
+              {
+                "eventId": "2026-open-02",
+                "place": 18,
+                "score": "7:43",
+                "points": 18
               },
               {
                 "eventId": "2026-open-03",
                 "place": 19,
-                "score": "286 reps",
+                "score": "284 reps",
                 "points": 19
               }
             ],
-            "rank": 12
+            "rank": 11
           },
           {
             "name": "Lydia Fish",
             "country": "United States",
-            "totalPoints": 45,
+            "totalPoints": 43,
             "officialRank": "19",
             "events": [
               {
@@ -1201,23 +1174,77 @@
               },
               {
                 "eventId": "2026-open-02",
-                "place": 20,
+                "place": 19,
                 "score": "7:46",
-                "points": 20
+                "points": 19
               },
               {
                 "eventId": "2026-open-03",
-                "place": 10,
+                "place": 9,
                 "score": "15:28",
-                "points": 10
+                "points": 9
+              }
+            ],
+            "rank": 12
+          },
+          {
+            "name": "Madeline Sturt",
+            "country": "Australia",
+            "totalPoints": 43,
+            "officialRank": "58",
+            "events": [
+              {
+                "eventId": "2026-open-01",
+                "place": 25,
+                "score": "337 reps",
+                "points": 25
+              },
+              {
+                "eventId": "2026-open-02",
+                "place": 3,
+                "score": "6:54",
+                "points": 3
+              },
+              {
+                "eventId": "2026-open-03",
+                "place": 15,
+                "score": "15:53",
+                "points": 15
               }
             ],
             "rank": 13
           },
           {
+            "name": "Lucy McGonigle",
+            "country": "Ireland",
+            "totalPoints": 44,
+            "officialRank": "51",
+            "events": [
+              {
+                "eventId": "2026-open-01",
+                "place": 27,
+                "score": "335 reps",
+                "points": 27
+              },
+              {
+                "eventId": "2026-open-02",
+                "place": 15,
+                "score": "7:36",
+                "points": 15
+              },
+              {
+                "eventId": "2026-open-03",
+                "place": 2,
+                "score": "14:01",
+                "points": 2
+              }
+            ],
+            "rank": 14
+          },
+          {
             "name": "Arielle Loewen",
             "country": "United States",
-            "totalPoints": 46,
+            "totalPoints": 44,
             "officialRank": "45",
             "events": [
               {
@@ -1228,72 +1255,18 @@
               },
               {
                 "eventId": "2026-open-02",
-                "place": 7,
+                "place": 6,
                 "score": "6:58",
-                "points": 7
+                "points": 6
               },
               {
                 "eventId": "2026-open-03",
-                "place": 23,
+                "place": 22,
                 "score": "277 reps",
-                "points": 23
-              }
-            ],
-            "rank": 14
-          },
-          {
-            "name": "Lucy McGonigle",
-            "country": "Ireland",
-            "totalPoints": 47,
-            "officialRank": "51",
-            "events": [
-              {
-                "eventId": "2026-open-01",
-                "place": 28,
-                "score": "335 reps",
-                "points": 28
-              },
-              {
-                "eventId": "2026-open-02",
-                "place": 17,
-                "score": "7:36",
-                "points": 17
-              },
-              {
-                "eventId": "2026-open-03",
-                "place": 2,
-                "score": "14:01",
-                "points": 2
+                "points": 22
               }
             ],
             "rank": 15
-          },
-          {
-            "name": "Madeline Sturt",
-            "country": "Australia",
-            "totalPoints": 47,
-            "officialRank": "58",
-            "events": [
-              {
-                "eventId": "2026-open-01",
-                "place": 26,
-                "score": "337 reps",
-                "points": 26
-              },
-              {
-                "eventId": "2026-open-02",
-                "place": 4,
-                "score": "6:54",
-                "points": 4
-              },
-              {
-                "eventId": "2026-open-03",
-                "place": 17,
-                "score": "15:53",
-                "points": 17
-              }
-            ],
-            "rank": 16
           },
           {
             "name": "Miley Wade",
@@ -1320,7 +1293,7 @@
                 "points": 6
               }
             ],
-            "rank": 17
+            "rank": 16
           },
           {
             "name": "Ellie Turner",
@@ -1330,15 +1303,15 @@
             "events": [
               {
                 "eventId": "2026-open-01",
-                "place": 3,
+                "place": 4,
                 "score": "11:10",
-                "points": 3
+                "points": 4
               },
               {
                 "eventId": "2026-open-02",
-                "place": 23,
+                "place": 22,
                 "score": "7:52",
-                "points": 23
+                "points": 22
               },
               {
                 "eventId": "2026-open-03",
@@ -1347,12 +1320,12 @@
                 "points": 24
               }
             ],
-            "rank": 18
+            "rank": 17
           },
           {
             "name": "Haley Adams",
             "country": "United States",
-            "totalPoints": 53,
+            "totalPoints": 50,
             "officialRank": "28",
             "events": [
               {
@@ -1363,15 +1336,42 @@
               },
               {
                 "eventId": "2026-open-02",
-                "place": 24,
+                "place": 23,
                 "score": "7:53",
-                "points": 24
+                "points": 23
               },
               {
                 "eventId": "2026-open-03",
-                "place": 16,
+                "place": 14,
                 "score": "15:50",
-                "points": 16
+                "points": 14
+              }
+            ],
+            "rank": 18
+          },
+          {
+            "name": "Alexis Raptis",
+            "country": "United States",
+            "totalPoints": 51,
+            "officialRank": "56",
+            "events": [
+              {
+                "eventId": "2026-open-01",
+                "place": 24,
+                "score": "339 reps",
+                "points": 24
+              },
+              {
+                "eventId": "2026-open-02",
+                "place": 14,
+                "score": "7:33",
+                "points": 14
+              },
+              {
+                "eventId": "2026-open-03",
+                "place": 13,
+                "score": "15:42",
+                "points": 13
               }
             ],
             "rank": 19
@@ -1379,35 +1379,8 @@
           {
             "name": "Gabriela Migala",
             "country": "Poland",
-            "totalPoints": 54,
+            "totalPoints": 53,
             "officialRank": "35",
-            "events": [
-              {
-                "eventId": "2026-open-01",
-                "place": 7,
-                "score": "11:38",
-                "points": 7
-              },
-              {
-                "eventId": "2026-open-02",
-                "place": 29,
-                "score": "8:26",
-                "points": 29
-              },
-              {
-                "eventId": "2026-open-03",
-                "place": 18,
-                "score": "15:58",
-                "points": 18
-              }
-            ],
-            "rank": 20
-          },
-          {
-            "name": "Elisa Fuliano",
-            "country": "Italy",
-            "totalPoints": 54,
-            "officialRank": "65",
             "events": [
               {
                 "eventId": "2026-open-01",
@@ -1417,23 +1390,23 @@
               },
               {
                 "eventId": "2026-open-02",
-                "place": 21,
-                "score": "7:47",
-                "points": 21
+                "place": 29,
+                "score": "8:26",
+                "points": 29
               },
               {
                 "eventId": "2026-open-03",
-                "place": 25,
-                "score": "270 reps",
-                "points": 25
+                "place": 16,
+                "score": "15:58",
+                "points": 16
               }
             ],
-            "rank": 21
+            "rank": 20
           },
           {
             "name": "Abigail Domit",
             "country": "United States",
-            "totalPoints": 56,
+            "totalPoints": 53,
             "officialRank": "50",
             "events": [
               {
@@ -1444,63 +1417,63 @@
               },
               {
                 "eventId": "2026-open-02",
-                "place": 15,
+                "place": 13,
                 "score": "7:32",
-                "points": 15
+                "points": 13
               },
               {
                 "eventId": "2026-open-03",
-                "place": 21,
+                "place": 20,
                 "score": "279 reps",
-                "points": 21
+                "points": 20
+              }
+            ],
+            "rank": 21
+          },
+          {
+            "name": "Elisa Fuliano",
+            "country": "Italy",
+            "totalPoints": 54,
+            "officialRank": "65",
+            "events": [
+              {
+                "eventId": "2026-open-01",
+                "place": 9,
+                "score": "11:38",
+                "points": 9
+              },
+              {
+                "eventId": "2026-open-02",
+                "place": 20,
+                "score": "7:47",
+                "points": 20
+              },
+              {
+                "eventId": "2026-open-03",
+                "place": 25,
+                "score": "270 reps",
+                "points": 25
               }
             ],
             "rank": 22
           },
           {
-            "name": "Alexis Raptis",
-            "country": "United States",
-            "totalPoints": 56,
-            "officialRank": "56",
-            "events": [
-              {
-                "eventId": "2026-open-01",
-                "place": 25,
-                "score": "339 reps",
-                "points": 25
-              },
-              {
-                "eventId": "2026-open-02",
-                "place": 16,
-                "score": "7:33",
-                "points": 16
-              },
-              {
-                "eventId": "2026-open-03",
-                "place": 15,
-                "score": "15:42",
-                "points": 15
-              }
-            ],
-            "rank": 23
-          },
-          {
             "name": "Matilde Garnes",
             "country": "Norway",
-            "totalPoints": 57,
+            "totalPoints": 55,
             "officialRank": "96",
             "events": [
               {
                 "eventId": "2026-open-01",
-                "place": 29,
+                "place": 28,
                 "score": "335 reps",
-                "points": 29
+                "points": 28
               },
               {
                 "eventId": "2026-open-02",
-                "place": 2,
+                "place": 1,
                 "score": "6:40",
-                "points": 2
+                "points": 1
               },
               {
                 "eventId": "2026-open-03",
@@ -1509,12 +1482,12 @@
                 "points": 26
               }
             ],
-            "rank": 24
+            "rank": 23
           },
           {
             "name": "Alex Gazan",
             "country": "United States",
-            "totalPoints": 64,
+            "totalPoints": 62,
             "officialRank": "91",
             "events": [
               {
@@ -1525,15 +1498,42 @@
               },
               {
                 "eventId": "2026-open-02",
-                "place": 19,
+                "place": 17,
                 "score": "7:40",
-                "points": 19
+                "points": 17
               },
               {
                 "eventId": "2026-open-03",
                 "place": 27,
                 "score": "264 reps",
                 "points": 27
+              }
+            ],
+            "rank": 24
+          },
+          {
+            "name": "Erica Folo",
+            "country": "Canada",
+            "totalPoints": 65,
+            "officialRank": "2423",
+            "events": [
+              {
+                "eventId": "2026-open-01",
+                "place": 14,
+                "score": "11:51",
+                "points": 14
+              },
+              {
+                "eventId": "2026-open-02",
+                "place": 21,
+                "score": "7:47",
+                "points": 21
+              },
+              {
+                "eventId": "2026-open-03",
+                "place": 30,
+                "score": "204 reps",
+                "points": 30
               }
             ],
             "rank": 25
@@ -1566,36 +1566,9 @@
             "rank": 26
           },
           {
-            "name": "Erica Folo",
-            "country": "Canada",
-            "totalPoints": 66,
-            "officialRank": "2423",
-            "events": [
-              {
-                "eventId": "2026-open-01",
-                "place": 14,
-                "score": "11:51",
-                "points": 14
-              },
-              {
-                "eventId": "2026-open-02",
-                "place": 22,
-                "score": "7:47",
-                "points": 22
-              },
-              {
-                "eventId": "2026-open-03",
-                "place": 30,
-                "score": "204 reps",
-                "points": 30
-              }
-            ],
-            "rank": 27
-          },
-          {
             "name": "Olivia Kerstetter",
             "country": "United States",
-            "totalPoints": 68,
+            "totalPoints": 66,
             "officialRank": "53",
             "events": [
               {
@@ -1612,9 +1585,36 @@
               },
               {
                 "eventId": "2026-open-03",
-                "place": 20,
+                "place": 18,
                 "score": "285 reps",
-                "points": 20
+                "points": 18
+              }
+            ],
+            "rank": 27
+          },
+          {
+            "name": "Holly Tynan",
+            "country": "Ireland",
+            "totalPoints": 76,
+            "officialRank": "90",
+            "events": [
+              {
+                "eventId": "2026-open-01",
+                "place": 29,
+                "score": "334 reps",
+                "points": 29
+              },
+              {
+                "eventId": "2026-open-02",
+                "place": 24,
+                "score": "7:56",
+                "points": 24
+              },
+              {
+                "eventId": "2026-open-03",
+                "place": 23,
+                "score": "276 reps",
+                "points": 23
               }
             ],
             "rank": 28
@@ -1649,14 +1649,14 @@
           {
             "name": "Hannah Black",
             "country": "United States",
-            "totalPoints": 86,
+            "totalPoints": 85,
             "officialRank": "154",
             "events": [
               {
                 "eventId": "2026-open-01",
-                "place": 27,
+                "place": 26,
                 "score": "336 reps",
-                "points": 27
+                "points": 26
               },
               {
                 "eventId": "2026-open-02",
@@ -2736,7 +2736,7 @@
           {
             "name": "Kyra Milligan",
             "country": "United States",
-            "totalPoints": 16,
+            "totalPoints": 15,
             "officialRank": "1",
             "events": [
               {
@@ -2747,9 +2747,9 @@
               },
               {
                 "eventId": "2026-qf-02",
-                "place": 3,
+                "place": 2,
                 "score": "6:47",
-                "points": 3
+                "points": 2
               },
               {
                 "eventId": "2026-qf-03",
@@ -2769,7 +2769,7 @@
           {
             "name": "Arielle Loewen",
             "country": "United States",
-            "totalPoints": 30,
+            "totalPoints": 29,
             "officialRank": "2",
             "events": [
               {
@@ -2780,9 +2780,9 @@
               },
               {
                 "eventId": "2026-qf-02",
-                "place": 4,
+                "place": 3,
                 "score": "6:52",
-                "points": 4
+                "points": 3
               },
               {
                 "eventId": "2026-qf-03",
@@ -2802,7 +2802,7 @@
           {
             "name": "Lucy Campbell",
             "country": "United Kingdom",
-            "totalPoints": 32,
+            "totalPoints": 31,
             "officialRank": "4",
             "events": [
               {
@@ -2813,9 +2813,9 @@
               },
               {
                 "eventId": "2026-qf-02",
-                "place": 6,
+                "place": 5,
                 "score": "6:56",
-                "points": 6
+                "points": 5
               },
               {
                 "eventId": "2026-qf-03",
@@ -2835,7 +2835,7 @@
           {
             "name": "Danielle Brandon",
             "country": "United States",
-            "totalPoints": 35,
+            "totalPoints": 34,
             "officialRank": "3",
             "events": [
               {
@@ -2846,9 +2846,9 @@
               },
               {
                 "eventId": "2026-qf-02",
-                "place": 12,
+                "place": 11,
                 "score": "7:09",
-                "points": 12
+                "points": 11
               },
               {
                 "eventId": "2026-qf-03",
@@ -2868,7 +2868,7 @@
           {
             "name": "Lucy McGonigle",
             "country": "Ireland",
-            "totalPoints": 36,
+            "totalPoints": 34,
             "officialRank": "5",
             "events": [
               {
@@ -2879,15 +2879,15 @@
               },
               {
                 "eventId": "2026-qf-02",
-                "place": 5,
+                "place": 4,
                 "score": "6:54",
-                "points": 5
+                "points": 4
               },
               {
                 "eventId": "2026-qf-03",
-                "place": 13,
+                "place": 12,
                 "score": "4:22",
-                "points": 13
+                "points": 12
               },
               {
                 "eventId": "2026-qf-04",
@@ -2901,7 +2901,7 @@
           {
             "name": "Mirjam von Rohr",
             "country": "Switzerland",
-            "totalPoints": 37,
+            "totalPoints": 35,
             "officialRank": "7",
             "events": [
               {
@@ -2924,9 +2924,9 @@
               },
               {
                 "eventId": "2026-qf-04",
-                "place": 22,
+                "place": 20,
                 "score": "11:10",
-                "points": 22
+                "points": 20
               }
             ],
             "rank": 6
@@ -2934,7 +2934,7 @@
           {
             "name": "Paige Rodgers",
             "country": "United States",
-            "totalPoints": 38,
+            "totalPoints": 37,
             "officialRank": "6",
             "events": [
               {
@@ -2945,9 +2945,9 @@
               },
               {
                 "eventId": "2026-qf-02",
-                "place": 10,
+                "place": 9,
                 "score": "7:05",
-                "points": 10
+                "points": 9
               },
               {
                 "eventId": "2026-qf-03",
@@ -2965,42 +2965,9 @@
             "rank": 7
           },
           {
-            "name": "Claudia Gluck",
-            "country": "France",
-            "totalPoints": 40,
-            "officialRank": "8",
-            "events": [
-              {
-                "eventId": "2026-qf-01",
-                "place": 1,
-                "score": "6:02",
-                "points": 1
-              },
-              {
-                "eventId": "2026-qf-02",
-                "place": 7,
-                "score": "6:57",
-                "points": 7
-              },
-              {
-                "eventId": "2026-qf-03",
-                "place": 12,
-                "score": "4:21",
-                "points": 12
-              },
-              {
-                "eventId": "2026-qf-04",
-                "place": 20,
-                "score": "11:04",
-                "points": 20
-              }
-            ],
-            "rank": 8
-          },
-          {
             "name": "Alexis Raptis",
             "country": "United States",
-            "totalPoints": 46,
+            "totalPoints": 45,
             "officialRank": "13",
             "events": [
               {
@@ -3011,9 +2978,9 @@
               },
               {
                 "eventId": "2026-qf-02",
-                "place": 19,
+                "place": 18,
                 "score": "7:29",
-                "points": 19
+                "points": 18
               },
               {
                 "eventId": "2026-qf-03",
@@ -3028,12 +2995,12 @@
                 "points": 4
               }
             ],
-            "rank": 9
+            "rank": 8
           },
           {
             "name": "Olivia Kerstetter",
             "country": "United States",
-            "totalPoints": 47,
+            "totalPoints": 46,
             "officialRank": "12",
             "events": [
               {
@@ -3044,9 +3011,9 @@
               },
               {
                 "eventId": "2026-qf-02",
-                "place": 22,
+                "place": 21,
                 "score": "7:34",
-                "points": 22
+                "points": 21
               },
               {
                 "eventId": "2026-qf-03",
@@ -3061,12 +3028,12 @@
                 "points": 1
               }
             ],
-            "rank": 10
+            "rank": 9
           },
           {
             "name": "Madeline Sturt",
             "country": "Australia",
-            "totalPoints": 50,
+            "totalPoints": 47,
             "officialRank": "21",
             "events": [
               {
@@ -3077,9 +3044,9 @@
               },
               {
                 "eventId": "2026-qf-02",
-                "place": 8,
+                "place": 6,
                 "score": "6:59",
-                "points": 8
+                "points": 6
               },
               {
                 "eventId": "2026-qf-03",
@@ -3089,17 +3056,17 @@
               },
               {
                 "eventId": "2026-qf-04",
-                "place": 27,
+                "place": 26,
                 "score": "11:43",
-                "points": 27
+                "points": 26
               }
             ],
-            "rank": 11
+            "rank": 10
           },
           {
             "name": "Emma Lawson",
             "country": "Canada",
-            "totalPoints": 60,
+            "totalPoints": 58,
             "officialRank": "20",
             "events": [
               {
@@ -3110,15 +3077,15 @@
               },
               {
                 "eventId": "2026-qf-02",
-                "place": 17,
+                "place": 16,
                 "score": "7:25",
-                "points": 17
+                "points": 16
               },
               {
                 "eventId": "2026-qf-03",
-                "place": 23,
+                "place": 22,
                 "score": "4:43",
-                "points": 23
+                "points": 22
               },
               {
                 "eventId": "2026-qf-04",
@@ -3127,12 +3094,12 @@
                 "points": 14
               }
             ],
-            "rank": 12
+            "rank": 11
           },
           {
             "name": "Lydia Fish",
             "country": "United States",
-            "totalPoints": 61,
+            "totalPoints": 59,
             "officialRank": "18",
             "events": [
               {
@@ -3143,15 +3110,15 @@
               },
               {
                 "eventId": "2026-qf-02",
-                "place": 18,
+                "place": 17,
                 "score": "7:26",
-                "points": 18
+                "points": 17
               },
               {
                 "eventId": "2026-qf-03",
-                "place": 20,
+                "place": 19,
                 "score": "4:39",
-                "points": 20
+                "points": 19
               },
               {
                 "eventId": "2026-qf-04",
@@ -3160,12 +3127,12 @@
                 "points": 16
               }
             ],
-            "rank": 13
+            "rank": 12
           },
           {
             "name": "Ellie Turner",
             "country": "Australia",
-            "totalPoints": 61,
+            "totalPoints": 59,
             "officialRank": "696",
             "events": [
               {
@@ -3176,9 +3143,9 @@
               },
               {
                 "eventId": "2026-qf-02",
-                "place": 9,
+                "place": 7,
                 "score": "7:02",
-                "points": 9
+                "points": 7
               },
               {
                 "eventId": "2026-qf-03",
@@ -3193,12 +3160,12 @@
                 "points": 13
               }
             ],
-            "rank": 14
+            "rank": 13
           },
           {
             "name": "Anikha Greer",
             "country": "Canada",
-            "totalPoints": 62,
+            "totalPoints": 60,
             "officialRank": "17",
             "events": [
               {
@@ -3209,15 +3176,15 @@
               },
               {
                 "eventId": "2026-qf-02",
-                "place": 20,
+                "place": 19,
                 "score": "7:30",
-                "points": 20
+                "points": 19
               },
               {
                 "eventId": "2026-qf-03",
-                "place": 17,
+                "place": 16,
                 "score": "4:34",
-                "points": 17
+                "points": 16
               },
               {
                 "eventId": "2026-qf-04",
@@ -3226,12 +3193,45 @@
                 "points": 7
               }
             ],
+            "rank": 14
+          },
+          {
+            "name": "Bergrós Björnsdóttir",
+            "country": "Iceland",
+            "totalPoints": 60,
+            "officialRank": "51",
+            "events": [
+              {
+                "eventId": "2026-qf-01",
+                "place": 1,
+                "score": "6:01",
+                "points": 1
+              },
+              {
+                "eventId": "2026-qf-02",
+                "place": 8,
+                "score": "7:04",
+                "points": 8
+              },
+              {
+                "eventId": "2026-qf-03",
+                "place": 27,
+                "score": "5:13",
+                "points": 27
+              },
+              {
+                "eventId": "2026-qf-04",
+                "place": 24,
+                "score": "11:17",
+                "points": 24
+              }
+            ],
             "rank": 15
           },
           {
             "name": "Abigail Domit",
             "country": "United States",
-            "totalPoints": 65,
+            "totalPoints": 63,
             "officialRank": "22",
             "events": [
               {
@@ -3242,15 +3242,15 @@
               },
               {
                 "eventId": "2026-qf-02",
-                "place": 25,
+                "place": 24,
                 "score": "7:55",
-                "points": 25
+                "points": 24
               },
               {
                 "eventId": "2026-qf-03",
-                "place": 16,
+                "place": 15,
                 "score": "4:29",
-                "points": 16
+                "points": 15
               },
               {
                 "eventId": "2026-qf-04",
@@ -3264,7 +3264,7 @@
           {
             "name": "Aimee Cringle",
             "country": "United Kingdom",
-            "totalPoints": 66,
+            "totalPoints": 64,
             "officialRank": "18",
             "events": [
               {
@@ -3275,15 +3275,15 @@
               },
               {
                 "eventId": "2026-qf-02",
-                "place": 15,
+                "place": 14,
                 "score": "7:23",
-                "points": 15
+                "points": 14
               },
               {
                 "eventId": "2026-qf-03",
-                "place": 18,
+                "place": 17,
                 "score": "4:35",
-                "points": 18
+                "points": 17
               },
               {
                 "eventId": "2026-qf-04",
@@ -3297,7 +3297,7 @@
           {
             "name": "Gabriela Migala",
             "country": "Poland",
-            "totalPoints": 66,
+            "totalPoints": 65,
             "officialRank": "27",
             "events": [
               {
@@ -3314,9 +3314,9 @@
               },
               {
                 "eventId": "2026-qf-03",
-                "place": 21,
+                "place": 20,
                 "score": "4:39",
-                "points": 21
+                "points": 20
               },
               {
                 "eventId": "2026-qf-04",
@@ -3330,7 +3330,7 @@
           {
             "name": "Alex Gazan",
             "country": "United States",
-            "totalPoints": 67,
+            "totalPoints": 65,
             "officialRank": "25",
             "events": [
               {
@@ -3341,15 +3341,15 @@
               },
               {
                 "eventId": "2026-qf-02",
-                "place": 24,
+                "place": 23,
                 "score": "7:54",
-                "points": 24
+                "points": 23
               },
               {
                 "eventId": "2026-qf-03",
-                "place": 14,
+                "place": 13,
                 "score": "4:26",
-                "points": 14
+                "points": 13
               },
               {
                 "eventId": "2026-qf-04",
@@ -3361,34 +3361,34 @@
             "rank": 19
           },
           {
-            "name": "Jess Green",
-            "country": "Australia",
-            "totalPoints": 68,
-            "officialRank": "32",
+            "name": "Matilde Garnes",
+            "country": "Norway",
+            "totalPoints": 70,
+            "officialRank": "61",
             "events": [
               {
                 "eventId": "2026-qf-01",
-                "place": 26,
-                "score": "6:55",
-                "points": 26
+                "place": 29,
+                "score": "7:15",
+                "points": 29
               },
               {
                 "eventId": "2026-qf-02",
-                "place": 2,
-                "score": "6:35",
-                "points": 2
+                "place": 13,
+                "score": "7:20",
+                "points": 13
               },
               {
                 "eventId": "2026-qf-03",
-                "place": 19,
-                "score": "4:36",
-                "points": 19
+                "place": 3,
+                "score": "4:09",
+                "points": 3
               },
               {
                 "eventId": "2026-qf-04",
-                "place": 21,
-                "score": "11:07",
-                "points": 21
+                "place": 25,
+                "score": "11:24",
+                "points": 25
               }
             ],
             "rank": 20
@@ -3396,7 +3396,7 @@
           {
             "name": "Haley Adams",
             "country": "United States",
-            "totalPoints": 72,
+            "totalPoints": 71,
             "officialRank": "148",
             "events": [
               {
@@ -3407,9 +3407,9 @@
               },
               {
                 "eventId": "2026-qf-02",
-                "place": 16,
+                "place": 15,
                 "score": "7:23",
-                "points": 16
+                "points": 15
               },
               {
                 "eventId": "2026-qf-03",
@@ -3427,42 +3427,9 @@
             "rank": 21
           },
           {
-            "name": "Matilde Garnes",
-            "country": "Norway",
-            "totalPoints": 72,
-            "officialRank": "61",
-            "events": [
-              {
-                "eventId": "2026-qf-01",
-                "place": 29,
-                "score": "7:15",
-                "points": 29
-              },
-              {
-                "eventId": "2026-qf-02",
-                "place": 14,
-                "score": "7:20",
-                "points": 14
-              },
-              {
-                "eventId": "2026-qf-03",
-                "place": 3,
-                "score": "4:09",
-                "points": 3
-              },
-              {
-                "eventId": "2026-qf-04",
-                "place": 26,
-                "score": "11:24",
-                "points": 26
-              }
-            ],
-            "rank": 22
-          },
-          {
             "name": "Siria Meha",
             "country": "Albania",
-            "totalPoints": 74,
+            "totalPoints": 73,
             "officialRank": "88",
             "events": [
               {
@@ -3473,9 +3440,9 @@
               },
               {
                 "eventId": "2026-qf-02",
-                "place": 13,
+                "place": 12,
                 "score": "7:12",
-                "points": 13
+                "points": 12
               },
               {
                 "eventId": "2026-qf-03",
@@ -3490,45 +3457,12 @@
                 "points": 8
               }
             ],
-            "rank": 23
-          },
-          {
-            "name": "Ella Wilkinson",
-            "country": "United Kingdom",
-            "totalPoints": 80,
-            "officialRank": "33",
-            "events": [
-              {
-                "eventId": "2026-qf-01",
-                "place": 22,
-                "score": "6:45",
-                "points": 22
-              },
-              {
-                "eventId": "2026-qf-02",
-                "place": 23,
-                "score": "7:53",
-                "points": 23
-              },
-              {
-                "eventId": "2026-qf-03",
-                "place": 11,
-                "score": "4:20",
-                "points": 11
-              },
-              {
-                "eventId": "2026-qf-04",
-                "place": 24,
-                "score": "11:13",
-                "points": 24
-              }
-            ],
-            "rank": 24
+            "rank": 22
           },
           {
             "name": "Elisa Fuliano",
             "country": "Italy",
-            "totalPoints": 80,
+            "totalPoints": 76,
             "officialRank": "49",
             "events": [
               {
@@ -3539,62 +3473,62 @@
               },
               {
                 "eventId": "2026-qf-02",
-                "place": 11,
+                "place": 10,
                 "score": "7:08",
-                "points": 11
+                "points": 10
               },
               {
                 "eventId": "2026-qf-03",
-                "place": 26,
+                "place": 25,
                 "score": "5:04",
-                "points": 26
+                "points": 25
               },
               {
                 "eventId": "2026-qf-04",
-                "place": 23,
+                "place": 21,
                 "score": "11:11",
-                "points": 23
+                "points": 21
               }
             ],
-            "rank": 25
+            "rank": 23
           },
           {
-            "name": "Miley Wade",
-            "country": "United States",
-            "totalPoints": 83,
-            "officialRank": "36",
+            "name": "Ella Wilkinson",
+            "country": "United Kingdom",
+            "totalPoints": 77,
+            "officialRank": "33",
             "events": [
               {
                 "eventId": "2026-qf-01",
-                "place": 21,
-                "score": "6:43",
-                "points": 21
+                "place": 22,
+                "score": "6:45",
+                "points": 22
               },
               {
                 "eventId": "2026-qf-02",
-                "place": 21,
-                "score": "7:31",
-                "points": 21
+                "place": 22,
+                "score": "7:53",
+                "points": 22
               },
               {
                 "eventId": "2026-qf-03",
-                "place": 24,
-                "score": "4:45",
-                "points": 24
+                "place": 11,
+                "score": "4:20",
+                "points": 11
               },
               {
                 "eventId": "2026-qf-04",
-                "place": 17,
-                "score": "11:01",
-                "points": 17
+                "place": 22,
+                "score": "11:13",
+                "points": 22
               }
             ],
-            "rank": 26
+            "rank": 24
           },
           {
             "name": "Janie Cheverie",
             "country": "Canada",
-            "totalPoints": 83,
+            "totalPoints": 80,
             "officialRank": "44",
             "events": [
               {
@@ -3611,15 +3545,81 @@
               },
               {
                 "eventId": "2026-qf-03",
-                "place": 15,
+                "place": 14,
                 "score": "4:27",
-                "points": 15
+                "points": 14
               },
               {
                 "eventId": "2026-qf-04",
-                "place": 25,
+                "place": 23,
                 "score": "11:16",
+                "points": 23
+              }
+            ],
+            "rank": 25
+          },
+          {
+            "name": "Miley Wade",
+            "country": "United States",
+            "totalPoints": 81,
+            "officialRank": "36",
+            "events": [
+              {
+                "eventId": "2026-qf-01",
+                "place": 21,
+                "score": "6:43",
+                "points": 21
+              },
+              {
+                "eventId": "2026-qf-02",
+                "place": 20,
+                "score": "7:31",
+                "points": 20
+              },
+              {
+                "eventId": "2026-qf-03",
+                "place": 23,
+                "score": "4:45",
+                "points": 23
+              },
+              {
+                "eventId": "2026-qf-04",
+                "place": 17,
+                "score": "11:01",
+                "points": 17
+              }
+            ],
+            "rank": 26
+          },
+          {
+            "name": "Holly Tynan",
+            "country": "Ireland",
+            "totalPoints": 96,
+            "officialRank": "65",
+            "events": [
+              {
+                "eventId": "2026-qf-01",
+                "place": 26,
+                "score": "6:53",
+                "points": 26
+              },
+              {
+                "eventId": "2026-qf-02",
+                "place": 25,
+                "score": "7:56",
                 "points": 25
+              },
+              {
+                "eventId": "2026-qf-03",
+                "place": 18,
+                "score": "4:37",
+                "points": 18
+              },
+              {
+                "eventId": "2026-qf-04",
+                "place": 27,
+                "score": "11:44",
+                "points": 27
               }
             ],
             "rank": 27
@@ -3627,7 +3627,7 @@
           {
             "name": "Hannah Black",
             "country": "United States",
-            "totalPoints": 106,
+            "totalPoints": 105,
             "officialRank": "177",
             "events": [
               {
@@ -3644,9 +3644,9 @@
               },
               {
                 "eventId": "2026-qf-03",
-                "place": 22,
+                "place": 21,
                 "score": "4:42",
-                "points": 22
+                "points": 21
               },
               {
                 "eventId": "2026-qf-04",
@@ -3660,7 +3660,7 @@
           {
             "name": "Rachel Noel",
             "country": "United States",
-            "totalPoints": 112,
+            "totalPoints": 111,
             "officialRank": "632",
             "events": [
               {
@@ -3677,9 +3677,9 @@
               },
               {
                 "eventId": "2026-qf-03",
-                "place": 25,
+                "place": 24,
                 "score": "4:46",
-                "points": 25
+                "points": 24
               },
               {
                 "eventId": "2026-qf-04",
@@ -3693,7 +3693,7 @@
           {
             "name": "Erica Folo",
             "country": "Canada",
-            "totalPoints": 115,
+            "totalPoints": 114,
             "officialRank": "318",
             "events": [
               {
@@ -3710,9 +3710,9 @@
               },
               {
                 "eventId": "2026-qf-03",
-                "place": 27,
+                "place": 26,
                 "score": "5:10",
-                "points": 27
+                "points": 26
               },
               {
                 "eventId": "2026-qf-04",
@@ -5489,7 +5489,7 @@
           {
             "name": "Lucy Campbell",
             "country": "United Kingdom",
-            "totalPoints": 41,
+            "totalPoints": 39,
             "officialRank": "1",
             "openRank": "1",
             "qfRank": "4",
@@ -5504,9 +5504,9 @@
               },
               {
                 "eventId": "2026-open-02",
-                "place": 3,
+                "place": 2,
                 "score": "6:50",
-                "points": 3
+                "points": 2
               },
               {
                 "eventId": "2026-open-03",
@@ -5522,9 +5522,9 @@
               },
               {
                 "eventId": "2026-qf-02",
-                "place": 6,
+                "place": 5,
                 "score": "6:56",
-                "points": 6
+                "points": 5
               },
               {
                 "eventId": "2026-qf-03",
@@ -5544,7 +5544,7 @@
           {
             "name": "Mirjam von Rohr",
             "country": "Switzerland",
-            "totalPoints": 49,
+            "totalPoints": 45,
             "officialRank": "2",
             "openRank": "2",
             "qfRank": "7",
@@ -5559,9 +5559,9 @@
               },
               {
                 "eventId": "2026-open-02",
-                "place": 10,
+                "place": 8,
                 "score": "7:15",
-                "points": 10
+                "points": 8
               },
               {
                 "eventId": "2026-open-03",
@@ -5589,9 +5589,9 @@
               },
               {
                 "eventId": "2026-qf-04",
-                "place": 22,
+                "place": 20,
                 "score": "11:10",
-                "points": 22
+                "points": 20
               }
             ],
             "rank": 2
@@ -5599,7 +5599,7 @@
           {
             "name": "Kyra Milligan",
             "country": "United States",
-            "totalPoints": 50,
+            "totalPoints": 47,
             "officialRank": "25",
             "openRank": "25",
             "qfRank": "1",
@@ -5608,15 +5608,15 @@
             "events": [
               {
                 "eventId": "2026-open-01",
-                "place": 24,
+                "place": 23,
                 "score": "345 reps",
-                "points": 24
+                "points": 23
               },
               {
                 "eventId": "2026-open-02",
-                "place": 5,
+                "place": 4,
                 "score": "6:56",
-                "points": 5
+                "points": 4
               },
               {
                 "eventId": "2026-open-03",
@@ -5632,9 +5632,9 @@
               },
               {
                 "eventId": "2026-qf-02",
-                "place": 3,
+                "place": 2,
                 "score": "6:47",
-                "points": 3
+                "points": 2
               },
               {
                 "eventId": "2026-qf-03",
@@ -5652,64 +5652,9 @@
             "rank": 3
           },
           {
-            "name": "Claudia Gluck",
-            "country": "France",
-            "totalPoints": 59,
-            "officialRank": "7",
-            "openRank": "7",
-            "qfRank": "8",
-            "semifinalEvent": "Individual Online Semifinal",
-            "semifinalFinish": "5th",
-            "events": [
-              {
-                "eventId": "2026-open-01",
-                "place": 9,
-                "score": "11:41",
-                "points": 9
-              },
-              {
-                "eventId": "2026-open-02",
-                "place": 1,
-                "score": "6:33",
-                "points": 1
-              },
-              {
-                "eventId": "2026-open-03",
-                "place": 9,
-                "score": "15:27",
-                "points": 9
-              },
-              {
-                "eventId": "2026-qf-01",
-                "place": 1,
-                "score": "6:02",
-                "points": 1
-              },
-              {
-                "eventId": "2026-qf-02",
-                "place": 7,
-                "score": "6:57",
-                "points": 7
-              },
-              {
-                "eventId": "2026-qf-03",
-                "place": 12,
-                "score": "4:21",
-                "points": 12
-              },
-              {
-                "eventId": "2026-qf-04",
-                "place": 20,
-                "score": "11:04",
-                "points": 20
-              }
-            ],
-            "rank": 4
-          },
-          {
             "name": "Paige Rodgers",
             "country": "United States",
-            "totalPoints": 73,
+            "totalPoints": 68,
             "officialRank": "15",
             "openRank": "15",
             "qfRank": "6",
@@ -5724,15 +5669,15 @@
               },
               {
                 "eventId": "2026-open-02",
-                "place": 11,
+                "place": 9,
                 "score": "7:17",
-                "points": 11
+                "points": 9
               },
               {
                 "eventId": "2026-open-03",
-                "place": 13,
+                "place": 11,
                 "score": "15:38",
-                "points": 13
+                "points": 11
               },
               {
                 "eventId": "2026-qf-01",
@@ -5742,9 +5687,9 @@
               },
               {
                 "eventId": "2026-qf-02",
-                "place": 10,
+                "place": 9,
                 "score": "7:05",
-                "points": 10
+                "points": 9
               },
               {
                 "eventId": "2026-qf-03",
@@ -5759,12 +5704,67 @@
                 "points": 5
               }
             ],
+            "rank": 4
+          },
+          {
+            "name": "Danielle Brandon",
+            "country": "United States",
+            "totalPoints": 73,
+            "officialRank": "22",
+            "openRank": "22",
+            "qfRank": "3",
+            "semifinalEvent": "Syndicate Crown",
+            "semifinalFinish": "3rd",
+            "events": [
+              {
+                "eventId": "2026-open-01",
+                "place": 10,
+                "score": "11:42",
+                "points": 10
+              },
+              {
+                "eventId": "2026-open-02",
+                "place": 12,
+                "score": "7:30",
+                "points": 12
+              },
+              {
+                "eventId": "2026-open-03",
+                "place": 17,
+                "score": "286 reps",
+                "points": 17
+              },
+              {
+                "eventId": "2026-qf-01",
+                "place": 5,
+                "score": "6:17",
+                "points": 5
+              },
+              {
+                "eventId": "2026-qf-02",
+                "place": 11,
+                "score": "7:09",
+                "points": 11
+              },
+              {
+                "eventId": "2026-qf-03",
+                "place": 9,
+                "score": "4:19",
+                "points": 9
+              },
+              {
+                "eventId": "2026-qf-04",
+                "place": 9,
+                "score": "10:48",
+                "points": 9
+              }
+            ],
             "rank": 5
           },
           {
             "name": "Arielle Loewen",
             "country": "United States",
-            "totalPoints": 76,
+            "totalPoints": 73,
             "officialRank": "45",
             "openRank": "45",
             "qfRank": "2",
@@ -5779,15 +5779,15 @@
               },
               {
                 "eventId": "2026-open-02",
-                "place": 7,
+                "place": 6,
                 "score": "6:58",
-                "points": 7
+                "points": 6
               },
               {
                 "eventId": "2026-open-03",
-                "place": 23,
+                "place": 22,
                 "score": "277 reps",
-                "points": 23
+                "points": 22
               },
               {
                 "eventId": "2026-qf-01",
@@ -5797,9 +5797,9 @@
               },
               {
                 "eventId": "2026-qf-02",
-                "place": 4,
+                "place": 3,
                 "score": "6:52",
-                "points": 4
+                "points": 3
               },
               {
                 "eventId": "2026-qf-03",
@@ -5819,7 +5819,7 @@
           {
             "name": "Emma Lawson",
             "country": "Canada",
-            "totalPoints": 77,
+            "totalPoints": 74,
             "officialRank": "4",
             "openRank": "4",
             "qfRank": "20",
@@ -5828,15 +5828,15 @@
             "events": [
               {
                 "eventId": "2026-open-01",
-                "place": 5,
+                "place": 6,
                 "score": "11:33",
-                "points": 5
+                "points": 6
               },
               {
                 "eventId": "2026-open-02",
-                "place": 9,
+                "place": 7,
                 "score": "7:02",
-                "points": 9
+                "points": 7
               },
               {
                 "eventId": "2026-open-03",
@@ -5852,15 +5852,15 @@
               },
               {
                 "eventId": "2026-qf-02",
-                "place": 17,
+                "place": 16,
                 "score": "7:25",
-                "points": 17
+                "points": 16
               },
               {
                 "eventId": "2026-qf-03",
-                "place": 23,
+                "place": 22,
                 "score": "4:43",
-                "points": 23
+                "points": 22
               },
               {
                 "eventId": "2026-qf-04",
@@ -5872,64 +5872,9 @@
             "rank": 7
           },
           {
-            "name": "Danielle Brandon",
-            "country": "United States",
-            "totalPoints": 78,
-            "officialRank": "22",
-            "openRank": "22",
-            "qfRank": "3",
-            "semifinalEvent": "Syndicate Crown",
-            "semifinalFinish": "3rd",
-            "events": [
-              {
-                "eventId": "2026-open-01",
-                "place": 10,
-                "score": "11:42",
-                "points": 10
-              },
-              {
-                "eventId": "2026-open-02",
-                "place": 14,
-                "score": "7:30",
-                "points": 14
-              },
-              {
-                "eventId": "2026-open-03",
-                "place": 19,
-                "score": "286 reps",
-                "points": 19
-              },
-              {
-                "eventId": "2026-qf-01",
-                "place": 5,
-                "score": "6:17",
-                "points": 5
-              },
-              {
-                "eventId": "2026-qf-02",
-                "place": 12,
-                "score": "7:09",
-                "points": 12
-              },
-              {
-                "eventId": "2026-qf-03",
-                "place": 9,
-                "score": "4:19",
-                "points": 9
-              },
-              {
-                "eventId": "2026-qf-04",
-                "place": 9,
-                "score": "10:48",
-                "points": 9
-              }
-            ],
-            "rank": 8
-          },
-          {
             "name": "Lucy McGonigle",
             "country": "Ireland",
-            "totalPoints": 83,
+            "totalPoints": 78,
             "officialRank": "51",
             "openRank": "51",
             "qfRank": "5",
@@ -5938,15 +5883,15 @@
             "events": [
               {
                 "eventId": "2026-open-01",
-                "place": 28,
+                "place": 27,
                 "score": "335 reps",
-                "points": 28
+                "points": 27
               },
               {
                 "eventId": "2026-open-02",
-                "place": 17,
+                "place": 15,
                 "score": "7:36",
-                "points": 17
+                "points": 15
               },
               {
                 "eventId": "2026-open-03",
@@ -5962,15 +5907,15 @@
               },
               {
                 "eventId": "2026-qf-02",
-                "place": 5,
+                "place": 4,
                 "score": "6:54",
-                "points": 5
+                "points": 4
               },
               {
                 "eventId": "2026-qf-03",
-                "place": 13,
+                "place": 12,
                 "score": "4:22",
-                "points": 13
+                "points": 12
               },
               {
                 "eventId": "2026-qf-04",
@@ -5979,12 +5924,67 @@
                 "points": 15
               }
             ],
+            "rank": 8
+          },
+          {
+            "name": "Madeline Sturt",
+            "country": "Australia",
+            "totalPoints": 90,
+            "officialRank": "58",
+            "openRank": "58",
+            "qfRank": "21",
+            "semifinalEvent": "Torian Pro",
+            "semifinalFinish": "1st",
+            "events": [
+              {
+                "eventId": "2026-open-01",
+                "place": 25,
+                "score": "337 reps",
+                "points": 25
+              },
+              {
+                "eventId": "2026-open-02",
+                "place": 3,
+                "score": "6:54",
+                "points": 3
+              },
+              {
+                "eventId": "2026-open-03",
+                "place": 15,
+                "score": "15:53",
+                "points": 15
+              },
+              {
+                "eventId": "2026-qf-01",
+                "place": 13,
+                "score": "6:31",
+                "points": 13
+              },
+              {
+                "eventId": "2026-qf-02",
+                "place": 6,
+                "score": "6:59",
+                "points": 6
+              },
+              {
+                "eventId": "2026-qf-03",
+                "place": 2,
+                "score": "4:04",
+                "points": 2
+              },
+              {
+                "eventId": "2026-qf-04",
+                "place": 26,
+                "score": "11:43",
+                "points": 26
+              }
+            ],
             "rank": 9
           },
           {
             "name": "Aimee Cringle",
             "country": "United Kingdom",
-            "totalPoints": 96,
+            "totalPoints": 91,
             "officialRank": "12",
             "openRank": "12",
             "qfRank": "18",
@@ -5999,15 +5999,15 @@
               },
               {
                 "eventId": "2026-open-02",
-                "place": 6,
+                "place": 5,
                 "score": "6:57",
-                "points": 6
+                "points": 5
               },
               {
                 "eventId": "2026-open-03",
-                "place": 12,
+                "place": 10,
                 "score": "15:36",
-                "points": 12
+                "points": 10
               },
               {
                 "eventId": "2026-qf-01",
@@ -6017,15 +6017,15 @@
               },
               {
                 "eventId": "2026-qf-02",
-                "place": 15,
+                "place": 14,
                 "score": "7:23",
-                "points": 15
+                "points": 14
               },
               {
                 "eventId": "2026-qf-03",
-                "place": 18,
+                "place": 17,
                 "score": "4:35",
-                "points": 18
+                "points": 17
               },
               {
                 "eventId": "2026-qf-04",
@@ -6037,119 +6037,9 @@
             "rank": 10
           },
           {
-            "name": "Madeline Sturt",
-            "country": "Australia",
-            "totalPoints": 97,
-            "officialRank": "58",
-            "openRank": "58",
-            "qfRank": "21",
-            "semifinalEvent": "Torian Pro",
-            "semifinalFinish": "1st",
-            "events": [
-              {
-                "eventId": "2026-open-01",
-                "place": 26,
-                "score": "337 reps",
-                "points": 26
-              },
-              {
-                "eventId": "2026-open-02",
-                "place": 4,
-                "score": "6:54",
-                "points": 4
-              },
-              {
-                "eventId": "2026-open-03",
-                "place": 17,
-                "score": "15:53",
-                "points": 17
-              },
-              {
-                "eventId": "2026-qf-01",
-                "place": 13,
-                "score": "6:31",
-                "points": 13
-              },
-              {
-                "eventId": "2026-qf-02",
-                "place": 8,
-                "score": "6:59",
-                "points": 8
-              },
-              {
-                "eventId": "2026-qf-03",
-                "place": 2,
-                "score": "4:04",
-                "points": 2
-              },
-              {
-                "eventId": "2026-qf-04",
-                "place": 27,
-                "score": "11:43",
-                "points": 27
-              }
-            ],
-            "rank": 11
-          },
-          {
-            "name": "Anikha Greer",
-            "country": "Canada",
-            "totalPoints": 101,
-            "officialRank": "30",
-            "openRank": "30",
-            "qfRank": "17",
-            "semifinalEvent": "Copa Sur",
-            "semifinalFinish": "1st",
-            "events": [
-              {
-                "eventId": "2026-open-01",
-                "place": 4,
-                "score": "11:33",
-                "points": 4
-              },
-              {
-                "eventId": "2026-open-02",
-                "place": 13,
-                "score": "7:28",
-                "points": 13
-              },
-              {
-                "eventId": "2026-open-03",
-                "place": 22,
-                "score": "277 reps",
-                "points": 22
-              },
-              {
-                "eventId": "2026-qf-01",
-                "place": 18,
-                "score": "6:37",
-                "points": 18
-              },
-              {
-                "eventId": "2026-qf-02",
-                "place": 20,
-                "score": "7:30",
-                "points": 20
-              },
-              {
-                "eventId": "2026-qf-03",
-                "place": 17,
-                "score": "4:34",
-                "points": 17
-              },
-              {
-                "eventId": "2026-qf-04",
-                "place": 7,
-                "score": "10:46",
-                "points": 7
-              }
-            ],
-            "rank": 12
-          },
-          {
             "name": "Alexis Raptis",
             "country": "United States",
-            "totalPoints": 102,
+            "totalPoints": 96,
             "officialRank": "56",
             "openRank": "56",
             "qfRank": "13",
@@ -6158,21 +6048,21 @@
             "events": [
               {
                 "eventId": "2026-open-01",
-                "place": 25,
+                "place": 24,
                 "score": "339 reps",
-                "points": 25
+                "points": 24
               },
               {
                 "eventId": "2026-open-02",
-                "place": 16,
+                "place": 14,
                 "score": "7:33",
-                "points": 16
+                "points": 14
               },
               {
                 "eventId": "2026-open-03",
-                "place": 15,
+                "place": 13,
                 "score": "15:42",
-                "points": 15
+                "points": 13
               },
               {
                 "eventId": "2026-qf-01",
@@ -6182,9 +6072,9 @@
               },
               {
                 "eventId": "2026-qf-02",
-                "place": 19,
+                "place": 18,
                 "score": "7:29",
-                "points": 19
+                "points": 18
               },
               {
                 "eventId": "2026-qf-03",
@@ -6199,12 +6089,122 @@
                 "points": 4
               }
             ],
+            "rank": 11
+          },
+          {
+            "name": "Anikha Greer",
+            "country": "Canada",
+            "totalPoints": 97,
+            "officialRank": "30",
+            "openRank": "30",
+            "qfRank": "17",
+            "semifinalEvent": "Copa Sur",
+            "semifinalFinish": "1st",
+            "events": [
+              {
+                "eventId": "2026-open-01",
+                "place": 5,
+                "score": "11:33",
+                "points": 5
+              },
+              {
+                "eventId": "2026-open-02",
+                "place": 11,
+                "score": "7:28",
+                "points": 11
+              },
+              {
+                "eventId": "2026-open-03",
+                "place": 21,
+                "score": "277 reps",
+                "points": 21
+              },
+              {
+                "eventId": "2026-qf-01",
+                "place": 18,
+                "score": "6:37",
+                "points": 18
+              },
+              {
+                "eventId": "2026-qf-02",
+                "place": 19,
+                "score": "7:30",
+                "points": 19
+              },
+              {
+                "eventId": "2026-qf-03",
+                "place": 16,
+                "score": "4:34",
+                "points": 16
+              },
+              {
+                "eventId": "2026-qf-04",
+                "place": 7,
+                "score": "10:46",
+                "points": 7
+              }
+            ],
+            "rank": 12
+          },
+          {
+            "name": "Bergrós Björnsdóttir",
+            "country": "Iceland",
+            "totalPoints": 100,
+            "officialRank": "17",
+            "openRank": "17",
+            "qfRank": "51",
+            "semifinalEvent": "Individual Online Semifinal",
+            "semifinalFinish": "7th",
+            "events": [
+              {
+                "eventId": "2026-open-01",
+                "place": 3,
+                "score": "10:55",
+                "points": 3
+              },
+              {
+                "eventId": "2026-open-02",
+                "place": 18,
+                "score": "7:43",
+                "points": 18
+              },
+              {
+                "eventId": "2026-open-03",
+                "place": 19,
+                "score": "284 reps",
+                "points": 19
+              },
+              {
+                "eventId": "2026-qf-01",
+                "place": 1,
+                "score": "6:01",
+                "points": 1
+              },
+              {
+                "eventId": "2026-qf-02",
+                "place": 8,
+                "score": "7:04",
+                "points": 8
+              },
+              {
+                "eventId": "2026-qf-03",
+                "place": 27,
+                "score": "5:13",
+                "points": 27
+              },
+              {
+                "eventId": "2026-qf-04",
+                "place": 24,
+                "score": "11:17",
+                "points": 24
+              }
+            ],
             "rank": 13
           },
           {
             "name": "Lydia Fish",
             "country": "United States",
-            "totalPoints": 106,
+            "totalPoints": 102,
             "officialRank": "19",
             "openRank": "19",
             "qfRank": "18",
@@ -6219,15 +6219,15 @@
               },
               {
                 "eventId": "2026-open-02",
-                "place": 20,
+                "place": 19,
                 "score": "7:46",
-                "points": 20
+                "points": 19
               },
               {
                 "eventId": "2026-open-03",
-                "place": 10,
+                "place": 9,
                 "score": "15:28",
-                "points": 10
+                "points": 9
               },
               {
                 "eventId": "2026-qf-01",
@@ -6237,15 +6237,15 @@
               },
               {
                 "eventId": "2026-qf-02",
-                "place": 18,
+                "place": 17,
                 "score": "7:26",
-                "points": 18
+                "points": 17
               },
               {
                 "eventId": "2026-qf-03",
-                "place": 20,
+                "place": 19,
                 "score": "4:39",
-                "points": 20
+                "points": 19
               },
               {
                 "eventId": "2026-qf-04",
@@ -6257,56 +6257,56 @@
             "rank": 14
           },
           {
-            "name": "Jess Green",
-            "country": "Australia",
-            "totalPoints": 110,
-            "officialRank": "33",
-            "openRank": "33",
-            "qfRank": "32",
-            "semifinalEvent": "Individual Online Semifinal",
-            "semifinalFinish": "5th",
+            "name": "Siria Meha",
+            "country": "Albania",
+            "totalPoints": 109,
+            "officialRank": "18",
+            "openRank": "18",
+            "qfRank": "88",
+            "semifinalEvent": "Far East Throwdown",
+            "semifinalFinish": "1st",
             "events": [
               {
                 "eventId": "2026-open-01",
-                "place": 23,
-                "score": "345 reps",
-                "points": 23
-              },
-              {
-                "eventId": "2026-open-02",
-                "place": 8,
-                "score": "7:00",
-                "points": 8
-              },
-              {
-                "eventId": "2026-open-03",
-                "place": 11,
-                "score": "15:32",
-                "points": 11
-              },
-              {
-                "eventId": "2026-qf-01",
-                "place": 26,
-                "score": "6:55",
-                "points": 26
-              },
-              {
-                "eventId": "2026-qf-02",
-                "place": 2,
-                "score": "6:35",
-                "points": 2
-              },
-              {
-                "eventId": "2026-qf-03",
                 "place": 19,
-                "score": "4:36",
+                "score": "11:59",
                 "points": 19
               },
               {
+                "eventId": "2026-open-02",
+                "place": 10,
+                "score": "7:27",
+                "points": 10
+              },
+              {
+                "eventId": "2026-open-03",
+                "place": 7,
+                "score": "15:16",
+                "points": 7
+              },
+              {
+                "eventId": "2026-qf-01",
+                "place": 25,
+                "score": "6:51",
+                "points": 25
+              },
+              {
+                "eventId": "2026-qf-02",
+                "place": 12,
+                "score": "7:12",
+                "points": 12
+              },
+              {
+                "eventId": "2026-qf-03",
+                "place": 28,
+                "score": "5:30",
+                "points": 28
+              },
+              {
                 "eventId": "2026-qf-04",
-                "place": 21,
-                "score": "11:07",
-                "points": 21
+                "place": 8,
+                "score": "10:47",
+                "points": 8
               }
             ],
             "rank": 15
@@ -6314,7 +6314,7 @@
           {
             "name": "Ellie Turner",
             "country": "Australia",
-            "totalPoints": 111,
+            "totalPoints": 109,
             "officialRank": "38",
             "openRank": "38",
             "qfRank": "696",
@@ -6323,15 +6323,15 @@
             "events": [
               {
                 "eventId": "2026-open-01",
-                "place": 3,
+                "place": 4,
                 "score": "11:10",
-                "points": 3
+                "points": 4
               },
               {
                 "eventId": "2026-open-02",
-                "place": 23,
+                "place": 22,
                 "score": "7:52",
-                "points": 23
+                "points": 22
               },
               {
                 "eventId": "2026-open-03",
@@ -6347,9 +6347,9 @@
               },
               {
                 "eventId": "2026-qf-02",
-                "place": 9,
+                "place": 7,
                 "score": "7:02",
-                "points": 9
+                "points": 7
               },
               {
                 "eventId": "2026-qf-03",
@@ -6367,56 +6367,56 @@
             "rank": 16
           },
           {
-            "name": "Siria Meha",
-            "country": "Albania",
+            "name": "Ella Wilkinson",
+            "country": "United Kingdom",
             "totalPoints": 112,
-            "officialRank": "18",
-            "openRank": "18",
-            "qfRank": "88",
-            "semifinalEvent": "Far East Throwdown",
-            "semifinalFinish": "1st",
+            "officialRank": "13",
+            "openRank": "13",
+            "qfRank": "33",
+            "semifinalEvent": "MAD Fitness Festival (Ciudad Real, Spain)",
+            "semifinalFinish": "3rd",
             "events": [
               {
                 "eventId": "2026-open-01",
-                "place": 19,
-                "score": "11:59",
-                "points": 19
-              },
-              {
-                "eventId": "2026-open-02",
-                "place": 12,
-                "score": "7:27",
-                "points": 12
-              },
-              {
-                "eventId": "2026-open-03",
                 "place": 7,
-                "score": "15:16",
+                "score": "11:36",
                 "points": 7
               },
               {
+                "eventId": "2026-open-02",
+                "place": 16,
+                "score": "7:40",
+                "points": 16
+              },
+              {
+                "eventId": "2026-open-03",
+                "place": 12,
+                "score": "15:41",
+                "points": 12
+              },
+              {
                 "eventId": "2026-qf-01",
-                "place": 25,
-                "score": "6:51",
-                "points": 25
+                "place": 22,
+                "score": "6:45",
+                "points": 22
               },
               {
                 "eventId": "2026-qf-02",
-                "place": 13,
-                "score": "7:12",
-                "points": 13
+                "place": 22,
+                "score": "7:53",
+                "points": 22
               },
               {
                 "eventId": "2026-qf-03",
-                "place": 28,
-                "score": "5:30",
-                "points": 28
+                "place": 11,
+                "score": "4:20",
+                "points": 11
               },
               {
                 "eventId": "2026-qf-04",
-                "place": 8,
-                "score": "10:47",
-                "points": 8
+                "place": 22,
+                "score": "11:13",
+                "points": 22
               }
             ],
             "rank": 17
@@ -6424,7 +6424,7 @@
           {
             "name": "Olivia Kerstetter",
             "country": "United States",
-            "totalPoints": 115,
+            "totalPoints": 112,
             "officialRank": "53",
             "openRank": "53",
             "qfRank": "12",
@@ -6445,9 +6445,9 @@
               },
               {
                 "eventId": "2026-open-03",
-                "place": 20,
+                "place": 18,
                 "score": "285 reps",
-                "points": 20
+                "points": 18
               },
               {
                 "eventId": "2026-qf-01",
@@ -6457,9 +6457,9 @@
               },
               {
                 "eventId": "2026-qf-02",
-                "place": 22,
+                "place": 21,
                 "score": "7:34",
-                "points": 22
+                "points": 21
               },
               {
                 "eventId": "2026-qf-03",
@@ -6477,56 +6477,56 @@
             "rank": 18
           },
           {
-            "name": "Ella Wilkinson",
-            "country": "United Kingdom",
-            "totalPoints": 118,
-            "officialRank": "13",
-            "openRank": "13",
-            "qfRank": "33",
-            "semifinalEvent": "MAD Fitness Festival (Ciudad Real, Spain)",
-            "semifinalFinish": "3rd",
+            "name": "Abigail Domit",
+            "country": "United States",
+            "totalPoints": 116,
+            "officialRank": "50",
+            "openRank": "50",
+            "qfRank": "22",
+            "semifinalEvent": "Legends Championship",
+            "semifinalFinish": "2nd",
             "events": [
               {
                 "eventId": "2026-open-01",
-                "place": 6,
-                "score": "11:36",
-                "points": 6
+                "place": 20,
+                "score": "353 reps",
+                "points": 20
               },
               {
                 "eventId": "2026-open-02",
-                "place": 18,
-                "score": "7:40",
-                "points": 18
+                "place": 13,
+                "score": "7:32",
+                "points": 13
               },
               {
                 "eventId": "2026-open-03",
-                "place": 14,
-                "score": "15:41",
-                "points": 14
+                "place": 20,
+                "score": "279 reps",
+                "points": 20
               },
               {
                 "eventId": "2026-qf-01",
-                "place": 22,
-                "score": "6:45",
-                "points": 22
+                "place": 12,
+                "score": "6:29",
+                "points": 12
               },
               {
                 "eventId": "2026-qf-02",
-                "place": 23,
-                "score": "7:53",
-                "points": 23
+                "place": 24,
+                "score": "7:55",
+                "points": 24
               },
               {
                 "eventId": "2026-qf-03",
-                "place": 11,
-                "score": "4:20",
-                "points": 11
+                "place": 15,
+                "score": "4:29",
+                "points": 15
               },
               {
                 "eventId": "2026-qf-04",
-                "place": 24,
-                "score": "11:13",
-                "points": 24
+                "place": 12,
+                "score": "10:51",
+                "points": 12
               }
             ],
             "rank": 19
@@ -6534,7 +6534,7 @@
           {
             "name": "Gabriela Migala",
             "country": "Poland",
-            "totalPoints": 120,
+            "totalPoints": 118,
             "officialRank": "35",
             "openRank": "35",
             "qfRank": "27",
@@ -6543,9 +6543,9 @@
             "events": [
               {
                 "eventId": "2026-open-01",
-                "place": 7,
+                "place": 8,
                 "score": "11:38",
-                "points": 7
+                "points": 8
               },
               {
                 "eventId": "2026-open-02",
@@ -6555,9 +6555,9 @@
               },
               {
                 "eventId": "2026-open-03",
-                "place": 18,
+                "place": 16,
                 "score": "15:58",
-                "points": 18
+                "points": 16
               },
               {
                 "eventId": "2026-qf-01",
@@ -6573,9 +6573,9 @@
               },
               {
                 "eventId": "2026-qf-03",
-                "place": 21,
+                "place": 20,
                 "score": "4:39",
-                "points": 21
+                "points": 20
               },
               {
                 "eventId": "2026-qf-04",
@@ -6587,64 +6587,9 @@
             "rank": 20
           },
           {
-            "name": "Abigail Domit",
-            "country": "United States",
-            "totalPoints": 121,
-            "officialRank": "50",
-            "openRank": "50",
-            "qfRank": "22",
-            "semifinalEvent": "Legends Championship",
-            "semifinalFinish": "2nd",
-            "events": [
-              {
-                "eventId": "2026-open-01",
-                "place": 20,
-                "score": "353 reps",
-                "points": 20
-              },
-              {
-                "eventId": "2026-open-02",
-                "place": 15,
-                "score": "7:32",
-                "points": 15
-              },
-              {
-                "eventId": "2026-open-03",
-                "place": 21,
-                "score": "279 reps",
-                "points": 21
-              },
-              {
-                "eventId": "2026-qf-01",
-                "place": 12,
-                "score": "6:29",
-                "points": 12
-              },
-              {
-                "eventId": "2026-qf-02",
-                "place": 25,
-                "score": "7:55",
-                "points": 25
-              },
-              {
-                "eventId": "2026-qf-03",
-                "place": 16,
-                "score": "4:29",
-                "points": 16
-              },
-              {
-                "eventId": "2026-qf-04",
-                "place": 12,
-                "score": "10:51",
-                "points": 12
-              }
-            ],
-            "rank": 21
-          },
-          {
             "name": "Haley Adams",
             "country": "United States",
-            "totalPoints": 125,
+            "totalPoints": 121,
             "officialRank": "28",
             "openRank": "28",
             "qfRank": "148",
@@ -6659,15 +6604,15 @@
               },
               {
                 "eventId": "2026-open-02",
-                "place": 24,
+                "place": 23,
                 "score": "7:53",
-                "points": 24
+                "points": 23
               },
               {
                 "eventId": "2026-open-03",
-                "place": 16,
+                "place": 14,
                 "score": "15:50",
-                "points": 16
+                "points": 14
               },
               {
                 "eventId": "2026-qf-01",
@@ -6677,9 +6622,9 @@
               },
               {
                 "eventId": "2026-qf-02",
-                "place": 16,
+                "place": 15,
                 "score": "7:23",
-                "points": 16
+                "points": 15
               },
               {
                 "eventId": "2026-qf-03",
@@ -6694,12 +6639,12 @@
                 "points": 3
               }
             ],
-            "rank": 22
+            "rank": 21
           },
           {
             "name": "Matilde Garnes",
             "country": "Norway",
-            "totalPoints": 129,
+            "totalPoints": 125,
             "officialRank": "96",
             "openRank": "96",
             "qfRank": "61",
@@ -6708,15 +6653,15 @@
             "events": [
               {
                 "eventId": "2026-open-01",
-                "place": 29,
+                "place": 28,
                 "score": "335 reps",
-                "points": 29
+                "points": 28
               },
               {
                 "eventId": "2026-open-02",
-                "place": 2,
+                "place": 1,
                 "score": "6:40",
-                "points": 2
+                "points": 1
               },
               {
                 "eventId": "2026-open-03",
@@ -6732,9 +6677,9 @@
               },
               {
                 "eventId": "2026-qf-02",
-                "place": 14,
+                "place": 13,
                 "score": "7:20",
-                "points": 14
+                "points": 13
               },
               {
                 "eventId": "2026-qf-03",
@@ -6744,9 +6689,64 @@
               },
               {
                 "eventId": "2026-qf-04",
-                "place": 26,
+                "place": 25,
                 "score": "11:24",
-                "points": 26
+                "points": 25
+              }
+            ],
+            "rank": 22
+          },
+          {
+            "name": "Alex Gazan",
+            "country": "United States",
+            "totalPoints": 127,
+            "officialRank": "91",
+            "openRank": "91",
+            "qfRank": "25",
+            "semifinalEvent": "Northern California Classic",
+            "semifinalFinish": "1st",
+            "events": [
+              {
+                "eventId": "2026-open-01",
+                "place": 18,
+                "score": "11:55",
+                "points": 18
+              },
+              {
+                "eventId": "2026-open-02",
+                "place": 17,
+                "score": "7:40",
+                "points": 17
+              },
+              {
+                "eventId": "2026-open-03",
+                "place": 27,
+                "score": "264 reps",
+                "points": 27
+              },
+              {
+                "eventId": "2026-qf-01",
+                "place": 23,
+                "score": "6:46",
+                "points": 23
+              },
+              {
+                "eventId": "2026-qf-02",
+                "place": 23,
+                "score": "7:54",
+                "points": 23
+              },
+              {
+                "eventId": "2026-qf-03",
+                "place": 13,
+                "score": "4:26",
+                "points": 13
+              },
+              {
+                "eventId": "2026-qf-04",
+                "place": 6,
+                "score": "10:39",
+                "points": 6
               }
             ],
             "rank": 23
@@ -6754,7 +6754,7 @@
           {
             "name": "Miley Wade",
             "country": "United States",
-            "totalPoints": 131,
+            "totalPoints": 129,
             "officialRank": "22",
             "openRank": "22",
             "qfRank": "36",
@@ -6787,15 +6787,15 @@
               },
               {
                 "eventId": "2026-qf-02",
-                "place": 21,
+                "place": 20,
                 "score": "7:31",
-                "points": 21
+                "points": 20
               },
               {
                 "eventId": "2026-qf-03",
-                "place": 24,
+                "place": 23,
                 "score": "4:45",
-                "points": 24
+                "points": 23
               },
               {
                 "eventId": "2026-qf-04",
@@ -6807,64 +6807,9 @@
             "rank": 24
           },
           {
-            "name": "Alex Gazan",
-            "country": "United States",
-            "totalPoints": 131,
-            "officialRank": "91",
-            "openRank": "91",
-            "qfRank": "25",
-            "semifinalEvent": "Northern California Classic",
-            "semifinalFinish": "1st",
-            "events": [
-              {
-                "eventId": "2026-open-01",
-                "place": 18,
-                "score": "11:55",
-                "points": 18
-              },
-              {
-                "eventId": "2026-open-02",
-                "place": 19,
-                "score": "7:40",
-                "points": 19
-              },
-              {
-                "eventId": "2026-open-03",
-                "place": 27,
-                "score": "264 reps",
-                "points": 27
-              },
-              {
-                "eventId": "2026-qf-01",
-                "place": 23,
-                "score": "6:46",
-                "points": 23
-              },
-              {
-                "eventId": "2026-qf-02",
-                "place": 24,
-                "score": "7:54",
-                "points": 24
-              },
-              {
-                "eventId": "2026-qf-03",
-                "place": 14,
-                "score": "4:26",
-                "points": 14
-              },
-              {
-                "eventId": "2026-qf-04",
-                "place": 6,
-                "score": "10:39",
-                "points": 6
-              }
-            ],
-            "rank": 25
-          },
-          {
             "name": "Elisa Fuliano",
             "country": "Italy",
-            "totalPoints": 134,
+            "totalPoints": 130,
             "officialRank": "65",
             "openRank": "65",
             "qfRank": "49",
@@ -6873,15 +6818,15 @@
             "events": [
               {
                 "eventId": "2026-open-01",
-                "place": 8,
+                "place": 9,
                 "score": "11:38",
-                "points": 8
+                "points": 9
               },
               {
                 "eventId": "2026-open-02",
-                "place": 21,
+                "place": 20,
                 "score": "7:47",
-                "points": 21
+                "points": 20
               },
               {
                 "eventId": "2026-open-03",
@@ -6897,29 +6842,29 @@
               },
               {
                 "eventId": "2026-qf-02",
-                "place": 11,
+                "place": 10,
                 "score": "7:08",
-                "points": 11
+                "points": 10
               },
               {
                 "eventId": "2026-qf-03",
-                "place": 26,
+                "place": 25,
                 "score": "5:04",
-                "points": 26
+                "points": 25
               },
               {
                 "eventId": "2026-qf-04",
-                "place": 23,
+                "place": 21,
                 "score": "11:11",
-                "points": 23
+                "points": 21
               }
             ],
-            "rank": 26
+            "rank": 25
           },
           {
             "name": "Janie Cheverie",
             "country": "Canada",
-            "totalPoints": 148,
+            "totalPoints": 145,
             "officialRank": "106",
             "openRank": "106",
             "qfRank": "44",
@@ -6958,15 +6903,70 @@
               },
               {
                 "eventId": "2026-qf-03",
-                "place": 15,
+                "place": 14,
                 "score": "4:27",
-                "points": 15
+                "points": 14
               },
               {
                 "eventId": "2026-qf-04",
-                "place": 25,
+                "place": 23,
                 "score": "11:16",
+                "points": 23
+              }
+            ],
+            "rank": 26
+          },
+          {
+            "name": "Holly Tynan",
+            "country": "Ireland",
+            "totalPoints": 172,
+            "officialRank": "90",
+            "openRank": "90",
+            "qfRank": "65",
+            "semifinalEvent": "Individual Online Semifinal",
+            "semifinalFinish": "8th",
+            "events": [
+              {
+                "eventId": "2026-open-01",
+                "place": 29,
+                "score": "334 reps",
+                "points": 29
+              },
+              {
+                "eventId": "2026-open-02",
+                "place": 24,
+                "score": "7:56",
+                "points": 24
+              },
+              {
+                "eventId": "2026-open-03",
+                "place": 23,
+                "score": "276 reps",
+                "points": 23
+              },
+              {
+                "eventId": "2026-qf-01",
+                "place": 26,
+                "score": "6:53",
+                "points": 26
+              },
+              {
+                "eventId": "2026-qf-02",
+                "place": 25,
+                "score": "7:56",
                 "points": 25
+              },
+              {
+                "eventId": "2026-qf-03",
+                "place": 18,
+                "score": "4:37",
+                "points": 18
+              },
+              {
+                "eventId": "2026-qf-04",
+                "place": 27,
+                "score": "11:44",
+                "points": 27
               }
             ],
             "rank": 27
@@ -6974,7 +6974,7 @@
           {
             "name": "Erica Folo",
             "country": "Canada",
-            "totalPoints": 181,
+            "totalPoints": 179,
             "officialRank": "2423",
             "openRank": "2423",
             "qfRank": "318",
@@ -6989,9 +6989,9 @@
               },
               {
                 "eventId": "2026-open-02",
-                "place": 22,
+                "place": 21,
                 "score": "7:47",
-                "points": 22
+                "points": 21
               },
               {
                 "eventId": "2026-open-03",
@@ -7013,9 +7013,9 @@
               },
               {
                 "eventId": "2026-qf-03",
-                "place": 27,
+                "place": 26,
                 "score": "5:10",
-                "points": 27
+                "points": 26
               },
               {
                 "eventId": "2026-qf-04",
@@ -7029,7 +7029,7 @@
           {
             "name": "Rachel Noel",
             "country": "United States",
-            "totalPoints": 189,
+            "totalPoints": 188,
             "officialRank": "112",
             "openRank": "112",
             "qfRank": "632",
@@ -7068,9 +7068,9 @@
               },
               {
                 "eventId": "2026-qf-03",
-                "place": 25,
+                "place": 24,
                 "score": "4:46",
-                "points": 25
+                "points": 24
               },
               {
                 "eventId": "2026-qf-04",
@@ -7084,7 +7084,7 @@
           {
             "name": "Hannah Black",
             "country": "United States",
-            "totalPoints": 192,
+            "totalPoints": 190,
             "officialRank": "154",
             "openRank": "154",
             "qfRank": "177",
@@ -7093,9 +7093,9 @@
             "events": [
               {
                 "eventId": "2026-open-01",
-                "place": 27,
+                "place": 26,
                 "score": "336 reps",
-                "points": 27
+                "points": 26
               },
               {
                 "eventId": "2026-open-02",
@@ -7123,9 +7123,9 @@
               },
               {
                 "eventId": "2026-qf-03",
-                "place": 22,
+                "place": 21,
                 "score": "4:42",
-                "points": 22
+                "points": 21
               },
               {
                 "eventId": "2026-qf-04",
