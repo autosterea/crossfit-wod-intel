@@ -1,132 +1,17 @@
 [
   {
-    "slug": "event-1-ranch-7200-whose-engine-fits",
-    "title": "Event 1 Is a 7,200m Ranch Run. Whose Engine Fits It?",
-    "dek": "The Games open at the birthplace of the sport with a 7.2km trail run. We modeled whose aerobic engine, and whose body mass, the Ranch rewards.",
-    "category": "Event Preview",
-    "date": "2026-07-06",
-    "author": "Ravikant Dewangan",
-    "readMin": 4,
-    "summary": "Event 1 of the 2026 CrossFit Games is Ranch 7200: a 7,200-meter trail run at the Aromas ranch where the Games were born. We modeled whose profile a long run rewards, scaling the aerobic read by power-to-weight, with a data-grounded top 5 for men and women.",
-    "blocks": [
-      {
-        "type": "p",
-        "text": "Event 1 sends the 2026 CrossFit Games home. Before a single rep at SAP Center, the individuals line up at the Aromas ranch, the patch of California where the Games were born in 2007, for **Ranch 7200**: a 7,200-meter trail run, for time. That is about 4.5 miles of dirt and hills. It is the purest endurance test the Games have opened with in years, and it rewards two things a barbell never asks for: a deep aerobic engine and a light frame to carry it. Individuals run it Wednesday, July 22."
-      },
-      {
-        "type": "h2",
-        "text": "A Run Rewrites the Board"
-      },
-      {
-        "type": "p",
-        "text": "Here is the honest problem with modeling a run: nothing in the 2026 season was a run. The Open and Quarterfinals were indoor, machine-and-barbell affairs, so we do not have a measured 7km time for anyone. What we do have is each athlete's long engine (sustained output), their monostructural machine output, and their oxidative-system score, all computed from real results. That is the right starting point. Then we adjust for the one thing a trail run punishes that a rower does not: body mass. Over 7.2km, every extra kilogram is a kilogram carried the whole way. So the read below is an aerobic-engine ranking scaled by power-to-weight, not a stopwatch."
-      },
-      {
-        "type": "h2",
-        "text": "The Men: Adler's Frame Beats Khrennikov's Engine"
-      },
-      {
-        "type": "p",
-        "text": "The biggest engine in the men's field belongs to **Roman Khrennikov**, an 81 monostructural with 79 on both long engine and oxidative. On a rower or a bike, he wins this. But at 97 kilograms, a 7.2km run is the one event where his size is a bill that comes due, and the model drops him to fourth. The pick at the top is **Jeffrey Adler**. At 72 kilograms with a 74 engine, he owns the best power-to-weight up front, exactly the trait a long run rewards. **Justin Medeiros** (79 oxidative, 88 kg) and **Ricky Garard** (77 monostructural, 85 kg) slot second and third on strong engines and manageable frames. **Patrick Vellner** rounds out the five; his aerobic scores hold even if his long-engine mark is the lowest of the group."
-      },
-      {
-        "type": "ranked",
-        "title": "Men's Best-Fit Top 5 (Aerobic Engine, Mass-Adjusted)",
-        "rows": [
-          {
-            "name": "Jeffrey Adler",
-            "value": "81",
-            "note": "72 kg with a 74 engine, the best power-to-weight up top. A run is his event to gain."
-          },
-          {
-            "name": "Justin Medeiros",
-            "value": "79",
-            "note": "79 oxidative and 78 monostructural on a runnable 88 kg frame."
-          },
-          {
-            "name": "Ricky Garard",
-            "value": "78",
-            "note": "77 monostructural, 75 engine. Steady over distance at 85 kg."
-          },
-          {
-            "name": "Roman Khrennikov",
-            "value": "77",
-            "note": "The biggest engine in the field (81 mono), but 97 kg is the tax a 7.2km run collects."
-          },
-          {
-            "name": "Patrick Vellner",
-            "value": "72",
-            "note": "75 oxidative and monostructural; grinds the back half."
-          }
-        ]
-      },
-      {
-        "type": "h2",
-        "text": "The Women: Adams Runs Away From the Field"
-      },
-      {
-        "type": "p",
-        "text": "On the women's side it is not close. **Haley Adams** owns the single biggest engine in either division, an 82 long engine, and carries it at 64 kilograms. Best motor, lightest relevant frame: on a run, that is the dream combination, and she is the clear model pick. **Emma Lawson**, also 64 kilograms with a balanced aerobic card, is second. **Mirjam von Rohr** posts the field's highest raw engine score at 83 and lands third; a long run is the kind of event where her sustained output can shine even against lighter athletes. **Lucy Campbell** (81 engine) and **Danielle Brandon** (75 monostructural, and a better runner than her reputation) complete the five."
-      },
-      {
-        "type": "ranked",
-        "title": "Women's Best-Fit Top 5 (Aerobic Engine, Mass-Adjusted)",
-        "rows": [
-          {
-            "name": "Haley Adams",
-            "value": "82",
-            "note": "82 engine at 64 kg. Best motor and lightest frame, the ideal run build."
-          },
-          {
-            "name": "Emma Lawson",
-            "value": "77",
-            "note": "Balanced aerobic card at 64 kg. Light and steady over distance."
-          },
-          {
-            "name": "Mirjam von Rohr",
-            "value": "76",
-            "note": "Field-high 83 engine; distance lets her sustained output show."
-          },
-          {
-            "name": "Lucy Campbell",
-            "value": "74",
-            "note": "81 engine at 73 kg. Elite motor, a touch more to carry."
-          },
-          {
-            "name": "Danielle Brandon",
-            "value": "72",
-            "note": "75 monostructural, 74 oxidative at 68 kg. Better runner than her rep."
-          }
-        ]
-      },
-      {
-        "type": "h2",
-        "text": "Meanwhile, Back at the Ranch"
-      },
-      {
-        "type": "p",
-        "text": "Opening here is not a gimmick, it is a homecoming. The Ranch in Aromas hosted the first three CrossFit Games from 2007 to 2009, on Dave Castro's family property, until the sport outgrew the field. Trail running is woven through Games history too: a roughly seven-kilometer trail run opened Games competition in 2016. Ranch 7200 stitches both threads together, the birthplace and the run, into the first score of the sport's 20th-anniversary Games. The original 2007 hopper returns later in the week; the Ranch returns on day one."
-      },
-      {
-        "type": "callout",
-        "title": "Methodology",
-        "text": "There was no run in the 2026 season, so no athlete has a measured 7km time. This read starts from competition-derived performance profiles, long engine (sustained output), monostructural (machine and cardio), and oxidative (aerobic system), each a placement percentile from official 2026 Open and Quarterfinals results plus all prior Games. Because a 7.2km run also rewards a light frame, we scale that aerobic score by power-to-weight using each athlete's body mass. It is a fit read for a run, not a predicted finish. A great profile still has to be run on the dirt Wednesday."
-      }
-    ]
-  },
-  {
-    "slug": "event-2-the-2007-hopper-whose-profile-fits",
-    "title": "Event 2 Is the 2007 Hopper. Whose Profile Fits It?",
-    "dek": "The second event revives the 2007 opener. We modeled whose profile the row, pull-ups and push jerks reward.",
+    "slug": "event-1-the-2007-hopper-whose-profile-fits",
+    "title": "Event 1 Is the 2007 Hopper. Whose Profile Fits It?",
+    "dek": "The opener revives the 2007 opener. We modeled whose profile the row, pull-ups and push jerks reward.",
     "category": "Event Preview",
     "date": "2026-07-02",
     "author": "Ravikant Dewangan",
     "readMin": 3,
-    "summary": "Event 2 of the 2026 CrossFit Games is The 2007 Hopper: a 1,000m row then 5 rounds of 25 pull-ups and 7 push jerks. We modeled whose profile the workout rewards, with a data-grounded top 5 for men and women.",
+    "summary": "Event 1 of the 2026 CrossFit Games is The 2007 Hopper: a 1,000m row then 5 rounds of 25 pull-ups and 7 push jerks. We modeled whose profile the workout rewards, with a data-grounded top 5 for men and women.",
     "blocks": [
       {
         "type": "p",
-        "text": "Event 2 pulls a fossil out of the vault. It is **The 2007 Hopper**, the workout that opened the very first CrossFit Games: a 1,000-meter row, then 5 rounds of 25 pull-ups and 7 push jerks, for time. The barbell sits at 135 lb for the men and 85 lb for the women. Everything else is you against gravity. The row and the pull-ups carry no load at all. Individuals kick it off Wednesday, July 22, 2026. Read the pieces and the shape is clear: this is a medium-length grind, not a sprint and not a marathon. The 2007 winner needed about 13 minutes; when the field ran it back in 2013 the top time dropped to 8:33. The engine gets lit early on the rower, then the day becomes a math problem, 125 total pull-ups against 35 light push jerks. The barbell is almost a formality. Whoever can cycle pull-ups in big unbroken chunks while breathing hard controls this."
+        "text": "Event 1 pulls a fossil out of the vault. It is **The 2007 Hopper**, the workout that opened the very first CrossFit Games: a 1,000-meter row, then 5 rounds of 25 pull-ups and 7 push jerks, for time. The barbell sits at 135 lb for the men and 85 lb for the women. Everything else is you against gravity. The row and the pull-ups carry no load at all. Individuals kick it off Wednesday, July 22, 2026. Read the pieces and the shape is clear: this is a medium-length grind, not a sprint and not a marathon. The 2007 winner needed about 13 minutes; when the field ran it back in 2013 the top time dropped to 8:33. The engine gets lit early on the rower, then the day becomes a math problem, 125 total pull-ups against 35 light push jerks. The barbell is almost a formality. Whoever can cycle pull-ups in big unbroken chunks while breathing hard controls this."
       },
       {
         "type": "h2",
@@ -223,6 +108,121 @@
       }
     ],
     "tracesTo": "Event 1 movements/reps/loads from the official games.crossfit.com/workouts/finals/2026/1 page (researched + verified). Top-5 fit = projectEvent over public/projection-2026.json (mean measured percentile on the domains the event taxes: modality MGW, medium, light)."
+  },
+  {
+    "slug": "event-2-ranch-7200-whose-engine-fits",
+    "title": "Event 2 Is a 7,200m Ranch Run. Whose Engine Fits It?",
+    "dek": "The second event sends the field off-road for a 7.2km trail run. We modeled whose aerobic engine, and whose body mass, the Ranch rewards.",
+    "category": "Event Preview",
+    "date": "2026-07-06",
+    "author": "Ravikant Dewangan",
+    "readMin": 4,
+    "summary": "Event 2 of the 2026 CrossFit Games is Ranch 7200: a 7,200-meter trail run at the Aromas ranch where the Games were born. We modeled whose profile a long run rewards, scaling the aerobic read by power-to-weight, with a data-grounded top 5 for men and women.",
+    "blocks": [
+      {
+        "type": "p",
+        "text": "Event 2 takes the 2026 CrossFit Games off-road. On the opening day at the Aromas ranch, the patch of California where the Games were born in 2007, the field faces **Ranch 7200**: a 7,200-meter trail run, for time. That is about 4.5 miles of dirt and hills. It is the purest endurance test the Games have run in years, and it rewards two things a barbell never asks for: a deep aerobic engine and a light frame to carry it. Individuals run it Wednesday, July 22, right after the opener."
+      },
+      {
+        "type": "h2",
+        "text": "A Run Rewrites the Board"
+      },
+      {
+        "type": "p",
+        "text": "Here is the honest problem with modeling a run: nothing in the 2026 season was a run. The Open and Quarterfinals were indoor, machine-and-barbell affairs, so we do not have a measured 7km time for anyone. What we do have is each athlete's long engine (sustained output), their monostructural machine output, and their oxidative-system score, all computed from real results. That is the right starting point. Then we adjust for the one thing a trail run punishes that a rower does not: body mass. Over 7.2km, every extra kilogram is a kilogram carried the whole way. So the read below is an aerobic-engine ranking scaled by power-to-weight, not a stopwatch."
+      },
+      {
+        "type": "h2",
+        "text": "The Men: Adler's Frame Beats Khrennikov's Engine"
+      },
+      {
+        "type": "p",
+        "text": "The biggest engine in the men's field belongs to **Roman Khrennikov**, an 81 monostructural with 79 on both long engine and oxidative. On a rower or a bike, he wins this. But at 97 kilograms, a 7.2km run is the one event where his size is a bill that comes due, and the model drops him to fourth. The pick at the top is **Jeffrey Adler**. At 72 kilograms with a 74 engine, he owns the best power-to-weight up front, exactly the trait a long run rewards. **Justin Medeiros** (79 oxidative, 88 kg) and **Ricky Garard** (77 monostructural, 85 kg) slot second and third on strong engines and manageable frames. **Patrick Vellner** rounds out the five; his aerobic scores hold even if his long-engine mark is the lowest of the group."
+      },
+      {
+        "type": "ranked",
+        "title": "Men's Best-Fit Top 5 (Aerobic Engine, Mass-Adjusted)",
+        "rows": [
+          {
+            "name": "Jeffrey Adler",
+            "value": "81",
+            "note": "72 kg with a 74 engine, the best power-to-weight up top. A run is his event to gain."
+          },
+          {
+            "name": "Justin Medeiros",
+            "value": "79",
+            "note": "79 oxidative and 78 monostructural on a runnable 88 kg frame."
+          },
+          {
+            "name": "Ricky Garard",
+            "value": "78",
+            "note": "77 monostructural, 75 engine. Steady over distance at 85 kg."
+          },
+          {
+            "name": "Roman Khrennikov",
+            "value": "77",
+            "note": "The biggest engine in the field (81 mono), but 97 kg is the tax a 7.2km run collects."
+          },
+          {
+            "name": "Patrick Vellner",
+            "value": "72",
+            "note": "75 oxidative and monostructural; grinds the back half."
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "The Women: Adams Runs Away From the Field"
+      },
+      {
+        "type": "p",
+        "text": "On the women's side it is not close. **Haley Adams** owns the single biggest engine in either division, an 82 long engine, and carries it at 64 kilograms. Best motor, lightest relevant frame: on a run, that is the dream combination, and she is the clear model pick. **Emma Lawson**, also 64 kilograms with a balanced aerobic card, is second. **Mirjam von Rohr** posts the field's highest raw engine score at 83 and lands third; a long run is the kind of event where her sustained output can shine even against lighter athletes. **Lucy Campbell** (81 engine) and **Danielle Brandon** (75 monostructural, and a better runner than her reputation) complete the five."
+      },
+      {
+        "type": "ranked",
+        "title": "Women's Best-Fit Top 5 (Aerobic Engine, Mass-Adjusted)",
+        "rows": [
+          {
+            "name": "Haley Adams",
+            "value": "82",
+            "note": "82 engine at 64 kg. Best motor and lightest frame, the ideal run build."
+          },
+          {
+            "name": "Emma Lawson",
+            "value": "77",
+            "note": "Balanced aerobic card at 64 kg. Light and steady over distance."
+          },
+          {
+            "name": "Mirjam von Rohr",
+            "value": "76",
+            "note": "Field-high 83 engine; distance lets her sustained output show."
+          },
+          {
+            "name": "Lucy Campbell",
+            "value": "74",
+            "note": "81 engine at 73 kg. Elite motor, a touch more to carry."
+          },
+          {
+            "name": "Danielle Brandon",
+            "value": "72",
+            "note": "75 monostructural, 74 oxidative at 68 kg. Better runner than her rep."
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Meanwhile, Back at the Ranch"
+      },
+      {
+        "type": "p",
+        "text": "Opening here is not a gimmick, it is a homecoming. The Ranch in Aromas hosted the first three CrossFit Games from 2007 to 2009, on Dave Castro's family property, until the sport outgrew the field. Trail running is woven through Games history too: a roughly seven-kilometer trail run opened Games competition in 2016. Ranch 7200 stitches both threads together, the birthplace and the run, onto the opening day of the sport's 20th-anniversary Games, right alongside the revived 2007 Hopper that runs as Event 1."
+      },
+      {
+        "type": "callout",
+        "title": "Methodology",
+        "text": "There was no run in the 2026 season, so no athlete has a measured 7km time. This read starts from competition-derived performance profiles, long engine (sustained output), monostructural (machine and cardio), and oxidative (aerobic system), each a placement percentile from official 2026 Open and Quarterfinals results plus all prior Games. Because a 7.2km run also rewards a light frame, we scale that aerobic score by power-to-weight using each athlete's body mass. It is a fit read for a run, not a predicted finish. A great profile still has to be run on the dirt Wednesday."
+      }
+    ]
   },
   {
     "slug": "what-dave-castro-told-us-about-the-2026-games",

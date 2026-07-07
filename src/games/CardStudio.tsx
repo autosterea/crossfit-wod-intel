@@ -30,9 +30,9 @@ type Pick = { name: string; value: string; why: string }
 type PickSet = { id: string; label: string; eventKicker: string; eventLine: string; note: string; men: Pick[]; women: Pick[] }
 const PICKS: PickSet[] = [
   {
-    id: 'event1-ranch7200',
-    label: 'Event 1 - Ranch 7200',
-    eventKicker: 'Event 1 - Ranch 7200',
+    id: 'event2-ranch7200',
+    label: 'Event 2 - Ranch 7200',
+    eventKicker: 'Event 2 - Ranch 7200',
     eventLine: '7,200-meter trail run at the Aromas ranch. For time. Wednesday, July 22.',
     note: "Score is the model's aerobic-engine read (long engine, monostructural and oxidative percentiles) scaled by power-to-weight, since a run rewards a light frame. A fit read, not a result prediction.",
     men: [
@@ -51,9 +51,9 @@ const PICKS: PickSet[] = [
     ],
   },
   {
-    id: 'event2-hopper',
-    label: 'Event 2 - The 2007 Hopper',
-    eventKicker: 'Event 2 - The 2007 Hopper',
+    id: 'event1-hopper',
+    label: 'Event 1 - The 2007 Hopper',
+    eventKicker: 'Event 1 - The 2007 Hopper',
     eventLine: '1,000m row, then 5 rounds: 25 pull-ups + 7 push jerks (135/85). For time.',
     note: 'Score is the mean placement percentile, the percent of the 60-athlete field beaten, on the domains this workout taxes. A fit read, not a result prediction.',
     men: [
@@ -112,32 +112,32 @@ const CAROUSELS: Carousel[] = [
   },
   {
     id: 'ranch7200-preview',
-    label: 'Event 1 - Ranch 7200',
+    label: 'Event 2 - Ranch 7200',
     caption:
-      "🏔️ EVENT 1 = RANCH 7200. The 2026 CrossFit Games OPEN at the birthplace of the sport, the Aromas ranch, with a 7,200-meter trail run. For time.\n\nAbout 4.5 miles of dirt to start the individual competition, Wednesday July 22.\n\nSwipe for the workout, what it demands, and our model's top 5 for men and women, an aerobic-engine read scaled by power-to-weight (a run punishes body mass). A fit read, not a result prediction. Full breakdown at the link in bio.\n\nEvent source: the official CrossFit Games workout page.",
+      "🏔️ EVENT 2 = RANCH 7200. On Day 1, the 2026 CrossFit Games send the field off-road at the birthplace of the sport, the Aromas ranch, for a 7,200-meter trail run. For time.\n\nAbout 4.5 miles of dirt, right after the opener.\n\nSwipe for the workout, what it demands, and our model's top 5 for men and women, an aerobic-engine read scaled by power-to-weight (a run punishes body mass). A fit read, not a result prediction. Full breakdown at the link in bio.\n\nEvent source: the official CrossFit Games workout page.",
     slides: [
-      { type: 'cover', kicker: 'Event 1', headline: 'RANCH\n7200', sub: 'The 2026 Games open where the sport was born: a 7,200m trail run at the Aromas ranch. Swipe.' },
-      { type: 'point', num: 1, kicker: 'The Workout', headline: '7,200M\nTRAIL RUN', body: 'A 7,200-meter trail run at the Ranch in Aromas, for time. About 4.5 miles. The opening event of the individual competition, Wednesday July 22, at the off-site venues.', source: 'CrossFit Games (official workout page)' },
+      { type: 'cover', kicker: 'Event 2', headline: 'RANCH\n7200', sub: 'On Day 1 the field runs off-road where the sport was born: a 7,200m trail run at the Aromas ranch. Swipe.' },
+      { type: 'point', num: 1, kicker: 'The Workout', headline: '7,200M\nTRAIL RUN', body: 'A 7,200-meter trail run at the Ranch in Aromas, for time. About 4.5 miles. The second event of the individual competition, Wednesday July 22, at the off-site venues.', source: 'CrossFit Games (official workout page)' },
       { type: 'point', num: 2, kicker: 'What it demands', headline: 'ENGINE +\nLIGHT FRAME', body: 'A pure aerobic test. It rewards a deep engine and a light body to carry it. No barbell, no rig, just running economy over distance, the one event where extra mass is a tax, not an asset.', source: 'Persistence Athletics model' },
       { type: 'point', num: 3, kicker: "Model's top 5 - Men", headline: 'MEN', body: '1. Adler  2. Medeiros  3. Garard  4. Khrennikov  5. Vellner. Adler (72kg) leads on power-to-weight; Khrennikov owns the biggest engine but 97kg drops him to fourth.', source: 'Persistence Athletics model' },
       { type: 'point', num: 4, kicker: "Model's top 5 - Women", headline: 'WOMEN', body: '1. Adams  2. Lawson  3. von Rohr  4. Campbell  5. Brandon. Adams pairs the biggest engine in the field with a 64kg frame, the ideal run build.', source: 'Persistence Athletics model' },
       { type: 'point', num: 5, kicker: 'The history', headline: 'BORN AT\nTHE RANCH', body: 'The Ranch hosted the first three Games (2007-2009) on the Castro family property. A roughly 7km trail run also opened Games competition in 2016. The birthplace and the run, together, on day one.', source: 'CrossFit Games history' },
-      { type: 'cta', headline: 'FULL\nBREAKDOWN', body: 'Every athlete, every number, and the model read on Event 1 is on the site. A fit read, not a result prediction.' },
+      { type: 'cta', headline: 'FULL\nBREAKDOWN', body: 'Every athlete, every number, and the model read on Ranch 7200 is on the site. A fit read, not a result prediction.' },
     ],
   },
   {
-    id: 'event2-preview',
-    label: 'Event 2 - The 2007 Hopper',
+    id: 'event1-preview',
+    label: 'Event 1 - The 2007 Hopper',
     caption:
-      "🚨 EVENT 2 = THE 2007 HOPPER. The second event of the 2026 Games revives the very first event in CrossFit Games history.\n\n1,000m row, then 5 rounds of 25 pull-ups + 7 push jerks (135/85). For time.\n\nSwipe for the workout, what it demands, and our model's top 5 for men and women. It's a model read of who FITS the workout, not a result prediction. Full breakdown at the link in bio.\n\nEvent source: the official CrossFit Games workout page.",
+      "🚨 EVENT 1 = THE 2007 HOPPER. The opening event of the 2026 Games revives the very first event in CrossFit Games history.\n\n1,000m row, then 5 rounds of 25 pull-ups + 7 push jerks (135/85). For time.\n\nSwipe for the workout, what it demands, and our model's top 5 for men and women. It's a model read of who FITS the workout, not a result prediction. Full breakdown at the link in bio.\n\nEvent source: the official CrossFit Games workout page.",
     slides: [
-      { type: 'cover', kicker: 'Event 2', headline: 'THE 2007\nHOPPER', sub: 'The second event of the 2026 Games revives the very first event in Games history. Swipe.' },
+      { type: 'cover', kicker: 'Event 1', headline: 'THE 2007\nHOPPER', sub: 'The opening event of the 2026 Games revives the very first event in Games history. Swipe.' },
       { type: 'point', num: 1, kicker: 'The Workout', headline: 'FOR\nTIME', body: '1,000-meter row, then 5 rounds of: 25 pull-ups and 7 push jerks (135 lb men / 85 lb women). Individual start day, Wednesday July 22.', source: 'CrossFit Games (official workout page)' },
       { type: 'point', num: 2, kicker: 'What it demands', headline: 'ENGINE +\nRIG', body: 'A medium grind: a 1,000m row, then a big pile of pull-ups (125 total) and a light, fast barbell. Aerobic engine and gymnastics stamina decide this one, not raw strength.', source: 'Persistence Athletics model' },
       { type: 'point', num: 3, kicker: "Model's top 5 - Men", headline: 'MEN', body: '1. Khrennikov  2. Medeiros  3. Garard  4. Vellner  5. Sprague. Khrennikov and Medeiros are co-favorites, split by how you weight the light barbell.', source: 'Persistence Athletics model' },
       { type: 'point', num: 4, kicker: "Model's top 5 - Women", headline: 'WOMEN', body: '1. Adams  2. Campbell  3. Lawson  4. von Rohr  5. Brandon. Adams brings the biggest engine in the field; Campbell the best gymnastics.', source: 'Persistence Athletics model' },
       { type: 'point', num: 5, kicker: 'The history', headline: 'BORN AT\nTHE RANCH', body: 'A revival of the opener from the very first CrossFit Games in 2007, held at the Aromas ranch. Fitting, since the original hopper returns this year to draw a workout live.', source: 'CrossFit Games history' },
-      { type: 'cta', headline: 'FULL\nBREAKDOWN', body: 'Every athlete, every number, and the model read on Event 2 is on the site. A fit read, not a result prediction.' },
+      { type: 'cta', headline: 'FULL\nBREAKDOWN', body: 'Every athlete, every number, and the model read on the 2007 Hopper is on the site. A fit read, not a result prediction.' },
     ],
   },
 ]
