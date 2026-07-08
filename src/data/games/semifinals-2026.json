@@ -1949,51 +1949,6 @@
       "fieldSize": 30,
       "sourceUrl": "https://competitioncorner.net/api2/v1/leaderboard/20044/tab/female_132362"
     },
-    "gabriela-migala": {
-      "event": "MAD Fitness Festival",
-      "official": true,
-      "source": "researched + verified from official event results",
-      "overallFinish": "1st",
-      "perEvent": [
-        {
-          "n": 1,
-          "label": "MAD X",
-          "score": "31:41",
-          "place": 2
-        },
-        {
-          "n": 2,
-          "label": "FASTFOOT",
-          "score": "7:40",
-          "place": 4
-        },
-        {
-          "n": 3,
-          "label": "CARCELERO",
-          "score": "7:36",
-          "place": 1
-        },
-        {
-          "n": 4,
-          "label": "THE LADDER",
-          "score": "87kg",
-          "place": 3
-        },
-        {
-          "n": 5,
-          "label": "BEADED SANDBAG",
-          "score": "15",
-          "place": 10
-        },
-        {
-          "n": 6,
-          "label": "CALATRAVA",
-          "score": "3:41",
-          "place": 9
-        }
-      ],
-      "sourceUrl": "https://www.boxrox.com/mad-fitness-festival-2026-recap-10-stories-from-spain/"
-    },
     "abigail-domit": {
       "event": "Legends Championship",
       "official": true,
@@ -2661,6 +2616,21 @@
           "place": 17
         }
       ]
+    },
+    "aline-wirz": {
+      "event": "MAD Fitness Festival",
+      "official": true,
+      "source": "MAD Fitness Festival official results + The Barbell Spin backfill report",
+      "overallFinish": "4th (backfill invite)",
+      "perEvent": [
+        {
+          "n": 4,
+          "label": "THE LADDER (snatch)",
+          "score": "85kg PR",
+          "place": null
+        }
+      ],
+      "sourceUrl": "https://thebarbellspin.com/crossfit-games/gabi-migala-withdraws-from-2026-crossfit-games-aline-wirz-receives-backfill-invite/"
     }
   }
 }

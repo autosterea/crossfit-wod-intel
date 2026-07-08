@@ -46,8 +46,8 @@ const PICKS: PickSet[] = [
       { name: 'Mirjam von Rohr', value: '360', why: '2025 Games 1RM back-squat WINNER.' },
       { name: 'Anikha Greer', value: '355', why: 'Tied second at the 2025 Games.' },
       { name: 'Elisa Fuliano', value: '353', why: 'Reported PR (160 kg).' },
-      { name: 'Gabriela Migala', value: '342', why: 'Reported PR.' },
-      { name: 'Kyra Milligan', value: '340', why: 'Reported PR.' },
+      { name: 'Kyra Milligan', value: '340', why: 'Reported PR; top heavy profile.' },
+      { name: 'Madeline Sturt', value: '331', why: 'Reported PR; pairs with a big deadlift.' },
     ],
   },
   {
