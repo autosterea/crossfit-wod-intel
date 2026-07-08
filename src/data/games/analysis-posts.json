@@ -1,243 +1,305 @@
 [
   {
     "slug": "the-crossfit-total-whose-strength-wins",
-    "title": "The CrossFit Total Is Back, Split in Three. Whose Strength Banks the Most?",
-    "dek": "Events 3, 4 and 5 are one 1-rep-max workout scored as three 50-point events. We ranked the field on their own reported maxes.",
+    "title": "The CrossFit Total: Who Tops Each Lift, and the Whole Thing",
+    "dek": "Events 3, 4 and 5 are three 50-point lifts. We pulled the athletes real competition maxes and built a leaderboard for each, plus the overall Total.",
     "category": "Event Preview",
     "date": "2026-07-07",
     "author": "Ravikant Dewangan",
-    "readMin": 5,
-    "summary": "Events 3-5 of the 2026 CrossFit Games are The CrossFit Total, a 1-rep-max back squat, shoulder press and deadlift, each scored as its own 50-point event. We ranked the field on their self-reported maxes, with a data-grounded top 5 per lift and for the Total.",
+    "readMin": 6,
+    "summary": "Events 3-5 of the 2026 CrossFit Games are The CrossFit Total: 1RM back squat, shoulder press and deadlift, each a 50-point event. We built a leaderboard for every lift from real competition maxes (the 2025 Games back squat, the 2023 Rogue deadlift, the 2020 Games press) plus reported PRs and labeled estimates, then summed them for the overall Total.",
     "blocks": [
       {
         "type": "p",
-        "text": "Events 3, 4 and 5 are one workout wearing three bibs. It is **The CrossFit Total**, back at the Games, and this year each lift is scored as its own event worth 50 points, so 150 points are on the table for the strongest all-around lifter. One rep, max load: a **back squat** (Event 3), a strict **shoulder press** (Event 4), and a **deadlift** (Event 5). After a 7.2km run and a metcon, the Total is the hard pivot to raw strength, and unlike the run, this is the one place a big body is an asset rather than a tax. Absolute weight wins; bodyweight does not factor into the score."
+        "text": "Events 3, 4 and 5 are **The CrossFit Total**, three separate 50-point events: a 1-rep-max back squat, strict shoulder press and deadlift. So instead of guessing, we went to the tape. We pulled these athletes actual competition maxes, the **2025 CrossFit Games 1-rep-max back squat**, the **2023 Rogue Invitational max deadlift**, and the strict presses from the **2020 Games Total**, then filled the gaps with official reported PRs and clearly labeled estimates. Here is a leaderboard for every lift, and for the whole Total. Absolute load wins; bodyweight does not factor into the score."
       },
       {
         "type": "h2",
-        "text": "Event 3, the Back Squat: Mertens Sits the Heaviest"
+        "text": "Event 3, the Back Squat"
       },
       {
         "type": "p",
-        "text": "By the athletes' own reported one-rep maxes, **Colten Mertens** owns the biggest back squat in the men's field at **555 lb**, a hair over **Nick Mathew** (545) and **Austin Hatfield** (535). **Guilherme Malheiros** (511) and a 500 lb pair in **Quinn Robinson** and **Jayson Hopper** round out the top five. On the women's side **Elisa Fuliano** leads at **353 lb**, with **Gabriela Migala** (342) and **Kyra Milligan** (340) a squat rack behind."
+        "text": "**Colten Mertens** owns this one on real evidence: he **won the 2025 Games 1-rep-max back squat at 570 lb**, breaking an 18-year Games record. **Nick Mathew** (555) and **Justin Medeiros** (512) also squatted big in that same 2025 test; **Austin Hatfield** (535) and **Guilherme Malheiros** (511) sit on reported PRs. The women are led by another 2025 Games result: **Mirjam von Rohr won that event at 360 lb**, with **Anikha Greer** tied second at 355, then **Elisa Fuliano** (353) and **Gabriela Migala** (342) on profile numbers."
       },
       {
         "type": "ranked",
-        "title": "Men's Back Squat Top 5 (reported 1RM)",
+        "title": "Men's Back Squat - projected top 5 (1RM, lb)",
         "rows": [
           {
             "name": "Colten Mertens",
-            "value": "555 lb",
-            "note": "The biggest back squat in the field."
+            "value": "570",
+            "note": "2025 Games winner; broke an 18-year Games record. Real."
           },
           {
             "name": "Nick Mathew",
-            "value": "545 lb",
-            "note": "Squat strength to match a monster deadlift."
+            "value": "555",
+            "note": "2025 Games, second behind Mertens. Real."
           },
           {
             "name": "Austin Hatfield",
-            "value": "535 lb",
-            "note": "Balanced power under the bar."
+            "value": "535",
+            "note": "Reported PR (515 at the 2025 Games)."
+          },
+          {
+            "name": "Justin Medeiros",
+            "value": "512",
+            "note": "2025 Games back squat. Real."
           },
           {
             "name": "Guilherme Malheiros",
-            "value": "511 lb",
-            "note": "Explosive; also the top clean and jerk in the field."
-          },
-          {
-            "name": "Quinn Robinson",
-            "value": "500 lb",
-            "note": "Ties Hopper at a clean 500."
+            "value": "511",
+            "note": "Reported PR."
           }
         ]
       },
       {
         "type": "ranked",
-        "title": "Women's Back Squat Top 5 (reported 1RM)",
+        "title": "Women's Back Squat - projected top 5 (1RM, lb)",
         "rows": [
           {
+            "name": "Mirjam von Rohr",
+            "value": "360",
+            "note": "2025 Games 1RM back-squat WINNER. Real."
+          },
+          {
+            "name": "Anikha Greer",
+            "value": "355",
+            "note": "Tied second at the 2025 Games. Real."
+          },
+          {
             "name": "Elisa Fuliano",
-            "value": "353 lb",
-            "note": "Field-best squat by a clear margin."
+            "value": "353",
+            "note": "Reported PR (160 kg)."
           },
           {
             "name": "Gabriela Migala",
-            "value": "342 lb",
-            "note": "Poland's powerhouse under the bar."
+            "value": "342",
+            "note": "Reported PR."
           },
           {
             "name": "Kyra Milligan",
-            "value": "340 lb",
-            "note": "Top heavy-lifting profile in the field, too."
-          },
-          {
-            "name": "Madeline Sturt",
-            "value": "331 lb",
-            "note": "Pairs with a field-best deadlift."
-          },
-          {
-            "name": "Hannah Black",
-            "value": "325 lb",
-            "note": "Strong squat, bigger pull."
+            "value": "340",
+            "note": "Reported PR."
           }
         ]
       },
       {
         "type": "h2",
-        "text": "Event 4, the Shoulder Press: the Blind Spot"
+        "text": "Event 4, the Shoulder Press (the honest board)"
       },
       {
         "type": "p",
-        "text": "Here is the honest gap. The strict shoulder press is the one Total lift almost nobody reports, so we cannot rank it on real numbers. Only **Ricky Garard** lists one, and it is a huge **245 lb**. So we proxy from overhead strength, the clean and jerk plus competition heavy-lifting form. That points to **Garard**, **Guilherme Malheiros** (395 lb clean and jerk) and **Dallin Pepper** (385) pressing biggest for the men, with **Justin Medeiros** and **Patrick Vellner**, the two best heavy-lifting profiles in the field, in the mix. For the women, **Hannah Black** (265 clean and jerk) and **Alex Gazan** (255) project to the front, alongside the heavy reads of **Kyra Milligan** and **Olivia Kerstetter**. Treat this one as the wildcard."
-      },
-      {
-        "type": "h2",
-        "text": "Event 5, the Deadlift: Magda and Mathew Off the Floor"
-      },
-      {
-        "type": "p",
-        "text": "The deadlift is where the numbers get silly. **Tudor Magda** and **Nick Mathew** top the men at **605 lb**, with **Patrick Vellner** (595) and **Jayson Hopper** (585) a plate behind. The women are led by a **408 lb** tie between **Aimee Cringle** and **Madeline Sturt**, then **Alex Gazan** and **Hannah Black** at 400."
+        "text": "Here is the one to read with a raised eyebrow. Almost nobody has a real strict-press number, because CrossFit rarely tests it. Only a handful exist: **Jeffrey Adler pressed 207 lb at the 2020 Games**, **Justin Medeiros 175** and **Patrick Vellner ~200** in a Total, **Haley Adams 127** at the 2020 Games, and **Alex Gazan** owns a 167 lb training PR. Everyone else is an estimate off their overhead strength, so we tag those. On that basis **Roman Khrennikov** projects the biggest press in the field (an estimated 240), with **Dallin Pepper** next; among the women **Hannah Black** and **Gazan** lead. Treat this board as informed projection, not fact."
       },
       {
         "type": "ranked",
-        "title": "Men's Deadlift Top 5 (reported 1RM)",
+        "title": "Men's Shoulder Press - projected top 5 (1RM, lb)",
+        "rows": [
+          {
+            "name": "Roman Khrennikov",
+            "value": "240",
+            "note": "Estimate. Projects biggest presser in the field."
+          },
+          {
+            "name": "Dallin Pepper",
+            "value": "212",
+            "note": "Estimate from overhead strength."
+          },
+          {
+            "name": "Jeffrey Adler",
+            "value": "207",
+            "note": "REAL: strict press at the 2020 Games."
+          },
+          {
+            "name": "Henrik Haapalainen",
+            "value": "205",
+            "note": "Estimate (three-way tie)."
+          },
+          {
+            "name": "Tudor Magda",
+            "value": "205",
+            "note": "Estimate."
+          }
+        ]
+      },
+      {
+        "type": "ranked",
+        "title": "Women's Shoulder Press - projected top 5 (1RM, lb)",
+        "rows": [
+          {
+            "name": "Hannah Black",
+            "value": "170",
+            "note": "Estimate from overhead strength."
+          },
+          {
+            "name": "Alex Gazan",
+            "value": "167",
+            "note": "Real training PR (2021)."
+          },
+          {
+            "name": "Anikha Greer",
+            "value": "165",
+            "note": "Estimate."
+          },
+          {
+            "name": "Danielle Brandon",
+            "value": "150",
+            "note": "Estimate."
+          },
+          {
+            "name": "Emma Lawson",
+            "value": "150",
+            "note": "Estimate."
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Event 5, the Deadlift"
+      },
+      {
+        "type": "p",
+        "text": "The deadlift has the best competition record of the three, thanks to the 2023 Rogue Invitational max-deadlift event. **Patrick Vellner (595) and Tudor Magda (595)** went head to head there; **Nick Mathew** matches 605 on his profile and **Justin Medeiros** pulled **600** in competition. The women are led by a monster: **Alex Gazan won the 2023 Rogue max deadlift at 425 lb**, a PR, ahead of **Madeline Sturt** and **Aimee Cringle** (both 408 reported)."
+      },
+      {
+        "type": "ranked",
+        "title": "Men's Deadlift - projected top 5 (1RM, lb)",
         "rows": [
           {
             "name": "Tudor Magda",
-            "value": "605 lb",
-            "note": "Ties for the biggest pull in the field."
+            "value": "605",
+            "note": "Reported PR (595 at 2023 Rogue)."
           },
           {
             "name": "Nick Mathew",
-            "value": "605 lb",
-            "note": "Squat and deadlift both elite; the projected Total leader."
+            "value": "605",
+            "note": "Reported PR."
+          },
+          {
+            "name": "Justin Medeiros",
+            "value": "600",
+            "note": "Competition pull. Real."
           },
           {
             "name": "Patrick Vellner",
-            "value": "595 lb",
-            "note": "Veteran strength off the floor."
+            "value": "595",
+            "note": "2023 Rogue max deadlift (2nd). Real."
           },
           {
             "name": "Jayson Hopper",
-            "value": "585 lb",
-            "note": "The reigning champ's quiet strength."
-          },
-          {
-            "name": "Moritz Fiebig",
-            "value": "573 lb",
-            "note": "Ties Khrennikov just off the leaders."
+            "value": "585",
+            "note": "Reported (575 at 2023 Rogue)."
           }
         ]
       },
       {
         "type": "ranked",
-        "title": "Women's Deadlift Top 5 (reported 1RM)",
+        "title": "Women's Deadlift - projected top 5 (1RM, lb)",
         "rows": [
           {
-            "name": "Aimee Cringle",
-            "value": "408 lb",
-            "note": "Ties Sturt for the field-best pull."
+            "name": "Alex Gazan",
+            "value": "425",
+            "note": "2023 Rogue max-deadlift WINNER, a PR. Real."
           },
           {
             "name": "Madeline Sturt",
-            "value": "408 lb",
-            "note": "Deadlift to anchor a Total run."
+            "value": "408",
+            "note": "Reported PR."
           },
           {
-            "name": "Alex Gazan",
-            "value": "400 lb",
-            "note": "Strength to match her engine."
+            "name": "Aimee Cringle",
+            "value": "408",
+            "note": "Reported PR."
+          },
+          {
+            "name": "Mirjam von Rohr",
+            "value": "405",
+            "note": "Estimate."
           },
           {
             "name": "Hannah Black",
-            "value": "400 lb",
-            "note": "Ties Gazan at a round 400."
-          },
-          {
-            "name": "Matilde Garnes",
-            "value": "397 lb",
-            "note": "Sneaky-strong Norwegian."
+            "value": "400",
+            "note": "Reported PR."
           }
         ]
       },
       {
         "type": "h2",
-        "text": "The Whole Total: Who Banks the Most"
+        "text": "The Overall Total: 150 Points on the Line"
       },
       {
         "type": "p",
-        "text": "Add the two lifts we can measure, squat and deadlift, and the Total leaderboard takes shape. For the men, **Nick Mathew** is the projected king at a combined **1,150 lb** (545 squat, 605 deadlift), ahead of **Colten Mertens** (1,100) and **Jayson Hopper** (1,085). For the women, **Madeline Sturt** (739 lb) edges **Kyra Milligan** (735) and **Gabriela Migala** (726). These are the athletes who bank points across all three lifting events, not just one. Add a strong press and Mathew, Mertens, Milligan and Sturt are the names to watch atop this Total."
+        "text": "Sum the three lifts and the men's Total is led by **Nick Mathew** at roughly **1,355 lb** (555 squat, a big deadlift at 605, and an estimated press), with **Colten Mertens** (record squat), **Justin Medeiros**, **Roman Khrennikov** and **Jayson Hopper** bunched around 1,285-1,290. On the women's side **Alex Gazan** is the projected Total leader near **912 lb**, the only woman who reads elite across all three lifts, ahead of **Mirjam von Rohr** (900) and **Hannah Black** (895). Remember the press column is largely estimated, so the Total order can shift on that one lift."
       },
       {
         "type": "ranked",
-        "title": "Men's Total Top 5 (squat + deadlift, lb)",
+        "title": "Men's Total - projected top 5 (squat + press + deadlift, lb)",
         "rows": [
           {
             "name": "Nick Mathew",
-            "value": "1150",
-            "note": "545 squat + 605 deadlift. The biggest combined lift in the field."
+            "value": "1355",
+            "note": "555 squat, big 605 deadlift, estimated press. Biggest Total."
           },
           {
             "name": "Colten Mertens",
-            "value": "1100",
-            "note": "555 squat + 545 deadlift. Field-best squat."
+            "value": "1290",
+            "note": "Record 570 squat plus a 545 deadlift."
+          },
+          {
+            "name": "Justin Medeiros",
+            "value": "1287",
+            "note": "Balanced: 512 squat, 600 pull, real 175 press."
+          },
+          {
+            "name": "Roman Khrennikov",
+            "value": "1287",
+            "note": "Carried by the biggest projected press."
           },
           {
             "name": "Jayson Hopper",
-            "value": "1085",
-            "note": "500 squat + 585 deadlift. The champ's hidden strength."
-          },
-          {
-            "name": "Tudor Magda",
-            "value": "1080",
-            "note": "475 squat + a field-best 605 deadlift."
-          },
-          {
-            "name": "Austin Hatfield",
-            "value": "1075",
-            "note": "535 squat + 540 deadlift. Balanced brute."
+            "value": "1285",
+            "note": "500 squat, 585 deadlift, solid press."
           }
         ]
       },
       {
         "type": "ranked",
-        "title": "Women's Total Top 5 (squat + deadlift, lb)",
+        "title": "Women's Total - projected top 5 (squat + press + deadlift, lb)",
         "rows": [
           {
-            "name": "Madeline Sturt",
-            "value": "739",
-            "note": "331 squat + 408 deadlift. Nothing light about her."
+            "name": "Alex Gazan",
+            "value": "912",
+            "note": "Elite in all three: 320 squat, 167 press, 425 deadlift."
           },
           {
-            "name": "Kyra Milligan",
-            "value": "735",
-            "note": "340 squat + 395 deadlift, plus the top heavy profile."
-          },
-          {
-            "name": "Gabriela Migala",
-            "value": "726",
-            "note": "342 squat + 384 deadlift. Powerhouse."
+            "name": "Mirjam von Rohr",
+            "value": "900",
+            "note": "Record-squat winner (360) plus a big pull."
           },
           {
             "name": "Hannah Black",
-            "value": "725",
-            "note": "325 squat + 400 deadlift + 265 clean and jerk."
+            "value": "895",
+            "note": "325 squat, 400 deadlift, top projected press."
           },
           {
-            "name": "Alex Gazan",
-            "value": "720",
-            "note": "320 squat + 400 deadlift. Strength to match the engine."
+            "name": "Madeline Sturt",
+            "value": "879",
+            "note": "331 squat, 408 deadlift."
+          },
+          {
+            "name": "Anikha Greer",
+            "value": "870",
+            "note": "355 squat plus a strong pull."
           }
         ]
       },
       {
         "type": "callout",
         "title": "Methodology",
-        "text": "The squat and deadlift numbers are the athletes' own self-reported one-rep maxes from their official CrossFit profiles, real but aspirational and sometimes dated. The shoulder press is barely reported across the field, so that event is a proxy built from clean-and-jerk maxes and competition heavy-lifting performance, not a measured press. The CrossFit Total scores absolute load, so body weight does not factor into the ranking. This ranks paper strength (squat plus deadlift), not a predicted event result. A great number on paper still has to be hit on the platform Wednesday."
+        "text": "Real competition maxes were used wherever they exist: the 2025 CrossFit Games 1-rep-max back squat, the 2023 Rogue Invitational max deadlift, and the strict presses from the 2020 Games Total (all tagged Real above). Gaps were filled with the athletes official CrossFit-profile 1RMs, and where even that was missing, with estimates from their clean-and-jerk and overhead strength (tagged Estimate). The shoulder press is mostly estimated, only about five athletes have a documented strict-press number, so read Event 4 as informed projection. The CrossFit Total scores absolute load, so body weight does not factor. This ranks projected strength, not a predicted event result."
       }
     ],
-    "tracesTo": "Self-reported 1-rep-max lifts from athletes' official CrossFit profiles (athlete-benchmarks-2026.json); shoulder-press proxy from clean-and-jerk maxes + competition heavy-lifting performance."
+    "tracesTo": "Competition results: 2025 CrossFit Games 1RM back squat (Event 5), 2023 Rogue Invitational max deadlift, 2020 CrossFit Games Total strict press. Gaps: official CrossFit profile 1RMs + estimates from clean-and-jerk / overhead strength, tagged by confidence."
   },
   {
     "slug": "event-1-the-2007-hopper-whose-profile-fits",
