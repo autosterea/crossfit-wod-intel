@@ -299,7 +299,21 @@
         "text": "Real competition maxes were used wherever they exist: the 2025 CrossFit Games 1-rep-max back squat, the 2023 Rogue Invitational max deadlift, and the strict presses from the 2020 Games Total (all tagged Real above). Gaps were filled with the athletes official CrossFit-profile 1RMs, and where even that was missing, with estimates from their clean-and-jerk and overhead strength (tagged Estimate). The shoulder press is mostly estimated, only about five athletes have a documented strict-press number, so read Event 4 as informed projection. The CrossFit Total scores absolute load, so body weight does not factor. This ranks projected strength, not a predicted event result."
       }
     ],
-    "tracesTo": "Competition results: 2025 CrossFit Games 1RM back squat (Event 5), 2023 Rogue Invitational max deadlift, 2020 CrossFit Games Total strict press. Gaps: official CrossFit profile 1RMs + estimates from clean-and-jerk / overhead strength, tagged by confidence."
+    "tracesTo": "Competition results: 2025 CrossFit Games 1RM back squat (Event 5), 2023 Rogue Invitational max deadlift, 2020 CrossFit Games Total strict press. Gaps: official CrossFit profile 1RMs + estimates from clean-and-jerk / overhead strength, tagged by confidence.",
+    "sources": [
+      {
+        "label": "2025 CrossFit Games 1RM Back Squat results (BarBend)",
+        "url": "https://barbend.com/news/how-this-years-one-rep-max-back-squats-stack-up-to-past-crossfit-games/"
+      },
+      {
+        "label": "2023 Rogue Invitational Max Deadlift results (The Barbell Spin)",
+        "url": "https://thebarbellspin.com/crossfit-games/"
+      },
+      {
+        "label": "2020 CrossFit Games Total + athlete 1RMs (CrossFit Games)",
+        "url": "https://games.crossfit.com/"
+      }
+    ]
   },
   {
     "slug": "event-1-the-2007-hopper-whose-profile-fits",
@@ -523,6 +537,16 @@
         "type": "callout",
         "title": "Methodology",
         "text": "There was no run in the 2026 season, so no athlete has a measured 7km time. This read starts from competition-derived performance profiles, long engine (sustained output), monostructural (machine and cardio), and oxidative (aerobic system), each a placement percentile from official 2026 Open and Quarterfinals results plus all prior Games. Because a 7.2km run also rewards a light frame, we scale that aerobic score by power-to-weight using each athlete's body mass. It is a fit read for a run, not a predicted finish. A great profile still has to be run on the dirt Wednesday."
+      }
+    ],
+    "sources": [
+      {
+        "label": "Official CrossFit Games workout page",
+        "url": "https://games.crossfit.com/workouts/finals/2026/1"
+      },
+      {
+        "label": "2026 Games to Kick Off July 22 with Multiple Off-Sites (CrossFit Games)",
+        "url": "https://games.crossfit.com/article/2026-crossfit-games-to-kick-off-on-july-22-with-multiple-off-sites"
       }
     ]
   },

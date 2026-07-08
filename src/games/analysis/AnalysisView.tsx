@@ -98,7 +98,7 @@ function Article({ post }: { post: AnalysisPost }) {
       <p className="text-[16px] sm:text-[17px] text-[var(--text-secondary)] leading-relaxed mb-4">{post.dek}</p>
       <div className="text-[12px] text-[var(--text-muted)] mb-6 pb-6" style={{ borderBottom: '1px solid var(--panel-border)' }}>By {post.author} &middot; Persistence Athletics</div>
       <div>{post.blocks.map((b, i) => <BlockView key={i} block={b} />)}</div>
-      {post.sources.length > 0 && (
+      {(post.sources?.length ?? 0) > 0 && (
         <div className="mt-8 pt-5" style={{ borderTop: '1px solid var(--panel-border)' }}>
           <div className="games-condensed text-[11px] uppercase tracking-[0.12em] text-[var(--text-tertiary)] mb-2">Sources</div>
           <ul className="space-y-1">
