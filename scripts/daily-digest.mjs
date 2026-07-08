@@ -94,10 +94,10 @@ L.push('')
 L.push(`*Status:* field ${fieldLocked ? 'locked 30+30' : 'not locked'} · ${interviews}/60 interviews linked.`)
 L.push('')
 const post = uncovered.length
-  ? `:point_right: *Action:* a new event dropped - ping the team to build + post its preview today.`
+  ? `:point_right: *Action:* a NEW event dropped -> build its Breakdown blog post + a Story card (9:16, /share/posts/story-<slug>.png), then post the kit to the team here so Anu can share and drive traffic to the blog.`
   : eventNews.length
-    ? `:point_right: *Action:* event-related news is out - consider a post. Otherwise run the weekly kit.`
-    : `:point_right: *Action:* no new event today. Keep the daily cadence with the weekly kit (matchups / spotlights / picks).`
+    ? `:point_right: *Action:* event-related news is out - consider a Breakdown post + Story card, then post to the team. Otherwise run the weekly kit.`
+    : `:point_right: *Action:* no new event today. Keep the daily cadence: post the latest Breakdown's Story card (link sticker -> the article), plus the weekly kit (matchups / spotlights / picks).`
 L.push(post)
 
 const digest = L.join('\n')
