@@ -4,6 +4,7 @@ import { A2026, allAthletes2026, countryFlag, initials, monogramColor } from './
 import photosExtra from '../data/games/photos-extra.json'
 import rawGames from '../data/games-data.json'
 import type { GamesData, GamesAthlete2026 } from '../types-games'
+import analysisPosts from '../data/games/analysis-posts.json'
 
 // Instagram card studio for @cf_games_update. URL-only tool (not in nav).
 // Cards render at a fixed 1080x1350 (IG portrait) offscreen and export as PNG.
@@ -12,7 +13,7 @@ import type { GamesData, GamesAthlete2026 } from '../types-games'
 const G = rawGames as unknown as GamesData
 
 type Division = 'men' | 'women'
-type Template = 'spotlight' | 'cover' | 'h2h' | 'form' | 'news' | 'carousel' | 'picks'
+type Template = 'spotlight' | 'cover' | 'h2h' | 'form' | 'news' | 'carousel' | 'picks' | 'story'
 
 const TEMPLATES: { id: Template; label: string }[] = [
   { id: 'spotlight', label: 'Athlete Spotlight' },
@@ -22,6 +23,7 @@ const TEMPLATES: { id: Template; label: string }[] = [
   { id: 'news', label: 'News / Announcement' },
   { id: 'carousel', label: 'Carousel (multi-slide)' },
   { id: 'picks', label: 'Event picks (model top 5)' },
+  { id: 'story', label: 'Story (blog promo, 9:16)' },
 ]
 
 // Model-favored top 5 per event. Every number/reason is grounded in the projection
@@ -679,6 +681,39 @@ function NewsCard({ item }: { item: NewsItem }) {
   )
 }
 
+// Story cards (9:16, 1080x1920) that promote a Breakdown post and drive traffic
+// to the blog. One per analysis post, generated from the posts themselves.
+type Story = { id: string; kicker: string; title: string; hook: string; url: string }
+const ANALYSIS_BASE = HUB_URL.replace('/2026', '/analysis')
+const STORIES: Story[] = (analysisPosts as { slug: string; title: string; dek: string; category: string; date: string }[])
+  .slice()
+  .sort((a, b) => (a.date < b.date ? 1 : -1))
+  .map((p) => ({ id: p.slug, kicker: p.category, title: p.title, hook: p.dek, url: `${ANALYSIS_BASE}/${p.slug}` }))
+
+const storyBg: React.CSSProperties = { ...cardBg, height: 1920 }
+function StoryCard({ story }: { story: Story }) {
+  const titleSize = story.title.length > 46 ? 74 : story.title.length > 34 ? 86 : 100
+  return (
+    <div style={storyBg}>
+      <CardHeader />
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 64px' }}>
+        <div style={{ fontSize: 30, letterSpacing: 6, textTransform: 'uppercase', color: GREEN, fontWeight: 600 }}>The Breakdown</div>
+        <div style={{ fontSize: 25, letterSpacing: 3, textTransform: 'uppercase', color: DIM, marginTop: 6, marginBottom: 30 }}>{story.kicker}</div>
+        <div style={{ fontFamily: "'Anton', sans-serif", fontSize: titleSize, textTransform: 'uppercase', lineHeight: 0.98 }}>{story.title}</div>
+        <div style={{ fontSize: 40, color: INK, marginTop: 34, lineHeight: 1.32, maxWidth: 940 }}>{story.hook}</div>
+        <div style={{ marginTop: 56 }}>
+          <div style={{ fontFamily: "'Anton', sans-serif", fontSize: 52, color: GREEN, textTransform: 'uppercase' }}>Read the full breakdown &rarr;</div>
+          <div style={{ fontSize: 33, color: DIM, marginTop: 10, letterSpacing: 0.5 }}>{story.url}</div>
+        </div>
+        <div style={{ marginTop: 46, alignSelf: 'flex-start', background: 'rgba(145,198,64,0.14)', border: '1px solid rgba(145,198,64,0.45)', borderRadius: 20, padding: '22px 34px' }}>
+          <div style={{ fontSize: 34, color: GREEN, fontWeight: 600 }}>Link in bio &middot; {HANDLE}</div>
+        </div>
+      </div>
+      <CardFooter />
+    </div>
+  )
+}
+
 function SlideDots({ index, total }: { index: number; total: number }) {
   return (
     <div style={{ display: 'flex', justifyContent: 'center', gap: 10, padding: '0 56px' }}>
@@ -730,7 +765,10 @@ function CarouselSlide({ slide, index, total }: { slide: Slide; index: number; t
 
 // ---------- Captions ----------
 
-function captionFor(t: Template, a: GamesAthlete2026 | undefined, b: GamesAthlete2026 | undefined, division: Division, news?: NewsItem, carousel?: Carousel, pickSet?: PickSet): string {
+function captionFor(t: Template, a: GamesAthlete2026 | undefined, b: GamesAthlete2026 | undefined, division: Division, news?: NewsItem, carousel?: Carousel, pickSet?: PickSet, story?: Story): string {
+  if (t === 'story' && story) {
+    return `📊 NEW ON THE BREAKDOWN\n\n${story.title}\n\n${story.hook}\n\nRead it: ${story.url}\n\n${HASHTAGS}`
+  }
   if (t === 'picks' && pickSet) {
     const rows = division === 'men' ? pickSet.men : pickSet.women
     return `🎯 ${pickSet.eventKicker.toUpperCase()} - THE MODEL'S TOP 5 (${division.toUpperCase()})\n\n${pickSet.eventLine}\n\n${rows.map((r, i) => `${i + 1}. ${r.name}`).join('\n')}\n\nWho you got? This is a model read of who fits the workout, not a result prediction. Full breakdown + every athlete at the link in bio.\n\n${HASHTAGS}`
@@ -767,6 +805,7 @@ export default function CardStudio() {
   const [carouselId, setCarouselId] = useState(params.get('c') || CAROUSELS[0].id)
   const [slideIdx, setSlideIdx] = useState(Number(params.get('s') || 0))
   const [pickId, setPickId] = useState(params.get('p') || PICKS[0].id)
+  const [storyId, setStoryId] = useState(params.get('st') || STORIES[0].id)
   const [busy, setBusy] = useState(false)
   const cardRef = useRef<HTMLDivElement>(null)
 
@@ -776,7 +815,8 @@ export default function CardStudio() {
   const carousel = useMemo(() => CAROUSELS.find((x) => x.id === carouselId) ?? CAROUSELS[0], [carouselId])
   const slideClamped = Math.max(0, Math.min(slideIdx, carousel.slides.length - 1))
   const pickSet = useMemo(() => PICKS.find((x) => x.id === pickId) ?? PICKS[0], [pickId])
-  const caption = captionFor(template, a, b, division, newsItem, carousel, pickSet)
+  const story = useMemo(() => STORIES.find((x) => x.id === storyId) ?? STORIES[0], [storyId])
+  const caption = captionFor(template, a, b, division, newsItem, carousel, pickSet, story)
 
   const download = async () => {
     if (!cardRef.current || busy) return
@@ -799,10 +839,11 @@ export default function CardStudio() {
       await Promise.all(imgs.map((img) => img.decode?.().catch(() => {})))
       await new Promise((r) => setTimeout(r, 120))
       // double-render to ensure fonts settle
-      await toPng(cardRef.current, { width: 1080, height: 1350, pixelRatio: 1 })
-      const url = await toPng(cardRef.current, { width: 1080, height: 1350, pixelRatio: 1 })
+      const exportH = template === 'story' ? 1920 : 1350
+      await toPng(cardRef.current, { width: 1080, height: exportH, pixelRatio: 1 })
+      const url = await toPng(cardRef.current, { width: 1080, height: exportH, pixelRatio: 1 })
       const link = document.createElement('a')
-      link.download = template === 'spotlight' ? `${a.slug}-spotlight.png` : template === 'h2h' ? `${a.slug}-vs-${b.slug}.png` : template === 'news' ? `news-${newsItem.id}.png` : template === 'carousel' ? `carousel-${carousel.id}-${String(slideClamped + 1).padStart(2, '0')}.png` : template === 'picks' ? `picks-${pickSet.id}-${division}.png` : `${template}-${division}.png`
+      link.download = template === 'spotlight' ? `${a.slug}-spotlight.png` : template === 'h2h' ? `${a.slug}-vs-${b.slug}.png` : template === 'news' ? `news-${newsItem.id}.png` : template === 'carousel' ? `carousel-${carousel.id}-${String(slideClamped + 1).padStart(2, '0')}.png` : template === 'picks' ? `picks-${pickSet.id}-${division}.png` : template === 'story' ? `story-${story.id}.png` : `${template}-${division}.png`
       link.href = url
       link.click()
     } finally {
@@ -852,6 +893,11 @@ export default function CardStudio() {
             {PICKS.map((x) => <option key={x.id} value={x.id}>{x.label}</option>)}
           </select>
         )}
+        {template === 'story' && (
+          <select value={storyId} onChange={(e) => setStoryId(e.target.value)} className="bg-[var(--input-bg)] border border-[var(--input-border)] rounded-lg px-3 py-2 text-sm text-[var(--text-primary)]">
+            {STORIES.map((x) => <option key={x.id} value={x.id}>{x.title.slice(0, 42)}</option>)}
+          </select>
+        )}
         {template === 'carousel' && (
           <>
             <select value={carouselId} onChange={(e) => { setCarouselId(e.target.value); setSlideIdx(0) }} className="bg-[var(--input-bg)] border border-[var(--input-border)] rounded-lg px-3 py-2 text-sm text-[var(--text-primary)]">
@@ -872,7 +918,7 @@ export default function CardStudio() {
 
       <div className="grid lg:grid-cols-[auto_1fr] gap-6 items-start">
         {/* Preview (scaled) */}
-        <div className="rounded-2xl border border-[var(--panel-border)] overflow-hidden" style={{ width: 378, height: 472.5 }}>
+        <div className="rounded-2xl border border-[var(--panel-border)] overflow-hidden" style={{ width: 378, height: template === 'story' ? 672 : 472.5 }}>
           <div style={{ transform: 'scale(0.35)', transformOrigin: 'top left' }}>
             <div ref={cardRef} data-testid="card-canvas">
               {template === 'spotlight' && <SpotlightCard a={a} />}
@@ -882,6 +928,7 @@ export default function CardStudio() {
               {template === 'news' && <NewsCard item={newsItem} />}
               {template === 'carousel' && <CarouselSlide slide={carousel.slides[slideClamped]} index={slideClamped} total={carousel.slides.length} />}
               {template === 'picks' && <PicksCard set={pickSet} division={division} />}
+              {template === 'story' && <StoryCard story={story} />}
             </div>
           </div>
         </div>
