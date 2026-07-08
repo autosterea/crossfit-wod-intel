@@ -30,6 +30,27 @@ type Pick = { name: string; value: string; why: string }
 type PickSet = { id: string; label: string; eventKicker: string; eventLine: string; note: string; men: Pick[]; women: Pick[] }
 const PICKS: PickSet[] = [
   {
+    id: 'cf-total',
+    label: 'Events 3-5 - The CrossFit Total',
+    eventKicker: 'Events 3-5 - The CrossFit Total',
+    eventLine: '1-rep-max back squat, shoulder press, deadlift. Each lift a 50-point event.',
+    note: 'Total = reported back squat + deadlift 1RM (the two lifts athletes report). A strength read from self-reported maxes, not a result prediction.',
+    men: [
+      { name: 'Nick Mathew', value: '1150', why: '545 back squat + 605 deadlift. The biggest combined lift in the field.' },
+      { name: 'Colten Mertens', value: '1100', why: 'Field-best 555 back squat, 545 deadlift.' },
+      { name: 'Jayson Hopper', value: '1085', why: "500 squat, 585 deadlift. The reigning champ's quiet strength." },
+      { name: 'Tudor Magda', value: '1080', why: '475 squat plus a field-best 605 deadlift.' },
+      { name: 'Austin Hatfield', value: '1075', why: '535 squat, 540 deadlift. Balanced brute.' },
+    ],
+    women: [
+      { name: 'Madeline Sturt', value: '739', why: '331 squat, 408 deadlift (field-best tie).' },
+      { name: 'Kyra Milligan', value: '735', why: '340 squat, 395 deadlift, top heavy-lifting profile.' },
+      { name: 'Gabriela Migala', value: '726', why: '342 squat, 384 deadlift. Powerhouse.' },
+      { name: 'Hannah Black', value: '725', why: '325 squat, 400 deadlift, 265 clean and jerk.' },
+      { name: 'Alex Gazan', value: '720', why: '320 squat, 400 deadlift. Strength to match the engine.' },
+    ],
+  },
+  {
     id: 'event2-ranch7200',
     label: 'Event 2 - Ranch 7200',
     eventKicker: 'Event 2 - Ranch 7200',
@@ -108,6 +129,21 @@ const CAROUSELS: Carousel[] = [
       { type: 'point', num: 3, kicker: 'The Sleeper', headline: 'JAMES\nSPRAGUE', body: 'His engine (74th percentile) outruns his overall capacity. In a 20-event grind, that kind of aerobic base shows up late in the weekend, not early.', source: 'Persistence Athletics model' },
       { type: 'point', num: 4, kicker: 'Why it matters', headline: '4 DAYS.\n20 EVENTS.', body: 'The most events in Games history. The athletes who depend least on a single good day are the ones built to last the whole weekend. The engine is the separator.', source: 'CrossFit Games format' },
       { type: 'cta', headline: 'READ THE\nBREAKDOWN', body: 'The full engine analysis, every athlete and every number, is on the site. Data-grounded, no takes without the numbers.' },
+    ],
+  },
+  {
+    id: 'cf-total-preview',
+    label: 'Events 3-5 - The CrossFit Total',
+    caption:
+      "🏋️ EVENTS 3-5 = THE CROSSFIT TOTAL. The Games bring back the Total, and this year each lift scores as its own 50-point event: 1-rep-max back squat (E3), shoulder press (E4), deadlift (E5). 150 points on the line for the strongest.\n\nSwipe for each lift, our model's top 5 from the athletes' own reported maxes, and who banks the most across the whole Total. A strength read, not a result prediction. Full breakdown at the link in bio.\n\nEvent source: the official CrossFit Games workout page.",
+    slides: [
+      { type: 'cover', kicker: 'Events 3-5', headline: 'THE CROSSFIT\nTOTAL', sub: 'Back squat, shoulder press, deadlift. One rep max each, scored as three 50-point events. Swipe.' },
+      { type: 'point', num: 1, kicker: 'The Workout', headline: '3 LIFTS,\n150 POINTS', body: '1-rep-max back squat (Event 3), strict shoulder press (Event 4) and deadlift (Event 5). Each lift is its own event worth 50 points. Absolute load wins, bodyweight does not factor. Day 1, Wednesday July 22.', source: 'CrossFit Games (official workout page)' },
+      { type: 'point', num: 2, kicker: 'Back Squat', headline: 'MERTENS\n555 LB', body: 'By reported 1RM: Mertens 555, Mathew 545, Hatfield 535, Malheiros 511, Robinson 500. Women: Fuliano 353, Migala 342, Milligan 340.', source: 'Athletes reported maxes' },
+      { type: 'point', num: 3, kicker: 'Deadlift', headline: 'MAGDA &\nMATHEW 605', body: 'Off the floor: Magda and Mathew tie at 605, Vellner 595, Hopper 585. Women: Cringle and Sturt tie at 408, Gazan and Black at 400.', source: 'Athletes reported maxes' },
+      { type: 'point', num: 4, kicker: 'The Press', headline: 'THE\nWILDCARD', body: 'Almost nobody reports a strict press, so Event 4 is the wildcard. Proxying from overhead strength: Garard (a reported 245 lb), Malheiros and Pepper for the men; Black and Gazan for the women.', source: 'Persistence Athletics model' },
+      { type: 'point', num: 5, kicker: 'The Total - Top 5', headline: 'MATHEW.\nSTURT.', body: 'Squat + deadlift combined: Men, Mathew 1150, Mertens 1100, Hopper 1085. Women, Sturt 739, Milligan 735, Migala 726. The names who bank points on all three lifts.', source: 'Persistence Athletics model' },
+      { type: 'cta', headline: 'FULL\nBREAKDOWN', body: 'Every lift, every athlete and the top 5 for the Total are on the site. A strength read from reported maxes, not a result prediction.' },
     ],
   },
   {

@@ -1,5 +1,245 @@
 [
   {
+    "slug": "the-crossfit-total-whose-strength-wins",
+    "title": "The CrossFit Total Is Back, Split in Three. Whose Strength Banks the Most?",
+    "dek": "Events 3, 4 and 5 are one 1-rep-max workout scored as three 50-point events. We ranked the field on their own reported maxes.",
+    "category": "Event Preview",
+    "date": "2026-07-07",
+    "author": "Ravikant Dewangan",
+    "readMin": 5,
+    "summary": "Events 3-5 of the 2026 CrossFit Games are The CrossFit Total, a 1-rep-max back squat, shoulder press and deadlift, each scored as its own 50-point event. We ranked the field on their self-reported maxes, with a data-grounded top 5 per lift and for the Total.",
+    "blocks": [
+      {
+        "type": "p",
+        "text": "Events 3, 4 and 5 are one workout wearing three bibs. It is **The CrossFit Total**, back at the Games, and this year each lift is scored as its own event worth 50 points, so 150 points are on the table for the strongest all-around lifter. One rep, max load: a **back squat** (Event 3), a strict **shoulder press** (Event 4), and a **deadlift** (Event 5). After a 7.2km run and a metcon, the Total is the hard pivot to raw strength, and unlike the run, this is the one place a big body is an asset rather than a tax. Absolute weight wins; bodyweight does not factor into the score."
+      },
+      {
+        "type": "h2",
+        "text": "Event 3, the Back Squat: Mertens Sits the Heaviest"
+      },
+      {
+        "type": "p",
+        "text": "By the athletes' own reported one-rep maxes, **Colten Mertens** owns the biggest back squat in the men's field at **555 lb**, a hair over **Nick Mathew** (545) and **Austin Hatfield** (535). **Guilherme Malheiros** (511) and a 500 lb pair in **Quinn Robinson** and **Jayson Hopper** round out the top five. On the women's side **Elisa Fuliano** leads at **353 lb**, with **Gabriela Migala** (342) and **Kyra Milligan** (340) a squat rack behind."
+      },
+      {
+        "type": "ranked",
+        "title": "Men's Back Squat Top 5 (reported 1RM)",
+        "rows": [
+          {
+            "name": "Colten Mertens",
+            "value": "555 lb",
+            "note": "The biggest back squat in the field."
+          },
+          {
+            "name": "Nick Mathew",
+            "value": "545 lb",
+            "note": "Squat strength to match a monster deadlift."
+          },
+          {
+            "name": "Austin Hatfield",
+            "value": "535 lb",
+            "note": "Balanced power under the bar."
+          },
+          {
+            "name": "Guilherme Malheiros",
+            "value": "511 lb",
+            "note": "Explosive; also the top clean and jerk in the field."
+          },
+          {
+            "name": "Quinn Robinson",
+            "value": "500 lb",
+            "note": "Ties Hopper at a clean 500."
+          }
+        ]
+      },
+      {
+        "type": "ranked",
+        "title": "Women's Back Squat Top 5 (reported 1RM)",
+        "rows": [
+          {
+            "name": "Elisa Fuliano",
+            "value": "353 lb",
+            "note": "Field-best squat by a clear margin."
+          },
+          {
+            "name": "Gabriela Migala",
+            "value": "342 lb",
+            "note": "Poland's powerhouse under the bar."
+          },
+          {
+            "name": "Kyra Milligan",
+            "value": "340 lb",
+            "note": "Top heavy-lifting profile in the field, too."
+          },
+          {
+            "name": "Madeline Sturt",
+            "value": "331 lb",
+            "note": "Pairs with a field-best deadlift."
+          },
+          {
+            "name": "Hannah Black",
+            "value": "325 lb",
+            "note": "Strong squat, bigger pull."
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Event 4, the Shoulder Press: the Blind Spot"
+      },
+      {
+        "type": "p",
+        "text": "Here is the honest gap. The strict shoulder press is the one Total lift almost nobody reports, so we cannot rank it on real numbers. Only **Ricky Garard** lists one, and it is a huge **245 lb**. So we proxy from overhead strength, the clean and jerk plus competition heavy-lifting form. That points to **Garard**, **Guilherme Malheiros** (395 lb clean and jerk) and **Dallin Pepper** (385) pressing biggest for the men, with **Justin Medeiros** and **Patrick Vellner**, the two best heavy-lifting profiles in the field, in the mix. For the women, **Hannah Black** (265 clean and jerk) and **Alex Gazan** (255) project to the front, alongside the heavy reads of **Kyra Milligan** and **Olivia Kerstetter**. Treat this one as the wildcard."
+      },
+      {
+        "type": "h2",
+        "text": "Event 5, the Deadlift: Magda and Mathew Off the Floor"
+      },
+      {
+        "type": "p",
+        "text": "The deadlift is where the numbers get silly. **Tudor Magda** and **Nick Mathew** top the men at **605 lb**, with **Patrick Vellner** (595) and **Jayson Hopper** (585) a plate behind. The women are led by a **408 lb** tie between **Aimee Cringle** and **Madeline Sturt**, then **Alex Gazan** and **Hannah Black** at 400."
+      },
+      {
+        "type": "ranked",
+        "title": "Men's Deadlift Top 5 (reported 1RM)",
+        "rows": [
+          {
+            "name": "Tudor Magda",
+            "value": "605 lb",
+            "note": "Ties for the biggest pull in the field."
+          },
+          {
+            "name": "Nick Mathew",
+            "value": "605 lb",
+            "note": "Squat and deadlift both elite; the projected Total leader."
+          },
+          {
+            "name": "Patrick Vellner",
+            "value": "595 lb",
+            "note": "Veteran strength off the floor."
+          },
+          {
+            "name": "Jayson Hopper",
+            "value": "585 lb",
+            "note": "The reigning champ's quiet strength."
+          },
+          {
+            "name": "Moritz Fiebig",
+            "value": "573 lb",
+            "note": "Ties Khrennikov just off the leaders."
+          }
+        ]
+      },
+      {
+        "type": "ranked",
+        "title": "Women's Deadlift Top 5 (reported 1RM)",
+        "rows": [
+          {
+            "name": "Aimee Cringle",
+            "value": "408 lb",
+            "note": "Ties Sturt for the field-best pull."
+          },
+          {
+            "name": "Madeline Sturt",
+            "value": "408 lb",
+            "note": "Deadlift to anchor a Total run."
+          },
+          {
+            "name": "Alex Gazan",
+            "value": "400 lb",
+            "note": "Strength to match her engine."
+          },
+          {
+            "name": "Hannah Black",
+            "value": "400 lb",
+            "note": "Ties Gazan at a round 400."
+          },
+          {
+            "name": "Matilde Garnes",
+            "value": "397 lb",
+            "note": "Sneaky-strong Norwegian."
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "The Whole Total: Who Banks the Most"
+      },
+      {
+        "type": "p",
+        "text": "Add the two lifts we can measure, squat and deadlift, and the Total leaderboard takes shape. For the men, **Nick Mathew** is the projected king at a combined **1,150 lb** (545 squat, 605 deadlift), ahead of **Colten Mertens** (1,100) and **Jayson Hopper** (1,085). For the women, **Madeline Sturt** (739 lb) edges **Kyra Milligan** (735) and **Gabriela Migala** (726). These are the athletes who bank points across all three lifting events, not just one. Add a strong press and Mathew, Mertens, Milligan and Sturt are the names to watch atop this Total."
+      },
+      {
+        "type": "ranked",
+        "title": "Men's Total Top 5 (squat + deadlift, lb)",
+        "rows": [
+          {
+            "name": "Nick Mathew",
+            "value": "1150",
+            "note": "545 squat + 605 deadlift. The biggest combined lift in the field."
+          },
+          {
+            "name": "Colten Mertens",
+            "value": "1100",
+            "note": "555 squat + 545 deadlift. Field-best squat."
+          },
+          {
+            "name": "Jayson Hopper",
+            "value": "1085",
+            "note": "500 squat + 585 deadlift. The champ's hidden strength."
+          },
+          {
+            "name": "Tudor Magda",
+            "value": "1080",
+            "note": "475 squat + a field-best 605 deadlift."
+          },
+          {
+            "name": "Austin Hatfield",
+            "value": "1075",
+            "note": "535 squat + 540 deadlift. Balanced brute."
+          }
+        ]
+      },
+      {
+        "type": "ranked",
+        "title": "Women's Total Top 5 (squat + deadlift, lb)",
+        "rows": [
+          {
+            "name": "Madeline Sturt",
+            "value": "739",
+            "note": "331 squat + 408 deadlift. Nothing light about her."
+          },
+          {
+            "name": "Kyra Milligan",
+            "value": "735",
+            "note": "340 squat + 395 deadlift, plus the top heavy profile."
+          },
+          {
+            "name": "Gabriela Migala",
+            "value": "726",
+            "note": "342 squat + 384 deadlift. Powerhouse."
+          },
+          {
+            "name": "Hannah Black",
+            "value": "725",
+            "note": "325 squat + 400 deadlift + 265 clean and jerk."
+          },
+          {
+            "name": "Alex Gazan",
+            "value": "720",
+            "note": "320 squat + 400 deadlift. Strength to match the engine."
+          }
+        ]
+      },
+      {
+        "type": "callout",
+        "title": "Methodology",
+        "text": "The squat and deadlift numbers are the athletes' own self-reported one-rep maxes from their official CrossFit profiles, real but aspirational and sometimes dated. The shoulder press is barely reported across the field, so that event is a proxy built from clean-and-jerk maxes and competition heavy-lifting performance, not a measured press. The CrossFit Total scores absolute load, so body weight does not factor into the ranking. This ranks paper strength (squat plus deadlift), not a predicted event result. A great number on paper still has to be hit on the platform Wednesday."
+      }
+    ],
+    "tracesTo": "Self-reported 1-rep-max lifts from athletes' official CrossFit profiles (athlete-benchmarks-2026.json); shoulder-press proxy from clean-and-jerk maxes + competition heavy-lifting performance."
+  },
+  {
     "slug": "event-1-the-2007-hopper-whose-profile-fits",
     "title": "Event 1 Is the 2007 Hopper. Whose Profile Fits It?",
     "dek": "The opener revives the 2007 opener. We modeled whose profile the row, pull-ups and push jerks reward.",

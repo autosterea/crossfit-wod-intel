@@ -38,6 +38,48 @@
       "analysisSlug": "event-2-ranch-7200-whose-engine-fits"
     },
     {
+      "name": "Event 3: The CrossFit Total - Back Squat",
+      "status": "confirmed",
+      "kind": "event",
+      "num": 3,
+      "summary": "The first lift of The CrossFit Total: a 1-rep-max back squat, scored as its own event worth 50 points. The Total (back squat, shoulder press, deadlift) runs on the opening day, Wednesday, July 22.",
+      "source": {
+        "label": "CrossFit Games (official workout page)",
+        "url": "https://games.crossfit.com/workouts/finals/2026/3"
+      },
+      "date": "2026-07-07",
+      "shortName": "CF Total: Back Squat",
+      "analysisSlug": "the-crossfit-total-whose-strength-wins"
+    },
+    {
+      "name": "Event 4: The CrossFit Total - Shoulder Press",
+      "status": "confirmed",
+      "kind": "event",
+      "num": 4,
+      "summary": "The second lift of The CrossFit Total: a 1-rep-max strict shoulder press, scored as its own event worth 50 points. The Total (back squat, shoulder press, deadlift) runs on the opening day, Wednesday, July 22.",
+      "source": {
+        "label": "CrossFit Games (official workout page)",
+        "url": "https://games.crossfit.com/workouts/finals/2026/3"
+      },
+      "date": "2026-07-07",
+      "shortName": "CF Total: Shoulder Press",
+      "analysisSlug": "the-crossfit-total-whose-strength-wins"
+    },
+    {
+      "name": "Event 5: The CrossFit Total - Deadlift",
+      "status": "confirmed",
+      "kind": "event",
+      "num": 5,
+      "summary": "The third lift of The CrossFit Total: a 1-rep-max deadlift, scored as its own event worth 50 points. The Total (back squat, shoulder press, deadlift) runs on the opening day, Wednesday, July 22.",
+      "source": {
+        "label": "CrossFit Games (official workout page)",
+        "url": "https://games.crossfit.com/workouts/finals/2026/3"
+      },
+      "date": "2026-07-07",
+      "shortName": "CF Total: Deadlift",
+      "analysisSlug": "the-crossfit-total-whose-strength-wins"
+    },
+    {
       "name": "Pool swim confirmed at 25-meter lengths",
       "status": "confirmed",
       "kind": "event",
@@ -151,9 +193,9 @@
       "name": "Individuals compete across 4 days: July 22 (Wed) through July 26 (Sun)",
       "status": "confirmed",
       "kind": "format",
-      "summary": "The Individual division begins competition Wednesday, July 22, and finishes Sunday, July 26 — a four-day competition window. Teams begin a day later, Thursday, July 23, and also finish July 26.",
+      "summary": "The Individual division begins competition Wednesday, July 22, and finishes Sunday, July 26 - a four-day competition window. Teams begin a day later, Thursday, July 23, and also finish July 26.",
       "source": {
-        "label": "CrossFit Games (official) — 2026 Games to Kick Off on July 22 with Multiple Off-Sites",
+        "label": "CrossFit Games (official) - 2026 Games to Kick Off on July 22 with Multiple Off-Sites",
         "url": "https://games.crossfit.com/article/2026-crossfit-games-to-kick-off-on-july-22-with-multiple-off-sites"
       },
       "date": "2026-06-27"
@@ -164,7 +206,7 @@
       "kind": "format",
       "summary": "The first Individual events on July 22 take place at multiple off-site locations across the Bay Area, not at SAP Center. These off-sites are not open to the general public but are livestreamed; select off-sites are open to Rx+ Experience holders.",
       "source": {
-        "label": "CrossFit Games (official) — 2026 Games to Kick Off on July 22 with Multiple Off-Sites",
+        "label": "CrossFit Games (official) - 2026 Games to Kick Off on July 22 with Multiple Off-Sites",
         "url": "https://games.crossfit.com/article/2026-crossfit-games-to-kick-off-on-july-22-with-multiple-off-sites"
       },
       "date": "2026-06-27"
@@ -175,7 +217,7 @@
       "kind": "format",
       "summary": "Beyond SAP Center, the San Jose McEnery Convention Center serves as a secondary 2026 Games venue, hosting the Masters, Teenage, and Adaptive divisions during the same competition window.",
       "source": {
-        "label": "CrossFit Games (official) — Schedule: 2026 Games",
+        "label": "CrossFit Games (official) - Schedule: 2026 Games",
         "url": "https://games.crossfit.com/finals/schedule"
       },
       "date": "2026-06-27"
@@ -186,7 +228,7 @@
       "kind": "format",
       "summary": "SAP Center hosts events Friday, July 24 through Sunday, July 26. The Arena Ticket Package is a three-day ticket (July 24-26) granting a reserved seat for all events held inside SAP Center; the earlier off-site days are not part of the arena ticket.",
       "source": {
-        "label": "CrossFit Games (official) — 2026 Games to Kick Off on July 22 with Multiple Off-Sites",
+        "label": "CrossFit Games (official) - 2026 Games to Kick Off on July 22 with Multiple Off-Sites",
         "url": "https://games.crossfit.com/article/2026-crossfit-games-to-kick-off-on-july-22-with-multiple-off-sites"
       },
       "date": "2026-06-27"
@@ -197,7 +239,7 @@
       "kind": "format",
       "summary": "Tickets to the 2026 CrossFit Games arena events are purchased through the San Jose Sharks + SAP Center ticketing page (Ticketmaster), with single and multi-day options. The three-day Arena Ticket Package went on sale March 24, 2026.",
       "source": {
-        "label": "CrossFit Games (official) — 2026 Games to Kick Off on July 22 with Multiple Off-Sites",
+        "label": "CrossFit Games (official) - 2026 Games to Kick Off on July 22 with Multiple Off-Sites",
         "url": "https://games.crossfit.com/article/2026-crossfit-games-to-kick-off-on-july-22-with-multiple-off-sites"
       },
       "date": "2026-06-27"
