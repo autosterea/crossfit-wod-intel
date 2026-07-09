@@ -168,6 +168,21 @@ type Slide =
 type Carousel = { id: string; label: string; caption: string; slides: Slide[] }
 const CAROUSELS: Carousel[] = [
   {
+    id: 'day1-preview',
+    label: 'Day 1 - Five Events',
+    caption:
+      "🔥 DAY 1 OF THE 2026 GAMES = FIVE EVENTS IN ONE DAY. The field opens at the Ranch (Aromas) on Wed July 22 with a metcon (The 2007 Hopper), a 7,200m trail run (Ranch 7200), and three max lifts (The CrossFit Total).\n\nThe demands fight each other, a light runner vs a heavy lifter, so we scored who has the BREADTH to survive all five. Men: Medeiros. Women: Lawson.\n\nSwipe, then read the full Day 1 breakdown at the link in bio. A model read, not a result prediction.",
+    slides: [
+      { type: 'cover', kicker: 'Day 1 - July 22', headline: 'FIVE EVENTS,\nONE DAY', sub: 'The Games open at the Ranch with a metcon, a 7.2km run and three max lifts. Who survives it? Swipe.' },
+      { type: 'point', num: 1, kicker: 'The Opening Day', headline: 'METCON. RUN.\nMAX LIFTS.', body: 'Day 1 (Wed July 22) is five scored events: The 2007 Hopper (E1), Ranch 7200 (E2, a 7,200m trail run), and The CrossFit Total (E3-5, max back squat, press, deadlift). All at the off-site Ranch venues.', source: 'CrossFit Games (official)' },
+      { type: 'point', num: 2, kicker: 'The Catch', headline: 'THE DEMANDS\nFIGHT', body: 'The run rewards a light frame and a deep engine. The Total rewards raw mass and strength. A 65kg runner and a 100kg squatter are different species, and Day 1 asks you to be both. Nobody wins all five.', source: 'Persistence Athletics model' },
+      { type: 'point', num: 3, kicker: 'Men - Best Breadth', headline: 'JUSTIN\nMEDEIROS', body: 'The two-time champ reads top-3 in the metcon, the run AND the strength, with no domain below the 77th percentile. The complete Day-1 athlete. Khrennikov is next; the long run is his one tax.', source: 'Persistence Athletics model' },
+      { type: 'point', num: 4, kicker: 'Women - Best Breadth', headline: 'EMMA\nLAWSON', body: 'No weakness, nothing under the 67th percentile across all five. Adams and Campbell have the biggest engines but the max lifts are their hole. von Rohr scores on the run AND the strength.', source: 'Persistence Athletics model' },
+      { type: 'point', num: 5, kicker: 'The Venue', headline: 'HOME AT\nTHE RANCH', body: 'Day 1 runs at the Aromas ranch, where the Games were born (2007-2009). The 2007 Hopper revives the first-ever Games event, and the original hopper is back. A homecoming before San Jose.', source: 'CrossFit Games history' },
+      { type: 'cta', headline: 'FULL DAY 1\nBREAKDOWN', body: 'Who survives all five events, the full breadth score for men and women, is on the site. A model read, not a result prediction.' },
+    ],
+  },
+  {
     id: 'castro-reveals',
     label: 'What Castro has told us',
     caption:

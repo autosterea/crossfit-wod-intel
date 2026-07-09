@@ -1,5 +1,134 @@
 [
   {
+    "slug": "day-1-five-events-who-survives",
+    "title": "Day 1 of the 2026 Games Is Five Events. Who Survives Them All?",
+    "dek": "The Games open at the Ranch with a metcon, a 7.2km run and three max lifts, all in one day. We modeled who has the breadth to survive it, and who gets exposed.",
+    "category": "Analysis",
+    "date": "2026-07-09",
+    "author": "Ravikant Dewangan",
+    "readMin": 5,
+    "summary": "The 2026 CrossFit Games open with five scored events on Day 1 (Wednesday July 22): The 2007 Hopper, Ranch 7200 and The CrossFit Total. We built a Day-1 breadth score from the model to find who covers a metcon, a 7.2km run and three max lifts best, and who gets exposed by the day's contradictions.",
+    "blocks": [
+      {
+        "type": "p",
+        "text": "The 2026 Games do not ease anyone in. On **Day 1, Wednesday July 22**, at the off-site venues around the Ranch in Aromas, the individual field faces **five scored events**: **The 2007 Hopper** (Event 1, a row-and-rig metcon), **Ranch 7200** (Event 2, a 7,200-meter trail run), and **The CrossFit Total** (Events 3-5, max back squat, shoulder press and deadlift). A metcon, an endurance run, and a strength triple, all before anyone touches the SAP Center floor. It is the broadest opening day the Games have programmed, and the demands actively fight each other."
+      },
+      {
+        "type": "h2",
+        "text": "The Contradiction Built Into Day 1"
+      },
+      {
+        "type": "p",
+        "text": "Look at what these five events ask for. The Hopper wants a gymnastics engine and grip. Ranch 7200 wants a deep aerobic motor and a **light frame** to carry over 4.5 miles. The Total wants the opposite: raw, **absolute strength**, where more body mass is an asset. A 65 kg runner and a 100 kg squatter are almost different species, and Day 1 asks every athlete to be both. Nobody wins all five. The athlete who wins the day is the one with no hole for it to find, so we scored the field on breadth: how well each covers all six domains these events tax, weighted 70 percent on the average and 30 percent on their single weakest domain, because one crack is fatal when the day tests everything."
+      },
+      {
+        "type": "h2",
+        "text": "The Men: Medeiros Is Built for This"
+      },
+      {
+        "type": "p",
+        "text": "Run the five events through the model and one name sits on top: **Justin Medeiros**. The two-time champion reads top-three in the metcon, the run, and the strength triple, and he has **no soft domain, nothing below the 77th percentile** across gymnastics, engine, monostructural, aerobic, heavy strength and Olympic lifting. That is the definition of a Day-1 athlete. **Roman Khrennikov** is right behind on a monster engine and elite lifting; his only relative give is the long run, the one event where his size is a tax. **Ricky Garard** has no weak domain either, while **Patrick Vellner** pairs huge gymnastics and strength with the one crack the run can widen, his engine."
+      },
+      {
+        "type": "ranked",
+        "title": "Men's Day-1 Breadth - projected top 5",
+        "rows": [
+          {
+            "name": "Justin Medeiros",
+            "value": "78.5",
+            "note": "No hole: 77+ in every Day-1 domain. The complete opener."
+          },
+          {
+            "name": "Roman Khrennikov",
+            "value": "76.4",
+            "note": "Elite engine and strength; the long run is his one tax."
+          },
+          {
+            "name": "Ricky Garard",
+            "value": "73.7",
+            "note": "No weak domain across the five events."
+          },
+          {
+            "name": "Patrick Vellner",
+            "value": "72.2",
+            "note": "Big gymnastics and strength, but the engine is the crack."
+          },
+          {
+            "name": "Dallin Pepper",
+            "value": "70.0",
+            "note": "Balanced power; holds up across the whole day."
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "The Women: Lawson's Balance, Adams's Gamble"
+      },
+      {
+        "type": "p",
+        "text": "The women's read splits into engines and all-arounders. **Emma Lawson** tops the breadth score because she has no weakness, nothing under the 67th percentile across all five events. **Haley Adams** and **Lucy Campbell** own the two biggest engines in the field and should lead the Hopper and the run, but they share the same hole: the back squat and deadlift. The Total is where the strength day claws back what they bank early. **Mirjam von Rohr** is the interesting one, pairing the field's best raw engine with a record-setting back squat, the rare woman who can score on the run AND the strength, which is why the model likes her Day-1 shape."
+      },
+      {
+        "type": "ranked",
+        "title": "Women's Day-1 Breadth - projected top 5",
+        "rows": [
+          {
+            "name": "Emma Lawson",
+            "value": "71.2",
+            "note": "Nothing below the 67th percentile. The most balanced."
+          },
+          {
+            "name": "Mirjam von Rohr",
+            "value": "70.5",
+            "note": "Best raw engine plus a record squat; scores run AND strength."
+          },
+          {
+            "name": "Haley Adams",
+            "value": "69.9",
+            "note": "Biggest engine, but the Total is her hole."
+          },
+          {
+            "name": "Danielle Brandon",
+            "value": "69.8",
+            "note": "Steady across the board; no glaring gap."
+          },
+          {
+            "name": "Lucy Campbell",
+            "value": "68.5",
+            "note": "Elite gymnastics and engine; the max lifts expose her."
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Meanwhile, Back at the Ranch"
+      },
+      {
+        "type": "p",
+        "text": "The venue is the story too. Day 1 runs at the Aromas ranch, the birthplace of the Games from 2007 to 2009, and the programming leans all the way into it: the 2007 Hopper revives the very first Games event, and the original hopper apparatus is back. Opening the sport's 20th-anniversary Games where it started, with a run on the same dirt, is a deliberate homecoming before the lights of San Jose take over July 24-26."
+      },
+      {
+        "type": "callout",
+        "title": "Methodology",
+        "text": "The Day-1 breadth score blends each athlete's model percentile across the six domains these five events tax (gymnastics, long engine, monostructural, aerobic, heavy strength and Olympic lifting), weighted 70 percent on the average and 30 percent on the weakest of those domains, since a single hole is costly when the day tests everything. Percentiles come from official 2026 Open and Quarterfinals results plus all prior Games; the strength reads fold in real competition maxes. This ranks Day-1 breadth, not a predicted finish."
+      }
+    ],
+    "sources": [
+      {
+        "label": "Official CrossFit Games workout pages (Events 1-5)",
+        "url": "https://games.crossfit.com/workouts/finals/2026/1"
+      },
+      {
+        "label": "2026 Games kick off July 22 with multiple off-sites (CrossFit Games)",
+        "url": "https://games.crossfit.com/article/2026-crossfit-games-to-kick-off-on-july-22-with-multiple-off-sites"
+      },
+      {
+        "label": "Persistence Athletics model (2026 Open + Quarterfinals + prior Games)",
+        "url": "https://wod.persistenceathletics.com/games/2026/intel"
+      }
+    ]
+  },
+  {
     "slug": "the-crossfit-total-whose-strength-wins",
     "title": "The CrossFit Total: Who Tops Each Lift, and the Whole Thing",
     "dek": "Events 3, 4 and 5 are three 50-point lifts. We pulled the athletes real competition maxes and built a leaderboard for each, plus the overall Total.",
