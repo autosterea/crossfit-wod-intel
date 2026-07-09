@@ -1,6 +1,7 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useGamesStore } from '../gamesStore'
 import { Panel } from '../ui'
+import { track } from '../../lib/track'
 import postsData from '../../data/games/analysis-posts.json'
 import type { AnalysisPost, Block } from './analysisTypes'
 
@@ -90,6 +91,9 @@ function ArticleCard({ p }: { p: AnalysisPost }) {
 
 function Article({ post }: { post: AnalysisPost }) {
   const navigate = useGamesStore((s) => s.navigate)
+  useEffect(() => {
+    track('read_breakdown', { post_slug: post.slug, post_title: post.title, category: post.category })
+  }, [post.slug, post.title, post.category])
   return (
     <article className="max-w-2xl mx-auto pt-6">
       <button onClick={() => navigate({ view: 'analysis', year: 2026 })} className="games-condensed text-[12px] uppercase tracking-[0.1em] text-[var(--text-muted)] hover:text-[#91C640] mb-5">&larr; The Breakdown</button>

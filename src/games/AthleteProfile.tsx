@@ -1,5 +1,7 @@
+import { useEffect } from 'react'
 import { athleteBySlug, countryFlag, youtubeEmbed, allAthletes2026, mediaForAthlete, youtubeThumb, VIDEO_KIND_LABEL } from './athletes2026'
 import { useGamesStore } from './gamesStore'
+import { track } from '../lib/track'
 import AthleteAvatar from './AthleteAvatar'
 import IntelProfile from './intel/IntelProfile'
 import type { GamesAthlete2026 } from '../types-games'
@@ -29,6 +31,10 @@ export default function AthleteProfile() {
   const route = useGamesStore((s) => s.route)
   const navigate = useGamesStore((s) => s.navigate)
   const a: GamesAthlete2026 | undefined = route.slug ? athleteBySlug.get(route.slug) : undefined
+
+  useEffect(() => {
+    if (route.slug) track('view_athlete', { athlete_slug: route.slug })
+  }, [route.slug])
 
   if (!a) {
     // Athlete is in the projection cohort (top-30 Open) but not yet in the
