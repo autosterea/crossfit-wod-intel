@@ -446,8 +446,13 @@ would need a new `Bodyweight-Relative` lp category to capture properly
   themed-out — they're brand identity.
 - **3D scenes stay dark.** ForceGraph3DScene and Heatmap3DScene canvases
   retain their dark backgrounds in both themes for GL readability.
-- **No analytics or tracking.** The site loads no third-party scripts;
-  the only external resources are Google Fonts (Poppins/Inter/JetBrains Mono).
+- **Analytics (added 2026-07-09, owner direction).** The site runs the SAME stack + IDs as
+  persistenceathletics.com so wod traffic flows into the PA dashboards: Google Analytics 4
+  (`G-2CZFX3PN8G`), Meta Pixel (`1572848396214445`), and Microsoft Clarity (`r22nwmiu8e`),
+  all in `index.html`. Because this is a pushState SPA, a small history hook in `index.html`
+  fires a GA4 `page_view` + Meta `PageView` on every in-app navigation. Do NOT remove these
+  (the earlier "no tracking" rule was superseded by the owner). Other external resources:
+  Google Fonts only.
 - **No em or en dashes (—, –) in user-facing copy.** Use plain hyphens.
   The user is firm on this (matches the PA brand voice).
 
