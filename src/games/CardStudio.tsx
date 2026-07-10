@@ -168,6 +168,21 @@ type Slide =
 type Carousel = { id: string; label: string; caption: string; slides: Slide[] }
 const CAROUSELS: Carousel[] = [
   {
+    id: 'rings-reveal',
+    label: 'Ring Skills Reveal',
+    caption:
+      "💍 CASTRO'S RING CURVEBALL. On the Girls Unfiltered podcast + a social post (demoed by Trista Smith & Jacob Marlow), Dave Castro unveiled TWO never-before-tested ring gymnastics skills for a midday Sunday event at the 2026 Games.\n\n1) A ring muscle-up straight into a forward roll to support.\n2) A backward roll to support (a United Grid League staple).\n\nNever tested = a wildcard that could scramble the leaderboard on the final day. Swipe for who's positioned. Full breakdown at the link in bio. A model read, not a result prediction.",
+    slides: [
+      { type: 'cover', kicker: 'Games News', headline: 'THE RING\nCURVEBALL', sub: 'Castro unveiled two ring skills the Games have NEVER tested, for midday Sunday. Swipe.' },
+      { type: 'point', num: 1, kicker: 'The Reveal', headline: 'TWO NEW\nRING SKILLS', body: 'On the Girls Unfiltered podcast and a social post (demoed by Trista Smith and Jacob Marlow), Castro confirmed rings as a centerpiece skill test, with two movements never tested at the Games.', source: 'CF Network News' },
+      { type: 'point', num: 2, kicker: 'Skill 1', headline: 'MUSCLE-UP TO\nFORWARD ROLL', body: 'A ring muscle-up straight into a forward roll on the rings, finishing locked out in a support at the top. One continuous, high-control sequence, no stop-and-reset.', source: 'CF Network News' },
+      { type: 'point', num: 3, kicker: 'Skill 2', headline: 'BACKWARD ROLL\nTO SUPPORT', body: 'Roll backward through the rings to finish in a straight-arm support. Rare in CrossFit, but a staple of the United Grid League. CrossFit lists ring dips and a strict muscle-up as prerequisites.', source: 'CrossFit coaching' },
+      { type: 'point', num: 4, kicker: 'Why it matters', headline: 'A LATE-DAY\nWILDCARD', body: 'Nobody has competed these at the Games, so there is no proven edge. A never-tested skill is an equalizer, and it lands midday SUNDAY, deep into fatigue. It can scramble the leaderboard on the final day.', source: 'Persistence Athletics model' },
+      { type: 'point', num: 5, kicker: "Model's read", headline: 'CAMPBELL.\nVELLNER.', body: 'By gymnastics + bodyweight control: Women, Campbell (field-best gymnastics), Adams, Bergros. Men, Vellner (top pure gymnastics), Medeiros, Maisuradze. A never-tested skill is still a wildcard.', source: 'Persistence Athletics model' },
+      { type: 'cta', headline: 'FULL\nBREAKDOWN', body: 'What the two skills are, why they are a wildcard, and the full model read for men and women is on the site. A model read, not a result prediction.' },
+    ],
+  },
+  {
     id: 'day1-preview',
     label: 'Day 1 - Five Events',
     caption:

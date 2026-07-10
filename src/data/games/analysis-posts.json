@@ -1,5 +1,126 @@
 [
   {
+    "slug": "castro-ring-curveball-never-tested-skills",
+    "title": "Castro's Ring Curveball: Two Never-Tested Skills, and Who's Built for Them",
+    "dek": "Rings take center stage midday Sunday. Castro unveiled two gymnastics skills the Games have never tested. We modeled who is positioned, and why it is a wildcard.",
+    "category": "Analysis",
+    "date": "2026-07-10",
+    "author": "Ravikant Dewangan",
+    "readMin": 4,
+    "summary": "Dave Castro revealed two never-before-tested ring gymnastics skills for a midday Sunday event: a ring muscle-up into a forward roll to support, and a backward roll to support. We break down the movements, why a never-tested skill is a wildcard, and the model read on who is best positioned.",
+    "blocks": [
+      {
+        "type": "p",
+        "text": "Dave Castro just handed the 2026 Games a curveball. On the **Girls Unfiltered** podcast and in a social post demoed by Trista Smith and Jacob Marlow, he unveiled **two ring gymnastics skills the Games have never tested**: a **ring muscle-up straight into a forward roll**, finishing locked out in a support at the top, and a **backward roll to support** with the arms locked out on the rings. Both land **midday Sunday**, the final day, when athletes are deepest into fatigue. His message was blunt: control and strength on the rings will help decide the Fittest on Earth."
+      },
+      {
+        "type": "h2",
+        "text": "What the Two Skills Actually Are"
+      },
+      {
+        "type": "p",
+        "text": "The first chains a **ring muscle-up**, already a Games staple, directly into a **forward roll** on the rings, ending locked out in support at the top: one continuous, high-control sequence rather than a stop-and-reset. The second, the **backward roll to support**, is a still-rings skill where the athlete rolls backward through the rings to finish in a straight-arm support. It is rare in CrossFit but a **staple of the United Grid League**, where teams drill it. CrossFit's own coaching notes list real prerequisites for it, confident ring dips, a strict muscle-up, and genuine body control. These are not volume movements. They are precision under fatigue."
+      },
+      {
+        "type": "h2",
+        "text": "Why It Is a Wildcard"
+      },
+      {
+        "type": "p",
+        "text": "Here is what makes it dangerous for the field. **Nobody has competed these at the Games**, so there is no track record, no proven edge, and no obvious favorite. A never-tested skill is an **equalizer**: an athlete who already owns it, or picks it up fast in the next two weeks, can leapfrog stronger all-arounders, and a title contender who freezes on it can bleed places on the last day. Add **midday Sunday fatigue** and it becomes a nerve test as much as a strength test. The athletes with a **grid background** or a still-rings gymnastics base have the clearest head start."
+      },
+      {
+        "type": "h2",
+        "text": "The Model Read: Who Is Positioned"
+      },
+      {
+        "type": "p",
+        "text": "The model cannot measure a skill nobody has done, so we use the best proxy: **gymnastics performance plus bodyweight control**. On the women's side **Lucy Campbell** is the standout, with the **field's best gymnastics score (84)** and elite bodyweight control, ahead of **Haley Adams** and rookie **Bergrós Björnsdóttir**, whose bodyweight-gymnastics number is the highest in the field. For the men, the cleanest technical reads are **Patrick Vellner** (top pure gymnastics at 78), **Justin Medeiros**, and **Nika Maisuradze**. **Roman Khrennikov** posts the highest composite on freakish bodyweight control, but a 97 kg frame on a brand-new ring skill deep into fatigue is the question mark of the day."
+      },
+      {
+        "type": "ranked",
+        "title": "Women's Ring-Skill Read - projected top 5",
+        "rows": [
+          {
+            "name": "Lucy Campbell",
+            "value": "82.7",
+            "note": "Field-best gymnastics (84) plus elite bodyweight control."
+          },
+          {
+            "name": "Haley Adams",
+            "value": "80.9",
+            "note": "78 gymnastics, 85 bodyweight. Built for the rings."
+          },
+          {
+            "name": "Bergrós Björnsdóttir",
+            "value": "80.3",
+            "note": "93 bodyweight-gymnastics, the field best. Rookie X-factor."
+          },
+          {
+            "name": "Emma Lawson",
+            "value": "77.1",
+            "note": "Balanced: 76 gymnastics, 79 bodyweight control."
+          },
+          {
+            "name": "Danielle Brandon",
+            "value": "76.2",
+            "note": "Sharp on the rig; 75 gymnastics."
+          }
+        ]
+      },
+      {
+        "type": "ranked",
+        "title": "Men's Ring-Skill Read - projected top 5",
+        "rows": [
+          {
+            "name": "Roman Khrennikov",
+            "value": "81.5",
+            "note": "Elite bodyweight control (90); the catch is doing it at 97 kg, fatigued."
+          },
+          {
+            "name": "Nika Maisuradze",
+            "value": "80.7",
+            "note": "77 gymnastics, 87 bodyweight. Georgia's technician."
+          },
+          {
+            "name": "Justin Medeiros",
+            "value": "76.8",
+            "note": "Balanced gymnastics and control; ice in the veins."
+          },
+          {
+            "name": "Patrick Vellner",
+            "value": "75.4",
+            "note": "Highest pure gymnastics in the field (78). The technical pick."
+          },
+          {
+            "name": "James Sprague",
+            "value": "75.4",
+            "note": "73 gymnastics, 79 bodyweight; young and springy."
+          }
+        ]
+      },
+      {
+        "type": "callout",
+        "title": "Methodology",
+        "text": "The ring-skill read blends each athlete's gymnastics performance percentile (60 percent) and bodyweight-gymnastics percentile (40 percent) from the model, since both movements are still-rings bodyweight skills. Critically, these two movements have never been tested at the Games, so no data captures the specific skill: this ranks who is best positioned by general gymnastics and bodyweight control, not a predicted result. A grid or still-rings background could override it entirely. Reveal via the Girls Unfiltered podcast and Castro's social post."
+      }
+    ],
+    "sources": [
+      {
+        "label": "Dave Castro reveals new ring skills for Sunday (CF Network News)",
+        "url": "https://cfnetworknews.com/news.html"
+      },
+      {
+        "label": "CrossFit coaching: Swing to Backward Roll to Support",
+        "url": "https://www.crossfit.com/essentials/backward-roll-to-support"
+      },
+      {
+        "label": "Persistence Athletics model (2026 Open + Quarterfinals + prior Games)",
+        "url": "https://wod.persistenceathletics.com/games/2026/intel"
+      }
+    ]
+  },
+  {
     "slug": "day-1-five-events-who-survives",
     "title": "Day 1 of the 2026 Games Is Five Events. Who Survives Them All?",
     "dek": "The Games open at the Ranch with a metcon, a 7.2km run and three max lifts, all in one day. We modeled who has the breadth to survive it, and who gets exposed.",
