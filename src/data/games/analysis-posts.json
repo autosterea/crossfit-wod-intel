@@ -720,36 +720,36 @@
       },
       {
         "type": "p",
-        "text": "The biggest engine in the men's field belongs to **Roman Khrennikov**, an 81 monostructural with 79 on both long engine and oxidative. On a rower or a bike, he wins this. But at 97 kilograms, a 7.2km run is the one event where his size is a bill that comes due, and the model drops him to fourth. The pick at the top is **Jeffrey Adler**. At 72 kilograms with a 74 engine, he owns the best power-to-weight up front, exactly the trait a long run rewards. **Justin Medeiros** (79 oxidative, 88 kg) and **Ricky Garard** (77 monostructural, 85 kg) slot second and third on strong engines and manageable frames. **Patrick Vellner** rounds out the five; his aerobic scores hold even if his long-engine mark is the lowest of the group."
+        "text": "The biggest engine in the men's field belongs to **Roman Khrennikov**, an 81 monostructural with elite sustained output. On a rower or a bike, he wins this. But at a corrected **103 kilograms**, a 7.2km run is where his size is a bill that comes due, and the mass-adjusted read drops him to the back of the top five. The pick at the top is **Justin Medeiros**: a 79 oxidative engine on an **88-kilogram** frame, the best blend of motor and manageable mass in the field. **Ricky Garard** (corrected 93 kg) and **James Sprague** (95 kg) follow on strong engines. **Jeffrey Adler** slots **fourth, not first**: his weight was mis-listed at 72 kg but the official record is **197 lb (89 kg)**, essentially Medeiros's mass without the same aerobic ceiling, so the run is a hold-serve event for him rather than the runaway an earlier read implied."
       },
       {
         "type": "ranked",
         "title": "Men's Best-Fit Top 5 (Aerobic Engine, Mass-Adjusted)",
         "rows": [
           {
-            "name": "Jeffrey Adler",
-            "value": "81",
-            "note": "72 kg with a 74 engine, the best power-to-weight up top. A run is his event to gain."
-          },
-          {
             "name": "Justin Medeiros",
-            "value": "79",
-            "note": "79 oxidative and 78 monostructural on a runnable 88 kg frame."
+            "value": "77",
+            "note": "79 oxidative on an 88 kg frame. Best motor-to-mass in the field."
           },
           {
             "name": "Ricky Garard",
-            "value": "78",
-            "note": "77 monostructural, 75 engine. Steady over distance at 85 kg."
+            "value": "74",
+            "note": "Strong monostructural engine at a corrected 93 kg."
+          },
+          {
+            "name": "James Sprague",
+            "value": "71",
+            "note": "Young engine at 95 kg; sustained output travels over distance."
+          },
+          {
+            "name": "Jeffrey Adler",
+            "value": "70",
+            "note": "Weight corrected to 89 kg (was mis-listed 72). Medeiros mass, smaller motor."
           },
           {
             "name": "Roman Khrennikov",
-            "value": "77",
-            "note": "The biggest engine in the field (81 mono), but 97 kg is the tax a 7.2km run collects."
-          },
-          {
-            "name": "Patrick Vellner",
-            "value": "72",
-            "note": "75 oxidative and monostructural; grinds the back half."
+            "value": "68",
+            "note": "Field's biggest engine, but 103 kg is the tax a 7.2km run collects."
           }
         ]
       },
@@ -804,6 +804,11 @@
         "type": "callout",
         "title": "Methodology",
         "text": "There was no run in the 2026 season, so no athlete has a measured 7km time. This read starts from competition-derived performance profiles, long engine (sustained output), monostructural (machine and cardio), and oxidative (aerobic system), each a placement percentile from official 2026 Open and Quarterfinals results plus all prior Games. Because a 7.2km run also rewards a light frame, we scale that aerobic score by power-to-weight using each athlete's body mass. It is a fit read for a run, not a predicted finish. A great profile still has to be run on the dirt Wednesday."
+      },
+      {
+        "type": "callout",
+        "title": "Correction (July 11)",
+        "text": "This men’s read was recomputed after an audit found the site was using a stale 72 kg for Jeffrey Adler; his official weight is 197 lb (89 kg). Vitals for the full field were refreshed from the official CrossFit registration feed and the mass-adjusted model rerun, which moves Medeiros to the top and Adler to fourth. The women’s read is unchanged."
       }
     ],
     "sources": [
@@ -814,6 +819,10 @@
       {
         "label": "2026 Games to Kick Off July 22 with Multiple Off-Sites (CrossFit Games)",
         "url": "https://games.crossfit.com/article/2026-crossfit-games-to-kick-off-on-july-22-with-multiple-off-sites"
+      },
+      {
+        "label": "Official 2026 Games registration feed (current entrant vitals)",
+        "url": "https://c3po.crossfit.com/api/leaderboards/v2/competitions/finals/2026/leaderboards?final=261&division=1&sort=0&page=1"
       }
     ]
   },

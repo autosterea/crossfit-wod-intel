@@ -328,6 +328,10 @@ function buildDivision(div) {
       for (const e of g.events) {
         const meta = histEventMeta.get(e.eventId)
         if (!meta) continue
+        // Skip placeholder/invalid placements. A place <= 0 is a data gap, NOT a
+        // perfect finish - counting it inverts to >100th percentile (clamped to
+        // 100) and inflates capacity. Exclude it from every event-based metric.
+        if (!(e.place >= 1) || !(g.fieldSize >= 1)) continue
         const win = div === 'men' ? meta.winM : meta.winW
         const winSec = meta.format === 'max-load' ? null : parseSeconds(win)
         const perf = clamp(((g.fieldSize - e.place + 1) / g.fieldSize) * 100, 0, 100)
@@ -349,7 +353,10 @@ function buildDivision(div) {
     // Per-appearance Games history summary (from the Games subset above).
     const gamesHistory = []
     for (const g of history[name]?.games ?? []) {
+      // Skip appearances with an invalid/non-positive overall rank (data gap).
+      if (!(g.overallRank >= 1) || !(g.fieldSize >= 1)) continue
       const evs = evlist.filter((e) => e.stage === 'games' && e.year === g.year)
+      if (evs.length === 0) continue // no valid event cells left after filtering
       gamesHistory.push({
         year: g.year,
         overallRank: g.overallRank,
@@ -360,6 +367,12 @@ function buildDivision(div) {
       })
     }
     gamesHistory.sort((x, y) => y.year - x.year)
+
+    // Guard: no invalid placement may survive into the modeled outputs.
+    const badEv = evlist.find((e) => e.stage === 'games' && !(e.place >= 1))
+    if (badEv) throw new Error(`[intel] ${name}: Games event place <= 0 leaked (${badEv.name})`)
+    const badApp = gamesHistory.find((g) => !(g.overallRank >= 1))
+    if (badApp) throw new Error(`[intel] ${name}: appearance overallRank <= 0 leaked (${badApp.year})`)
 
     return { name, evlist, gamesHistory }
   })
