@@ -1,12 +1,12 @@
 {
-  "generated": "2026-06-20T18:16:47.660Z",
+  "generated": "2026-07-11",
   "source": "Online Individual Semifinal = official c3po (competition semifinals/2026, id 266); licensed in-person events researched + verified from official event results.",
-  "note": "Per-athlete 2026 Semifinal results. Semifinal EVENTS DIFFER per athlete (11 licensed events + the online semifinal), so these are NOT cross-comparable for a single capacity ranking - shown as per-athlete context. Online results are unofficial pending CrossFit video review (final June 29).",
+  "note": "Per-athlete 2026 Semifinal results. Semifinal EVENTS DIFFER per athlete (11 licensed events + the online semifinal), so these are NOT cross-comparable for a single capacity ranking - shown as per-athlete context. Online results were FINALIZED after CrossFit video review on June 29, 2026.",
   "athletes": {
     "guilherme-malheiros": {
       "event": "Individual Online Semifinal",
-      "official": false,
-      "source": "c3po semifinals/2026 (online)",
+      "official": true,
+      "source": "c3po semifinals/2026 (online, final)",
       "fieldSize": 465,
       "overallRank": "1",
       "perEvent": [
@@ -39,8 +39,8 @@
     },
     "quinn-robinson": {
       "event": "Individual Online Semifinal",
-      "official": false,
-      "source": "c3po semifinals/2026 (online)",
+      "official": true,
+      "source": "c3po semifinals/2026 (online, final)",
       "fieldSize": 465,
       "overallRank": "2",
       "perEvent": [
@@ -73,8 +73,8 @@
     },
     "nick-mathew": {
       "event": "Individual Online Semifinal",
-      "official": false,
-      "source": "c3po semifinals/2026 (online)",
+      "official": true,
+      "source": "c3po semifinals/2026 (online, final)",
       "fieldSize": 465,
       "overallRank": "3",
       "perEvent": [
@@ -107,8 +107,8 @@
     },
     "justin-medeiros": {
       "event": "Individual Online Semifinal",
-      "official": false,
-      "source": "c3po semifinals/2026 (online)",
+      "official": true,
+      "source": "c3po semifinals/2026 (online, final)",
       "fieldSize": 465,
       "overallRank": "4",
       "perEvent": [
@@ -141,8 +141,8 @@
     },
     "spencer-panchik": {
       "event": "Individual Online Semifinal",
-      "official": false,
-      "source": "c3po semifinals/2026 (online)",
+      "official": true,
+      "source": "c3po semifinals/2026 (online, final)",
       "fieldSize": 465,
       "overallRank": "5",
       "perEvent": [
@@ -175,8 +175,8 @@
     },
     "colten-mertens": {
       "event": "Individual Online Semifinal",
-      "official": false,
-      "source": "c3po semifinals/2026 (online)",
+      "official": true,
+      "source": "c3po semifinals/2026 (online, final)",
       "fieldSize": 465,
       "overallRank": "6",
       "perEvent": [
@@ -209,8 +209,8 @@
     },
     "patrick-vellner": {
       "event": "Individual Online Semifinal",
-      "official": false,
-      "source": "c3po semifinals/2026 (online)",
+      "official": true,
+      "source": "c3po semifinals/2026 (online, final)",
       "fieldSize": 465,
       "overallRank": "7",
       "perEvent": [
@@ -243,8 +243,8 @@
     },
     "alexis-raptis": {
       "event": "Individual Online Semifinal",
-      "official": false,
-      "source": "c3po semifinals/2026 (online)",
+      "official": true,
+      "source": "c3po semifinals/2026 (online, final)",
       "fieldSize": 476,
       "overallRank": "1",
       "perEvent": [
@@ -277,8 +277,8 @@
     },
     "erica-folo": {
       "event": "Individual Online Semifinal",
-      "official": false,
-      "source": "c3po semifinals/2026 (online)",
+      "official": true,
+      "source": "c3po semifinals/2026 (online, final)",
       "fieldSize": 476,
       "overallRank": "2",
       "perEvent": [
@@ -311,10 +311,10 @@
     },
     "matilde-garnes": {
       "event": "Individual Online Semifinal",
-      "official": false,
-      "source": "c3po semifinals/2026 (online)",
+      "official": true,
+      "source": "c3po semifinals/2026 (online, final)",
       "fieldSize": 476,
-      "overallRank": "4",
+      "overallRank": "5",
       "perEvent": [
         {
           "n": 1,
@@ -345,10 +345,10 @@
     },
     "arielle-loewen": {
       "event": "Individual Online Semifinal",
-      "official": false,
-      "source": "c3po semifinals/2026 (online)",
+      "official": true,
+      "source": "c3po semifinals/2026 (online, final)",
       "fieldSize": 476,
-      "overallRank": "5",
+      "overallRank": "4",
       "perEvent": [
         {
           "n": 1,
@@ -379,10 +379,10 @@
     },
     "janie-cheverie": {
       "event": "Individual Online Semifinal",
-      "official": false,
-      "source": "c3po semifinals/2026 (online)",
+      "official": true,
+      "source": "c3po semifinals/2026 (online, final)",
       "fieldSize": 476,
-      "overallRank": "8",
+      "overallRank": "6",
       "perEvent": [
         {
           "n": 1,
@@ -2551,8 +2551,8 @@
     },
     "bergros-bjornsdottir": {
       "event": "Individual Online Semifinal",
-      "official": false,
-      "source": "c3po semifinals/2026 (online)",
+      "official": true,
+      "source": "c3po semifinals/2026 (online, final)",
       "fieldSize": 476,
       "overallRank": "7",
       "perEvent": [
@@ -2585,8 +2585,8 @@
     },
     "holly-tynan": {
       "event": "Individual Online Semifinal",
-      "official": false,
-      "source": "c3po semifinals/2026 (online)",
+      "official": true,
+      "source": "c3po semifinals/2026 (online, final)",
       "fieldSize": 476,
       "overallRank": "8",
       "perEvent": [
