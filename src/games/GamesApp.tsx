@@ -120,13 +120,16 @@ function TopBar() {
             <button
               key={n.view}
               onClick={() => navigate({ view: n.view, year: null })}
-              className="games-condensed uppercase tracking-[0.08em] text-[12px] font-semibold px-2 shrink-0 whitespace-nowrap"
-              style={{ color: route.view === n.view ? '#91C640' : 'var(--text-secondary)' }}
+              className="games-condensed uppercase tracking-[0.08em] text-[12px] font-semibold px-2.5 py-1 rounded-md shrink-0 whitespace-nowrap transition-colors"
+              style={{
+                color: route.view === n.view ? '#91C640' : 'var(--text-secondary)',
+                background: route.view === n.view ? 'rgba(145,198,64,0.12)' : 'transparent',
+              }}
             >
               {n.mobileLabel ?? n.label}
             </button>
           ))}
-          <a href="/news" className="games-condensed uppercase tracking-[0.08em] text-[12px] font-semibold px-2 shrink-0 whitespace-nowrap text-[var(--text-secondary)]">News</a>
+          <a href="/news" className="games-condensed uppercase tracking-[0.08em] text-[12px] font-semibold px-2.5 py-1 shrink-0 whitespace-nowrap text-[var(--text-secondary)]">News</a>
         </div>
       </div>
     </header>

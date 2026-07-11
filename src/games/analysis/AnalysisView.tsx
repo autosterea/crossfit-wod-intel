@@ -79,12 +79,12 @@ function ArticleCard({ p }: { p: AnalysisPost }) {
   return (
     <button
       onClick={() => navigate({ view: 'analysis', year: 2026, slug: p.slug })}
-      className="cap-card p-5 text-left w-full hover:border-[#91C640]/40 transition-colors"
+      className="cap-card p-4 sm:p-5 text-left w-full flex flex-col h-full hover:border-[#91C640]/40 active:border-[#91C640]/60 active:scale-[0.99] transition-[transform,border-color]"
     >
       <div className="games-condensed text-[10.5px] uppercase tracking-[0.16em] text-[#91C640] mb-2">{p.category} &middot; {fmtDate(p.date)} &middot; {p.readMin} min</div>
-      <h3 className="games-display text-xl sm:text-2xl text-[var(--text-primary)] leading-tight mb-2">{p.title}</h3>
-      <p className="text-[13.5px] text-[var(--text-secondary)] leading-relaxed">{p.dek}</p>
-      <div className="games-condensed text-[12px] text-[#91C640] mt-3 uppercase tracking-[0.08em]">Read the breakdown &rarr;</div>
+      <h3 className="games-display text-xl sm:text-2xl text-[var(--text-primary)] leading-tight mb-2 clamp-3">{p.title}</h3>
+      <p className="text-[13.5px] text-[var(--text-secondary)] leading-relaxed clamp-2">{p.dek}</p>
+      <div className="games-condensed text-[12px] text-[#91C640] mt-auto pt-3 uppercase tracking-[0.08em]">Read the breakdown &rarr;</div>
     </button>
   )
 }
