@@ -48,6 +48,8 @@ const COUNTRY_ISO: Record<string, string> = {
   Poland: 'PL',
   Ireland: 'IE',
   Russia: 'RU',
+  Norway: 'NO',
+  Iceland: 'IS',
 }
 
 export function countryFlag(country: string | null): string {

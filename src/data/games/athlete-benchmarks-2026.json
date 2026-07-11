@@ -2,7 +2,7 @@
   "generated": "2026-06-16T13:28:06.444Z",
   "source": "games.crossfit.com athlete profiles (#benchmarkStats), self-reported by athletes",
   "note": "Real, official, but SELF-REPORTED 1RM lifts and benchmark WOD scores. Blank/unreported stats are omitted. Label as self-reported in the UI; keep separate from competition-derived metrics.",
-  "cohortSize": 91,
+  "cohortSize": 60,
   "athletesWithBenchmarks": 49,
   "benchmarks": {
     "Colten Mertens": [

@@ -101,7 +101,7 @@ export default function AthleteProfile() {
 
       {/* Games history */}
       <section className="mb-5 grid grid-cols-3 gap-2.5">
-        <Stat label="Games" value={a.gamesAppearances != null ? `${a.gamesAppearances}×` : a.isRookie ? '1st' : '-'} />
+        <Stat label="Games" value={a.gamesAppearances ? `${a.gamesAppearances}×` : a.isRookie || a.gamesAppearances === 0 ? 'Rookie' : '-'} />
         <Stat label="Best finish" value={a.bestGamesFinish ? a.bestGamesFinish.replace(/\s*\(.*\)/, '') : a.isRookie ? 'Debut' : '-'} accent />
         <Stat label="Since" value={a.firstGamesYear ? String(a.firstGamesYear) : a.isRookie ? '2026' : '-'} />
       </section>
