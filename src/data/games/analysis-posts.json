@@ -270,7 +270,7 @@
     "blocks": [
       {
         "type": "p",
-        "text": "Events 3, 4 and 5 are **The CrossFit Total**, three separate 50-point events: a 1-rep-max back squat, strict shoulder press and deadlift. So instead of guessing, we went to the tape. We pulled these athletes actual competition maxes, the **2025 CrossFit Games 1-rep-max back squat**, the **2023 Rogue Invitational max deadlift**, and the strict presses from the **2020 Games Total**, then filled the gaps with official reported PRs and clearly labeled estimates. Here is a leaderboard for every lift, and for the whole Total. Absolute load wins; bodyweight does not factor into the score."
+        "text": "Events 3, 4 and 5 are **The CrossFit Total**, three separate 50-point events: a 1-rep-max back squat, strict shoulder press and deadlift. So instead of guessing, we went to the tape. We pulled these athletes actual competition maxes, the **2025 CrossFit Games 1-rep-max back squat**, the **2023 Rogue Invitational** and **2026 World Fitness Project** max deadlifts, and the strict presses from the **2020 Games Total**, then filled the gaps with official reported PRs and clearly labeled self-reported stats. Here is a leaderboard for every lift, and for the whole Total. Absolute load wins; bodyweight does not factor into the score."
       },
       {
         "type": "h2",
@@ -418,7 +418,7 @@
       },
       {
         "type": "p",
-        "text": "The deadlift has the best competition record of the three, thanks to the 2023 Rogue Invitational max-deadlift event. **Patrick Vellner (595) and Tudor Magda (595)** went head to head there; **Nick Mathew** matches 605 on his profile and **Justin Medeiros** pulled **600** in competition. The women are led by a monster: **Alex Gazan won the 2023 Rogue max deadlift at 425 lb**, a PR, ahead of **Madeline Sturt** and **Aimee Cringle** (both 408 reported)."
+        "text": "The deadlift has the best competition record of the three, thanks to the 2023 Rogue Invitational and, new this year, the 2026 World Fitness Project max-deadlift events. **Patrick Vellner (595) and Tudor Magda (595)** went head to head at Rogue; **Nick Mathew** matches 605 on his profile and **Justin Medeiros** pulled **600** in competition. On the women's side the board just moved. **Aimee Cringle** pulled a competition-verified **197 kg (435 lb)** at World Fitness Project Tour Stop 1 in May 2026, tied second in that field and well above the 408 she self-reports; **Matilde Garnes** hit **193 kg (425)** at the same event (single-source, provisional). They edge **Alex Gazan**, whose **425 lb won the 2023 Rogue max deadlift** and is still the most bulletproof number here. **Madeline Sturt** (408) and **Hannah Black** (400) hold on self-reported PRs. One correction worth flagging: our earlier 405 for **Mirjam von Rohr** was an estimate. Her only meet-verified pull is 380 lb and she did not contest the WFP deadlift, so she drops out of the top five."
       },
       {
         "type": "ranked",
@@ -456,29 +456,29 @@
         "title": "Women's Deadlift - projected top 5 (1RM, lb)",
         "rows": [
           {
+            "name": "Aimee Cringle",
+            "value": "435",
+            "note": "WFP 2026 Tour Stop 1, 197 kg (tied 2nd). Was 408 self-reported."
+          },
+          {
             "name": "Alex Gazan",
             "value": "425",
-            "note": "2023 Rogue max-deadlift WINNER, a PR. Real."
+            "note": "2023 Rogue max-deadlift WINNER, a PR. Verified."
+          },
+          {
+            "name": "Matilde Garnes",
+            "value": "425",
+            "note": "WFP 2026, 193 kg. Single-source, provisional."
           },
           {
             "name": "Madeline Sturt",
             "value": "408",
-            "note": "Reported PR."
-          },
-          {
-            "name": "Aimee Cringle",
-            "value": "408",
-            "note": "Reported PR."
-          },
-          {
-            "name": "Mirjam von Rohr",
-            "value": "405",
-            "note": "Estimate."
+            "note": "Self-reported PR (185 kg)."
           },
           {
             "name": "Hannah Black",
             "value": "400",
-            "note": "Reported PR."
+            "note": "Self-reported PR."
           }
         ]
       },
@@ -488,7 +488,7 @@
       },
       {
         "type": "p",
-        "text": "Sum the three lifts and the men's Total is led by **Nick Mathew** at roughly **1,355 lb** (555 squat, a big deadlift at 605, and an estimated press), with **Colten Mertens** (record squat), **Justin Medeiros**, **Roman Khrennikov** and **Jayson Hopper** bunched around 1,285-1,290. On the women's side **Alex Gazan** is the projected Total leader near **912 lb**, the only woman who reads elite across all three lifts, ahead of **Mirjam von Rohr** (900) and **Hannah Black** (895). Remember the press column is largely estimated, so the Total order can shift on that one lift."
+        "text": "Sum the three lifts and the men's Total is led by **Nick Mathew** at roughly **1,355 lb** (555 squat, a big deadlift at 605, and an estimated press), with **Colten Mertens** (record squat), **Justin Medeiros**, **Roman Khrennikov** and **Jayson Hopper** bunched around 1,285-1,290. On the women's side **Alex Gazan** is the projected Total leader near **912 lb**, the only woman who reads elite across all three lifts, ahead of **Hannah Black** (895) and **Madeline Sturt** (879); **Mirjam von Rohr** slips to around **875** after her deadlift was corrected down to a verified 380. Remember the press column is largely estimated, so the Total order can shift on that one lift."
       },
       {
         "type": "ranked",
@@ -531,11 +531,6 @@
             "note": "Elite in all three: 320 squat, 167 press, 425 deadlift."
           },
           {
-            "name": "Mirjam von Rohr",
-            "value": "900",
-            "note": "Record-squat winner (360) plus a big pull."
-          },
-          {
             "name": "Hannah Black",
             "value": "895",
             "note": "325 squat, 400 deadlift, top projected press."
@@ -544,6 +539,11 @@
             "name": "Madeline Sturt",
             "value": "879",
             "note": "331 squat, 408 deadlift."
+          },
+          {
+            "name": "Mirjam von Rohr",
+            "value": "875",
+            "note": "Record squat (360); deadlift corrected to a verified 380."
           },
           {
             "name": "Anikha Greer",
@@ -571,6 +571,14 @@
       {
         "label": "2020 CrossFit Games Total + athlete 1RMs (CrossFit Games)",
         "url": "https://games.crossfit.com/"
+      },
+      {
+        "label": "World Fitness Project 2026 Tour Stop 1 - London (event recap)",
+        "url": "https://anabelavila.com/world-fitness-project/tour-1/"
+      },
+      {
+        "label": "World Fitness Project - London recap (BOXROX)",
+        "url": "https://www.boxrox.com/world-fitness-project-london-recap-10-stats-that-tell-the-real-story/"
       }
     ]
   },
