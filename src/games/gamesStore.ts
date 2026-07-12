@@ -73,7 +73,12 @@ const applyTitle = (route: GamesRoute) => {
   if (route.view === 'year' && route.year) {
     document.title = `${route.year} CrossFit Games - Almanac by Persistence Athletics`
   } else if (route.view === 'athlete' && route.slug) {
-    document.title = `${slugToName(route.slug)} - 2026 CrossFit Games | Persistence Athletics`
+    // AthleteProfile sets the exact canonical name (preserving diacritics) on mount.
+    // Only fall back to the slug-derived name if a title isn't already an athlete one,
+    // so we never clobber the component's accurate title with a de-accented slug.
+    if (!/2026 CrossFit Games \| Persistence Athletics$/.test(document.title)) {
+      document.title = `${slugToName(route.slug)} - 2026 CrossFit Games | Persistence Athletics`
+    }
   } else {
     document.title = TITLES[route.view]
   }
