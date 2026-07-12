@@ -262,10 +262,10 @@ export default function IntelProfile({ slug, showHeader = false }: { slug: strin
             <div key={s.key} className="mb-2.5 last:mb-0">
               <div className="flex items-baseline justify-between">
                 <span className="text-[13px] font-semibold text-[var(--text-primary)]">{s.label}</span>
-                <span className="games-condensed text-[11px] text-[var(--text-muted)]">{s.pct}th percentile</span>
+                <span className="games-condensed text-[11px] text-[var(--text-muted)]">{ordinal(s.pct)} percentile</span>
               </div>
               <div className="text-[10px] text-[var(--text-muted)] mt-0.5">
-                {s.drivingEvents.map((e) => `${e.event} (${e.place === 1 ? 'won' : `${e.place}${e.place === 2 ? 'nd' : e.place === 3 ? 'rd' : 'th'}`})`).join(' . ')}
+                {s.drivingEvents.map((e) => `${e.event} (${e.place === 1 ? 'won' : ordinal(e.place)})`).join(' . ')}
               </div>
             </div>
           ))}
@@ -276,7 +276,7 @@ export default function IntelProfile({ slug, showHeader = false }: { slug: strin
             <div key={s.key} className="mb-2.5 last:mb-0">
               <div className="flex items-baseline justify-between">
                 <span className="text-[13px] font-semibold text-[var(--text-primary)]">{s.label}</span>
-                <span className="games-condensed text-[11px] text-[var(--text-muted)]">{s.pct}th percentile</span>
+                <span className="games-condensed text-[11px] text-[var(--text-muted)]">{ordinal(s.pct)} percentile</span>
               </div>
               <div className="text-[10px] text-[var(--text-muted)] mt-0.5">
                 {s.drivingEvents.map((e) => `${e.event} (${ordinal(e.place)})`).join(' . ')}

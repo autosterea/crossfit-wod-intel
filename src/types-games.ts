@@ -281,10 +281,15 @@ export interface Athletes2026Data {
   meta: {
     generated: string
     gamesDates: string
+    spectatorDates?: string
+    competitionNote?: string
     venue: string
     city: string
     fieldNote: string
     fieldLocked: boolean
+    registered?: { men: number; women: number }
+    registrationClosesAt?: string
+    registrationNote?: string
   }
   interviewSeries?: { series: string; seriesUrl: string | null } | null
   men: GamesAthlete2026[]

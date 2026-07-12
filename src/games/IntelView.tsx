@@ -379,7 +379,7 @@ export default function IntelView() {
           </div>
         ) : (
           <div className="mt-3 inline-flex items-center gap-2 text-[11px] px-3 py-1.5 rounded-lg" style={{ background: 'rgba(1,150,68,0.14)', color: '#019644' }}>
-            Field locked - 30 men and 30 women. Every rank and percentile is computed within the 60-athlete Games field.
+            Field set - 30 men and 30 women qualified. Every rank and percentile is computed within the 60-athlete Games field.
           </div>
         )}
       </section>

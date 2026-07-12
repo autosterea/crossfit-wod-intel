@@ -520,7 +520,7 @@ const out = {
   season: 2026,
   fieldProvisional: !fieldLocked && ((results2026.status || '').includes('open') || (results2026.status || '').includes('qf')),
   fieldNote: fieldLocked
-    ? 'The 2026 individual field is locked: 30 men and 30 women. Every percentile and rank is computed within this 60-athlete Games field, from their official 2026 Open + Quarterfinals results and all prior Games.'
+    ? 'The 2026 individual field is set: 30 men and 30 women qualified. Every percentile and rank is computed within this 60-athlete Games field, from their official 2026 Open + Quarterfinals results and all prior Games.'
     : 'Cohort = top 30 per division by 2026 Open+Quarterfinals. The Games field locks after the online Semifinal (~June 16); this profile regenerates when results/2026.json updates.',
   method: {
     skillOrder: SKILLS,

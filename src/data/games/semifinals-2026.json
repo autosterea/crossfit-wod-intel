@@ -1,7 +1,7 @@
 {
   "generated": "2026-07-11",
   "source": "Online Individual Semifinal = official c3po (competition semifinals/2026, id 266); licensed in-person events researched + verified from official event results.",
-  "note": "Per-athlete 2026 Semifinal results. Semifinal EVENTS DIFFER per athlete (11 licensed events + the online semifinal), so these are NOT cross-comparable for a single capacity ranking - shown as per-athlete context. Online results were FINALIZED after CrossFit video review on June 29, 2026.",
+  "note": "Per-athlete 2026 Semifinal results. Semifinal EVENTS DIFFER per athlete (11 licensed events + the online semifinal), so these are NOT cross-comparable for a single capacity ranking - shown as per-athlete context. Online results were FINALIZED after CrossFit video review on June 29, 2026; per-event rows refreshed from the official c3po leaderboard.",
   "athletes": {
     "guilherme-malheiros": {
       "event": "Individual Online Semifinal",
@@ -13,7 +13,7 @@
         {
           "n": 1,
           "score": "6:28",
-          "place": 7
+          "place": 6
         },
         {
           "n": 2,
@@ -33,7 +33,7 @@
         {
           "n": 5,
           "score": "4:10",
-          "place": 15
+          "place": 14
         }
       ]
     },
@@ -46,8 +46,8 @@
       "perEvent": [
         {
           "n": 1,
-          "score": "6:13",
-          "place": 4
+          "score": "6:37",
+          "place": 9
         },
         {
           "n": 2,
@@ -67,7 +67,7 @@
         {
           "n": 5,
           "score": "4:16",
-          "place": 20
+          "place": 19
         }
       ]
     },
@@ -81,11 +81,11 @@
         {
           "n": 1,
           "score": "7:00",
-          "place": 21
+          "place": 16
         },
         {
           "n": 2,
-          "score": "9:12",
+          "score": "9:13",
           "place": 14
         },
         {
@@ -115,7 +115,7 @@
         {
           "n": 1,
           "score": "6:26",
-          "place": 6
+          "place": 5
         },
         {
           "n": 2,
@@ -130,7 +130,7 @@
         {
           "n": 4,
           "score": "4:13",
-          "place": 34
+          "place": 32
         },
         {
           "n": 5,
@@ -164,7 +164,7 @@
         {
           "n": 4,
           "score": "3:57",
-          "place": 19
+          "place": 18
         },
         {
           "n": 5,
@@ -183,7 +183,7 @@
         {
           "n": 1,
           "score": "7:03",
-          "place": 25
+          "place": 20
         },
         {
           "n": 2,
@@ -217,7 +217,7 @@
         {
           "n": 1,
           "score": "6:31",
-          "place": 9
+          "place": 7
         },
         {
           "n": 2,
@@ -237,7 +237,7 @@
         {
           "n": 5,
           "score": "4:07",
-          "place": 12
+          "place": 11
         }
       ]
     },
@@ -251,12 +251,12 @@
         {
           "n": 1,
           "score": "6:55",
-          "place": 5
+          "place": 3
         },
         {
           "n": 2,
           "score": "10:08",
-          "place": 13
+          "place": 12
         },
         {
           "n": 3,
@@ -285,17 +285,17 @@
         {
           "n": 1,
           "score": "7:03",
-          "place": 6
+          "place": 5
         },
         {
           "n": 2,
-          "score": "9:59",
+          "score": "10:00",
           "place": 7
         },
         {
           "n": 3,
           "score": "15:23",
-          "place": 7
+          "place": 6
         },
         {
           "n": 4,
@@ -319,17 +319,17 @@
         {
           "n": 1,
           "score": "7:17",
-          "place": 9
+          "place": 8
         },
         {
           "n": 2,
           "score": "10:15",
-          "place": 21
+          "place": 20
         },
         {
           "n": 3,
           "score": "16:07",
-          "place": 17
+          "place": 16
         },
         {
           "n": 4,
@@ -353,7 +353,7 @@
         {
           "n": 1,
           "score": "8:52",
-          "place": 50
+          "place": 46
         },
         {
           "n": 2,
@@ -363,7 +363,7 @@
         {
           "n": 3,
           "score": "14:33",
-          "place": 3
+          "place": 2
         },
         {
           "n": 4,
@@ -387,17 +387,17 @@
         {
           "n": 1,
           "score": "7:33",
-          "place": 13
+          "place": 12
         },
         {
           "n": 2,
           "score": "10:13",
-          "place": 18
+          "place": 17
         },
         {
           "n": 3,
           "score": "15:37",
-          "place": 9
+          "place": 8
         },
         {
           "n": 4,

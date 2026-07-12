@@ -112,6 +112,13 @@ export default function Hub2026() {
       ) : (
         <div className="mb-6 rounded-xl px-4 py-3 text-[12.5px] leading-relaxed" style={{ background: 'rgba(1,150,68,0.1)', border: '1px solid rgba(1,150,68,0.35)', color: 'var(--text-secondary)' }}>
           <span className="games-condensed uppercase tracking-[0.1em] font-semibold text-[#019644]">Field set · </span>
+          {A2026.meta.registered ? (
+            <>
+              <span className="text-[var(--text-primary)] font-semibold">30 men and 30 women qualified</span>
+              {'; '}{A2026.meta.registered.men} men / {A2026.meta.registered.women} women registered so far
+              {A2026.meta.registrationClosesAt ? ' (registration closes July 16)' : ''}.{' '}
+            </>
+          ) : null}
           {A2026.meta.fieldNote}
         </div>
       )}

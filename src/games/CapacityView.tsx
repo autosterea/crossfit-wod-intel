@@ -673,10 +673,11 @@ export default function CapacityView() {
       {activeStage && yearResults?.stages?.[activeStage]?.projected && (
         <div className="mb-5 rounded-xl px-4 py-3 text-[12.5px] leading-relaxed" style={{ background: 'rgba(245,158,11,0.1)', border: '1px solid rgba(245,158,11,0.3)', color: 'var(--text-secondary)' }}>
           <span className="games-condensed uppercase tracking-[0.1em] font-semibold text-[var(--accent-amber)]">Projection &middot; </span>
-          The field is locked: 30 men and 30 women have qualified. This is 2026 season form, all 7 Open and Quarterfinal
-          tests combined and re-based onto the actual qualified field, a data-driven proxy for Games form (each athlete also
-          carries their Semifinal route below). It is not a Games result: the Games run July 24-26 at the SAP Center in San
-          Jose. Live event-by-event data will replace this as scores are posted.
+          The field is set: 30 men and 30 women have qualified (registration closes July 16). This is 2026 season form, all 7
+          Open and Quarterfinal tests combined and re-based onto the actual qualified field, a data-driven proxy for Games form
+          (each athlete also carries their Semifinal route below). It is not a Games result: individual competition runs
+          July 22-26, with SAP Center spectator days July 24-26 in San Jose. Live event-by-event data will replace this as
+          scores are posted.
         </div>
       )}
 

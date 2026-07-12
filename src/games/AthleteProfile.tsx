@@ -34,7 +34,10 @@ export default function AthleteProfile() {
 
   useEffect(() => {
     if (route.slug) track('view_athlete', { athlete_slug: route.slug })
-  }, [route.slug])
+    // Set the tab title from the canonical name (keeps diacritics/casing that
+    // slug-reconstruction drops, e.g. Bergrós Björnsdóttir).
+    if (a?.name) document.title = `${a.name} - 2026 CrossFit Games | Persistence Athletics`
+  }, [route.slug, a?.name])
 
   if (!a) {
     // Athlete is in the projection cohort (top-30 Open) but not yet in the
@@ -57,7 +60,7 @@ export default function AthleteProfile() {
   const semiWin = a.semifinalFinish2026 && /1st|won/i.test(a.semifinalFinish2026)
   const vitals = [
     a.age ? `${a.age} yrs` : null,
-    a.heightCm ? `${Math.floor(a.heightCm / 30.48)}'${Math.round((a.heightCm / 2.54) % 12)}"` : null,
+    a.heightCm ? `${Math.floor(Math.round(a.heightCm / 2.54) / 12)}'${Math.round(a.heightCm / 2.54) % 12}"` : null,
     a.weightKg ? `${Math.round(a.weightKg * 2.205)} lb` : null,
   ].filter(Boolean)
 
@@ -198,10 +201,15 @@ export default function AthleteProfile() {
         </section>
       )}
 
-      {/* Follow / profile links */}
-      {media?.links && media.links.length > 0 && (
+      {/* Follow / profile links (always show the official CrossFit profile) */}
+      {(a.crossfitAthleteId || (media?.links && media.links.length > 0)) && (
         <section className="mb-6 flex flex-wrap gap-2">
-          {media.links.map((l) => (
+          {a.crossfitAthleteId && (
+            <a key="cf-official" href={`https://games.crossfit.com/athlete/${a.crossfitAthleteId}`} target="_blank" rel="noopener noreferrer" className="games-chip" style={{ background: 'var(--panel-bg-2)', color: 'var(--text-secondary)', border: '1px solid var(--panel-border)' }}>
+              Official CrossFit profile ↗
+            </a>
+          )}
+          {media?.links?.map((l) => (
             <a key={l.url} href={l.url} target="_blank" rel="noopener noreferrer" className="games-chip" style={{ background: 'var(--panel-bg-2)', color: 'var(--text-secondary)', border: '1px solid var(--panel-border)' }}>
               {l.label} ↗
             </a>
