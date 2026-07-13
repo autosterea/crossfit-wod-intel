@@ -168,6 +168,20 @@ type Slide =
 type Carousel = { id: string; label: string; caption: string; slides: Slide[] }
 const CAROUSELS: Carousel[] = [
   {
+    id: 'prep-watch',
+    label: 'Prep Watch - 10 Days Out',
+    caption:
+      "⏱️ 10 DAYS OUT. The 2026 field is deep in final prep and it is all over your feed. Dave Castro has tipped enough of the weekend that the training focus is no longer a secret. Here is what is HOT.\n\n💍 The ring skills: a MU-to-forward-roll-to-support and a backward roll to support. The reveal landed AFTER athletes were already testing them on IG. Rewards the real gymnasts.\n🏃 Ranch 7200: a 7.2km trail run. Nobody trained a run indoors all season.\n🏋️ The CrossFit Total: max-out season, three 50-point lifts.\n🏊 A pool is back.\n\nSwipe for who our model likes on the hottest test. Full Prep Watch at the link in bio. A model read, not a result prediction.",
+    slides: [
+      { type: 'cover', kicker: 'Prep Watch', headline: '10 DAYS\nOUT', sub: 'The 2026 field is deep in prep and posting it. Here is what is hot, and who is built for it. Swipe.' },
+      { type: 'point', num: 1, kicker: "What's Hot", headline: 'THE RING\nSKILLS', body: 'Castro unveiled two never-tested still-rings skills: a muscle-up into a forward roll to support, and a backward roll to support. The tell: the reveal landed after athletes were already testing them on IG. Everyone owns the base and had two weeks to drill.', source: 'The Barbell Spin + CrossFit' },
+      { type: 'point', num: 2, kicker: 'Event 2', headline: 'THE RANCH\nRUN', body: 'A 7,200m trail run for time, about 4.5 miles of Aromas dirt. The whole season was indoor machine-and-barbell racing, so nobody has a measured trail time. That is why the trail miles are everywhere right now.', source: 'Persistence Athletics' },
+      { type: 'point', num: 3, kicker: 'Events 3-5', headline: "MAX-OUT\nSEASON", body: 'The CrossFit Total: 1RM back squat, strict press and deadlift, three 50-point events. The prep footage is full of heavy singles. The strict press is the wild card almost nobody has real data on.', source: 'Persistence Athletics' },
+      { type: 'point', num: 4, kicker: 'Who to Watch', headline: 'BUILT FOR\nTHE RINGS', body: 'Men: Vellner and Hoffer, the field\'s two former artistic gymnasts. Women: rings specialist Sturt and USAG Level 9 gymnast Domit. Dark horse: Mertens, who drills the backward roll to support in the Grid league.', source: 'Persistence Athletics model' },
+      { type: 'cta', headline: 'FULL\nPREP WATCH', body: 'What every revealed test demands, and who our model reads as built for it, is on the site. A model read, not a result prediction.' },
+    ],
+  },
+  {
     id: 'rings-reveal',
     label: 'Ring Skills Reveal',
     caption:

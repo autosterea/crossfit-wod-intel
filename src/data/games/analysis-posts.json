@@ -1179,5 +1179,93 @@
       }
     ],
     "tracesTo": "public/projection-2026.json (modal.mono, modal.engine -> fit). Event returns sourced from The Barbell Spin (swimming) and CrossFit Games (cycling). Swim is a profile-fit proxy: no swim event exists in the data."
+  },
+  {
+    "slug": "prep-watch-10-days-out-what-the-field-is-drilling",
+    "title": "Prep Watch: 10 Days Out, What the Whole Field Is Drilling",
+    "dek": "The 2026 field is deep in final prep and posting it. Here is what every revealed test demands, the ring skills everyone is grinding, and who our model reads as built for the hottest movement of the weekend.",
+    "category": "Prep Watch",
+    "date": "2026-07-12",
+    "author": "Ravikant Dewangan",
+    "readMin": 5,
+    "summary": "With the 2026 CrossFit Games about 10 days out (competition July 22-26, San Jose), athletes are deep in final prep and the training content is everywhere. Dave Castro has revealed enough - the CrossFit Total, a 7.2km Ranch trail run, a returning pool, and two never-tested ring skills - that the field's focus is clear. We break down what is hot, what each test demands, and who our model reads as built for it.",
+    "blocks": [
+      {
+        "type": "p",
+        "text": "Ten days out from San Jose and the 2026 field is in the loud part of prep, all over your feed. The reason it is easy to read what they are drilling: **Dave Castro has already tipped most of the weekend.** We know Events 3, 4 and 5 are the CrossFit Total, Event 2 is a 7.2km Ranch trail run, a pool is back in play, and Sunday hides two ring skills the Games have never tested. Here is what is hot, what each test actually asks for, and who our model reads as built for it."
+      },
+      {
+        "type": "h2",
+        "text": "What's Hot: The Ring Skills"
+      },
+      {
+        "type": "p",
+        "text": "The single biggest talking point of the buildup is the pair of still-rings skills Castro unveiled on July 10: a **ring muscle-up straight into a forward roll to support**, and a **backward roll to support**. Here is the tell on how much the field cares: the reveal actually landed *after* athletes had already been spotted testing the movements on Instagram, and CrossFit followed with an official movement feature. Nobody is walking in cold. The whole field already owns the base - strict ring muscle-ups, skin-the-cats, strict ring handstand push-ups - and has had two weeks to drill the two additions, so this is not a wildcard nobody can do. It rewards the sharpest gymnasts and the cleanest technicians."
+      },
+      {
+        "type": "h2",
+        "text": "The Run Nobody Got to Train Indoors"
+      },
+      {
+        "type": "p",
+        "text": "Event 2, **Ranch 7200**, is a 7,200-meter trail run for time on the Aromas hills, about 4.5 miles of dirt and climbing. The catch that explains all the trail-miles content right now: the entire 2026 season was indoor, machine-and-barbell racing, so nobody has a measured trail time. On corrected competition vitals our model reads **Justin Medeiros** at the top on the best engine-to-mass blend, ahead of Ricky Garard and James Sprague. The biggest engine in the field, Roman Khrennikov, pays a real mass tax over 4.5 miles of climbing."
+      },
+      {
+        "type": "h2",
+        "text": "The Total: It's Max-Out Season"
+      },
+      {
+        "type": "p",
+        "text": "Events 3 to 5 are **The CrossFit Total**: a 1-rep-max back squat, strict shoulder press and deadlift, each scored as its own 50-point event. That is why the prep footage is full of heavy singles. The women's deadlift board just got a real-competition refresh - **Aimee Cringle** pulled 197 kg (435 lb) at the World Fitness Project - while the men's Total leans on **Nick Mathew**'s size. The strict press is the wild card: almost nobody in the field has real strict-press data, so it is the single lift most likely to scramble the order."
+      },
+      {
+        "type": "h2",
+        "text": "And a Pool Is Back"
+      },
+      {
+        "type": "p",
+        "text": "CrossFit confirmed swimming returns in a controlled pool for 2026, which pulls the proven water athletes back into the conversation after years of the swim being an open-water lottery. In a pool, technique and turns reward the handful of genuine swimmers in the field rather than the biggest engine."
+      },
+      {
+        "type": "h2",
+        "text": "Who to Watch on the Hot Skill"
+      },
+      {
+        "type": "list",
+        "items": [
+          "**Patrick Vellner and Victor Hoffer (men)** - the field's two former competitive artistic gymnasts. The new rolls are the closest thing to home court for anyone here; Hoffer trained federation-level gymnastics from age 3.",
+          "**Madeline Sturt and Abigail Domit (women)** - a rings specialist with teaching-level control and a USAG Level 9 artistic gymnast. Rotation and support are second nature.",
+          "**Colten Mertens** - plays in the United Grid League, where the backward roll to support is a standard skill. One of the two \"new\" movements may not be new to him at all.",
+          "**Roman Khrennikov** - an Olympic-reserve gymnastics base makes the rings a strength; his one tax this weekend is the run, not the rolls."
+        ]
+      },
+      {
+        "type": "callout",
+        "title": "How we read it",
+        "text": "Every read here is our model plus Castro's verified reveals, not a result prediction. The ring-skill watch list weights researched gymnastics backgrounds over a single season score, since a real gymnast picks up a novel ring skill faster than a percentile predicts. Full breakdowns for each event are in The Breakdown."
+      }
+    ],
+    "sources": [
+      {
+        "label": "Two new gymnastics movements coming to the 2026 Games (The Barbell Spin)",
+        "url": "https://thebarbellspin.com/crossfit-games/two-new-gymnastics-movements-coming-to-the-2026-crossfit-games/"
+      },
+      {
+        "label": "CrossFit official gymnastics-based movements feature (forward roll)",
+        "url": "https://games.crossfit.com/features/photos/gymnastics-based-movements/forward-roll/index.html"
+      },
+      {
+        "label": "Our ring-skills breakdown: who is built for them",
+        "url": "https://wod.persistenceathletics.com/games/analysis/castro-ring-curveball-never-tested-skills"
+      },
+      {
+        "label": "Our Ranch 7200 run read",
+        "url": "https://wod.persistenceathletics.com/games/analysis/event-2-ranch-7200-whose-engine-fits"
+      },
+      {
+        "label": "Our CrossFit Total read",
+        "url": "https://wod.persistenceathletics.com/games/analysis/the-crossfit-total-whose-strength-wins"
+      }
+    ]
   }
 ]
