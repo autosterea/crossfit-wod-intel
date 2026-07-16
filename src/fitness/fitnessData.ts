@@ -122,6 +122,26 @@ export const MODULES: ModuleMeta[] = [
     blurb: 'Stack every age of your life into one surface. Health is the volume you keep under it.',
     accent: PAL.robust,
   },
+  {
+    key: 'crossfit',
+    slug: 'crossfit',
+    num: '07',
+    label: 'What Is CrossFit?',
+    mobileLabel: 'CrossFit',
+    title: 'What Is CrossFit? The Methodology',
+    blurb: 'Constantly varied functional movement at high intensity, built on a five-level pyramid. Crack a level and watch everything above it suffer.',
+    accent: PAL.seaGreen,
+  },
+  {
+    key: 'technique',
+    slug: 'technique',
+    num: '08',
+    label: 'Technique',
+    mobileLabel: 'Technique',
+    title: 'Technique: Mechanics, Consistency, Then Intensity',
+    blurb: 'The nine foundational movements, demonstrated joint by joint, and why technique is what turns effort into power.',
+    accent: PAL.weightlifting,
+  },
 ]
 
 export const moduleByKey = (k: ModuleKey): ModuleMeta => MODULES.find((m) => m.key === k)!
@@ -536,8 +556,9 @@ export const INTRO_TEXT =
 export const DEFINITION_TEXT =
   'CrossFit defines fitness as work capacity across broad time and modal domains. Plot power against the duration of effort, average that power across many tasks and many time intervals, and the area under the resulting curve is your fitness. It is measurable, it is observable, and it leaves no room for opinion. Tell me how much weight moves, how far it moves, and how long it takes, and you have a valid measure of fitness.'
 
+/** Verbatim: Figure 1, "World-Class Fitness in 100 Words.", CrossFit Level 1 Training Guide p. 17 (2020 ed.). */
 export const HUNDRED_WORDS =
-  'Eat meat and vegetables, nuts and seeds, some fruit, little starch, and no sugar. Keep intake to levels that will support exercise but not body fat. Practice and train major lifts: deadlift, clean, squat, presses, clean and jerk, and snatch. Master the basics of gymnastics: pull-ups, dips, rope climbs, push-ups, sit-ups, presses to handstands, pirouettes, flips, splits, and holds. Bike, run, swim, row, and the like, hard and fast. Five or six days per week mix these elements in as many combinations and patterns as creativity will allow. Routine is the enemy. Keep workouts short and intense. Regularly learn and play new sports.'
+  'Eat meat and vegetables, nuts and seeds, some fruit, little starch, and no sugar. Keep intake to levels that will support exercise but not body fat. Practice and train major lifts: Deadlift, clean, squat, presses, C&J (clean and jerk), and snatch. Similarly, master the basics of gymnastics: pull-ups, dips, rope climbs, push-ups, sit-ups, presses to handstands, pirouettes, flips, splits, and holds. Bike, run, swim, row, etc. hard and fast. Five or six days per week mix these elements in as many combinations and patterns as creativity will allow. Routine is the enemy. Keep workouts short and intense. Regularly learn and play new sports.'
 
 export interface ModuleCopy {
   eyebrow: string
@@ -607,7 +628,215 @@ export const MODULE_COPY: Record<ModuleKey, ModuleCopy> = {
       'Resistance and power training reclaim capacity at any age, even into the 90s.',
     ],
   },
+  crossfit: {
+    eyebrow: 'The Methodology',
+    body: 'CrossFit is the prescription: "constantly varied, high-intensity functional movement." Functional movements are universal motor recruitment patterns, performed core to extremity, whose defining capacity is moving large loads over long distances quickly. Intensity is defined exactly as power, the variable most associated with favorable adaptation. And the prescription is constantly varied because preparation for the unknown and unknowable is at odds with routine. The whole development path stacks as a five-level pyramid: nutrition, metabolic conditioning, gymnastics, weightlifting and throwing, then sport. A deficiency at any level makes every level above it suffer.',
+    keyPoints: [
+      'The definition has three parts: constantly varied, functional movements, high intensity.',
+      'Intensity is defined exactly as power, and it drives the rate of favorable adaptation.',
+      'The pyramid orders development: nutrition to metcon to gymnastics to weightlifting to sport.',
+      'It scales by degree, not kind: load and intensity change, the program does not.',
+    ],
+  },
+  technique: {
+    eyebrow: 'The Charter',
+    body: 'CrossFit\'s charter is mechanics, consistency, then - and only then - intensity. Learn the mechanics of the fundamental movements, prove you can repeat them correctly, and only then push speed and load. The order exists because it optimizes safety, efficacy, and efficiency, and because technique is not the opposite of intensity but its prerequisite: technique is what maximizes the work completed for the energy expended. The nine foundational movements teach it all, three squats, three presses, and three pulls, each one layer more dynamic than the last, all recruiting from core to extremity.',
+    keyPoints: [
+      'The charter: mechanics first, consistency second, intensity only after both.',
+      'Nine foundational movements in three families: squats, presses, and the deadlift family.',
+      'Every movement drives core to extremity: hips fire first, arms finish.',
+      'Technique is everything: you will not express power in significant measure without it.',
+    ],
+  },
 }
+
+/* =========================================================================
+   Module 07 data - What Is CrossFit? (all quotes verified verbatim against
+   the CrossFit Level 1 Training Guide, 3rd ed., 2020, V6E3OL-20201212KW;
+   page numbers are the printed pages. Em dashes inside original quotes are
+   rendered as " - " to match the site's typography rule.)
+   ========================================================================= */
+
+export interface HierarchyLevel {
+  key: string
+  label: string
+  /** The guide's "logical flow" role for this layer (p. 29). */
+  role: string
+  detail: string
+  color: string
+}
+
+/** Figure 5, "The Theoretical Hierarchy of the Development of an Athlete" (L1 Guide p. 29), bottom to top. */
+export const HIERARCHY: HierarchyLevel[] = [
+  { key: 'nutrition', label: 'Nutrition', role: 'Molecular foundations', detail: 'The base of the pyramid. Nutrition is the molecular foundation every adaptation above it is built from.', color: PAL.seaGreen },
+  { key: 'metcon', label: 'Metabolic Conditioning', role: 'Cardiovascular sufficiency', detail: 'Engine work in all three energy pathways builds the cardiovascular sufficiency the skills sit on.', color: PAL.monostructural },
+  { key: 'gymnastics', label: 'Gymnastics', role: 'Body control', detail: 'Control of your own body: pull-ups, dips, presses to handstands, holds. Body control precedes object control.', color: PAL.gymnastics },
+  { key: 'weightlifting', label: 'Weightlifting & Throwing', role: 'External object control', detail: 'Control of external objects: the slow lifts and the Olympic lifts, moving loads with speed.', color: PAL.weightlifting },
+  { key: 'sport', label: 'Sport', role: 'Mastery and application', detail: 'The apex: applying the whole stack in competition, where fitness is expressed and tested.', color: PAL.both },
+]
+
+/** The dependency rule the pyramid visualizes (verbatim, L1 Guide p. 29). */
+export const HIERARCHY_RULE =
+  'We do not deliberately order these components but nature will. If you have a deficiency at any level of "the pyramid" the components above will suffer.'
+
+export interface DefinitionPillar {
+  key: string
+  label: string
+  quote: string
+  cite: string
+  explain: string
+}
+
+/** The three parts of the prescription (quotes verbatim from "Understanding CrossFit," L1 Guide p. 2). */
+export const CF_PILLARS: DefinitionPillar[] = [
+  {
+    key: 'varied',
+    label: 'Constantly varied',
+    quote: 'We believe that preparation for random physical challenges - i.e., unknown and unknowable events - is at odds with fixed, predictable, and routine regimens.',
+    cite: 'Understanding CrossFit, L1 Guide p. 2',
+    explain: 'The breadth of a program\'s stimulus determines the breadth of the adaptation it elicits. Routine is the enemy.',
+  },
+  {
+    key: 'functional',
+    label: 'Functional movement',
+    quote: 'Functional movements are universal motor recruitment patterns; they are performed in a wave of contraction from core to extremity; and they are compound movements - i.e., they are multi-joint.',
+    cite: 'Understanding CrossFit, L1 Guide p. 2',
+    explain: 'Their defining capacity: moving large loads over long distances, quickly. Load, distance, speed - that is power.',
+  },
+  {
+    key: 'intensity',
+    label: 'High intensity',
+    quote: 'Intensity is defined exactly as power, and intensity is the independent variable most commonly associated with maximizing the rate of return of favorable adaptation to exercise.',
+    cite: 'Understanding CrossFit, L1 Guide p. 2',
+    explain: 'Intensity is not effort or soreness. It is measurable output: work divided by time.',
+  },
+]
+
+export const CF_SCALING = {
+  quote: 'The needs of an Olympic athlete and our grandparents differ by degree not kind.',
+  cite: 'What Is Fitness? (Part 1), L1 Guide p. 31',
+  rule: 'We scale load and intensity; we do not change programs.',
+}
+
+/* =========================================================================
+   Module 08 data - Technique + the nine foundational movements. Points of
+   performance are verbatim bullets from the L1 Guide Movement Guide
+   (pp. 170-215); each movement's one-liner is the guide's own opening line.
+   ========================================================================= */
+
+export type MovementGroup = 'squat' | 'press' | 'deadlift'
+
+export interface Foundational {
+  key: string
+  name: string
+  group: MovementGroup
+  /** The guide's opening line for the movement (verbatim or tightly compressed). */
+  oneLiner: string
+  setup: string[]
+  execution: string[]
+  finish: string
+  buildsOn?: string
+}
+
+export const CHARTER = {
+  steps: ['Mechanics', 'Consistency', 'Intensity'] as const,
+  quote:
+    "CrossFit's charter for creating the most optimal balance of safety, efficacy, and efficiency is: mechanics, consistency, then - and only then - intensity.",
+  cite: 'Scaling CrossFit, L1 Guide p. 77',
+  gate: 'It is imperative that the movements can be performed correctly and consistently before load and speed are added.',
+  why: 'Technique is what maximizes the work completed for the energy expended.',
+  whyCite: 'Technique, L1 Guide pp. 40-44',
+}
+
+export const MOVEMENTS: Foundational[] = [
+  {
+    key: 'air-squat',
+    name: 'The Air Squat',
+    group: 'squat',
+    oneLiner: 'The cornerstone movement of CrossFit, foundational to the front squat and overhead squat.',
+    setup: ['Shoulder-width stance.'],
+    execution: ['Hips descend back and down.', 'Lumbar curve maintained.', 'Knees in line with toes.', 'Hips descend lower than knees.', 'Heels down.'],
+    finish: 'Complete at full hip and knee extension.',
+  },
+  {
+    key: 'front-squat',
+    name: 'The Front Squat',
+    group: 'squat',
+    oneLiner: 'The air squat plus a loaded barbell supported on the torso in the front-rack position.',
+    setup: ['Loose fingertip grip on the bar.', 'Hands just outside shoulders.', 'Elbows high (upper arm parallel to the ground).'],
+    execution: ['All air squat points carry over.', 'Bar rides the front rack, torso upright.'],
+    finish: 'Complete at full hip and knee extension.',
+    buildsOn: 'air-squat',
+  },
+  {
+    key: 'overhead-squat',
+    name: 'The Overhead Squat',
+    group: 'squat',
+    oneLiner: 'The ultimate core exercise, the heart of the snatch, peerless in developing athletic movement.',
+    setup: ['Shoulders push up into the bar.', 'Arms extended.', 'Wide grip on the bar.', 'Armpits face forward.'],
+    execution: ['All air squat points carry over.', 'Bar moves over the middle of the foot.'],
+    finish: 'Complete at full hip and knee extension.',
+    buildsOn: 'front-squat',
+  },
+  {
+    key: 'shoulder-press',
+    name: 'The Shoulder Press',
+    group: 'press',
+    oneLiner: 'Foundational to all the overhead lifts: neutral spine, straight bar path, correct overhead position.',
+    setup: ['Hip-width stance.', 'Elbows slightly in front of the bar.', 'Hands just outside shoulders.', 'Full grip; bar rests on torso.'],
+    execution: ['Spine neutral and legs extended.', 'Heels down.', 'Bar moves over the middle of the foot.', 'Shoulders push up into the bar.'],
+    finish: 'Complete at full arm extension.',
+  },
+  {
+    key: 'push-press',
+    name: 'The Push Press',
+    group: 'press',
+    oneLiner: 'Adds a vertical dip of the torso and a rapid hip extension that puts velocity on the bar.',
+    setup: ['Same set-up as the shoulder press.'],
+    execution: ['Torso remains vertical as hips and knees flex in the dip.', 'Hips and legs extend, then arms press.', 'Heels remain down until hips and knees extend.', 'Bar moves over the middle of the foot.'],
+    finish: 'Complete at full hip, knee, and arm extension.',
+    buildsOn: 'shoulder-press',
+  },
+  {
+    key: 'push-jerk',
+    name: 'The Push Jerk',
+    group: 'press',
+    oneLiner: 'Adds the press under the bar: after hip extension the athlete drives down and receives the lift in a partial overhead squat.',
+    setup: ['Same set-up as the shoulder press.'],
+    execution: ['Torso remains vertical as hips and knees flex in the dip.', 'Heels stay down until hips and knees extend.', 'Hips and knees extend rapidly, then arms press to drive under the bar.'],
+    finish: 'Complete at full hip, knee, and arm extension.',
+    buildsOn: 'push-press',
+  },
+  {
+    key: 'deadlift',
+    name: 'The Deadlift',
+    group: 'deadlift',
+    oneLiner: 'Foundational to all pulling lifts: spine neutral at all times, object close to the body.',
+    setup: ['Hip-to-shoulder-width stance.', 'Hands just outside hips.', 'Eyes on the horizon.', 'Shoulders slightly in front of or over the bar.', 'Arms straight, bar in contact with the shins.'],
+    execution: ['Lumbar curve maintained.', 'Hips and shoulders rise at the same rate until the bar passes the knee.', 'Hips then open.', 'Bar moves over the middle of the foot.', 'Heels down.'],
+    finish: 'Complete at full hip and knee extension.',
+  },
+  {
+    key: 'sdhp',
+    name: 'The Sumo Deadlift High Pull',
+    group: 'deadlift',
+    oneLiner: 'Builds on the deadlift with a wider stance and narrower grip, adding velocity and range of motion.',
+    setup: ['Slightly wider than shoulder-width stance.', 'Hands inside legs, full grip.', 'Shoulders slightly in front of or over the bar.', 'Knees in line with toes.'],
+    execution: ['Lumbar curve maintained.', 'Hips and shoulders rise at the same rate, then hips extend rapidly.', 'Shoulders shrug, then the arms pull.', 'Elbows move high and outside.'],
+    finish: 'Complete at full hip and knee extension, bar pulled to below the chin.',
+    buildsOn: 'deadlift',
+  },
+  {
+    key: 'mb-clean',
+    name: 'The Medicine-Ball Clean',
+    group: 'deadlift',
+    oneLiner: 'Adds the pull-under: the athlete brings the object to a position of support, the front rack.',
+    setup: ['Shoulder-width stance.', 'Ball between the feet, palms on the ball.', 'Shoulders over the ball.', 'Eyes on the horizon.'],
+    execution: ['Lumbar curve maintained.', 'Hips extend rapidly.', 'Shoulders then shrug.', 'Arms then pull under to the bottom of the squat.', 'Ball stays close to the body.'],
+    finish: 'Complete at full hip and knee extension with the ball in the rack position.',
+    buildsOn: 'sdhp',
+  },
+]
 
 export interface Source {
   title: string
@@ -615,10 +844,14 @@ export interface Source {
   for: ModuleKey[]
 }
 
-const ALL: ModuleKey[] = ['skills', 'hopper', 'pathways', 'definition', 'continuum', 'health']
+const ALL: ModuleKey[] = ['skills', 'hopper', 'pathways', 'definition', 'continuum', 'health', 'crossfit', 'technique']
 
 /** Verified citations (all resolved 200 OK in research). */
 export const SOURCES: Source[] = [
+  { title: 'Greg Glassman, "Understanding CrossFit," CrossFit Journal, April 2007 (L1 Guide pp. 2-3)', url: 'https://library.crossfit.com/free/pdf/CFJ_English_Level1_TrainingGuide.pdf', for: ['crossfit'] },
+  { title: '"What Is a CrossFit Workout?" crossfit.com Essentials, June 2023', url: 'https://www.crossfit.com/essentials/what-is-a-crossfit-workout', for: ['crossfit'] },
+  { title: 'L1 Guide Movement Guide: the nine foundational movements (pp. 170-215)', url: 'https://library.crossfit.com/free/pdf/CFJ_English_Level1_TrainingGuide.pdf', for: ['technique'] },
+  { title: '"Mechanics, Consistency, Intensity" crossfit.com Essentials, February 2020', url: 'https://www.crossfit.com/essentials/mechanics-consistency-intensity-what-does-it-mean', for: ['technique'] },
   { title: 'Greg Glassman, "What Is Fitness?" CrossFit Journal, Issue 2, October 2002', url: 'https://library.crossfit.com/free/pdf/CFJ-trial.pdf', for: ALL },
   { title: '"What Is Fitness?" CrossFit Journal article page', url: 'https://journal.crossfit.com/article/what-is-fitness', for: ALL },
   { title: 'CrossFit Level 1 Training Guide (official L1 book)', url: 'https://library.crossfit.com/free/pdf/CFJ_English_Level1_TrainingGuide.pdf', for: ALL },
@@ -655,4 +888,12 @@ export const CROSS_LINKS: Record<ModuleKey, CrossLink[]> = {
   ],
   continuum: [{ label: 'Methodology and Sources', href: '/', note: 'How the app grounds its claims in evidence.' }],
   health: [{ label: 'Capacity Lab', href: '/games/capacity', note: 'Capacity across broad time and modal domains, measured.' }],
+  crossfit: [
+    { label: 'Daily WOD Intelligence', href: '/', note: 'Constantly varied, measured: 25 years of crossfit.com programming analyzed.' },
+    { label: 'The 2026 Games hub', href: '/games/2026', note: 'The Sport of Fitness, live: the athletes the methodology built.' },
+  ],
+  technique: [
+    { label: 'All 80 movements in the WOD data', href: '/', note: 'How often each foundational pattern shows up in real programming.' },
+    { label: 'Games movements index', href: '/games/movements', note: 'The same patterns under competition loads.' },
+  ],
 }

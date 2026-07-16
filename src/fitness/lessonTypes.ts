@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 
 /** The six interactive models that make up the "What Is Fitness?" lesson. */
-export type ModuleKey = 'skills' | 'hopper' | 'pathways' | 'definition' | 'continuum' | 'health'
+export type ModuleKey = 'skills' | 'hopper' | 'pathways' | 'definition' | 'continuum' | 'health' | 'crossfit' | 'technique'
 
 /** All routable views in the /fitness app (intro plus the six modules). */
 export type FitnessView = 'intro' | ModuleKey
