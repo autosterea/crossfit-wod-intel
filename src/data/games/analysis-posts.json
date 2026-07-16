@@ -1271,12 +1271,12 @@
   {
     "slug": "event-13-the-500m-sprint-whose-speed-wins",
     "title": "Event 13: The 500m Sprint - Whose Speed Wins?",
-    "dek": "The Games just published a 500-meter sprint as Individual Event 13. Ninety-ish seconds of pure glycolytic pain, and the first true footrace-at-speed this field has faced. We modeled who is built for it.",
+    "dek": "The Games just published a 500-meter sprint as Individual Event 13. The Games have run this test before - a 550-yard sprint in 2021 - and the real results reshuffle the model: the field already has a sprint champion in it.",
     "category": "Event Preview",
     "date": "2026-07-16",
     "author": "Ravikant Dewangan",
     "readMin": 4,
-    "summary": "Individual Event 13 of the 2026 CrossFit Games is a 500-meter sprint, published on the official workouts page July 16. For this field that is roughly 75 to 100 seconds of maximal running, the deepest glycolytic well in sport. We break down what the distance actually tests and rank who is built for it from sprint, glycolytic, speed and power profiles.",
+    "summary": "Individual Event 13 of the 2026 CrossFit Games is a 500-meter sprint, published on the official workouts page July 16. The Games ran a near-identical test in 2021 (the 550-yard sprint) and a track meet in 2024, and the verified results move the board: Guilherme Malheiros won the 2021 sprint outright, Ricky Garard won 2024 Track and Field, Khrennikov took 3rd there, and Haley Adams owns the best women's sprint resume in the field. History first, model second.",
     "blocks": [
       {
         "type": "p",
@@ -1296,36 +1296,36 @@
       },
       {
         "type": "p",
-        "text": "**Justin Medeiros** tops the men's read with the field's most complete sprint card: 80 sprint percentile, 79 glycolytic, and near-80 marks on measured speed and power. **Patrick Vellner** is right behind on nearly identical sprint numbers, and **Ricky Garard**, whose rugby-league past was literally built on repeat sprints, rounds out the podium read ahead of **Dallin Pepper** and **Austin Hatfield**. The interesting tax: **Roman Khrennikov**, elite in so much else, carries 103 kg over 500 meters here."
+        "text": "Here is what the model alone misses: **the Games have already run this race.** Individual Event 3 of the 2021 Games was a **550-yard sprint** - 503 meters, virtually this exact test - and **Guilherme Malheiros won it outright** in 1:15.37, edging the field in a photo finish. **Patrick Vellner took 3rd** in that same race and **Saxon Panchik 4th**. Then in 2024, the **Track and Field** event (a 1,600m run plus a sprint-and-sandbag course at Farrington Field) went to **Ricky Garard**, who won both parts outright with a 1:04.89 sprint course; **Roman Khrennikov ran 3rd** there, so do not let his 103 kg fool you - the man moves. The honest note cuts the other way too: **Justin Medeiros**, who tops the pure model blend, finished 11th in the 2021 sprint and 25th in 2024 Track and Field. On real footraces, the résumés speak."
       },
       {
         "type": "ranked",
         "title": "Men's 500m Sprint Read - projected top 5",
         "rows": [
           {
-            "name": "Justin Medeiros",
-            "value": "79",
-            "note": "Field-best blend: 80 sprint, 79 glycolytic, real speed and power."
-          },
-          {
-            "name": "Patrick Vellner",
-            "value": "76",
-            "note": "79 sprint percentile; the veteran still has a gear."
+            "name": "Guilherme Malheiros",
+            "value": "Won it",
+            "note": "WON the 2021 550-yard sprint (1:15.37), the near-identical test."
           },
           {
             "name": "Ricky Garard",
-            "value": "74",
-            "note": "Rugby-league fullback pedigree: repeat sprints are home turf."
+            "value": "Won 2024",
+            "note": "Won 2024 Track and Field outright; 1:04.89 on the sprint course."
           },
           {
-            "name": "Dallin Pepper",
-            "value": "72",
-            "note": "74 glycolytic engine on a powerful frame."
+            "name": "Patrick Vellner",
+            "value": "3rd + 5th",
+            "note": "3rd in the 2021 sprint, 5th in 2024 Track and Field. Always there."
           },
           {
-            "name": "Austin Hatfield",
-            "value": "72",
-            "note": "Balanced sprint card; nothing to hide on a run."
+            "name": "Roman Khrennikov",
+            "value": "3rd 2024",
+            "note": "3rd in 2024 Track and Field. 103 kg and still top-3 on his feet."
+          },
+          {
+            "name": "Saxon Panchik",
+            "value": "4th 2021",
+            "note": "4th in the 2021 550-yard sprint; the model (67) underrates his wheels."
           }
         ]
       },
@@ -1335,35 +1335,35 @@
       },
       {
         "type": "p",
-        "text": "The women's read is a photo finish up top, and it comes with a storyline. **Emma Lawson** edges it on the best measured speed in the field, but **Danielle Brandon** posts the single best women's sprint percentile (74), and she is the one athlete here with a **real track background**: state-championship track teams as a junior athlete, then a Division I pole-vault scholarship. Event 13 is the closest thing to home turf the Games have ever handed her. **Haley Adams**, **Mirjam von Rohr** (the field's best glycolytic score at 75) and **Alexis Raptis** complete the read."
+        "text": "The women's board moves the same way. **Haley Adams owns the best verified sprint résumé in the current field**: 3rd in the 2021 550-yard sprint and **2nd in 2024 Track and Field**, behind only Tia-Clair Toomey-Orr both times - and Toomey is not in this field. **Danielle Brandon** pairs the field-best sprint percentile (74) with the only real track pedigree here (state track teams, then a D1 pole-vault scholarship) and won the 2022 Skill Speed Medley. **Emma Lawson** brings the best measured speed in the field (73) but has no pure-footrace history to point to. **Mirjam von Rohr** (field-best 75 glycolytic) and **Alexis Raptis** complete the read."
       },
       {
         "type": "ranked",
         "title": "Women's 500m Sprint Read - projected top 5",
         "rows": [
           {
-            "name": "Emma Lawson",
-            "value": "72",
-            "note": "Best measured speed in the women's field (73)."
+            "name": "Haley Adams",
+            "value": "3rd + 2nd",
+            "note": "3rd in the 2021 sprint, 2nd in 2024 Track and Field. Best resume here."
           },
           {
             "name": "Danielle Brandon",
-            "value": "72",
-            "note": "Field-best 74 sprint percentile, and a real track/D1 past."
+            "value": "74 sprint",
+            "note": "Field-best sprint percentile, real track/D1 past, won the 2022 Speed Medley."
           },
           {
-            "name": "Haley Adams",
-            "value": "71",
-            "note": "Speed 73; light, fast, and fearless on a runway."
+            "name": "Emma Lawson",
+            "value": "73 speed",
+            "note": "Best measured speed in the women's field; no footrace history yet."
           },
           {
             "name": "Mirjam von Rohr",
-            "value": "69",
-            "note": "Field-best 75 glycolytic: she slows down least."
+            "value": "75 glyc",
+            "note": "Field-best glycolytic score: she slows down least."
           },
           {
             "name": "Alexis Raptis",
-            "value": "68",
+            "value": "70 sprint",
             "note": "70 sprint percentile; springy and efficient."
           }
         ]
@@ -1371,7 +1371,7 @@
       {
         "type": "callout",
         "title": "Methodology",
-        "text": "The 500m read blends each athlete's sprint-domain percentile (35 percent), glycolytic-system score (25), measured Speed (20), Power (10) and monostructural mark (10) from the model, all computed from official 2026 Open + Quarterfinals results and prior Games. Venue and heat format have not been announced, and a footrace this short has real day-of variance: this ranks who is built for the distance, not a predicted result. Event published on the official Games workouts page, July 16."
+        "text": "This read weights VERIFIED Games footrace history first - the 2021 550-yard sprint (Individual Event 3, won by Malheiros in 1:15.37) and 2024 Track and Field (won by Garard; sprint course 1:04.89) - over the season model, because a real sprint result predicts a sprint better than a percentile blend. The model layer (sprint domain 35, glycolytic 25, speed 20, power 10, mono 10, from official 2026 Open + Quarterfinals and prior Games) breaks ties where history is thin. Venue and heat format have not been announced. Event published on the official Games workouts page, July 16; historical results from the official Games leaderboards."
       }
     ],
     "sources": [
@@ -1382,6 +1382,18 @@
       {
         "label": "Persistence Athletics model (2026 Open + Quarterfinals + prior Games)",
         "url": "https://wod.persistenceathletics.com/games/2026/intel"
+      },
+      {
+        "label": "Our energy-systems explainer (why 90 seconds is glycolytic hell)",
+        "url": "https://wod.persistenceathletics.com/fitness/pathways"
+      },
+      {
+        "label": "2021 Games Individual Event 3: 550-Yard Sprint (Malheiros 1:15.37)",
+        "url": "https://games.crossfit.com/workouts/games/2021"
+      },
+      {
+        "label": "2024 Games Track and Field (Garard won both parts)",
+        "url": "https://games.crossfit.com/workouts/games/2024"
       },
       {
         "label": "Our energy-systems explainer (why 90 seconds is glycolytic hell)",
