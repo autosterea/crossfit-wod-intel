@@ -196,8 +196,10 @@ const STATIC = [
   },
 ]
 
-/** The six fitness modules: slug -> [title, description]. */
+/** The fitness lesson modules: slug -> [title, description]. */
 const FITNESS = {
+  crossfit: ['What Is CrossFit? The Methodology | Persistence Athletics', 'Constantly varied functional movement at high intensity, and the five-level development pyramid from the L1 Training Guide. Crack a level and watch everything above it suffer.'],
+  technique: ['Technique and the Nine Foundational Movements | Persistence Athletics', 'Mechanics, consistency, then intensity. A 3D athlete demonstrates all nine foundational movements with the L1 points of performance pinned to the joints they coach.'],
   skills: ['The 10 General Physical Skills | Persistence Athletics', 'You are as fit as you are competent across ten skills. Compare a balanced CrossFitter to twelve specialists on an interactive 3D radar.'],
   hopper: ['The Hopper Model | Persistence Athletics', 'Fitness is performing well at any task drawn at random. Pull from an infinite hopper and watch the generalist beat the specialists.'],
   pathways: ['The Three Metabolic Pathways | Persistence Athletics', 'Phosphagen, glycolytic and oxidative engines power every effort. Slide through duration and watch the dominant energy system change.'],
