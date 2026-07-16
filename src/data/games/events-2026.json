@@ -10,6 +10,20 @@
   },
   "items": [
     {
+      "name": "Event 13: The 500-Meter Sprint",
+      "status": "confirmed",
+      "kind": "event",
+      "num": 13,
+      "summary": "Individual Event 13 is a 500-meter sprint, published on the official Games workouts page July 16. Roughly a minute and a half of maximal running for this field: the deepest glycolytic test on the weekend. Venue and heat format not yet announced.",
+      "source": {
+        "label": "CrossFit Games (official workout page)",
+        "url": "https://games.crossfit.com/workouts/finals/2026"
+      },
+      "date": "2026-07-16",
+      "shortName": "The 500m Sprint",
+      "analysisSlug": "event-13-the-500m-sprint-whose-speed-wins"
+    },
+    {
       "name": "Event 1: The 2007 Hopper",
       "status": "confirmed",
       "kind": "event",

@@ -116,6 +116,27 @@ const PICKS: PickSet[] = [
     ],
   },
   {
+    id: 'event13-sprint',
+    label: 'Event 13 - The 500m Sprint',
+    eventKicker: 'Event 13 - The 500m Sprint',
+    eventLine: 'A 500-meter sprint, published on the official workouts page. Roughly 90 seconds all-out.',
+    note: "Score blends the model's sprint-domain percentile, glycolytic score, and measured speed and power. Venue and heats not yet announced. A fit read, not a result prediction.",
+    men: [
+      { name: 'Justin Medeiros', value: '79', why: 'Field-best blend: 80 sprint, 79 glycolytic, real speed and power.' },
+      { name: 'Patrick Vellner', value: '76', why: '79 sprint percentile; the veteran still has a gear.' },
+      { name: 'Ricky Garard', value: '74', why: 'Rugby-league fullback pedigree: repeat sprints are home turf.' },
+      { name: 'Dallin Pepper', value: '72', why: '74 glycolytic engine on a powerful frame.' },
+      { name: 'Austin Hatfield', value: '72', why: 'Balanced sprint card; nothing to hide on a run.' },
+    ],
+    women: [
+      { name: 'Emma Lawson', value: '72', why: "Best measured speed in the women's field (73)." },
+      { name: 'Danielle Brandon', value: '72', why: 'Field-best 74 sprint percentile, and a real track/D1 past.' },
+      { name: 'Haley Adams', value: '71', why: 'Speed 73; light, fast, and fearless on a runway.' },
+      { name: 'Mirjam von Rohr', value: '69', why: 'Field-best 75 glycolytic: she slows down least.' },
+      { name: 'Alexis Raptis', value: '68', why: '70 sprint percentile; springy and efficient.' },
+    ],
+  },
+  {
     id: 'event2-ranch7200',
     label: 'Event 2 - Ranch 7200',
     eventKicker: 'Event 2 - Ranch 7200',
@@ -167,6 +188,20 @@ type Slide =
   | { type: 'cta'; headline: string; body: string }
 type Carousel = { id: string; label: string; caption: string; slides: Slide[] }
 const CAROUSELS: Carousel[] = [
+  {
+    id: 'event13-sprint',
+    label: 'Event 13 - The 500m Sprint',
+    caption:
+      "🏃 EVENT 13 = A 500-METER SPRINT. The official Games workouts page just published Individual Event 13: a 500-meter sprint. No barbell, no rig - one maximal run, in the back half of the weekend on tired legs.\n\nFor this field that's roughly 90 seconds ALL-OUT: peak glycolytic territory, the pathway that makes the last 150 meters pure survival.\n\nOur model's read (sprint + glycolytic + speed + power): Men - Medeiros, Vellner, Garard. Women - Lawson and Brandon in a photo finish, and Brandon is the one athlete here with a real track past (state track teams, D1 pole vault). Swipe. Full breakdown at the link in bio. A model read, not a result prediction.",
+    slides: [
+      { type: 'cover', kicker: 'Event 13', headline: 'THE 500M\nSPRINT', sub: 'One maximal run, published on the official workouts page. Who is built for 90 seconds all-out? Swipe.' },
+      { type: 'point', num: 1, kicker: 'The Test', headline: 'NO PLACE\nTO HIDE', body: 'A 500-meter sprint, full stop. No barbell, no rig, no strategy layer. The first pure footrace-at-speed this field has faced at the Games, landing after 12 events of banked fatigue.', source: 'games.crossfit.com (official workouts page)' },
+      { type: 'point', num: 2, kicker: 'The Physiology', headline: '90 SECONDS\nOF BURN', body: 'Too long for a pure burst, way too short to settle in: roughly 75-100 seconds of maximal output is peak GLYCOLYTIC territory. Cover the first 200 fast, then race who slows down least.', source: 'Persistence Athletics / L1 energy systems' },
+      { type: 'point', num: 3, kicker: "Model's top 5 - Men", headline: 'MEDEIROS', body: '1. Medeiros 2. Vellner 3. Garard 4. Pepper 5. Hatfield. Medeiros owns the field-best blend (80 sprint, 79 glycolytic); Garard was a rugby-league fullback - repeat sprints built him.', source: 'Persistence Athletics model' },
+      { type: 'point', num: 4, kicker: "Model's top 5 - Women", headline: 'LAWSON &\nBRANDON', body: '1. Lawson 2. Brandon 3. Adams 4. von Rohr 5. Raptis. A photo finish: Lawson has the best measured speed, Brandon the best sprint percentile AND a real track past - state track teams, then a D1 pole-vault scholarship.', source: 'Persistence Athletics model' },
+      { type: 'cta', headline: 'FULL\nBREAKDOWN', body: 'What 500 meters actually tests, the full method, and both boards are on the site. A model read, not a result prediction.' },
+    ],
+  },
   {
     id: 'prep-watch',
     label: 'Prep Watch - 10 Days Out',

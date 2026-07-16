@@ -1267,5 +1267,126 @@
         "url": "https://wod.persistenceathletics.com/games/analysis/the-crossfit-total-whose-strength-wins"
       }
     ]
+  },
+  {
+    "slug": "event-13-the-500m-sprint-whose-speed-wins",
+    "title": "Event 13: The 500m Sprint - Whose Speed Wins?",
+    "dek": "The Games just published a 500-meter sprint as Individual Event 13. Ninety-ish seconds of pure glycolytic pain, and the first true footrace-at-speed this field has faced. We modeled who is built for it.",
+    "category": "Event Preview",
+    "date": "2026-07-16",
+    "author": "Ravikant Dewangan",
+    "readMin": 4,
+    "summary": "Individual Event 13 of the 2026 CrossFit Games is a 500-meter sprint, published on the official workouts page July 16. For this field that is roughly 75 to 100 seconds of maximal running, the deepest glycolytic well in sport. We break down what the distance actually tests and rank who is built for it from sprint, glycolytic, speed and power profiles.",
+    "blocks": [
+      {
+        "type": "p",
+        "text": "The reveals keep coming. The official Games workouts page just published **Individual Event 13: a 500-meter sprint**, full stop. No barbell, no rig, no strategy layer to hide behind: one maximal run. It is the first pure footrace-at-speed this field has faced at the Games, and it lands in the back half of the weekend, when 12 events of fatigue have already been banked."
+      },
+      {
+        "type": "h2",
+        "text": "What 500 Meters Actually Tests"
+      },
+      {
+        "type": "p",
+        "text": "Five hundred meters sits in the nastiest spot on the energy-system map. It is too long to be a pure phosphagen burst and far too short to settle into an aerobic rhythm: for athletes this size, it is roughly **75 to 100 seconds of maximal output**, which is peak **glycolytic** territory, the pathway that produces the burn and the bear that jumps on your back at the 300-meter mark. Pacing it is a razor: go out too hot and the last 150 meters becomes survival; too conservative and the heat is gone. Expect the field to cover the first 200 fast and then race who slows down least."
+      },
+      {
+        "type": "h2",
+        "text": "The Model Read: Men"
+      },
+      {
+        "type": "p",
+        "text": "**Justin Medeiros** tops the men's read with the field's most complete sprint card: 80 sprint percentile, 79 glycolytic, and near-80 marks on measured speed and power. **Patrick Vellner** is right behind on nearly identical sprint numbers, and **Ricky Garard**, whose rugby-league past was literally built on repeat sprints, rounds out the podium read ahead of **Dallin Pepper** and **Austin Hatfield**. The interesting tax: **Roman Khrennikov**, elite in so much else, carries 103 kg over 500 meters here."
+      },
+      {
+        "type": "ranked",
+        "title": "Men's 500m Sprint Read - projected top 5",
+        "rows": [
+          {
+            "name": "Justin Medeiros",
+            "value": "79",
+            "note": "Field-best blend: 80 sprint, 79 glycolytic, real speed and power."
+          },
+          {
+            "name": "Patrick Vellner",
+            "value": "76",
+            "note": "79 sprint percentile; the veteran still has a gear."
+          },
+          {
+            "name": "Ricky Garard",
+            "value": "74",
+            "note": "Rugby-league fullback pedigree: repeat sprints are home turf."
+          },
+          {
+            "name": "Dallin Pepper",
+            "value": "72",
+            "note": "74 glycolytic engine on a powerful frame."
+          },
+          {
+            "name": "Austin Hatfield",
+            "value": "72",
+            "note": "Balanced sprint card; nothing to hide on a run."
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "The Model Read: Women"
+      },
+      {
+        "type": "p",
+        "text": "The women's read is a photo finish up top, and it comes with a storyline. **Emma Lawson** edges it on the best measured speed in the field, but **Danielle Brandon** posts the single best women's sprint percentile (74), and she is the one athlete here with a **real track background**: state-championship track teams as a junior athlete, then a Division I pole-vault scholarship. Event 13 is the closest thing to home turf the Games have ever handed her. **Haley Adams**, **Mirjam von Rohr** (the field's best glycolytic score at 75) and **Alexis Raptis** complete the read."
+      },
+      {
+        "type": "ranked",
+        "title": "Women's 500m Sprint Read - projected top 5",
+        "rows": [
+          {
+            "name": "Emma Lawson",
+            "value": "72",
+            "note": "Best measured speed in the women's field (73)."
+          },
+          {
+            "name": "Danielle Brandon",
+            "value": "72",
+            "note": "Field-best 74 sprint percentile, and a real track/D1 past."
+          },
+          {
+            "name": "Haley Adams",
+            "value": "71",
+            "note": "Speed 73; light, fast, and fearless on a runway."
+          },
+          {
+            "name": "Mirjam von Rohr",
+            "value": "69",
+            "note": "Field-best 75 glycolytic: she slows down least."
+          },
+          {
+            "name": "Alexis Raptis",
+            "value": "68",
+            "note": "70 sprint percentile; springy and efficient."
+          }
+        ]
+      },
+      {
+        "type": "callout",
+        "title": "Methodology",
+        "text": "The 500m read blends each athlete's sprint-domain percentile (35 percent), glycolytic-system score (25), measured Speed (20), Power (10) and monostructural mark (10) from the model, all computed from official 2026 Open + Quarterfinals results and prior Games. Venue and heat format have not been announced, and a footrace this short has real day-of variance: this ranks who is built for the distance, not a predicted result. Event published on the official Games workouts page, July 16."
+      }
+    ],
+    "sources": [
+      {
+        "label": "Official 2026 Games workouts page (Event 13: 500-meter sprint)",
+        "url": "https://games.crossfit.com/workouts/finals/2026"
+      },
+      {
+        "label": "Persistence Athletics model (2026 Open + Quarterfinals + prior Games)",
+        "url": "https://wod.persistenceathletics.com/games/2026/intel"
+      },
+      {
+        "label": "Our energy-systems explainer (why 90 seconds is glycolytic hell)",
+        "url": "https://wod.persistenceathletics.com/fitness/pathways"
+      }
+    ]
   }
 ]
