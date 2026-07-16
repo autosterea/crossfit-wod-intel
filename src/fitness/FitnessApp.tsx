@@ -39,9 +39,9 @@ class ViewErrorBoundary extends Component<{ children: ReactNode; name: string },
   }
 }
 
-const NAV: { view: FitnessView; label: string; mobileLabel?: string }[] = [
-  { view: 'intro', label: 'Overview' },
-  ...MODULES.map((m) => ({ view: m.key as FitnessView, label: m.label, mobileLabel: m.mobileLabel })),
+const NAV: { view: FitnessView; label: string; short: string; num?: string }[] = [
+  { view: 'intro', label: 'Overview', short: 'Overview' },
+  ...MODULES.map((m) => ({ view: m.key as FitnessView, label: m.label, short: m.mobileLabel ?? m.label, num: m.num })),
 ]
 
 function TopBar() {
@@ -63,18 +63,25 @@ function TopBar() {
           </div>
         </button>
 
+        {/* Compact numbered chips: eight modules fit one row without wrapping. */}
         <nav className="hidden md:flex items-center gap-0.5">
           {NAV.map((n) => (
             <button
               key={n.view}
               onClick={() => navigate({ view: n.view })}
-              className="wf-condensed uppercase tracking-[0.08em] text-[12.5px] font-semibold px-2.5 py-1.5 rounded-lg transition-colors"
+              title={n.label}
+              className="wf-condensed uppercase tracking-[0.06em] text-[12px] font-semibold px-2 py-1.5 rounded-lg transition-colors whitespace-nowrap"
               style={{
                 color: route.view === n.view ? '#91C640' : 'var(--text-secondary)',
                 background: route.view === n.view ? 'rgba(145,198,64,0.1)' : 'transparent',
               }}
             >
-              {n.label}
+              {n.num && (
+                <span className="mr-1 text-[10px]" style={{ color: route.view === n.view ? '#91C640' : 'var(--text-muted)' }}>
+                  {n.num}
+                </span>
+              )}
+              {n.short}
             </button>
           ))}
         </nav>
@@ -103,10 +110,13 @@ function TopBar() {
             <button
               key={n.view}
               onClick={() => navigate({ view: n.view })}
-              className="wf-condensed uppercase tracking-[0.07em] text-[12px] font-semibold px-2 shrink-0"
-              style={{ color: route.view === n.view ? '#91C640' : 'var(--text-secondary)' }}
+              className="wf-condensed uppercase tracking-[0.07em] text-[12px] font-semibold px-2 py-1 rounded-md shrink-0"
+              style={{
+                color: route.view === n.view ? '#91C640' : 'var(--text-secondary)',
+                background: route.view === n.view ? 'rgba(145,198,64,0.12)' : 'transparent',
+              }}
             >
-              {n.mobileLabel ?? n.label}
+              {n.short}
             </button>
           ))}
         </div>

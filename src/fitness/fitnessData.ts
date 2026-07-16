@@ -129,7 +129,7 @@ export const MODULES: ModuleMeta[] = [
     label: 'What Is CrossFit?',
     mobileLabel: 'CrossFit',
     title: 'What Is CrossFit? The Methodology',
-    blurb: 'Constantly varied functional movement at high intensity, built on a five-level pyramid. Crack a level and watch everything above it suffer.',
+    blurb: 'The prescription, part by part: a functional movement against the machine it replaced, the worked Fran power math, variance vs the rut, and the pyramid.',
     accent: PAL.seaGreen,
   },
   {
@@ -139,7 +139,7 @@ export const MODULES: ModuleMeta[] = [
     label: 'Technique',
     mobileLabel: 'Technique',
     title: 'Technique: Mechanics, Consistency, Then Intensity',
-    blurb: 'The nine foundational movements, demonstrated joint by joint, and why technique is what turns effort into power.',
+    blurb: 'Push the intensity dial until form falters, drill at that speed, advance the margin. Threshold training, the charter, and the safety-efficacy-efficiency balance.',
     accent: PAL.weightlifting,
   },
 ]
@@ -640,11 +640,11 @@ export const MODULE_COPY: Record<ModuleKey, ModuleCopy> = {
   },
   technique: {
     eyebrow: 'The Charter',
-    body: 'CrossFit\'s charter is mechanics, consistency, then - and only then - intensity. Learn the mechanics of the fundamental movements, prove you can repeat them correctly, and only then push speed and load. The order exists because it optimizes safety, efficacy, and efficiency, and because technique is not the opposite of intensity but its prerequisite: technique is what maximizes the work completed for the energy expended. The nine foundational movements teach it all, three squats, three presses, and three pulls, each one layer more dynamic than the last, all recruiting from core to extremity.',
+    body: 'CrossFit\'s charter is mechanics, consistency, then - and only then - intensity, and the reason is a balance of three things: safety, efficacy, and efficiency. Technique is not the opposite of intensity but its prerequisite - it is what maximizes the work completed for the energy expended. And the development method is threshold training: push speed until form falters, fix technique at that speed without slowing down, then advance the margin again. Perfect-but-slow fails ("a perfectly exquisite Fran is worthless if it takes 32 minutes") and fast-but-broken gets hurt; the frontier between them is where athletes are made.',
     keyPoints: [
       'The charter: mechanics first, consistency second, intensity only after both.',
-      'Nine foundational movements in three families: squats, presses, and the deadlift family.',
-      'Every movement drives core to extremity: hips fire first, arms finish.',
+      'It exists to balance safety, efficacy, and efficiency - the three tests of any program.',
+      'Threshold training: let errors broaden at speed, then rein them in without slowing down.',
       'Technique is everything: you will not express power in significant measure without it.',
     ],
   },
@@ -711,6 +711,115 @@ export const CF_PILLARS: DefinitionPillar[] = [
     explain: 'Intensity is not effort or soreness. It is measurable output: work divided by time.',
   },
 ]
+
+/* ---- Module 07 stage data: the guide's own teaching devices ---- */
+
+/** The guide's named functional-vs-non-functional replacements (Foundations p. 6). */
+export const CF_REPLACEMENTS = [
+  { out: 'Lateral raise', in_: 'Push press' },
+  { out: 'Curl', in_: 'Pull-up' },
+  { out: 'Leg extension', in_: 'Squat' },
+]
+export const CF_FUNCTIONAL_QUOTES = {
+  natural: 'Squatting is standing from a seated position; deadlifting is picking any object off the ground. They are both functional movements.',
+  naturalCite: 'Foundations, L1 Guide p. 14',
+  nonFunctional: 'Leg extension and leg curl both have no equivalent in nature and are in turn non-functional movements.',
+  nonFunctionalCite: 'Foundations, L1 Guide p. 14',
+  replaced: 'We have replaced the lateral raise with the push press, the curl with the pull-up, and the leg extension with the squat.',
+  replacedCite: 'Foundations, L1 Guide p. 6',
+}
+
+/** Table 1, L1 Guide p. 35: the guide's own worked Fran power calculation (6 ft, 200 lb athlete). */
+export const FRAN_TABLE = {
+  athlete: '6 ft, 200 lb athlete; Fran = 21-15-9 thrusters (95 lb) and pull-ups',
+  totalWorkFtLb: 54225,
+  perRep: [
+    { move: 'Pull-up', calc: '200 lb x 24 in', ftLb: 400 },
+    { move: 'Thruster (body)', calc: '200 lb x 26 in', ftLb: 433 },
+    { move: 'Thruster (barbell)', calc: '95 lb x 47 in', ftLb: 372 },
+  ],
+  attempts: [
+    { label: 'April 2015', timeSec: 270, display: '4:30', powerFtLbMin: 12050 },
+    { label: 'May 2016', timeSec: 165, display: '2:45', powerFtLbMin: 19718 },
+  ],
+  formula: 'Power is force times distance (work) divided by time.',
+  formulaCite: 'What Is Fitness? (Part 2), L1 Guide p. 36',
+  cancel: 'The work required to do Fran is constant (force times distance).',
+  conclusion: 'The table concludes the 4:30 to 2:45 improvement is a 60% increase in power: same work, less time.',
+}
+
+/** The hopper contents the guide itself names (What Is Fitness? Parts 1-2, pp. 19, 33). */
+export const HOPPER_TASKS = ['Fran', 'Helen', 'Diane', '1RM bench', 'Agility drills', 'Pilates', 'Yoga', '5k run']
+export const VARIANCE_RUT = {
+  quote: 'Your body will only respond to an unaccustomed stressor; routine is the enemy of progress and broad adaptation.',
+  cite: 'What Is Fitness? (Part 1), L1 Guide p. 30',
+  rut: 'Cycle only 5-7 miles and you are weakest at the margins of exposure: weak below 5 and above 7. The fix is to expand the margins of exposure as broad as function and capacity will allow (L1 Guide p. 14).',
+  law: "Recognizing that the breadth and depth of a program's stimulus will determine the breadth and depth of the adaptation it elicits, our prescription of functionality and intensity is constantly varied.",
+  lawCite: 'Understanding CrossFit, L1 Guide p. 2',
+}
+
+/* ---- Module 08 stage data: threshold training + S/E/E + MCI (Technique essay pp. 40-44) ---- */
+
+/** The essay's own worked example (p. 44): thresholds advance in 2,000 ft-lb/min steps. */
+export const THRESHOLD = {
+  start: 10000,
+  breakBand: 2000,
+  dialMax: 18000,
+  unit: 'ft-lb per minute',
+  mechanism:
+    'Perfect technique at 10,000 foot-pounds per minute; form falls apart at 12,000. Train in that band until technique is great at 12,000. The next target is 14,000, where technique suffers again and must be reined in.',
+  quote: 'What you need to do is continuously and constantly advance the margins at which form falters.',
+  quoteCite: 'Technique, L1 Guide p. 44',
+  definition: 'This iterative process of letting this scope of errors broaden then reducing them without reducing the speed is called "threshold training."',
+  definitionCite: 'Technique, L1 Guide p. 43',
+  illusion:
+    'Technique and speed are not at odds with one another. They are seemingly at odds. It is a misapprehension. It is an illusion.',
+  fran: 'In CrossFit, a perfectly exquisite Fran is worthless if it takes 32 minutes.',
+  errors: 'The errors are an unavoidable consequence of development.',
+}
+
+/** Safety, efficacy, efficiency (p. 40): the three program-evaluation criteria with the essay's own examples. */
+export const SEE = [
+  {
+    key: 'safety',
+    label: 'Safety',
+    definition: 'How many people end up at the finish line.',
+    example: 'Ten people start a program: two become the fittest on Earth, the other eight die. The real tragedy comes in not knowing the safety numbers.',
+    color: '#f43f5e',
+  },
+  {
+    key: 'efficacy',
+    label: 'Efficacy',
+    definition: 'What is the return - the adaptation the program actually induces.',
+    example: "A program claiming it makes you a better soccer player must show evidence. CrossFit's return: increased work capacity across broad time and modal domains.",
+    color: '#91c640',
+  },
+  {
+    key: 'efficiency',
+    label: 'Efficiency',
+    definition: 'The time rate of that adaptation.',
+    example: 'A program promising 50 pull-ups: there is a big difference between six months and nine years.',
+    color: '#38bdf8',
+  },
+]
+export const SEE_VECTORS = {
+  quote:
+    'These three vectors of safety, efficacy and efficiency point in the same direction, such that they are not entirely at odds with each other.',
+  cite: 'Technique, L1 Guide p. 40',
+  intimate: 'Technique is an intimate part of safety, efficacy, and efficiency.',
+}
+
+/** The consistency stage, concretely (crossfit.com essentials, Feb 2020). */
+export const MCI_CONSISTENCY_QUESTIONS = [
+  'Correct and predictable from one day to the next?',
+  'Without constant oversight from the trainer?',
+  'Across minor variations in equipment, reps, and loading?',
+  'With consistent exposure to the stimulus?',
+]
+export const MCI_SKIP_PENALTY =
+  'Ignoring this order increases the risk for injury and potentially blunts long-term progress, especially if poor mechanics are combined with load.'
+export const MCI_ENFORCE =
+  'At the appearance of unsafe form, the athlete or coach should end the workout or reduce the load to that which allows proper mechanics.'
 
 export const CF_SCALING = {
   quote: 'The needs of an Olympic athlete and our grandparents differ by degree not kind.',
