@@ -1,4 +1,4 @@
-import { Suspense, useEffect, Component, type ReactNode } from 'react'
+import { Suspense, useEffect, useRef, Component, type ReactNode } from 'react'
 import { lazyReload as lazy } from '../lazyReload'
 import './games.css'
 import ThemeToggle from '../components/ThemeToggle'
@@ -58,6 +58,14 @@ const NAV: { view: 'hub' | 'home' | 'evolution' | 'movements' | 'lore' | 'capaci
 function TopBar() {
   const route = useGamesStore((s) => s.route)
   const navigate = useGamesStore((s) => s.navigate)
+  // Child routes highlight their parent section (athlete pages live under the
+  // 2026 hub; year pages under the timeline) so the nav always shows location.
+  const activeView = route.view === 'athlete' ? 'hub' : route.view === 'year' ? 'timeline' : route.view
+  // Keep the active pill visible in the scrollable mobile row on load/navigation.
+  const activeMobileRef = useRef<HTMLButtonElement | null>(null)
+  useEffect(() => {
+    activeMobileRef.current?.scrollIntoView({ inline: 'center', block: 'nearest' })
+  }, [activeView])
   return (
     <header className="games-topbar sticky top-0 z-40">
       <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between gap-3">
@@ -81,8 +89,8 @@ function TopBar() {
               onClick={() => navigate({ view: n.view, year: null })}
               className="games-condensed uppercase tracking-[0.1em] text-[13px] font-semibold px-3 py-1.5 rounded-lg transition-colors"
               style={{
-                color: route.view === n.view ? '#91C640' : 'var(--text-secondary)',
-                background: route.view === n.view ? 'rgba(145,198,64,0.1)' : 'transparent',
+                color: activeView === n.view ? '#91C640' : 'var(--text-secondary)',
+                background: activeView === n.view ? 'rgba(145,198,64,0.1)' : 'transparent',
               }}
             >
               {n.label}
@@ -119,11 +127,12 @@ function TopBar() {
           {NAV.map((n) => (
             <button
               key={n.view}
+              ref={activeView === n.view ? activeMobileRef : undefined}
               onClick={() => navigate({ view: n.view, year: null })}
               className="games-condensed uppercase tracking-[0.08em] text-[12px] font-semibold px-2.5 py-1 rounded-md shrink-0 whitespace-nowrap transition-colors"
               style={{
-                color: route.view === n.view ? '#91C640' : 'var(--text-secondary)',
-                background: route.view === n.view ? 'rgba(145,198,64,0.12)' : 'transparent',
+                color: activeView === n.view ? '#91C640' : 'var(--text-secondary)',
+                background: activeView === n.view ? 'rgba(145,198,64,0.12)' : 'transparent',
               }}
             >
               {n.mobileLabel ?? n.label}

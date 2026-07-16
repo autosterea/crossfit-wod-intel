@@ -30,6 +30,7 @@ export default function AthleteAvatar({
           src={athlete.photoUrl ?? undefined}
           alt={athlete.name}
           loading="lazy"
+          decoding="async"
           referrerPolicy="no-referrer"
           onError={() => setFailed(true)}
           className="w-full h-full object-cover"

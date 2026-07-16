@@ -127,7 +127,7 @@ const STATIC = [
     path: '/games/2026',
     title: '2026 CrossFit Games Hub: San Jose | Persistence Athletics',
     description:
-      'The 2026 CrossFit Games, July 24-26 at SAP Center in San Jose. Countdown, the forming field, athlete profiles and the road through Semifinals.',
+      'The 2026 CrossFit Games, July 22-26 in San Jose (SAP Center arena days July 24-26). Countdown, the full field, athlete profiles and the road through Semifinals.',
     ogType: 'website',
     image: OG_GAMES,
     priority: 0.9,

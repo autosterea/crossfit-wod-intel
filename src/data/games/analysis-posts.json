@@ -246,7 +246,7 @@
     "sources": [
       {
         "label": "Official CrossFit Games workout pages (Events 1-5)",
-        "url": "https://games.crossfit.com/workouts/finals/2026/1"
+        "url": "https://games.crossfit.com/workouts/finals/2026"
       },
       {
         "label": "2026 Games kick off July 22 with multiple off-sites (CrossFit Games)",
@@ -683,7 +683,7 @@
     "sources": [
       {
         "label": "Event 1 official workout - CrossFit Games",
-        "url": "https://games.crossfit.com/workouts/finals/2026/1"
+        "url": "https://games.crossfit.com/workouts/finals/2026"
       },
       {
         "label": "Persistence Athletics - Athlete Intelligence model",
@@ -808,7 +808,7 @@
       {
         "type": "callout",
         "title": "Correction (July 11)",
-        "text": "This men’s read was recomputed after an audit found the site was using a stale 72 kg for Jeffrey Adler; his official weight is 197 lb (89 kg). Vitals for the full field were refreshed from the official CrossFit registration feed and the mass-adjusted model rerun, which moves Medeiros to the top and Adler to fourth. The women’s read is unchanged."
+        "text": "This men's read was recomputed after an audit found the site was using a stale 72 kg for Jeffrey Adler; his official weight is 197 lb (89 kg). Vitals for the full field were refreshed from the official CrossFit registration feed and the mass-adjusted model rerun, which moves Medeiros to the top and Adler to fourth. The women's read is unchanged."
       }
     ],
     "sources": [
@@ -926,7 +926,7 @@
     "blocks": [
       {
         "type": "p",
-        "text": "San Jose is 20 scored events over 4 days, July 24-26. That format does not reward one big lift or one fast sprint. It rewards the athlete whose output holds up on day four the same way it did on day one. So before we argue about who wins, ask a narrower question: who actually has the engine to survive it? The numbers below answer that, using only aerobic-system, monostructural, and sustained-output performance profiles."
+        "text": "San Jose is 20 scored events over 4 days, July 22-26 (SAP Center arena days July 24-26). That format does not reward one big lift or one fast sprint. It rewards the athlete whose output holds up on day four the same way it did on day one. So before we argue about who wins, ask a narrower question: who actually has the engine to survive it? The numbers below answer that, using only aerobic-system, monostructural, and sustained-output performance profiles."
       },
       {
         "type": "h2",
@@ -1057,11 +1057,11 @@
     "blocks": [
       {
         "type": "p",
-        "text": "CrossFit confirmed it this offseason: swimming is back at the 2026 Games (reported by The Barbell Spin), and cycling returns too (per CrossFit Games). The format is 20 scored events across four days in San Jose, July 24 to 26. Both tests pull on the same two places: the monostructural domain (cardio and machines) and the engine, sustained output over time. So which profiles get rewarded, and which suddenly have a problem to solve?"
+        "text": "CrossFit confirmed it this offseason: swimming is back at the 2026 Games (reported by The Barbell Spin), and cycling returns too (per CrossFit Games). The format is 20 scored events across four days, July 22-26, finishing at SAP Center in San Jose (arena days July 24-26). Both tests pull on the same two places: the monostructural domain (cardio and machines) and the engine, sustained output over time. So which profiles get rewarded, and which suddenly have a problem to solve?"
       },
       {
         "type": "p",
-        "text": "One honest caveat first. **There is no swim event in this data**, and nobody here has a measured swim split. What we have are placement percentiles from the 2026 Open, Quarterfinals, and every prior Games. Treat the swim read as a proxy: a strong monostructural and engine score says an athlete moves efficiently and holds output when the clock gets long, which is most of what open-water work demands. The cycling read is firmer, because that is squarely machine and engine territory the data covers."
+        "text": "One honest caveat first. **There is no swim event in this data**, and nobody here has a measured swim split. What we have are placement percentiles from the 2026 Open, Quarterfinals, and every prior Games. Treat the swim read as a proxy: a strong monostructural and engine score says an athlete moves efficiently and holds output when the clock gets long, which is most of what a long pool swim demands. The cycling read is firmer, because that is squarely machine and engine territory the data covers."
       },
       {
         "type": "h2",

@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated": "2026-07-11",
+    "generated": "2026-07-15",
     "gamesDates": "July 22-26, 2026",
     "venue": "SAP Center",
     "city": "San Jose, California",
@@ -10,10 +10,10 @@
     "competitionNote": "Individual competition runs July 22-26; SAP Center spectator days are July 24-26.",
     "registered": {
       "men": 30,
-      "women": 29
+      "women": 30
     },
     "registrationClosesAt": "2026-07-16T19:00:00Z",
-    "registrationNote": "Field qualified: 30 men, 30 women. Registered so far: 30 men, 29 women (Danielle Brandon qualified, registration pending; closes July 16)."
+    "registrationNote": "Field complete: all 30 men and 30 women are qualified AND registered (Danielle Brandon confirmed July 15, ahead of the July 16 close)."
   },
   "interviewSeries": {
     "series": "Dave Castro 2026 CrossFit Games athlete interviews",
@@ -883,7 +883,7 @@
       "nickname": null,
       "instagramHandle": "@breyess1",
       "interviewUrl": null,
-      "photoUrl": "/athletes/benjamin-reyes.webp",
+      "photoUrl": null,
       "crossfitAthleteId": "1398324"
     },
     {

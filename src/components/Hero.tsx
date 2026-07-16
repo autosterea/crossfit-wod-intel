@@ -73,7 +73,7 @@ export default function Hero() {
           CrossFit WOD Intelligence
         </h1>
         <p className="text-[var(--text-tertiary)] text-sm md:text-base mb-8 leading-relaxed">
-          Every workout from crossfit.com — 2001 to today — analyzed
+          Every workout from crossfit.com, 2001 to today, analyzed
         </p>
 
         {/* Stats — instant, no animation */}
