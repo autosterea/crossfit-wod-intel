@@ -116,6 +116,27 @@ const PICKS: PickSet[] = [
     ],
   },
   {
+    id: 'snatch-triple',
+    label: 'Speed Snatch Triple',
+    eventKicker: 'Speed Snatch Triple',
+    eventLine: 'Nine ascending snatches under 1, 2 and 3-minute caps. Final bar: 285 lb M / 185 lb W. The 2020 rerun.',
+    note: 'Verified competition snatches first (2021 Games 1RM snatch, the 2020 running of this event, WFP Finals 2025), self-reported maxes shown but labeled. Event number TBC. A fit read, not a result prediction.',
+    men: [
+      { name: 'Guilherme Malheiros', value: '305', why: 'WON the 2021 Games 1RM snatch at 305. The final bar is 20 lb below his proven max.' },
+      { name: 'Jeffrey Adler', value: '2nd 20', why: '2nd in this EXACT event in 2020; 290 self-reported.' },
+      { name: 'Patrick Vellner', value: '290', why: '290 in the 2021 Games snatch event. Above the final bar.' },
+      { name: 'Saxon Panchik', value: '285', why: '285 at the 2021 Games; 295 self-reported since.' },
+      { name: 'Justin Medeiros', value: '285', why: '285 in 2021 plus 5th in the 2020 running of this ladder.' },
+    ],
+    women: [
+      { name: 'Hannah Black', value: '231', why: 'Won the WFP Finals snatch at 105 kg (Dec 2025) + the 2023 Semifinal record.' },
+      { name: 'Olivia Kerstetter', value: '207', why: '202 at the 2021 Games at age 15 (official); 94 kg at the WFP Finals in Dec.' },
+      { name: 'Danielle Brandon', value: '210 rep', why: 'Won the 2022 Skill Speed Medley: heavy AND fast is her lane.' },
+      { name: 'Mirjam von Rohr', value: 'WL champ', why: 'Swiss weightlifting national champion; barbell speed is native.' },
+      { name: 'Bergrós Björnsdóttir', value: 'WL medal', why: "Iceland's first World Youth weightlifting medallist." },
+    ],
+  },
+  {
     id: 'event13-sprint',
     label: 'Event 13 - The 500m Sprint',
     eventKicker: 'Event 13 - The 500m Sprint',
@@ -188,6 +209,20 @@ type Slide =
   | { type: 'cta'; headline: string; body: string }
 type Carousel = { id: string; label: string; caption: string; slides: Slide[] }
 const CAROUSELS: Carousel[] = [
+  {
+    id: 'snatch-triple',
+    label: 'Speed Snatch Triple',
+    caption:
+      "🏋️ THE SPEED SNATCH TRIPLE IS BACK. The official workouts page just published it: 3 snatches (1-min cap), 3 heavier (2-min), 3 heavier still (3-min). Final bars: 285 lb men / 185 lb women.\n\nSame name, same loads as the 2020 Games event where Fraser missed his first attempt at 285 and still won. The Games have run this test twice - we know what it rewards: a verified heavy snatch, moved FAST.\n\nThe elephant in the room: Guilherme Malheiros WON the 2021 Games 1RM snatch at 305 lb - 20 lb OVER this event's final bar - and he just topped our sprint board too. Adler took 2nd in the 2020 running. Women: Hannah Black owns the most recent big verified snatch in the field (105 kg, WFP Finals Dec 2025).\n\nSwipe for the receipts. Full breakdown at the link in bio. A history + model read, not a result prediction.",
+    slides: [
+      { type: 'cover', kicker: 'New Event', headline: 'SPEED SNATCH\nTRIPLE', sub: 'Nine ascending snatches under the clock. 285 up top. The 2020 rerun - and we have the receipts. Swipe.' },
+      { type: 'point', num: 1, kicker: 'The Test', headline: 'HEAVY,\nFAST, x9', body: '3 snatches in 1 minute, 3 heavier in 2, 3 heavier still in 3. Men finish at 285 lb, women at 185. Maximal weightlifting under a clock: no reset, no platform ritual, technique at heart rate.', source: 'games.crossfit.com (official workouts page)' },
+      { type: 'point', num: 2, kicker: 'The History', headline: 'THE 2020\nRERUN', body: 'Same name, same bars as the 2020 Games elimination ladder - where Fraser missed his opener at the final 285, recovered on the spot, and won anyway. That event echoed the 2015 Snatch Speed Ladder. Third time the Games run this test.', source: 'Official Games archive' },
+      { type: 'point', num: 3, kicker: 'The receipts - Men', headline: 'GUI SNATCHED\n305 HERE', body: 'Malheiros WON the 2021 Games 1RM snatch at 305 - twenty pounds over this final bar - and he just topped our sprint read too. Adler was 2nd in this exact event in 2020; Vellner has 290 in competition. Pepper, Hopper and Hatfield self-report 305+, but those are profile numbers.', source: 'Official Games leaderboards' },
+      { type: 'point', num: 4, kicker: 'The receipts - Women', headline: 'BLACK HAS\nTHE BAR', body: 'Hannah Black won the WFP Finals snatch at 105 kg / 231 lb in December - the most recent big verified snatch in this field - plus the 2023 Semifinal record. Then Kerstetter, Brandon (won the 2022 Speed Medley), and the two weightlifting pedigrees: von Rohr and Bergros.', source: 'Official leaderboards + verified results' },
+      { type: 'cta', headline: 'FULL\nBREAKDOWN', body: 'The full history, both boards, and why paper maxes get audited on a ladder is on the site. A history + model read, not a result prediction.' },
+    ],
+  },
   {
     id: 'event13-sprint',
     label: 'Event 13 - The 500m Sprint',

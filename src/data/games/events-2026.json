@@ -10,6 +10,19 @@
   },
   "items": [
     {
+      "name": "Speed Snatch Triple",
+      "status": "confirmed",
+      "kind": "event",
+      "summary": "Published on the official workouts page July 17: three sets of 3 ascending snatches under 1, 2 and 3-minute caps, topping at 285 lb (men) / 185 lb (women). A rerun of the 2020 Games event of the same name (won by Fraser and Toomey), which itself echoed the 2015 Snatch Speed Ladder. Event number not yet announced.",
+      "source": {
+        "label": "CrossFit Games (official workout page)",
+        "url": "https://games.crossfit.com/workouts/finals/2026"
+      },
+      "date": "2026-07-17",
+      "shortName": "Speed Snatch Triple",
+      "analysisSlug": "speed-snatch-triple-the-2020-rerun"
+    },
+    {
       "name": "Event 13: The 500-Meter Sprint",
       "status": "confirmed",
       "kind": "event",
