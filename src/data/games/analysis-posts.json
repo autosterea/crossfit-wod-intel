@@ -1,5 +1,99 @@
 [
   {
+    "slug": "rookie-watch-bergros-bjornsdottir",
+    "title": "Rookie Watch: Bergros Bjornsdottir, the Gymnast Who Medals as a Weightlifter",
+    "dek": "Our model calls the 19-year-old Icelandic rookie a gymnast and rates her heavy work dead last. Her weightlifting medals call her something else entirely. Both are true - here is what that means in San Jose.",
+    "category": "Analysis",
+    "date": "2026-07-19",
+    "author": "Ravikant Dewangan",
+    "readMin": 4,
+    "summary": "Bergros Bjornsdottir, 19, is Iceland's only individual qualifier and a Games rookie who got the call two weeks after the submission window closed, moving into the field as a replacement after the post-lock penalties. Our model ranks her 17th of 30 women, driven by 100th-percentile bodyweight gymnastics and dragged down by 17th-percentile heavy and sprint work. But she is also Iceland's first-ever medallist at a global weightlifting championship, with a competition-verified 88 kg (194 lb) snatch and 110 kg (242 lb) clean and jerk. We reconcile the two readings.",
+    "blocks": [
+      {
+        "type": "p",
+        "text": "Every Games has a rookie nobody outside the sport is watching yet. This year one of them is **Bergros Bjornsdottir**, 19, from Selfoss, Iceland, competing out of **CrossFit Reykjavik** and the **only Icelandic athlete in the individual field**. Her path here is the storyline: she finished **7th at the Individual Online Semifinal**, just outside an automatic berth, then got an email from CrossFit **two weeks after the submission window had already closed** telling her she was in, moving up as a replacement after the post-lock penalties reshaped the women's field. A rookie who backed into the Games on paper, and who is far more dangerous than that sentence sounds."
+      },
+      {
+        "type": "h2",
+        "text": "The Model Says Gymnast"
+      },
+      {
+        "type": "p",
+        "text": "Our projection ranks her **17th of 30** women at a 66.2 capacity score, and the shape of that number is lopsided. Her **bodyweight gymnastics sit at the 100th percentile of this field** - the single best mark on her card - built on a **1st place on Quarterfinal Test 1** and a **3rd on Open 26.1**. When the test is high-skill and self-powered, she is elite already. Her softest area is the mirror image: **heavy and sprint-length work at the 17th percentile**, the lowest score on her profile. On the model alone, she reads as a pure gymnast with an honest strength gap."
+      },
+      {
+        "type": "h2",
+        "text": "Her Medals Say Weightlifter"
+      },
+      {
+        "type": "p",
+        "text": "Except the model has never seen her on a platform. Before CrossFit took over, Bjornsdottir was a weightlifter - and not a casual one. She is **Iceland's first-ever medallist at a global weightlifting championship**, the **2024 IWF Youth World Championships in Lima** (women's 71 kg), where she finished a hair short of the overall title in a story the IWF headlined \"six days ago she couldn't walk.\" Her competition bests, verified in the official meet database, are an **88 kg snatch (194 lb)** and a **110 kg clean and jerk (242 lb)**. For context that matters this weekend: her 194 lb snatch would **clear the 185 lb top bar of the Speed Snatch Triple** (Event 15). This is not a gymnast who happens to lift. This is a decorated lifter who happens to do gymnastics."
+      },
+      {
+        "type": "h2",
+        "text": "So Which Reading Is Right? Both."
+      },
+      {
+        "type": "p",
+        "text": "The two are not in conflict once you separate **absolute load** from **barbell skill**. The model's 17th-percentile \"heavy\" score measures raw output on the field's heaviest sleds, sandbags and long grinders, where 75 kg athletes simply move more total mass than a lightweight - and it is right that she gives ground there. What the model cannot price is that her barbell technique under fatigue is genuinely elite for her size. Give her a **max-effort or ascending-snatch test**, a high-skill gymnastics chipper, or anything that rewards a clean fast bar over brute tonnage, and the rookie you filed under \"17th\" is a threat to win the event. Give her a heavy sandbag sprint and she is chasing. That split - dangerous on skill and speed, exposed on absolute strength - is exactly the profile of a 19-year-old who has not filled out yet, and it is why she is worth watching now rather than in 2028."
+      },
+      {
+        "type": "ranked",
+        "title": "The rookie scorecard - Bergros Bjornsdottir",
+        "rows": [
+          {
+            "name": "Bodyweight gymnastics",
+            "value": "100th pct",
+            "note": "Best mark in the field. 1st on QF Test 1, 3rd on Open 26.1."
+          },
+          {
+            "name": "Snatch (competition)",
+            "value": "88 kg / 194 lb",
+            "note": "Official meet best. Clears the Speed Snatch Triple top bar (185 lb)."
+          },
+          {
+            "name": "Clean and jerk (competition)",
+            "value": "110 kg / 242 lb",
+            "note": "Iceland's first global weightlifting medallist, 2024 Youth Worlds, 71 kg."
+          },
+          {
+            "name": "2026 Open",
+            "value": "17th worldwide",
+            "note": "1st in Iceland. Model ranks her 17th of 30 overall."
+          },
+          {
+            "name": "Heavy / sprint-length work",
+            "value": "17th pct",
+            "note": "The honest gap. Bigger athletes out-load her on tonnage tests."
+          }
+        ]
+      },
+      {
+        "type": "callout",
+        "title": "Methodology",
+        "text": "Model percentiles and the 17th-of-30 projection come from our 2026 model (2026 Open + Quarterfinals + Individual Online Semifinal). Weightlifting numbers are COMPETITION-verified from the official meet record (OpenWeightlifting) and the IWF, not self-reported. Placements and qualification path are from her official CrossFit Games athlete page. This is a rookie profile, not a result prediction: with zero prior individual Games appearances her variance is high, which is precisely the point of watching. No em dashes were harmed, and no numbers were guessed."
+      }
+    ],
+    "sources": [
+      {
+        "label": "Official CrossFit Games athlete page (Bergros Bjornsdottir)",
+        "url": "https://games.crossfit.com/athlete/1836124"
+      },
+      {
+        "label": "IWF - Iceland's first-ever world championship weightlifting medallist (Lima 2024)",
+        "url": "https://iwf.sport/2024/05/26/lima-day-4-six-days-ago-she-couldnt-walk-now-bergros-is-icelands-first-ever-world-championships-medallist/"
+      },
+      {
+        "label": "OpenWeightlifting - competition lift record",
+        "url": "https://openweightlifting.org/lifter?name=BJORNSDOTTIR%20Bergros"
+      },
+      {
+        "label": "Persistence Athletics 2026 model",
+        "url": "https://wod.persistenceathletics.com/games/2026/intel"
+      }
+    ]
+  },
+  {
     "slug": "castro-ring-curveball-never-tested-skills",
     "title": "Castro's Ring Test: Two New Skills, and the Gymnasts Built for Them",
     "dek": "Rings take center stage midday Sunday with two skills the Games have never tested. The whole field owns the base and has two weeks to drill them, so this is not a wildcard: it rewards the real gymnasts. We checked every athlete's background.",
