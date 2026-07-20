@@ -12,8 +12,6 @@ const PathwaysModule = lazy(() => import('./modules/PathwaysModule'))
 const DefinitionModule = lazy(() => import('./modules/DefinitionModule'))
 const ContinuumModule = lazy(() => import('./modules/ContinuumModule'))
 const HealthModule = lazy(() => import('./modules/HealthModule'))
-const CrossFitModule = lazy(() => import('./modules/CrossFitModule'))
-const TechniqueModule = lazy(() => import('./modules/TechniqueModule'))
 
 class ViewErrorBoundary extends Component<{ children: ReactNode; name: string }, { error: Error | null }> {
   state = { error: null as Error | null }
@@ -228,8 +226,6 @@ export default function FitnessApp() {
             {route.view === 'definition' && <DefinitionModule />}
             {route.view === 'continuum' && <ContinuumModule />}
             {route.view === 'health' && <HealthModule />}
-            {route.view === 'crossfit' && <CrossFitModule />}
-            {route.view === 'technique' && <TechniqueModule />}
           </ViewErrorBoundary>
         </Suspense>
         <LessonNav />

@@ -122,26 +122,6 @@ export const MODULES: ModuleMeta[] = [
     blurb: 'Stack every age of your life into one surface. Health is the volume you keep under it.',
     accent: PAL.robust,
   },
-  {
-    key: 'crossfit',
-    slug: 'crossfit',
-    num: '07',
-    label: 'What Is CrossFit?',
-    mobileLabel: 'CrossFit',
-    title: 'What Is CrossFit? The Methodology',
-    blurb: 'The prescription, part by part: a functional movement against the machine it replaced, the worked Fran power math, variance vs the rut, and the pyramid.',
-    accent: PAL.seaGreen,
-  },
-  {
-    key: 'technique',
-    slug: 'technique',
-    num: '08',
-    label: 'Technique',
-    mobileLabel: 'Technique',
-    title: 'Technique: Mechanics, Consistency, Then Intensity',
-    blurb: 'Push the intensity dial until form falters, drill at that speed, advance the margin. Threshold training, the charter, and the safety-efficacy-efficiency balance.',
-    accent: PAL.weightlifting,
-  },
 ]
 
 export const moduleByKey = (k: ModuleKey): ModuleMeta => MODULES.find((m) => m.key === k)!
@@ -628,26 +608,6 @@ export const MODULE_COPY: Record<ModuleKey, ModuleCopy> = {
       'Resistance and power training reclaim capacity at any age, even into the 90s.',
     ],
   },
-  crossfit: {
-    eyebrow: 'The Methodology',
-    body: 'CrossFit is the prescription: "constantly varied, high-intensity functional movement." Functional movements are universal motor recruitment patterns, performed core to extremity, whose defining capacity is moving large loads over long distances quickly. Intensity is defined exactly as power, the variable most associated with favorable adaptation. And the prescription is constantly varied because preparation for the unknown and unknowable is at odds with routine. The whole development path stacks as a five-level pyramid: nutrition, metabolic conditioning, gymnastics, weightlifting and throwing, then sport. A deficiency at any level makes every level above it suffer.',
-    keyPoints: [
-      'The definition has three parts: constantly varied, functional movements, high intensity.',
-      'Intensity is defined exactly as power, and it drives the rate of favorable adaptation.',
-      'The pyramid orders development: nutrition to metcon to gymnastics to weightlifting to sport.',
-      'It scales by degree, not kind: load and intensity change, the program does not.',
-    ],
-  },
-  technique: {
-    eyebrow: 'The Charter',
-    body: 'CrossFit\'s charter is mechanics, consistency, then - and only then - intensity, and the reason is a balance of three things: safety, efficacy, and efficiency. Technique is not the opposite of intensity but its prerequisite - it is what maximizes the work completed for the energy expended. And the development method is threshold training: push speed until form falters, fix technique at that speed without slowing down, then advance the margin again. Perfect-but-slow fails ("a perfectly exquisite Fran is worthless if it takes 32 minutes") and fast-but-broken gets hurt; the frontier between them is where athletes are made.',
-    keyPoints: [
-      'The charter: mechanics first, consistency second, intensity only after both.',
-      'It exists to balance safety, efficacy, and efficiency - the three tests of any program.',
-      'Threshold training: let errors broaden at speed, then rein them in without slowing down.',
-      'Technique is everything: you will not express power in significant measure without it.',
-    ],
-  },
 }
 
 /* =========================================================================
@@ -953,14 +913,10 @@ export interface Source {
   for: ModuleKey[]
 }
 
-const ALL: ModuleKey[] = ['skills', 'hopper', 'pathways', 'definition', 'continuum', 'health', 'crossfit', 'technique']
+const ALL: ModuleKey[] = ['skills', 'hopper', 'pathways', 'definition', 'continuum', 'health']
 
 /** Verified citations (all resolved 200 OK in research). */
 export const SOURCES: Source[] = [
-  { title: 'Greg Glassman, "Understanding CrossFit," CrossFit Journal, April 2007 (L1 Guide pp. 2-3)', url: 'https://library.crossfit.com/free/pdf/CFJ_English_Level1_TrainingGuide.pdf', for: ['crossfit'] },
-  { title: '"What Is a CrossFit Workout?" crossfit.com Essentials, June 2023', url: 'https://www.crossfit.com/essentials/what-is-a-crossfit-workout', for: ['crossfit'] },
-  { title: 'L1 Guide Movement Guide: the nine foundational movements (pp. 170-215)', url: 'https://library.crossfit.com/free/pdf/CFJ_English_Level1_TrainingGuide.pdf', for: ['technique'] },
-  { title: '"Mechanics, Consistency, Intensity" crossfit.com Essentials, February 2020', url: 'https://www.crossfit.com/essentials/mechanics-consistency-intensity-what-does-it-mean', for: ['technique'] },
   { title: 'Greg Glassman, "What Is Fitness?" CrossFit Journal, Issue 2, October 2002', url: 'https://library.crossfit.com/free/pdf/CFJ-trial.pdf', for: ALL },
   { title: '"What Is Fitness?" CrossFit Journal article page', url: 'https://journal.crossfit.com/article/what-is-fitness', for: ALL },
   { title: 'CrossFit Level 1 Training Guide (official L1 book)', url: 'https://library.crossfit.com/free/pdf/CFJ_English_Level1_TrainingGuide.pdf', for: ALL },
@@ -997,12 +953,4 @@ export const CROSS_LINKS: Record<ModuleKey, CrossLink[]> = {
   ],
   continuum: [{ label: 'Methodology and Sources', href: '/', note: 'How the app grounds its claims in evidence.' }],
   health: [{ label: 'Capacity Lab', href: '/games/capacity', note: 'Capacity across broad time and modal domains, measured.' }],
-  crossfit: [
-    { label: 'Daily WOD Intelligence', href: '/', note: 'Constantly varied, measured: 25 years of crossfit.com programming analyzed.' },
-    { label: 'The 2026 Games hub', href: '/games/2026', note: 'The Sport of Fitness, live: the athletes the methodology built.' },
-  ],
-  technique: [
-    { label: 'All 80 movements in the WOD data', href: '/', note: 'How often each foundational pattern shows up in real programming.' },
-    { label: 'Games movements index', href: '/games/movements', note: 'The same patterns under competition loads.' },
-  ],
 }

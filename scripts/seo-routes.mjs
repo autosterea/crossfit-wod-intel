@@ -198,8 +198,6 @@ const STATIC = [
 
 /** The fitness lesson modules: slug -> [title, description]. */
 const FITNESS = {
-  crossfit: ['What Is CrossFit? The Methodology | Persistence Athletics', 'The prescription, part by part: functional movements vs the machines they replaced, the worked Fran power calculation, constant variance vs the rut, and the development pyramid.'],
-  technique: ['Technique: Threshold Training and the Charter | Persistence Athletics', 'Push intensity until form falters, drill at that speed, advance the margin. Threshold training, mechanics-consistency-intensity, and the safety-efficacy-efficiency balance, animated in 3D.'],
   skills: ['The 10 General Physical Skills | Persistence Athletics', 'You are as fit as you are competent across ten skills. Compare a balanced CrossFitter to twelve specialists on an interactive 3D radar.'],
   hopper: ['The Hopper Model | Persistence Athletics', 'Fitness is performing well at any task drawn at random. Pull from an infinite hopper and watch the generalist beat the specialists.'],
   pathways: ['The Three Metabolic Pathways | Persistence Athletics', 'Phosphagen, glycolytic and oxidative engines power every effort. Slide through duration and watch the dominant energy system change.'],
