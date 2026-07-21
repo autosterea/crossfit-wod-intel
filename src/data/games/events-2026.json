@@ -10,6 +10,19 @@
   },
   "items": [
     {
+      "name": "Grass Oval Bicycle Race",
+      "status": "confirmed",
+      "kind": "event",
+      "summary": "Published on the official workouts page: 20 laps of a grass oval track, for time, under a 25-minute cap, at the Morgan Hill Outdoor Complex, presented by Zenni Optical. This is the full prescription for the 'Ride' cycling opener CrossFit teased in June without distance or format details. Event number and per-lap distance not yet announced by a second confirming source.",
+      "source": {
+        "label": "CrossFit Games (official workout page)",
+        "url": "https://games.crossfit.com/workouts/finals/2026"
+      },
+      "date": "2026-07-21",
+      "shortName": "Grass Oval Bicycle Race",
+      "analysisSlug": "grass-oval-bicycle-race-whose-legs-are-built-for-it"
+    },
+    {
       "name": "Event 15: Speed Snatch Triple",
       "status": "confirmed",
       "kind": "event",

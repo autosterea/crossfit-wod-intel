@@ -1,5 +1,130 @@
 [
   {
+    "slug": "grass-oval-bicycle-race-whose-legs-are-built-for-it",
+    "title": "The Grass Oval Bicycle Race Is Set. Whose Legs Are Built for It?",
+    "dek": "CrossFit's official workouts page has revealed the full Day 1 cycling test: 20 laps of a grass oval, 25 minutes, at Morgan Hill. Here's who has already won this exact format, and who the season model likes now.",
+    "category": "Event Preview",
+    "date": "2026-07-21",
+    "author": "Ravikant Dewangan",
+    "readMin": 4,
+    "summary": "The 2026 Games' cycling opener has its full prescription: the Grass Oval Bicycle Race, 20 laps for time under a 25-minute cap at the Morgan Hill Outdoor Complex. We checked the field's real history in the Games' three prior dedicated bike races (2017 Cyclocross, 2018 Crit, 2023 Ride) plus the bike-and-gymnastics 2022 Bike to Work, and modeled the rest, with a data-grounded top 5 for men and women.",
+    "blocks": [
+      {
+        "type": "p",
+        "text": "The official CrossFit Games workouts page has published the field's Day 1 cycling test: the **Grass Oval Bicycle Race**. Twenty laps of a grass oval track, for time, under a **25-minute cap**, at the **Morgan Hill Outdoor Complex** on Wednesday, July 22. Zenni Optical presents. This is the full reveal of the 'Ride' cycling opener CrossFit teased back in June without a distance or format; no second source has confirmed an event number yet, so we are not asserting one here."
+      },
+      {
+        "type": "h2",
+        "text": "A Grind on Two Wheels, Not a Sprint"
+      },
+      {
+        "type": "p",
+        "text": "Twenty laps for time, with no per-lap distance announced, sits closer to the Games' two dedicated road-bike races than to a short sprint. The 2017 Cyclocross (three laps, roughly 19 to 21 minutes for the leaders) and the 2018 Crit (ten laps of a ~1,200m loop, roughly 18 to 20 minutes) both ran in that window under similar caps. Expect the Grass Oval Bicycle Race to land in the same range: a sustained aerobic effort of somewhere between 15 and 25 minutes, decided by leg power, bike-handling through repeated turns on an oval, and pacing, not a single burst. No barbell, no gymnastics skill involved: this is pure engine."
+      },
+      {
+        "type": "h2",
+        "text": "The Games Have Asked This Question Before"
+      },
+      {
+        "type": "p",
+        "text": "Cycling has real history at the Games, and unlike most 2026 tests, several current qualifiers have already answered a version of this exact question. **Jeffrey Adler** finished 2nd in the 2023 Ride (mountain-bike laps at Rogue's Alliant Energy Center) and 4th in the 2022 Bike to Work; no one else in the 2026 field has two finishes that strong across dedicated bike tests. **Ricky Garard** won the 2022 Bike to Work outright. On the women's side, **Emma Lawson** owns the strongest bike resume of anyone in the 2026 field, either division: she won the 2023 Ride and finished 3rd in the 2022 Bike to Work. **Haley Adams** won that same 2022 race. **Patrick Vellner** has started every one of the Games' four dedicated bike tests since 2017 (13th, 35th, 20th, 27th) without ever cracking the front of that specific board: real mileage, not real precedent. Note that 2022's Bike to Work paired the bike with pull-ups, so it is a partial comp; the 2017 Cyclocross, 2018 Crit and 2023 Ride are the closest matches to a pure bike race."
+      },
+      {
+        "type": "h2",
+        "text": "The Men: Adler's Resume, Garard's Win"
+      },
+      {
+        "type": "p",
+        "text": "**Jeffrey Adler** tops this board on history alone: a runner-up finish in the 2023 Ride plus 4th in 2022, the most consistent bike-specific record in the field. **Ricky Garard** WON the 2022 race outright and also carries the best modeled engine-and-sprint blend of anyone with proven bike results. **Justin Medeiros** was 3rd in 2022 and owns the single highest engine-and-sprint blend in the entire men's field, history or no history. **James Sprague** has no verified bike-race placement in our data (he finished 2023 outside the top 10 overall, so his per-event result isn't in the official leaderboard cohort we track), but his modeled engine and sprint numbers are third-best among the men. **Patrick Vellner** closes the five on sheer repetition: four separate bike starts since 2017, an elite modeled sprint score, and still no finish better than 13th on this specific test."
+      },
+      {
+        "type": "ranked",
+        "title": "Men's Best-Fit Top 5 (History First, Model Second)",
+        "rows": [
+          {
+            "name": "Jeffrey Adler",
+            "value": "2nd '23",
+            "note": "2nd in the 2023 Ride, 4th in the 2022 Bike to Work. The field's most proven bike racer."
+          },
+          {
+            "name": "Ricky Garard",
+            "value": "WON '22",
+            "note": "Won the 2022 Bike to Work outright. Also a top-tier modeled engine and sprint score."
+          },
+          {
+            "name": "Justin Medeiros",
+            "value": "3rd '22",
+            "note": "3rd in the 2022 Bike to Work. Field's single highest modeled engine-plus-sprint blend."
+          },
+          {
+            "name": "James Sprague",
+            "value": "n/a",
+            "note": "No verified per-event bike result (outside 2023's top 10 overall), but 3rd-best modeled blend."
+          },
+          {
+            "name": "Patrick Vellner",
+            "value": "4 starts",
+            "note": "Every dedicated Games bike test since 2017; best finish 13th. Elite modeled sprint number (79th pct)."
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "The Women: Lawson's Double, Adams's Engine"
+      },
+      {
+        "type": "p",
+        "text": "**Emma Lawson** is the clearest history pick on either board: she won the 2023 Ride and was 3rd in the 2022 Bike to Work, a resume no other 2026 qualifier, man or woman, can match. **Haley Adams** won that 2022 race and also owns the field's single highest modeled engine score (82nd percentile). **Danielle Brandon** has faced the format twice, 27th in 2022 and 21st in 2023, without cracking the front, though she ties for the field's best modeled sprint number. **Mirjam von Rohr** has no bike-race precedent (2025 is her only Games appearance) but posts the field's best pure modeled engine score (83rd percentile). **Lucy Campbell** competed in 2022 but finished outside our verified top-10 cohort for that race; she carries the third-best modeled engine (81st percentile) and is the reigning overall runner-up."
+      },
+      {
+        "type": "ranked",
+        "title": "Women's Best-Fit Top 5 (History First, Model Second)",
+        "rows": [
+          {
+            "name": "Emma Lawson",
+            "value": "WON '23",
+            "note": "Won the 2023 Ride, 3rd in the 2022 Bike to Work. Strongest bike resume in the 2026 field, either division."
+          },
+          {
+            "name": "Haley Adams",
+            "value": "WON '22",
+            "note": "Won the 2022 Bike to Work. Also the field's single highest modeled engine score."
+          },
+          {
+            "name": "Danielle Brandon",
+            "value": "27th/21st",
+            "note": "Faced the format twice without cracking the front; ties for the field's best modeled sprint number."
+          },
+          {
+            "name": "Mirjam von Rohr",
+            "value": "n/a",
+            "note": "No bike-race precedent (only 2025 Games appearance), but the field's best pure modeled engine score."
+          },
+          {
+            "name": "Lucy Campbell",
+            "value": "n/a",
+            "note": "Competed in 2022 but outside our verified top-10 results for it; 3rd-best modeled engine, reigning overall runner-up."
+          }
+        ]
+      },
+      {
+        "type": "callout",
+        "title": "Methodology",
+        "text": "History first, model second. Placements above come from the official CrossFit Games leaderboard results for the 2017 Cyclocross, 2018 Crit, 2022 Bike to Work and 2023 Ride. Our results files hold each year's top-10 overall finishers, so an athlete's absence from a given year means no verified top-10 data for them that year, not that they skipped the event. Where no direct precedent exists, we fall back to each athlete's modeled 'engine' and 'sprint' percentiles, computed from official 2026 Open, Quarterfinals and prior Games results. Per-lap distance, total race length, event number and heat format for the Grass Oval Bicycle Race have not been announced. This is a fit read, not a result prediction."
+      }
+    ],
+    "sources": [
+      {
+        "label": "CrossFit Games (official workout page)",
+        "url": "https://games.crossfit.com/workouts/finals/2026"
+      },
+      {
+        "label": "CrossFit Games - Individual Athletes Kick Off the Games With Ride",
+        "url": "https://games.crossfit.com/article/individual-athletes-kick-games-ride"
+      }
+    ]
+  },
+  {
     "slug": "rookie-watch-bergros-bjornsdottir",
     "title": "Rookie Watch: Bergros Bjornsdottir, the Gymnast Who Medals as a Weightlifter",
     "dek": "Our model calls the 19-year-old Icelandic rookie a gymnast and rates her heavy work dead last. Her weightlifting medals call her something else entirely. Both are true - here is what that means in San Jose.",
