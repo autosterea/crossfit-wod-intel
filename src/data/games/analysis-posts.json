@@ -1,17 +1,17 @@
 [
   {
     "slug": "grass-oval-bicycle-race-whose-legs-are-built-for-it",
-    "title": "The Grass Oval Bicycle Race Is Set. Whose Legs Are Built for It?",
+    "title": "Event 6: The Grass Oval Bicycle Race Is Set. Whose Legs Are Built for It?",
     "dek": "CrossFit's official workouts page has revealed the full Day 1 cycling test: 20 laps of a grass oval, 25 minutes, at Morgan Hill. Here's who has already won this exact format, and who the season model likes now.",
     "category": "Event Preview",
     "date": "2026-07-21",
     "author": "Ravikant Dewangan",
     "readMin": 4,
-    "summary": "The 2026 Games' cycling opener has its full prescription: the Grass Oval Bicycle Race, 20 laps for time under a 25-minute cap at the Morgan Hill Outdoor Complex. We checked the field's real history in the Games' three prior dedicated bike races (2017 Cyclocross, 2018 Crit, 2023 Ride) plus the bike-and-gymnastics 2022 Bike to Work, and modeled the rest, with a data-grounded top 5 for men and women.",
+    "summary": "Individual Event 6 of the 2026 Games is the Grass Oval Bicycle Race: 20 laps for time under a 25-minute cap, Wednesday July 22 at the Morgan Hill Outdoor Complex. We checked the field's real history in the Games' three prior dedicated bike races (2017 Cyclocross, 2018 Crit, 2023 Ride) plus the bike-and-gymnastics 2022 Bike to Work, and modeled the rest, with a data-grounded top 5 for men and women.",
     "blocks": [
       {
         "type": "p",
-        "text": "The official CrossFit Games workouts page has published the field's Day 1 cycling test: the **Grass Oval Bicycle Race**. Twenty laps of a grass oval track, for time, under a **25-minute cap**, at the **Morgan Hill Outdoor Complex** on Wednesday, July 22. Zenni Optical presents. This is the full reveal of the 'Ride' cycling opener CrossFit teased back in June without a distance or format; no second source has confirmed an event number yet, so we are not asserting one here."
+        "text": "The official CrossFit Games workouts page has published the field's Day 1 cycling test: the **Grass Oval Bicycle Race**. Twenty laps of a grass oval track, for time, under a **25-minute cap**, at the **Morgan Hill Outdoor Complex** on Wednesday, July 22. Zenni Optical presents. This is the full reveal of the 'Ride' cycling opener CrossFit teased in June, and the official CrossFit Games Instagram has since confirmed it as **Individual Event 6**. Unlike a stationary Echo-bike sprint, a bike race on grass rewards something almost nobody in this field has trained: real bike handling."
       },
       {
         "type": "h2",
@@ -42,14 +42,14 @@
         "title": "Men's Best-Fit Top 5 (History First, Model Second)",
         "rows": [
           {
-            "name": "Jeffrey Adler",
-            "value": "2nd '23",
-            "note": "2nd in the 2023 Ride, 4th in the 2022 Bike to Work. The field's most proven bike racer."
-          },
-          {
             "name": "Ricky Garard",
             "value": "WON '22",
-            "note": "Won the 2022 Bike to Work outright. Also a top-tier modeled engine and sprint score."
+            "note": "Won the 2022 Bike to Work outright AND raced BMX before CrossFit - genuine handling for a grass oval - plus 2nd overall at the 2025 Games. (His 2017 result was voided for a doping violation, so it is excluded.)"
+          },
+          {
+            "name": "Jeffrey Adler",
+            "value": "2nd '23",
+            "note": "2nd in the 2023 Ride, 4th in the 2022 Bike to Work. The field's most consistent bike racer."
           },
           {
             "name": "Justin Medeiros",
@@ -58,8 +58,8 @@
           },
           {
             "name": "James Sprague",
-            "value": "n/a",
-            "note": "No verified per-event bike result (outside 2023's top 10 overall), but 3rd-best modeled blend."
+            "value": "Engine",
+            "note": "No verified per-event bike result, but a top-3 modeled engine/sprint blend."
           },
           {
             "name": "Patrick Vellner",
@@ -110,7 +110,7 @@
       {
         "type": "callout",
         "title": "Methodology",
-        "text": "History first, model second. Placements above come from the official CrossFit Games leaderboard results for the 2017 Cyclocross, 2018 Crit, 2022 Bike to Work and 2023 Ride. Our results files hold each year's top-10 overall finishers, so an athlete's absence from a given year means no verified top-10 data for them that year, not that they skipped the event. Where no direct precedent exists, we fall back to each athlete's modeled 'engine' and 'sprint' percentiles, computed from official 2026 Open, Quarterfinals and prior Games results. Per-lap distance, total race length, event number and heat format for the Grass Oval Bicycle Race have not been announced. This is a fit read, not a result prediction."
+        "text": "History first, model second. Placements above come from the official CrossFit Games leaderboard results for the 2017 Cyclocross, 2018 Crit, 2022 Bike to Work and 2023 Ride. Our results files hold each year's top-10 overall finishers, so an athlete's absence from a given year means no verified top-10 data for them that year, not that they skipped the event. Where no direct precedent exists, we fall back to each athlete's modeled 'engine' and 'sprint' percentiles, computed from official 2026 Open, Quarterfinals and prior Games results. Per-lap distance, total race length, event number and heat format for the Grass Oval Bicycle Race have not been announced. This is a fit read, not a result prediction. CrossFit's official Instagram confirmed this as Individual Event 6 (July 20). Ricky Garard's 2017 Games results were annulled for a doping violation, so they are excluded from his bike resume. Details beyond 20 laps for time / 25-minute cap (per-lap distance, bike type) are not yet announced. A history + model read, not a result prediction."
       }
     ],
     "sources": [

@@ -10,17 +10,18 @@
   },
   "items": [
     {
-      "name": "Grass Oval Bicycle Race",
+      "name": "Event 6: Grass Oval Bicycle Race",
       "status": "confirmed",
       "kind": "event",
-      "summary": "Published on the official workouts page: 20 laps of a grass oval track, for time, under a 25-minute cap, at the Morgan Hill Outdoor Complex, presented by Zenni Optical. This is the full prescription for the 'Ride' cycling opener CrossFit teased in June without distance or format details. Event number and per-lap distance not yet announced by a second confirming source.",
+      "summary": "Confirmed as Individual Event 6 on the official CrossFit Games Instagram (July 20): a Grass Oval Bicycle Race, 20 laps for time under a 25-minute cap, on Wednesday July 22 at the Morgan Hill Outdoor Complex. The outdoor bike race returns (last run as the 2023 \"Ride\"). Per-lap distance and bike type are not yet announced.",
       "source": {
         "label": "CrossFit Games (official workout page)",
         "url": "https://games.crossfit.com/workouts/finals/2026"
       },
-      "date": "2026-07-21",
+      "date": "2026-07-20",
       "shortName": "Grass Oval Bicycle Race",
-      "analysisSlug": "grass-oval-bicycle-race-whose-legs-are-built-for-it"
+      "analysisSlug": "grass-oval-bicycle-race-whose-legs-are-built-for-it",
+      "num": 6
     },
     {
       "name": "Event 15: Speed Snatch Triple",
@@ -150,17 +151,6 @@
       "source": {
         "label": "CrossFit Games",
         "url": "https://games.crossfit.com/article/2026-crossfit-games-to-kick-off-on-july-22-with-multiple-off-sites"
-      },
-      "date": "2026-06"
-    },
-    {
-      "name": "Cycling as an individual off-site opener ('Ride')",
-      "status": "revealed",
-      "kind": "event",
-      "summary": "CrossFit indicated cycling returns as part of the individual off-site programming, framed around the Games' history of opening 'Ride' bike tests. Exact 2026 distance/bike were not announced; only the return of road cycling for individuals is stated.",
-      "source": {
-        "label": "CrossFit Games",
-        "url": "https://games.crossfit.com/article/individual-athletes-kick-games-ride"
       },
       "date": "2026-06"
     },

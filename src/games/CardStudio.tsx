@@ -34,14 +34,14 @@ const PICKS: PickSet[] = [
   {
     id: 'grass-oval-bike',
     label: 'Grass Oval Bicycle Race',
-    eventKicker: 'Grass Oval Bicycle Race',
-    eventLine: '20 laps of a grass oval, for time. 25-minute cap. Morgan Hill Outdoor Complex.',
-    note: 'History first: real placements from the 2017 Cyclocross, 2018 Crit, 2022 Bike to Work and 2023 Ride. Model engine/sprint score as tiebreaker. A fit read, not a result prediction.',
+    eventKicker: 'Event 6 - Grass Oval Bicycle Race',
+    eventLine: '20 laps for time, 25-minute cap. Wed July 22, Morgan Hill. The outdoor bike race returns.',
+    note: 'History first: real placements from the Games bike races (2017-2023); model engine/sprint as tiebreaker. Garard 2017 result was voided for doping, so it is excluded. A fit read, not a result prediction.',
     men: [
-      { name: 'Jeffrey Adler', value: '2nd \'23', why: '2nd in the 2023 Ride, 4th in 2022 Bike to Work. Field\'s most proven bike racer.' },
-      { name: 'Ricky Garard', value: 'WON \'22', why: 'Won the 2022 Bike to Work outright. Elite modeled engine and sprint too.' },
+      { name: 'Ricky Garard', value: 'WON \'22', why: 'Won the 2022 Bike to Work outright AND raced BMX before CrossFit - real handling for a grass oval. 2nd at the 2025 Games.' },
+      { name: 'Jeffrey Adler', value: '2nd \'23', why: '2nd in the 2023 Ride, 4th in 2022 Bike to Work. The field\'s most consistent bike racer.' },
       { name: 'Justin Medeiros', value: '3rd \'22', why: '3rd in the 2022 Bike to Work. Field\'s single highest engine-plus-sprint blend.' },
-      { name: 'James Sprague', value: 'n/a', why: 'No verified bike placement, but 3rd-best modeled engine/sprint blend.' },
+      { name: 'James Sprague', value: 'Engine', why: 'No verified bike placement, but a top-3 modeled engine/sprint blend.' },
       { name: 'Patrick Vellner', value: '4 starts', why: 'Every dedicated Games bike test since 2017; best finish 13th. Elite modeled sprint.' },
     ],
     women: [
@@ -236,10 +236,10 @@ const CAROUSELS: Carousel[] = [
     caption:
       "🚴 THE CYCLING TEST IS FULLY REVEALED. The official workouts page just published it: the Grass Oval Bicycle Race. 20 laps of a grass oval, for time, 25-minute cap, at the Morgan Hill Outdoor Complex.\n\nThis is the full prescription for the 'Ride' cycling opener CrossFit teased back in June with zero details. No barbell, no gymnastics: pure engine, decided by leg power and pacing.\n\nHistory first: Jeffrey Adler was 2nd in the 2023 Ride and 4th in the 2022 Bike to Work, the most proven bike racer in the men's field. Ricky Garard WON that 2022 race outright. Women: Emma Lawson WON the 2023 Ride AND was 3rd in 2022, the best bike resume in the whole field. Haley Adams won 2022 outright too.\n\nSwipe for the receipts. Full breakdown at the link in bio. A history + model read, not a result prediction.",
     slides: [
-      { type: 'cover', kicker: 'Cycling Reveal', headline: 'GRASS OVAL\nBICYCLE RACE', sub: 'The official workouts page just published the full cycling test. 20 laps, 25 minutes, Morgan Hill. Swipe.' },
-      { type: 'point', num: 1, kicker: 'The Test', headline: '20 LAPS,\n25 MINUTES', body: 'A grass oval track at the Morgan Hill Outdoor Complex, 20 laps for time under a 25-minute cap. Presented by Zenni Optical. No per-lap distance or event number announced yet. Pure engine: no barbell, no gymnastics.', source: 'games.crossfit.com (official workouts page)' },
+      { type: 'cover', kicker: 'Event 6', headline: 'GRASS OVAL\nBICYCLE RACE', sub: 'Cycling is back. 20 laps for time, Wed July 22 at Morgan Hill - and the Games bike-race history names the favorites. Swipe.' },
+      { type: 'point', num: 1, kicker: 'The Test', headline: '20 LAPS\nFOR TIME', body: 'Individual Event 6, Wednesday July 22 at the Morgan Hill Outdoor Complex: 20 laps of a grass oval for time under a 25-minute cap. Aerobic engine plus the wildcard almost nobody trains - real bike handling. Per-lap distance and bike type not yet announced.', source: 'Official CrossFit Games (workouts page + IG)' },
       { type: 'point', num: 2, kicker: 'The History', headline: 'THE GAMES\nHAVE ASKED THIS', body: 'The 2017 Cyclocross and 2018 Crit both ran roughly 18-21 minutes for the leaders under similar caps. Expect this one to land in the same window: a sustained aerobic grind, not a sprint.', source: 'Official Games archive' },
-      { type: 'point', num: 3, kicker: 'The receipts - Men', headline: 'ADLER\'S\nRESUME', body: 'Jeffrey Adler: 2nd in the 2023 Ride, 4th in the 2022 Bike to Work. The field\'s most proven bike racer. Ricky Garard WON that 2022 race. Medeiros (3rd in 2022) has the field\'s best modeled engine-plus-sprint blend.', source: 'Official Games leaderboards' },
+      { type: 'point', num: 3, kicker: 'The receipts - Men', headline: 'GARARD\nRACED BMX', body: 'Ricky Garard won the 2022 Bike to Work outright and once eyed a BMX career - real handling for a grass oval, plus 2nd overall at the 2025 Games. Then Adler (2nd 2023, 4th 2022, most consistent) and Medeiros (3rd 2022). Garard 2017 result was voided for doping, so it is excluded.', source: 'Official Games leaderboards + CrossFit coverage' },
       { type: 'point', num: 4, kicker: 'The receipts - Women', headline: 'LAWSON\'S\nDOUBLE', body: 'Emma Lawson WON the 2023 Ride and was 3rd in 2022: the best bike resume in the 2026 field, either division. Haley Adams won that 2022 race outright and owns the field\'s single highest modeled engine score.', source: 'Official Games leaderboards' },
       { type: 'cta', headline: 'FULL\nBREAKDOWN', body: 'The full history, both boards, and what a 20-lap grass oval actually tests is on the site. A history + model read, not a result prediction.' },
     ],
