@@ -75,7 +75,20 @@
       "short": "Back Squat",
       "scoreLabel": "LOAD",
       "men": [],
-      "women": []
+      "women": [
+        {
+          "name": "Kyra Milligan",
+          "score": "370 lb"
+        },
+        {
+          "name": "Mirjam von Rohr",
+          "score": "350 lb"
+        },
+        {
+          "name": "Anikha Greer",
+          "score": "335 lb"
+        }
+      ]
     },
     {
       "num": 4,
@@ -83,7 +96,20 @@
       "short": "Shoulder Press",
       "scoreLabel": "LOAD",
       "men": [],
-      "women": []
+      "women": [
+        {
+          "name": "Alex Gazan",
+          "score": "170 lb"
+        },
+        {
+          "name": "Paige Rodgers",
+          "score": "155 lb"
+        },
+        {
+          "name": "Aimee Cringle",
+          "score": "150 lb"
+        }
+      ]
     },
     {
       "num": 5,
@@ -91,7 +117,20 @@
       "short": "Deadlift",
       "scoreLabel": "LOAD",
       "men": [],
-      "women": []
+      "women": [
+        {
+          "name": "Aimee Cringle",
+          "score": "425 lb"
+        },
+        {
+          "name": "Alex Gazan",
+          "score": "420 lb"
+        },
+        {
+          "name": "Madeline Sturt",
+          "score": "410 lb"
+        }
+      ]
     },
     {
       "num": 6,
