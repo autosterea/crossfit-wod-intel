@@ -138,7 +138,20 @@
       "short": "Bike Race",
       "scoreLabel": "TIME",
       "men": [],
-      "women": []
+      "women": [
+        {
+          "name": "Aimee Cringle",
+          "score": "19:10"
+        },
+        {
+          "name": "Emma Lawson",
+          "score": "19:17"
+        },
+        {
+          "name": "Lucy Campbell",
+          "score": "19:17"
+        }
+      ]
     },
     {
       "num": 7,
@@ -150,8 +163,8 @@
     }
   ],
   "leaderboard": {
-    "afterEvent": 2,
-    "afterLabel": "After Event 2",
+    "afterEvent": 6,
+    "afterLabel": "After Event 6",
     "men": [
       {
         "name": "Jay Crouch",
@@ -206,53 +219,53 @@
     ],
     "women": [
       {
-        "name": "Haley Adams",
-        "points": 184,
-        "prev": 4
-      },
-      {
-        "name": "Lucy Campbell",
-        "points": 184,
-        "prev": 2
-      },
-      {
-        "name": "Aline Wirz",
-        "points": 172,
-        "prev": 3
-      },
-      {
-        "name": "Madeline Sturt",
-        "points": 168,
+        "name": "Aimee Cringle",
+        "points": 378,
         "prev": 1
       },
       {
-        "name": "Aimee Cringle",
-        "points": 164,
-        "prev": 10
+        "name": "Madeline Sturt",
+        "points": 339,
+        "prev": 2
       },
       {
-        "name": "Ellie Turner",
-        "points": 144,
-        "prev": 11
+        "name": "Lucy Campbell",
+        "points": 320,
+        "prev": 4
       },
       {
-        "name": "Emma Lawson",
-        "points": 140,
-        "prev": 7
-      },
-      {
-        "name": "Danielle Brandon",
-        "points": 132,
+        "name": "Haley Adams",
+        "points": 300,
         "prev": 5
       },
       {
-        "name": "Ella Wilkinson",
-        "points": 119,
-        "prev": 21
+        "name": "Ellie Turner",
+        "points": 282,
+        "prev": 7
       },
       {
-        "name": "Arielle Loewen",
-        "points": 107,
+        "name": "Emma Lawson",
+        "points": 280,
+        "prev": 8
+      },
+      {
+        "name": "Aline Wirz",
+        "points": 265,
+        "prev": 10
+      },
+      {
+        "name": "Alex Gazan",
+        "points": 249,
+        "prev": 3
+      },
+      {
+        "name": "Elisa Fuliano",
+        "points": 241,
+        "prev": 9
+      },
+      {
+        "name": "Kyra Milligan",
+        "points": 232,
         "prev": 6
       }
     ]
