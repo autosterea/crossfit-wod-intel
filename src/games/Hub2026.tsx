@@ -76,8 +76,8 @@ export default function Hub2026() {
             The 2026<br /><span className="text-[#91C640]">CrossFit Games</span>
           </h1>
           <p className="mt-3 cap-hero-dim text-[13px] leading-relaxed max-w-xl">
-            Every athlete, their road from the Open to the Games, and the analytics that explain it. One place for the
-            2026 season. {A2026.meta.venue}, {A2026.meta.city} · {A2026.meta.gamesDates}.
+            The Games are live. Follow every event as it lands, watch the interactive leaderboard move, and see the data
+            behind who wins. {A2026.meta.venue}, {A2026.meta.city} · {A2026.meta.gamesDates}.
           </p>
           <div className="mt-5 flex flex-wrap gap-x-7 gap-y-3">
             {[
@@ -104,27 +104,7 @@ export default function Hub2026() {
         </div>
       </section>
 
-      {/* FIELD STATUS */}
-      {!A2026.meta.fieldLocked ? (
-        <div className="mb-6 rounded-xl px-4 py-3 text-[12.5px] leading-relaxed" style={{ background: 'rgba(245,158,11,0.1)', border: '1px solid rgba(245,158,11,0.3)', color: 'var(--text-secondary)' }}>
-          <span className="games-condensed uppercase tracking-[0.1em] font-semibold text-[var(--accent-amber)]">Field forming · </span>
-          {A2026.meta.fieldNote}
-        </div>
-      ) : (
-        <div className="mb-6 rounded-xl px-4 py-3 text-[12.5px] leading-relaxed" style={{ background: 'rgba(1,150,68,0.1)', border: '1px solid rgba(1,150,68,0.35)', color: 'var(--text-secondary)' }}>
-          <span className="games-condensed uppercase tracking-[0.1em] font-semibold text-[#019644]">Field set · </span>
-          {A2026.meta.registered ? (
-            <>
-              <span className="text-[var(--text-primary)] font-semibold">30 men and 30 women qualified</span>
-              {'; '}{A2026.meta.registered.men} men / {A2026.meta.registered.women} women registered so far
-              {A2026.meta.registrationClosesAt ? ' (registration closes July 16)' : ''}.{' '}
-            </>
-          ) : null}
-          {A2026.meta.fieldNote}
-        </div>
-      )}
-
-      {/* LIVE LEADERBOARD (self-hides until an event is scored; the hero feature during Games week) */}
+      {/* LIVE LEADERBOARD - the hero feature during Games week (self-hides pre-Games) */}
       <LiveLeaderboard />
 
       {/* THE 20 EVENTS tracker (timely hook as reveals roll out) */}
@@ -136,6 +116,19 @@ export default function Hub2026() {
           <div className="text-[13px] text-[var(--text-secondary)] leading-snug">20 scored events across 4 days, the most in Games history. Swimming and cycling are back. Follow every reveal as it drops. <span className="text-[#91C640] whitespace-nowrap">See what we know &rarr;</span></div>
         </div>
       </button>
+
+      {/* FIELD STATUS (context, below the live board + events during Games week) */}
+      {!A2026.meta.fieldLocked ? (
+        <div className="mb-6 rounded-xl px-4 py-3 text-[12.5px] leading-relaxed" style={{ background: 'rgba(245,158,11,0.1)', border: '1px solid rgba(245,158,11,0.3)', color: 'var(--text-secondary)' }}>
+          <span className="games-condensed uppercase tracking-[0.1em] font-semibold text-[var(--accent-amber)]">Field forming · </span>
+          {A2026.meta.fieldNote}
+        </div>
+      ) : (
+        <div className="mb-6 rounded-xl px-4 py-3 text-[12.5px] leading-relaxed" style={{ background: 'rgba(1,150,68,0.1)', border: '1px solid rgba(1,150,68,0.35)', color: 'var(--text-secondary)' }}>
+          <span className="games-condensed uppercase tracking-[0.1em] font-semibold text-[#019644]">Field set · </span>
+          {A2026.meta.fieldNote}
+        </div>
+      )}
 
       {/* THE BREAKDOWN + INTELLIGENCE promo (surface the analytics features) */}
       <section className="mb-8 grid sm:grid-cols-2 gap-3">
