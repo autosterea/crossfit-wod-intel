@@ -6,7 +6,20 @@
       "name": "The 2007 Hopper",
       "short": "Hopper",
       "scoreLabel": "TIME",
-      "men": [],
+      "men": [
+        {
+          "name": "Jay Crouch",
+          "score": "7:11"
+        },
+        {
+          "name": "Colten Mertens",
+          "score": "7:17"
+        },
+        {
+          "name": "Saxon Panchik",
+          "score": "7:19"
+        }
+      ],
       "women": [
         {
           "name": "Madeline Sturt",
