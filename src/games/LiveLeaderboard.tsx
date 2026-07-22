@@ -33,10 +33,13 @@ export default function LiveLeaderboard() {
   }, [nEvents, division])
 
   if (!data || !dd || nEvents === 0) return null
-  const ev = dd.events[step]
+  // clamp the step to this division's event count (women may have more events scored
+  // than men, so switching divisions can leave `step` out of range for a render tick)
+  const s = Math.max(0, Math.min(step, nEvents - 1))
+  const ev = dd.events[s]
 
   return (
-    <section className="mb-10 games-rise games-rise-2">
+    <section id="leaderboard" className="mb-10 games-rise games-rise-2 games-anchor">
       <div className="flex items-end justify-between mb-1 flex-wrap gap-2">
         <div>
           <div className="games-condensed text-[11px] uppercase tracking-[0.2em] text-[#91C640] mb-1">Live · updated {data.updated}</div>
@@ -62,10 +65,10 @@ export default function LiveLeaderboard() {
         <div className="flex items-center gap-3">
           <button onClick={() => setStep((s) => Math.max(0, s - 1))} disabled={step === 0} className="games-condensed px-3 py-1.5 rounded-lg border border-[var(--panel-border)] text-[var(--text-secondary)] disabled:opacity-40">&larr;</button>
           <div className="flex-1">
-            <input type="range" min={0} max={nEvents - 1} value={step} onChange={(e) => setStep(+e.target.value)} className="w-full accent-[#019644]" style={{ accentColor: '#019644' }} />
+            <input type="range" min={0} max={nEvents - 1} value={s} onChange={(e) => setStep(+e.target.value)} className="w-full accent-[#019644]" style={{ accentColor: '#019644' }} />
             <div className="flex justify-between mt-1">
               {dd.events.map((e, i) => (
-                <button key={e.num} onClick={() => setStep(i)} className="games-condensed text-[10px] uppercase tracking-[0.06em]" style={{ color: i === step ? '#91C640' : 'var(--text-muted)', fontWeight: i === step ? 700 : 400 }}>
+                <button key={e.num} onClick={() => setStep(i)} className="games-condensed text-[10px] uppercase tracking-[0.06em]" style={{ color: i === s ? '#91C640' : 'var(--text-muted)', fontWeight: i === s ? 700 : 400 }}>
                   E{e.num}
                 </button>
               ))}
@@ -81,12 +84,12 @@ export default function LiveLeaderboard() {
       {/* Animated ranked list */}
       <div style={{ position: 'relative', height: dd.athletes.length * ROW }}>
         {dd.athletes.map((a) => {
-          const rk = a.rank[step]
-          const prev = step > 0 ? a.rank[step - 1] : null
+          const rk = a.rank[s]
+          const prev = s > 0 ? a.rank[s - 1] : null
           const mv = prev != null ? prev - rk : null
           const top3 = rk <= 3
           const full = a.slug ? athleteBySlug.get(a.slug) : undefined
-          const evScore = a.ev[step]
+          const evScore = a.ev[s]
           return (
             <div
               key={a.slug || a.name}
@@ -114,7 +117,7 @@ export default function LiveLeaderboard() {
                   </div>
                 </div>
                 <div className="games-display text-[15px] sm:text-[18px] text-[var(--text-primary)] shrink-0">
-                  {a.cum[step]}
+                  {a.cum[s]}
                   <span className="text-[10px] text-[var(--text-muted)]"> pts</span>
                 </div>
               </button>
