@@ -1,5 +1,99 @@
 [
   {
+    "slug": "day-1-is-here-the-full-running-order",
+    "title": "Day 1 Is Here: 7 Events, One Brutal Wednesday",
+    "dek": "The 2026 Games open with a seven-event gauntlet across the Bay Area - an engine-and-strength sandwich with no place for specialists to hide. And Ricky Garard may have drawn the dream card.",
+    "category": "Analysis",
+    "date": "2026-07-21",
+    "author": "Ravikant Dewangan",
+    "readMin": 4,
+    "summary": "Day 1 of the 2026 CrossFit Games (Wednesday, July 22) is SEVEN scored individual events, run off-site across the Bay Area at The Ranch in Aromas and the Morgan Hill Outdoor Complex. Six are revealed - the 2007 Hopper, Ranch 7200, the three-part CrossFit Total, and the Grass Oval Bicycle Race - and a seventh is a FloElite exclusive still under wraps. Here is the running order, the storylines, and why Ricky Garard could bank an early lead.",
+    "blocks": [
+      {
+        "type": "p",
+        "text": "It starts tomorrow. Day 1 of the 2026 Games, **Wednesday July 22**, is not an easing-in: it is **seven scored individual events** run across the Bay Area at **The Ranch (Aromas)** and the **Morgan Hill Outdoor Complex**, women's heats first and men's right behind, from morning into the night. Six events are already public; the seventh is a **FloElite exclusive** whose workout is still under wraps. That is a brutal opening day - and it is built so that neither the pure engine nor the pure strength athlete can hide."
+      },
+      {
+        "type": "h2",
+        "text": "The Running Order"
+      },
+      {
+        "type": "ranked",
+        "title": "Day 1 - Wednesday July 22 (7 events)",
+        "rows": [
+          {
+            "name": "Event 1: The 2007 Hopper",
+            "value": "Engine + gym",
+            "note": "1,000 m row, then 5 rounds of 25 pull-ups and 7 push jerks. The workout that opened the very first Games in 2007."
+          },
+          {
+            "name": "Event 2: Ranch 7200",
+            "value": "Trail run",
+            "note": "7,200 m through the hills at The Ranch. Garard won this exact test at the 2025 Games."
+          },
+          {
+            "name": "Events 3-5: The CrossFit Total",
+            "value": "Max strength",
+            "note": "1-rep-max back squat, shoulder press and deadlift - three separate 50-point events. The biggest point swings of the day."
+          },
+          {
+            "name": "Event 6: Grass Oval Bicycle Race",
+            "value": "Bike race",
+            "note": "20 laps for time, 25-minute cap, at Morgan Hill. Cycling returns, and Garard is the ex-BMX favorite."
+          },
+          {
+            "name": "Event 7: FloElite Exclusive",
+            "value": "TBA",
+            "note": "A seventh test to close the day, streaming Flo-only. The workout has not been released."
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Garard's Dream Draw"
+      },
+      {
+        "type": "p",
+        "text": "If you are building a Day 1 for **Ricky Garard**, it looks like this. He **won the 7,200 m trail run at the 2025 Games** - literally Event 2 again - and he is our **favorite for the bike race** (a former BMX racer who won the 2022 Bike to Work). Two of tomorrow's seven events are tests he has already conquered. Add a respectable Total and a strong Hopper and the man who finished **2nd overall in 2025** could walk out of Wednesday with a real lead before the arena doors even open. The rest of the podium contenders have to keep him in sight."
+      },
+      {
+        "type": "h2",
+        "text": "The Total Is Where Medals Move"
+      },
+      {
+        "type": "p",
+        "text": "Three of the seven events are the **CrossFit Total**, and because each 1-rep-max is scored as its own 50-point event, the strength block is where the standings swing hardest. This is the day the true heavyweights - the athletes with verified squat, press and deadlift numbers - bank points that the engine specialists simply cannot match on a barbell. Our CrossFit Total boards break down exactly who is armed for it. Everyone else has to survive the strength day without bleeding too much ground."
+      },
+      {
+        "type": "h2",
+        "text": "An Engine-and-Strength Sandwich"
+      },
+      {
+        "type": "p",
+        "text": "Look at the shape of the day: an engine-and-gymnastics opener (Hopper), a long run (Ranch 7200), a maximal-strength block (the Total), a bike race (Event 6), and a mystery closer (Event 7). Pure strength athletes get exposed on the run and the bike; pure engines give ground on the Total. The athletes who climb the Day 1 leaderboard will be the true generalists - which is, of course, the whole point of the Sport of Fitness. Full model reads for every revealed event are linked on the site."
+      },
+      {
+        "type": "callout",
+        "title": "Schedule + method",
+        "text": "Day 1 runs Wednesday July 22 across two off-site venues (The Ranch, Aromas + Morgan Hill Outdoor Complex), women's heats ahead of men's, from morning to night local time. Events 1-6 are confirmed on the official broadcast; Event 7 is a FloElite exclusive with the workout not yet released. Individual event details from the official CrossFit Games workouts page and broadcast schedule; the Garard history (2025 Ranch run win, 2022 bike win, 2nd overall 2025) is from the official Games leaderboards. Our per-event boards are model reads, not result predictions."
+      }
+    ],
+    "sources": [
+      {
+        "label": "2026 CrossFit Games broadcast schedule (Day 1)",
+        "url": "https://games.crossfit.com/finals/schedule?type=individuals"
+      },
+      {
+        "label": "2026 Games to kick off July 22 with multiple off-sites",
+        "url": "https://games.crossfit.com/article/2026-crossfit-games-to-kick-off-on-july-22-with-multiple-off-sites"
+      },
+      {
+        "label": "Persistence Athletics - every Day 1 event breakdown",
+        "url": "https://wod.persistenceathletics.com/games/analysis"
+      }
+    ]
+  },
+  {
     "slug": "roll-to-support-amrap-the-ring-test-is-scored",
     "title": "Roll to Support AMRAP: The Ring Test Castro Teased Is Now Fully Scored",
     "dek": "The two ring skills the Games have never tested now have a full prescription on the official workouts page: a 5-minute AMRAP of forward and backward rolls to support, on the final day. We already researched who has the gymnastics background - here is the scored event.",
@@ -33,11 +127,31 @@
         "type": "ranked",
         "title": "Men's Ring-Skill Read - who is positioned",
         "rows": [
-          { "name": "Patrick Vellner", "value": "Elite gymnast", "note": "Former competitive artistic gymnast (to 2010); the cleanest technician." },
-          { "name": "Victor Hoffer", "value": "Elite gymnast", "note": "Federation-level French artistic gymnast from age 3. Model score (44) is a miss." },
-          { "name": "Roman Khrennikov", "value": "Elite gymnast", "note": "Russian Olympic-reserve gymnastics plus break-dancing floorwork." },
-          { "name": "Justin Medeiros", "value": "Sharp technician", "note": "Field's sharpest strict-ring control." },
-          { "name": "Colten Mertens", "value": "Grid + rings", "note": "United Grid League player; the backward roll to support is a UGL staple." }
+          {
+            "name": "Patrick Vellner",
+            "value": "Elite gymnast",
+            "note": "Former competitive artistic gymnast (to 2010); the cleanest technician."
+          },
+          {
+            "name": "Victor Hoffer",
+            "value": "Elite gymnast",
+            "note": "Federation-level French artistic gymnast from age 3. Model score (44) is a miss."
+          },
+          {
+            "name": "Roman Khrennikov",
+            "value": "Elite gymnast",
+            "note": "Russian Olympic-reserve gymnastics plus break-dancing floorwork."
+          },
+          {
+            "name": "Justin Medeiros",
+            "value": "Sharp technician",
+            "note": "Field's sharpest strict-ring control."
+          },
+          {
+            "name": "Colten Mertens",
+            "value": "Grid + rings",
+            "note": "United Grid League player; the backward roll to support is a UGL staple."
+          }
         ]
       },
       {
@@ -52,11 +166,31 @@
         "type": "ranked",
         "title": "Women's Ring-Skill Read - who is positioned",
         "rows": [
-          { "name": "Madeline Sturt", "value": "Rings specialist", "note": "Australia's premier rings athlete. Model score (47) hides it." },
-          { "name": "Abigail Domit", "value": "Elite gymnast", "note": "USAG Level 9 artistic gymnast; rolls transfer one to one." },
-          { "name": "Ella Wilkinson", "value": "Elite gymnast", "note": "Team GB trampoline and tumbling to age 15. Elite aerial rotation." },
-          { "name": "Danielle Brandon", "value": "Elite gymnast", "note": "Childhood gymnast plus state diving; somersault instinct, strong lockout." },
-          { "name": "Haley Adams", "value": "Former gymnast", "note": "Competitive artistic gymnast most of her youth; real rotation and support." }
+          {
+            "name": "Madeline Sturt",
+            "value": "Rings specialist",
+            "note": "Australia's premier rings athlete. Model score (47) hides it."
+          },
+          {
+            "name": "Abigail Domit",
+            "value": "Elite gymnast",
+            "note": "USAG Level 9 artistic gymnast; rolls transfer one to one."
+          },
+          {
+            "name": "Ella Wilkinson",
+            "value": "Elite gymnast",
+            "note": "Team GB trampoline and tumbling to age 15. Elite aerial rotation."
+          },
+          {
+            "name": "Danielle Brandon",
+            "value": "Elite gymnast",
+            "note": "Childhood gymnast plus state diving; somersault instinct, strong lockout."
+          },
+          {
+            "name": "Haley Adams",
+            "value": "Former gymnast",
+            "note": "Competitive artistic gymnast most of her youth; real rotation and support."
+          }
         ]
       },
       {
@@ -66,9 +200,18 @@
       }
     ],
     "sources": [
-      { "label": "CrossFit Games (official workout page)", "url": "https://games.crossfit.com/workouts/finals/2026" },
-      { "label": "Dave Castro reveals new ring skills for Sunday (CF Network News)", "url": "https://cfnetworknews.com/news.html" },
-      { "label": "CrossFit coaching: Swing to Backward Roll to Support", "url": "https://www.crossfit.com/essentials/backward-roll-to-support" }
+      {
+        "label": "CrossFit Games (official workout page)",
+        "url": "https://games.crossfit.com/workouts/finals/2026"
+      },
+      {
+        "label": "Dave Castro reveals new ring skills for Sunday (CF Network News)",
+        "url": "https://cfnetworknews.com/news.html"
+      },
+      {
+        "label": "CrossFit coaching: Swing to Backward Roll to Support",
+        "url": "https://www.crossfit.com/essentials/backward-roll-to-support"
+      }
     ]
   },
   {
@@ -113,11 +256,31 @@
         "type": "ranked",
         "title": "Men's Best-Fit Top 5 (History First)",
         "rows": [
-          { "name": "Roman Khrennikov", "value": "WON x2", "note": "Won the 2020 1,000m Row (2:48.90) AND the 2022 Rinse 'N' Repeat (160 cal). Only double machine-event winner in the field." },
-          { "name": "Patrick Vellner", "value": "7th '20", "note": "7th in the 2020 1,000m Row (2:54.80), fastest 2026 qualifier behind Khrennikov." },
-          { "name": "Justin Medeiros", "value": "7th '22", "note": "7th in the 2022 Rinse 'N' Repeat (151 cal); also 15th in the 2020 row (2:59.00)." },
-          { "name": "Jeffrey Adler", "value": "11th/13th", "note": "11th in the 2020 row (2:57.30), 13th in the 2022 interval (146 cal)." },
-          { "name": "Ricky Garard", "value": "10th '22", "note": "10th in the 2022 Rinse 'N' Repeat (147 cal); 2nd overall at the 2025 Games." }
+          {
+            "name": "Roman Khrennikov",
+            "value": "WON x2",
+            "note": "Won the 2020 1,000m Row (2:48.90) AND the 2022 Rinse 'N' Repeat (160 cal). Only double machine-event winner in the field."
+          },
+          {
+            "name": "Patrick Vellner",
+            "value": "7th '20",
+            "note": "7th in the 2020 1,000m Row (2:54.80), fastest 2026 qualifier behind Khrennikov."
+          },
+          {
+            "name": "Justin Medeiros",
+            "value": "7th '22",
+            "note": "7th in the 2022 Rinse 'N' Repeat (151 cal); also 15th in the 2020 row (2:59.00)."
+          },
+          {
+            "name": "Jeffrey Adler",
+            "value": "11th/13th",
+            "note": "11th in the 2020 row (2:57.30), 13th in the 2022 interval (146 cal)."
+          },
+          {
+            "name": "Ricky Garard",
+            "value": "10th '22",
+            "note": "10th in the 2022 Rinse 'N' Repeat (147 cal); 2nd overall at the 2025 Games."
+          }
         ]
       },
       {
@@ -132,11 +295,31 @@
         "type": "ranked",
         "title": "Women's Best-Fit Top 5 (History First)",
         "rows": [
-          { "name": "Lucy Campbell", "value": "WON '22", "note": "Won the 2022 Rinse 'N' Repeat outright (137 cal), her first Games event win. Reigning overall runner-up." },
-          { "name": "Haley Adams", "value": "6th/6th", "note": "6th in the 2020 row (3:21.30) AND 6th in the 2022 interval (129 cal). Only double top-6 finish in the field." },
-          { "name": "Alexis Raptis", "value": "11th '22", "note": "11th in the 2022 Rinse 'N' Repeat (125 cal)." },
-          { "name": "Danielle Brandon", "value": "12th '22", "note": "12th in the 2022 Rinse 'N' Repeat (124 cal)." },
-          { "name": "Emma Lawson", "value": "15th '22", "note": "15th in the 2022 Rinse 'N' Repeat (123 cal)." }
+          {
+            "name": "Lucy Campbell",
+            "value": "WON '22",
+            "note": "Won the 2022 Rinse 'N' Repeat outright (137 cal), her first Games event win. Reigning overall runner-up."
+          },
+          {
+            "name": "Haley Adams",
+            "value": "6th/6th",
+            "note": "6th in the 2020 row (3:21.30) AND 6th in the 2022 interval (129 cal). Only double top-6 finish in the field."
+          },
+          {
+            "name": "Alexis Raptis",
+            "value": "11th '22",
+            "note": "11th in the 2022 Rinse 'N' Repeat (125 cal)."
+          },
+          {
+            "name": "Danielle Brandon",
+            "value": "12th '22",
+            "note": "12th in the 2022 Rinse 'N' Repeat (124 cal)."
+          },
+          {
+            "name": "Emma Lawson",
+            "value": "15th '22",
+            "note": "15th in the 2022 Rinse 'N' Repeat (123 cal)."
+          }
         ]
       },
       {
@@ -146,9 +329,18 @@
       }
     ],
     "sources": [
-      { "label": "CrossFit Games (official workout page)", "url": "https://games.crossfit.com/workouts/finals/2026" },
-      { "label": "CrossFit Games 2020 workouts (1,000-m Row)", "url": "https://games.crossfit.com/workouts/games/2020" },
-      { "label": "CrossFit Games 2022 workouts (Rinse 'N' Repeat)", "url": "https://games.crossfit.com/workouts/games/2022" }
+      {
+        "label": "CrossFit Games (official workout page)",
+        "url": "https://games.crossfit.com/workouts/finals/2026"
+      },
+      {
+        "label": "CrossFit Games 2020 workouts (1,000-m Row)",
+        "url": "https://games.crossfit.com/workouts/games/2020"
+      },
+      {
+        "label": "CrossFit Games 2022 workouts (Rinse 'N' Repeat)",
+        "url": "https://games.crossfit.com/workouts/games/2022"
+      }
     ]
   },
   {

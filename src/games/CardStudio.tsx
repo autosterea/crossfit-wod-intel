@@ -287,6 +287,20 @@ type Slide =
 type Carousel = { id: string; label: string; caption: string; slides: Slide[] }
 const CAROUSELS: Carousel[] = [
   {
+    id: 'day1-running-order',
+    label: 'Day 1 Running Order',
+    caption:
+      "🔥 DAY 1 IS HERE. The 2026 CrossFit Games open Wednesday July 22 with SEVEN scored individual events, run off-site across the Bay Area (The Ranch + Morgan Hill), women's heats first.\n\nThe slate: E1 the 2007 Hopper, E2 Ranch 7200 (7.2km run), E3-5 the CrossFit Total (squat/press/deadlift), E6 the Grass Oval Bicycle Race, and E7 - a FloElite exclusive still under wraps.\n\nWatch Ricky Garard: he WON the 2025 Ranch run (E2 again) and he's our bike-race favorite (ex-BMX). Two of seven events are already his - he could bank a lead before the arena even opens.\n\nSwipe for the full running order. Every event breakdown at the link in bio. #CrossFitGames",
+    slides: [
+      { type: 'cover', kicker: 'Day 1 - Wed July 22', headline: 'SEVEN EVENTS,\nONE WEDNESDAY', sub: 'The Games open with a 7-event gauntlet across the Bay Area. Here is the running order - and who is built for it. Swipe.' },
+      { type: 'point', num: 1, kicker: 'The Slate', headline: '7 EVENTS,\n2 VENUES', body: 'E1 the 2007 Hopper. E2 Ranch 7200 (7.2km trail run). E3-5 the CrossFit Total (1RM squat, press, deadlift - three 50-pt events). E6 the Grass Oval Bicycle Race. E7 a FloElite exclusive, still under wraps. The Ranch + Morgan Hill.', source: 'Official CrossFit Games broadcast schedule' },
+      { type: 'point', num: 2, kicker: "Garard's Draw", headline: 'GARARD\nGOT LUCKY', body: 'Ricky Garard WON the 7,200m trail run at the 2025 Games - that is Event 2 again - and he is our favorite for the bike race (ex-BMX, won 2022 Bike to Work). Two of tomorrow\'s seven events are already his. The 2025 runner-up could bank an early lead.', source: 'Official Games leaderboards' },
+      { type: 'point', num: 3, kicker: 'The Swing', headline: 'THE TOTAL\nMOVES MEDALS', body: 'Three of the seven events are the CrossFit Total, each 1RM scored as its own 50-point event. This is where the true heavyweights bank points the engine specialists cannot match. The strength block decides who leads after Day 1.', source: 'Persistence Athletics model' },
+      { type: 'point', num: 4, kicker: 'The Shape', headline: 'NO PLACE\nTO HIDE', body: 'An engine opener, a run, a max-strength block, a bike race, a mystery closer. Pure strength gets exposed on the run and bike; pure engine gives ground on the Total. Day 1 rewards the true generalist - the whole point of the sport.', source: 'Persistence Athletics' },
+      { type: 'cta', headline: 'FULL\nRUNNING ORDER', body: 'Every Day 1 event, both boards, and the storylines are on the site. A model read, not a result prediction.' },
+    ],
+  },
+  {
     id: 'roll-to-support-amrap',
     label: 'Roll to Support AMRAP',
     caption:
