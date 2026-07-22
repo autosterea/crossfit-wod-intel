@@ -32,6 +32,48 @@ type Pick = { name: string; value: string; why: string }
 type PickSet = { id: string; label: string; eventKicker: string; eventLine: string; note: string; men: Pick[]; women: Pick[] }
 const PICKS: PickSet[] = [
   {
+    id: 'roll-to-support-amrap',
+    label: 'Roll to Support AMRAP',
+    eventKicker: 'Sun July 26 - Roll to Support AMRAP',
+    eventLine: '5-min AMRAP: 4 forward rolls to support, 3 backward rolls to support. The ring test Castro teased is now scored.',
+    note: 'Researched gymnastics backgrounds, not the season model: real artistic-gymnast, tumbling and rings-specialist history. Both movements have zero Games precedent. A background read, not a result prediction.',
+    men: [
+      { name: 'Patrick Vellner', value: 'Elite gymnast', why: 'Former competitive artistic gymnast (to 2010); the cleanest technician.' },
+      { name: 'Victor Hoffer', value: 'Elite gymnast', why: 'Federation-level French artistic gymnast from age 3. Model score (44) is a miss.' },
+      { name: 'Roman Khrennikov', value: 'Elite gymnast', why: 'Russian Olympic-reserve gymnastics plus break-dancing floorwork.' },
+      { name: 'Justin Medeiros', value: 'Sharp technician', why: "Field's sharpest strict-ring control." },
+      { name: 'Colten Mertens', value: 'Grid + rings', why: 'United Grid League player; the backward roll to support is a UGL staple.' },
+    ],
+    women: [
+      { name: 'Madeline Sturt', value: 'Rings specialist', why: "Australia's premier rings athlete. Model score (47) hides it." },
+      { name: 'Abigail Domit', value: 'Elite gymnast', why: 'USAG Level 9 artistic gymnast; rolls transfer one to one.' },
+      { name: 'Ella Wilkinson', value: 'Elite gymnast', why: 'Team GB trampoline and tumbling to age 15. Elite aerial rotation.' },
+      { name: 'Danielle Brandon', value: 'Elite gymnast', why: 'Childhood gymnast plus state diving; somersault instinct, strong lockout.' },
+      { name: 'Haley Adams', value: 'Former gymnast', why: 'Competitive artistic gymnast most of her youth; real rotation and support.' },
+    ],
+  },
+  {
+    id: 'machine-7200m',
+    label: 'Machine 7200M',
+    eventKicker: 'Sun July 26 - Machine 7200M',
+    eventLine: 'For time: Row 3,600m, Ski 3,600m. 30-min cap men / 35-min women. No exact Games precedent.',
+    note: "History first: the 2020 1,000m Row and 2022 Rinse 'N' Repeat swim/SkiErg interval are the closest matches in Games archive. A history read, not a result prediction.",
+    men: [
+      { name: 'Roman Khrennikov', value: 'WON x2', why: "Won the 2020 1,000m Row (2:48.90) AND the 2022 Rinse 'N' Repeat (160 cal)." },
+      { name: 'Patrick Vellner', value: "7th '20", why: '7th in the 2020 1,000m Row (2:54.80), fastest 2026 qualifier behind Khrennikov.' },
+      { name: 'Justin Medeiros', value: "7th '22", why: "7th in the 2022 Rinse 'N' Repeat (151 cal); also 15th in the 2020 row." },
+      { name: 'Jeffrey Adler', value: '11th/13th', why: '11th in the 2020 row, 13th in the 2022 interval. Consistent on both.' },
+      { name: 'Ricky Garard', value: "10th '22", why: "10th in the 2022 Rinse 'N' Repeat (147 cal); 2nd overall at the 2025 Games." },
+    ],
+    women: [
+      { name: 'Lucy Campbell', value: "WON '22", why: "WON the 2022 Rinse 'N' Repeat outright (137 cal), her first Games event win." },
+      { name: 'Haley Adams', value: '6th/6th', why: '6th in the 2020 row (3:21.30) AND 6th in the 2022 interval (129 cal).' },
+      { name: 'Alexis Raptis', value: "11th '22", why: "11th in the 2022 Rinse 'N' Repeat (125 cal)." },
+      { name: 'Danielle Brandon', value: "12th '22", why: "12th in the 2022 Rinse 'N' Repeat (124 cal)." },
+      { name: 'Emma Lawson', value: "15th '22", why: "15th in the 2022 Rinse 'N' Repeat (123 cal)." },
+    ],
+  },
+  {
     id: 'grass-oval-bike',
     label: 'Grass Oval Bicycle Race',
     eventKicker: 'Event 6 - Grass Oval Bicycle Race',
@@ -230,6 +272,34 @@ type Slide =
   | { type: 'cta'; headline: string; body: string }
 type Carousel = { id: string; label: string; caption: string; slides: Slide[] }
 const CAROUSELS: Carousel[] = [
+  {
+    id: 'roll-to-support-amrap',
+    label: 'Roll to Support AMRAP',
+    caption:
+      "🤸 THE RING TEST IS NOW SCORED. The official workouts page just published the full prescription: a 5-minute AMRAP of 4 forward rolls to support, 3 backward rolls to support. Sunday July 26, the final day.\n\nThis is the scored version of the two ring skills Dave Castro teased in July on the Girls Unfiltered podcast - movements the Games have NEVER tested before. Zero precedent in our archive, 2007-2025.\n\nWe already researched every athlete's real gymnastics background for the original tease. Men: Vellner, Hoffer and Khrennikov are genuine former artistic gymnasts. Women: Sturt is Australia's premier rings athlete, then Domit (USAG Level 9), Wilkinson (Team GB tumbling).\n\nSwipe for the full read. Link in bio. A background read, not a result prediction.",
+    slides: [
+      { type: 'cover', kicker: 'Sun July 26', headline: 'ROLL TO\nSUPPORT AMRAP', sub: 'The ring test Castro teased is now fully scored. 5 minutes, forward and backward rolls to support. Never tested before. Swipe.' },
+      { type: 'point', num: 1, kicker: 'The Test', headline: '5-MIN AMRAP\nON THE RINGS', body: 'As many reps as possible in 5 minutes: 4 forward rolls to support, 3 backward rolls to support. Presented by Velites. Sunday July 26, the competition’s final day.', source: 'Official CrossFit Games (workouts page)' },
+      { type: 'point', num: 2, kicker: 'The History', headline: 'NEVER RUN\nBEFORE', body: 'A search of every Games event 2007-2025 in our archive finds zero prior instances of a roll-to-support movement. Genuinely new, though the base (ring muscle-ups, skin-the-cats, strict ring HSPU) is universal in this field.', source: 'Persistence Athletics archive' },
+      { type: 'point', num: 3, kicker: 'The receipts - Men', headline: 'VELLNER.\nHOFFER.', body: 'Patrick Vellner competed on apparatus into 2010, the cleanest technician. Victor Hoffer trained French artistic gymnastics from age 3 - his 44 gymnastics score undersells him badly. Then Khrennikov (Russian gymnastics program), Medeiros, Mertens (Grid League).', source: 'Persistence Athletics research' },
+      { type: 'point', num: 4, kicker: 'The receipts - Women', headline: 'STURT\'S\nRINGS PEDIGREE', body: "Madeline Sturt is Australia's premier rings athlete - her 47 gymnastics score hides it completely. Then Domit (USAG Level 9), Wilkinson (Team GB tumbling to 15), Brandon (childhood gymnast + diver), Adams.", source: 'Persistence Athletics research' },
+      { type: 'cta', headline: 'FULL\nBREAKDOWN', body: 'The complete researched background on every athlete, and why this rewards real gymnasts over the season model, is on the site. A background read, not a result prediction.' },
+    ],
+  },
+  {
+    id: 'machine-7200m',
+    label: 'Machine 7200M',
+    caption:
+      "🚣 MACHINE 7200M IS REVEALED. The official workouts page just published it: row 3,600m, then ski 3,600m, for time. 30-minute cap for men, 35 for women. Sunday July 26.\n\nNo Games event has ever paired a full row leg and a full ski leg like this. But we found the two closest tests in our archive - and one man has already won BOTH of them.\n\nRoman Khrennikov won the 2020 1,000m Row sprint outright (2:48.90) AND the 2022 Rinse 'N' Repeat swim/SkiErg interval outright (160 cal). Nobody else in the 2026 field has two machine-event wins.\n\nWomen: Lucy Campbell WON that 2022 interval (137 cal), her first Games win. Haley Adams was 6th in BOTH tests.\n\nSwipe for the full boards. Link in bio. A history read, not a result prediction.",
+    slides: [
+      { type: 'cover', kicker: 'Sun July 26', headline: 'MACHINE\n7200M', sub: 'Row 3,600m, ski 3,600m, for time. No exact precedent - but one man has already won both halves. Swipe.' },
+      { type: 'point', num: 1, kicker: 'The Test', headline: 'ROW 3600\nSKI 3600', body: 'For time: row 3,600 meters, then ski 3,600 meters. 30-minute cap for men, 35 for women. Presented by Saatva. Sunday July 26, the final day. Pure monostructural output, no barbell, no gymnastics.', source: 'Official CrossFit Games (workouts page)' },
+      { type: 'point', num: 2, kicker: 'The History', headline: 'NO EXACT\nPRECEDENT', body: 'No prior Games event pairs a full row leg and a full ski leg. The closest matches: the 2020 Stage 1 1,000m Row sprint and the 2022 Rinse ’N’ Repeat swim/SkiErg interval.', source: 'Persistence Athletics archive' },
+      { type: 'point', num: 3, kicker: 'The receipts - Men', headline: 'KHRENNIKOV\nOWNS BOTH', body: "Roman Khrennikov won the 2020 1,000m Row (2:48.90) AND the 2022 Rinse 'N' Repeat (160 cal) - the only double machine-event winner in the 2026 field. Then Vellner (7th '20), Medeiros (7th '22), Adler (11th/13th), Garard (10th '22).", source: 'Official Games leaderboards' },
+      { type: 'point', num: 4, kicker: 'The receipts - Women', headline: 'CAMPBELL\nWON IT', body: "Lucy Campbell WON the 2022 Rinse 'N' Repeat outright (137 cal), her first Games event win. Haley Adams was 6th in the 2020 row AND 6th in 2022 - the only double top-6. Then Raptis, Brandon, Lawson.", source: 'Official Games leaderboards' },
+      { type: 'cta', headline: 'FULL\nBREAKDOWN', body: 'Both full boards and the exact history behind them are on the site. A history read, not a result prediction.' },
+    ],
+  },
   {
     id: 'grass-oval-bike',
     label: 'Grass Oval Bicycle Race',

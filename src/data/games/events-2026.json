@@ -6,9 +6,35 @@
     "city": "San Jose, California",
     "dates": "July 24-26, 2026",
     "note": "The 2026 CrossFit Games will score 20 events across 4 days (July 22-26), the most in Games history. Individuals open at off-site Bay Area locations on Wednesday, July 22 before three arena days at SAP Center. CrossFit reveals the official numbered events closer to and during the competition. This tracker follows every confirmed, revealed and teased element as it drops, with the source.",
-    "updated": "2026-07-02"
+    "updated": "2026-07-22"
   },
   "items": [
+    {
+      "name": "Machine 7200M",
+      "status": "confirmed",
+      "kind": "event",
+      "summary": "Published on the official workouts page: for time, row 3,600 meters then ski 3,600 meters, under a 30-minute time cap for men / 35-minute cap for women. Presented by Saatva. Scheduled for Sunday, July 26. A pure double-machine test with no exact Games precedent (closest matches: the 2020 Stage 1 1,000m Row and the 2022 Rinse 'N' Repeat swim/SkiErg interval). Individual event number not yet confirmed by the official Instagram announcement.",
+      "source": {
+        "label": "CrossFit Games (official workout page)",
+        "url": "https://games.crossfit.com/workouts/finals/2026"
+      },
+      "date": "2026-07-22",
+      "shortName": "Machine 7200M",
+      "analysisSlug": "machine-7200m-whose-engine-survives-the-double"
+    },
+    {
+      "name": "Roll to Support AMRAP",
+      "status": "confirmed",
+      "kind": "event",
+      "summary": "The official workouts page has published the full scored prescription for the ring skills Dave Castro teased in July: a 5-minute AMRAP of 4 forward rolls to support and 3 backward rolls to support. Presented by Velites. Scheduled for Sunday, July 26. Both movements have zero precedent in Games history (2007-2025). Individual event number not yet confirmed by the official Instagram announcement.",
+      "source": {
+        "label": "CrossFit Games (official workout page)",
+        "url": "https://games.crossfit.com/workouts/finals/2026"
+      },
+      "date": "2026-07-22",
+      "shortName": "Roll to Support AMRAP",
+      "analysisSlug": "roll-to-support-amrap-the-ring-test-is-scored"
+    },
     {
       "name": "Event 6: Grass Oval Bicycle Race",
       "status": "confirmed",
