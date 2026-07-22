@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-22 (Event 1 women official; men pending)",
+  "updated": "2026-07-22 (Event 1 official; men times pending in API)",
   "events": [
     {
       "num": 1,
@@ -74,7 +74,58 @@
   "leaderboard": {
     "afterEvent": 1,
     "afterLabel": "After Event 1",
-    "men": [],
+    "men": [
+      {
+        "name": "Jay Crouch",
+        "points": 100,
+        "prev": null
+      },
+      {
+        "name": "Colten Mertens",
+        "points": 96,
+        "prev": null
+      },
+      {
+        "name": "Saxon Panchik",
+        "points": 92,
+        "prev": null
+      },
+      {
+        "name": "Calum Clements",
+        "points": 88,
+        "prev": null
+      },
+      {
+        "name": "Justin Medeiros",
+        "points": 84,
+        "prev": null
+      },
+      {
+        "name": "James Sprague",
+        "points": 80,
+        "prev": null
+      },
+      {
+        "name": "Moritz Fiebig",
+        "points": 76,
+        "prev": null
+      },
+      {
+        "name": "Ricky Garard",
+        "points": 72,
+        "prev": null
+      },
+      {
+        "name": "Jeffrey Adler",
+        "points": 68,
+        "prev": null
+      },
+      {
+        "name": "Bayley Martin",
+        "points": 64,
+        "prev": null
+      }
+    ],
     "women": [
       {
         "name": "Madeline Sturt",
