@@ -5,6 +5,7 @@ import photosExtra from '../data/games/photos-extra.json'
 import rawGames from '../data/games-data.json'
 import type { GamesData, GamesAthlete2026 } from '../types-games'
 import analysisPosts from '../data/games/analysis-posts.json'
+import liveResults from '../data/games/live-2026.json'
 
 // Instagram card studio for @cf_games_update. URL-only tool (not in nav).
 // Cards render at a fixed 1080x1350 (IG portrait) offscreen and export as PNG.
@@ -13,7 +14,18 @@ import analysisPosts from '../data/games/analysis-posts.json'
 const G = rawGames as unknown as GamesData
 
 type Division = 'men' | 'women'
-type Template = 'spotlight' | 'cover' | 'h2h' | 'form' | 'news' | 'carousel' | 'picks' | 'story'
+type Template = 'spotlight' | 'cover' | 'h2h' | 'form' | 'news' | 'carousel' | 'picks' | 'story' | 'results' | 'leaderboard'
+
+// ---- Live results (Games week): event top-3 + overall leaderboard ----
+type LiveRow = { name: string; score: string }
+type LiveLbRow = { name: string; points: number; prev?: number | null }
+type LiveEvent = { num: number; name: string; short: string; scoreLabel: string; men: LiveRow[]; women: LiveRow[] }
+type LiveData = { updated: string; events: LiveEvent[]; leaderboard: { afterEvent: number | null; afterLabel: string; men: LiveLbRow[]; women: LiveLbRow[] } }
+const LIVE = liveResults as LiveData
+function athleteCountry(name: string): string {
+  const k = name.toLowerCase().trim()
+  return allAthletes2026.find((x) => x.name.toLowerCase() === k)?.country ?? ''
+}
 
 const TEMPLATES: { id: Template; label: string }[] = [
   { id: 'spotlight', label: 'Athlete Spotlight' },
@@ -24,6 +36,8 @@ const TEMPLATES: { id: Template; label: string }[] = [
   { id: 'carousel', label: 'Carousel (multi-slide)' },
   { id: 'picks', label: 'Event picks (model top 5)' },
   { id: 'story', label: 'Story (blog promo, 9:16)' },
+  { id: 'results', label: 'LIVE: Event Top 3' },
+  { id: 'leaderboard', label: 'LIVE: Overall Leaderboard' },
 ]
 
 // Model-favored top 5 per event. Every number/reason is grounded in the projection
@@ -874,6 +888,75 @@ function PicksCard({ set, division }: { set: PickSet; division: Division }) {
   )
 }
 
+// LIVE results: top 3 of a completed event (men or women)
+const MEDAL = ['#F4C64A', '#C9D2DA', '#CD8B5B'] // gold / silver / bronze
+function ResultsCard({ event, division }: { event: LiveEvent; division: Division }) {
+  const rows = (division === 'men' ? event.men : event.women).slice(0, 3)
+  return (
+    <div style={cardBg}>
+      <CardHeader />
+      <div style={{ padding: '34px 56px 0' }}>
+        <div style={{ fontSize: 24, letterSpacing: 4, textTransform: 'uppercase', color: GREEN }}>Event {event.num} Result &middot; {event.name}</div>
+        <div style={{ fontFamily: "'Anton', sans-serif", fontSize: 80, textTransform: 'uppercase', lineHeight: 0.96, marginTop: 8 }}>Top 3<br /><span style={{ color: GREEN }}>{division}</span></div>
+      </div>
+      <div style={{ padding: '34px 56px 0' }}>
+        {rows.length === 0 && <div style={{ fontSize: 32, color: DIM }}>Results pending...</div>}
+        {rows.map((r, i) => (
+          <div key={r.name} style={{ display: 'flex', alignItems: 'center', gap: 24, padding: '26px 0', borderTop: i ? '1px solid rgba(244,246,242,0.1)' : 'none' }}>
+            <div style={{ fontFamily: "'Anton', sans-serif", fontSize: 78, width: 74, color: MEDAL[i], textAlign: 'center', lineHeight: 1 }}>{i + 1}</div>
+            <RoundPhoto name={r.name} size={116} />
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ fontFamily: "'Anton', sans-serif", fontSize: 48, textTransform: 'uppercase', lineHeight: 1 }}>{r.name}</div>
+              <div style={{ fontSize: 26, color: DIM, marginTop: 6 }}>{countryFlag(athleteCountry(r.name))} {athleteCountry(r.name)}</div>
+            </div>
+            <div style={{ textAlign: 'right' }}>
+              <div style={{ fontFamily: "'Anton', sans-serif", fontSize: 54, color: GREEN, lineHeight: 1 }}>{r.score}</div>
+              <div style={{ fontSize: 20, letterSpacing: 2, textTransform: 'uppercase', color: DIM, marginTop: 4 }}>{event.scoreLabel}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div style={{ padding: '26px 56px 0', fontSize: 22, color: DIM, letterSpacing: 0.5 }}>Official result. Full leaderboard + every athlete at the link.</div>
+      <CardFooter />
+    </div>
+  )
+}
+
+// LIVE overall leaderboard (cumulative points), top 10 with movement vs prior event
+function LeaderboardCard({ division, afterNum }: { division: Division; afterNum: number | null }) {
+  const rows = (division === 'men' ? LIVE.leaderboard.men : LIVE.leaderboard.women).slice(0, 10)
+  return (
+    <div style={cardBg}>
+      <CardHeader />
+      <div style={{ padding: '30px 56px 0' }}>
+        <div style={{ fontSize: 24, letterSpacing: 4, textTransform: 'uppercase', color: GREEN }}>Overall Standings{afterNum ? ` · After Event ${afterNum}` : ''}</div>
+        <div style={{ fontFamily: "'Anton', sans-serif", fontSize: 72, textTransform: 'uppercase', lineHeight: 0.96, marginTop: 8 }}>Leaderboard<br /><span style={{ color: GREEN }}>{division}</span></div>
+      </div>
+      <div style={{ padding: '20px 56px 0' }}>
+        {rows.length === 0 && <div style={{ fontSize: 32, color: DIM }}>Standings pending...</div>}
+        {rows.map((r, i) => {
+          const delta = r.prev != null ? r.prev - (i + 1) : null
+          return (
+            <div key={r.name} style={{ display: 'flex', alignItems: 'center', gap: 16, padding: '13px 0', borderTop: i ? '1px solid rgba(244,246,242,0.09)' : 'none' }}>
+              <div style={{ fontFamily: "'Anton', sans-serif", fontSize: 40, width: 46, color: i < 3 ? GREEN : DIM, textAlign: 'center' }}>{i + 1}</div>
+              <RoundPhoto name={r.name} size={64} />
+              <div style={{ flex: 1, minWidth: 0, fontFamily: "'Anton', sans-serif", fontSize: 36, textTransform: 'uppercase', lineHeight: 1 }}>
+                {r.name} <span style={{ fontSize: 26 }}>{countryFlag(athleteCountry(r.name))}</span>
+              </div>
+              <div style={{ width: 66, textAlign: 'center', fontSize: 26, color: delta && delta > 0 ? GREEN : delta && delta < 0 ? '#e0736a' : DIM }}>
+                {delta == null ? '' : delta > 0 ? `▲${delta}` : delta < 0 ? `▼${-delta}` : '-'}
+              </div>
+              <div style={{ fontFamily: "'Anton', sans-serif", fontSize: 44, color: INK, width: 150, textAlign: 'right' }}>{r.points}<span style={{ fontSize: 22, color: DIM }}> pts</span></div>
+            </div>
+          )
+        })}
+      </div>
+      <div style={{ padding: '18px 56px 0', fontSize: 22, color: DIM, letterSpacing: 0.5 }}>Cumulative points, official leaderboard. Full standings at the link.</div>
+      <CardFooter />
+    </div>
+  )
+}
+
 function NewsCard({ item }: { item: NewsItem }) {
   return (
     <div style={cardBg}>
@@ -984,7 +1067,18 @@ function CarouselSlide({ slide, index, total }: { slide: Slide; index: number; t
 
 // ---------- Captions ----------
 
-function captionFor(t: Template, a: GamesAthlete2026 | undefined, b: GamesAthlete2026 | undefined, division: Division, news?: NewsItem, carousel?: Carousel, pickSet?: PickSet, story?: Story): string {
+function captionFor(t: Template, a: GamesAthlete2026 | undefined, b: GamesAthlete2026 | undefined, division: Division, news?: NewsItem, carousel?: Carousel, pickSet?: PickSet, story?: Story, liveEvent?: LiveEvent): string {
+  if (t === 'results' && liveEvent) {
+    const rows = (division === 'men' ? liveEvent.men : liveEvent.women).slice(0, 3)
+    const medal = ['🥇', '🥈', '🥉']
+    const body = rows.length ? rows.map((r, i) => `${medal[i]} ${r.name} - ${r.score}`).join('\n') : 'Results pending.'
+    return `🏆 EVENT ${liveEvent.num} RESULT: ${liveEvent.name.toUpperCase()} (${division.toUpperCase()})\n\n${body}\n\nFull leaderboard + every athlete at the link in bio.\n\n${HASHTAGS}`
+  }
+  if (t === 'leaderboard') {
+    const rows = (division === 'men' ? LIVE.leaderboard.men : LIVE.leaderboard.women).slice(0, 5)
+    const body = rows.length ? rows.map((r, i) => `${i + 1}. ${r.name} - ${r.points} pts`).join('\n') : 'Standings pending.'
+    return `📊 OVERALL LEADERBOARD${LIVE.leaderboard.afterEvent ? ` - AFTER EVENT ${LIVE.leaderboard.afterEvent}` : ''} (${division.toUpperCase()})\n\n${body}\n\nFull standings + every athlete at the link in bio.\n\n${HASHTAGS}`
+  }
   if (t === 'story' && story) {
     return `📊 NEW ON THE BREAKDOWN\n\n${story.title}\n\n${story.hook}\n\nRead it: ${story.url}\n\n${HASHTAGS}`
   }
@@ -1025,6 +1119,7 @@ export default function CardStudio() {
   const [slideIdx, setSlideIdx] = useState(Number(params.get('s') || 0))
   const [pickId, setPickId] = useState(params.get('p') || PICKS[0].id)
   const [storyId, setStoryId] = useState(params.get('st') || STORIES[0].id)
+  const [eventNum, setEventNum] = useState(Number(params.get('e') || LIVE.events[0]?.num || 1))
   const [busy, setBusy] = useState(false)
   const cardRef = useRef<HTMLDivElement>(null)
 
@@ -1035,7 +1130,8 @@ export default function CardStudio() {
   const slideClamped = Math.max(0, Math.min(slideIdx, carousel.slides.length - 1))
   const pickSet = useMemo(() => PICKS.find((x) => x.id === pickId) ?? PICKS[0], [pickId])
   const story = useMemo(() => STORIES.find((x) => x.id === storyId) ?? STORIES[0], [storyId])
-  const caption = captionFor(template, a, b, division, newsItem, carousel, pickSet, story)
+  const liveEvent = useMemo(() => LIVE.events.find((x) => x.num === eventNum) ?? LIVE.events[0], [eventNum])
+  const caption = captionFor(template, a, b, division, newsItem, carousel, pickSet, story, liveEvent)
 
   const download = async () => {
     if (!cardRef.current || busy) return
@@ -1062,7 +1158,7 @@ export default function CardStudio() {
       await toPng(cardRef.current, { width: 1080, height: exportH, pixelRatio: 1 })
       const url = await toPng(cardRef.current, { width: 1080, height: exportH, pixelRatio: 1 })
       const link = document.createElement('a')
-      link.download = template === 'spotlight' ? `${a.slug}-spotlight.png` : template === 'h2h' ? `${a.slug}-vs-${b.slug}.png` : template === 'news' ? `news-${newsItem.id}.png` : template === 'carousel' ? `carousel-${carousel.id}-${String(slideClamped + 1).padStart(2, '0')}.png` : template === 'picks' ? `picks-${pickSet.id}-${division}.png` : template === 'story' ? `story-${story.id}.png` : `${template}-${division}.png`
+      link.download = template === 'spotlight' ? `${a.slug}-spotlight.png` : template === 'h2h' ? `${a.slug}-vs-${b.slug}.png` : template === 'news' ? `news-${newsItem.id}.png` : template === 'carousel' ? `carousel-${carousel.id}-${String(slideClamped + 1).padStart(2, '0')}.png` : template === 'picks' ? `picks-${pickSet.id}-${division}.png` : template === 'story' ? `story-${story.id}.png` : template === 'results' ? `results-e${eventNum}-${division}.png` : template === 'leaderboard' ? `leaderboard-e${eventNum}-${division}.png` : `${template}-${division}.png`
       link.href = url
       link.click()
     } finally {
@@ -1117,6 +1213,11 @@ export default function CardStudio() {
             {STORIES.map((x) => <option key={x.id} value={x.id}>{x.title.slice(0, 42)}</option>)}
           </select>
         )}
+        {template === 'results' && (
+          <select value={eventNum} onChange={(e) => setEventNum(Number(e.target.value))} className="bg-[var(--input-bg)] border border-[var(--input-border)] rounded-lg px-3 py-2 text-sm text-[var(--text-primary)]">
+            {LIVE.events.map((ev) => <option key={ev.num} value={ev.num}>E{ev.num} {ev.short}</option>)}
+          </select>
+        )}
         {template === 'carousel' && (
           <>
             <select value={carouselId} onChange={(e) => { setCarouselId(e.target.value); setSlideIdx(0) }} className="bg-[var(--input-bg)] border border-[var(--input-border)] rounded-lg px-3 py-2 text-sm text-[var(--text-primary)]">
@@ -1148,6 +1249,8 @@ export default function CardStudio() {
               {template === 'carousel' && <CarouselSlide slide={carousel.slides[slideClamped]} index={slideClamped} total={carousel.slides.length} />}
               {template === 'picks' && <PicksCard set={pickSet} division={division} />}
               {template === 'story' && <StoryCard story={story} />}
+              {template === 'results' && <ResultsCard event={liveEvent} division={division} />}
+              {template === 'leaderboard' && <LeaderboardCard division={division} afterNum={LIVE.leaderboard.afterEvent} />}
             </div>
           </div>
         </div>

@@ -1,0 +1,18 @@
+{
+  "updated": "",
+  "events": [
+    { "num": 1, "name": "The 2007 Hopper", "short": "Hopper", "scoreLabel": "TIME", "men": [], "women": [] },
+    { "num": 2, "name": "Ranch 7200", "short": "Ranch 7200", "scoreLabel": "TIME", "men": [], "women": [] },
+    { "num": 3, "name": "CrossFit Total - Back Squat", "short": "Back Squat", "scoreLabel": "LOAD", "men": [], "women": [] },
+    { "num": 4, "name": "CrossFit Total - Shoulder Press", "short": "Shoulder Press", "scoreLabel": "LOAD", "men": [], "women": [] },
+    { "num": 5, "name": "CrossFit Total - Deadlift", "short": "Deadlift", "scoreLabel": "LOAD", "men": [], "women": [] },
+    { "num": 6, "name": "Grass Oval Bicycle Race", "short": "Bike Race", "scoreLabel": "TIME", "men": [], "women": [] },
+    { "num": 7, "name": "Individual Event 7 (FloElite Exclusive)", "short": "Event 7", "scoreLabel": "RESULT", "men": [], "women": [] }
+  ],
+  "leaderboard": {
+    "afterEvent": null,
+    "afterLabel": "",
+    "men": [],
+    "women": []
+  }
+}
