@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { A2026, countryFlag, FIELD_2026 } from './athletes2026'
 import { useGamesStore } from './gamesStore'
 import AthleteAvatar from './AthleteAvatar'
+import LiveLeaderboard from './LiveLeaderboard'
 import type { GamesAthlete2026 } from '../types-games'
 
 type Division = 'men' | 'women'
@@ -122,6 +123,9 @@ export default function Hub2026() {
           {A2026.meta.fieldNote}
         </div>
       )}
+
+      {/* LIVE LEADERBOARD (self-hides until an event is scored; the hero feature during Games week) */}
+      <LiveLeaderboard />
 
       {/* THE 20 EVENTS tracker (timely hook as reveals roll out) */}
       <button onClick={() => navigate({ view: 'events', year: 2026 })}
