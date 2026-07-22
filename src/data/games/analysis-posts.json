@@ -1,5 +1,89 @@
 [
   {
+    "slug": "event-1-then-vs-now-19-years-of-the-hopper",
+    "title": "Event 1: The 2026 Field Just Cut the First-Ever Games Workout in Half",
+    "dek": "The Games opened with the EXACT workout from 2007. Jay Crouch (7:10) and Maddy Sturt (7:58) didn't just win Event 1 - they nearly halved the marks the sport set 19 years ago. Sturt's time would have beaten the 2007 men's champion by five minutes.",
+    "category": "Analysis",
+    "date": "2026-07-22",
+    "author": "Ravikant Dewangan",
+    "readMin": 3,
+    "summary": "Event 1 of the 2026 Games, \"the 2007 Hopper,\" is the exact workout (same reps, same loads) that opened the inaugural 2007 Games - a rare apples-to-apples measure of how far the sport has come. Jay Crouch won it in 7:10 (vs Brett Marshall's 13:07 in 2007) and Madeline Sturt in 7:58 (vs Jolie Gentry's 16:22). Both winners are Australian. The best woman today is now over five minutes faster than the best man was when the sport began.",
+    "blocks": [
+      {
+        "type": "p",
+        "text": "The 20th CrossFit Games opened by reaching all the way back to the first one. **Event 1, 'the 2007 Hopper,' is the exact workout that opened the inaugural 2007 Games** - same reps, same loads, right down to the 135/85 lb push jerks. That makes today a rare, clean measurement: the identical test, run by the best in the world, 19 years apart. The result is staggering."
+      },
+      {
+        "type": "h2",
+        "text": "The Same Test, Two Different Sports"
+      },
+      {
+        "type": "p",
+        "text": "The workout, both times: **1,000-meter row, then 5 rounds of 25 pull-ups and 7 push jerks** (135 lb men / 85 lb women), for time. In 2007 it was **drawn at random from a literal hopper** - a peanut roaster filled with colored balls - on the morning of competition, in front of an **open-registration field** (anyone could sign up; about 44 men and 20 women showed) on the **Castro family ranch**, with **$500** to the winner. Tonight it was Event 1 of a sold-out professional championship, known and trained for in advance. Same barbell. A completely different world."
+      },
+      {
+        "type": "h2",
+        "text": "Then vs Now: The Numbers Are Brutal"
+      },
+      {
+        "type": "p",
+        "text": "In 2007, the fastest man on this workout was **Brett Marshall in 13:07**. Tonight, **Jay Crouch won it in 7:10** - **nearly six minutes faster**, 45% quicker than anything the sport could produce in 2007. The women's gap is even bigger: **Jolie Gentry's winning 16:22** became **Madeline Sturt's 7:58** - she **more than halved it**, 8 minutes and 24 seconds faster. And the stat that says everything about two decades of progress: **Sturt's 7:58 would have beaten the 2007 men's champion by over five minutes.** The best woman in the field today is comfortably faster than the best man was when the sport began."
+      },
+      {
+        "type": "ranked",
+        "title": "Then vs Now - the same workout, 19 years apart",
+        "rows": [
+          {
+            "name": "Men's winner",
+            "value": "13:07 to 7:10",
+            "note": "2007 Brett Marshall to 2026 Jay Crouch: nearly 6 minutes and 45% faster."
+          },
+          {
+            "name": "Women's winner",
+            "value": "16:22 to 7:58",
+            "note": "2007 Jolie Gentry to 2026 Madeline Sturt: more than halved, 8:24 faster."
+          },
+          {
+            "name": "The kicker",
+            "value": "W over M",
+            "note": "Sturt's 7:58 (2026) is over 5 minutes faster than Marshall's 13:07 (the 2007 men's champ)."
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Why the Gap Is This Enormous"
+      },
+      {
+        "type": "p",
+        "text": "It is not that today's athletes are simply 45% 'fitter.' It is that the sport professionalized. In 2007, CrossFit was a garage-gym experiment - the competitors held day jobs, trained without specialized programming, and had never seen the workout until it came out of the hopper. In 2026, these are **full-time professional athletes** with dedicated coaches, sport science, nutrition and recovery, and years of training built for exactly this test. The workout did not change. The human being doing it did. That is the whole story of the Sport of Fitness in one head-to-head."
+      },
+      {
+        "type": "h2",
+        "text": "An Australian Statement"
+      },
+      {
+        "type": "p",
+        "text": "Both winners wave the same flag: **Jay Crouch and Madeline Sturt** put Australia on top of Event 1 to open the Games - a fast, aggressive start from two athletes built for this engine-and-gymnastics grind. The full Event 1 top 10 and the overall leaderboard drop as soon as the official results post."
+      },
+      {
+        "type": "callout",
+        "title": "Methodology",
+        "text": "The 2007 marks (Brett Marshall 13:07, Jolie Gentry 16:22) are from the official CrossFit Games archive, on the identical workout and loads. The 2026 winning times (Jay Crouch 7:10, Madeline Sturt 7:58) are from the live competition on July 22; we are confirming the full standings against the official leaderboard and will update with the complete top 10 and overall points. Same workout, same loads - a true apples-to-apples comparison."
+      }
+    ],
+    "sources": [
+      {
+        "label": "2007 CrossFit Games results (official archive, via our Games Almanac)",
+        "url": "https://wod.persistenceathletics.com/games/2007"
+      },
+      {
+        "label": "2026 CrossFit Games official leaderboard",
+        "url": "https://games.crossfit.com/leaderboard/finals/2026"
+      }
+    ]
+  },
+  {
     "slug": "day-1-is-here-the-full-running-order",
     "title": "Day 1 Is Here: 7 Events, One Brutal Wednesday",
     "dek": "The 2026 Games open with a seven-event gauntlet across the Bay Area - an engine-and-strength sandwich with no place for specialists to hide. And Ricky Garard may have drawn the dream card.",
