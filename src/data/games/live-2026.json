@@ -167,54 +167,54 @@
     ],
     "women": [
       {
-        "name": "Madeline Sturt",
-        "points": 100,
-        "prev": null
+        "name": "Haley Adams",
+        "points": 184,
+        "prev": 4
       },
       {
         "name": "Lucy Campbell",
-        "points": 96,
-        "prev": null
+        "points": 184,
+        "prev": 2
       },
       {
         "name": "Aline Wirz",
-        "points": 92,
-        "prev": null
+        "points": 172,
+        "prev": 3
       },
       {
-        "name": "Haley Adams",
-        "points": 88,
-        "prev": null
-      },
-      {
-        "name": "Danielle Brandon",
-        "points": 84,
-        "prev": null
-      },
-      {
-        "name": "Arielle Loewen",
-        "points": 80,
-        "prev": null
-      },
-      {
-        "name": "Emma Lawson",
-        "points": 76,
-        "prev": null
-      },
-      {
-        "name": "Kyra Milligan",
-        "points": 72,
-        "prev": null
-      },
-      {
-        "name": "Bergrós Björnsdóttir",
-        "points": 68,
-        "prev": null
+        "name": "Madeline Sturt",
+        "points": 168,
+        "prev": 1
       },
       {
         "name": "Aimee Cringle",
-        "points": 64,
-        "prev": null
+        "points": 164,
+        "prev": 10
+      },
+      {
+        "name": "Ellie Turner",
+        "points": 144,
+        "prev": 11
+      },
+      {
+        "name": "Emma Lawson",
+        "points": 140,
+        "prev": 7
+      },
+      {
+        "name": "Danielle Brandon",
+        "points": 132,
+        "prev": 5
+      },
+      {
+        "name": "Ella Wilkinson",
+        "points": 119,
+        "prev": 21
+      },
+      {
+        "name": "Arielle Loewen",
+        "points": 107,
+        "prev": 6
       }
     ]
   }
