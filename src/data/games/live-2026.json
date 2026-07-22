@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-22 (Event 1 official; men times pending in API)",
+  "updated": "2026-07-22 (Event 2 men official; women E2 pending)",
   "events": [
     {
       "num": 1,
@@ -27,7 +27,20 @@
       "name": "Ranch 7200",
       "short": "Ranch 7200",
       "scoreLabel": "TIME",
-      "men": [],
+      "men": [
+        {
+          "name": "Ricky Garard",
+          "score": "39:33"
+        },
+        {
+          "name": "James Sprague",
+          "score": ""
+        },
+        {
+          "name": "Jay Crouch",
+          "score": ""
+        }
+      ],
       "women": []
     },
     {
@@ -72,58 +85,58 @@
     }
   ],
   "leaderboard": {
-    "afterEvent": 1,
-    "afterLabel": "After Event 1",
+    "afterEvent": 2,
+    "afterLabel": "After Event 2",
     "men": [
       {
         "name": "Jay Crouch",
-        "points": 100,
-        "prev": null
+        "points": 192,
+        "prev": 1
       },
       {
-        "name": "Colten Mertens",
-        "points": 96,
-        "prev": null
+        "name": "James Sprague",
+        "points": 176,
+        "prev": 6
+      },
+      {
+        "name": "Ricky Garard",
+        "points": 172,
+        "prev": 8
+      },
+      {
+        "name": "Jeffrey Adler",
+        "points": 156,
+        "prev": 9
+      },
+      {
+        "name": "Justin Medeiros",
+        "points": 156,
+        "prev": 5
       },
       {
         "name": "Saxon Panchik",
-        "points": 92,
+        "points": 152,
+        "prev": 3
+      },
+      {
+        "name": "Roman Khrennikov",
+        "points": 136,
+        "prev": null
+      },
+      {
+        "name": "Austin Hatfield",
+        "points": 136,
         "prev": null
       },
       {
         "name": "Calum Clements",
-        "points": 88,
-        "prev": null
-      },
-      {
-        "name": "Justin Medeiros",
-        "points": 84,
-        "prev": null
-      },
-      {
-        "name": "James Sprague",
-        "points": 80,
-        "prev": null
+        "points": 103,
+        "prev": 4
       },
       {
         "name": "Moritz Fiebig",
-        "points": 76,
-        "prev": null
-      },
-      {
-        "name": "Ricky Garard",
-        "points": 72,
-        "prev": null
-      },
-      {
-        "name": "Jeffrey Adler",
-        "points": 68,
-        "prev": null
-      },
-      {
-        "name": "Bayley Martin",
-        "points": 64,
-        "prev": null
+        "points": 103,
+        "prev": 7
       }
     ],
     "women": [
