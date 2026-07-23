@@ -284,8 +284,57 @@ type Slide =
   | { type: 'cover'; kicker: string; headline: string; sub: string }
   | { type: 'point'; num: number; kicker: string; headline: string; body: string; source: string }
   | { type: 'cta'; headline: string; body: string }
+  | { type: 'bars'; kicker: string; headline: string; bars: { label: string; pct: number; display: string; color?: string }[]; footnote?: string }
+  | { type: 'stat'; kicker: string; headline: string; stats: { big: string; label: string }[]; footnote?: string }
+  | { type: 'movement'; kicker: string; headline: string; rows: { rank: number; name: string; pts: number; delta: number | null }[]; note?: string }
 type Carousel = { id: string; label: string; caption: string; slides: Slide[] }
 const CAROUSELS: Carousel[] = [
+  {
+    id: 'day1-data-recap',
+    label: 'Day 1 Data Recap + Friday Projection',
+    caption:
+      "📊 DAY 1, BY THE DATA. The 2026 Games opened with SEVEN events in one day, and the numbers tell it better than any hot take.\n\nWHAT IT TESTED: 6 of the 7 events went to the poles - maximal strength (the CrossFit Total) and pure engine (run, bike, swim). Zero dedicated gymnastics or barbell-cycling events. Day 1 rewarded the specialists at both ends.\n\nWHO LEADS: Women - Aimee Cringle (458), climbed from 10th to a runaway lead with 3 event wins. Men - James Sprague (414) by a SINGLE point over Dallin Pepper, after Jay Crouch led all day and got caught by the swim.\n\nTHE SWIM DECIDED IT: Lucy Campbell (a former international swimmer) won the women's by 69 seconds; Ty Jenkins took the men's. Both boards flipped on the last event of the day.\n\nFRIDAY: the arena opens (Events 8-12) and brings the skill-and-cycling middle Day 1 skipped. The all-rounders are coming for the specialists.\n\nFull recaps + the live board at the link in bio. A data read, not a result prediction.",
+    slides: [
+      { type: 'cover', kicker: 'Day 1 - Wed July 22', headline: 'DAY 1,\nBY THE DATA', sub: 'Seven events in one day. Here is what it tested, how the board moved, and what Friday changes. Swipe.' },
+      { type: 'bars', kicker: 'The Programming', headline: 'WHAT DAY 1\nACTUALLY TESTED', bars: [
+        { label: 'Maximal strength', pct: 100, display: '3 events', color: '#F4C64A' },
+        { label: 'Engine (run/bike/swim)', pct: 100, display: '3 events', color: '#91C640' },
+        { label: 'Mixed metcon', pct: 33, display: '1 event', color: '#60a5fa' },
+        { label: 'Dedicated gymnastics', pct: 0, display: '0 events', color: 'rgba(244,246,242,0.4)' },
+        { label: 'Barbell cycling', pct: 0, display: '0 events', color: 'rgba(244,246,242,0.4)' },
+      ], footnote: 'The Hopper touched pull-ups and jerks and the swim added burpees, but 6 of 7 events went to the poles - max strength and pure engine - and none to the skill-and-cycling middle. That middle is exactly what the arena tests.' },
+      { type: 'movement', kicker: 'Women - Final Day 1 Board', headline: 'WOMEN:\nTHE FINAL BOARD', rows: [
+        { rank: 1, name: 'Aimee Cringle', pts: 458, delta: 0 },
+        { rank: 2, name: 'Lucy Campbell', pts: 420, delta: 1 },
+        { rank: 3, name: 'Madeline Sturt', pts: 407, delta: -1 },
+        { rank: 4, name: 'Haley Adams', pts: 372, delta: 0 },
+        { rank: 5, name: 'Emma Lawson', pts: 364, delta: 1 },
+        { rank: 6, name: 'Alex Gazan', pts: 325, delta: 2 },
+        { rank: 7, name: 'Aline Wirz', pts: 313, delta: 0 },
+        { rank: 8, name: 'Arielle Loewen', pts: 300, delta: 3 },
+      ], note: 'Arrows = movement on the swim (Event 7). Campbell won it and jumped past Sturt; Loewen swam 4th to climb 3 spots. Cringle held the lead she took after the shoulder press.' },
+      { type: 'movement', kicker: 'Men - Final Day 1 Board', headline: 'MEN:\nTHE FINAL BOARD', rows: [
+        { rank: 1, name: 'James Sprague', pts: 414, delta: 1 },
+        { rank: 2, name: 'Dallin Pepper', pts: 413, delta: 2 },
+        { rank: 3, name: 'Justin Medeiros', pts: 392, delta: 3 },
+        { rank: 4, name: 'Jay Crouch', pts: 387, delta: -3 },
+        { rank: 5, name: 'Ricky Garard', pts: 386, delta: -2 },
+        { rank: 6, name: 'Moritz Fiebig', pts: 355, delta: -1 },
+        { rank: 7, name: 'Roman Khrennikov', pts: 348, delta: 0 },
+        { rank: 8, name: 'Jayson Hopper', pts: 304, delta: 1 },
+      ], note: 'Arrows = movement on the swim. Crouch led after all 6 prior events; a 19th-place swim dropped him to 4th and handed Sprague the lead by a single point.' },
+      { type: 'stat', kicker: 'The Headlines', headline: 'DAY 1 BY\nTHE NUMBERS', stats: [
+        { big: '6/7', label: 'events tested pure strength or pure engine' },
+        { big: '1 pt', label: 'separates Sprague and Pepper atop the men' },
+        { big: '69s', label: "Campbell's winning margin in the swim" },
+        { big: '10 to 1', label: "Cringle's climb from the opener to the lead" },
+      ] },
+      { type: 'point', num: 1, kicker: 'The Pivot', headline: 'THE SWIM\nDECIDED IT', body: "Both Day 1 leaders were made in the water. Lucy Campbell, a former international swimmer, won the women's Swim Standard by 69 seconds. Ty Jenkins, a three-time teen world champion, won the men's. The event flipped both boards - Crouch lost the men's lead, Campbell seized second - and proved again that swimming is the one CrossFit skill you cannot fake.", source: 'Official CrossFit Games leaderboard' },
+      { type: 'point', num: 2, kicker: 'Friday - The Arena', headline: 'WHAT FRIDAY\nCHANGES', body: 'Day 1 gave 6 of 7 events to raw strength and raw engine. Friday opens the arena (Events 8-12), historically where the Games test the middle Day 1 skipped: high-skill gymnastics, barbell cycling, and mixed triplets under fatigue. The exact workouts are not announced yet (two are FloElite exclusives), but the modality math is clear - the specialists who feasted on Day 1 now face the tests they like least.', source: 'Broadcast schedule + Persistence Athletics model' },
+      { type: 'point', num: 3, kicker: 'The Read', headline: 'WHO FRIDAY\nFAVORS', body: 'Watch the all-rounders sitting just off the lead. Men: Pepper and two-time champion Medeiros have the gymnastics and engine for arena couplets, and reigning champion Jayson Hopper - only 8th after a grinding Day 1 - historically climbs indoors. Women: Campbell, Adams and Lawson are built for skill-and-cycling. The Day 1 strength standouts, Mertens and Gazan, now have to defend. A modality read, not a result prediction.', source: 'Persistence Athletics model' },
+      { type: 'cta', headline: 'THE FULL\nBREAKDOWN', body: 'Both Day 1 recap blogs, the live interactive leaderboard, and every event card are on the site. Day 2 is Friday - cards and the read the moment it starts.' },
+    ],
+  },
   {
     id: 'day1-running-order',
     label: 'Day 1 Running Order',
@@ -1071,6 +1120,63 @@ function CarouselSlide({ slide, index, total }: { slide: Slide; index: number; t
             <div style={{ fontSize: 33, color: GREEN, fontWeight: 600 }}>Link in bio &middot; {HANDLE}</div>
             <div style={{ fontSize: 26, color: DIM, marginTop: 6 }}>{HUB_URL}/events</div>
           </div>
+        </div>
+      )}
+      {slide.type === 'bars' && (
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 56px' }}>
+          <div style={{ fontSize: 27, letterSpacing: 3, textTransform: 'uppercase', color: GREEN, fontWeight: 600 }}>{slide.kicker}</div>
+          <div style={{ fontFamily: "'Anton', sans-serif", fontSize: 82, textTransform: 'uppercase', lineHeight: 0.96, marginTop: 14, whiteSpace: 'pre-line' }}>{slide.headline}</div>
+          <div style={{ marginTop: 44, display: 'flex', flexDirection: 'column', gap: 26 }}>
+            {slide.bars.map((b, i) => (
+              <div key={i}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 9 }}>
+                  <div style={{ fontSize: 33, color: INK, fontWeight: 600, textTransform: 'uppercase', letterSpacing: 0.5 }}>{b.label}</div>
+                  <div style={{ fontFamily: "'Anton', sans-serif", fontSize: 40, color: b.color || GREEN }}>{b.display}</div>
+                </div>
+                <div style={{ height: 30, borderRadius: 8, background: 'rgba(244,246,242,0.09)', overflow: 'hidden' }}>
+                  <div style={{ width: `${Math.max(0, Math.min(100, b.pct))}%`, height: '100%', borderRadius: 8, background: b.color || GREEN }} />
+                </div>
+              </div>
+            ))}
+          </div>
+          {slide.footnote && <div style={{ marginTop: 40, fontSize: 27, color: DIM, lineHeight: 1.36 }}>{slide.footnote}</div>}
+        </div>
+      )}
+      {slide.type === 'stat' && (
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 56px' }}>
+          <div style={{ fontSize: 27, letterSpacing: 3, textTransform: 'uppercase', color: GREEN, fontWeight: 600 }}>{slide.kicker}</div>
+          <div style={{ fontFamily: "'Anton', sans-serif", fontSize: 82, textTransform: 'uppercase', lineHeight: 0.96, marginTop: 14, whiteSpace: 'pre-line' }}>{slide.headline}</div>
+          <div style={{ marginTop: 44, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
+            {slide.stats.map((s, i) => (
+              <div key={i} style={{ background: 'rgba(145,198,64,0.10)', border: '1px solid rgba(145,198,64,0.30)', borderRadius: 18, padding: '28px 30px' }}>
+                <div style={{ fontFamily: "'Anton', sans-serif", fontSize: 78, color: GREEN, lineHeight: 0.94 }}>{s.big}</div>
+                <div style={{ fontSize: 29, color: INK, marginTop: 12, lineHeight: 1.24 }}>{s.label}</div>
+              </div>
+            ))}
+          </div>
+          {slide.footnote && <div style={{ marginTop: 36, fontSize: 27, color: DIM, lineHeight: 1.36 }}>{slide.footnote}</div>}
+        </div>
+      )}
+      {slide.type === 'movement' && (
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 56px' }}>
+          <div style={{ fontSize: 27, letterSpacing: 3, textTransform: 'uppercase', color: GREEN, fontWeight: 600 }}>{slide.kicker}</div>
+          <div style={{ fontFamily: "'Anton', sans-serif", fontSize: 80, textTransform: 'uppercase', lineHeight: 0.96, marginTop: 12, whiteSpace: 'pre-line' }}>{slide.headline}</div>
+          <div style={{ marginTop: 34, display: 'flex', flexDirection: 'column', gap: 11 }}>
+            {slide.rows.map((r, i) => {
+              const medal = r.rank <= 3 ? MEDAL[r.rank - 1] : 'rgba(244,246,242,0.55)'
+              const dc = r.delta == null || r.delta === 0 ? DIM : r.delta > 0 ? '#5cbb3a' : '#e0655c'
+              const dtxt = r.delta == null ? '' : r.delta > 0 ? `▲${r.delta}` : r.delta < 0 ? `▼${-r.delta}` : '-'
+              return (
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 18, background: r.rank <= 3 ? 'rgba(145,198,64,0.09)' : 'rgba(244,246,242,0.04)', borderRadius: 12, padding: '15px 24px' }}>
+                  <div style={{ fontFamily: "'Anton', sans-serif", fontSize: 44, color: medal, width: 52 }}>{r.rank}</div>
+                  <div style={{ flex: 1, fontSize: 39, color: INK, fontWeight: 600 }}>{r.name}</div>
+                  <div style={{ fontSize: 30, color: dc, width: 66, textAlign: 'center' }}>{dtxt}</div>
+                  <div style={{ fontFamily: "'Anton', sans-serif", fontSize: 42, color: INK, width: 92, textAlign: 'right' }}>{r.pts}</div>
+                </div>
+              )
+            })}
+          </div>
+          {slide.note && <div style={{ marginTop: 26, fontSize: 26, color: DIM, lineHeight: 1.36 }}>{slide.note}</div>}
         </div>
       )}
       <div style={{ paddingBottom: 28 }}><SlideDots index={index} total={total} /></div>
