@@ -336,6 +336,36 @@ const CAROUSELS: Carousel[] = [
     ],
   },
   {
+    id: 'champions-check-in',
+    label: 'The Champions Check-In',
+    caption:
+      "Here is a fact that has never been true in the modern era: the last FOUR men to win the CrossFit Games are all competing on the same floor this weekend. Medeiros (2021, 2022). Adler (2023). Sprague (2024). Hopper (2025).\n\nAnd Day 1 scattered them. Sprague leads the Games at 418. Medeiros sits 3rd, doing quiet two-time-champion things. The reigning champ Hopper is grinding in 8th. Adler is digging out of 11th - and he built his 2023 title on the back half of a weekend.\n\nBehind them, the podium chasers: Pepper (runner-up in 2024) is 2nd. Garard (runner-up in 2025) won the Ranch run and sits 5th. Khrennikov 7th. And Vellner - 22nd on the board, but the 36-year-old won the deadlift at 605 lb over every young gun in the field.\n\nAnd the women? No former champion in the field at all. Whoever wins Sunday becomes a first-time Fittest Woman on Earth. Campbell (2nd in 2025) is 2nd again. Lawson 5th. Loewen 8th.\n\nThe engine specialists owned Day 1. The arena belongs to the winners. Full breakdown, with who fits the remaining tests, on the blog.",
+    slides: [
+      { type: 'cover', kicker: '2026 CrossFit Games', headline: 'THE CHAMPIONS\nCHECK-IN', sub: 'The last four men to win the Games are all on this floor - and Day 1 scattered them from 1st to 11th. Where every winner and podium vet stands. Swipe.' },
+      { type: 'stat', kicker: 'Never Before', headline: 'FOUR CHAMPIONS,\nONE FLOOR', stats: [
+        { big: '4', label: 'of the last 4 champions are in this field' },
+        { big: '1st', label: 'Sprague (2024 champ) leads at 418' },
+        { big: '11th', label: 'Adler (2023 champ), the deepest hole' },
+        { big: '0', label: "former champions in the women's field" },
+      ], footnote: 'Medeiros 2021+2022, Adler 2023, Sprague 2024, Hopper 2025. All numbers reflect the officials revised Day 1 scoring.' },
+      { type: 'movement', kicker: 'The Four Champions - After Day 1', headline: 'WHERE THE\nWINNERS SIT', rows: [
+        { rank: 1, name: 'James Sprague (24 champ)', pts: 418, delta: null },
+        { rank: 3, name: 'Justin Medeiros (21, 22)', pts: 388, delta: null },
+        { rank: 8, name: 'Jayson Hopper (25 champ)', pts: 304, delta: null },
+        { rank: 11, name: 'Jeffrey Adler (23 champ)', pts: 281, delta: null },
+      ], note: 'Sprague never finished worse than 6th outside the press. Hopper had to requalify this season after injury. Adler won 2023 by stacking the back half of the weekend.' },
+      { type: 'movement', kicker: 'The Podium Chasers - Men', headline: 'THE MEN WHO\nCAME CLOSE', rows: [
+        { rank: 2, name: 'Dallin Pepper (2nd in 24)', pts: 413, delta: null },
+        { rank: 5, name: 'Ricky Garard (2nd in 25)', pts: 386, delta: null },
+        { rank: 7, name: 'Roman Khrennikov (2nd in 22)', pts: 341, delta: null },
+        { rank: 22, name: 'Patrick Vellner (2nd in 18)', pts: 180, delta: null },
+      ], note: 'Pepper climbed 17th to 2nd through Day 1. Garard won the Ranch run. Vellner, 36, won the deadlift at 605 lb - the board undersells the day.' },
+      { type: 'point', num: 1, kicker: 'The Women', headline: 'A NEW CHAMPION\nIS GUARANTEED', body: 'There is no former champion in the 2026 women\'s field. Whoever wins on Sunday becomes a first-time Fittest Woman on Earth. The podium pedigree chasing the open crown: Lucy Campbell (2nd in 2025) sits 2nd at 420. Emma Lawson (2nd in 2023) is 5th. Arielle Loewen (3rd in 2023) is 8th. Olivia Kerstetter (3rd in 2025) is 17th with the barbell still to come.', source: 'Official leaderboard + Games Almanac' },
+      { type: 'point', num: 2, kicker: 'What Is Left', headline: 'WHO FITS THE\nREMAINING TESTS', body: 'Verified history, not vibes. The 500m sprint: Garard won both parts of 2024 Track and Field. Machine 7200m: Khrennikov won BOTH of its ancestors (2020 row, 2022 Rinse N Repeat) - and Campbell won that 2022 event on the women\'s side. The ring AMRAP: Vellner is a former artistic gymnast, the cleanest technician here. And the arena events reward exactly what Medeiros, Sprague and Hopper built their titles on.', source: 'Persistence Athletics Games Almanac, 2007-2026' },
+      { type: 'cta', headline: 'THE FULL\nCHECK-IN', body: 'Every champion, every podium vet, and who fits what is left - the full analysis is on the site, with the live board updating all weekend.' },
+    ],
+  },
+  {
     id: 'rookie-report-day1',
     label: 'The Rookie Report (Day 1)',
     caption:
