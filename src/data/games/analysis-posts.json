@@ -2482,5 +2482,87 @@
         "url": "https://wod.persistenceathletics.com/games/2026/analysis/womens-day-1-recap-cringle-takeover-campbell-swim"
       }
     ]
+  },
+  {
+    "slug": "rookie-report-day-1-2026",
+    "title": "The Rookie Report: How the 15 First-Timers Handled Day 1",
+    "dek": "Six men, nine women, zero Games experience between them, and a seven-event opener that would rattle a veteran. Three of them still walked off an event podium. Here is how every 2026 rookie handled Day 1.",
+    "category": "Rookie Watch",
+    "date": "2026-07-23",
+    "author": "Ravikant Dewangan",
+    "readMin": 7,
+    "summary": "The 2026 field has 15 Games rookies (6 men, 9 women). On a brutal seven-event opening day, three of them reached an event podium: Aline Wirz (3rd, Hopper), Ella Wilkinson (3rd, Ranch 7200) and Dylan Hamming (3rd, shoulder press). Wirz sits 7th overall, the only rookie in the top 10, on the back of an elite engine and despite a rough CrossFit Total. The class also skews young (Miley Wade is 18, the youngest in the field) and it was not spared by the day - Hannah Black fought ankle trouble on the run. Every number verified against the official leaderboard.",
+    "blocks": [
+      {
+        "type": "p",
+        "text": "Fifteen athletes walked into the 2026 CrossFit Games with zero individual Games experience - six men, nine women - and the sport did not ease them in. Seven scored events in a single day is the most brutal opener ever programmed, the kind of day that rattles athletes who have done this for a decade. And yet three of these first-timers walked off an event podium. Here is how the whole rookie class handled Day 1."
+      },
+      {
+        "type": "h2",
+        "text": "Three Rookies, Three Podiums"
+      },
+      {
+        "type": "p",
+        "text": "Start with the headline. **Aline Wirz took 3rd in the opening Hopper** (8:16), behind only Madeline Sturt and Lucy Campbell. **Ella Wilkinson ran to 3rd in the Ranch 7200** (42:16), a 7,200-meter trail race, beaten only by Aimee Cringle and Haley Adams. And on the men side, **Dylan Hamming pressed 245 lb for 3rd in the shoulder press**, one rung below Colten Mertens and Ricky Garard. Three rookies who did not merely survive an event - they beat almost every veteran in it."
+      },
+      {
+        "type": "h2",
+        "text": "The Rookie of Day 1: Aline Wirz"
+      },
+      {
+        "type": "p",
+        "text": "Switzerland's Wirz, 32, sits **7th overall** after Day 1, the only rookie in either division inside the top 10. Her card tells you exactly who she is: 3rd on the Hopper, 4th on the bike, an engine that belongs at this level. The CrossFit Total exposed the gap - 27th, 29th and 29th on the three lifts - but she had banked so much on the mono-structural events that she held a top-seven spot through the barbell block anyway. And remember the backstory: she was diagnosed with a C6 neck fracture roughly five weeks before her semifinal. Seventh at the CrossFit Games after Day 1, on that timeline, is the story of this rookie class."
+      },
+      {
+        "type": "h2",
+        "text": "The Young Guns"
+      },
+      {
+        "type": "p",
+        "text": "Three of these rookies are barely out of the teen ranks. **Miley Wade, at 18 the youngest athlete in the entire field**, took 8th on the Ranch run and sits 25th - completely at home. **Iceland's Bergros Bjornsdottir, 19**, was the steadiest rookie on the floor: a best of 8th on the back squat and nothing worse than 24th across all seven events, good for 15th overall on debut. And **Chile's Benjamin Reyes, 21**, had the hardest day of the group, but he made it here, and he is 21. This class has a future."
+      },
+      {
+        "type": "h2",
+        "text": "The Men's Class"
+      },
+      {
+        "type": "p",
+        "text": "Georgia's **Nika Maisuradze** led the rookie men in 17th, with a pair of 6th-place finishes - the Ranch run and the deadlift - that point to a real all-around base. Spain's **Luis Cuellar**, 19th, saved his best for last with a 5th in the Swim Standard, a rookie who can actually swim in a field where most cannot. And **Dylan Hamming**, at 33 the oldest rookie in the field, announced himself on the barbell with that 3rd-place press. Different ages, different tools, same result: they belonged."
+      },
+      {
+        "type": "h2",
+        "text": "Day 1 Also Took a Toll"
+      },
+      {
+        "type": "p",
+        "text": "The opener was punishing, and not everyone came through it clean. Per BoxRox's Day 1 coverage, Henrik Haapalainen raced the 7,200m Ranch carrying an Achilles injury and Anika Greer competed on an injured ankle. Among the rookies, **Hannah Black dealt with ankle trouble on the same trail run** and did not post a scored result on the bike. The steep Ranch climbs forced multiple athletes to walk sections of the course. Day 1 was a test of durability as much as fitness, and the newcomers felt every bit of it."
+      },
+      {
+        "type": "h2",
+        "text": "What Day 2 Holds"
+      },
+      {
+        "type": "p",
+        "text": "The arena events (8 through 12) reward a different toolkit than Day 1's strength-and-engine poles: high-skill gymnastics, barbell cycling, mixed triplets under fatigue. That is neutral-to-good news for the rookies who lost ground on the Total, like Wirz and Wilkinson, and a real test for the ones who leaned on it. First-timers carry no scar tissue from a bad Games day and none of the pressure of defending a ranking. Watch whether Wirz can hold the top 10 when the barbell gets technical - and whether one of these names sneaks another event podium indoors."
+      },
+      {
+        "type": "p",
+        "text": "Fifteen first-timers walked into the deepest field the sport has ever assembled, and three of them left Day 1 standing on an event podium. Whatever Friday brings, this class arrived."
+      }
+    ],
+    "sources": [
+      {
+        "label": "Official CrossFit Games leaderboard (C3PO, divisions 1 and 2)",
+        "url": "https://games.crossfit.com/leaderboard/finals/2026"
+      },
+      {
+        "label": "Persistence Athletics live leaderboard + athlete profiles",
+        "url": "https://wod.persistenceathletics.com/games/2026"
+      },
+      {
+        "label": "BoxRox - 2026 CrossFit Games Day 1 recap (injury notes)",
+        "url": "https://www.boxrox.com/2026-crossfit-games-day-1-recap-who-leads-after-brutal-return-to-the-ranch/"
+      }
+    ]
   }
 ]
