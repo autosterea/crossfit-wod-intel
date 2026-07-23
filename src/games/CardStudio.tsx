@@ -336,6 +336,24 @@ const CAROUSELS: Carousel[] = [
     ],
   },
   {
+    id: 'day1-records',
+    label: 'Day 1 Records & Firsts',
+    caption:
+      "🏆 DAY 1 RECORDS & FIRSTS. The 2026 Games opener did not just move the leaderboard, it moved the record book.\n\nTHE HEAVIEST TOTALS: Colten Mertens posted a 1,380 lb CrossFit Total (555 squat / 260 press / 565 deadlift) and Alex Gazan a 920 lb Total (330 / 170 / 420) - both reported by BoxRox as new Games CrossFit Total records. Mertens won the squat AND the press; Gazan won the press outright.\n\nA FIRST: Ty Jenkins, 20, won the Swim Standard for the first event win of his career, ahead of two-time champion Justin Medeiros. Lucy Campbell was the only woman under 11 minutes in the pool.\n\nAND THE GRIT: Henrik Haapalainen raced the Ranch on an Achilles injury, Anika Greer competed on an injured ankle, and the trail run forced athletes to walk the steep climbs.\n\nFull Day 1 breakdown at the link in bio.",
+    slides: [
+      { type: 'cover', kicker: 'Day 1 - Wed July 22', headline: 'RECORDS\n& FIRSTS', sub: 'The Games opener rewrote the record book and minted a brand-new event winner. The Day 1 superlatives. Swipe.' },
+      { type: 'stat', kicker: 'The Record Book', headline: 'THE HEAVIEST\nTOTALS', stats: [
+        { big: '1,380', label: "Colten Mertens' CrossFit Total (555 / 260 / 565)" },
+        { big: '920', label: "Alex Gazan's CrossFit Total (330 / 170 / 420)" },
+        { big: '2 wins', label: 'Mertens took the squat AND the press' },
+        { big: '170', label: 'Gazan won the shoulder press outright' },
+      ], footnote: 'BoxRox reports both as new Games CrossFit Total records. On Day 1, Mertens and Gazan owned the barbell.' },
+      { type: 'point', num: 1, kicker: 'The Firsts', headline: 'A 20-YEAR-OLD\nWON A GAMES EVENT', body: "Ty Jenkins, 20, won the Swim Standard for the first individual event win of his career - ahead of two-time champion Justin Medeiros. On the women's side, Lucy Campbell was the only athlete to break 11 minutes in the pool (10:55), winning by 69 seconds. Swimming decided the day.", source: 'Official leaderboard + BoxRox' },
+      { type: 'point', num: 2, kicker: 'The Grit', headline: 'THEY COMPETED\nHURT', body: 'Day 1 asked a brutal question and several answered it injured. Henrik Haapalainen raced the 7,200m Ranch carrying an Achilles injury; Anika Greer competed on an injured ankle; and the steep trail run forced multiple athletes to walk sections of the climbs. The opener was as much about toughness as fitness.', source: 'BoxRox Day 1 recap' },
+      { type: 'cta', headline: 'THE FULL\nDAY 1', body: 'Both recap blogs, the data breakdown, and the live board are on the site. Day 2 is Friday - the arena opens.' },
+    ],
+  },
+  {
     id: 'day1-running-order',
     label: 'Day 1 Running Order',
     caption:
