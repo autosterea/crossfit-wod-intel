@@ -211,12 +211,25 @@
       "short": "Swim Standard",
       "scoreLabel": "TIME",
       "men": [],
-      "women": []
+      "women": [
+        {
+          "name": "Lucy Campbell",
+          "score": "10:55"
+        },
+        {
+          "name": "Paige Rodgers",
+          "score": "12:04"
+        },
+        {
+          "name": "Danielle Brandon",
+          "score": "12:18"
+        }
+      ]
     }
   ],
   "leaderboard": {
-    "afterEvent": 6,
-    "afterLabel": "After Event 6",
+    "afterEvent": 7,
+    "afterLabel": "After Event 7",
     "men": [
       {
         "name": "Jay Crouch",
@@ -272,53 +285,53 @@
     "women": [
       {
         "name": "Aimee Cringle",
-        "points": 378,
+        "points": 458,
         "prev": 1
       },
       {
+        "name": "Lucy Campbell",
+        "points": 420,
+        "prev": 3
+      },
+      {
         "name": "Madeline Sturt",
-        "points": 339,
+        "points": 407,
         "prev": 2
       },
       {
-        "name": "Lucy Campbell",
-        "points": 320,
+        "name": "Haley Adams",
+        "points": 372,
         "prev": 4
       },
       {
-        "name": "Haley Adams",
-        "points": 300,
-        "prev": 5
-      },
-      {
-        "name": "Ellie Turner",
-        "points": 282,
-        "prev": 7
-      },
-      {
         "name": "Emma Lawson",
-        "points": 280,
+        "points": 364,
+        "prev": 6
+      },
+      {
+        "name": "Alex Gazan",
+        "points": 325,
         "prev": 8
       },
       {
         "name": "Aline Wirz",
-        "points": 265,
-        "prev": 10
+        "points": 313,
+        "prev": 7
       },
       {
-        "name": "Alex Gazan",
-        "points": 249,
-        "prev": 3
+        "name": "Arielle Loewen",
+        "points": 300,
+        "prev": 11
+      },
+      {
+        "name": "Ellie Turner",
+        "points": 288,
+        "prev": 5
       },
       {
         "name": "Elisa Fuliano",
-        "points": 241,
+        "points": 280,
         "prev": 9
-      },
-      {
-        "name": "Kyra Milligan",
-        "points": 232,
-        "prev": 6
       }
     ]
   }
