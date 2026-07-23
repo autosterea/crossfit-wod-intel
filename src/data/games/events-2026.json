@@ -50,6 +50,19 @@
       "num": 6
     },
     {
+      "name": "3D Throw",
+      "status": "confirmed",
+      "kind": "event",
+      "summary": "Published on the official workouts page for Friday, July 24: for total distance, one throw to the right, one throw to the left, and one throw backward, with a 30 lb implement for men and 20 lb for women. Presented by Rogue. Throwing for distance has not been tested at the Games since 2012 (the GHD Ball Toss - itself a backward toss for distance - and the 2011 softball throw before it), and those used far lighter implements. The implement type and the individual event number are not yet announced.",
+      "source": {
+        "label": "CrossFit Games (official workout page)",
+        "url": "https://games.crossfit.com/workouts/finals"
+      },
+      "date": "2026-07-23",
+      "shortName": "3D Throw",
+      "analysisSlug": "3d-throw-whose-power-flies"
+    },
+    {
       "name": "Event 7: Swim Standard",
       "status": "confirmed",
       "kind": "event",

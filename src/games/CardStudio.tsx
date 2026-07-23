@@ -336,6 +336,30 @@ const CAROUSELS: Carousel[] = [
     ],
   },
   {
+    id: '3d-throw',
+    label: '3D Throw (Friday preview)',
+    caption:
+      "Friday's opener is out, and it is the strangest test of the weekend: the 3D THROW. For total distance - one throw right, one throw left, one throw backward. 30 lb for the men, 20 for the women. Presented by Rogue. Implement and event number not announced yet.\n\nHere is why this is fascinating: the Games have not thrown ANYTHING for distance since 2012. The old Ball Toss was a backward throw with a 4 lb ball. Friday's load is more than seven times heavier. This is not accuracy - this is body mass times total-body power, in three directions. You cannot hide a weak side.\n\nThe physics reads: Jayson Hopper (100 kg, ex-college wide receiver - the one man whose sporting DNA is a ball in flight, and the reigning champ needs a Friday). Khrennikov, the heaviest man here at 103. Rookie Dylan Hamming, 98 kg with a 245 lb press. For the women: Hannah Black, the heaviest woman in the field at 82 kg and top-10 in all three lifts - a test built for her frame. Kerstetter. Gazan and her record-setting press.\n\nThe caveat: throwing is technique, nobody here trains it, and the 2012 toss was won by names nobody picked. Expect a surprise. A model read, not a result prediction.\n\nFull breakdown on the blog.",
+    slides: [
+      { type: 'cover', kicker: 'Friday July 24 - Just Announced', headline: '3D\nTHROW', sub: 'Three throws for total distance: right, left, backward. 30 lb men, 20 lb women. The Games have not thrown anything in 14 years. Swipe.' },
+      { type: 'point', num: 1, kicker: 'The Test', headline: 'RIGHT. LEFT.\nBACKWARD.', body: 'For total distance: one throw to the right, one to the left, one backward. Men 30 lb, women 20 lb. Presented by Rogue. Total distance across all three throws means consistency beats one monster heave - you cannot hide a weak side. Implement and event number not yet announced.', source: 'Official CrossFit Games workouts page' },
+      { type: 'point', num: 2, kicker: 'The History', headline: 'NOTHING THROWN\nSINCE 2012', body: 'Our almanac finds exactly two throwing tests in Games history: the 2011 softball throw and the 2012 GHD Ball Toss - a BACKWARD toss for distance, with 4 lb balls for the men. Friday is seven times heavier. And 2012 was won by Chad Mackay and Cheryl Brost, not the era\'s stars. Novelty tests scramble boards.', source: 'Persistence Athletics Games Almanac, 2007-2026' },
+      { type: 'stat', kicker: 'The Physics Reads - Men', headline: 'MASS TIMES\nPOWER', stats: [
+        { big: '100kg', label: 'Hopper - ex-college wide receiver, needs a Friday' },
+        { big: '103kg', label: 'Khrennikov - heaviest man in the field, 4th in the press' },
+        { big: '245', label: 'Hamming - rookie pressed 245 at 98 kg' },
+        { big: '2 wins', label: 'Mertens owned the barbell, gives up mass at 86 kg' },
+      ], footnote: 'Throwing heavy for distance rewards body mass and total-body power - the shot put recipe. Weights and Day 1 lifts verified.' },
+      { type: 'stat', kicker: 'The Physics Reads - Women', headline: 'THE SNEAKY\nPICKS', stats: [
+        { big: '82kg', label: 'Hannah Black - heaviest woman by 7 kg, top-10 in all 3 lifts' },
+        { big: '4th', label: 'Kerstetter on the deadlift - the power profile fits' },
+        { big: '170', label: 'Gazan won the press outright at 68 kg' },
+        { big: '2012', label: 'the last throw produced winners nobody picked' },
+      ], footnote: 'Black sits 29th after ankle trouble on Day 1 - a test built for her frame is exactly the reset she needs.' },
+      { type: 'cta', headline: 'THE FULL\nBREAKDOWN', body: 'The complete physics read, the 2012 history, and every athlete angle - on the site now. Podium + updated board the moment it is official.' },
+    ],
+  },
+  {
     id: 'champions-check-in',
     label: 'The Champions Check-In',
     caption:
