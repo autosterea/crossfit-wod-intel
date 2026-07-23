@@ -74,7 +74,20 @@
       "name": "CrossFit Total - Back Squat",
       "short": "Back Squat",
       "scoreLabel": "LOAD",
-      "men": [],
+      "men": [
+        {
+          "name": "Colten Mertens",
+          "score": "555 lb"
+        },
+        {
+          "name": "Guilherme Malheiros",
+          "score": "550 lb"
+        },
+        {
+          "name": "Austin Hatfield",
+          "score": "525 lb"
+        }
+      ],
       "women": [
         {
           "name": "Kyra Milligan",
@@ -95,7 +108,20 @@
       "name": "CrossFit Total - Shoulder Press",
       "short": "Shoulder Press",
       "scoreLabel": "LOAD",
-      "men": [],
+      "men": [
+        {
+          "name": "Colten Mertens",
+          "score": "260 lb"
+        },
+        {
+          "name": "Ricky Garard",
+          "score": "250 lb"
+        },
+        {
+          "name": "Dylan Hamming",
+          "score": "245 lb"
+        }
+      ],
       "women": [
         {
           "name": "Alex Gazan",
@@ -116,7 +142,20 @@
       "name": "CrossFit Total - Deadlift",
       "short": "Deadlift",
       "scoreLabel": "LOAD",
-      "men": [],
+      "men": [
+        {
+          "name": "Patrick Vellner",
+          "score": "605 lb"
+        },
+        {
+          "name": "James Sprague",
+          "score": "590 lb"
+        },
+        {
+          "name": "Nick Mathew",
+          "score": "585 lb"
+        }
+      ],
       "women": [
         {
           "name": "Aimee Cringle",
@@ -163,57 +202,57 @@
     }
   ],
   "leaderboard": {
-    "afterEvent": 6,
-    "afterLabel": "After Event 6",
+    "afterEvent": 5,
+    "afterLabel": "After Event 5",
     "men": [
       {
         "name": "Jay Crouch",
-        "points": 192,
+        "points": 262,
         "prev": 1
       },
       {
         "name": "James Sprague",
-        "points": 176,
-        "prev": 6
-      },
-      {
-        "name": "Ricky Garard",
-        "points": 172,
-        "prev": 8
-      },
-      {
-        "name": "Jeffrey Adler",
-        "points": 156,
-        "prev": 9
-      },
-      {
-        "name": "Justin Medeiros",
-        "points": 156,
+        "points": 246,
         "prev": 5
       },
       {
-        "name": "Saxon Panchik",
-        "points": 152,
-        "prev": 3
+        "name": "Ricky Garard",
+        "points": 242,
+        "prev": 2
       },
       {
-        "name": "Roman Khrennikov",
-        "points": 136,
-        "prev": null
-      },
-      {
-        "name": "Austin Hatfield",
-        "points": 136,
-        "prev": null
-      },
-      {
-        "name": "Calum Clements",
-        "points": 103,
+        "name": "Colten Mertens",
+        "points": 238,
         "prev": 4
       },
       {
+        "name": "Austin Hatfield",
+        "points": 232,
+        "prev": 3
+      },
+      {
+        "name": "Dallin Pepper",
+        "points": 225,
+        "prev": 8
+      },
+      {
+        "name": "Justin Medeiros",
+        "points": 224,
+        "prev": 6
+      },
+      {
         "name": "Moritz Fiebig",
-        "points": 103,
+        "points": 203,
+        "prev": 10
+      },
+      {
+        "name": "Bayley Martin",
+        "points": 199,
+        "prev": 11
+      },
+      {
+        "name": "Roman Khrennikov",
+        "points": 196,
         "prev": 7
       }
     ],
