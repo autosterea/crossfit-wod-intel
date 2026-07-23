@@ -336,6 +336,57 @@ const CAROUSELS: Carousel[] = [
     ],
   },
   {
+    id: 'rookie-report-day1',
+    label: 'The Rookie Report (Day 1)',
+    caption:
+      "Fifteen athletes walked into the 2026 CrossFit Games for the first time. Here is how Day 1 went for the rookie class.\n\nThree of them hit an event podium on debut. Aline Wirz took 3rd on the Hopper, Ella Wilkinson ran to 3rd on the Ranch 7200 behind only Cringle and Adams, and Dylan Hamming pressed his way to 3rd. On day one. On this floor.\n\nWirz was the story. Seventh overall, the only rookie inside the top 10, a 3rd on the Hopper and a 4th on the bike. And she did it after being diagnosed with a C6 neck fracture roughly five weeks before her semifinal. Read that again.\n\nThe young ones did not blink either. Miley Wade, 18 and the youngest athlete in the entire field, ran to 8th. Bergros Bjornsdottir, 19, was the steadiest rookie of the bunch with nothing worse than 24th and an 8th on the squat. Nika Maisuradze led the rookie men with two 6th-place finishes, and Luis Cuellar swam to 5th when the pool showed up.\n\nNot everyone got the day they wanted, and that is the Games. But every one of these fifteen earned the floor they were standing on. Full breakdown on the blog.",
+    slides: [
+      { type: 'cover', kicker: '2026 CrossFit Games', headline: 'THE ROOKIE\nREPORT', sub: 'Fifteen first-timers, one brutal opening day, and a few who refused to look like rookies at all. Swipe through the class of 2026.' },
+      { type: 'point', num: 1, kicker: 'Podium Rookies', headline: 'THREE ROOKIES\nHIT A PODIUM', body: 'On debut. Aline Wirz took 3rd on the Hopper. Ella Wilkinson ran to 3rd on the Ranch 7200, behind only Cringle and Adams. Dylan Hamming pressed to 3rd on the shoulder press. Three first-timers, three event podiums, day one.', source: '2026 CrossFit Games, official leaderboard after Day 1' },
+      { type: 'point', num: 2, kicker: 'Rookie of Day 1', headline: 'ALINE WIRZ\n7TH OVERALL', body: 'The only rookie inside the top 10. A 3rd on the Hopper, a 4th on the bike, an engine that belongs. The part that stops you: she was diagnosed with a C6 neck fracture roughly five weeks before her semifinal. Then she made the Games and finished her first day in 7th.', source: 'Switzerland, 32. Official Day 1 results' },
+      { type: 'movement', kicker: "Women's Rookie Board", headline: 'AFTER DAY 1\nWOMEN', rows: [
+        { rank: 7, name: 'Aline Wirz', pts: 313, delta: null },
+        { rank: 15, name: 'Bergros Bjornsdottir', pts: 245, delta: null },
+        { rank: 18, name: 'Ella Wilkinson', pts: 209, delta: null },
+        { rank: 20, name: 'Janie Cheverie', pts: 202, delta: null },
+        { rank: 21, name: 'Holly Tynan', pts: 198, delta: null },
+        { rank: 25, name: 'Miley Wade', pts: 180, delta: null },
+        { rank: 26, name: 'Erica Folo', pts: 179, delta: null },
+        { rank: 28, name: 'Rachel Noel', pts: 168, delta: null },
+      ], note: 'Overall placing after 7 events. Nine women made their Games debut this weekend.' },
+      { type: 'movement', kicker: "Men's Rookie Board", headline: 'AFTER DAY 1\nMEN', rows: [
+        { rank: 17, name: 'Nika Maisuradze', pts: 242, delta: null },
+        { rank: 19, name: 'Luis Cuellar', pts: 231, delta: null },
+        { rank: 27, name: 'Ben Fowler', pts: 158, delta: null },
+        { rank: 28, name: 'Quinn Robinson', pts: 152, delta: null },
+        { rank: 29, name: 'Dylan Hamming', pts: 147, delta: null },
+        { rank: 30, name: 'Benjamin Reyes', pts: 49, delta: null },
+      ], note: 'Maisuradze led the rookie men with two 6th-place finishes. Cuellar swam to 5th on E7.' },
+      { type: 'point', num: 3, kicker: 'Young Guns', headline: 'THE KIDS\nSHOWED UP', body: 'Miley Wade is 18, the youngest athlete in the whole field, and she ran to 8th. Bergros Bjornsdottir at 19 was the steadiest rookie out there, nothing worse than 24th and an 8th on the squat. Benjamin Reyes, 21 from Chile, had the hardest day of the group, but he had it on the biggest floor in the sport.', source: 'Official Day 1 results' },
+      { type: 'stat', kicker: 'Day 1 By The Numbers', headline: 'THE ROOKIE\nCLASS', stats: [
+        { big: '15', label: 'first-timers at the 2026 Games' },
+        { big: '3', label: 'event podiums on debut' },
+        { big: '18', label: 'age of the youngest, Miley Wade' },
+        { big: '7th', label: 'top rookie overall, Aline Wirz' },
+      ], footnote: 'Six rookie men, nine rookie women, after 7 events.' },
+      { type: 'cta', headline: 'READ THE FULL\nROOKIE REPORT', body: 'Every debut, every placing, and the live leaderboard as the weekend unfolds. The full Rookie Report blog is on the site.' },
+    ],
+  },
+  {
+    id: 'day-1-took-a-toll',
+    label: 'Day 1 Took a Toll (injuries + drop-offs)',
+    caption:
+      "Day 1 at the Ranch asked a lot, and a few athletes answered it hurt. Henrik Haapalainen raced the 7,200m trail run on an Achilles and still finished the day competing. Anika Greer went on an injured ankle. Rookie Hannah Black fought ankle trouble on the run, had no scored result on the bike, and sits 29th. Paige Rodgers battled her own ankle and still swam to 2nd. Those injury notes come from BoxRox's Day 1 recap, and respect to every one of them for staying in the fight.\n\nThen there is the other kind of Day 1 swing, the competitive one. Jay Crouch led the whole field after every event from 1 through 6, then a 19th-place swim dropped him to 4th. Healthy, just outswum. Colten Mertens won the squat and the press, took zero points on the bike at 21:48, and slid from 4th to 11th. No injuries there, just the leaderboard doing what it does.\n\nThat is the Games. One day, and the whole board rearranges. Full recap and the live leaderboard are on the site.",
+    slides: [
+      { type: 'cover', kicker: '2026 CrossFit Games / Day 1', headline: 'DAY 1\nTOOK A TOLL', sub: 'Some fell to injury, some fell on the board, and the two are not the same. Swipe through it.' },
+      { type: 'point', num: 1, kicker: 'Competed Hurt', headline: 'RAN IT ON\nAN ACHILLES', body: 'Henrik Haapalainen raced the 7,200m Ranch trail run carrying an Achilles injury, and still finished Day 1 competing. The steep climbs forced multiple athletes to walk sections of that course. He kept going anyway.', source: 'Injury note: BoxRox Day 1 recap' },
+      { type: 'point', num: 2, kicker: 'Ankles Under Fire', headline: 'TWO WOMEN,\nHURT ANKLES', body: 'Anika Greer competed on an injured ankle. Rookie Hannah Black fought ankle trouble on the trail run, posted no scored result on the bike, and sits 29th. Both stayed in the fight. Respect to them.', source: 'Injury notes: BoxRox Day 1 recap' },
+      { type: 'point', num: 3, kicker: 'Not An Injury', headline: 'LED SIX,\nFELL TO FOURTH', body: 'Different story, and it matters. This one is competitive, not physical. Jay Crouch led the whole field after every event from 1 through 6. Then a 19th-place swim knocked him from 1st all the way to 4th. Healthy, just outswum.', source: 'Official leaderboard' },
+      { type: 'point', num: 4, kicker: 'Also Competitive', headline: 'WON THE LIFTS,\nSANK ON THE BIKE', body: 'Colten Mertens won both the squat and the press, then took zero points on the bike, crossing at 21:48. That dropped him from 4th to 11th. No injury here either, the bike just bit. That is Day 1 at the Games.', source: 'Official leaderboard' },
+      { type: 'cta', headline: 'READ THE\nFULL RECAP', body: 'Our full Day 1 recap and the live leaderboard are up now on the site.' },
+    ],
+  },
+  {
     id: 'day1-records',
     label: 'Day 1 Records & Firsts',
     caption:
