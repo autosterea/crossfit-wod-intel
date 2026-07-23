@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { A2026, countryFlag, FIELD_2026 } from './athletes2026'
+import live2026 from '../data/games/live-2026.json'
 import { useGamesStore } from './gamesStore'
 import AthleteAvatar from './AthleteAvatar'
 import LiveLeaderboard from './LiveLeaderboard'
@@ -83,9 +84,9 @@ export default function Hub2026() {
           <div className="mt-5 flex flex-wrap gap-x-7 gap-y-3">
             {[
               { v: days != null && days > 0 ? String(days) : 'LIVE', l: days != null && days > 0 ? 'days to go' : 'games week' },
-              { v: `${FIELD_2026.inPerson}+${FIELD_2026.online}`, l: 'field (per division)' },
+              { v: `${live2026.leaderboard.afterEvent}/20`, l: 'events done' },
+              { v: String(FIELD_2026.total), l: 'per division' },
               { v: String(champions.length), l: 'former champions' },
-              { v: String(interviewCount), l: 'interviews' },
             ].map((s) => (
               <div key={s.l}>
                 <div className="games-display text-3xl sm:text-4xl cap-hero-ink leading-none">{s.v}</div>
@@ -94,30 +95,30 @@ export default function Hub2026() {
             ))}
           </div>
           <div className="mt-6 flex flex-wrap gap-2">
-            <button onClick={() => navigate({ view: 'capacity', year: 2026 })}
+            <button onClick={() => navigate({ view: 'events', year: 2026 })}
               className="games-condensed uppercase tracking-[0.1em] font-semibold text-[13px] px-4 py-2 rounded-lg bg-[#019644] text-white hover:bg-[#01a94d] transition-colors">
-              Capacity Lab →
+              The Events →
             </button>
-            <a href="#roster" className="games-condensed uppercase tracking-[0.1em] font-semibold text-[13px] px-4 py-2 rounded-lg border text-[#91C640] hover:bg-[#91C640]/10 transition-colors" style={{ borderColor: 'rgba(145,198,64,0.4)' }}>
-              The field ↓
+            <a href="#leaderboard" className="games-condensed uppercase tracking-[0.1em] font-semibold text-[13px] px-4 py-2 rounded-lg border text-[#91C640] hover:bg-[#91C640]/10 transition-colors" style={{ borderColor: 'rgba(145,198,64,0.4)' }}>
+              Leaderboard ↓
             </a>
           </div>
           <LiveHeroStrip />
         </div>
       </section>
 
-      {/* LIVE LEADERBOARD - the hero feature during Games week (self-hides pre-Games) */}
-      <LiveLeaderboard />
-
-      {/* THE 20 EVENTS tracker (timely hook as reveals roll out) */}
+      {/* THE 20 EVENTS tracker - top placement so every event (+ its blog) is one tap away */}
       <button onClick={() => navigate({ view: 'events', year: 2026 })}
         className="w-full mb-3 rounded-xl px-4 py-3.5 text-left flex items-center justify-between gap-3 transition-colors"
         style={{ background: 'rgba(145,198,64,0.1)', border: '1px solid rgba(145,198,64,0.3)' }}>
         <div className="min-w-0">
-          <div className="games-condensed text-[10.5px] uppercase tracking-[0.16em] text-[#91C640] mb-0.5">The 20 Events &middot; tracker</div>
-          <div className="text-[13px] text-[var(--text-secondary)] leading-snug">20 scored events across 4 days, the most in Games history. Swimming and cycling are back. Follow every reveal as it drops. <span className="text-[#91C640] whitespace-nowrap">See what we know &rarr;</span></div>
+          <div className="games-condensed text-[10.5px] uppercase tracking-[0.16em] text-[#91C640] mb-0.5">The 20 Events &middot; {live2026.leaderboard.afterEvent} done</div>
+          <div className="text-[13px] text-[var(--text-secondary)] leading-snug">Every event as it lands: the workout, the winners, and the analysis behind it. <span className="text-[#91C640] whitespace-nowrap">See the events &rarr;</span></div>
         </div>
       </button>
+
+      {/* LIVE LEADERBOARD - the hero feature during Games week (self-hides pre-Games) */}
+      <LiveLeaderboard />
 
       {/* FIELD STATUS (context, below the live board + events during Games week) */}
       {!A2026.meta.fieldLocked ? (

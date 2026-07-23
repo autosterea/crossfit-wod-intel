@@ -46,13 +46,13 @@ class ViewErrorBoundary extends Component<{ children: ReactNode; name: string },
 
 const NAV: { view: 'hub' | 'home' | 'evolution' | 'movements' | 'lore' | 'capacity' | 'intel' | 'analysis'; label: string; mobileLabel?: string }[] = [
   { view: 'hub', label: '2026 Games', mobileLabel: '2026' },
+  { view: 'capacity', label: 'Capacity Lab', mobileLabel: 'Capacity' },
   { view: 'intel', label: 'Intelligence', mobileLabel: 'Intel' },
   { view: 'analysis', label: 'The Breakdown', mobileLabel: 'Breakdown' },
   { view: 'home', label: 'Timeline' },
   { view: 'evolution', label: 'Evolution' },
   { view: 'movements', label: 'Movements' },
   { view: 'lore', label: 'Records & Lore', mobileLabel: 'Lore' },
-  { view: 'capacity', label: 'Capacity Lab', mobileLabel: 'Capacity' },
 ]
 
 function TopBar() {

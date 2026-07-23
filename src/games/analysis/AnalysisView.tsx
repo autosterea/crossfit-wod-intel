@@ -3,9 +3,16 @@ import { useGamesStore } from '../gamesStore'
 import { Panel } from '../ui'
 import { track } from '../../lib/track'
 import postsData from '../../data/games/analysis-posts.json'
+import eventsData from '../../data/games/events-2026.json'
 import type { AnalysisPost, Block } from './analysisTypes'
 
 const POSTS = (postsData as AnalysisPost[]).slice().sort((a, b) => (a.date < b.date ? 1 : -1))
+
+// Reverse index: post slug -> the 2026 event it covers (for the "view this event" link)
+type EventItem = { name: string; num?: number; shortName?: string; analysisSlug?: string }
+const EVENT_BY_SLUG = new Map<string, EventItem>(
+  ((eventsData as { items: EventItem[] }).items || []).filter((e) => e.analysisSlug).map((e) => [e.analysisSlug as string, e]),
+)
 
 function fmtDate(d: string): string {
   const [y, m, day] = d.split('-').map(Number)
@@ -113,7 +120,12 @@ function Article({ post }: { post: AnalysisPost }) {
         </div>
       )}
       <div className="mt-6 flex flex-wrap gap-2">
-        <button onClick={() => navigate({ view: 'intel', year: 2026 })} className="games-condensed uppercase tracking-[0.1em] font-semibold text-[12px] px-4 py-2 rounded-lg bg-[#019644] text-white hover:bg-[#01a94d] transition-colors">See the full model &rarr;</button>
+        {EVENT_BY_SLUG.has(post.slug) && (
+          <button onClick={() => navigate({ view: 'events', year: 2026 })} className="games-condensed uppercase tracking-[0.1em] font-semibold text-[12px] px-4 py-2 rounded-lg bg-[#019644] text-white hover:bg-[#01a94d] transition-colors">
+            {EVENT_BY_SLUG.get(post.slug)?.num ? `Event ${EVENT_BY_SLUG.get(post.slug)?.num}: ` : ''}{EVENT_BY_SLUG.get(post.slug)?.shortName || 'View this event'} &rarr;
+          </button>
+        )}
+        <button onClick={() => navigate({ view: 'intel', year: 2026 })} className={`games-condensed uppercase tracking-[0.1em] font-semibold text-[12px] px-4 py-2 rounded-lg ${EVENT_BY_SLUG.has(post.slug) ? 'border text-[#91C640] hover:bg-[#91C640]/10' : 'bg-[#019644] text-white hover:bg-[#01a94d]'} transition-colors`} style={EVENT_BY_SLUG.has(post.slug) ? { borderColor: 'rgba(145,198,64,0.4)' } : undefined}>See the full model &rarr;</button>
         <button onClick={() => navigate({ view: 'capacity', year: 2026 })} className="games-condensed uppercase tracking-[0.1em] font-semibold text-[12px] px-4 py-2 rounded-lg border text-[#91C640] hover:bg-[#91C640]/10 transition-colors" style={{ borderColor: 'rgba(145,198,64,0.4)' }}>Capacity Lab</button>
       </div>
     </article>

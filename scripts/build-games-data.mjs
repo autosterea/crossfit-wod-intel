@@ -424,7 +424,8 @@ for (const f of files) {
     continue
   }
   if (raw.year !== year) problem(`${year}: year field mismatch (${raw.year})`)
-  if (!raw.championMen || !raw.championWomen) problem(`${year}: missing champion(s)`)
+  // In-progress year (e.g. 2026 during Games week): no champions yet, events fill in as contested
+  if (!raw.inProgress && (!raw.championMen || !raw.championWomen)) problem(`${year}: missing champion(s)`)
   if (!Array.isArray(raw.events) || raw.events.length === 0) {
     problem(`${year}: no events`)
     continue

@@ -4,6 +4,7 @@ import { useGamesStore } from './gamesStore'
 import { track } from '../lib/track'
 import AthleteAvatar from './AthleteAvatar'
 import IntelProfile from './intel/IntelProfile'
+import Live2026Performance from './Live2026Performance'
 import type { GamesAthlete2026 } from '../types-games'
 
 const ord = (n: number) => (n % 100 >= 11 && n % 100 <= 13 ? 'th' : n % 10 === 1 ? 'st' : n % 10 === 2 ? 'nd' : n % 10 === 3 ? 'rd' : 'th')
@@ -90,6 +91,9 @@ export default function AthleteProfile() {
           </div>
         </div>
       </section>
+
+      {/* LIVE 2026: per-event placings + rank-fluctuation line (top billing during Games week) */}
+      <Live2026Performance slug={a.slug} />
 
       {/* Athlete Intelligence (competition-derived profile) - lead with the analysis */}
       <IntelProfile slug={a.slug} />
