@@ -50,6 +50,20 @@
       "num": 6
     },
     {
+      "name": "Event 7: Swim Standard",
+      "status": "confirmed",
+      "kind": "event",
+      "num": 7,
+      "summary": "Published on the official workouts page as the Day 1 closer: for time, a descending swim-and-burpee ladder - 200m swim, 40 burpees, 150m swim, 30 burpees, 100m swim, 20 burpees, 50m swim, 10 burpees - under a 15-minute cap. That is 500 meters of pool swimming (25-meter lengths, presented by TYR) broken by 100 total burpees. The first Games pool swim since 2020 and a FloElite-exclusive broadcast. Individual Event 7 on Wednesday, July 22 at the Morgan Hill Outdoor Sport Center.",
+      "source": {
+        "label": "CrossFit Games (official workout page)",
+        "url": "https://games.crossfit.com/workouts/finals"
+      },
+      "date": "2026-07-22",
+      "shortName": "Swim Standard",
+      "analysisSlug": "event-7-swim-standard-whose-swim-holds-up"
+    },
+    {
       "name": "Event 15: Speed Snatch Triple",
       "status": "confirmed",
       "kind": "event",

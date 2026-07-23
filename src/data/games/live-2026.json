@@ -207,9 +207,9 @@
     },
     {
       "num": 7,
-      "name": "Individual Event 7 (FloElite Exclusive)",
-      "short": "Event 7",
-      "scoreLabel": "RESULT",
+      "name": "Swim Standard",
+      "short": "Swim Standard",
+      "scoreLabel": "TIME",
       "men": [],
       "women": []
     }
