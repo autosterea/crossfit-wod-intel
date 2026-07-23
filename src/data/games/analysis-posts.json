@@ -2176,5 +2176,75 @@
         "url": "https://games.crossfit.com/article/broken-records-story-stats-2021-games"
       }
     ]
+  },
+  {
+    "slug": "event-7-swim-standard-whose-swim-holds-up",
+    "title": "Event 7: Swim Standard - Whose Swim Holds Up?",
+    "dek": "The Day 1 closer is 500 meters of pool swimming broken by 100 burpees, for time. Swimming decided Games leaderboards for a decade before it vanished. Now it is back, and history says it shreds the board.",
+    "category": "Event Preview",
+    "date": "2026-07-22",
+    "author": "Ravikant Dewangan",
+    "readMin": 4,
+    "summary": "Individual Event 7 is Swim Standard: for time, 15-minute cap, a descending swim-and-burpee ladder (200m swim / 40 burpees / 150 / 30 / 100 / 20 / 50 / 10) in a 25-meter pool. It is the first Games pool swim since 2019. Our own almanac shows swimming was a Games staple from 2011 to 2019, and the two closest precedents are the 2013 Pool (first 25-yard pool swim) and the 2014 Beach (swim plus burpees, won by Olympic sailing gold medalist Anna Tunnicliffe). Swim events reward a background you either have or you do not, and they produce some of the widest time gaps in the sport.",
+    "blocks": [
+      {
+        "type": "p",
+        "text": "The official workouts page confirmed the Day 1 closer, and it is the one nobody in this field could fake: **Swim Standard**. For time, under a 15-minute cap: a 200-meter swim, 40 burpees, a 150-meter swim, 30 burpees, a 100-meter swim, 20 burpees, a 50-meter swim, 10 burpees. That is 500 meters of pool swimming, in 25-meter lengths, cut into a descending ladder by 100 total burpees. It streams exclusively on FloElite, and it is the first pool swim at the CrossFit Games since 2019."
+      },
+      {
+        "type": "h2",
+        "text": "Why the Swim Is the Great Equalizer"
+      },
+      {
+        "type": "p",
+        "text": "Swimming is the one skill in the sport that does not transfer from land. You can build a huge engine on the rower, the bike and the run and still be genuinely slow in the water, because swim speed lives in technique and comfort, not just fitness. The burpees make it meaner: you climb out of the pool, drop to the deck for a breathless set, then push back off the wall with your heart rate pinned and no ability to control your breathing underwater. Panic is a real factor. The athletes with a swim background will look calm and long in the water while the rest thrash."
+      },
+      {
+        "type": "h2",
+        "text": "The Pool Detail That Matters: 25-Meter Lengths"
+      },
+      {
+        "type": "p",
+        "text": "Five hundred meters in a 25-meter pool is 20 lengths and 19 turns. Every wall is a chance to gain or lose a body length depending on whether you can push off tight and streamlined or come in clumsy and stand up. The ladder is built smart, too: the longest swim (200m) comes first when you are freshest, and both the swims and the burpee sets shrink as the fatigue climbs, so the back half is a test of who can still move when the shoulders are shot."
+      },
+      {
+        "type": "h2",
+        "text": "History First: The Water Has Always Shredded the Board"
+      },
+      {
+        "type": "p",
+        "text": "This is not new territory for the Games, and our almanac makes the pattern obvious. Swimming was a fixture from 2011 through 2019, when the Games opened in the water almost every single year. Two precedents matter most here. The 2013 Pool, at the Woollett Aquatics Center, was the first true pool swim in Games history and it used 25-yard segments, the direct ancestor of this 25-meter pool test. And the 2014 Beach paired swimming with burpees and kettlebell thrusters, the same swim-plus-burpee shape you are watching now."
+      },
+      {
+        "type": "p",
+        "text": "The winners tell you everything about how these events reward. The 2014 swim event was won on the women side by Anna Tunnicliffe, an Olympic gold medalist, in sailing. A water athlete to her core. Across the whole 2011 to 2019 run, swim mornings routinely produced surprise event winners and buried strength specialists who had no answer once the venue changed from the barbell to the buoy."
+      },
+      {
+        "type": "h2",
+        "text": "What It Means for the Standings"
+      },
+      {
+        "type": "p",
+        "text": "Day 1 has already run the 2007 Hopper, a 7,200-meter trail run, the full CrossFit Total and a bicycle race. Legs and grip are cooked, and the swim rewards a completely different system, which is exactly why it can flip the board. The strength men who owned the Total have no edge in the water. An unheralded swimmer can bank the day of their life. Expect one of the widest time spreads of the weekend: swim events regularly separate the field by a minute or more from top to bottom."
+      },
+      {
+        "type": "p",
+        "text": "We will post the official podium and the updated overall the moment it scores. History says the name at the top may surprise you."
+      }
+    ],
+    "sources": [
+      {
+        "label": "CrossFit Games (official workout page)",
+        "url": "https://games.crossfit.com/workouts/finals"
+      },
+      {
+        "label": "Persistence Athletics Games Almanac - Games swim events 2011-2019",
+        "url": "https://wod.persistenceathletics.com/games"
+      },
+      {
+        "label": "The Barbell Spin - pool swim will be 25-meter lengths",
+        "url": "https://thebarbellspin.com/crossfit-games/pool-swim-at-crossfit-games-will-be-25-meter-lengths/"
+      }
+    ]
   }
 ]
