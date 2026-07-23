@@ -28,8 +28,9 @@ export default function LiveHeroStrip() {
       {dd.athletes.slice(0, 3).map((a, i) => (
         <div key={a.name} className="flex items-center gap-2 text-[12.5px] leading-tight mb-1">
           <span className="games-display w-4 text-center shrink-0" style={{ color: i === 0 ? '#F4C64A' : i === 1 ? '#C9D2DA' : '#CD8B5B' }}>{i + 1}</span>
-          <span className="text-[var(--text-primary)] truncate">{countryFlag(a.country)} {a.name}</span>
-          <span className="games-display text-[var(--text-secondary)] ml-auto shrink-0">{a.cum[a.cum.length - 1]}</span>
+          {/* hero is always dark (brand), so text is fixed light - not theme vars (invisible in light mode) */}
+          <span className="truncate" style={{ color: '#f4f6f2' }}>{countryFlag(a.country)} {a.name}</span>
+          <span className="games-display ml-auto shrink-0" style={{ color: 'rgba(244,246,242,0.72)' }}>{a.cum[a.cum.length - 1]}</span>
         </div>
       ))}
     </div>
