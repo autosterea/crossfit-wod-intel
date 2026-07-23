@@ -176,7 +176,20 @@
       "name": "Grass Oval Bicycle Race",
       "short": "Bike Race",
       "scoreLabel": "TIME",
-      "men": [],
+      "men": [
+        {
+          "name": "Moritz Fiebig",
+          "score": "18:15.77"
+        },
+        {
+          "name": "Dallin Pepper",
+          "score": "18:15.91"
+        },
+        {
+          "name": "Jay Crouch",
+          "score": "18:16.16"
+        }
+      ],
       "women": [
         {
           "name": "Aimee Cringle",
@@ -202,58 +215,58 @@
     }
   ],
   "leaderboard": {
-    "afterEvent": 5,
-    "afterLabel": "After Event 5",
+    "afterEvent": 6,
+    "afterLabel": "After Event 6",
     "men": [
       {
         "name": "Jay Crouch",
-        "points": 262,
+        "points": 354,
         "prev": 1
       },
       {
         "name": "James Sprague",
-        "points": 246,
-        "prev": 5
-      },
-      {
-        "name": "Ricky Garard",
-        "points": 242,
+        "points": 334,
         "prev": 2
       },
       {
-        "name": "Colten Mertens",
-        "points": 238,
-        "prev": 4
-      },
-      {
-        "name": "Austin Hatfield",
-        "points": 232,
+        "name": "Ricky Garard",
+        "points": 322,
         "prev": 3
       },
       {
         "name": "Dallin Pepper",
-        "points": 225,
-        "prev": 8
-      },
-      {
-        "name": "Justin Medeiros",
-        "points": 224,
+        "points": 321,
         "prev": 6
       },
       {
         "name": "Moritz Fiebig",
-        "points": 203,
+        "points": 303,
+        "prev": 8
+      },
+      {
+        "name": "Justin Medeiros",
+        "points": 296,
+        "prev": 7
+      },
+      {
+        "name": "Roman Khrennikov",
+        "points": 272,
         "prev": 10
       },
       {
         "name": "Bayley Martin",
-        "points": 199,
+        "points": 267,
+        "prev": 9
+      },
+      {
+        "name": "Jayson Hopper",
+        "points": 256,
         "prev": 11
       },
       {
-        "name": "Roman Khrennikov",
-        "points": 196,
-        "prev": 7
+        "name": "Austin Hatfield",
+        "points": 244,
+        "prev": 5
       }
     ],
     "women": [
