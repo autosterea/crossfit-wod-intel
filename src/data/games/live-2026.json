@@ -210,7 +210,20 @@
       "name": "Swim Standard",
       "short": "Swim Standard",
       "scoreLabel": "TIME",
-      "men": [],
+      "men": [
+        {
+          "name": "Ty Jenkins",
+          "score": "11:09"
+        },
+        {
+          "name": "Justin Medeiros",
+          "score": "11:23"
+        },
+        {
+          "name": "Dallin Pepper",
+          "score": "11:49"
+        }
+      ],
       "women": [
         {
           "name": "Lucy Campbell",
@@ -232,54 +245,54 @@
     "afterLabel": "After Event 7",
     "men": [
       {
-        "name": "Jay Crouch",
-        "points": 354,
-        "prev": 1
-      },
-      {
         "name": "James Sprague",
-        "points": 334,
+        "points": 414,
         "prev": 2
       },
       {
-        "name": "Ricky Garard",
-        "points": 322,
-        "prev": 3
-      },
-      {
         "name": "Dallin Pepper",
-        "points": 321,
-        "prev": 6
-      },
-      {
-        "name": "Moritz Fiebig",
-        "points": 303,
-        "prev": 8
+        "points": 413,
+        "prev": 4
       },
       {
         "name": "Justin Medeiros",
-        "points": 296,
-        "prev": 7
+        "points": 392,
+        "prev": 6
+      },
+      {
+        "name": "Jay Crouch",
+        "points": 387,
+        "prev": 1
+      },
+      {
+        "name": "Ricky Garard",
+        "points": 386,
+        "prev": 3
+      },
+      {
+        "name": "Moritz Fiebig",
+        "points": 355,
+        "prev": 5
       },
       {
         "name": "Roman Khrennikov",
-        "points": 272,
-        "prev": 10
-      },
-      {
-        "name": "Bayley Martin",
-        "points": 267,
-        "prev": 9
+        "points": 348,
+        "prev": 7
       },
       {
         "name": "Jayson Hopper",
-        "points": 256,
+        "points": 304,
+        "prev": 9
+      },
+      {
+        "name": "Colten Mertens",
+        "points": 298,
         "prev": 11
       },
       {
-        "name": "Austin Hatfield",
-        "points": 244,
-        "prev": 5
+        "name": "Saxon Panchik",
+        "points": 295,
+        "prev": 15
       }
     ],
     "women": [
