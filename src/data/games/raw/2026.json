@@ -33,12 +33,26 @@
       "winnerWomen": "Madeline Sturt",
       "winningScoreMen": "7:11.22",
       "winningScoreWomen": "8:03.48",
-      "movements": ["Row", "Pull-up", "Push Jerk"],
-      "loads": [
-        { "item": "Push jerk", "men": "135 lb", "women": "85 lb" }
+      "movements": [
+        "Row",
+        "Pull-up",
+        "Push Jerk"
       ],
-      "equipment": ["rower", "pull-up bar", "barbell"],
-      "eventTypes": ["chipper"],
+      "loads": [
+        {
+          "item": "Push jerk",
+          "men": "135 lb",
+          "women": "85 lb"
+        }
+      ],
+      "equipment": [
+        "rower",
+        "pull-up bar",
+        "barbell"
+      ],
+      "eventTypes": [
+        "chipper"
+      ],
       "modality": "MGW",
       "timeDomain": "short",
       "loadLevel": "moderate",
@@ -67,10 +81,15 @@
       "winnerWomen": "Aimee Cringle",
       "winningScoreMen": "39:33",
       "winningScoreWomen": "40:42",
-      "movements": ["Run"],
+      "movements": [
+        "Run"
+      ],
       "loads": [],
       "equipment": [],
-      "eventTypes": ["run", "endurance"],
+      "eventTypes": [
+        "run",
+        "endurance"
+      ],
       "modality": "M",
       "timeDomain": "long",
       "loadLevel": "none",
@@ -99,12 +118,23 @@
       "winnerWomen": "Kyra Milligan",
       "winningScoreMen": "555 lb",
       "winningScoreWomen": "370 lb",
-      "movements": ["Back Squat"],
-      "loads": [
-        { "item": "Back squat (winning 1RM)", "men": "555 lb", "women": "370 lb" }
+      "movements": [
+        "Back Squat"
       ],
-      "equipment": ["barbell", "squat rack"],
-      "eventTypes": ["max-lift"],
+      "loads": [
+        {
+          "item": "Back squat (winning 1RM)",
+          "men": "555 lb",
+          "women": "370 lb"
+        }
+      ],
+      "equipment": [
+        "barbell",
+        "squat rack"
+      ],
+      "eventTypes": [
+        "max-lift"
+      ],
       "modality": "W",
       "timeDomain": null,
       "loadLevel": "max",
@@ -133,12 +163,22 @@
       "winnerWomen": "Alex Gazan",
       "winningScoreMen": "260 lb",
       "winningScoreWomen": "170 lb",
-      "movements": ["Shoulder Press"],
-      "loads": [
-        { "item": "Shoulder press (winning 1RM)", "men": "260 lb", "women": "170 lb" }
+      "movements": [
+        "Shoulder Press"
       ],
-      "equipment": ["barbell"],
-      "eventTypes": ["max-lift"],
+      "loads": [
+        {
+          "item": "Shoulder press (winning 1RM)",
+          "men": "260 lb",
+          "women": "170 lb"
+        }
+      ],
+      "equipment": [
+        "barbell"
+      ],
+      "eventTypes": [
+        "max-lift"
+      ],
       "modality": "W",
       "timeDomain": null,
       "loadLevel": "max",
@@ -167,12 +207,22 @@
       "winnerWomen": "Aimee Cringle",
       "winningScoreMen": "605 lb",
       "winningScoreWomen": "425 lb",
-      "movements": ["Deadlift"],
-      "loads": [
-        { "item": "Deadlift (winning 1RM)", "men": "605 lb", "women": "425 lb" }
+      "movements": [
+        "Deadlift"
       ],
-      "equipment": ["barbell"],
-      "eventTypes": ["max-lift"],
+      "loads": [
+        {
+          "item": "Deadlift (winning 1RM)",
+          "men": "605 lb",
+          "women": "425 lb"
+        }
+      ],
+      "equipment": [
+        "barbell"
+      ],
+      "eventTypes": [
+        "max-lift"
+      ],
       "modality": "W",
       "timeDomain": null,
       "loadLevel": "max",
@@ -201,10 +251,16 @@
       "winnerWomen": "Aimee Cringle",
       "winningScoreMen": "18:15.77",
       "winningScoreWomen": "19:10.78",
-      "movements": ["Bike"],
+      "movements": [
+        "Bike"
+      ],
       "loads": [],
-      "equipment": ["bike"],
-      "eventTypes": ["bike"],
+      "equipment": [
+        "bike"
+      ],
+      "eventTypes": [
+        "bike"
+      ],
       "modality": "M",
       "timeDomain": "medium",
       "loadLevel": "none",
@@ -233,10 +289,18 @@
       "winnerWomen": "Lucy Campbell",
       "winningScoreMen": "11:09",
       "winningScoreWomen": "10:55",
-      "movements": ["Swim", "Burpee"],
+      "movements": [
+        "Swim",
+        "Burpee"
+      ],
       "loads": [],
-      "equipment": ["pool"],
-      "eventTypes": ["swim", "couplet"],
+      "equipment": [
+        "pool"
+      ],
+      "eventTypes": [
+        "swim",
+        "couplet"
+      ],
       "modality": "MG",
       "timeDomain": "medium",
       "loadLevel": "none",
@@ -248,6 +312,61 @@
         "https://games.crossfit.com/workouts/finals",
         "https://games.crossfit.com/leaderboard/finals/2026",
         "https://www.boxrox.com/2026-crossfit-games-day-1-recap-who-leads-after-brutal-return-to-the-ranch/"
+      ]
+    },
+    {
+      "id": "2026-08",
+      "order": 8,
+      "stage": "games",
+      "name": "Climbing Snail '26",
+      "aka": null,
+      "day": "Friday",
+      "description": "For time, wearing a weight vest (22 lb men / 16 lb women):\n400-lb Snail push (100 feet men / 60 feet women)\nLegless rope climbs (3 men / 2 women)\n30 toes-to-bars\nRope climbs (5 men / 4 women)\nClosing Snail push\n10-minute time cap.",
+      "format": "for-time",
+      "scoring": "time",
+      "timeCapMin": 10,
+      "winnerMen": "Roman Khrennikov",
+      "winnerWomen": null,
+      "winningScoreMen": "5:27.60",
+      "winningScoreWomen": null,
+      "movements": [
+        "Snail Push",
+        "Legless Rope Climb",
+        "Toes-to-Bar",
+        "Rope Climb"
+      ],
+      "loads": [
+        {
+          "item": "Snail",
+          "men": "400 lb",
+          "women": "400 lb"
+        },
+        {
+          "item": "Weight vest",
+          "men": "22 lb",
+          "women": "16 lb"
+        }
+      ],
+      "equipment": [
+        "snail",
+        "rope",
+        "pull-up bar",
+        "weight vest"
+      ],
+      "eventTypes": [
+        "chipper",
+        "odd-object"
+      ],
+      "modality": "GW",
+      "timeDomain": "short",
+      "loadLevel": "heavy",
+      "environment": "arena",
+      "namedWod": null,
+      "firstAtGames": [],
+      "notes": "First Snail at the Games since the 2016 Climbing Snail. Khrennikov won by nearly a minute for his sixth career event win, then gave his first victory interview delivered entirely in English. Women contested the same course later in the session (result pending at time of entry).",
+      "sources": [
+        "https://games.crossfit.com/workouts/finals",
+        "https://games.crossfit.com/leaderboard/finals/2026?division=1"
       ]
     }
   ]

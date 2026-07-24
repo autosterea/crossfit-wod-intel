@@ -294,58 +294,58 @@
     }
   ],
   "leaderboard": {
-    "afterEvent": 7,
-    "afterLabel": "After Event 7",
+    "afterEvent": 8,
+    "afterLabel": "After Event 8",
     "men": [
       {
         "name": "James Sprague",
-        "points": 418,
-        "prev": 2
-      },
-      {
-        "name": "Dallin Pepper",
-        "points": 413,
-        "prev": 4
-      },
-      {
-        "name": "Justin Medeiros",
-        "points": 388,
-        "prev": 6
-      },
-      {
-        "name": "Jay Crouch",
-        "points": 387,
+        "points": 514,
         "prev": 1
       },
       {
-        "name": "Ricky Garard",
-        "points": 386,
-        "prev": 3
+        "name": "Dallin Pepper",
+        "points": 505,
+        "prev": 2
       },
       {
-        "name": "Moritz Fiebig",
-        "points": 355,
+        "name": "Ricky Garard",
+        "points": 470,
         "prev": 5
       },
       {
+        "name": "Justin Medeiros",
+        "points": 456,
+        "prev": 3
+      },
+      {
         "name": "Roman Khrennikov",
-        "points": 341,
+        "points": 441,
         "prev": 7
       },
       {
-        "name": "Jayson Hopper",
-        "points": 304,
-        "prev": 9
+        "name": "Jay Crouch",
+        "points": 426,
+        "prev": 4
       },
       {
-        "name": "Colten Mertens",
-        "points": 298,
+        "name": "Moritz Fiebig",
+        "points": 407,
+        "prev": 6
+      },
+      {
+        "name": "Jayson Hopper",
+        "points": 392,
+        "prev": 8
+      },
+      {
+        "name": "Jeffrey Adler",
+        "points": 329,
         "prev": 11
       },
       {
         "name": "Saxon Panchik",
-        "points": 295,
-        "prev": 15
+        "points": 319,
+        "prev": 10
       }
     ],
     "women": [
