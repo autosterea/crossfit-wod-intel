@@ -14,6 +14,7 @@ interface EventItem {
   num?: number | null
   shortName?: string
   analysisSlug?: string
+  day?: string
 }
 interface EventsData {
   meta: { total: number; days: number; venue: string; city: string; dates: string; note: string; updated: string }
@@ -92,6 +93,41 @@ export default function EventsView() {
           ))}
         </div>
       </section>
+
+      {/* NEXT UP - day-known events whose official numbers are pending (top billing so
+          "what's tomorrow" is never buried in the sections below) */}
+      {(() => {
+        const upNext = D.items.filter((e) => e.day && !e.num)
+        if (!upNext.length) return null
+        const dayLabel = upNext[0].day
+        return (
+          <section className="mb-9">
+            <div className="flex items-baseline justify-between gap-3 mb-3 flex-wrap">
+              <h2 className="games-display text-2xl text-[var(--text-primary)]">Next up: {dayLabel}</h2>
+              <span className="games-condensed text-[12px] uppercase tracking-[0.08em] text-[#91C640]">{upNext.length} events revealed</span>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              {upNext.map((ev) => (
+                <button
+                  key={ev.name}
+                  onClick={() => ev.analysisSlug && navigate({ view: 'analysis', year: 2026, slug: ev.analysisSlug })}
+                  disabled={!ev.analysisSlug}
+                  className="cap-card p-3.5 text-left"
+                  style={{ borderColor: 'rgba(145,198,64,0.45)', cursor: ev.analysisSlug ? 'pointer' : 'default' }}
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="games-display text-lg text-[var(--text-primary)] leading-tight">{ev.shortName ?? ev.name}</div>
+                    <span className="games-chip shrink-0" style={{ background: 'rgba(1,150,68,0.16)', color: 'var(--accent-success)' }}>Confirmed</span>
+                  </div>
+                  <p className="text-[12px] text-[var(--text-secondary)] leading-relaxed mt-1 clamp-2">{ev.summary}</p>
+                  {ev.analysisSlug && <div className="games-condensed text-[11px] text-[#91C640] mt-1.5 uppercase tracking-[0.08em]">Full breakdown &rarr;</div>}
+                </button>
+              ))}
+            </div>
+            <p className="text-[11px] text-[var(--text-muted)] mt-2">Official event numbers are announced on game day - these fill into the numbered grid below the moment they are.</p>
+          </section>
+        )
+      })()}
 
       {/* THE 20 EVENTS - numbered slots, fill in as CrossFit releases them */}
       <section className="mb-9">
