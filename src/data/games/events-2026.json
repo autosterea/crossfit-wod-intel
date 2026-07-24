@@ -6,7 +6,7 @@
     "city": "San Jose, California",
     "dates": "July 24-26, 2026",
     "note": "The 2026 CrossFit Games will score 20 events across 4 days (July 22-26), the most in Games history. Individuals open at off-site Bay Area locations on Wednesday, July 22 before three arena days at SAP Center. CrossFit reveals the official numbered events closer to and during the competition. This tracker follows every confirmed, revealed and teased element as it drops, with the source.",
-    "updated": "2026-07-22"
+    "updated": "2026-07-24"
   },
   "items": [
     {
@@ -24,30 +24,32 @@
       "day": "Friday, July 24"
     },
     {
-      "name": "Machine 7200M",
+      "name": "Event 18: Machine 7200M",
       "status": "confirmed",
       "kind": "event",
-      "summary": "Published on the official workouts page: for time, row 3,600 meters then ski 3,600 meters, under a 30-minute time cap for men / 35-minute cap for women. Presented by Saatva. Scheduled for Sunday, July 26. A pure double-machine test with no exact Games precedent (closest matches: the 2020 Stage 1 1,000m Row and the 2022 Rinse 'N' Repeat swim/SkiErg interval). Individual event number not yet confirmed by the official Instagram announcement.",
+      "summary": "Published on the official workouts page: for time, row 3,600 meters then ski 3,600 meters, under a 30-minute time cap for men / 35-minute cap for women. Presented by Saatva. Scheduled for Sunday, July 26. A pure double-machine test with no exact Games precedent (closest matches: the 2020 Stage 1 1,000m Row and the 2022 Rinse 'N' Repeat swim/SkiErg interval).",
       "source": {
         "label": "CrossFit Games (official workout page)",
         "url": "https://games.crossfit.com/workouts/finals/2026"
       },
       "date": "2026-07-22",
       "shortName": "Machine 7200M",
-      "analysisSlug": "machine-7200m-whose-engine-survives-the-double"
+      "analysisSlug": "machine-7200m-whose-engine-survives-the-double",
+      "num": 18
     },
     {
-      "name": "Roll to Support AMRAP",
+      "name": "Event 19: Roll to Support AMRAP",
       "status": "confirmed",
       "kind": "event",
-      "summary": "The official workouts page has published the full scored prescription for the ring skills Dave Castro teased in July: a 5-minute AMRAP of 4 forward rolls to support and 3 backward rolls to support. Presented by Velites. Scheduled for Sunday, July 26. Both movements have zero precedent in Games history (2007-2025). Individual event number not yet confirmed by the official Instagram announcement.",
+      "summary": "The official workouts page has published the full scored prescription for the ring skills Dave Castro teased in July: a 5-minute AMRAP of 4 forward rolls to support and 3 backward rolls to support. Presented by Velites. Scheduled for Sunday, July 26. Both movements have zero precedent in Games history (2007-2025).",
       "source": {
         "label": "CrossFit Games (official workout page)",
         "url": "https://games.crossfit.com/workouts/finals/2026"
       },
       "date": "2026-07-22",
       "shortName": "Roll to Support AMRAP",
-      "analysisSlug": "roll-to-support-amrap-the-ring-test-is-scored"
+      "analysisSlug": "roll-to-support-amrap-the-ring-test-is-scored",
+      "num": 19
     },
     {
       "name": "Event 6: Grass Oval Bicycle Race",
@@ -64,10 +66,10 @@
       "num": 6
     },
     {
-      "name": "Climbing Snail '26",
+      "name": "Event 8: Climbing Snail '26",
       "status": "confirmed",
       "kind": "event",
-      "summary": "Published on the official workouts page for Friday, July 24: for time under a 10-minute cap - a 400-lb Snail push (100 feet men / 60 feet women), legless rope climbs (3 men / 2 women), 30 toes-to-bars, rope climbs (5 men / 4 women), and a closing Snail push - all wearing a weight vest (22 lb men / 16 lb women). A rerun-in-spirit of the 2016 Climbing Snail (berm run, rope ascents, Snail pushes), won that year by Brent Fikowski and Samantha Briggs. The individual event number is not yet announced.",
+      "summary": "Published on the official workouts page for Friday, July 24: for time under a 10-minute cap - a 400-lb Snail push (100 feet men / 60 feet women), legless rope climbs (3 men / 2 women), 30 toes-to-bars, rope climbs (5 men / 4 women), and a closing Snail push - all wearing a weight vest (22 lb men / 16 lb women). A rerun-in-spirit of the 2016 Climbing Snail (berm run, rope ascents, Snail pushes), won that year by Brent Fikowski and Samantha Briggs.",
       "source": {
         "label": "CrossFit Games (official workout page)",
         "url": "https://games.crossfit.com/workouts/finals"
@@ -75,13 +77,14 @@
       "date": "2026-07-23",
       "shortName": "Climbing Snail '26",
       "analysisSlug": "day-2-slate-snail-handstands-hang-cleans",
-      "day": "Friday, July 24"
+      "day": "Friday, July 24",
+      "num": 8
     },
     {
-      "name": "Run Hang Squat Clean",
+      "name": "Event 10: Run Hang Squat Clean",
       "status": "confirmed",
       "kind": "event",
-      "summary": "Published on the official workouts page for Friday, July 24: 4 rounds for time of a 660-meter run and 10 hang squat cleans on a short barbell (225 lb men / 155 lb women). No exact Games precedent for a run plus hang-squat-clean interval; the closest recent cousin is the 2025 Albany Grip Trip (runs, axle deadlifts and handstand walks), won by Jay Crouch and Lucy Campbell. The individual event number is not yet announced.",
+      "summary": "Published on the official workouts page for Friday, July 24: 4 rounds for time of a 660-meter run and 10 hang squat cleans on a short barbell (225 lb men / 155 lb women). No exact Games precedent for a run plus hang-squat-clean interval; the closest recent cousin is the 2025 Albany Grip Trip (runs, axle deadlifts and handstand walks), won by Jay Crouch and Lucy Campbell.",
       "source": {
         "label": "CrossFit Games (official workout page)",
         "url": "https://games.crossfit.com/workouts/finals"
@@ -89,10 +92,11 @@
       "date": "2026-07-23",
       "shortName": "Run Hang Squat Clean",
       "analysisSlug": "day-2-slate-snail-handstands-hang-cleans",
-      "day": "Friday, July 24"
+      "day": "Friday, July 24",
+      "num": 10
     },
     {
-      "name": "Handstand Sprint",
+      "name": "Event 11: Handstand Sprint",
       "status": "confirmed",
       "kind": "event",
       "summary": "Published on the official workouts page for Friday, July 24: for time, a handstand walk course under a 6-minute cap. The name is a direct callback to the 2020 Handstand Sprint (a 100-yard handstand walk at the Ranch, won by Mat Fraser and Brooke Wells). Handstand-walk events are a Games staple with deep history in this field: Danielle Brandon has won three handstand-walk-family events (2021, 2022, 2023), Nick Mathew won the 2022 Skill Speed Medley, and Jay Crouch and Lucy Campbell won the handstand-walk-heavy 2025 Albany Grip Trip. Course layout and the event number are not yet announced.",
@@ -103,10 +107,11 @@
       "date": "2026-07-23",
       "shortName": "Handstand Sprint",
       "analysisSlug": "day-2-slate-snail-handstands-hang-cleans",
-      "day": "Friday, July 24"
+      "day": "Friday, July 24",
+      "num": 11
     },
     {
-      "name": "3D Throw",
+      "name": "Event 9: 3D Throw",
       "status": "confirmed",
       "kind": "event",
       "summary": "Published on the official workouts page for Friday, July 24: for total distance, one throw to the right, one throw to the left, and one throw backward, with a 30 lb implement for men and 20 lb for women. Presented by Rogue. Throwing for distance has not been tested at the Games since 2012 (the GHD Ball Toss - itself a backward toss for distance - and the 2011 softball throw before it), and those used far lighter implements. The implement type and the individual event number are not yet announced.",
@@ -117,7 +122,8 @@
       "date": "2026-07-23",
       "shortName": "3D Throw",
       "analysisSlug": "3d-throw-whose-power-flies",
-      "day": "Friday, July 24"
+      "day": "Friday, July 24",
+      "num": 9
     },
     {
       "name": "Event 7: Swim Standard",

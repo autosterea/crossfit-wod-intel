@@ -238,6 +238,46 @@
           "score": "12:18"
         }
       ]
+    },
+    {
+      "num": 8,
+      "name": "Climbing Snail '26",
+      "short": "Climbing Snail",
+      "scoreLabel": "TIME",
+      "men": [],
+      "women": []
+    },
+    {
+      "num": 9,
+      "name": "3D Throw",
+      "short": "3D Throw",
+      "scoreLabel": "DISTANCE",
+      "men": [],
+      "women": []
+    },
+    {
+      "num": 10,
+      "name": "Run Hang Squat Clean",
+      "short": "Run Hang Clean",
+      "scoreLabel": "TIME",
+      "men": [],
+      "women": []
+    },
+    {
+      "num": 11,
+      "name": "Handstand Sprint",
+      "short": "HS Sprint",
+      "scoreLabel": "TIME",
+      "men": [],
+      "women": []
+    },
+    {
+      "num": 12,
+      "name": "The Hopper Draw",
+      "short": "Hopper Draw",
+      "scoreLabel": "RESULT",
+      "men": [],
+      "women": []
     }
   ],
   "leaderboard": {
