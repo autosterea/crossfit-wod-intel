@@ -278,7 +278,20 @@
       "name": "3D Throw",
       "short": "3D Throw",
       "scoreLabel": "DISTANCE",
-      "men": [],
+      "men": [
+        {
+          "name": "Guilherme Malheiros",
+          "score": "123 ft"
+        },
+        {
+          "name": "Patrick Vellner",
+          "score": "122 ft (T-2)"
+        },
+        {
+          "name": "Dylan Hamming",
+          "score": "122 ft (T-2)"
+        }
+      ],
       "women": []
     },
     {
@@ -307,58 +320,58 @@
     }
   ],
   "leaderboard": {
-    "afterEvent": 8,
-    "afterLabel": "After Event 8",
+    "afterEvent": 9,
+    "afterLabel": "After Event 9",
     "men": [
       {
-        "name": "James Sprague",
-        "points": 514,
-        "prev": 1
-      },
-      {
         "name": "Dallin Pepper",
-        "points": 505,
+        "points": 543,
         "prev": 2
       },
       {
-        "name": "Ricky Garard",
-        "points": 470,
-        "prev": 5
+        "name": "James Sprague",
+        "points": 534,
+        "prev": 1
       },
       {
         "name": "Justin Medeiros",
-        "points": 456,
-        "prev": 3
-      },
-      {
-        "name": "Roman Khrennikov",
-        "points": 441,
-        "prev": 7
-      },
-      {
-        "name": "Jay Crouch",
-        "points": 426,
+        "points": 498,
         "prev": 4
       },
       {
-        "name": "Moritz Fiebig",
-        "points": 407,
+        "name": "Ricky Garard",
+        "points": 475,
+        "prev": 3
+      },
+      {
+        "name": "Jay Crouch",
+        "points": 458,
         "prev": 6
       },
       {
+        "name": "Roman Khrennikov",
+        "points": 457,
+        "prev": 5
+      },
+      {
         "name": "Jayson Hopper",
-        "points": 392,
+        "points": 430,
         "prev": 8
       },
       {
-        "name": "Jeffrey Adler",
-        "points": 329,
-        "prev": 11
+        "name": "Moritz Fiebig",
+        "points": 421,
+        "prev": 7
       },
       {
-        "name": "Saxon Panchik",
-        "points": 319,
-        "prev": 10
+        "name": "Bayley Martin",
+        "points": 350,
+        "prev": 12
+      },
+      {
+        "name": "Jeffrey Adler",
+        "points": 349,
+        "prev": 9
       }
     ],
     "women": [

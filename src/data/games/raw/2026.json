@@ -368,6 +368,50 @@
         "https://games.crossfit.com/workouts/finals",
         "https://games.crossfit.com/leaderboard/finals/2026?division=1"
       ]
+    },
+    {
+      "id": "2026-09",
+      "order": 9,
+      "stage": "games",
+      "name": "3D Throw",
+      "aka": null,
+      "day": "Friday",
+      "description": "For total distance, three sandbag throws (30 lb men / 20 lb women):\n1 throw with the right foot forward\n1 throw with the left foot forward\n1 overhead backward throw\nDistance measured from the back of the bag; throws landing outside the lane incur a 10-foot penalty. Scored as a 50-point event.",
+      "format": "other",
+      "scoring": "distance",
+      "timeCapMin": null,
+      "winnerMen": "Guilherme Malheiros",
+      "winnerWomen": null,
+      "winningScoreMen": "123 ft",
+      "winningScoreWomen": null,
+      "movements": [
+        "Sandbag Throw"
+      ],
+      "loads": [
+        {
+          "item": "Sandbag",
+          "men": "30 lb",
+          "women": "20 lb"
+        }
+      ],
+      "equipment": [
+        "sandbag"
+      ],
+      "eventTypes": [
+        "skill"
+      ],
+      "modality": "W",
+      "timeDomain": null,
+      "loadLevel": "light",
+      "environment": "arena",
+      "namedWod": null,
+      "firstAtGames": [
+        "sandbag throw for distance"
+      ],
+      "notes": "First throw-for-distance test at the Games since the 2012 GHD Ball Toss. A 50-point event (the first 50-point events since 2016 per the broadcast, alongside the CrossFit Total). Malheiros won for his sixth career event win - one of his five priors was the 2022 Sandbag Ladder. Vellner and Dylan Hamming tied for second at 122 ft. James Sprague slipped on his final throw (16th), costing him the overall lead to Dallin Pepper. Women's result recorded separately when official.",
+      "sources": [
+        "https://games.crossfit.com/leaderboard/finals/2026?division=1"
+      ]
     }
   ]
 }
