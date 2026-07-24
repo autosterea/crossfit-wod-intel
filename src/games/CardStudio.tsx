@@ -336,6 +336,51 @@ const CAROUSELS: Carousel[] = [
     ],
   },
   {
+    id: 'camp-wars-day1',
+    label: 'Camp Wars (Day 1 standings)',
+    caption:
+      "Everyone keeps asking: which training camp is actually winning the 2026 Games? We verified every camp's 2026 roster against their own announcements, joined it to the official leaderboard, and did the math. Here it is after Day 1.\n\nBRUTE STRENGTH is running the Games. Twelve athletes, and they own BOTH overall leaders - James Sprague (418) on the men's side and Aimee Cringle (458, three event wins) on the women's. Add Pepper 2nd, Adams 4th, Lawson 5th, Wirz 7th, the reigning champ Hopper 8th - that is seven of twelve inside the top 10 and a 10.4 average placement across the whole squad.\n\nPRVN is the counterpunch: ten athletes, FIVE in the top 10 (Sturt 3rd, Crouch 4th, Garard 5th, Mertens and Turner 9th), and the most event wins of any camp - six, against Brute's four.\n\nMayhem: quiet day by their standards - Khrennikov 7th is the lone top-10, zero event wins. HWPO runs small but sharp: Gazan 6th with a press win, Vellner's 605 deadlift win at 36. TTT had a rough opener.\n\nAnd respect to the unaffiliated: Medeiros (3rd) and Campbell (2nd) are beating entire camps on their own, and self-coached Arielle Loewen sits 8th out of a garage gym in Texas.\n\nCamp rosters verified from each program's own 2026 announcements. Full standings on the site.",
+    slides: [
+      { type: 'cover', kicker: 'Everyone Is Asking', headline: 'WHICH CAMP\nIS WINNING?', sub: 'We verified every 2026 camp roster, joined it to the official board, and did the math. The camp standings after Day 1. Swipe.' },
+      { type: 'stat', kicker: 'The Headline', headline: 'BRUTE OWNS\nBOTH LEADERS', stats: [
+        { big: '2/2', label: 'both overall leaders are Brute: Sprague (M) + Cringle (W)' },
+        { big: '7/12', label: 'Brute athletes inside the top 10' },
+        { big: '6', label: 'event wins for PRVN - the most of any camp' },
+        { big: '10.4', label: 'Brute average placement across 12 athletes' },
+      ], footnote: 'Rosters verified against each camp\'s own 2026 announcements; standings from the official leaderboard after 7 events.' },
+      { type: 'bars', kicker: 'The Camp Standings', headline: 'AVERAGE PLACEMENT\nAFTER DAY 1', bars: [
+        { label: 'Brute Strength (12)', pct: 69, display: '10.4', color: '#91C640' },
+        { label: 'PRVN Fitness (10)', pct: 62, display: '12.5', color: '#F4C64A' },
+        { label: 'CrossFit Mayhem (5)', pct: 53, display: '15.2', color: '#60a5fa' },
+        { label: 'HWPO Training (3)', pct: 43, display: '18.0', color: '#C9D2DA' },
+        { label: 'Training Think Tank (3)', pct: 10, display: '28.0', color: 'rgba(244,246,242,0.4)' },
+      ], footnote: 'Average overall placement of each camp\'s athletes, both divisions (lower is better; bar length = better). Camps with 2+ verified 2026 Games athletes.' },
+      { type: 'movement', kicker: 'Brute Strength - 12 athletes', headline: 'THE BRUTE\nTAKEOVER', rows: [
+        { rank: 1, name: 'James Sprague (M)', pts: 418, delta: null },
+        { rank: 1, name: 'Aimee Cringle (W)', pts: 458, delta: null },
+        { rank: 2, name: 'Dallin Pepper (M)', pts: 413, delta: null },
+        { rank: 4, name: 'Haley Adams (W)', pts: 372, delta: null },
+        { rank: 5, name: 'Emma Lawson (W)', pts: 364, delta: null },
+        { rank: 7, name: 'Aline Wirz (W)', pts: 313, delta: null },
+        { rank: 8, name: 'Jayson Hopper (M)', pts: 304, delta: null },
+        { rank: 16, name: 'Ty Jenkins (M)', pts: 246, delta: null },
+      ], note: 'Both overall leaders, the reigning men\'s champ, and the swim winner (Jenkins) - all one camp. Plus Ekai 18th, Wilkinson 18th, Cheverie 20th, Mathew 25th.' },
+      { type: 'movement', kicker: 'PRVN Fitness - 10 athletes', headline: 'PRVN WINS\nTHE EVENTS', rows: [
+        { rank: 3, name: 'Madeline Sturt (W)', pts: 407, delta: null },
+        { rank: 4, name: 'Jay Crouch (M)', pts: 387, delta: null },
+        { rank: 5, name: 'Ricky Garard (M)', pts: 386, delta: null },
+        { rank: 9, name: 'Colten Mertens (M)', pts: 298, delta: null },
+        { rank: 9, name: 'Ellie Turner (W)', pts: 288, delta: null },
+        { rank: 13, name: 'Bayley Martin (M)', pts: 270, delta: null },
+        { rank: 14, name: 'Kyra Milligan (W)', pts: 247, delta: null },
+        { rank: 17, name: 'Olivia Kerstetter (W)', pts: 220, delta: null },
+      ], note: 'Six event wins - the most of any camp: Sturt\'s Hopper, Crouch\'s Hopper, Garard\'s run, Mertens\' squat AND press, Milligan\'s squat. Plus Souza 24th, McGonigle 27th.' },
+      { type: 'point', num: 1, kicker: 'The Rest of the Map', headline: 'MAYHEM QUIET,\nHWPO SHARP', body: 'CrossFit Mayhem (5 athletes): a quiet opener by Cookeville standards - Khrennikov 7th is the lone top-10 and the camp took zero event wins. HWPO Training runs a three-athlete squad with teeth: Gazan 6th with the shoulder press win and the women\'s Total record, and Vellner\'s 605 lb deadlift win at age 36. Training Think Tank\'s three women all sit 25th or below after a bruising Day 1.', source: 'Official leaderboard + camps\' own 2026 rosters' },
+      { type: 'point', num: 2, kicker: 'No Camp, No Problem', headline: 'THE INDEPENDENTS\nARE FINE', body: 'Justin Medeiros (3rd) and Lucy Campbell (2nd) are beating entire camps without one. And the best story in this category: Arielle Loewen, who self-coaches out of her garage gym in Texas, sits 8th in the world. Fiebig (6th) rounds out an unaffiliated top-10 crowd.', source: 'Official leaderboard; camp status per 2026 sources' },
+      { type: 'cta', headline: 'THE FULL\nCAMP MATH', body: 'Every camp, every athlete, every placing - plus the live board that updates all weekend. Link in bio.' },
+    ],
+  },
+  {
     id: '3d-throw',
     label: '3D Throw (Friday preview)',
     caption:
