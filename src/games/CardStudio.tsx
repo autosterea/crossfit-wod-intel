@@ -336,6 +336,25 @@ const CAROUSELS: Carousel[] = [
     ],
   },
   {
+    id: 'hopper-result',
+    label: 'The Hopper Spoke (snatch + T2B)',
+    caption:
+      "THE BARREL SPOKE. At Opening Ceremonies this morning, the original 2007 hopper drum was spun live - and out came SNATCH and TOES-TO-BAR. One barbell movement, one gymnastics movement. Friday night's closer now has its ingredients.\n\nThe twist on the twist: the final workout structure is being decided by a VOTE. The field knows what they'll do tonight - not how much, how heavy, or in what shape.\n\nHere is what our almanac knows. The snatch has been tested 26 times at the Games (Amanda, Isabel, the max snatches). Toes-to-bar: 12 times. And the exact COMBINATION has happened once - the 2024 Dickies Triplet - won by JAYSON HOPPER. The reigning champ. In this field. Sitting 8th and needing a Friday. The barrel may have just dealt him his favorite hand.\n\nMore in-field receipts: Malheiros won the 2021 max snatch at 305 lb (and tomorrow is the Speed Snatch Triple - the snatchers just got a double-feature weekend). Hatfield won 2025's Running Isabel. Garard (2022) and Khrennikov (2023) have both WON toes-to-bar events, and Haley Adams owns the 2022 women's.\n\nThe vote decides everything: heavy = Malheiros country, fast and light = Isabel specialists, add running = the event Hopper already won. We publish the workout the moment it's official. Tonight, under the lights, the barrel gets its answer.",
+    slides: [
+      { type: 'cover', kicker: 'The Draw Is In', headline: 'SNATCH.\nTOES-TO-BAR.', sub: 'The original 2007 barrel spoke this morning: snatch + toes-to-bar, raced tonight. The workout itself? Being decided by a vote right now. Swipe.' },
+      { type: 'point', num: 1, kicker: 'The Twist On The Twist', headline: 'THE WORKOUT IS\nUP FOR A VOTE', body: 'The hopper gave the movements; a vote decides the structure before tonight\'s session. The field knows WHAT they will do - not how much, how heavy, or in what shape. Even after the draw, nobody can prepare. And it runs as the FINAL event of a five-event arena day, on fried grip.', source: 'Opening Ceremonies draw; workout pending official publication' },
+      { type: 'stat', kicker: 'The Almanac Read', headline: 'THE BARREL DEALT\nHOPPER HIS HAND', stats: [
+        { big: '1', label: 'prior Games event combined these movements: the 2024 Dickies Triplet' },
+        { big: '1st', label: 'Jayson Hopper WON it - the reigning champ, sitting 8th tonight' },
+        { big: '26', label: 'Games events have tested the snatch (Amanda, Isabel...)' },
+        { big: '12', label: 'Games events have tested toes-to-bar' },
+      ], footnote: 'All history from our verified Games Almanac, 2007-2026. The 2024 women\'s winner (Toomey) is not in the field - that title is open.' },
+      { type: 'point', num: 2, kicker: 'The Receipts In This Field', headline: 'WHO OWNS THESE\nMOVEMENTS', body: 'Snatch: Malheiros won the 2021 max snatch outright at 305 lb - and with tomorrow\'s Speed Snatch Triple, the snatchers just got a double-feature weekend. Hatfield won 2025\'s Running Isabel (2:35). Toes-to-bar: Garard won the 2022 test, Khrennikov the 2023 Pig Chipper, and Haley Adams the 2022 women\'s - T2B volume has been her signature for years.', source: 'Persistence Athletics Games Almanac' },
+      { type: 'point', num: 3, kicker: 'What The Vote Decides', headline: 'EVERYTHING\nIS THE VOTE', body: 'Heavy barbell: Malheiros-Mertens country. Light and fast, Isabel-style: Hatfield, Medeiros, the cyclers. High-volume toes-to-bar: Adams, Garard, Khrennikov. Add running and you recreate the exact event Hopper won in 2024. The unknown stays alive until the last moment - that is the whole point of the barrel.', source: 'Persistence Athletics analysis' },
+      { type: 'cta', headline: 'THE MOMENT\nIT IS OFFICIAL', body: 'The full workout + final picks publish the second the vote closes. Tonight, under the lights, the barrel gets its answer. Link in bio.' },
+    ],
+  },
+  {
     id: 'hopper-draw',
     label: 'The Hopper Draw (Friday closer)',
     caption:

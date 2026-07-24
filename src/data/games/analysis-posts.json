@@ -2884,5 +2884,71 @@
         "url": "https://wod.persistenceathletics.com/games"
       }
     ]
+  },
+  {
+    "slug": "the-hopper-spoke-snatch-and-toes-to-bar",
+    "title": "The Hopper Spoke: Snatch and Toes-to-Bar. Now the Workout Is Up for a Vote.",
+    "dek": "The original 2007 barrel was spun at Opening Ceremonies this morning and out came two movements: the snatch and the toes-to-bar. The final workout structure is being decided by a vote, and the field races it tonight. Here is the Games history of both movements - and the one man in this field who has already won this exact combination.",
+    "category": "Event Preview",
+    "date": "2026-07-24",
+    "author": "Ravikant Dewangan",
+    "readMin": 5,
+    "summary": "The 2026 hopper draw happened at Opening Ceremonies on Friday morning: the balls that came out of the original 2007 drum were the SNATCH and TOES-TO-BAR, with the final workout structure being decided by a vote before the field contests it in the Friday night session. Our almanac counts 26 Games events featuring a snatch and 12 featuring toes-to-bar. The combination has exactly one precedent: the 2024 Dickies Triplet (runs, toes-to-bars, dumbbell snatches), won by Jayson Hopper - the reigning champion, in this field, sitting 8th. Also in the field: Guilherme Malheiros won the 2021 max snatch (305 lb), Austin Hatfield won 2025 Running Isabel, and Ricky Garard (2022) and Roman Khrennikov (2023) have both won toes-to-bar events. The workout itself is unknown until the vote closes - we update the moment it is official.",
+    "blocks": [
+      {
+        "type": "p",
+        "text": "The barrel spun this morning, and the sport's oldest randomizer gave Friday night its ingredients: **the snatch and the toes-to-bar**. One barbell movement, one gymnastics movement - the two-modality draw as billed. And there is a twist on top of the twist: **the final workout structure is being decided by a vote** before tonight's session. So the field knows WHAT they will do, but not how much, how heavy, or in what shape. We will publish the workout the moment it is official. Until then, here is what our almanac knows about these two movements - and it knows a lot."
+      },
+      {
+        "type": "h2",
+        "text": "The One Man Who Has Won This Exact Combo"
+      },
+      {
+        "type": "p",
+        "text": "The snatch-plus-toes-to-bar pairing has appeared at the Games exactly once: the **2024 Dickies Triplet** - 5 rounds of a 175-meter run, 12 toes-to-bars and 8 dumbbell snatches, under an 11-minute cap. The men's winner? **Jayson Hopper.** The reigning champion. In this field. Sitting 8th and openly needing a Friday statement. If tonight's vote lands anywhere near a fast triplet shape, the hopper just dealt the champ his favorite hand. (The women's winner of that event, Tia-Clair Toomey, is not in the field - that title is open.)"
+      },
+      {
+        "type": "h2",
+        "text": "The Snatch at the Games: 26 Events Deep"
+      },
+      {
+        "type": "p",
+        "text": "The snatch is one of the most-tested movements in Games history - our almanac counts **26 events** featuring it, from the 2009 Max Snatch to the greatest hits: **Amanda** (2010, muscle-ups and squat snatches, won by Chris Spealler and Kristan Clever) and **Isabel** (2012, 30 snatches for time, won by Rich Froning and Annie Thorisdottir). The freshest receipt belongs to this field: **Austin Hatfield won 2025's Running Isabel** (2:35). And the biggest barbell in the building is **Guilherme Malheiros, who won the 2021 max snatch outright at 305 lb**. One more wrinkle: tomorrow's Event 15 is the Speed Snatch Triple - so whatever tonight holds, **the snatchers just got a double-feature weekend**. Malheiros, sitting 20th, suddenly has two events aimed straight at him."
+      },
+      {
+        "type": "h2",
+        "text": "Toes-to-Bar: The Quiet Separator"
+      },
+      {
+        "type": "p",
+        "text": "Twelve Games events have featured toes-to-bars, and they reward a specific, unglamorous skill: rhythm under grip fatigue. The in-field receipts are strong. **Ricky Garard won the 2022 Bike to Work** (a toes-to-bar event) and **Roman Khrennikov won the 2023 Pig Chipper**. On the women's side, **Haley Adams won that same 2022 test** - and toes-to-bar volume has been an Adams signature her whole career. Fraser and Toomey won the 2020 toes-to-bar/lunge event, which tells you what kind of athlete this movement historically rewards: the relentless ones."
+      },
+      {
+        "type": "h2",
+        "text": "What the Vote Decides"
+      },
+      {
+        "type": "p",
+        "text": "Everything, honestly. A heavy barbell turns this into a Malheiros-Mertens event. A light, fast Isabel-style sprint rewards Hatfield, Medeiros and the barbell cyclers. High-volume toes-to-bars bring Adams, Garard and Khrennikov into it. A triplet with running recreates the 2024 event Hopper already won. The beauty of the hopper format is that even after the draw, nobody can prepare - the vote keeps the unknown alive until the last moment. And remember the context: this runs as the FINAL event of a five-event arena day, on tired grip and tired legs."
+      },
+      {
+        "type": "p",
+        "text": "The moment the vote closes and the workout is official, we publish it with the final picks. Tonight, under the lights, the barrel gets its answer."
+      }
+    ],
+    "sources": [
+      {
+        "label": "Live Opening Ceremonies draw (as it happened; workout pending official publication)",
+        "url": "https://games.crossfit.com/workouts/finals"
+      },
+      {
+        "label": "Persistence Athletics Games Almanac - every snatch and toes-to-bar event, 2007-2026",
+        "url": "https://wod.persistenceathletics.com/games"
+      },
+      {
+        "label": "The Hopper Draw preview (how the format works)",
+        "url": "https://wod.persistenceathletics.com/games/2026/analysis/the-hopper-draw-returns-fridays-unknown-closer"
+      }
+    ]
   }
 ]
