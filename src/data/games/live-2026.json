@@ -364,53 +364,53 @@
     "women": [
       {
         "name": "Aimee Cringle",
-        "points": 458,
+        "points": 538,
         "prev": 1
       },
       {
         "name": "Lucy Campbell",
-        "points": 420,
-        "prev": 3
-      },
-      {
-        "name": "Madeline Sturt",
-        "points": 407,
+        "points": 480,
         "prev": 2
       },
       {
-        "name": "Haley Adams",
-        "points": 372,
-        "prev": 4
+        "name": "Madeline Sturt",
+        "points": 479,
+        "prev": 3
       },
       {
         "name": "Emma Lawson",
-        "points": 364,
-        "prev": 6
-      },
-      {
-        "name": "Alex Gazan",
-        "points": 325,
-        "prev": 8
-      },
-      {
-        "name": "Aline Wirz",
-        "points": 313,
-        "prev": 7
-      },
-      {
-        "name": "Arielle Loewen",
-        "points": 300,
-        "prev": 11
-      },
-      {
-        "name": "Ellie Turner",
-        "points": 288,
+        "points": 448,
         "prev": 5
       },
       {
+        "name": "Alex Gazan",
+        "points": 425,
+        "prev": 6
+      },
+      {
+        "name": "Haley Adams",
+        "points": 417,
+        "prev": 4
+      },
+      {
         "name": "Elisa Fuliano",
-        "points": 280,
-        "prev": 9
+        "points": 368,
+        "prev": 10
+      },
+      {
+        "name": "Aline Wirz",
+        "points": 366,
+        "prev": 7
+      },
+      {
+        "name": "Paige Rodgers",
+        "points": 360,
+        "prev": 11
+      },
+      {
+        "name": "Danielle Brandon",
+        "points": 344,
+        "prev": 13
       }
     ]
   }
