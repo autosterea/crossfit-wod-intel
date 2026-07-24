@@ -1,10 +1,10 @@
 {
-  "updatedAt": "2026-07-24T02:08:09.006Z",
+  "updatedAt": "2026-07-24T22:08:57.357Z",
   "season": 2026,
   "stage": "games",
   "stageLabel": "2026 CrossFit Games",
   "status": "live",
-  "eventsCompleted": 7,
+  "eventsCompleted": 8,
   "eventsTotal": null,
   "source": "https://c3po.crossfit.com/api/leaderboards/v2/competitions/games/2026/leaderboards?division=1&sort=0&page=1",
   "sourceLabel": "Official CrossFit Games leaderboard (c3po.crossfit.com)",
@@ -16,70 +16,70 @@
         "name": "James Sprague",
         "country": "United States",
         "countryCode": "US",
-        "points": "418"
+        "points": "514"
       },
       {
         "rank": 2,
         "name": "Dallin Pepper",
         "country": "United States",
         "countryCode": "US",
-        "points": "413"
+        "points": "505"
       },
       {
         "rank": 3,
-        "name": "Justin Medeiros",
-        "country": "United States",
-        "countryCode": "US",
-        "points": "388"
-      },
-      {
-        "rank": 4,
-        "name": "Jay Crouch",
-        "country": "Australia",
-        "countryCode": "AU",
-        "points": "387"
-      },
-      {
-        "rank": 5,
         "name": "Ricky Garard",
         "country": "Australia",
         "countryCode": "AU",
-        "points": "386"
+        "points": "470"
       },
       {
-        "rank": 6,
-        "name": "Moritz Fiebig",
-        "country": "Germany",
-        "countryCode": "DE",
-        "points": "355"
+        "rank": 4,
+        "name": "Justin Medeiros",
+        "country": "United States",
+        "countryCode": "US",
+        "points": "456"
       },
       {
-        "rank": 7,
+        "rank": 5,
         "name": "Roman Khrennikov",
         "country": "United States",
         "countryCode": "US",
-        "points": "341"
+        "points": "441"
+      },
+      {
+        "rank": 6,
+        "name": "Jay Crouch",
+        "country": "Australia",
+        "countryCode": "AU",
+        "points": "426"
+      },
+      {
+        "rank": 7,
+        "name": "Moritz Fiebig",
+        "country": "Germany",
+        "countryCode": "DE",
+        "points": "407"
       },
       {
         "rank": 8,
         "name": "Jayson Hopper",
         "country": "United States",
         "countryCode": "US",
-        "points": "304"
+        "points": "392"
       },
       {
         "rank": 9,
-        "name": "Colten Mertens",
-        "country": "United States",
-        "countryCode": "US",
-        "points": "298"
+        "name": "Jeffrey Adler",
+        "country": "Canada",
+        "countryCode": "CA",
+        "points": "329"
       },
       {
         "rank": 10,
         "name": "Saxon Panchik",
         "country": "United States",
         "countryCode": "US",
-        "points": "295"
+        "points": "319"
       }
     ],
     "women": [
@@ -88,70 +88,70 @@
         "name": "Aimee Cringle",
         "country": "United Kingdom",
         "countryCode": "GB",
-        "points": "458"
+        "points": "538"
       },
       {
         "rank": 2,
         "name": "Lucy Campbell",
         "country": "United Kingdom",
         "countryCode": "GB",
-        "points": "420"
+        "points": "480"
       },
       {
         "rank": 3,
         "name": "Madeline Sturt",
         "country": "Australia",
         "countryCode": "AU",
-        "points": "407"
+        "points": "479"
       },
       {
         "rank": 4,
-        "name": "Haley Adams",
-        "country": "United States",
-        "countryCode": "US",
-        "points": "372"
-      },
-      {
-        "rank": 5,
         "name": "Emma Lawson",
         "country": "Canada",
         "countryCode": "CA",
-        "points": "364"
+        "points": "448"
       },
       {
-        "rank": 6,
+        "rank": 5,
         "name": "Alex Gazan",
         "country": "United States",
         "countryCode": "US",
-        "points": "325"
+        "points": "425"
+      },
+      {
+        "rank": 6,
+        "name": "Haley Adams",
+        "country": "United States",
+        "countryCode": "US",
+        "points": "417"
       },
       {
         "rank": 7,
-        "name": "Aline Wirz",
-        "country": "Switzerland",
-        "countryCode": "CH",
-        "points": "314"
-      },
-      {
-        "rank": 8,
-        "name": "Arielle Loewen",
-        "country": "United States",
-        "countryCode": "US",
-        "points": "300"
-      },
-      {
-        "rank": 9,
-        "name": "Ellie Turner",
-        "country": "Australia",
-        "countryCode": "AU",
-        "points": "288"
-      },
-      {
-        "rank": 10,
         "name": "Elisa Fuliano",
         "country": "Italy",
         "countryCode": "IT",
-        "points": "280"
+        "points": "368"
+      },
+      {
+        "rank": 8,
+        "name": "Aline Wirz",
+        "country": "Switzerland",
+        "countryCode": "CH",
+        "points": "366"
+      },
+      {
+        "rank": 9,
+        "name": "Paige Rodgers",
+        "country": "United States",
+        "countryCode": "US",
+        "points": "360"
+      },
+      {
+        "rank": 10,
+        "name": "Danielle Brandon",
+        "country": "United States",
+        "countryCode": "US",
+        "points": "344"
       }
     ]
   }
