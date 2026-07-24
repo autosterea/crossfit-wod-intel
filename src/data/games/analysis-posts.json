@@ -2822,5 +2822,67 @@
         "url": "https://wod.persistenceathletics.com/games/2026/analysis/3d-throw-whose-power-flies"
       }
     ]
+  },
+  {
+    "slug": "the-hopper-draw-returns-fridays-unknown-closer",
+    "title": "The Hopper Draw Returns: Friday Ends With a Workout Nobody Has Seen",
+    "dek": "On Friday morning, the original 2007 hopper drum gets spun live at Opening Ceremonies. Whatever comes out gets contested by the individual field that same night. This is the sport's founding idea - unknown and unknowable - made into an event, and it is the purest test of the whole weekend.",
+    "category": "Event Preview",
+    "date": "2026-07-23",
+    "author": "Ravikant Dewangan",
+    "readMin": 5,
+    "summary": "CrossFit confirmed the hopper draw returns at the 2026 Games: on the morning of Friday, July 24, during Opening Ceremonies, a workout is drawn live from the ORIGINAL 2007 hopper drum in front of athletes and fans, and the individual field competes the drawn test that same Friday night (reported as the night-session closer, expected to be Event 12; the official number is pending). The 2007 draw produced the 1,000m row + pull-ups + push jerks test that opened these very Games as Event 1. A hopper rewards the athlete with no holes: nobody can prepare, everybody finds out together. Who the no-holes read favors, grounded in Day 1 spreads and our capacity data.",
+    "blocks": [
+      {
+        "type": "p",
+        "text": "Here is the most CrossFit thing that will happen all weekend. On **Friday morning, during Opening Ceremonies**, CrossFit will spin the **original hopper drum from the 2007 Games** - the actual barrel - live in front of the athletes and the crowd, and draw a workout out of it. Whatever comes out, the individual field competes it **that same Friday night**. Per the announcement, the drawn test combines two modalities; the official event number is still pending (by the broadcast schedule it closes Friday as Event 12). No preview. No pacing plan. Nobody has seen it, because it does not exist yet."
+      },
+      {
+        "type": "h2",
+        "text": "The Origin Myth, Full Circle Twice"
+      },
+      {
+        "type": "p",
+        "text": "The hopper is not a gimmick, it is the founding document. In 2007, at the first Games on a ranch in Aromas, the field learned their test when it came out of a barrel: a 1,000-meter row, then 5 rounds of 25 pull-ups and 7 push jerks. That draw became one of the most iconic workouts in the sport - iconic enough that **these very Games opened with it on Wednesday as Event 1**, where Jay Crouch (7:11) and Madeline Sturt (8:03) nearly halved the 2007 winning times. And now the same physical drum that created that workout gets spun again to create a new one. The 2026 Games opened with the last hopper's answer and will run its next question two days later."
+      },
+      {
+        "type": "h2",
+        "text": "Why This Is the Purest Test"
+      },
+      {
+        "type": "p",
+        "text": "CrossFit's definition of fitness was built on exactly this: **preparedness for the unknown and unknowable**. Every other event this weekend was announced, studied, and strategized. This one cannot be. A hopper strips away coaching, pacing scripts and specialist prep, and asks the only question the sport was founded on: are you fit for whatever comes out? Our whole analytical model - the hopper quadrant in the Capacity Lab, the Hopper Readiness index on our daily WOD tracker - is built on this idea, and on Friday night it stops being a model and becomes an event."
+      },
+      {
+        "type": "h2",
+        "text": "Who a Hopper Favors: The No-Holes Athletes"
+      },
+      {
+        "type": "p",
+        "text": "You cannot prepare for a hopper, but you can BE prepared for it, and Day 1 already told us who that is. A hopper punishes the athlete with one great weapon and rewards the athlete with no bad ones. On the men's side, that reads like **James Sprague** - outside the two strength lifts, the leader never finished worse than 6th on Day 1 - and **Dallin Pepper**, who climbed to 2nd without winning anything, the classic no-holes scorecard. **Justin Medeiros** built two titles on exactly this profile. On the women's side, **Aimee Cringle just won events in three different domains in one day** (a trail run, a max deadlift, a bike race) - it is hard to imagine a better hopper resume - and **Lucy Campbell** was top four in four of seven events. The athletes who should be nervous are the specialists who bank on knowing what is coming."
+      },
+      {
+        "type": "p",
+        "text": "One more layer: fatigue. The drawn workout runs at the END of Friday night, after the Snail, the throws, the hang cleans and the handstand course. Whatever comes out of the barrel lands on a field that has already been through four events that day. The unknown, on empty tanks, under arena lights. That is as honest as this sport gets."
+      },
+      {
+        "type": "p",
+        "text": "We will publish the drawn workout the moment it is official on Friday morning, with the history of every movement that comes out of the barrel - our almanac has all of it. Then cards the moment it scores. Do not miss this one."
+      }
+    ],
+    "sources": [
+      {
+        "label": "CrossFit Games (official) - The Hopper Returns article",
+        "url": "https://games.crossfit.com/article/the-hopper-returns-a-piece-of-crossfit-history-comes-back-to-the-games"
+      },
+      {
+        "label": "Official CrossFit Games announcement (YouTube/TikTok, June 2026) - morning draw, tested that night",
+        "url": "https://www.youtube.com/shorts/f6YY8R2qUb8"
+      },
+      {
+        "label": "Persistence Athletics Games Almanac - the 2007 hopper + Event 1 2026 results",
+        "url": "https://wod.persistenceathletics.com/games"
+      }
+    ]
   }
 ]

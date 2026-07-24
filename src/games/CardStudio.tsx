@@ -336,6 +336,25 @@ const CAROUSELS: Carousel[] = [
     ],
   },
   {
+    id: 'hopper-draw',
+    label: 'The Hopper Draw (Friday closer)',
+    caption:
+      "The most CrossFit thing that will happen all weekend: on Friday morning, at Opening Ceremonies, they spin the ORIGINAL 2007 hopper drum - the actual barrel - live in front of the athletes. Whatever workout comes out, the individual field competes it THAT NIGHT as Friday's closer. Nobody has seen it. It does not exist yet.\n\nThe full-circle part gives me chills: the 2007 draw from this same drum produced the 1,000m row + pull-ups + push jerks test that opened THESE Games as Event 1 on Wednesday - Crouch and Sturt nearly halved the 2007 times. Now the barrel spins again.\n\nThis is the sport's founding idea made into an event. Unknown and unknowable. No pacing plans, no specialist prep. A hopper punishes the athlete with one great weapon and rewards the athlete with no bad ones.\n\nWho that favors, from the Day 1 data: Sprague (nothing worse than 6th outside the strength lifts), Pepper (climbed to 2nd without winning anything - the classic no-holes card), Medeiros (built two titles on this profile). And Cringle just won events in three different domains in ONE DAY - the best hopper resume imaginable. Campbell top-4 in four of seven.\n\nAnd remember: it runs LAST on Friday night, after four other events. The unknown, on empty tanks, under arena lights.\n\nWe publish the drawn workout the moment it is official, with the history of every movement that comes out. Full analysis on the blog.",
+    slides: [
+      { type: 'cover', kicker: 'Friday - Opening Ceremonies', headline: 'THE HOPPER\nDRAW RETURNS', sub: 'The original 2007 barrel gets spun Friday morning. Whatever comes out, the field competes it that night. Nobody has seen the workout. It does not exist yet. Swipe.' },
+      { type: 'point', num: 1, kicker: 'How It Works', headline: 'DRAWN AT DAWN,\nRACED AT NIGHT', body: 'During Opening Ceremonies on Friday morning, a workout is drawn live from the ORIGINAL 2007 hopper drum, in front of the athletes and the crowd. The individual field competes the drawn test that same night as Friday\'s closer. Per the announcement it combines two modalities. Official event number pending.', source: 'CrossFit Games (official announcement)' },
+      { type: 'point', num: 2, kicker: 'Full Circle, Twice', headline: 'THE BARREL THAT\nBUILT THE SPORT', body: 'In 2007 this same drum drew the 1,000m row + 25 pull-ups + 7 push jerks test that became one of the most iconic workouts in CrossFit - iconic enough that THESE Games opened with it as Event 1 on Wednesday, where Crouch (7:11) and Sturt (8:03) nearly halved the 2007 winning times. The Games opened with the last hopper\'s answer. Friday night runs its next question.', source: 'Persistence Athletics Games Almanac' },
+      { type: 'stat', kicker: 'Who a Hopper Favors', headline: 'THE NO-HOLES\nATHLETES', stats: [
+        { big: 'Top 6', label: 'Sprague\'s floor on Day 1 in everything but the press' },
+        { big: '0 wins', label: 'Pepper climbed to 2nd without winning an event - pure balance' },
+        { big: '3', label: 'domains Cringle won in ONE day: run, deadlift, bike' },
+        { big: '4/7', label: 'events where Campbell was top four' },
+      ], footnote: 'A hopper punishes one great weapon and rewards no bad ones. The specialists who bank on knowing the test should be nervous.' },
+      { type: 'point', num: 3, kicker: 'The Kicker', headline: 'THE UNKNOWN,\nON EMPTY TANKS', body: 'The drawn workout runs LAST on Friday night - after the Snail, the throws, the hang cleans and the handstand course. Whatever comes out of the barrel lands on a field that has already raced four events that day. Unknown and unknowable, under arena lights, on fumes. That is as honest as this sport gets.', source: 'Broadcast schedule + Persistence Athletics analysis' },
+      { type: 'cta', headline: 'THE MOMENT\nIT IS DRAWN', body: 'We publish the drawn workout the second it is official Friday morning - with the Games history of every movement that comes out of the barrel. Our almanac has all of it. Full analysis on the site now.' },
+    ],
+  },
+  {
     id: 'day2-slate',
     label: 'Day 2 Slate (Friday preview)',
     caption:

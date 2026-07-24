@@ -10,6 +10,19 @@
   },
   "items": [
     {
+      "name": "The Hopper Draw",
+      "status": "confirmed",
+      "kind": "event",
+      "summary": "Confirmed by CrossFit: on the morning of Friday, July 24, during Opening Ceremonies, a workout is drawn live from the ORIGINAL 2007 hopper drum in front of athletes and fans, and the individual field competes the drawn test that same Friday night as the session closer (expected Event 12; official number pending). Per the announcement the drawn test combines two modalities. The 2007 draw from this same drum produced the 1,000m row + pull-ups + push jerks workout that opened these Games as Event 1. Nobody - athletes included - knows the workout until it is drawn.",
+      "source": {
+        "label": "CrossFit Games (official) - The Hopper Returns",
+        "url": "https://games.crossfit.com/article/the-hopper-returns-a-piece-of-crossfit-history-comes-back-to-the-games"
+      },
+      "date": "2026-07-23",
+      "shortName": "The Hopper Draw",
+      "analysisSlug": "the-hopper-draw-returns-fridays-unknown-closer"
+    },
+    {
       "name": "Machine 7200M",
       "status": "confirmed",
       "kind": "event",
