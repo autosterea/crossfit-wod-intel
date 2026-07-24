@@ -299,7 +299,20 @@
       "name": "Run Hang Squat Clean",
       "short": "Run Hang Clean",
       "scoreLabel": "TIME",
-      "men": [],
+      "men": [
+        {
+          "name": "Jay Crouch",
+          "score": "14:15"
+        },
+        {
+          "name": "Justin Medeiros",
+          "score": "14:28"
+        },
+        {
+          "name": "Jeffrey Adler",
+          "score": "14:29"
+        }
+      ],
       "women": []
     },
     {
