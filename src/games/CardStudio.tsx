@@ -336,6 +336,30 @@ const CAROUSELS: Carousel[] = [
     ],
   },
   {
+    id: 'e8-snail-men',
+    label: "E8 Climbing Snail - men's recap",
+    caption:
+      "ROMAN'S ANSWER. The arena opened tonight and Roman Khrennikov conquered the Climbing Snail - by nearly a MINUTE. 5:27.60 on the official results board, ahead of Sprague (5:46) and Pepper (5:52). His 6th career Games event win (we verified: 2020 Row, 2022 Rinse N Repeat + Alpaca, 2023 Pig Chipper + Alpaca Redux, and now the Snail).\n\nHow it was won: the early heats produced two blueprints - Vellner went slow Snail / fast rope, Malheiros the reverse. Roman just did BOTH. Textbook rope climbing, heels tucked, and once he touched the last Snail push it was over. Hopper tried to pace off him at the rope and couldn't hold. Sprague passed Hopper mid-event - no win, but the overall lead is protected.\n\nAnd the moment of the night: his SIXTH winner's interview - but the FIRST ever entirely in English. 'It doesn't matter what place I have, you always support me.' Then he thanked his wife and son. After years of visa battles, that hits different.\n\nRemember when we called Mayhem's Day 1 their quietest in years? Roman just answered with 100 points.\n\nWomen are on the course next. Updated standings + movement the moment the official board posts. Full recap on the site.",
+    slides: [
+      { type: 'cover', kicker: 'Event 8 - Climbing Snail 26', headline: "ROMAN'S\nANSWER", sub: 'The arena opened and Khrennikov conquered it - by nearly a minute. His 6th career event win, and the night\'s best moment came after the race. Swipe.' },
+      { type: 'movement', kicker: 'Event 8 - Official Results Board', headline: 'THE\nPODIUM', rows: [
+        { rank: 1, name: 'Roman Khrennikov', pts: 100, delta: null },
+        { rank: 2, name: 'James Sprague', pts: 96, delta: null },
+        { rank: 3, name: 'Dallin Pepper', pts: 92, delta: null },
+        { rank: 4, name: 'Jayson Hopper', pts: 88, delta: null },
+        { rank: 5, name: 'Ricky Garard', pts: 84, delta: null },
+      ], note: 'Times per the official results board: 5:27.60 / 5:46.03 / 5:52.12 / 6:00.48 / 6:09.03. Points shown are the standard scale; final standings post with the official leaderboard.' },
+      { type: 'point', num: 1, kicker: 'How It Was Won', headline: 'TWO BLUEPRINTS.\nHE USED BOTH.', body: 'Heat one: Vellner won going slow on the Snail, fast on the rope. Heat two: Malheiros won doing the reverse. Heat three: Khrennikov did both - textbook foot-clamp rope climbing, heels under hips, then a Snail push nobody could answer. Hopper paced off him at the rope and could not hold. Sprague passed Hopper mid-event to protect the overall lead. All five fastest times came from the final heat.', source: 'Broadcast heat coverage' },
+      { type: 'stat', kicker: 'The Numbers', headline: 'SIX WINS,\nONE FIRST', stats: [
+        { big: '~1 min', label: 'his winning margin over the field' },
+        { big: '6th', label: 'career Games event win (verified vs our almanac)' },
+        { big: '1st', label: 'victory interview EVER delivered entirely in English' },
+        { big: '100', label: 'points - Mayhem\'s answer to their quiet Day 1' },
+      ], footnote: '"It doesn\'t matter what place I have, you always support me." Then he thanked his wife and son. After the visa years, that hits different.' },
+      { type: 'cta', headline: 'STANDINGS\nNEXT', body: 'Updated overall board with movement arrows the moment the official leaderboard posts. The women take the same course next. Full recap on the site - link in bio.' },
+    ],
+  },
+  {
     id: 'hopper-result',
     label: 'The Hopper Spoke (snatch + T2B)',
     caption:

@@ -244,7 +244,20 @@
       "name": "Climbing Snail '26",
       "short": "Climbing Snail",
       "scoreLabel": "TIME",
-      "men": [],
+      "men": [
+        {
+          "name": "Roman Khrennikov",
+          "score": "5:27"
+        },
+        {
+          "name": "James Sprague",
+          "score": "5:46"
+        },
+        {
+          "name": "Dallin Pepper",
+          "score": "5:52"
+        }
+      ],
       "women": []
     },
     {

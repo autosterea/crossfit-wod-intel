@@ -2950,5 +2950,67 @@
         "url": "https://wod.persistenceathletics.com/games/2026/analysis/the-hopper-draw-returns-fridays-unknown-closer"
       }
     ]
+  },
+  {
+    "slug": "event-8-climbing-snail-romans-answer",
+    "title": "Event 8: Roman's Answer. Khrennikov Wins the Climbing Snail by Nearly a Minute.",
+    "dek": "The arena opened and Roman Khrennikov conquered it - a sixth career event win, taken by almost sixty seconds, capped by the first victory interview of his career delivered entirely in English. How the Snail was won, from the broadcast floor.",
+    "category": "Event Recap",
+    "date": "2026-07-24",
+    "author": "Ravikant Dewangan",
+    "readMin": 4,
+    "summary": "Men's Event 8, Climbing Snail 26 (400-lb Snail pushes, legless rope climbs, 30 toes-to-bars, rope climbs, all in a 22-lb vest): Roman Khrennikov won in 5:27.60 per the official results board, nearly a minute clear, ahead of James Sprague (5:46.03) and Dallin Pepper (5:52.12). It is Khrennikov's sixth career Games event win (verified against our almanac: 2020 Row, 2022 Rinse N Repeat and Alpaca, 2023 Pig Chipper and Alpaca Redux). The race story from the broadcast: two strategies emerged in the early heats - Vellner slow on the Snail and fast on the rig, Malheiros the reverse - and Khrennikov simply did both. Sprague passed Hopper mid-event to protect his overall lead. All five fastest times came from the final heat. Overall standings update the moment the official leaderboard posts.",
+    "blocks": [
+      {
+        "type": "p",
+        "text": "The arena portion of the 2026 Games opened tonight, and the first man to own it was the one Cookeville has been waiting on. **Roman Khrennikov won Event 8, Climbing Snail 26, in 5:27.60** per the official results board - **nearly a full minute clear of the field** - ahead of James Sprague (5:46.03) and Dallin Pepper (5:52.12). It is the **sixth event win of his Games career**, and we checked that number against our almanac: the 2020 1,000m Row, the 2022 Rinse N Repeat and Alpaca, the 2023 Pig Chipper and Alpaca Redux, and now the Snail."
+      },
+      {
+        "type": "h2",
+        "text": "How It Was Won"
+      },
+      {
+        "type": "p",
+        "text": "The early heats produced two competing blueprints. In heat one, Patrick Vellner went **slower on the Snail, faster on the rig and rope**, and won the heat. In heat two, Guilherme Malheiros flipped it - **fast Snail, slower rig** - and won his. Then heat three answered the debate: Khrennikov did both. On the broadcast his rope work drew a coaching clinic of praise - heels tucked under the hips, a locked-down foot clamp, \"textbook rope climbing\" - and once his hands touched the final Snail push, the race was over. The broadcast put it simply: he might beat the best time by a minute. He nearly did."
+      },
+      {
+        "type": "p",
+        "text": "Behind him, the overall race sharpened. **Jayson Hopper paced directly off Khrennikov at the rope and could not hold the cycle rate.** James Sprague passed Hopper mid-event and, in the words of the booth, \"did everything he could to keep pace\" - he did not get the win, but second place keeps him clear of everyone chasing his overall lead. Every one of the five fastest times came from the final heat."
+      },
+      {
+        "type": "h2",
+        "text": "The Interview That Mattered"
+      },
+      {
+        "type": "p",
+        "text": "The moment of the night was not on the rig. Six career event wins means six winner interviews - and this was **the first one Roman Khrennikov has ever done entirely in English**. \"It doesn't matter what place I have in competition, you always support me,\" he told the crowd, before thanking his wife and son. For an athlete whose career has run through years of visa battles and a translator at every podium, that is not a small thing. The broadcast added the line that frames his whole weekend: he was one foot injury away from being a CrossFit Games champion. Tonight he started Day 2, in their words, in a championship way."
+      },
+      {
+        "type": "h2",
+        "text": "What It Shakes Up"
+      },
+      {
+        "type": "p",
+        "text": "Three storylines move. **Mayhem finally has its 2026 statement** - we called their Day 1 the quietest in years, and their franchise athlete just answered with 100 points. **The Crouch slide continues**: he finished outside the event top ten per the broadcast, which likely costs him a spot to Ricky Garard (5th tonight) in the overall. And the champions delivered in a cluster: Sprague 2nd, Pepper 3rd, Hopper 4th, Garard 5th - the men who came into the arena with resumes stacked the front of this event. Full official standings, the movement arrows, and the updated live board land the moment the leaderboard posts - we publish only official numbers there."
+      },
+      {
+        "type": "p",
+        "text": "The women take the floor on the same course next. Event 9, the 3D Throw, follows. The arena day is rolling."
+      }
+    ],
+    "sources": [
+      {
+        "label": "Official event results board (broadcast) - times pending final leaderboard confirmation",
+        "url": "https://games.crossfit.com/leaderboard/finals/2026?division=1"
+      },
+      {
+        "label": "Broadcast heat transcripts (race narrative)",
+        "url": "https://wod.persistenceathletics.com/games/2026"
+      },
+      {
+        "label": "Persistence Athletics Games Almanac - Khrennikov career event wins",
+        "url": "https://wod.persistenceathletics.com/games"
+      }
+    ]
   }
 ]
