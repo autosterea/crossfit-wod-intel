@@ -2752,5 +2752,75 @@
         "url": "https://games.crossfit.com/leaderboard/finals/2026"
       }
     ]
+  },
+  {
+    "slug": "day-2-slate-snail-handstands-hang-cleans",
+    "title": "Day 2 Is Loaded: The Snail Returns, a Handstand Sprint, Heavy Hang Cleans and That Throw",
+    "dek": "Four of Friday's five arena-day events are now published, and our almanac has history on three of them. The Snail is back after a decade, the Handstand Sprint name is straight from 2020, and one woman in this field has won three handstand-walk events in a row.",
+    "category": "Event Preview",
+    "date": "2026-07-23",
+    "author": "Ravikant Dewangan",
+    "readMin": 6,
+    "summary": "The official workouts page published three more Friday events alongside the 3D Throw: Climbing Snail 26 (400-lb Snail pushes, legless rope climbs, 30 toes-to-bars, rope climbs, in weight vests, 10-min cap), Run Hang Squat Clean (4 rounds of 660m run + 10 hang squat cleans at 225/155 on a short barbell), and Handstand Sprint (a handstand walk course, 6-min cap). History first: the 2016 Climbing Snail was won by Fikowski and Briggs; the 2020 Handstand Sprint by Fraser and Wells; and in the current field, Danielle Brandon has won three handstand-walk-family events (2021-2023), Nick Mathew won the 2022 Skill Speed Medley, and Crouch and Campbell won the 2025 run-barbell-handstand Grip Trip. One Friday event remains unannounced.",
+    "blocks": [
+      {
+        "type": "p",
+        "text": "The workouts page just went from quiet to loaded. Alongside the 3D Throw, CrossFit published three more Friday events, which means **four of the five arena-day tests are now public** (one remains unannounced, likely a FloElite exclusive). Here is each one, with the history our almanac has on it."
+      },
+      {
+        "type": "h2",
+        "text": "Climbing Snail 26: The Snail Is Back After a Decade"
+      },
+      {
+        "type": "p",
+        "text": "For time, 10-minute cap: a **400-lb Snail push** (100 feet for the men, 60 for the women), legless rope climbs (3 men / 2 women), **30 toes-to-bars**, rope climbs (5 men / 4 women), and a closing Snail push - all of it wearing a **weight vest** (22 lb men / 16 lb women). The name is a direct callback: the **2016 Climbing Snail** paired berm runs, rope ascents and Snail pushes, and it was won by **Brent Fikowski and Samantha Briggs**. Neither is in this field, so the title is open. The demands are brutal grip and midline under load: legless climbs after pushing a 400-lb implement, then holding a rig with a vest dragging on you. Grip survivors win it."
+      },
+      {
+        "type": "h2",
+        "text": "Handstand Sprint: One Athlete Owns This History"
+      },
+      {
+        "type": "p",
+        "text": "For time, a handstand walk course under a 6-minute cap. The name comes straight from the **2020 Handstand Sprint** - a 100-yard walk at the Ranch won by Mat Fraser (1:20.85) and Brooke Wells (1:21.22). And this is where our almanac gets loud, because handstand-walk events are a Games staple and the current field has serious receipts. **Danielle Brandon has won three straight handstand-walk-family events: the 2021 Handstand Walk Obstacle Course, the 2022 Skill Speed Medley, and the 2023 Inverted Medley.** Nobody in the sport owns this movement family like she does, and after a quiet Day 1 (13th), this is her springboard. On the men's side, **Nick Mathew won that same 2022 Skill Speed Medley**, and **Jay Crouch and Lucy Campbell both won the 2025 Albany Grip Trip**, which closed four of five rounds with a 100-foot handstand walk (150 feet in the final round). Saxon and Spencer Panchik also carry family pedigree here - their brother Scott won the 2021 obstacle course."
+      },
+      {
+        "type": "h2",
+        "text": "Run Hang Squat Clean: No Precedent, Pure Engine-Barbell"
+      },
+      {
+        "type": "p",
+        "text": "4 rounds for time: **660-meter run, 10 hang squat cleans at 225 lb men / 155 lb women on a short barbell**. Our almanac finds no exact precedent for a run-plus-hang-squat-clean interval, which makes this the most honest test of Friday: run fast with heavy legs, then cycle a heavy barbell with a spiked heart rate, four times. The profile it rewards - engine plus heavy barbell under fatigue - reads like the athletes who scored at both poles of Day 1: Garard (won the run, 2nd in the press), Sprague (2nd run, 2nd deadlift), and on the women's side Cringle (won the run AND the deadlift) and Sturt. The short barbell is a wrinkle: less whip, less forgiveness, more precision when tired."
+      },
+      {
+        "type": "h2",
+        "text": "Plus the Throw, and One Mystery Left"
+      },
+      {
+        "type": "p",
+        "text": "The **3D Throw** (three throws for total distance, 30/20 lb) has its own full breakdown on the site - the first Games throwing test since 2012, and a body-mass-times-power lottery with a technique twist. That makes four of five Friday events public. The fifth remains unannounced; based on the broadcast schedule, expect it to surface on FloElite. We will cover it the moment it is official - no guessing before then."
+      },
+      {
+        "type": "h2",
+        "text": "What Friday Means for the Board"
+      },
+      {
+        "type": "p",
+        "text": "Day 1 tested the poles: maximal strength and raw engine. Friday is the middle we said was coming - gymnastics skill (handstand course, rope climbs, toes-to-bars), odd objects under load, and barbell-engine blends. The leaders who got there on engine alone now have to hold on through skill; the gymnasts buried by the Total get their events at last. With the top five men separated by 32 points and Cringle's cushion at 38, Friday is where the 2026 Games actually take shape. Cards and boards the moment each event is official."
+      }
+    ],
+    "sources": [
+      {
+        "label": "CrossFit Games (official workout page) - Friday prescriptions",
+        "url": "https://games.crossfit.com/workouts/finals"
+      },
+      {
+        "label": "Persistence Athletics Games Almanac - 2016 Climbing Snail, 2020 Handstand Sprint, 2021-2023 handstand events, 2025 Grip Trip",
+        "url": "https://wod.persistenceathletics.com/games"
+      },
+      {
+        "label": "3D Throw full preview",
+        "url": "https://wod.persistenceathletics.com/games/2026/analysis/3d-throw-whose-power-flies"
+      }
+    ]
   }
 ]

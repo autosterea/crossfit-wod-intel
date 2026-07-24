@@ -50,6 +50,45 @@
       "num": 6
     },
     {
+      "name": "Climbing Snail '26",
+      "status": "confirmed",
+      "kind": "event",
+      "summary": "Published on the official workouts page for Friday, July 24: for time under a 10-minute cap - a 400-lb Snail push (100 feet men / 60 feet women), legless rope climbs (3 men / 2 women), 30 toes-to-bars, rope climbs (5 men / 4 women), and a closing Snail push - all wearing a weight vest (22 lb men / 16 lb women). A rerun-in-spirit of the 2016 Climbing Snail (berm run, rope ascents, Snail pushes), won that year by Brent Fikowski and Samantha Briggs. The individual event number is not yet announced.",
+      "source": {
+        "label": "CrossFit Games (official workout page)",
+        "url": "https://games.crossfit.com/workouts/finals"
+      },
+      "date": "2026-07-23",
+      "shortName": "Climbing Snail '26",
+      "analysisSlug": "day-2-slate-snail-handstands-hang-cleans"
+    },
+    {
+      "name": "Run Hang Squat Clean",
+      "status": "confirmed",
+      "kind": "event",
+      "summary": "Published on the official workouts page for Friday, July 24: 4 rounds for time of a 660-meter run and 10 hang squat cleans on a short barbell (225 lb men / 155 lb women). No exact Games precedent for a run plus hang-squat-clean interval; the closest recent cousin is the 2025 Albany Grip Trip (runs, axle deadlifts and handstand walks), won by Jay Crouch and Lucy Campbell. The individual event number is not yet announced.",
+      "source": {
+        "label": "CrossFit Games (official workout page)",
+        "url": "https://games.crossfit.com/workouts/finals"
+      },
+      "date": "2026-07-23",
+      "shortName": "Run Hang Squat Clean",
+      "analysisSlug": "day-2-slate-snail-handstands-hang-cleans"
+    },
+    {
+      "name": "Handstand Sprint",
+      "status": "confirmed",
+      "kind": "event",
+      "summary": "Published on the official workouts page for Friday, July 24: for time, a handstand walk course under a 6-minute cap. The name is a direct callback to the 2020 Handstand Sprint (a 100-yard handstand walk at the Ranch, won by Mat Fraser and Brooke Wells). Handstand-walk events are a Games staple with deep history in this field: Danielle Brandon has won three handstand-walk-family events (2021, 2022, 2023), Nick Mathew won the 2022 Skill Speed Medley, and Jay Crouch and Lucy Campbell won the handstand-walk-heavy 2025 Albany Grip Trip. Course layout and the event number are not yet announced.",
+      "source": {
+        "label": "CrossFit Games (official workout page)",
+        "url": "https://games.crossfit.com/workouts/finals"
+      },
+      "date": "2026-07-23",
+      "shortName": "Handstand Sprint",
+      "analysisSlug": "day-2-slate-snail-handstands-hang-cleans"
+    },
+    {
       "name": "3D Throw",
       "status": "confirmed",
       "kind": "event",

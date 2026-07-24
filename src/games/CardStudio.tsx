@@ -336,6 +336,26 @@ const CAROUSELS: Carousel[] = [
     ],
   },
   {
+    id: 'day2-slate',
+    label: 'Day 2 Slate (Friday preview)',
+    caption:
+      "FRIDAY JUST GOT LOADED. Three more arena events published tonight - four of Friday's five are now public. Here is the slate, with the history from our almanac.\n\nCLIMBING SNAIL 26: a 400-lb Snail push, legless rope climbs, 30 toes-to-bars, more rope climbs, another Snail push - all in a weight vest, 10-minute cap. The Snail is back for the first time since 2016, when Fikowski and Briggs won the original Climbing Snail. Grip survivors win this one.\n\nHANDSTAND SPRINT: a handstand walk course, 6-minute cap. The name is straight from 2020 (Fraser and Wells won that one). And here is the stat of the night: Danielle Brandon has won THREE straight handstand-walk events at the Games - 2021, 2022, 2023. Nobody owns this movement family like her. Nick Mathew won the 2022 medley on the men's side, and Crouch and Campbell won the handstand-heavy 2025 Grip Trip.\n\nRUN HANG SQUAT CLEAN: 4 rounds of a 660m run + 10 hang squat cleans at 225/155 on a short barbell. No Games precedent - pure engine-meets-barbell. Built for the athletes who scored at both poles on Day 1: Garard, Sprague, Cringle, Sturt.\n\nPlus the 3D THROW (full breakdown on the site) and ONE mystery event still unannounced.\n\nDay 1 tested the poles. Friday is the middle. This is where the 2026 Games take shape.",
+    slides: [
+      { type: 'cover', kicker: 'Just Announced - Friday July 24', headline: 'DAY 2\nIS LOADED', sub: 'Three more events published tonight. The Snail returns, a handstand sprint, heavy hang cleans - and one mystery left. Swipe the slate.' },
+      { type: 'point', num: 1, kicker: 'The Snail Returns', headline: 'CLIMBING\nSNAIL 26', body: 'For time, 10-min cap, in a weight vest (22/16 lb): 400-lb Snail push (100 ft men / 60 ft women), legless rope climbs, 30 toes-to-bars, rope climbs, and a closing Snail push. First Snail since 2016, when Fikowski and Briggs won the original Climbing Snail. Grip and midline under load - the survivors win it.', source: 'Official workouts page + Games Almanac (2016)' },
+      { type: 'point', num: 2, kicker: 'The Callback', headline: 'HANDSTAND\nSPRINT', body: 'A handstand walk course, 6-minute cap. The name comes straight from the 2020 Handstand Sprint (Fraser 1:20, Wells 1:21). Course layout not announced - but the history in this field is loud.', source: 'Official workouts page + Games Almanac (2020)' },
+      { type: 'stat', kicker: 'The Receipts - Handstand Walking', headline: 'BRANDON\nOWNS THIS', stats: [
+        { big: '3', label: 'straight handstand-walk event wins for Danielle Brandon (2021, 2022, 2023)' },
+        { big: '1st', label: 'Nick Mathew, 2022 Skill Speed Medley' },
+        { big: '2', label: 'Crouch AND Campbell won the handstand-heavy 2025 Grip Trip' },
+        { big: '13th', label: 'Brandon after Day 1 - this is her springboard' },
+      ], footnote: 'All results from our verified Games Almanac, 2007-2026. The Panchik family adds pedigree: brother Scott won the 2021 obstacle course.' },
+      { type: 'point', num: 3, kicker: 'No Precedent', headline: 'RUN HANG\nSQUAT CLEAN', body: '4 rounds for time: 660-meter run, 10 hang squat cleans at 225 lb men / 155 lb women - on a short barbell (less whip, less forgiveness). No exact Games precedent. Pure engine-meets-barbell, built for the athletes who scored at both poles on Day 1: Garard, Sprague, Cringle, Sturt.', source: 'Official workouts page + Persistence Athletics model' },
+      { type: 'point', num: 4, kicker: 'The Shape of Friday', headline: 'DAY 1 POLES,\nDAY 2 MIDDLE', body: 'Day 1 tested max strength and raw engine. Friday brings the middle we called: gymnastics skill, odd objects, barbell-engine blends, plus the 3D Throw (full breakdown on the site) and one unannounced event. Top 5 men within 32 points, Cringle up 38. This is where the Games take shape.', source: 'Persistence Athletics analysis' },
+      { type: 'cta', headline: 'EVERY EVENT,\nBROKEN DOWN', body: 'The full Day 2 slate analysis, the 3D Throw deep dive, and the live board - all on the site. Cards the moment each event goes official.' },
+    ],
+  },
+  {
     id: 'camp-wars-day1',
     label: 'Camp Wars (Day 1 standings)',
     caption:
