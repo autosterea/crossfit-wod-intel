@@ -34,7 +34,8 @@ function fmtDate(d?: string): string {
   if (!d) return ''
   const [y, m, day] = d.split('-').map(Number)
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-  return `${months[(m || 1) - 1]} ${day}`
+  // month-only dates ("2026-06") have no day - show "Jun 2026", not "Jun undefined"
+  return day ? `${months[(m || 1) - 1]} ${day}` : `${months[(m || 1) - 1]} ${y}`
 }
 
 function EventCard({ e }: { e: EventItem }) {
@@ -144,7 +145,7 @@ export default function EventsView() {
                   <span className="games-chip" style={{ background: STATUS_STYLE[st].bg, color: STATUS_STYLE[st].color }}>{STATUS_STYLE[st].label}</span>
                   <span className="text-[12px] text-[var(--text-muted)]">{groups[st].length}</span>
                 </div>
-                <div className="grid sm:grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {groups[st].map((e, i) => <EventCard key={e.name + i} e={e} />)}
                 </div>
               </section>

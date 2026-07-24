@@ -164,7 +164,7 @@ export default function AnalysisView() {
           <p className="text-[13px] text-[var(--text-secondary)]">The first breakdowns are being written from the model. Check back shortly.</p>
         </Panel>
       ) : (
-        <div className="grid sm:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {POSTS.map((p) => <ArticleCard key={p.slug} p={p} />)}
         </div>
       )}

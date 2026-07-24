@@ -65,7 +65,7 @@ function Benchmarks({ items }: { items: Benchmark[] }) {
         <span className="text-[10px] text-[var(--text-muted)]">self-reported on official CrossFit profile</span>
       </div>
       <p className="text-[10px] text-[var(--text-muted)] mb-3">Green = top third of the field, amber = bottom third. Rank is within division among athletes who reported each mark.</p>
-      <div className="grid sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {lifts.length > 0 && (
           <div>
             <div className="games-condensed text-[10px] uppercase tracking-[0.1em] text-[#91C640] mb-1.5">Strength (1RM)</div>
@@ -255,7 +255,7 @@ export default function IntelProfile({ slug, showHeader = false }: { slug: strin
       </div>
 
       {/* Strengths / weaknesses */}
-      <div className="grid sm:grid-cols-2 gap-4 mt-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
         <Panel className="p-4">
           <h3 className="games-condensed uppercase tracking-[0.12em] text-[12px] text-[var(--accent-success)] mb-2">Strengths</h3>
           {a.strengths.map((s) => (

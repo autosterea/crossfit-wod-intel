@@ -185,7 +185,7 @@ export default function AthleteProfile() {
       {media?.videos && media.videos.length > 0 && (
         <section className="mb-6">
           <div className="games-condensed text-[10px] uppercase tracking-[0.16em] text-[#91C640] mb-2">Watch</div>
-          <div className="grid sm:grid-cols-2 gap-2.5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
             {media.videos.map((v) => (
               <a key={v.videoId} href={v.url} target="_blank" rel="noopener noreferrer" className="cap-card group overflow-hidden block">
                 <div className="relative" style={{ aspectRatio: '16 / 9' }}>
