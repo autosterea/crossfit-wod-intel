@@ -336,6 +336,31 @@ const CAROUSELS: Carousel[] = [
     ],
   },
   {
+    id: 'e8-snail-women',
+    label: "E8 Climbing Snail - women's recap",
+    caption:
+      "THE GAZAN MASTERCLASS. Alex Gazan won the women's Climbing Snail in 4:55.22 - the only woman under five minutes - by 13.5 seconds. And here's the scary part: per the broadcast splits she was FASTEST ON EVERY SINGLE SECTION - the 400-lb Snail push, the legless climbs (20 seconds faster than anyone), the toes-to-bars, the rope climbs - and she still took a REST in the middle of her final push. Won going away.\n\nThat's her SECOND event win of these Games (press + Snail), and she's up to 5th overall. Her words after: 'My family means everything to me.' On coach Justin Cotler: 'He's believed in me since day one. No one cares more than him.' A year after injury took her out of the 2025 Games, the comeback is complete.\n\nBehind her: Paige Rodgers (5:08) won heat two by making up ALL her time on the rope climbs. Danielle Brandon (5:23) podiumed a day after her bike crash - road rash and all - in her 8th Games, with her signature handstand event still to come tonight.\n\nThe board: Cringle went 6th and her lead GREW to 58. And second place is now a ONE-POINT race - Campbell 480, Sturt 479.\n\nPlus the stat we owe you from Wednesday: Campbell's 10:55 swim beat EVERY MAN in the field (men's winner: 11:09, identical workout - we verified). Per the broadcast, just the 7th time in Games history a woman has topped a gender-neutral test outright.\n\nFull recap on the site. E9, the 3D Throw, is next.",
+    slides: [
+      { type: 'cover', kicker: 'Event 8 - Women', headline: 'THE GAZAN\nMASTERCLASS', sub: 'Fastest at everything. Rest included. Alex Gazan won the Snail by 13.5 seconds - her second win of the Games. Swipe.' },
+      { type: 'movement', kicker: 'Event 8 - Official Results', headline: 'THE\nPODIUM', rows: [
+        { rank: 1, name: 'Alex Gazan', pts: 100, delta: null },
+        { rank: 2, name: 'Paige Rodgers', pts: 96, delta: null },
+        { rank: 3, name: 'Danielle Brandon', pts: 92, delta: null },
+        { rank: 4, name: 'Elisa Fuliano', pts: 88, delta: null },
+        { rank: 5, name: 'Emma Lawson', pts: 84, delta: null },
+      ], note: 'Times: 4:55.22 / 5:08.73 / 5:23.14 / 5:27.14 / 5:27.99. Gazan was the only woman under five minutes.' },
+      { type: 'point', num: 1, kicker: 'How Dominant?', headline: 'FASTEST AT\nEVERYTHING', body: 'Per the broadcast splits: fastest opening Snail push, fastest legless rope climbs (by nearly 20 seconds), fastest toes-to-bars, fastest rope climbs - then a REST in the middle of her final push, and still a 13.5-second win. The booth called this workout her "wheelhouse home run pitch." Second event win of these Games. On coach Justin Cotler: "He\'s believed in me since day one. No one cares more than him."', source: 'Broadcast splits + official leaderboard' },
+      { type: 'point', num: 2, kicker: 'The Stories Behind Her', headline: 'GRIT, ROPES\nAND ROOKIES', body: 'Rodgers won heat two by making up ALL her time on the four rope climbs - the smoothest rope work of the night. Brandon podiumed a day after her bike crash (road rash and all) in her 8th Games - with her three-peat handstand event still to come. And rookie Rachel Noel won heat one on pacing IQ: a deliberate 30-second rest between legless climbs while everyone else rushed.', source: 'Broadcast heat coverage' },
+      { type: 'stat', kicker: 'The Board After 8', headline: 'ONE POINT\nFOR SECOND', stats: [
+        { big: '58', label: 'Cringle\'s lead grew - she went 6th and gave up nothing' },
+        { big: '1 pt', label: 'second place: Campbell 480, Sturt 479' },
+        { big: '2', label: 'event wins for Gazan - now 5th overall' },
+        { big: '10:55', label: 'the Wednesday stat: Campbell\'s swim beat EVERY man (11:09 won the men\'s)' },
+      ], footnote: 'Campbell-beat-the-men verified against the official scores on an identical prescription. Per the broadcast, the 7th time ever a woman topped a gender-neutral Games test.' },
+      { type: 'cta', headline: 'THE THROW\nIS NEXT', body: 'E9, the 3D Throw - the first Games throwing test in 14 years, and our physics picks are on record. Cards the moment it is official. Link in bio.' },
+    ],
+  },
+  {
     id: 'e8-snail-men',
     label: "E8 Climbing Snail - men's recap",
     caption:
