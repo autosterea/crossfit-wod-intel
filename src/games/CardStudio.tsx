@@ -345,7 +345,7 @@ const CAROUSELS: Carousel[] = [
       { type: 'point', num: 1, kicker: 'How It Works', headline: 'DRAWN AT DAWN,\nRACED AT NIGHT', body: 'During Opening Ceremonies on Friday morning, a workout is drawn live from the ORIGINAL 2007 hopper drum, in front of the athletes and the crowd. The individual field competes the drawn test that same night as Friday\'s closer. Per the announcement it combines two modalities. Official event number pending.', source: 'CrossFit Games (official announcement)' },
       { type: 'point', num: 2, kicker: 'Full Circle, Twice', headline: 'THE BARREL THAT\nBUILT THE SPORT', body: 'In 2007 this same drum drew the 1,000m row + 25 pull-ups + 7 push jerks test that became one of the most iconic workouts in CrossFit - iconic enough that THESE Games opened with it as Event 1 on Wednesday, where Crouch (7:11) and Sturt (8:03) nearly halved the 2007 winning times. The Games opened with the last hopper\'s answer. Friday night runs its next question.', source: 'Persistence Athletics Games Almanac' },
       { type: 'stat', kicker: 'Who a Hopper Favors', headline: 'THE NO-HOLES\nATHLETES', stats: [
-        { big: 'Top 6', label: 'Sprague\'s floor on Day 1 in everything but the press' },
+        { big: 'Top 6', label: 'Sprague\'s Day 1 floor outside the two strength lifts' },
         { big: '0 wins', label: 'Pepper climbed to 2nd without winning an event - pure balance' },
         { big: '3', label: 'domains Cringle won in ONE day: run, deadlift, bike' },
         { big: '4/7', label: 'events where Campbell was top four' },
