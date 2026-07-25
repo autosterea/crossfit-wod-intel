@@ -290,6 +290,310 @@ type Slide =
 type Carousel = { id: string; label: string; caption: string; slides: Slide[] }
 const CAROUSELS: Carousel[] = [
   {
+    "id": "camp-wars-day2",
+    "label": "Camp Wars Round 2 (through Day 2)",
+    "caption": "CAMP WARS, ROUND 2. You asked after Day 1 - here is the update through 12 events. Rosters verified from the camps' own announcements, math straight off the official board.\n\nTHE TWIST: the camp lead changed hands too. PRVN now owns the best average placement (12.2) and a monster EIGHT event wins - Mertens alone has three, Crouch two, plus Garard, Sturt and Milligan. Day 2 belonged to Nashville.\n\nBUT Brute Strength still owns what matters most: BOTH leader jerseys. Sprague (752) and Cringle (826, with an 87-point lead) wear white into Saturday, and Brute has six athletes in the top 10. Their depth got tested - five of their twelve sit 21st or lower - but the crowns are theirs.\n\nAND MAYHEM WOKE UP. We called their Day 1 the quietest in years - Day 2 answered: Khrennikov won the Snail, Rodgers won the handstands hours after taking 2nd on the Snail, Malheiros won the sandbag throw and went 2nd on the handstands. Second-best camp average (12.6).\n\nHWPO runs lean but sharp: Gazan owns TWO event wins and sits 5th. TTT is still hunting its day.\n\nBrute owns the jerseys. PRVN owns the events. Mayhem owns the momentum. Two days left.",
+    "slides": [
+      {
+        "type": "cover",
+        "kicker": "Camp Wars - Round 2",
+        "headline": "THE CAMP LEAD\nCHANGED TOO",
+        "sub": "Through 12 events: PRVN owns the event wins, Brute owns both jerseys, and Mayhem woke up. Verified rosters, official math. Swipe."
+      },
+      {
+        "type": "stat",
+        "kicker": "The Headline",
+        "headline": "PRVN RISES,\nBRUTE REIGNS",
+        "stats": [
+          {
+            "big": "12.2",
+            "label": "PRVN average placement - now the best camp (Brute led Day 1 at 10.4)"
+          },
+          {
+            "big": "8",
+            "label": "PRVN event wins through 12 events - most of any camp"
+          },
+          {
+            "big": "2/2",
+            "label": "Brute still owns BOTH leader jerseys: Sprague 752 + Cringle 826"
+          },
+          {
+            "big": "3",
+            "label": "Mayhem event wins on Day 2 alone - the revival"
+          }
+        ],
+        "footnote": "Average overall placement across each camp's athletes, official board through Event 12. Camps with 2+ athletes."
+      },
+      {
+        "type": "bars",
+        "kicker": "Camp Standings - Through 12 Events",
+        "headline": "AVERAGE\nPLACEMENT",
+        "bars": [
+          {
+            "label": "PRVN Fitness (10)",
+            "pct": 63,
+            "display": "12.2",
+            "color": "#91C640"
+          },
+          {
+            "label": "CrossFit Mayhem (5)",
+            "pct": 62,
+            "display": "12.6",
+            "color": "#F4C64A"
+          },
+          {
+            "label": "Brute Strength (12)",
+            "pct": 58,
+            "display": "13.8",
+            "color": "#60a5fa"
+          },
+          {
+            "label": "HWPO Training (3)",
+            "pct": 48,
+            "display": "16.7",
+            "color": "#C9D2DA"
+          },
+          {
+            "label": "Training Think Tank (3)",
+            "pct": 27,
+            "display": "23.0",
+            "color": "rgba(244,246,242,0.4)"
+          }
+        ],
+        "footnote": "Lower average = better; longer bar = better. Day 1 order was Brute 10.4, PRVN 12.5, Mayhem 15.2 - two camps traded places."
+      },
+      {
+        "type": "point",
+        "num": 1,
+        "kicker": "Brute Strength",
+        "headline": "BOTH JERSEYS,\nTESTED DEPTH",
+        "body": "Sprague survived two lead changes and a scoring scare to keep the men's jersey at 752. Cringle turned Day 2 into a fortress: an 87-point lead at 826. Add Lawson 3rd, Pepper 4th, Hopper 6th, Adams 10th - six Brute athletes in the top 10. The flip side: five of their twelve sit 21st or lower. The crowns are Brute's. The floor is not.",
+        "source": "Official leaderboard through E12; roster per Brute's 2026 announcements"
+      },
+      {
+        "type": "point",
+        "num": 2,
+        "kicker": "PRVN Fitness",
+        "headline": "EIGHT WINS.\nDAY 2 WAS THEIRS.",
+        "body": "Mertens won the hopper for his THIRD win of these Games. Crouch won the run-and-clean, took 2nd on the hopper, and sits 2nd overall at 740 - twelve points off the jersey. Garard, Sturt and Milligan own wins too. Eight event victories, the best camp average, and four in the top 8 (Crouch 2nd, Sturt 4th, Garard 5th, Mertens 8th). Nashville is coming for Saturday.",
+        "source": "Official leaderboard through E12; roster per PRVN's Games-week posts"
+      },
+      {
+        "type": "point",
+        "num": 3,
+        "kicker": "Mayhem + HWPO",
+        "headline": "THE REVIVAL AND\nTHE SHARPSHOOTERS",
+        "body": "Mayhem's Friday: Khrennikov won the Snail, Rodgers won the Handstand Sprint hours after taking 2nd on the Snail, and Malheiros won the sandbag throw then went 2nd on the handstands. Three wins in one day - second-best camp average. HWPO stays lean and lethal: Gazan owns TWO event wins and 5th overall, and Vellner backed his deadlift with a throw podium.",
+        "source": "Official leaderboard; verified camp rosters"
+      },
+      {
+        "type": "cta",
+        "headline": "TWO DAYS.\nEIGHT EVENTS.",
+        "body": "Brute owns the jerseys. PRVN owns the events. Mayhem owns the momentum. Full camp math and the live leaderboard are on the site - link in bio."
+      }
+    ]
+  },
+  {
+    "id": "day2-data-recap",
+    "label": "Day 2 Data Recap + Day 3 Projection",
+    "caption": "DAY 2, BY THE DATA. Five arena events, and the modality map flipped exactly the way we projected: Day 1 tested the poles - Day 2 tested the middle.\n\nWHAT IT TESTED: an odd-object grip war (the Snail), a throwing skill test (the 3D throw), a barbell-engine interval (run + hang cleans), a pure gymnastics sprint (the handstands), and a fan-voted barbell-gymnastics couplet (Toomey's hopper). Zero pure-engine events, zero max lifts - everything lived in the skill-and-cycling middle that Day 1 skipped.\n\nWHO LEADS AT HALFWAY: Men - Sprague 752, after a day where the lead changed twice and the top four packed into 34 points (Crouch 740, Medeiros 732, Pepper 718). Women - Cringle 826 with an EIGHTY-SEVEN point fortress, while 2nd place changed hands four times in one day and landed with Campbell (739), five points over Lawson (734).\n\nTHE DAY IN NUMBERS: 3 first-career event wins (Hoffer, Domit, Rodgers). 2 men's lead changes. 4 women's silver flips. 1 buzzer review that decided a podium place.\n\nDAY 3 BY THE ALMANAC: the 500m sprint (Garard won 2024 Track and Field outright - the closest verified sprint credential in the field; Adams owns the best women's sprint resume) and the Speed Snatch Triple (Malheiros won the 2021 max snatch at 305 lb). Three Saturday events still unannounced.\n\nHalfway done. Full boards + the live leaderboard at the link in bio. A history read, not a result prediction.",
+    "slides": [
+      {
+        "type": "cover",
+        "kicker": "Day 2 - Friday",
+        "headline": "DAY 2,\nBY THE DATA",
+        "sub": "Five arena events, two lead changes, four silver flips, one buzzer verdict. The numbers behind the wildest day of the week. Swipe."
+      },
+      {
+        "type": "bars",
+        "kicker": "The Programming",
+        "headline": "DAY 2 TESTED\nTHE MIDDLE",
+        "bars": [
+          {
+            "label": "Gymnastics skill",
+            "pct": 100,
+            "display": "2 events",
+            "color": "#91C640"
+          },
+          {
+            "label": "Barbell + engine mix",
+            "pct": 100,
+            "display": "2 events",
+            "color": "#F4C64A"
+          },
+          {
+            "label": "Odd-object / grip",
+            "pct": 50,
+            "display": "1 event",
+            "color": "#60a5fa"
+          },
+          {
+            "label": "Throwing skill",
+            "pct": 50,
+            "display": "1 event",
+            "color": "#CD8B5B"
+          },
+          {
+            "label": "Pure engine / max lift",
+            "pct": 4,
+            "display": "0 events",
+            "color": "rgba(244,246,242,0.4)"
+          }
+        ],
+        "footnote": "Classified by each event's primary stimulus; the hopper counts in two families. Day 1 put 6 of 7 tests at the poles - Day 2 put 5 of 5 in the middle. Exactly the swing our Day 1 data recap projected."
+      },
+      {
+        "type": "movement",
+        "kicker": "Men - Halfway (12 of 20 events)",
+        "headline": "MEN: THE\nHALFWAY BOARD",
+        "rows": [
+          {
+            "rank": 1,
+            "name": "James Sprague",
+            "pts": 752,
+            "delta": null
+          },
+          {
+            "rank": 2,
+            "name": "Jay Crouch",
+            "pts": 740,
+            "delta": null
+          },
+          {
+            "rank": 3,
+            "name": "Justin Medeiros",
+            "pts": 732,
+            "delta": null
+          },
+          {
+            "rank": 4,
+            "name": "Dallin Pepper",
+            "pts": 718,
+            "delta": null
+          },
+          {
+            "rank": 5,
+            "name": "Ricky Garard",
+            "pts": 675,
+            "delta": null
+          },
+          {
+            "rank": 6,
+            "name": "Jayson Hopper",
+            "pts": 647,
+            "delta": null
+          },
+          {
+            "rank": 7,
+            "name": "Roman Khrennikov",
+            "pts": 592,
+            "delta": null
+          },
+          {
+            "rank": 8,
+            "name": "Colten Mertens",
+            "pts": 559,
+            "delta": null
+          }
+        ],
+        "note": "Top four within 34 points. The lead changed twice on Friday and ended where it started. Adler 9th, Hoffer 10th."
+      },
+      {
+        "type": "movement",
+        "kicker": "Women - Halfway (12 of 20 events)",
+        "headline": "WOMEN: THE\nHALFWAY BOARD",
+        "rows": [
+          {
+            "rank": 1,
+            "name": "Aimee Cringle",
+            "pts": 826,
+            "delta": null
+          },
+          {
+            "rank": 2,
+            "name": "Lucy Campbell",
+            "pts": 739,
+            "delta": null
+          },
+          {
+            "rank": 3,
+            "name": "Emma Lawson",
+            "pts": 734,
+            "delta": null
+          },
+          {
+            "rank": 4,
+            "name": "Madeline Sturt",
+            "pts": 652,
+            "delta": null
+          },
+          {
+            "rank": 5,
+            "name": "Alex Gazan",
+            "pts": 636,
+            "delta": null
+          },
+          {
+            "rank": 6,
+            "name": "Paige Rodgers",
+            "pts": 583,
+            "delta": null
+          },
+          {
+            "rank": 7,
+            "name": "Danielle Brandon",
+            "pts": 580,
+            "delta": null
+          },
+          {
+            "rank": 8,
+            "name": "Arielle Loewen",
+            "pts": 580,
+            "delta": null
+          }
+        ],
+        "note": "Cringle's lead: 87. Second place changed hands four times on Friday and sits with Campbell by five. Fuliano 9th, Adams 10th."
+      },
+      {
+        "type": "stat",
+        "kicker": "The Day In Numbers",
+        "headline": "FRIDAY BY\nTHE NUMBERS",
+        "stats": [
+          {
+            "big": "2",
+            "label": "men's lead changes - and Sprague still ended the day in front"
+          },
+          {
+            "big": "4",
+            "label": "times 2nd place flipped in the women's race in ONE day"
+          },
+          {
+            "big": "3",
+            "label": "first-career event wins: Hoffer, Domit, Rodgers"
+          },
+          {
+            "big": "87",
+            "label": "Cringle's halfway lead - built without a single Friday event win"
+          }
+        ],
+        "footnote": "Plus a 25-second gymnastics demolition and a buzzer review that decided a podium place. All from the official board."
+      },
+      {
+        "type": "point",
+        "num": 1,
+        "kicker": "Day 3 Projection",
+        "headline": "SPEED DAY:\nWHO IT FAVORS",
+        "body": "Saturday opens with the 500-meter sprint - Ricky Garard won 2024 Track and Field outright, the closest verified sprint credential in the field, and Haley Adams owns the best women's sprint resume in our almanac. Then the Speed Snatch Triple, echoing the 2020 test - and the proven big snatcher here is Guilherme Malheiros, who won the 2021 max snatch at 305 lb and just had a two-podium Friday. Three Saturday events remain unannounced. A history read, not a result prediction.",
+        "source": "Persistence Athletics Games Almanac + official leaderboard"
+      },
+      {
+        "type": "cta",
+        "headline": "HALFWAY.\nEVERYTHING LIVE.",
+        "body": "Both halfway boards, every event recap, and the live leaderboard that updates all weekend - link in bio. Day 3 cards the moment each event goes official."
+      }
+    ]
+  },
+  {
     "id": "champs-day2",
     "label": "Champions Check-In - Day 2",
     "caption": "Halfway through the Games and four former champions sit inside the top 10, with Sprague still in the jersey. Crouch is coming for those red shorts, and Sunday will crown a first-time women's champion. Buckle up.",
