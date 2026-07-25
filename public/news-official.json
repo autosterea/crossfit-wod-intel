@@ -1,10 +1,10 @@
 {
-  "updatedAt": "2026-07-25T02:08:54.171Z",
+  "updatedAt": "2026-07-25T04:08:28.483Z",
   "season": 2026,
   "stage": "games",
   "stageLabel": "2026 CrossFit Games",
   "status": "live",
-  "eventsCompleted": 11,
+  "eventsCompleted": 12,
   "eventsTotal": null,
   "source": "https://c3po.crossfit.com/api/leaderboards/v2/competitions/games/2026/leaderboards?division=1&sort=0&page=1",
   "sourceLabel": "Official CrossFit Games leaderboard (c3po.crossfit.com)",
@@ -13,73 +13,73 @@
     "men": [
       {
         "rank": 1,
-        "name": "Justin Medeiros",
-        "country": "United States",
-        "countryCode": "US",
-        "points": "674"
-      },
-      {
-        "rank": 2,
         "name": "James Sprague",
         "country": "United States",
         "countryCode": "US",
-        "points": "662"
+        "points": "752"
       },
       {
-        "rank": 3,
+        "rank": 2,
         "name": "Jay Crouch",
         "country": "Australia",
         "countryCode": "AU",
-        "points": "642"
+        "points": "740"
+      },
+      {
+        "rank": 3,
+        "name": "Justin Medeiros",
+        "country": "United States",
+        "countryCode": "US",
+        "points": "732"
       },
       {
         "rank": 4,
         "name": "Dallin Pepper",
         "country": "United States",
         "countryCode": "US",
-        "points": "640"
+        "points": "718"
       },
       {
         "rank": 5,
         "name": "Ricky Garard",
         "country": "Australia",
         "countryCode": "AU",
-        "points": "607"
+        "points": "675"
       },
       {
         "rank": 6,
-        "name": "Roman Khrennikov",
-        "country": "United States",
-        "countryCode": "US",
-        "points": "563"
-      },
-      {
-        "rank": 7,
         "name": "Jayson Hopper",
         "country": "United States",
         "countryCode": "US",
-        "points": "553"
+        "points": "647"
+      },
+      {
+        "rank": 7,
+        "name": "Roman Khrennikov",
+        "country": "United States",
+        "countryCode": "US",
+        "points": "592"
       },
       {
         "rank": 8,
-        "name": "Moritz Fiebig",
-        "country": "Germany",
-        "countryCode": "DE",
-        "points": "472"
+        "name": "Colten Mertens",
+        "country": "United States",
+        "countryCode": "US",
+        "points": "559"
       },
       {
         "rank": 9,
         "name": "Jeffrey Adler",
         "country": "Canada",
         "countryCode": "CA",
-        "points": "462"
+        "points": "520"
       },
       {
         "rank": 10,
-        "name": "Colten Mertens",
-        "country": "United States",
-        "countryCode": "US",
-        "points": "459"
+        "name": "Victor Hoffer",
+        "country": "France",
+        "countryCode": "FR",
+        "points": "514"
       }
     ],
     "women": [
