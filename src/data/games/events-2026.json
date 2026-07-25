@@ -10,18 +10,18 @@
   },
   "items": [
     {
-      "name": "The Hopper Draw",
+      "name": "Event 12: The Hopper 2026",
       "status": "confirmed",
       "kind": "event",
-      "summary": "DRAWN at Opening Ceremonies on Friday morning: the original 2007 hopper drum produced SNATCH and TOES-TO-BAR as the two movements for the Friday night closer (expected Event 12; official number pending). The final workout structure is being decided by a vote before the session - loads, reps and format unknown until it closes. The only prior Games event combining the two: the 2024 Dickies Triplet, won by Jayson Hopper, who is in this field. We publish the full workout the moment it is official.",
+      "summary": "THE DRAWN WORKOUT IS SET (announced via Morning Chalk Up from the arena): 3 rounds for time of 21 toes-to-bars, 7 UNBROKEN power snatches, 7 UNBROKEN hang snatches, 7 UNBROKEN squat snatches - 95 lb men / 65 lb women, 6-minute time cap. The snatch and toes-to-bar balls were drawn from the original 2007 hopper drum at Opening Ceremonies; a fan vote set the structure. A light-barbell discipline sprint: the unbroken requirement means a dropped bar mid-set restarts the set. Contested tonight as the Friday closer.",
       "source": {
         "label": "CrossFit Games (official) - The Hopper Returns",
         "url": "https://games.crossfit.com/article/the-hopper-returns-a-piece-of-crossfit-history-comes-back-to-the-games"
       },
       "date": "2026-07-24",
-      "shortName": "The Hopper Draw",
+      "shortName": "The Hopper 2026",
       "analysisSlug": "the-hopper-spoke-snatch-and-toes-to-bar",
-      "day": "Friday, July 24"
+      "num": 12
     },
     {
       "name": "Event 18: Machine 7200M",

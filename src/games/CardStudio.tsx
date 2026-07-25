@@ -336,6 +336,24 @@ const CAROUSELS: Carousel[] = [
     ],
   },
   {
+    id: 'hopper-final',
+    label: 'The Hopper 2026 - workout is SET',
+    caption:
+      "THE HOPPER WORKOUT IS SET. The barrel gave the movements this morning - the vote just gave the structure. Event 12, tonight's closer:\n\n3 ROUNDS FOR TIME\n21 toes-to-bars\n7 UNBROKEN power snatches\n7 UNBROKEN hang snatches\n7 UNBROKEN squat snatches\n95 lb men / 65 lb women. 6-MINUTE CAP.\n\nRead that again: UNBROKEN. Drop the bar on rep six and the set restarts. This is not a strength test - at 95/65 it's a discipline sprint. Sixty-three toes-to-bars frying your grip, then three snatch complexes your hands are not allowed to fail.\n\nThis is EXACTLY the scenario we mapped this morning: light and fast, Isabel-family. The reads from our almanac: Hatfield (won 2025's Running Isabel), Medeiros (the barbell cycler's cycler), and the toes-to-bar owners - Adams (won the 2022 T2B test), Garard, Khrennikov. And remember who won the only prior snatch+T2B combo at the Games: Jayson Hopper, 2024.\n\nThe stakes could not be bigger: Sprague leads Pepper by SEVEN points. Cringle's cushion is 60. Lead has changed twice today already. Six minutes, under the lights, on a workout that did not exist this morning.\n\nThe original hopper built this sport in 2007. Tonight it closes the loudest day of the 2026 Games. Full analysis on the site.",
+    slides: [
+      { type: 'cover', kicker: 'Event 12 - Tonight\'s Closer', headline: 'THE HOPPER\nIS SET', sub: 'The barrel gave the movements. The vote gave the structure. Six minutes, unbroken snatches, and a 7-point lead on the line. Swipe.' },
+      { type: 'point', num: 1, kicker: 'The Drawn Workout', headline: '3 ROUNDS.\n6 MINUTES.', body: '21 toes-to-bars, then 7 UNBROKEN power snatches, 7 UNBROKEN hang snatches, 7 UNBROKEN squat snatches. 95 lb men, 65 lb women, 6-minute cap. The unbroken rule is the event: drop the bar mid-set and the set restarts. Announced from the arena via Morning Chalk Up.', source: 'Hopper draw + fan vote (per Morning Chalk Up)' },
+      { type: 'point', num: 2, kicker: 'What It Really Tests', headline: 'GRIP, THEN\nDISCIPLINE', body: 'Sixty-three total toes-to-bars torch the grip - and then the workout FORBIDS the grip from failing, three times per round, at snatch speed. At 95/65 nobody in this field misses these weights fresh. On fried forearms, in event five of the day, under arena lights? This is the sport\'s founding idea: fitness you cannot fake, drawn from a barrel.', source: 'Persistence Athletics analysis' },
+      { type: 'stat', kicker: 'The Almanac Reads', headline: 'WHO FITS\nTHE DRAW', stats: [
+        { big: '2:35', label: 'Hatfield\'s winning Running Isabel (2025) - light-snatch royalty' },
+        { big: '1st', label: 'Hopper won the only prior snatch+T2B combo (2024)' },
+        { big: '3', label: 'T2B event winners in this field: Adams, Garard, Khrennikov' },
+        { big: '7 pts', label: 'Sprague\'s lead over Pepper - tonight decides who sleeps in the jersey' },
+      ], footnote: 'Two lead changes today already. Cringle\'s cushion: 60. Six minutes settles Day 2.' },
+      { type: 'cta', headline: 'CARDS AT\nTHE BUZZER', body: 'Results + updated boards the moment tonight\'s closer goes official. The barrel that built the sport in 2007 closes the loudest day of 2026. Link in bio.' },
+    ],
+  },
+  {
     id: 'e8-snail-women',
     label: "E8 Climbing Snail - women's recap",
     caption:
