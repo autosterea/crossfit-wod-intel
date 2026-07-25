@@ -290,6 +290,122 @@ type Slide =
 type Carousel = { id: string; label: string; caption: string; slides: Slide[] }
 const CAROUSELS: Carousel[] = [
   {
+    "id": "day2-toll",
+    "label": "Day 2 Took Its Toll (and the swings)",
+    "caption": "Day 2 asked hard questions on hurt legs, and a few athletes answered with some of the best moments of the weekend. Henrik Haapalainen raced all of Day 2 on an Achilles injury and still crossed 4th on the Handstand Sprint. Lydia Fish had been limping on a Wednesday foot injury all day, then climbed the handstand course to a Games podium. Upside down, the foot doesn't matter.\n\nThe ankle trouble kept coming. Alexis Raptis competed on an ankle injury, plus a fall from the rope onto the mat on Event 8, and took 4th on the Handstand Sprint. Anikha Greer went on an injured ankle and took 5th. Add Fish's podium and the injured trio swept 3rd through 5th on the same event. Hannah Black shut down her Event 8 rope climbs early to protect the weekend, then came back the same day to take 2nd on the sandbag. Matilde Garnes looked spent on Event 10, walking the runs and time capped, the broadcast urging her to shut it down, then bounced back 5th on the hopper. Respect to every one of them.\n\nThen the swings that had nothing to do with injury. Ricky Garard led Event 10 unbroken, then one no-rep on his final round-3 rep sank it. James Sprague slipped on his final sandbag throw, went 16th, briefly lost the overall lead, then won it back within an event and defended it on the hopper with a clutch 4th. Dallin Pepper wore the leader jersey for exactly one event.\n\nAnd the answer-backs. Danielle Brandon's 3-straight handstand-event streak ended, outside the top 10 in her signature event, and ninety minutes later she answered with 3rd on the hopper. Lucy Campbell went 11th on the Snail, lost the overall 2nd, then turned around and won the hopper.\n\nThat's Day 2. Get hit, answer back. Injury notes per the Games broadcast coverage. Full recap and the live leaderboard are on the site.",
+    "slides": [
+      {
+        "type": "cover",
+        "kicker": "2026 CrossFit Games / Day 2",
+        "headline": "DAY 2\nTOOK ITS TOLL",
+        "sub": "Some raced hurt. Some got hit on the board. Some answered back within the hour. Swipe through it."
+      },
+      {
+        "type": "point",
+        "num": 1,
+        "kicker": "Competed Hurt",
+        "headline": "RACED HURT,\nCLIMBED ANYWAY",
+        "body": "Henrik Haapalainen raced all of Day 2 on an Achilles injury and still crossed 4th on the Handstand Sprint. Lydia Fish had been limping on a Wednesday foot injury all day, then climbed the handstand course to a Games podium. Upside down, the foot doesn't matter.",
+        "source": "Injury notes: Games broadcast coverage"
+      },
+      {
+        "type": "point",
+        "num": 2,
+        "kicker": "The Ankle Trio",
+        "headline": "3RD, 4TH, 5TH,\nSAME BAD ANKLES",
+        "body": "Alexis Raptis competed on an ankle injury, plus a fall from the rope onto the mat on Event 8, and took 4th on the Handstand Sprint. Anikha Greer went on an injured ankle and took 5th. Add Fish's podium and the trio swept 3rd through 5th on the same event. Hannah Black shut down her Event 8 rope climbs early to protect the weekend, then came back to take 2nd on the sandbag. Matilde Garnes looked spent on Event 10, walking the runs and time capped, then bounced back 5th on the hopper.",
+        "source": "Injury notes + broadcast coverage"
+      },
+      {
+        "type": "point",
+        "num": 3,
+        "kicker": "Not An Injury",
+        "headline": "ONE NO-REP,\nONE SLIP",
+        "body": "Ricky Garard led Event 10 unbroken, then a single no-rep on his final round-3 rep sank the event. James Sprague slipped on his final sandbag throw for 16th and briefly lost the overall lead, then won it back within an event and defended it on the hopper with a clutch 4th. Dallin Pepper wore the leader jersey for exactly one event.",
+        "source": "Official leaderboard"
+      },
+      {
+        "type": "point",
+        "num": 4,
+        "kicker": "The Answer-Backs",
+        "headline": "HIT. THEN\nANSWERED.",
+        "body": "Danielle Brandon's 3-straight handstand-event streak ended, outside the top 10 in her signature event. Ninety minutes later she answered with 3rd on the hopper. Lucy Campbell went 11th on the Snail and lost the overall 2nd, then turned around and won the hopper. That is Day 2: get hit, answer back.",
+        "source": "Official leaderboard"
+      },
+      {
+        "type": "cta",
+        "headline": "FULL DAY 2\nRECAP",
+        "body": "Every injury note, every swing, and the full leaderboard after Day 2 are on the site."
+      }
+    ]
+  },
+  {
+    "id": "day2-records",
+    "label": "Day 2 Records & Firsts",
+    "caption": "Day 2 of the Games gave us three first-time winners, three first-time podiums, and a piece of history that hasn't happened since 2007.\n\nVictor Hoffer put about 25 seconds on the field in the Handstand Sprint for his first career win. Abigail Domit won the women's sandbag throw at 108 feet - she threw it like a snatch, all power from the hips, while others kettlebell-swung it. Her line after: \"I do wish this event was 100 points, but it's not too late to change that, right?\" Paige Rodgers won the women's Handstand Sprint in 1:56.58, the same day she took 2nd on the Snail.\n\nThen the podiums. Lydia Fish took 3rd in the women's Handstand Sprint on a foot she's been limping on since Wednesday. She was dead last overall. \"This is just part of sport,\" she said. Ben Fowler grabbed his first career podium at 3rd in the men's Handstand Sprint. Dylan Hamming, our physics pick, tied for 2nd in the sandbag.\n\nAnd some athletes just don't stop. Mertens has 3 event wins this Games now, more than anyone in the field. Malheiros won the sandbag and took 2nd in the Handstand Sprint on the same day, his 6th career win. Campbell won the hopper for her 2nd win of these Games, and she already owns the 2022 pool swim too. Crouch and Lawson each won Event 10 for their 3rd career wins, and Khrennikov grabbed a 6th career win - then gave his first all-English victory interview. Some competitors just know how to show up when it counts.\n\nOh, and that hopper event. First time a hopper has drawn a Games event since 2007, and they used the original drum. The sandbag brought firsts of its own: the first 50-point event since 2016 and the first Games throw-for-distance since 2012.\n\nThis sport keeps giving us new names to remember. Who stood out to you on Day 2?",
+    "slides": [
+      {
+        "type": "cover",
+        "kicker": "GAMES 2026 - DAY 2",
+        "headline": "RECORDS\n& FIRSTS",
+        "sub": "Three first-time winners. Three first-time podiums. History made three times over."
+      },
+      {
+        "type": "stat",
+        "kicker": "BY THE NUMBERS",
+        "headline": "A DAY OF\nFIRSTS",
+        "stats": [
+          {
+            "big": "3",
+            "label": "first career event wins"
+          },
+          {
+            "big": "3",
+            "label": "first career podiums"
+          },
+          {
+            "big": "3",
+            "label": "Mertens' wins this Games"
+          },
+          {
+            "big": "2007",
+            "label": "last Games hopper draw"
+          }
+        ],
+        "footnote": "The hopper used Day 2 was the original 2007 drum. The sandbag was the first 50-point event since 2016 and the first Games throw-for-distance since 2012."
+      },
+      {
+        "type": "point",
+        "num": 1,
+        "kicker": "FIRST CAREER WINS",
+        "headline": "THREE NEW\nWINNERS",
+        "body": "Victor Hoffer, the French ex-gymnast, put about 25 seconds on the field to win the Handstand Sprint - his first career win. Abigail Domit took the women's sandbag at 108 feet, throwing it like a snatch with power from the hips while others kettlebell-swung it. \"I do wish this event was 100 points, but it's not too late to change that, right?\" Paige Rodgers won the women's Handstand Sprint in 1:56.58 - the same day she took 2nd on the Snail.",
+        "source": "Broadcast coverage + official leaderboard"
+      },
+      {
+        "type": "point",
+        "num": 2,
+        "kicker": "FIRST CAREER PODIUMS",
+        "headline": "PODIUM ON\nONE FOOT",
+        "body": "Lydia Fish took 3rd in the women's Handstand Sprint on a foot she'd been limping on since Wednesday. She was dead last overall. \"This is just part of sport,\" she said after. Ben Fowler (NZ) earned his first career podium at 3rd in the men's Handstand Sprint. Dylan Hamming, our physics pick, tied for 2nd in the men's sandbag.",
+        "source": "Broadcast coverage + official leaderboard"
+      },
+      {
+        "type": "point",
+        "num": 3,
+        "kicker": "MULTIPLE ON THE DAY",
+        "headline": "SOME ATHLETES\nDON'T STOP",
+        "body": "Mertens now has 3 event wins this Games - squat, press, and the hopper - more than anyone else in the field. Malheiros won the sandbag and took 2nd in the Handstand Sprint on the same day, his 6th career win - fittingly, one of the earlier five came on the 2022 Sandbag Ladder. Campbell won the women's hopper in 5:02.48 for her 2nd win of these Games, after the swim - and she already owns the 2022 pool swim too. When it matters, she shows up. Crouch and Lawson each won Event 10 for 3rd career wins, and Khrennikov took his 6th - capped with his first all-English victory interview.",
+        "source": "Broadcast coverage + official leaderboard"
+      },
+      {
+        "type": "cta",
+        "headline": "MORE FIRSTS\nCOMING",
+        "body": "Day 2 rewrote some record books. Follow along as we track every win, every podium, every piece of history through the rest of these Games."
+      }
+    ]
+  },
+  {
     id: 'day1-data-recap',
     label: 'Day 1 Data Recap + Friday Projection',
     caption:
