@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-25T04:08:28.483Z",
+  "updatedAt": "2026-07-25T06:08:13.589Z",
   "season": 2026,
   "stage": "games",
   "stageLabel": "2026 CrossFit Games",
@@ -88,70 +88,70 @@
         "name": "Aimee Cringle",
         "country": "United Kingdom",
         "countryCode": "GB",
-        "points": "738"
+        "points": "826"
       },
       {
         "rank": 2,
-        "name": "Emma Lawson",
-        "country": "Canada",
-        "countryCode": "CA",
-        "points": "650"
-      },
-      {
-        "rank": 3,
         "name": "Lucy Campbell",
         "country": "United Kingdom",
         "countryCode": "GB",
-        "points": "639"
+        "points": "739"
+      },
+      {
+        "rank": 3,
+        "name": "Emma Lawson",
+        "country": "Canada",
+        "countryCode": "CA",
+        "points": "734"
       },
       {
         "rank": 4,
-        "name": "Alex Gazan",
-        "country": "United States",
-        "countryCode": "US",
-        "points": "603"
-      },
-      {
-        "rank": 5,
         "name": "Madeline Sturt",
         "country": "Australia",
         "countryCode": "AU",
-        "points": "596"
+        "points": "652"
+      },
+      {
+        "rank": 5,
+        "name": "Alex Gazan",
+        "country": "United States",
+        "countryCode": "US",
+        "points": "636"
       },
       {
         "rank": 6,
         "name": "Paige Rodgers",
         "country": "United States",
         "countryCode": "US",
-        "points": "523"
+        "points": "583"
       },
       {
         "rank": 7,
-        "name": "Arielle Loewen",
+        "name": "Danielle Brandon",
         "country": "United States",
         "countryCode": "US",
-        "points": "504"
+        "points": "580"
       },
       {
         "rank": 8,
-        "name": "Kyra Milligan",
+        "name": "Arielle Loewen",
         "country": "United States",
         "countryCode": "US",
-        "points": "497"
+        "points": "580"
       },
       {
         "rank": 9,
         "name": "Elisa Fuliano",
         "country": "Italy",
         "countryCode": "IT",
-        "points": "493"
+        "points": "561"
       },
       {
         "rank": 10,
         "name": "Haley Adams",
         "country": "United States",
         "countryCode": "US",
-        "points": "490"
+        "points": "529"
       }
     ]
   }
