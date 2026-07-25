@@ -381,9 +381,9 @@
       "scoring": "distance",
       "timeCapMin": null,
       "winnerMen": "Guilherme Malheiros",
-      "winnerWomen": null,
+      "winnerWomen": "Abigail Domit",
       "winningScoreMen": "123 ft",
-      "winningScoreWomen": null,
+      "winningScoreWomen": "108 ft",
       "movements": [
         "Sandbag Throw"
       ],
@@ -408,9 +408,54 @@
       "firstAtGames": [
         "sandbag throw for distance"
       ],
-      "notes": "First throw-for-distance test at the Games since the 2012 GHD Ball Toss. A 50-point event (the first 50-point events since 2016 per the broadcast, alongside the CrossFit Total). Malheiros won for his sixth career event win - one of his five priors was the 2022 Sandbag Ladder. Vellner and Dylan Hamming tied for second at 122 ft. James Sprague slipped on his final throw (16th), costing him the overall lead to Dallin Pepper. Women's result recorded separately when official.",
+      "notes": "First throw-for-distance test at the Games since the 2012 GHD Ball Toss. A 50-point event (the first 50-point events since 2016 per the broadcast, alongside the CrossFit Total). Malheiros won for his sixth career event win - one of his five priors was the 2022 Sandbag Ladder. Vellner and Dylan Hamming tied for second at 122 ft. James Sprague slipped on his final throw (16th), costing him the overall lead to Dallin Pepper. Abigail Domit won the women's event (108 ft) for her first career event win, ahead of Hannah Black (106 ft) and Alex Gazan (100 ft).",
       "sources": [
         "https://games.crossfit.com/leaderboard/finals/2026?division=1"
+      ]
+    },
+    {
+      "id": "2026-10",
+      "order": 10,
+      "stage": "games",
+      "name": "Run Hang Squat Clean",
+      "aka": null,
+      "day": "Friday",
+      "description": "4 rounds for time of:\n660-meter run\n10 hang squat cleans (225 lb men / 155 lb women, short barbell)\n15-minute time cap.",
+      "format": "for-time",
+      "scoring": "time",
+      "timeCapMin": 15,
+      "winnerMen": "Jay Crouch",
+      "winnerWomen": "Emma Lawson",
+      "winningScoreMen": "14:15.05",
+      "winningScoreWomen": "14:56.52",
+      "movements": [
+        "Run",
+        "Hang Squat Clean"
+      ],
+      "loads": [
+        {
+          "item": "Hang squat clean",
+          "men": "225 lb",
+          "women": "155 lb"
+        }
+      ],
+      "equipment": [
+        "barbell"
+      ],
+      "eventTypes": [
+        "couplet",
+        "run"
+      ],
+      "modality": "MW",
+      "timeDomain": "medium",
+      "loadLevel": "heavy",
+      "environment": "arena",
+      "namedWod": null,
+      "firstAtGames": [],
+      "notes": "Runs exited the SAP Center onto an outdoor course. Crouch won by 13+ seconds for his second win of these Games (third career), with Medeiros edging Adler by 0.40s for second; Garard led early but a no-rep on his final round-three rep sank his event. Sprague finished 15:00.07 to Pepper 15:19.14, retaking the overall lead 614-607 - the second lead change of the day. Lawson won the women's event ahead of Campbell, who retook 2nd overall from Sturt (10th in the event) - that battle flipped three times on Friday.",
+      "sources": [
+        "https://games.crossfit.com/leaderboard/finals/2026?division=1",
+        "https://games.crossfit.com/leaderboard/finals/2026?division=2"
       ]
     }
   ]

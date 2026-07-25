@@ -292,7 +292,20 @@
           "score": "122 ft (T-2)"
         }
       ],
-      "women": []
+      "women": [
+        {
+          "name": "Abigail Domit",
+          "score": "108 ft"
+        },
+        {
+          "name": "Hannah Black",
+          "score": "106 ft"
+        },
+        {
+          "name": "Alex Gazan",
+          "score": "100 ft"
+        }
+      ]
     },
     {
       "num": 10,
@@ -346,110 +359,110 @@
     }
   ],
   "leaderboard": {
-    "afterEvent": 9,
-    "afterLabel": "After Event 9",
+    "afterEvent": 10,
+    "afterLabel": "After Event 10",
     "men": [
       {
-        "name": "Dallin Pepper",
-        "points": 543,
+        "name": "James Sprague",
+        "points": 614,
         "prev": 2
       },
       {
-        "name": "James Sprague",
-        "points": 534,
+        "name": "Dallin Pepper",
+        "points": 607,
         "prev": 1
       },
       {
         "name": "Justin Medeiros",
-        "points": 498,
-        "prev": 4
-      },
-      {
-        "name": "Ricky Garard",
-        "points": 475,
+        "points": 594,
         "prev": 3
       },
       {
         "name": "Jay Crouch",
-        "points": 458,
-        "prev": 6
-      },
-      {
-        "name": "Roman Khrennikov",
-        "points": 457,
+        "points": 558,
         "prev": 5
       },
       {
-        "name": "Jayson Hopper",
-        "points": 430,
-        "prev": 8
+        "name": "Roman Khrennikov",
+        "points": 545,
+        "prev": 6
       },
       {
-        "name": "Moritz Fiebig",
-        "points": 421,
+        "name": "Ricky Garard",
+        "points": 535,
+        "prev": 4
+      },
+      {
+        "name": "Jayson Hopper",
+        "points": 514,
         "prev": 7
       },
       {
-        "name": "Bayley Martin",
-        "points": 350,
-        "prev": 12
+        "name": "Moritz Fiebig",
+        "points": 448,
+        "prev": 8
       },
       {
         "name": "Jeffrey Adler",
-        "points": 349,
-        "prev": 9
+        "points": 441,
+        "prev": 10
+      },
+      {
+        "name": "Colten Mertens",
+        "points": 383,
+        "prev": 13
       }
     ],
     "women": [
       {
         "name": "Aimee Cringle",
-        "points": 576,
+        "points": 666,
         "prev": 1
       },
       {
-        "name": "Madeline Sturt",
-        "points": 511,
+        "name": "Lucy Campbell",
+        "points": 606,
         "prev": 3
       },
       {
-        "name": "Lucy Campbell",
-        "points": 510,
+        "name": "Madeline Sturt",
+        "points": 575,
         "prev": 2
       },
       {
-        "name": "Alex Gazan",
-        "points": 471,
+        "name": "Emma Lawson",
+        "points": 570,
         "prev": 5
       },
       {
-        "name": "Emma Lawson",
-        "points": 468,
+        "name": "Alex Gazan",
+        "points": 527,
         "prev": 4
       },
       {
         "name": "Haley Adams",
-        "points": 427,
+        "points": 466,
         "prev": 6
       },
       {
-        "name": "Paige Rodgers",
-        "points": 386,
-        "prev": 9
-      },
-      {
-        "name": "Aline Wirz",
-        "points": 378,
-        "prev": 8
-      },
-      {
-        "name": "Elisa Fuliano",
-        "points": 376,
-        "prev": 7
-      },
-      {
         "name": "Arielle Loewen",
-        "points": 372,
+        "points": 452,
+        "prev": 10
+      },
+      {
+        "name": "Ellie Turner",
+        "points": 443,
+        "prev": 13
+      },
+      {
+        "name": "Kyra Milligan",
+        "points": 433,
         "prev": 12
+      },
+      {
+        "name": "Danielle Brandon",
+        "points": 428,
+        "prev": 11
       }
     ]
   }
