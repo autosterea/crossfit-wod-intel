@@ -313,7 +313,20 @@
           "score": "14:29"
         }
       ],
-      "women": []
+      "women": [
+        {
+          "name": "Emma Lawson",
+          "score": "14:56"
+        },
+        {
+          "name": "Lucy Campbell",
+          "score": "14:58"
+        },
+        {
+          "name": "Ellie Turner",
+          "score": "15:22"
+        }
+      ]
     },
     {
       "num": 11,
