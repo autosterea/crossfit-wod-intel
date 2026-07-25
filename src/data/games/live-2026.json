@@ -346,7 +346,20 @@
       "name": "Handstand Sprint",
       "short": "HS Sprint",
       "scoreLabel": "TIME",
-      "men": [],
+      "men": [
+        {
+          "name": "Victor Hoffer",
+          "score": "1:05.62"
+        },
+        {
+          "name": "Guilherme Malheiros",
+          "score": "1:30.26"
+        },
+        {
+          "name": "Ben Fowler",
+          "score": "1:50.18"
+        }
+      ],
       "women": []
     },
     {
