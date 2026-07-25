@@ -360,7 +360,20 @@
           "score": "1:50.18"
         }
       ],
-      "women": []
+      "women": [
+        {
+          "name": "Paige Rodgers",
+          "score": "1:56.58"
+        },
+        {
+          "name": "Elisa Fuliano",
+          "score": "2:03.55"
+        },
+        {
+          "name": "Lydia Fish",
+          "score": "2:36.49"
+        }
+      ]
     },
     {
       "num": 12,
