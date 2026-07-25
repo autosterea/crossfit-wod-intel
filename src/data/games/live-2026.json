@@ -380,63 +380,76 @@
       "name": "The Hopper 2026",
       "short": "Hopper 2026",
       "scoreLabel": "TIME",
-      "men": [],
+      "men": [
+        {
+          "name": "Colten Mertens",
+          "score": "4:55.57"
+        },
+        {
+          "name": "Jay Crouch",
+          "score": "4:59.27"
+        },
+        {
+          "name": "Jayson Hopper",
+          "score": "5:08.23"
+        }
+      ],
       "women": []
     }
   ],
   "leaderboard": {
-    "afterEvent": 11,
-    "afterLabel": "After Event 11",
+    "afterEvent": 12,
+    "afterLabel": "After Event 12 - End of Day 2",
     "men": [
       {
         "name": "James Sprague",
-        "points": 664,
+        "points": 752,
         "prev": 1
       },
       {
-        "name": "Justin Medeiros",
-        "points": 648,
+        "name": "Jay Crouch",
+        "points": 740,
         "prev": 3
       },
       {
-        "name": "Jay Crouch",
-        "points": 644,
-        "prev": 4
-      },
-      {
-        "name": "Dallin Pepper",
-        "points": 642,
+        "name": "Justin Medeiros",
+        "points": 732,
         "prev": 2
       },
       {
-        "name": "Ricky Garard",
-        "points": 607,
-        "prev": 6
+        "name": "Dallin Pepper",
+        "points": 718,
+        "prev": 4
       },
       {
-        "name": "Roman Khrennikov",
-        "points": 565,
+        "name": "Ricky Garard",
+        "points": 675,
         "prev": 5
       },
       {
         "name": "Jayson Hopper",
-        "points": 555,
+        "points": 647,
         "prev": 7
       },
       {
-        "name": "Moritz Fiebig",
-        "points": 474,
-        "prev": 8
-      },
-      {
-        "name": "Jeffrey Adler",
-        "points": 464,
-        "prev": 9
+        "name": "Roman Khrennikov",
+        "points": 592,
+        "prev": 6
       },
       {
         "name": "Colten Mertens",
-        "points": 459,
+        "points": 559,
         "prev": 10
+      },
+      {
+        "name": "Jeffrey Adler",
+        "points": 520,
+        "prev": 9
+      },
+      {
+        "name": "Victor Hoffer",
+        "points": 514,
+        "prev": 12
       }
     ],
     "women": [

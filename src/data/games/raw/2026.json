@@ -493,6 +493,55 @@
       "sources": [
         "https://games.crossfit.com/leaderboard/finals/2026?division=1"
       ]
+    },
+    {
+      "id": "2026-12",
+      "order": 12,
+      "stage": "games",
+      "name": "The Hopper 2026",
+      "aka": null,
+      "day": "Friday",
+      "description": "Drawn live from the original 2007 hopper drum at Opening Ceremonies (snatch + toes-to-bar), structure set by fan vote:\n3 rounds for time of:\n21 toes-to-bars\n7 unbroken power snatches\n7 unbroken hang snatches\n7 unbroken squat snatches\n(95 lb men / 65 lb women)\n6-minute time cap.",
+      "format": "for-time",
+      "scoring": "time",
+      "timeCapMin": 6,
+      "winnerMen": "Colten Mertens",
+      "winnerWomen": null,
+      "winningScoreMen": "4:55.57",
+      "winningScoreWomen": null,
+      "movements": [
+        "Toes-to-Bar",
+        "Power Snatch",
+        "Hang Snatch",
+        "Squat Snatch"
+      ],
+      "loads": [
+        {
+          "item": "Snatch",
+          "men": "95 lb",
+          "women": "65 lb"
+        }
+      ],
+      "equipment": [
+        "barbell",
+        "pull-up bar"
+      ],
+      "eventTypes": [
+        "triplet",
+        "sprint"
+      ],
+      "modality": "GW",
+      "timeDomain": "sprint",
+      "loadLevel": "light",
+      "environment": "arena",
+      "namedWod": null,
+      "firstAtGames": [
+        "fan-vote workout structure"
+      ],
+      "notes": "The first hopper-drawn Games event since 2007, using the original drum. Unbroken snatch sets required (a dropped bar restarted the set). Mertens won for his third event win of the 2026 Games; Crouch 2nd, reigning champion Hopper 3rd, and Sprague 4th to retain the overall lead at the end of Day 2 (752 over Crouch 740, Medeiros 732, Pepper 718). Women contested the same workout after the men.",
+      "sources": [
+        "https://games.crossfit.com/leaderboard/finals/2026?division=1"
+      ]
     }
   ]
 }
