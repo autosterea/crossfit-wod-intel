@@ -542,6 +542,42 @@
       "sources": [
         "https://games.crossfit.com/leaderboard/finals/2026?division=1"
       ]
+    },
+    {
+      "id": "2026-13",
+      "name": "500 Run",
+      "format": "for-time",
+      "scoring": "time",
+      "movements": [
+        "Run"
+      ],
+      "equipment": [],
+      "winnerMen": "Ricky Garard",
+      "winningScoreMen": "1:13.09",
+      "winnerWomen": "Aimee Cringle",
+      "winningScoreWomen": "1:20.98",
+      "notes": "500m street sprint on Barack Obama Boulevard outside SAP Center, two turns, heats of 15. A 50-point event (half value). Men (official broadcast results; API board pending at time of entry): Garard 1:13.09 over Malheiros 1:13.31 and Souza 1:13.98 - Garard talked to Malheiros mid-race and had the win eased up before the line. Women (official board, 29/30 scored): Cringle 1:20.98 - her FIRST event win of these Games after leading all week without one - over rookie Noel 1:21.31 and Wirz 1:22.05. The win pushed her lead to 108; behind her Lawson (9th) edged Campbell (12th) to retake 2nd overall by ONE point, 768-767, the fifth flip of the silver race.",
+      "order": 13,
+      "stage": "games",
+      "aka": null,
+      "day": "Saturday",
+      "description": "500-meter street sprint on Barack Obama Boulevard outside SAP Center: three straightaways, two turns, run in heats of 15. A 50-point (half-value) event.",
+      "timeCapMin": null,
+      "loads": [],
+      "eventTypes": [
+        "run",
+        "sprint"
+      ],
+      "modality": "M",
+      "timeDomain": "sprint",
+      "loadLevel": "none",
+      "environment": "street",
+      "namedWod": null,
+      "firstAtGames": false,
+      "sources": [
+        "games.crossfit.com leaderboard",
+        "official broadcast results graphic"
+      ]
     }
   ]
 }

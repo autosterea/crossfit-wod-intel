@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-22 (Event 2 men official; women E2 pending)",
+  "updated": "2026-07-25T18:30:00.000Z",
   "events": [
     {
       "num": 1,
@@ -428,7 +428,20 @@
           "score": "1:13.98"
         }
       ],
-      "women": []
+      "women": [
+        {
+          "name": "Aimee Cringle",
+          "score": "1:20.98"
+        },
+        {
+          "name": "Rachel Noel",
+          "score": "1:21.31"
+        },
+        {
+          "name": "Aline Wirz",
+          "score": "1:22.05"
+        }
+      ]
     }
   ],
   "leaderboard": {
@@ -489,54 +502,55 @@
     "women": [
       {
         "name": "Aimee Cringle",
-        "points": 826,
+        "points": 876,
         "prev": 1
       },
       {
-        "name": "Lucy Campbell",
-        "points": 739,
+        "name": "Emma Lawson",
+        "points": 768,
         "prev": 3
       },
       {
-        "name": "Emma Lawson",
-        "points": 734,
+        "name": "Lucy Campbell",
+        "points": 767,
         "prev": 2
       },
       {
         "name": "Madeline Sturt",
-        "points": 652,
-        "prev": 5
-      },
-      {
-        "name": "Alex Gazan",
-        "points": 636,
+        "points": 696,
         "prev": 4
       },
       {
-        "name": "Paige Rodgers",
-        "points": 583,
-        "prev": 6
-      },
-      {
-        "name": "Danielle Brandon",
-        "points": 580,
-        "prev": 11
+        "name": "Alex Gazan",
+        "points": 674,
+        "prev": 5
       },
       {
         "name": "Arielle Loewen",
-        "points": 580,
+        "points": 610,
+        "prev": 8
+      },
+      {
+        "name": "Danielle Brandon",
+        "points": 604,
         "prev": 7
       },
       {
+        "name": "Paige Rodgers",
+        "points": 590,
+        "prev": 6
+      },
+      {
         "name": "Elisa Fuliano",
-        "points": 561,
+        "points": 587,
         "prev": 9
       },
       {
         "name": "Haley Adams",
-        "points": 529,
+        "points": 551,
         "prev": 10
       }
-    ]
+    ],
+    "afterEventWomen": 13
   }
 }
