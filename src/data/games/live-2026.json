@@ -442,6 +442,27 @@
           "score": "1:22.05"
         }
       ]
+    },
+    {
+      "num": 14,
+      "name": "Triple Pig",
+      "short": "Triple Pig",
+      "scoreLabel": "TIME",
+      "men": [],
+      "women": [
+        {
+          "name": "Aimee Cringle",
+          "score": "10:41.36"
+        },
+        {
+          "name": "Kyra Milligan",
+          "score": "12:28.34"
+        },
+        {
+          "name": "Arielle Loewen",
+          "score": "12:43.09"
+        }
+      ]
     }
   ],
   "leaderboard": {
@@ -502,54 +523,55 @@
     "women": [
       {
         "name": "Aimee Cringle",
-        "points": 876,
+        "points": 976,
         "prev": 1
       },
       {
         "name": "Emma Lawson",
-        "points": 768,
-        "prev": 3
-      },
-      {
-        "name": "Lucy Campbell",
-        "points": 767,
+        "points": 848,
         "prev": 2
       },
       {
+        "name": "Lucy Campbell",
+        "points": 812,
+        "prev": 3
+      },
+      {
         "name": "Madeline Sturt",
-        "points": 696,
+        "points": 705,
         "prev": 4
       },
       {
+        "name": "Arielle Loewen",
+        "points": 702,
+        "prev": 6
+      },
+      {
         "name": "Alex Gazan",
-        "points": 674,
+        "points": 677,
         "prev": 5
       },
       {
-        "name": "Arielle Loewen",
-        "points": 610,
+        "name": "Elisa Fuliano",
+        "points": 655,
+        "prev": 9
+      },
+      {
+        "name": "Paige Rodgers",
+        "points": 654,
         "prev": 8
       },
       {
         "name": "Danielle Brandon",
-        "points": 604,
+        "points": 652,
         "prev": 7
       },
       {
-        "name": "Paige Rodgers",
-        "points": 590,
-        "prev": 6
-      },
-      {
-        "name": "Elisa Fuliano",
-        "points": 587,
-        "prev": 9
-      },
-      {
-        "name": "Haley Adams",
-        "points": 551,
-        "prev": 10
+        "name": "Kyra Milligan",
+        "points": 617,
+        "prev": 11
       }
-    ]
+    ],
+    "afterEventWomen": 14
   }
 }
