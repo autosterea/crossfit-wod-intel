@@ -482,7 +482,20 @@
       "name": "Speed Snatch Triple",
       "short": "Speed Snatch",
       "scoreLabel": "BARS (TIME)",
-      "men": [],
+      "men": [
+        {
+          "name": "Guilherme Malheiros",
+          "score": "3 (21.27)"
+        },
+        {
+          "name": "Tudor Magda",
+          "score": "3 (24.42)"
+        },
+        {
+          "name": "Bayley Martin",
+          "score": "3 (26.26)"
+        }
+      ],
       "women": [
         {
           "name": "Hannah Black",

@@ -624,6 +624,47 @@
         "official broadcast results graphic",
         "games.crossfit.com leaderboard"
       ]
+    },
+    {
+      "id": "2026-15",
+      "order": 15,
+      "stage": "games",
+      "name": "2020 Speed Snatch",
+      "aka": "Speed Snatch Triple",
+      "day": "Saturday",
+      "description": "Rerun of the 2020 speed snatch ladder: three bracket-elimination rounds of three ascending bars, all racing simultaneously. Round 1: 145/150/155 lb women, 1-min cap, top 20 times advance. Round 2: 160/165/170, 2-min cap, top 10 advance. Final: 175/180/185 women (men heavier), 3-min cap, winner take all.",
+      "format": "elimination-ladder",
+      "scoring": "bars-then-time",
+      "timeCapMin": 3,
+      "winnerMen": "Guilherme Malheiros",
+      "winningScoreMen": "21.27 (final round)",
+      "winnerWomen": "Hannah Black",
+      "winningScoreWomen": "20.55 (final round)",
+      "movements": [
+        "Squat Snatch"
+      ],
+      "loads": [
+        "women 145-185 lb ascending",
+        "men ascending to final-round triple"
+      ],
+      "equipment": [
+        "barbell"
+      ],
+      "eventTypes": [
+        "ladder",
+        "max-effort"
+      ],
+      "modality": "W",
+      "timeDomain": "sprint",
+      "loadLevel": "heavy",
+      "environment": "arena",
+      "namedWod": null,
+      "firstAtGames": false,
+      "notes": "Both No. 1 model picks delivered: Malheiros (2021 max-snatch champion at 305 lb) won the men final in 21.27 over Magda 24.42 and Martin 26.26 - his redemption arc in one day: sprint 2nd by 0.22, knocked from the top 10 by the Pig, then an event win. Hannah Black (heaviest listed snatch in the women field, 231) took her first career win in 20.55 over Kerstetter 23.09 and Fuliano 24.94 - the 10th first-time event winner of the 2026 Games - after 19-year-old Bergros Bjornsdottir, youngest in the field, led her to the final bar and missed 185 on a shoulder-check (broadcast). Cringle, Campbell and Lawson all missed the women final; Cringle 13th still kept a 120-point lead and became the first athlete past 1,000 points. Pepper went 4th on the men side, his third straight top-4 finish of the day.",
+      "sources": [
+        "games.crossfit.com leaderboard",
+        "official broadcast results graphic"
+      ]
     }
   ]
 }
