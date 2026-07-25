@@ -408,6 +408,27 @@
           "score": "5:04.93"
         }
       ]
+    },
+    {
+      "num": 13,
+      "name": "500 Run",
+      "short": "500 Run",
+      "scoreLabel": "TIME",
+      "men": [
+        {
+          "name": "Ricky Garard",
+          "score": "1:13.09"
+        },
+        {
+          "name": "Guilherme Malheiros",
+          "score": "1:13.31"
+        },
+        {
+          "name": "Kalyan Souza",
+          "score": "1:13.98"
+        }
+      ],
+      "women": []
     }
   ],
   "leaderboard": {
