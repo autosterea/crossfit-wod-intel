@@ -1527,12 +1527,16 @@ function ResultsCard({ event, division }: { event: LiveEvent; division: Division
 
 // LIVE overall leaderboard (cumulative points), top 10 with movement vs prior event
 function LeaderboardCard({ division, afterNum }: { division: Division; afterNum: number | null }) {
+  const lb = LIVE.leaderboard as typeof LIVE.leaderboard & { afterEventWomen?: number | null }
+  // Divisions can settle at different times (e.g. one division's final event still under
+  // official review) - a per-division override prevents mislabeling stale standings.
+  const effectiveAfter = division === 'women' && lb.afterEventWomen !== undefined ? lb.afterEventWomen : afterNum
   const rows = (division === 'men' ? LIVE.leaderboard.men : LIVE.leaderboard.women).slice(0, 10)
   return (
     <div style={cardBg}>
       <CardHeader />
       <div style={{ padding: '30px 56px 0' }}>
-        <div style={{ fontSize: 24, letterSpacing: 4, textTransform: 'uppercase', color: GREEN }}>Overall Standings{afterNum ? ` · After Event ${afterNum}` : ''}</div>
+        <div style={{ fontSize: 24, letterSpacing: 4, textTransform: 'uppercase', color: GREEN }}>Overall Standings{effectiveAfter ? ` · After Event ${effectiveAfter}` : ''}</div>
         <div style={{ fontFamily: "'Anton', sans-serif", fontSize: 72, textTransform: 'uppercase', lineHeight: 0.96, marginTop: 8 }}>Leaderboard<br /><span style={{ color: GREEN }}>{division}</span></div>
       </div>
       <div style={{ padding: '20px 56px 0' }}>
