@@ -578,6 +578,52 @@
         "games.crossfit.com leaderboard",
         "official broadcast results graphic"
       ]
+    },
+    {
+      "id": "2026-14",
+      "order": 14,
+      "stage": "games",
+      "name": "Triple Pig",
+      "aka": null,
+      "day": "Saturday",
+      "description": "3 ascending rounds for time: 10/15/20 bar muscle-ups, 15/20/25 GHD sit-up wall-ball shots (20/14 lb), 20/25/30 triple-unders (a Games first), 1/2/3 Pig flips at 510/350 lb - the same Pig weight as the 2021 Sled, Pig, Muscle-Ups and the 2023 Pig Chipper. 15-minute cap.",
+      "format": "for-time",
+      "scoring": "time",
+      "timeCapMin": 15,
+      "winnerMen": "Patrick Vellner",
+      "winningScoreMen": "10:31.58",
+      "winnerWomen": "Aimee Cringle",
+      "winningScoreWomen": "10:41.36",
+      "movements": [
+        "Bar Muscle-up",
+        "GHD Sit-up Wall-ball",
+        "Triple-Under",
+        "Pig Flip"
+      ],
+      "loads": [
+        "510/350 lb Pig",
+        "20/14 lb medicine ball"
+      ],
+      "equipment": [
+        "pig",
+        "GHD",
+        "medicine ball",
+        "jump rope"
+      ],
+      "eventTypes": [
+        "chipper"
+      ],
+      "modality": "GW",
+      "timeDomain": "medium",
+      "loadLevel": "heavy",
+      "environment": "arena",
+      "namedWod": null,
+      "firstAtGames": true,
+      "notes": "Triple-unders had zero Games precedent. Men (official broadcast results; API pending at entry): Vellner 10:31.58 - winning at the exact Pig weight he won at in 2021, our history-first pick - over Pepper 10:46.92 and overall leader Sprague 11:11.25, while title rival Crouch took 10th (12:54.44). Khrennikov (2023 Pig Chipper champion) 6th. Women (official board, 30/30): CRINGLE 10:41.36 WON BY 1:47 - back-to-back wins two hours after the sprint, zero wins in her first 12 events - over Milligan 12:28.34 and Loewen 12:43.09 (2nd at this weight in 2023). The Pig capped 16 of 30 women and ate two top-5 spots: Sturt 27th (CAP+154), Gazan 29th (CAP+161); the silver gap exploded from 1 point to 36 (Lawson 848, Campbell 812).",
+      "sources": [
+        "official broadcast results graphic",
+        "games.crossfit.com leaderboard"
+      ]
     }
   ]
 }

@@ -448,7 +448,20 @@
       "name": "Triple Pig",
       "short": "Triple Pig",
       "scoreLabel": "TIME",
-      "men": [],
+      "men": [
+        {
+          "name": "Patrick Vellner",
+          "score": "10:31.58"
+        },
+        {
+          "name": "Dallin Pepper",
+          "score": "10:46.92"
+        },
+        {
+          "name": "James Sprague",
+          "score": "11:11.25"
+        }
+      ],
       "women": [
         {
           "name": "Aimee Cringle",
