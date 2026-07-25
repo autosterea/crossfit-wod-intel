@@ -455,7 +455,7 @@
         },
         {
           "name": "Dallin Pepper",
-          "score": "10:46.92"
+          "score": "10:46.91"
         },
         {
           "name": "James Sprague",
@@ -479,58 +479,58 @@
     }
   ],
   "leaderboard": {
-    "afterEvent": 13,
-    "afterLabel": "After Event 13",
+    "afterEvent": 14,
+    "afterLabel": "After Event 14",
     "men": [
       {
         "name": "James Sprague",
-        "points": 778,
+        "points": 870,
         "prev": 1
       },
       {
         "name": "Jay Crouch",
-        "points": 772,
+        "points": 836,
         "prev": 2
       },
       {
         "name": "Justin Medeiros",
-        "points": 748,
+        "points": 836,
         "prev": 3
       },
       {
-        "name": "Ricky Garard",
-        "points": 725,
+        "name": "Dallin Pepper",
+        "points": 821,
         "prev": 5
       },
       {
-        "name": "Dallin Pepper",
-        "points": 725,
+        "name": "Ricky Garard",
+        "points": 770,
         "prev": 4
       },
       {
         "name": "Jayson Hopper",
-        "points": 675,
+        "points": 699,
         "prev": 6
       },
       {
         "name": "Roman Khrennikov",
-        "points": 602,
+        "points": 682,
         "prev": 7
       },
       {
-        "name": "Colten Mertens",
-        "points": 559,
-        "prev": 8
-      },
-      {
         "name": "Jeffrey Adler",
-        "points": 558,
+        "points": 626,
         "prev": 9
       },
       {
-        "name": "Guilherme Malheiros",
-        "points": 555,
+        "name": "Bayley Martin",
+        "points": 602,
         "prev": 11
+      },
+      {
+        "name": "Moritz Fiebig",
+        "points": 582,
+        "prev": 12
       }
     ],
     "women": [
@@ -584,7 +584,6 @@
         "points": 617,
         "prev": 11
       }
-    ],
-    "afterEventWomen": 14
+    ]
   }
 }
