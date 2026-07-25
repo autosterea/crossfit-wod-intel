@@ -10,6 +10,34 @@
   },
   "items": [
     {
+      "name": "Event 16: Echo Thruster",
+      "status": "confirmed",
+      "kind": "event",
+      "summary": "Individual Event 16, Echo Thruster, is live on the official workouts page: 21-18-15 reps for time of Echo Bike calories and Thrusters, ascending in load as the reps descend (115/135/155 lb men, 85/95/105 lb women), under an 8-minute cap. FloElite's schedule lists Individual Events 16 & 17 in the men's 7:40-8:40 p.m. ET session Saturday, July 25. The loads are the exact ones used in the 2023 Echo Thruster Final, minus that event's closing overhead-lunge finisher and with a tighter cap (8 minutes here vs. 10 in 2023).",
+      "source": {
+        "label": "CrossFit Games (official workout page)",
+        "url": "https://games.crossfit.com/workouts/finals/2026"
+      },
+      "date": "2026-07-25",
+      "shortName": "Echo Thruster",
+      "analysisSlug": "event-16-17-echo-thruster-yoke-two-reruns-back-to-back",
+      "num": 16
+    },
+    {
+      "name": "Event 17: Jump Pull Yoke",
+      "status": "confirmed",
+      "kind": "event",
+      "summary": "Individual Event 17, Jump Pull Yoke, follows directly on the same running clock as Event 16 (begins at the 10:00 mark per the official workouts page): 20 shuttle box jumps, a seated sled pull, then three ascending yoke carries (30 feet each) - 345/405/445 lb for women, 425/565/665 lb for men - under a 6-minute cap. The men's heaviest rung, 665 lb, matches the heaviest yoke ever loaded at the Games (2022's Back Nine). Box height and sled weight also differ by gender (36-in/170-lb men, 30-in/140-lb women).",
+      "source": {
+        "label": "CrossFit Games (official workout page)",
+        "url": "https://games.crossfit.com/workouts/finals/2026"
+      },
+      "date": "2026-07-25",
+      "shortName": "Jump Pull Yoke",
+      "analysisSlug": "event-16-17-echo-thruster-yoke-two-reruns-back-to-back",
+      "num": 17
+    },
+    {
       "name": "Event 14: Triple Pig",
       "status": "confirmed",
       "kind": "event",

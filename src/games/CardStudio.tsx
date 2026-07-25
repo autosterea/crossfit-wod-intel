@@ -46,6 +46,27 @@ type Pick = { name: string; value: string; why: string }
 type PickSet = { id: string; label: string; eventKicker: string; eventLine: string; note: string; men: Pick[]; women: Pick[] }
 const PICKS: PickSet[] = [
   {
+    id: 'event16-17-echo-thruster-yoke',
+    label: 'Echo Thruster / Jump Pull Yoke',
+    eventKicker: 'Event 16/17 - Echo Thruster / Jump Pull Yoke',
+    eventLine: '16: 21-18-15 Echo Bike cals + Thrusters, 8-min cap. 17 (starts at 10:00): box jumps, sled pull, 3 ascending yoke carries, 6-min cap. Sat July 25.',
+    note: 'History first: Event 16 loads match the 2023 Echo Thruster Final exactly; Event 17\'s top yoke rung matches the heaviest yoke ever loaded at the Games (2022). Real placements from both tests plus the 2024 yoke finals. A history read, not a result prediction.',
+    men: [
+      { name: 'Jeffrey Adler', value: 'WON 2022 yoke', why: 'Won the 2022 Back Nine at this exact 665-lb yoke weight; 5th in the 2023 Echo Thruster at these exact loads.' },
+      { name: 'Dallin Pepper', value: 'WON 2023 Echo Thruster', why: 'Won the 2023 Echo Thruster Final outright at these exact loads; 2nd/7th across the 2024 yoke finals.' },
+      { name: 'Austin Hatfield', value: 'WON both 2024 yoke finals', why: 'Swept the 2024 Final 2421 and Final 1815 yoke sprints.' },
+      { name: 'Justin Medeiros', value: '3rd 2022 yoke', why: '3rd in the 2022 Back Nine at this same 665-lb yoke weight.' },
+      { name: 'Guilherme Malheiros', value: '4th 2022 yoke', why: '4th in the 2022 Back Nine at this same 665-lb yoke weight.' },
+    ],
+    women: [
+      { name: 'Alexis Raptis', value: 'WON 2024 Final 2421', why: 'Won the 2024 Final 2421 yoke sprint outright, 2nd in Final 1815; 13th in the 2023 Echo Thruster at these exact loads.' },
+      { name: 'Danielle Brandon', value: '8th/8th/5th', why: '8th in the 2023 Echo Thruster, then 8th and 5th across the 2024 yoke finals.' },
+      { name: 'Madeline Sturt', value: '5th/4th 2024', why: '5th and 4th across the 2024 yoke finals.' },
+      { name: 'Emma Lawson', value: '9th 2023', why: '9th in the 2023 Echo Thruster at these exact barbell loads.' },
+      { name: 'Alex Gazan', value: '16th to 13th/6th', why: '16th in 2023, improving to 13th and 6th across the 2024 yoke finals.' },
+    ],
+  },
+  {
     id: 'event14-triple-pig',
     label: 'Triple Pig',
     eventKicker: 'Event 14 - Triple Pig',
@@ -310,6 +331,20 @@ type Slide =
   | { type: 'movement'; kicker: string; headline: string; rows: { rank: number; name: string; pts: number; delta: number | null }[]; note?: string }
 type Carousel = { id: string; label: string; caption: string; slides: Slide[] }
 const CAROUSELS: Carousel[] = [
+  {
+    id: 'event16-17-echo-thruster-yoke',
+    label: 'Event 16/17 - Echo Thruster / Jump Pull Yoke',
+    caption:
+      "TWO MORE EVENTS JUST DROPPED: EVENT 16/17. The official workouts page published both, run back to back on one clock tonight.\n\nEVENT 16, Echo Thruster: 21-18-15 reps of Echo Bike cals + Thrusters, ascending load (115/135/155 lb men, 85/95/105 lb women), 8-min cap.\n\nEVENT 17, Jump Pull Yoke, starts when the clock reads 10:00: 20 shuttle box jumps, a seated sled pull, then 3 ascending yoke carries topping at 665 lb men / 445 lb women.\n\nWe checked our own almanac. Event 16's loads are the EXACT 2023 Echo Thruster Final again (won by Dallin Pepper, back in the field). Event 17's 665-lb top yoke matches the heaviest yoke EVER loaded at the Games - 2022's Back Nine, won by Jeffrey Adler, also back.\n\nSwipe for who's positioned on both halves. Link in bio. A history read, not a result prediction.",
+    slides: [
+      { type: 'cover', kicker: 'Event 16/17 - Sat July 25', headline: 'ECHO THRUSTER\n+ YOKE', sub: 'Two events, one clock. Event 16 matches 2023 exactly. Event 17\'s top yoke matches the heaviest ever loaded at the Games. Swipe.' },
+      { type: 'point', num: 1, kicker: 'Event 16', headline: '21-18-15,\nASCENDING', body: 'Echo Bike calories + Thrusters, load climbing as reps drop: 115/135/155 lb men, 85/95/105 lb women. 8-minute cap. Identical loads to the 2023 Echo Thruster Final.', source: 'games.crossfit.com (official workouts page)' },
+      { type: 'point', num: 2, kicker: 'Event 17', headline: 'STARTS AT\nTHE 10:00 MARK', body: '20 shuttle box jumps, a seated sled pull, then 3 ascending 30-ft yoke carries: 425/565/665 lb men, 345/405/445 lb women. 6-minute cap. The 665-lb top rung matches the heaviest yoke ever loaded at the Games (2022).', source: 'games.crossfit.com (official workouts page)' },
+      { type: 'point', num: 3, kicker: 'The receipts - Men', headline: 'ADLER.\nPEPPER.', body: 'Adler WON the 2022 665-lb yoke test outright and was 5th in the 2023 Echo Thruster at these exact loads. Pepper WON the 2023 Echo Thruster outright. Hatfield swept both 2024 yoke finals. Then Medeiros and Malheiros, 3rd and 4th in the 2022 yoke test.', source: 'Official Games leaderboards' },
+      { type: 'point', num: 4, kicker: 'The receipts - Women', headline: 'RAPTIS.\nBRANDON.', body: 'Raptis WON the 2024 Final 2421 yoke sprint and was 13th in the 2023 Echo Thruster. Brandon is the most consistent: 8th, 8th, 5th across all three tests. Sturt (5th/4th in 2024), Lawson (9th in 2023) and Gazan (trending up) round out the board.', source: 'Official Games leaderboards' },
+      { type: 'cta', headline: 'FULL\nBREAKDOWN', body: 'The complete history and both boards are on the site. A history read, not a result prediction.' },
+    ],
+  },
   {
     id: 'event14-triple-pig',
     label: 'Event 14 - Triple Pig',
