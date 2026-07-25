@@ -513,58 +513,58 @@
     }
   ],
   "leaderboard": {
-    "afterEvent": 14,
-    "afterLabel": "After Event 14",
+    "afterEvent": 15,
+    "afterLabel": "After Event 15",
     "men": [
       {
         "name": "James Sprague",
-        "points": 870,
+        "points": 918,
         "prev": 1
       },
       {
+        "name": "Dallin Pepper",
+        "points": 909,
+        "prev": 4
+      },
+      {
         "name": "Jay Crouch",
-        "points": 836,
+        "points": 892,
         "prev": 2
       },
       {
         "name": "Justin Medeiros",
-        "points": 836,
+        "points": 875,
         "prev": 3
       },
       {
-        "name": "Dallin Pepper",
-        "points": 821,
+        "name": "Ricky Garard",
+        "points": 794,
         "prev": 5
       },
       {
-        "name": "Ricky Garard",
-        "points": 770,
-        "prev": 4
-      },
-      {
         "name": "Jayson Hopper",
-        "points": 699,
+        "points": 732,
         "prev": 6
       },
       {
         "name": "Roman Khrennikov",
-        "points": 682,
+        "points": 703,
         "prev": 7
       },
       {
         "name": "Jeffrey Adler",
-        "points": 626,
-        "prev": 9
+        "points": 698,
+        "prev": 8
       },
       {
         "name": "Bayley Martin",
-        "points": 602,
-        "prev": 12
+        "points": 694,
+        "prev": 9
       },
       {
-        "name": "Moritz Fiebig",
-        "points": 582,
-        "prev": 13
+        "name": "Guilherme Malheiros",
+        "points": 676,
+        "prev": 11
       }
     ],
     "women": [
@@ -618,7 +618,6 @@
         "points": 691,
         "prev": 9
       }
-    ],
-    "afterEventWomen": 15
+    ]
   }
 }
