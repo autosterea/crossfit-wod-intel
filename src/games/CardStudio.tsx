@@ -290,6 +290,137 @@ type Slide =
 type Carousel = { id: string; label: string; caption: string; slides: Slide[] }
 const CAROUSELS: Carousel[] = [
   {
+    "id": "champs-day2",
+    "label": "Champions Check-In - Day 2",
+    "caption": "Halfway through the Games and four former champions sit inside the top 10, with Sprague still in the jersey. Crouch is coming for those red shorts, and Sunday will crown a first-time women's champion. Buckle up.",
+    "slides": [
+      {
+        "type": "cover",
+        "kicker": "GAMES 2026 · DAY 2 RECAP",
+        "headline": "Four Champions\nStill Standing",
+        "sub": "Sprague, Medeiros, Hopper, and Adler are all top 10 at the halfway point"
+      },
+      {
+        "type": "point",
+        "num": 1,
+        "kicker": "THE LEADER",
+        "headline": "Sprague Never\nLet Go",
+        "body": "He lost the jersey to Pepper for exactly one event and took it right back. Then came an E11 scoring-revision scare that had everybody holding their breath - officially, he retained the lead through it. He closed the day with a clutch 4th on the hopper. 752 points. Still wearing red.",
+        "source": "Games leaderboard, official"
+      },
+      {
+        "type": "stat",
+        "kicker": "HALFWAY NUMBERS",
+        "headline": "Champions Own\nThe Top Ten",
+        "stats": [
+          {
+            "big": "4/10",
+            "label": "former champions in the top 10"
+          },
+          {
+            "big": "3rd",
+            "label": "Hopper's finish on the hopper"
+          },
+          {
+            "big": "3",
+            "label": "Mertens event wins, most of anyone"
+          },
+          {
+            "big": "34",
+            "label": "points span the top 4 men"
+          }
+        ],
+        "footnote": "Men's standings official through Day 2"
+      },
+      {
+        "type": "point",
+        "num": 2,
+        "kicker": "THE CHASE PACK",
+        "headline": "Crouch Wants\nThose Shorts",
+        "body": "Crouch won E10 for his 3rd career event win, backed it with a hopper 2nd, and sits 12 back: \"I'll come back for those red shorts and leader's jersey, baby.\" Medeiros keeps grinding with no holes - 5th sandbag, 2nd on E10, 6th handstands, 5th hopper - the machine that was 20 points off the lead at one stage. Pepper wore the jersey for exactly one event, then stumbled 10th and 19th. Saturday owes him an answer.",
+        "source": "Games broadcast, official leaderboard"
+      },
+      {
+        "type": "point",
+        "num": 3,
+        "kicker": "NO CROWNS IN THIS FIELD",
+        "headline": "A New Queen\nRises Sunday",
+        "body": "Not one former champion sits in the women's field, so Sunday hands somebody a first title. Campbell banked her 6th career win on the hopper and spoke about racing without Toomey in the room: \"there is a different chat when you come second... the person who won obviously not being here.\" Lawson surged from 5th to 2nd on the official after-Event-11 board. Cringle carries the leader's jersey into Saturday after leading by 88 entering the closer - final points and placings are pending the official board.",
+        "source": "Games broadcast, official leaderboard"
+      },
+      {
+        "type": "cta",
+        "headline": "Saturday Brings\nTwo Reads",
+        "body": "500m sprint (E13): Garard won the 2024 Track and Field event and is our verified pick. Speed Snatch Triple (E15): Malheiros owns the closest ancestor, the 2021 1RM snatch win. Eight events left. Nothing is settled."
+      }
+    ]
+  },
+  {
+    "id": "rookie-day2",
+    "label": "Rookie Report - Day 2",
+    "caption": "Day 2 and the rookie class already has three podiums - one of them earned on a foot that had no business letting her compete. Fish spent two days limping, sat dead last, then went out and threw down a 3rd place. Fowler got his first career podium. Hamming tied for 2nd on the sandbag and quietly put together one of the best rookie days I've seen. This is what showing up looks like. Full story on the blog.",
+    "slides": [
+      {
+        "type": "cover",
+        "kicker": "ROOKIE REPORT",
+        "headline": "Day 2\nAt The Games",
+        "sub": "Three podiums. One dead-last comeback. A day this class will be talking about for years."
+      },
+      {
+        "type": "stat",
+        "kicker": "DAY 2 BY THE NUMBERS",
+        "headline": "The Rookies\nShowed Up",
+        "stats": [
+          {
+            "big": "3",
+            "label": "rookie podiums in one day"
+          },
+          {
+            "big": "3rd",
+            "label": "Fish, Handstand Sprint - on one foot"
+          },
+          {
+            "big": "T-2nd",
+            "label": "Hamming, Sandbag at 122 ft"
+          },
+          {
+            "big": "1st",
+            "label": "Noel wins her Snail heat on pure pacing IQ"
+          }
+        ]
+      },
+      {
+        "type": "point",
+        "num": 1,
+        "kicker": "THE COMEBACK",
+        "headline": "Lydia Fish\nFinds The Podium",
+        "body": "Lydia Fish has been limping for two days on a foot that had no business letting her compete. She came into the day sitting dead last overall. Then she walked out for the Handstand Sprint and put together a 2:36.49, good enough for 3rd place and a Games podium in her rookie season. Asked about the foot after, she just shrugged: this is just part of sport. That's the whole rookie class in one sentence.",
+        "source": "CrossFit Games broadcast, Day 2"
+      },
+      {
+        "type": "point",
+        "num": 2,
+        "kicker": "FIRST PODIUM, BEST DAY",
+        "headline": "Fowler Breaks Through\nHamming Keeps Building",
+        "body": "Ben Fowler of New Zealand went 3rd in the men's Handstand Sprint at 1:50.18, his first career podium. Dylan Hamming went one better on the Sandbag, tying for 2nd at 122 feet, exactly what the physics pointed to for a 98kg athlete with a 245 press. He'd already set the benchmark on Event 10 out of heat 1, unbroken every single set for 15:03.30, a time that held until the final heat and landed him 7th. Add a 10th on handstands and it's quietly one of the best rookie days at these Games.",
+        "source": "CrossFit Games broadcast, Day 2"
+      },
+      {
+        "type": "point",
+        "num": 3,
+        "kicker": "THE REST OF THE CLASS",
+        "headline": "Pacing, Grit,\nAnd A Heat Win",
+        "body": "Rachel Noel won heat 1 of the women's Snail on pure pacing IQ, taking a deliberate 30 seconds of rest between legless rope climbs while the field around her rushed. The broadcast praised her strategy. She's coached by Adrian Conway, a former collegiate soccer goalkeeper, and that kind of patience under pressure looked well coached. Bergros Bjornsdottir added a 4th on the women's sandbag, and 18-year-old Miley Wade kept grinding through a long day in the arena. This class isn't just talented. It's smart.",
+        "source": "CrossFit Games broadcast, Day 2"
+      },
+      {
+        "type": "cta",
+        "headline": "More Rookies\nMore Stories",
+        "body": "Fifteen rookies, one Games, and this is only Day 2. Follow along as this class keeps writing itself into Games history - full recap on the blog."
+      }
+    ]
+  },
+  {
     "id": "day2-toll",
     "label": "Day 2 Took Its Toll (and the swings)",
     "caption": "Day 2 asked hard questions on hurt legs, and a few athletes answered with some of the best moments of the weekend. Henrik Haapalainen raced all of Day 2 on an Achilles injury and still crossed 4th on the Handstand Sprint. Lydia Fish had been limping on a Wednesday foot injury all day, then climbed the handstand course to a Games podium. Upside down, the foot doesn't matter.\n\nThe ankle trouble kept coming. Alexis Raptis competed on an ankle injury, plus a fall from the rope onto the mat on Event 8, and took 4th on the Handstand Sprint. Anikha Greer went on an injured ankle and took 5th. Add Fish's podium and the injured trio swept 3rd through 5th on the same event. Hannah Black shut down her Event 8 rope climbs early to protect the weekend, then came back the same day to take 2nd on the sandbag. Matilde Garnes looked spent on Event 10, walking the runs and time capped, the broadcast urging her to shut it down, then bounced back 5th on the hopper. Respect to every one of them.\n\nThen the swings that had nothing to do with injury. Ricky Garard led Event 10 unbroken, then one no-rep on his final round-3 rep sank it. James Sprague slipped on his final sandbag throw, went 16th, briefly lost the overall lead, then won it back within an event and defended it on the hopper with a clutch 4th. Dallin Pepper wore the leader jersey for exactly one event.\n\nAnd the answer-backs. Danielle Brandon's 3-straight handstand-event streak ended, outside the top 10 in her signature event, and ninety minutes later she answered with 3rd on the hopper. Lucy Campbell went 11th on the Snail, lost the overall 2nd, then turned around and won the hopper.\n\nThat's Day 2. Get hit, answer back. Injury notes per the Games broadcast coverage. Full recap and the live leaderboard are on the site.",
