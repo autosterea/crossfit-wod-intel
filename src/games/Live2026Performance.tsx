@@ -95,6 +95,18 @@ export default function Live2026Performance({ slug }: { slug: string }) {
             </text>
           ))}
 
+          {/* Per-event placement bars: same 1..Y_MAX scale as the line, so a
+              tall bar = a high event finish. Event wins pop gold; the line
+              above tells what each swing did to the overall campaign. */}
+          {evRows.map(({ i, rank }) => {
+            if (rank == null) return null
+            const barW = Math.min(18, (PLOT_W / Math.max(n, 1)) * 0.55)
+            const top = yFor(rank)
+            const bottom = PAD_T + PLOT_H
+            const color = rank === 1 ? '#F4C64A' : rank <= 10 ? '#019644' : rank >= 20 ? '#b45454' : '#5b6572'
+            return <rect key={`bar-${i}`} x={xFor(i) - barW / 2} y={top} width={barW} height={Math.max(bottom - top, 2)} fill={color} opacity={0.55} rx={2} />
+          })}
+
           <polyline points={points} fill="none" stroke="#91C640" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
 
           {ranks.map((r, i) => {
@@ -106,6 +118,13 @@ export default function Live2026Performance({ slug }: { slug: string }) {
             now {ordinal(lastRank)}
           </text>
         </svg>
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-2 games-condensed text-[9.5px] uppercase tracking-[0.12em] text-[var(--text-muted)]">
+          <span className="inline-flex items-center gap-1.5"><span className="inline-block w-4 h-[3px] rounded" style={{ background: '#91C640' }} /> overall rank</span>
+          <span className="inline-flex items-center gap-1.5"><span className="inline-block w-2.5 h-2.5 rounded-[3px]" style={{ background: '#F4C64A' }} /> event win</span>
+          <span className="inline-flex items-center gap-1.5"><span className="inline-block w-2.5 h-2.5 rounded-[3px]" style={{ background: '#019644' }} /> top 10</span>
+          <span className="inline-flex items-center gap-1.5"><span className="inline-block w-2.5 h-2.5 rounded-[3px]" style={{ background: '#5b6572' }} /> mid</span>
+          <span className="inline-flex items-center gap-1.5"><span className="inline-block w-2.5 h-2.5 rounded-[3px]" style={{ background: '#b45454' }} /> 20th or lower</span>
+        </div>
       </div>
 
       {/* Per-event chips */}
