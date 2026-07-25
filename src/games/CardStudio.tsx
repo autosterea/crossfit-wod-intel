@@ -46,6 +46,27 @@ type Pick = { name: string; value: string; why: string }
 type PickSet = { id: string; label: string; eventKicker: string; eventLine: string; note: string; men: Pick[]; women: Pick[] }
 const PICKS: PickSet[] = [
   {
+    id: 'event14-triple-pig',
+    label: 'Triple Pig',
+    eventKicker: 'Event 14 - Triple Pig',
+    eventLine: '3 ascending rounds: bar muscle-ups, GHD sit-up wall-ball, triple-unders, Pig flips. Same 510/350-lb Pig as 2021 and 2023. Sat July 25.',
+    note: 'History first: real placements from the 2021 Sled, Pig, Muscle-Ups and the 2023 Pig Chipper, both at this identical Pig weight. Model gym/heavy modal scores used only as a tiebreaker. A history + model read, not a result prediction.',
+    men: [
+      { name: 'Patrick Vellner', value: 'WON 2021', why: 'Won the 2021 Sled, Pig, Muscle-Ups at this exact Pig weight; 6th in the 2023 Pig Chipper.' },
+      { name: 'Roman Khrennikov', value: 'WON 2023', why: 'Won the 2023 Pig Chipper outright at this same 510-lb weight.' },
+      { name: 'Justin Medeiros', value: 'Model No. 1', why: "No podium history at this test (15th in 2021), but the field's best combined gym/heavy modal score." },
+      { name: 'Guilherme Malheiros', value: '6th 2021', why: 'Placed 6th in the 2021 Sled, Pig, Muscle-Ups at this same Pig weight.' },
+      { name: 'Jay Crouch', value: '10th 2023', why: 'Placed 10th in the 2023 Pig Chipper; balanced gym/heavy modal scores.' },
+    ],
+    women: [
+      { name: 'Arielle Loewen', value: '2nd 2023', why: 'Runner-up in the 2023 Pig Chipper at this same 350-lb Pig.' },
+      { name: 'Alexis Raptis', value: '3rd 2023', why: '3rd in the 2023 Pig Chipper at this same Pig weight.' },
+      { name: 'Alex Gazan', value: '6th 2023', why: "6th in the 2023 Pig Chipper; this group's best heavy-modal score." },
+      { name: 'Haley Adams', value: '5th 2021', why: '5th in the 2021 test at this identical Pig weight.' },
+      { name: 'Lucy Campbell', value: 'Model No. 1', why: "No precedent at this test (absent 2021 and 2023), but the field's best gymnastics modal score." },
+    ],
+  },
+  {
     id: 'roll-to-support-amrap',
     label: 'Roll to Support AMRAP',
     eventKicker: 'Sun July 26 - Roll to Support AMRAP',
@@ -289,6 +310,20 @@ type Slide =
   | { type: 'movement'; kicker: string; headline: string; rows: { rank: number; name: string; pts: number; delta: number | null }[]; note?: string }
 type Carousel = { id: string; label: string; caption: string; slides: Slide[] }
 const CAROUSELS: Carousel[] = [
+  {
+    id: 'event14-triple-pig',
+    label: 'Event 14 - Triple Pig',
+    caption:
+      "🐷 EVENT 14 IS LIVE: TRIPLE PIG. The official workouts page just published it: 3 ascending rounds of bar muscle-ups, GHD sit-up wall-ball shots, triple-unders (a Games first) and Pig flips. Sat July 25, 15-minute cap.\n\nThe Pig weight is not new: 510 lb men / 350 lb women is the EXACT same load as two prior tests. And two men in the 2026 field have already won at this weight.\n\nPatrick Vellner WON the 2021 Sled, Pig, Muscle-Ups at 510/350. Roman Khrennikov WON the 2023 Pig Chipper at the same weight. Women: Arielle Loewen (2nd 2023) and Alexis Raptis (3rd 2023) both return too.\n\nSwipe for the full read. Link in bio. A history + model read, not a result prediction.",
+    slides: [
+      { type: 'cover', kicker: 'Event 14 - Sat July 25', headline: 'TRIPLE\nPIG', sub: 'Bar muscle-ups, GHD wall-ball, triple-unders, Pig flips. Same 510/350-lb Pig as two prior tests. Swipe.' },
+      { type: 'point', num: 1, kicker: 'The Test', headline: '3 ROUNDS,\nASCENDING', body: '10/15/20 bar muscle-ups, 15/20/25 GHD sit-up wall-ball shots (20 lb men / 14 lb women), 20/25/30 triple-unders, 1/2/3 Pig flips (510 lb men / 350 lb women). 15-minute cap. Flip distance not yet announced.', source: 'games.crossfit.com (official workouts page)' },
+      { type: 'point', num: 2, kicker: 'The History', headline: 'THIS WEIGHT\nHAS BEEN BEATEN', body: '510 lb men / 350 lb women is the exact same Pig weight as the 2021 Sled, Pig, Muscle-Ups and the 2023 Pig Chipper. Triple-unders, on the other hand, have zero precedent anywhere in Games history.', source: 'Persistence Athletics archive' },
+      { type: 'point', num: 3, kicker: 'The receipts - Men', headline: 'VELLNER.\nKHRENNIKOV.', body: 'Vellner WON the 2021 test at this exact weight (7:42.42); 6th in the 2023 Pig Chipper. Khrennikov WON the 2023 Pig Chipper outright (14:28.77) at this same load. Medeiros has no precedent here but the field\'s best gym/heavy modal blend. Then Malheiros (6th 2021), Crouch (10th 2023).', source: 'Official Games leaderboards' },
+      { type: 'point', num: 4, kicker: 'The receipts - Women', headline: 'LOEWEN.\nRAPTIS.', body: 'Loewen was 2nd and Raptis 3rd in the 2023 Pig Chipper, both at this same weight. Gazan was 6th. Adams was 5th in the 2021 test. Campbell has no precedent (absent both years) but the field\'s best gymnastics modal score.', source: 'Official Games leaderboards' },
+      { type: 'cta', headline: 'FULL\nBREAKDOWN', body: 'The complete history and both boards are on the site. A history + model read, not a result prediction.' },
+    ],
+  },
   {
     "id": "camp-wars-day2",
     "label": "Camp Wars Round 2 (through Day 2)",

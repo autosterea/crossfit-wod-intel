@@ -6,9 +6,23 @@
     "city": "San Jose, California",
     "dates": "July 24-26, 2026",
     "note": "The 2026 CrossFit Games will score 20 events across 4 days (July 22-26), the most in Games history. Individuals open at off-site Bay Area locations on Wednesday, July 22 before three arena days at SAP Center. CrossFit reveals the official numbered events closer to and during the competition. This tracker follows every confirmed, revealed and teased element as it drops, with the source.",
-    "updated": "2026-07-24"
+    "updated": "2026-07-25"
   },
   "items": [
+    {
+      "name": "Event 14: Triple Pig",
+      "status": "confirmed",
+      "kind": "event",
+      "summary": "Published on the official workouts page: 3 ascending rounds for time under a 15-minute cap - 10/15/20 bar muscle-ups, 15/20/25 GHD sit-up wall-ball shots (20 lb men / 14 lb to a 9-ft target women), 20/25/30 triple-unders, and 1/2/3 Pig flips (510 lb men / 350 lb women; flip distance not yet announced). Scheduled for Saturday, July 25 (Individual Event 14, 11:00 a.m.-1:10 p.m., per Morning Chalk Up's schedule coverage). Same Pig weight as the 2021 Sled, Pig, Muscle-Ups test and the 2023 Pig Chipper. Triple-unders have zero precedent in Games history (2007-2025).",
+      "source": {
+        "label": "CrossFit Games (official workout page)",
+        "url": "https://games.crossfit.com/workouts/finals/2026"
+      },
+      "date": "2026-07-25",
+      "shortName": "Triple Pig",
+      "analysisSlug": "event-14-triple-pig-whose-chipper-wins",
+      "num": 14
+    },
     {
       "name": "Event 12: The Hopper 2026",
       "status": "confirmed",
