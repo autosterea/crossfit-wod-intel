@@ -633,8 +633,8 @@
       "aka": "Speed Snatch Triple",
       "day": "Saturday",
       "description": "Rerun of the 2020 speed snatch ladder: three bracket-elimination rounds of three ascending bars, all racing simultaneously. Round 1: 145/150/155 lb women, 1-min cap, top 20 times advance. Round 2: 160/165/170, 2-min cap, top 10 advance. Final: 175/180/185 women (men heavier), 3-min cap, winner take all.",
-      "format": "elimination-ladder",
-      "scoring": "bars-then-time",
+      "format": "points",
+      "scoring": "points",
       "timeCapMin": 3,
       "winnerMen": "Guilherme Malheiros",
       "winningScoreMen": "21.27 (final round)",
@@ -651,8 +651,8 @@
         "barbell"
       ],
       "eventTypes": [
-        "ladder",
-        "max-effort"
+        "max-lift",
+        "sprint"
       ],
       "modality": "W",
       "timeDomain": "sprint",
