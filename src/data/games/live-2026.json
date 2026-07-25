@@ -468,55 +468,54 @@
     "women": [
       {
         "name": "Aimee Cringle",
-        "points": 738,
+        "points": 826,
         "prev": 1
       },
       {
-        "name": "Emma Lawson",
-        "points": 650,
-        "prev": 4
-      },
-      {
         "name": "Lucy Campbell",
-        "points": 639,
-        "prev": 2
-      },
-      {
-        "name": "Alex Gazan",
-        "points": 603,
-        "prev": 5
-      },
-      {
-        "name": "Madeline Sturt",
-        "points": 596,
+        "points": 739,
         "prev": 3
       },
       {
+        "name": "Emma Lawson",
+        "points": 734,
+        "prev": 2
+      },
+      {
+        "name": "Madeline Sturt",
+        "points": 652,
+        "prev": 5
+      },
+      {
+        "name": "Alex Gazan",
+        "points": 636,
+        "prev": 4
+      },
+      {
         "name": "Paige Rodgers",
-        "points": 523,
+        "points": 583,
+        "prev": 6
+      },
+      {
+        "name": "Danielle Brandon",
+        "points": 580,
         "prev": 11
       },
       {
         "name": "Arielle Loewen",
-        "points": 504,
+        "points": 580,
         "prev": 7
       },
       {
-        "name": "Kyra Milligan",
-        "points": 497,
+        "name": "Elisa Fuliano",
+        "points": 561,
         "prev": 9
       },
       {
-        "name": "Elisa Fuliano",
-        "points": 493,
-        "prev": 13
-      },
-      {
         "name": "Haley Adams",
-        "points": 490,
-        "prev": 6
+        "points": 529,
+        "prev": 10
       }
-    ],
-    "afterEventWomen": 11
+    ]
   }
 }
