@@ -346,6 +346,148 @@ const CAROUSELS: Carousel[] = [
     ],
   },
   {
+    "id": "games-modality-map",
+    "label": "The Whole Test, Mapped (methodology read + E20 projection)",
+    "caption": "THE WHOLE TEST, MAPPED. 19 of 20 events are now published. One remains hidden. So we ran the entire 2026 Games through CrossFit's own programming methodology - modal domains, time domains, loading - the same lens we use on 6,800 daily WODs.\n\nTHE BREADTH: the shortest scored effort is a single max sandbag throw (seconds). The longest live in the 25-41 minute band (the Ranch 7200 trail run, Sunday's row+ski Machine 7200). In between: three dedicated 1-rep-max barbell tests, a swim, a bicycle race, a 500m sprint, handstands, rings, ropes, a 400-lb Snail, a 510-lb Pig, a 30/20-lb sandbag thrown three ways and a yoke that ends at 665 lb.\n\nTHE MODAL MAP (19 events): 4 pure engine, 4 pure barbell, 2 pure gymnastics skill, 6 mixed, 3 odd-object/throw/carry tests. Every time band is touched, including four tests with no clock at all (the three Total lifts and the throw). Scored against the definition - work capacity across broad time and modal domains - 2026 is the most faithful hopper in years.\n\nTONIGHT: Event 16 is the 2023 finale's bike-and-thruster core brought forward - same 21-18-15, same climbing loads. 2023 finished it with a lunge; tonight it hands off to the yoke instead. Then the Jump Pull Yoke gauntlet on the same running clock, ending at 16:00.\n\nAND THE FINALE MATH: through 19 events there are still no ring muscle-ups, no lunges, no handstand push-ups, not one dumbbell or kettlebell, no double-unders - and the clean & jerk has only appeared in fragments, never together. Thrusters closed 6 of the last 10 Games but just ran tonight. Lunges appeared in 4 of the last 10 finales. The 2019 finale was clean & jerks + ring muscle-ups + snatches. Our read for Event 20: short arena finale, clean & jerk + ring muscle-up, lunge as the wildcard. A methodology read, not inside information.\n\nFull breakdown at the link in bio.",
+    "slides": [
+      {
+        "type": "cover",
+        "kicker": "2026 Games - The Methodology Read",
+        "headline": "THE WHOLE TEST,\nMAPPED",
+        "sub": "19 of 20 events are published. One stays hidden. What the 2026 Games actually tests, in CrossFit's own programming language - and what the gaps say about the finale. Swipe."
+      },
+      {
+        "type": "stat",
+        "kicker": "The Breadth",
+        "headline": "SECONDS\nTO 40 MINUTES",
+        "stats": [
+          {
+            "big": "~2 sec",
+            "label": "the shortest scored effort: one max-distance sandbag throw (Event 9)"
+          },
+          {
+            "big": "25-41",
+            "label": "minutes - the long band: the Ranch 7200 trail run (women won in 40:42) and Sunday row+ski Machine 7200"
+          },
+          {
+            "big": "3",
+            "label": "dedicated 1-rep-max barbell tests: back squat, shoulder press, deadlift"
+          },
+          {
+            "big": "665 lb",
+            "label": "heaviest implement (the final yoke) - same Games as bodyweight ring skills"
+          }
+        ],
+        "footnote": "Work capacity across broad time and modal domains is the definition of fitness. 2026 runs the full span of both."
+      },
+      {
+        "type": "bars",
+        "kicker": "Modal Domains - 19 Published Events",
+        "headline": "THE MODAL\nMAP",
+        "bars": [
+          {
+            "label": "Mixed (M+G+W blends)",
+            "pct": 100,
+            "display": "6 events",
+            "color": "#91C640"
+          },
+          {
+            "label": "Pure engine (M)",
+            "pct": 67,
+            "display": "4 events",
+            "color": "#60a5fa"
+          },
+          {
+            "label": "Pure barbell (W)",
+            "pct": 67,
+            "display": "4 events",
+            "color": "#F4C64A"
+          },
+          {
+            "label": "Odd object / throw / carry",
+            "pct": 50,
+            "display": "3 events",
+            "color": "#CD8B5B"
+          },
+          {
+            "label": "Pure gymnastics skill (G)",
+            "pct": 33,
+            "display": "2 events",
+            "color": "#C9D2DA"
+          }
+        ],
+        "footnote": "M = monostructural, G = gymnastics, W = weightlifting, per the L1 model. Counting the Total as its three scored lifts. Filing rule for the straddlers: the Snail push is the majority of its event's scored work (odd object); the Pig flip is a low-rep bookend on a gymnastics-dominant test (mixed)."
+      },
+      {
+        "type": "bars",
+        "kicker": "Time Domains - Estimated Winning Durations",
+        "headline": "EVERY BAND,\nTOUCHED",
+        "bars": [
+          {
+            "label": "Medium, 6-20 min",
+            "pct": 100,
+            "display": "6 events",
+            "color": "#91C640"
+          },
+          {
+            "label": "Short, 2-6 min",
+            "pct": 83,
+            "display": "5 events",
+            "color": "#F4C64A"
+          },
+          {
+            "label": "Max effort, no clock",
+            "pct": 67,
+            "display": "4 events",
+            "color": "#CD8B5B"
+          },
+          {
+            "label": "Sprint, under 2 min",
+            "pct": 33,
+            "display": "2 events",
+            "color": "#60a5fa"
+          },
+          {
+            "label": "Long, 25-41 min",
+            "pct": 33,
+            "display": "2 events",
+            "color": "#C9D2DA"
+          }
+        ],
+        "footnote": "From published caps and posted winning times: the bicycle race was won in 18-19 min (medium), the Snail in under 5:30 (short), and the throw plus all three Total lifts run with no clock at all. Broad time domains is half the definition - 2026 touches every band."
+      },
+      {
+        "type": "point",
+        "num": 1,
+        "kicker": "The Verdict",
+        "headline": "THIS IS THE\nHOPPER, DELIVERED",
+        "body": "Squat, press and deadlift at max. A trail run, a bicycle race, a swim, a 500m sprint. Handstands, rings, ropes, muscle-ups. Snatches at speed, cleans in intervals, thrusters against a bike. A 400-lb Snail, a 510-lb Pig, a 665-lb yoke, a 30/20-lb sandbag thrown three directions. Nine of the ten general physical skills have a clear home, from balance on the handstand course to accuracy on the three-direction throw - flexibility alone rides along only inside the squat and overhead positions. Scored against CrossFit's own definition - work capacity across broad time and modal domains - 2026 is the most faithful test in years.",
+        "source": "Method: CrossFit L1 Training Guide definitions applied to the 19 published events"
+      },
+      {
+        "type": "point",
+        "num": 2,
+        "kicker": "Tonight - Events 16 + 17",
+        "headline": "THE 2023 FINALE\nRUNS TONIGHT",
+        "body": "Event 16, Echo Thruster, is the 2023 finale's bike-and-thruster core brought forward: the same 21-18-15 of Echo bike calories and short-bar thrusters at the same climbing loads, 115/135/155 lb (85/95/105), now on an 8-minute cap. One difference: 2023 finished with a lunge - tonight finishes with Event 17 instead. At the 10:00 clock, Jump Pull Yoke: 20 shuttle box jumps (36/30 in), a seated sled pull (170/140 lb), then 30-foot yoke carries at three rising weights ending at 665 lb (445), all done by 16:00. Two scores, one clock. And it changes the finale math: after tonight, thrusters are spent - and lunges are STILL untested.",
+        "source": "games.crossfit.com official workouts page"
+      },
+      {
+        "type": "point",
+        "num": 3,
+        "kicker": "Event 20 - The Gap Analysis",
+        "headline": "WHAT THE GAPS SAY\nABOUT NO. 20",
+        "body": "Still untested through 19 events: ring muscle-ups (bar only so far), lunges of any kind, handstand push-ups, dumbbells, kettlebells, double-unders - and the clean & jerk, which has appeared only in fragments (hang cleans on Event 10, push jerks on Event 1), never together. The finale record: thrusters closed 6 of the last 10 Games but just ran tonight; lunges appeared in 4 of the last 10 finales; the 2019 finale, The Standard, was clean & jerks, ring muscle-ups and snatches. Our read: a short arena finale built on the clean & jerk and the ring muscle-up, with a lunge as the wildcard. A methodology read, not inside information.",
+        "source": "Persistence Athletics Games Almanac, finales 2015-2025 (the last 10 Games)"
+      },
+      {
+        "type": "cta",
+        "headline": "ONE EVENT\nLEFT HIDDEN",
+        "body": "The full modality map, every event breakdown, and the live leaderboard are on the site - link in bio. The finale reveals Sunday. We will grade our guess in public."
+      }
+    ]
+  },
+  {
     id: 'event14-triple-pig',
     label: 'Event 14 - Triple Pig',
     caption:
