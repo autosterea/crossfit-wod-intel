@@ -457,6 +457,42 @@
         "https://games.crossfit.com/leaderboard/finals/2026?division=1",
         "https://games.crossfit.com/leaderboard/finals/2026?division=2"
       ]
+    },
+    {
+      "id": "2026-11",
+      "order": 11,
+      "stage": "games",
+      "name": "Handstand Sprint",
+      "aka": null,
+      "day": "Friday",
+      "description": "For time: handstand walk course across the arena floor.\n6-minute time cap.",
+      "format": "for-time",
+      "scoring": "time",
+      "timeCapMin": 6,
+      "winnerMen": "Victor Hoffer",
+      "winnerWomen": null,
+      "winningScoreMen": "1:05.62",
+      "winningScoreWomen": null,
+      "movements": [
+        "Handstand Walk"
+      ],
+      "loads": [],
+      "equipment": [],
+      "eventTypes": [
+        "skill",
+        "gymnastics",
+        "sprint"
+      ],
+      "modality": "G",
+      "timeDomain": "sprint",
+      "loadLevel": "none",
+      "environment": "arena",
+      "namedWod": null,
+      "firstAtGames": [],
+      "notes": "Name recalls the 2020 Handstand Sprint (Fraser/Wells). Victor Hoffer - who trained French artistic gymnastics from age three - won by nearly 25 seconds for his first career Games event win. Malheiros took his second podium of the day; New Zealand rookie Ben Fowler took his first career podium. Medeiros (6th) seized the overall lead from Sprague (14th) - the THIRD men's lead change of the day. Women's result recorded when official.",
+      "sources": [
+        "https://games.crossfit.com/leaderboard/finals/2026?division=1"
+      ]
     }
   ]
 }
