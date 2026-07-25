@@ -389,23 +389,23 @@
     "afterLabel": "After Event 11",
     "men": [
       {
-        "name": "Justin Medeiros",
-        "points": 674,
-        "prev": 3
-      },
-      {
         "name": "James Sprague",
-        "points": 662,
+        "points": 664,
         "prev": 1
       },
       {
+        "name": "Justin Medeiros",
+        "points": 648,
+        "prev": 3
+      },
+      {
         "name": "Jay Crouch",
-        "points": 642,
+        "points": 644,
         "prev": 4
       },
       {
         "name": "Dallin Pepper",
-        "points": 640,
+        "points": 642,
         "prev": 2
       },
       {
@@ -415,22 +415,22 @@
       },
       {
         "name": "Roman Khrennikov",
-        "points": 563,
+        "points": 565,
         "prev": 5
       },
       {
         "name": "Jayson Hopper",
-        "points": 553,
+        "points": 555,
         "prev": 7
       },
       {
         "name": "Moritz Fiebig",
-        "points": 472,
+        "points": 474,
         "prev": 8
       },
       {
         "name": "Jeffrey Adler",
-        "points": 462,
+        "points": 464,
         "prev": 9
       },
       {
