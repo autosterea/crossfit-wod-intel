@@ -394,7 +394,20 @@
           "score": "5:08.23"
         }
       ],
-      "women": []
+      "women": [
+        {
+          "name": "Lucy Campbell",
+          "score": "5:02.48"
+        },
+        {
+          "name": "Abigail Domit",
+          "score": "5:04.36"
+        },
+        {
+          "name": "Danielle Brandon",
+          "score": "5:04.93"
+        }
+      ]
     }
   ],
   "leaderboard": {
