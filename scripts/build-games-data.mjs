@@ -275,7 +275,7 @@ const SYNONYMS = {
   'sledgehammer stake drive': 'SledgeHammer', 'banger sledgehammer drive': 'Banger', 'stake drive': 'SledgeHammer',
   'burpee wall jump': 'WallOver', 'burpee over wall': 'WallOver', 'wall over': 'WallOver', 'wall overs': 'WallOver', 'over the wall burpee': 'WallOver',
   'jug carry': 'JerryCan', 'jerry bag carry': 'JerryCan', 'jerry can run': 'JerryCan',
-  'ghd medicine ball throw': 'GHDBallThrow', 'ghd ball throw': 'GHDBallThrow', 'med ball ghd sit up': 'GHDSitUp', 'medicine ball ghd sit up': 'GHDSitUp',
+  'ghd medicine ball throw': 'GHDBallThrow', 'ghd sit up wall ball': 'GHDBallThrow', 'ghd ball throw': 'GHDBallThrow', 'med ball ghd sit up': 'GHDSitUp', 'medicine ball ghd sit up': 'GHDSitUp',
   'medicine ball carry': 'BurdenCarry', 'hill sprint med ball carry': 'BurdenCarry', 'med ball carry': 'BurdenCarry',
   'sled drive': 'SledPush', 'snail push': 'SnailPush', 'the snail': 'SnailPush',
   'plow drag': 'PlowDrag', 'plow pull': 'PlowDrag',
