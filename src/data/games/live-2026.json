@@ -578,6 +578,27 @@
           "score": "3:38.46"
         }
       ]
+    },
+    {
+      "num": 18,
+      "name": "Machine 7200",
+      "short": "Machine 7200",
+      "scoreLabel": "TIME",
+      "men": [
+        {
+          "name": "James Sprague",
+          "score": "24:22.46"
+        },
+        {
+          "name": "Jayson Hopper",
+          "score": "24:35.49"
+        },
+        {
+          "name": "Roman Khrennikov",
+          "score": "24:36.98"
+        }
+      ],
+      "women": []
     }
   ],
   "leaderboard": {
