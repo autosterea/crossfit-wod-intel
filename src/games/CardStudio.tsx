@@ -46,6 +46,27 @@ type Pick = { name: string; value: string; why: string }
 type PickSet = { id: string; label: string; eventKicker: string; eventLine: string; note: string; men: Pick[]; women: Pick[] }
 const PICKS: PickSet[] = [
   {
+    id: 'event20-fibonacci-final',
+    label: 'Fibonacci Final',
+    eventKicker: 'Event 20 - Fibonacci Final',
+    eventLine: '5-8-13 deficit HSPU (14/8-in) + double-KB deadlift (203/124 lb), then an 89-ft KB overhead lunge. 10-min cap. The season closer, Sun July 26.',
+    note: 'History first: a rerun of the 2018 Fibonacci at the exact same deficit and loads (that year had a 6-min cap), itself a revision of the 2017 Fibonacci Final. Only one man and one related-test woman have a captured precedent; the rest of the board reflects live standings entering the finale. A history and standings read, not a result prediction.',
+    men: [
+      { name: 'Patrick Vellner', value: '4th 2018 Fibonacci', why: '4th at these exact loads in 2018; tied 9th in 2017. 16th overall, out of the title race.' },
+      { name: 'James Sprague', value: 'Leads, 1,114', why: '29-point cushion over Pepper entering the finale. No precedent at this test.' },
+      { name: 'Dallin Pepper', value: '2nd, 1,085 (-29)', why: '29 back with one event left. No precedent at this test.' },
+      { name: 'Jay Crouch', value: '3rd, 1,046 (-68)', why: '68 back of Sprague, needs a big result plus help. No precedent at this test.' },
+      { name: 'Justin Medeiros', value: '4th, 984', why: 'Two-time champ (2021, 2022). No precedent at this specific test.' },
+    ],
+    women: [
+      { name: 'Alexis Raptis', value: 'WON 2022 Echo Press', why: 'Her only Games win came in a deficit-HSPU test (2-in deficit vs this 8-in). 21st overall, out of the title race.' },
+      { name: 'Aimee Cringle', value: 'Leads, 1,190', why: '116-point lead over Lawson entering the finale. No precedent at this test.' },
+      { name: 'Emma Lawson', value: '2nd, 1,074 (-116)', why: 'Needs a near-maximal swing to threaten 1st. No precedent at this test.' },
+      { name: 'Lucy Campbell', value: '3rd, 1,041 (-33 on 2nd)', why: '33 back of Lawson for 2nd, tighter than the race for 1st.' },
+      { name: 'Madeline Sturt', value: '4th, 877', why: 'No captured precedent at this specific test.' },
+    ],
+  },
+  {
     id: 'event16-17-echo-thruster-yoke',
     label: 'Echo Thruster / Jump Pull Yoke',
     eventKicker: 'Event 16/17 - Echo Thruster / Jump Pull Yoke',
@@ -331,6 +352,20 @@ type Slide =
   | { type: 'movement'; kicker: string; headline: string; rows: { rank: number; name: string; pts: number; delta: number | null }[]; note?: string }
 type Carousel = { id: string; label: string; caption: string; slides: Slide[] }
 const CAROUSELS: Carousel[] = [
+  {
+    id: 'event20-fibonacci-final',
+    label: 'Event 20 - Fibonacci Final',
+    caption:
+      "THE LAST EVENT OF THE SEASON JUST DROPPED. Event 20, Fibonacci Final, is live on the official workouts page.\n\n5-8-13 reps for time of deficit handstand push-ups (14-in men, 8-in women) and double-kettlebell deadlifts (203/124 lb), then one 89-ft double-kettlebell overhead lunge (53/35 lb). 10-minute cap.\n\nWe checked our own almanac. This is the THIRD Fibonacci in Games history. The 2017 original closed that season (non-deficit HSPU, different women's rep scheme). The 2018 version introduced the exact 14/8-inch deficit and 5-8-13 scheme this year reuses, at a 6-minute cap. 2026 stretches that cap to 10.\n\nAnd the title math: Sprague leads Pepper by just 29 points entering the finale. Cringle leads Lawson by 116.\n\nSwipe for who's positioned. Link in bio. A history and standings read, not a result prediction.",
+    slides: [
+      { type: 'cover', kicker: 'Event 20 - Sun July 26', headline: 'FIBONACCI\nFINAL', sub: 'The last event of the season. Deficit HSPU + heavy kettlebells, at the exact 2018 loads. Sprague leads Pepper by 29 points. Swipe.' },
+      { type: 'point', num: 1, kicker: 'The workout', headline: '5-8-13,\nDEFICIT HSPU', body: 'Deficit handstand push-ups (14-in men, 8-in women) and double-kettlebell deadlifts (203/124 lb), 5-8-13 reps each. Then one 89-ft double-kettlebell overhead lunge (53/35 lb). 10-minute cap.', source: 'games.crossfit.com (official workouts page)' },
+      { type: 'point', num: 2, kicker: 'The history', headline: 'THE THIRD\nFIBONACCI', body: 'The 2017 Fibonacci Final closed that season at non-deficit HSPU. The 2018 version introduced this exact 14/8-inch deficit and 5-8-13 scheme, at a tighter 6-minute cap. 2026 is that test again, with the cap stretched to 10.', source: 'Persistence Athletics Games Almanac' },
+      { type: 'point', num: 3, kicker: 'The men', headline: 'VELLNER\'S THE\nSPECIALIST', body: 'Patrick Vellner: 4th in 2018 at these exact loads, tied 9th in 2017 - but 16th overall. The real fight is at the top: Sprague leads Pepper by 29 points, Crouch by 68, entering the last event.', source: 'Official Games leaderboard' },
+      { type: 'point', num: 4, kicker: 'The women', headline: 'RAPTIS\'S\nDEFICIT PEDIGREE', body: 'Alexis Raptis\'s only Games win came in a deficit-HSPU test (2022 Echo Press) - but she\'s 21st overall. Cringle leads Lawson by 116 points entering the finale, with Campbell 33 back of Lawson for 2nd.', source: 'Official Games leaderboard' },
+      { type: 'cta', headline: 'FULL\nBREAKDOWN', body: 'The complete three-generation history and both boards are on the site. A history and standings read, not a result prediction.' },
+    ],
+  },
   {
     id: 'event16-17-echo-thruster-yoke',
     label: 'Event 16/17 - Echo Thruster / Jump Pull Yoke',

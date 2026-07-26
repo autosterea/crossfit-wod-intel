@@ -6,9 +6,23 @@
     "city": "San Jose, California",
     "dates": "July 24-26, 2026",
     "note": "The 2026 CrossFit Games will score 20 events across 4 days (July 22-26), the most in Games history. Individuals open at off-site Bay Area locations on Wednesday, July 22 before three arena days at SAP Center. CrossFit reveals the official numbered events closer to and during the competition. This tracker follows every confirmed, revealed and teased element as it drops, with the source.",
-    "updated": "2026-07-25"
+    "updated": "2026-07-26"
   },
   "items": [
+    {
+      "name": "Event 20: Fibonacci Final",
+      "status": "confirmed",
+      "kind": "event",
+      "num": 20,
+      "summary": "The last individual event of the season, published on the official workouts page: 5-8-13 reps for time of deficit handstand push-ups (14-inch men, 8-inch women) and double-kettlebell deadlifts (203/124 lb), then an 89-foot double-kettlebell overhead walking lunge (53/35 lb), under a 10-minute cap. Confirmed as the closing slot on Sunday, July 26 by FloElite's independently published broadcast schedule. A rerun of the 2018 Fibonacci (same deficit and rep scheme, tighter 6-minute cap that year), itself a revision of the original 2017 Fibonacci Final closer.",
+      "source": {
+        "label": "CrossFit Games (official workout page)",
+        "url": "https://games.crossfit.com/workouts/finals/2026"
+      },
+      "date": "2026-07-26",
+      "shortName": "Fibonacci Final",
+      "analysisSlug": "event-20-fibonacci-final-the-title-math"
+    },
     {
       "name": "Event 16: Echo Thruster",
       "status": "confirmed",

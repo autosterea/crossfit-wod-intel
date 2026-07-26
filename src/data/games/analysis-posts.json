@@ -1,5 +1,138 @@
 [
   {
+    "slug": "event-20-fibonacci-final-the-title-math",
+    "title": "Event 20: Fibonacci Final. The Closer Is a Rerun, and the Men's Title Race Is 29 Points Wide.",
+    "dek": "The official workouts page has published the last individual event of 2026: deficit handstand push-ups and heavy kettlebell deadlifts at the exact loads from the 2018 version of this test, with a longer cap. We pulled the full three-generation history and the real math on both title races entering the finale.",
+    "category": "Event Preview",
+    "date": "2026-07-26",
+    "author": "Ravikant Dewangan",
+    "readMin": 4,
+    "summary": "Individual Event 20, the final event of the 2026 season, is live on the official workouts page: 5-8-13 reps for time of deficit handstand push-ups (14-inch men, 8-inch women) and double-kettlebell deadlifts (203 lb men, 124 lb women), then one set of an 89-foot double-kettlebell overhead walking lunge (53 lb men, 35 lb women), under a 10-minute cap. It is the third running of the Fibonacci test: the original 2017 Fibonacci Final (non-deficit HSPU, a different women's rep scheme) and the 2018 revision, which introduced the exact 14-inch/8-inch deficit and 5-8-13 scheme this year reuses, at a tighter 6-minute cap. Patrick Vellner has the field's best precedent (4th in 2018, tied 9th in 2017); Alexis Raptis is the closest women's specialist, her only Games win coming in a shallower deficit-HSPU test. Entering the finale, per the official live leaderboard, James Sprague leads Dallin Pepper by 29 points and Jay Crouch by 68; Aimee Cringle leads Emma Lawson by 116.",
+    "blocks": [
+      {
+        "type": "p",
+        "text": "The official CrossFit Games workouts page has published the twentieth and final individual event of the 2026 season. **Event 20, Fibonacci Final**, is **5-8-13 reps for time** of **deficit handstand push-ups** and **double-kettlebell deadlifts**, then one set of an **89-foot double-kettlebell overhead walking lunge**. Women use an **8-inch deficit** for the HSPU, **2 x 124-lb kettlebells** for the deadlift, and **2 x 35-lb kettlebells** for the lunge; men use a **14-inch deficit**, **2 x 203-lb kettlebells** for the deadlift, and **2 x 53-lb kettlebells** for the lunge. **Time cap: 10 minutes.** FloElite's independently published broadcast schedule confirms Individual Event 20 as the closing slot on Sunday, July 26 (women 6:30-7:15 p.m. ET, men 7:25-8:10 p.m. ET)."
+      },
+      {
+        "type": "h2",
+        "text": "What It Tests"
+      },
+      {
+        "type": "p",
+        "text": "The Fibonacci sequence sets the rep scheme (5, then 8, then 13) and the lunge distance (89 feet is the next number after 55 in the sequence). It is a short, unforgiving gymnastics-strength pairing: a strict deficit handstand push-up demands real overhead pressing range and shoulder stability under fatigue, immediately followed by a heavy double-kettlebell deadlift that punishes grip and posterior-chain endurance. The closing 89-foot overhead lunge, done only once, is pure core and shoulder stability at the end of a short, brutal effort. With a 10-minute cap, this is less about pacing and more about who can move through 26 total deficit HSPU and 26 heavy kettlebell deadlifts without a technical breakdown."
+      },
+      {
+        "type": "h2",
+        "text": "The Third Fibonacci: 2017, 2018, and Now"
+      },
+      {
+        "type": "p",
+        "text": "This is not a new idea. The **2017 Fibonacci Final** closed that season's Games with parallette handstand push-ups (no stated deficit) and the same 5-8-13 deadlift scheme, but a different women's HSPU rep count (3-5-8) and a 6-minute cap; **Mat Fraser**, that year's eventual champion, finished CAP+2 for 2nd, while **Sara Sigmundsdottir** won outright in 3:13.98. The **2018 Fibonacci**, a mid-week event rather than a finale, revised the test to the exact spec 2026 reuses: **14-inch men's / 8-inch women's deficit HSPU**, the same 5-8-13 scheme for both genders, and the same kettlebell loads throughout, run under a tighter 6-minute cap. **Mat Fraser** won that version too (4:54.84), with **Katrin Tanja Davidsdottir** winning the women's field (3:31.73). 2026's version is, almost movement-for-movement, the 2018 test again, with the cap stretched from 6 minutes to 10."
+      },
+      {
+        "type": "h2",
+        "text": "The Men: Vellner's the Specialist, but the Race Is Elsewhere"
+      },
+      {
+        "type": "p",
+        "text": "**Patrick Vellner** is the only man in the 2026 field with a captured result at either version of this test: 4th in the 2018 Fibonacci at these exact loads (5:51.65), and tied for 9th in the original 2017 version. He sits 16th overall and is out of title contention, but the specialist read favors him if the deficit HSPU proves as selective as it has both prior times it was run. The actual title fight, per the official live leaderboard through Event 19, is tight at the top: **James Sprague** leads with 1,114 points, **Dallin Pepper** is 2nd at 1,085 (29 back), and **Jay Crouch** is 3rd at 1,046 (68 back of Sprague, 39 of Pepper). None of the top three has a captured result at this specific deficit-HSPU test."
+      },
+      {
+        "type": "ranked",
+        "title": "Men's Fibonacci Final Read - who is positioned",
+        "rows": [
+          {
+            "name": "Patrick Vellner",
+            "value": "4th in 2018 Fibonacci",
+            "note": "Placed 4th at these exact 14-inch deficit HSPU and kettlebell loads in 2018 (5:51.65); tied for 9th in the original 2017 version. 16th overall, out of title contention."
+          },
+          {
+            "name": "James Sprague",
+            "value": "Leads, 1,114 pts",
+            "note": "A 29-point cushion over Pepper entering the last event, the tightest gap atop the board all season. No captured precedent at this test."
+          },
+          {
+            "name": "Dallin Pepper",
+            "value": "2nd, 1,085 (-29)",
+            "note": "29 back with one event left; a big finish keeps the title mathematically alive. No captured precedent at this test."
+          },
+          {
+            "name": "Jay Crouch",
+            "value": "3rd, 1,046 (-68)",
+            "note": "68 back of Sprague, needs a big result plus help from the top two. No captured precedent at this test."
+          },
+          {
+            "name": "Justin Medeiros",
+            "value": "4th, 984 pts",
+            "note": "Two-time Games champion (2021, 2022). No captured precedent at this specific deficit-HSPU test."
+          }
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "The Women: Raptis's Deficit-HSPU Pedigree, and Cringle's Cushion"
+      },
+      {
+        "type": "p",
+        "text": "No woman in the 2026 field appears in the captured top-10 results for either the 2017 or 2018 Fibonacci. The closest related precedent is **Alexis Raptis**, whose only career Games win came in a different deficit handstand push-up test, the **2022 Echo Press** (a 2-inch block deficit paired with the Echo Bike, a shallower deficit than Fibonacci's 8 inches but the same core skill). She sits 21st overall and is out of title contention. Atop the board, **Aimee Cringle** leads at 1,190 points, a 116-point cushion over **Emma Lawson** in 2nd (1,074), with **Lucy Campbell** 3rd at 1,041, 33 back of Lawson for the runner-up spot. None of the top three has a captured result at this specific test."
+      },
+      {
+        "type": "ranked",
+        "title": "Women's Fibonacci Final Read - who is positioned",
+        "rows": [
+          {
+            "name": "Alexis Raptis",
+            "value": "WON 2022 Echo Press",
+            "note": "Her only Games win came in a deficit-HSPU test, the 2022 Echo Press (2-inch deficit vs Fibonacci's 8-inch). 21st overall, out of title contention."
+          },
+          {
+            "name": "Aimee Cringle",
+            "value": "Leads, 1,190 pts",
+            "note": "A 116-point lead over Lawson entering the finale. No captured precedent at this specific test."
+          },
+          {
+            "name": "Emma Lawson",
+            "value": "2nd, 1,074 (-116)",
+            "note": "116 back with one event left, needing a near-maximal swing to threaten 1st. No captured precedent at this test."
+          },
+          {
+            "name": "Lucy Campbell",
+            "value": "3rd, 1,041 (-33 on 2nd)",
+            "note": "33 back of Lawson for the runner-up spot, tighter than the race for 1st. No captured precedent at this test."
+          },
+          {
+            "name": "Madeline Sturt",
+            "value": "4th, 877 pts",
+            "note": "No captured precedent at this specific test."
+          }
+        ]
+      },
+      {
+        "type": "callout",
+        "title": "Methodology",
+        "text": "We searched our verified Games almanac (src/data/games-data.json and the per-year raw and results files) for prior runs of this test and found two: the original 2017 Fibonacci Final, and a 2018 revision that introduced the exact 14-inch/8-inch deficit and equalized the rep scheme to 5-8-13 for both genders, the version 2026 reuses (with the cap stretched from 6 to 10 minutes). Rankings lead with verified placements from athletes still in the 2026 field; only Patrick Vellner (men) has a direct captured result, and Alexis Raptis (women) is included via a related deficit-HSPU test rather than this exact one, both labeled as such. The remaining board rows use each athlete's position on the official 2026 leaderboard entering the finale, pulled live from the official CrossFit Games leaderboard API through Event 19, not movement history, and are labeled accordingly. Event 20's number is confirmed by both the official workouts page and FloElite's independently published broadcast schedule. A single event can still move several places on a 30-athlete points table. A history and standings read, not a result prediction."
+      }
+    ],
+    "sources": [
+      {
+        "label": "CrossFit Games (official workout page)",
+        "url": "https://games.crossfit.com/workouts/finals/2026"
+      },
+      {
+        "label": "FloElite - 2026 CrossFit Games Schedule",
+        "url": "https://www.floelite.com/events/16071720-2026-the-crossfit-games/schedule"
+      },
+      {
+        "label": "CrossFit Games official leaderboard (live)",
+        "url": "https://games.crossfit.com/leaderboard/2026/games?division=1"
+      },
+      {
+        "label": "Persistence Athletics Games Almanac - 2017 and 2018 Fibonacci results",
+        "url": "https://wod.persistenceathletics.com/games"
+      }
+    ]
+  },
+  {
     "slug": "event-16-17-echo-thruster-yoke-two-reruns-back-to-back",
     "title": "Event 16/17: Echo Thruster/Jump Pull Yoke. Two Reruns Back to Back, and We Have the Receipts for Both.",
     "dek": "The official workouts page just split Saturday night into two backed-up sprints on one running clock: an Echo Bike/Thruster ladder that is the 2023 test again, then a three-rung Yoke Carry that tops out at the heaviest yoke ever loaded at the Games. We pulled the placements from all three prior tests.",
