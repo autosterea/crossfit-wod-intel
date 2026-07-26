@@ -251,6 +251,7 @@ const SYNONYMS = {
   'sled pull': 'SledPull', 'sled drag': 'SledPull', 'rope sled pull': 'SledPull', 'hand over hand sled pull': 'SledPull',
   'yoke': 'Yoke', 'yoke carry': 'Yoke', 'yoke walk': 'Yoke',
   'shuttle box jump': 'BoxJump', 'shuttle box jumps': 'BoxJump',
+  'ring roll to support': 'RingSkill', 'roll to support': 'RingSkill', 'forward roll to support': 'RingSkill', 'backward roll to support': 'RingSkill',
   'farmers carry': 'FarmersCarry', 'farmer carry': 'FarmersCarry', 'farmers walk': 'FarmersCarry', 'farmer walk': 'FarmersCarry', 'dumbbell farmers carry': 'FarmersCarry', 'kettlebell farmers carry': 'FarmersCarry', 'kettlebell carry': 'FarmersCarry', 'jerry can carry': 'JerryCan', 'jerry can': 'JerryCan',
   'husafell': 'Husafell', 'husafell carry': 'Husafell', 'husafell stone': 'Husafell', 'husafell bag': 'Husafell',
   'atlas stone': 'AtlasStone', 'atlas stones': 'AtlasStone', 'stone lift': 'AtlasStone', 'stone over shoulder': 'StoneToShoulder', 'stone to shoulder': 'StoneToShoulder', 'stone ground to shoulder': 'StoneToShoulder',
