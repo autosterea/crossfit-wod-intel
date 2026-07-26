@@ -353,6 +353,362 @@ type Slide =
 type Carousel = { id: string; label: string; caption: string; slides: Slide[] }
 const CAROUSELS: Carousel[] = [
   {
+    "id": "day3-records",
+    "label": "Day 3 Records + Receipts",
+    "caption": "DAY 3 RECORDS AND RECEIPTS - the numbers nobody else pulled.\n\nTHE RECEIPTS: five picks boards posted before Saturday's five events. Five hits. Garard won the sprint (our No. 1, on his 2024 Track and Field win). Vellner won the Pig (No. 1, on his 2021 win at the same weight). Loewen podiumed the Pig (top women's pick, on her 2023 runner-up). Malheiros won the snatch (No. 1, on his 2021 max-snatch title). Pepper won the Echo Thruster (the 2023 Echo champion, receipt printed on the picks board). We don't guess. We check the history.\n\nTHE HONEST GRADE: our Event 20 gap analysis named HSPU, kettlebells and lunges as the biggest untested pieces - the Fibonacci Final is exactly those three. We predicted the wrong combination (clean and jerk + ring muscle-ups). Ingredients right, recipe wrong. We publish both halves.\n\nTHE BOOKS: Cringle's five event wins and a 1,190-point total through 17. Campbell's seventh career win (third of these Games). Vellner's tenth career win in his tenth Games. Sprague's first win of the week on the heaviest test, after leading since Event 7. Hannah Black, the 10th first-time event winner of these Games per the broadcast. And Henrik Haapalainen - who told us himself he is not racing hurt - stood on the yoke podium.\n\nEverything sourced: official board, broadcast, our almanac. Link in bio.",
+    "slides": [
+      {
+        "type": "cover",
+        "kicker": "Day 3 - Records + Receipts",
+        "headline": "RECEIPTS\nDAY",
+        "sub": "Five picks boards. Five hits. Plus the record-book lines from the biggest day of the week. Swipe."
+      },
+      {
+        "type": "point",
+        "num": 1,
+        "kicker": "The Receipts",
+        "headline": "FIVE FOR\nFIVE",
+        "body": "Every pick posted BEFORE the event, every receipt from our own database: Garard won the sprint (No. 1 pick, 2024 Track and Field win). Vellner won the Pig (No. 1, won at this exact weight in 2021). Loewen podiumed the Pig (top women's pick, 2nd at this weight in 2023). Malheiros won the snatch (No. 1, 2021 max-snatch champion). Pepper won the Echo Thruster (he won this exact test in 2023). We don't guess. We check the history.",
+        "source": "Persistence Athletics picks boards (posted pre-event) + official results"
+      },
+      {
+        "type": "stat",
+        "kicker": "The Record Book",
+        "headline": "THE LINES THAT\nGO IN THE BOOKS",
+        "stats": [
+          {
+            "big": "5",
+            "label": "Cringle's event wins these Games - three on Day 1, two more Saturday - at 1,190 points"
+          },
+          {
+            "big": "7th",
+            "label": "career event win for Lucy Campbell (swim, hopper, yoke this week)"
+          },
+          {
+            "big": "10th",
+            "label": "career win, 10th Games for Vellner - at the same Pig weight he won at in 2021"
+          },
+          {
+            "big": "1st",
+            "label": "Sprague's first event win of the week - on the 665-lb yoke, leading since Event 7"
+          }
+        ],
+        "footnote": "All win counts verified against our almanac and the official leaderboard."
+      },
+      {
+        "type": "point",
+        "num": 2,
+        "kicker": "The Honest Grade",
+        "headline": "INGREDIENTS RIGHT,\nRECIPE WRONG",
+        "body": "Yesterday we published the gap analysis: through 19 events, the untested pieces were handstand push-ups, kettlebells and lunges (plus dumbbells, double-unders, ring muscle-ups and the clean and jerk). Our finale call was clean and jerks plus ring muscle-ups, lunge as the wildcard. The real Event 20 - the Fibonacci Final - is deficit HSPU, kettlebell deadlifts and a kettlebell overhead lunge. All three ingredients came off our gap list. The combination did not. We grade our own work in public, both halves.",
+        "source": "Our Event 20 gap analysis (published pre-reveal) + official workouts page"
+      },
+      {
+        "type": "point",
+        "num": 3,
+        "kicker": "The People",
+        "headline": "THE DAY'S\nHUMAN LINES",
+        "body": "Hannah Black, 30th overall entering the event with the heaviest listed snatch in the field, won the Speed Snatch - per the broadcast, the 10th athlete to take a first career event win at these Games. Henrik Haapalainen - who corrected our injury note himself this morning: not hurt, fully recovered - stood 2nd on the yoke by night's end. And Guilherme Malheiros won the snatch, asked for heavier bars, and danced: 'I think they forgot to change the women's weights.' The arena believed him.",
+        "source": "Official board + Games broadcast (quotes and first-timer count per broadcast)"
+      },
+      {
+        "type": "cta",
+        "headline": "SUNDAY:\nTHE FINALE",
+        "body": "Three events left. A 29-point men's race between two training partners. Full previews, the Fibonacci breakdown, and the live board - link in bio."
+      }
+    ]
+  },
+  {
+    "id": "camp-wars-day3",
+    "label": "Camp Wars Round 3 (through Day 3)",
+    "caption": "CAMP WARS, ROUND 3 - and the plot twist nobody had: BOTH title races are now an all-Brute affair. Sprague versus Pepper for the men's crown. Cringle versus Lawson for the women's. Every jersey and every chaser, one camp. Sunday is a civil war.\n\nTHE STANDINGS (verified rosters, official board through 17): PRVN keeps the best average (11.9) and the most event wins (TEN - Mertens 3, Crouch 2, Garard 2, Sturt, Milligan, Turner). Mayhem holds second on average (12.6) behind Khrennikov and Malheiros' two-win Saturday. Brute is third on average (13.4) but owns what matters: all four top-2 slots and nine event wins. HWPO stays lean (Gazan two wins, Vellner two). And Training Think Tank finally got its moment: Hannah Black's snatch win - the camp's first event victory of the week.\n\nOne roster note: PRVN's average includes McGonigle, who has no scored result since Event 13 and sits scored last on the board.\n\nOne day left. The camp trophy is PRVN's to lose. The crowns are Brute's civil war.",
+    "slides": [
+      {
+        "type": "cover",
+        "kicker": "Camp Wars - Round 3",
+        "headline": "THE CIVIL\nWAR",
+        "sub": "Both title races are now Brute versus Brute. PRVN still owns the averages. TTT finally got a win. Round 3 standings. Swipe."
+      },
+      {
+        "type": "stat",
+        "kicker": "The Headline",
+        "headline": "ONE CAMP,\nFOUR CROWN SEATS",
+        "stats": [
+          {
+            "big": "4/4",
+            "label": "both No. 1s AND both No. 2s are Brute: Sprague-Pepper and Cringle-Lawson"
+          },
+          {
+            "big": "10",
+            "label": "PRVN event wins - still the most of any camp, with the best average (11.9)"
+          },
+          {
+            "big": "9",
+            "label": "Brute event wins - five of them Cringle's alone"
+          },
+          {
+            "big": "1st",
+            "label": "Training Think Tank's first event win of the week: Hannah Black's snatch"
+          }
+        ],
+        "footnote": "Average overall placement across each camp's athletes, official board through Event 17. Camps with 2+ athletes."
+      },
+      {
+        "type": "bars",
+        "kicker": "Camp Standings - Through 17 Events",
+        "headline": "AVERAGE\nPLACEMENT",
+        "bars": [
+          {
+            "label": "PRVN Fitness (10)",
+            "pct": 70,
+            "display": "11.9",
+            "color": "#91C640"
+          },
+          {
+            "label": "CrossFit Mayhem (5)",
+            "pct": 66,
+            "display": "12.6",
+            "color": "#F4C64A"
+          },
+          {
+            "label": "Brute Strength (12)",
+            "pct": 62,
+            "display": "13.4",
+            "color": "#60a5fa"
+          },
+          {
+            "label": "HWPO Training (3)",
+            "pct": 51,
+            "display": "16.3",
+            "color": "#C9D2DA"
+          },
+          {
+            "label": "Training Think Tank (3)",
+            "pct": 26,
+            "display": "24.3",
+            "color": "rgba(244,246,242,0.4)"
+          }
+        ],
+        "footnote": "Lower average = better; longer bar = better. Round order held from Day 2 (PRVN, Mayhem, Brute). PRVN's average includes McGonigle, scored last with no result since Event 13."
+      },
+      {
+        "type": "point",
+        "num": 1,
+        "kicker": "Brute Strength",
+        "headline": "THE CIVIL WAR\nIS THE CROWN",
+        "body": "Sprague 1114 versus Pepper 1085 for the men's title. Cringle 1190 versus Lawson 1074 for the women's. Every leader and every chaser wears Brute. Add Hopper's climb to 5th and nine event wins - five of them Cringle's - and the camp's top end has never looked stronger, even with the deepest roster carrying its average to third.",
+        "source": "Official leaderboard through E17; roster per Brute's 2026 announcements"
+      },
+      {
+        "type": "point",
+        "num": 2,
+        "kicker": "PRVN + Mayhem",
+        "headline": "TEN WINS, AND\nTHE QUIET SECOND",
+        "body": "PRVN's math still leads the camp race: ten event wins (Mertens 3, Crouch 2, Garard 2, Sturt, Milligan, Turner - whose Echo win Saturday was the camp's sixth different winner) and the best average at 11.9, with Crouch 3rd, Sturt 4th, Garard 6th and Kerstetter's evening surge to 7th. Mayhem sits second on average behind Khrennikov (8th) and Malheiros, whose snatch win and top-10 return made Saturday the camp's best day since Friday's revival.",
+        "source": "Official leaderboard through E17; verified camp rosters"
+      },
+      {
+        "type": "point",
+        "num": 3,
+        "kicker": "HWPO + Training Think Tank",
+        "headline": "LEAN, AND\nFINALLY ON BOARD",
+        "body": "HWPO's three-athlete roster keeps punching up: Gazan holds 5th with two event wins, and Vellner's Pig victory - his second win of these Games - came with the whole arena on its feet. And Training Think Tank finally has a win column: Hannah Black, 30th overall entering the event, took the Speed Snatch outright with the heaviest listed snatch in the field. Sometimes the week just needs one bar.",
+        "source": "Official leaderboard through E17; verified camp rosters"
+      },
+      {
+        "type": "cta",
+        "headline": "ONE DAY.\nTHREE EVENTS.",
+        "body": "The camp trophy is PRVN's to lose. The crowns are a Brute civil war. Full camp math and the live leaderboard - link in bio."
+      }
+    ]
+  },
+  {
+    "id": "day3-data-recap",
+    "label": "Day 3 Data Recap + Sunday Projection",
+    "caption": "DAY 3, BY THE DATA. Ten events in one day - five per division, the biggest single day of the week - and both title races got tighter, not clearer.\n\nTHE DAY IN NUMBERS: 5-for-5 on our picks boards (Garard, Vellner, Loewen, Malheiros, Pepper - every pick posted before the event, every receipt from our own almanac). Cringle took wins four and five of her Games and leads by 116 at 1,190. Sprague finally won his first event of the week - on the heaviest test - and leads Pepper by 29.\n\nTHE MOVERS (after 12 vs after 17): Pepper 4th to 2nd. Hopper 6th to 5th on a 3rd-plus-3rd evening. Adler 9th to 7th. And the closing surge of the day belongs to Olivia Kerstetter: 13th at the evening break, 7th by the end of the night.\n\nTHE SILVER DRAMA: the women's second-place gap read 36, then 1, then 36, then 63, then 33 across Saturday's five events. Lawson holds it at 1,074 over Campbell's 1,041 - after Campbell answered with 196 points in her last two events.\n\nSUNDAY BY THE ALMANAC: E18 is machines only (row 3,600m + ski 3,600m) - and both prior machine-event winners are in this field: Adler won the 2025 Run/Row/Run, Mertens won the 2023 Ski-Bag. E19 is a rings skill test with zero Games precedent - our research flags the real gymnastics backgrounds (Hoffer won Friday's handstand sprint; Sturt trained gymnastics; Campbell owns the best gymnastics modal score in the field). E20 is the Fibonacci Final - full kit already live.\n\nA history read, not a result prediction. Everything live at the link in bio.",
+    "slides": [
+      {
+        "type": "cover",
+        "kicker": "Day 3 - Sat July 25",
+        "headline": "DAY 3,\nBY THE DATA",
+        "sub": "Ten events in one day. Five picks receipts. Two title races tighter than when the sun came up. The numbers. Swipe."
+      },
+      {
+        "type": "stat",
+        "kicker": "The Day In Numbers",
+        "headline": "SATURDAY BY\nTHE NUMBERS",
+        "stats": [
+          {
+            "big": "10",
+            "label": "events run in one day - five per division, the biggest day of the week"
+          },
+          {
+            "big": "5-for-5",
+            "label": "picks-board receipts: Garard, Vellner, Loewen, Malheiros, Pepper - all posted before the events"
+          },
+          {
+            "big": "29",
+            "label": "the men's title gap: Sprague 1114 over Pepper 1085, three events left"
+          },
+          {
+            "big": "116",
+            "label": "Cringle's lead at 1,190 after wins four and five of her Games"
+          }
+        ],
+        "footnote": "All numbers per the official leaderboard through Event 17. Picks receipts verifiable on our feed - posted before every event."
+      },
+      {
+        "type": "movement",
+        "kicker": "Men - After 17 (movement across Day 3)",
+        "headline": "MEN: WHAT THE\nDAY CHANGED",
+        "rows": [
+          {
+            "rank": 1,
+            "name": "James Sprague",
+            "pts": 1114,
+            "delta": 0
+          },
+          {
+            "rank": 2,
+            "name": "Dallin Pepper",
+            "pts": 1085,
+            "delta": 2
+          },
+          {
+            "rank": 3,
+            "name": "Jay Crouch",
+            "pts": 1046,
+            "delta": -1
+          },
+          {
+            "rank": 4,
+            "name": "Justin Medeiros",
+            "pts": 984,
+            "delta": -1
+          },
+          {
+            "rank": 5,
+            "name": "Jayson Hopper",
+            "pts": 916,
+            "delta": 1
+          },
+          {
+            "rank": 6,
+            "name": "Ricky Garard",
+            "pts": 906,
+            "delta": -1
+          },
+          {
+            "rank": 7,
+            "name": "Jeffrey Adler",
+            "pts": 832,
+            "delta": 2
+          },
+          {
+            "rank": 8,
+            "name": "Roman Khrennikov",
+            "pts": 798,
+            "delta": -1
+          }
+        ],
+        "note": "Movement shown vs the start of the day (after Event 12). Malheiros 9th and Fiebig 10th round out the ten; Mertens and Hoffer dropped out."
+      },
+      {
+        "type": "movement",
+        "kicker": "Women - After 17 (movement across Day 3)",
+        "headline": "WOMEN: WHAT THE\nDAY CHANGED",
+        "rows": [
+          {
+            "rank": 1,
+            "name": "Aimee Cringle",
+            "pts": 1190,
+            "delta": 0
+          },
+          {
+            "rank": 2,
+            "name": "Emma Lawson",
+            "pts": 1074,
+            "delta": 1
+          },
+          {
+            "rank": 3,
+            "name": "Lucy Campbell",
+            "pts": 1041,
+            "delta": -1
+          },
+          {
+            "rank": 4,
+            "name": "Madeline Sturt",
+            "pts": 877,
+            "delta": 0
+          },
+          {
+            "rank": 5,
+            "name": "Alex Gazan",
+            "pts": 863,
+            "delta": 0
+          },
+          {
+            "rank": 6,
+            "name": "Arielle Loewen",
+            "pts": 811,
+            "delta": 2
+          },
+          {
+            "rank": 7,
+            "name": "Olivia Kerstetter",
+            "pts": 787,
+            "delta": null
+          },
+          {
+            "rank": 8,
+            "name": "Danielle Brandon",
+            "pts": 782,
+            "delta": -1
+          }
+        ],
+        "note": "Movement vs after Event 12 (official tiebreaks). Kerstetter climbed from 13th at the evening break to 7th by night - the best closing surge in the field. Fuliano 9th, Rodgers 10th."
+      },
+      {
+        "type": "stat",
+        "kicker": "The Two Races",
+        "headline": "TIGHTER, NOT\nCLEARER",
+        "stats": [
+          {
+            "big": "36-1-36-63-33",
+            "label": "the women's silver gap after each event Saturday - Lawson holds it by 33"
+          },
+          {
+            "big": "196",
+            "label": "Campbell's points in her final two events (Echo 2nd + yoke WIN, her 3rd of the Games)"
+          },
+          {
+            "big": "1st",
+            "label": "Sprague's yoke win - his first event win of these Games, after leading since Event 7"
+          },
+          {
+            "big": "4/4",
+            "label": "both title-race slots in both divisions belong to Brute Strength athletes"
+          }
+        ],
+        "footnote": "Sprague and Pepper, Cringle and Lawson - every jersey and every chaser trains at the same camp. Sunday is a civil war."
+      },
+      {
+        "type": "point",
+        "num": 1,
+        "kicker": "Sunday Projection",
+        "headline": "WHAT THE ALMANAC\nSAYS ABOUT SUNDAY",
+        "body": "E18 is machines only - row 3,600m, ski 3,600m - and both prior machine-event winners are in this field: Adler won the 2025 Run/Row/Run and Mertens won the 2023 Ski-Bag. E19 is a five-minute rings skill test with zero Games precedent - our research flags the real gymnastics backgrounds: Hoffer (who won Friday's handstand sprint), Sturt, and Campbell with the field's best gymnastics modal score. E20 is the Fibonacci Final, the 2018 deficit rerun at a 10-minute cap - our full breakdown is already live. A history read, not a result prediction.",
+        "source": "Persistence Athletics Games Almanac + official workouts page"
+      },
+      {
+        "type": "cta",
+        "headline": "THREE EVENTS.\nEVERYTHING LIVE.",
+        "body": "Both boards, every recap, the Fibonacci breakdown, and the live leaderboard - link in bio. Finale day cards fire the moment each board posts."
+      }
+    ]
+  },
+  {
     id: 'event20-fibonacci-final',
     label: 'Event 20 - Fibonacci Final',
     caption:
