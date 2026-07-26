@@ -516,7 +516,20 @@
       "name": "Echo Thruster",
       "short": "Echo Thruster",
       "scoreLabel": "TIME",
-      "men": [],
+      "men": [
+        {
+          "name": "Dallin Pepper",
+          "score": "4:55.43"
+        },
+        {
+          "name": "James Sprague",
+          "score": "5:18.14"
+        },
+        {
+          "name": "Jayson Hopper",
+          "score": "5:19.08"
+        }
+      ],
       "women": [
         {
           "name": "Ellie Turner",
@@ -537,7 +550,20 @@
       "name": "Jump Pull Yoke",
       "short": "Yoke",
       "scoreLabel": "TIME",
-      "men": [],
+      "men": [
+        {
+          "name": "James Sprague",
+          "score": "3:20.65"
+        },
+        {
+          "name": "Henrik Haapalainen",
+          "score": "3:38.09"
+        },
+        {
+          "name": "Jayson Hopper",
+          "score": "3:39.81"
+        }
+      ],
       "women": [
         {
           "name": "Lucy Campbell",
@@ -555,57 +581,57 @@
     }
   ],
   "leaderboard": {
-    "afterEvent": 15,
-    "afterLabel": "After Event 15",
+    "afterEvent": 17,
+    "afterLabel": "After Event 17 - End of Day 3",
     "men": [
       {
         "name": "James Sprague",
-        "points": 918,
+        "points": 1114,
         "prev": 1
       },
       {
         "name": "Dallin Pepper",
-        "points": 905,
-        "prev": 4
-      },
-      {
-        "name": "Jay Crouch",
-        "points": 890,
+        "points": 1085,
         "prev": 2
       },
       {
-        "name": "Justin Medeiros",
-        "points": 875,
+        "name": "Jay Crouch",
+        "points": 1046,
         "prev": 3
       },
       {
-        "name": "Ricky Garard",
-        "points": 794,
-        "prev": 5
+        "name": "Justin Medeiros",
+        "points": 984,
+        "prev": 4
       },
       {
         "name": "Jayson Hopper",
-        "points": 732,
+        "points": 916,
         "prev": 6
       },
       {
-        "name": "Roman Khrennikov",
-        "points": 703,
-        "prev": 7
+        "name": "Ricky Garard",
+        "points": 906,
+        "prev": 5
       },
       {
         "name": "Jeffrey Adler",
-        "points": 698,
+        "points": 832,
         "prev": 8
       },
       {
-        "name": "Bayley Martin",
-        "points": 694,
-        "prev": 9
+        "name": "Roman Khrennikov",
+        "points": 798,
+        "prev": 7
       },
       {
         "name": "Guilherme Malheiros",
-        "points": 676,
+        "points": 763,
+        "prev": 10
+      },
+      {
+        "name": "Moritz Fiebig",
+        "points": 760,
         "prev": 11
       }
     ],
@@ -660,7 +686,6 @@
         "points": 773,
         "prev": 9
       }
-    ],
-    "afterEventWomen": 17
+    ]
   }
 }

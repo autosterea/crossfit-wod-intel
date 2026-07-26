@@ -665,6 +665,93 @@
         "games.crossfit.com leaderboard",
         "official broadcast results graphic"
       ]
+    },
+    {
+      "id": "2026-16",
+      "order": 16,
+      "stage": "games",
+      "name": "Echo Thruster",
+      "aka": null,
+      "day": "Saturday",
+      "description": "21-18-15 reps for time of Echo bike calories and short-bar thrusters climbing per round (115/135/155 lb men, 85/95/105 lb women). 8-minute cap. The bike-and-thruster core of the 2023 Echo Thruster Final at identical loads; 2023 finished with a lunge, 2026 hands off to Event 17 on the same running clock instead.",
+      "format": "for-time",
+      "scoring": "time",
+      "timeCapMin": 8,
+      "winnerMen": "Dallin Pepper",
+      "winningScoreMen": "4:55.43",
+      "winnerWomen": "Ellie Turner",
+      "winningScoreWomen": "5:54.27",
+      "movements": [
+        "Echo Bike",
+        "Thruster"
+      ],
+      "loads": [
+        "thrusters 115/135/155 lb men, 85/95/105 lb women"
+      ],
+      "equipment": [
+        "echo bike",
+        "barbell"
+      ],
+      "eventTypes": [
+        "couplet",
+        "sprint"
+      ],
+      "modality": "MW",
+      "timeDomain": "short",
+      "loadLevel": "moderate",
+      "environment": "arena",
+      "namedWod": null,
+      "firstAtGames": false,
+      "notes": "The receipt cashed: Pepper, the 2023 Echo Thruster Final champion, won the rerun at 4:55.43 - our picks board fifth hit of the day (Garard E13, Vellner E14, Loewen podium, Malheiros E15, Pepper E16). Sprague answered with 2nd at 5:18.14 in the tightest title race of the week; Hopper 3rd began a huge closing night. Women: Ellie Turner won 5:54.27 over Campbell 6:00.78 and von Rohr 6:07.74, one day after being time-capped twice - the comeback swing of the weekend.",
+      "sources": [
+        "games.crossfit.com leaderboard",
+        "official broadcast"
+      ]
+    },
+    {
+      "id": "2026-17",
+      "order": 17,
+      "stage": "games",
+      "name": "Jump Pull Yoke",
+      "aka": null,
+      "day": "Saturday",
+      "description": "At the 10:00 mark of the Event 16 clock, for time: 20 shuttle box jumps (36/30 in), a seated sled pull (170/140 lb), then 30-foot yoke carries at three rising weights (425/565/665 lb men, 345/405/445 lb women). 6-minute cap; the 665-lb top yoke ties the heaviest ever loaded at the Games (2022 Back Nine).",
+      "format": "for-time",
+      "scoring": "time",
+      "timeCapMin": 6,
+      "winnerMen": "James Sprague",
+      "winningScoreMen": "3:20.65",
+      "winnerWomen": "Lucy Campbell",
+      "winningScoreWomen": "3:16.21",
+      "movements": [
+        "Shuttle Box Jump",
+        "Sled Pull",
+        "Yoke Carry"
+      ],
+      "loads": [
+        "yoke 425/565/665 lb men, 345/405/445 lb women",
+        "sled 170/140 lb"
+      ],
+      "equipment": [
+        "box",
+        "sled",
+        "yoke"
+      ],
+      "eventTypes": [
+        "odd-object",
+        "sprint"
+      ],
+      "modality": "GW",
+      "timeDomain": "short",
+      "loadLevel": "heavy",
+      "environment": "arena",
+      "namedWod": null,
+      "firstAtGames": true,
+      "notes": "The leader finally took one: Sprague won in 3:20.65 - his FIRST event win of the 2026 Games (verified: zero wins through 16 despite leading since Event 7), closing Day 3 up 29 on Pepper. Henrik Haapalainen took 2nd at 3:38.09, days after publicly correcting our injury note - not hurt, just back. Hopper 3rd completed a 3rd-3rd evening that vaulted him to 5th overall. Women: Campbell won 3:16.21 (her third win: swim, hopper, yoke) over Kerstetter and Garnes to cap a 196-point evening that cut the silver gap to 33.",
+      "sources": [
+        "games.crossfit.com leaderboard",
+        "official broadcast"
+      ]
     }
   ]
 }
