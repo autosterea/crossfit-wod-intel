@@ -612,6 +612,27 @@
           "score": "28:03.10"
         }
       ]
+    },
+    {
+      "num": 19,
+      "name": "Roll to Support",
+      "short": "Roll to Support",
+      "scoreLabel": "REPS",
+      "men": [],
+      "women": [
+        {
+          "name": "Paige Rodgers",
+          "score": "23 (4:55)"
+        },
+        {
+          "name": "Arielle Loewen",
+          "score": "23 (4:59)"
+        },
+        {
+          "name": "Elisa Fuliano",
+          "score": "22"
+        }
+      ]
     }
   ],
   "leaderboard": {
@@ -672,54 +693,55 @@
     "women": [
       {
         "name": "Aimee Cringle",
-        "points": 1278,
+        "points": 1322,
         "prev": 1
       },
       {
         "name": "Emma Lawson",
-        "points": 1142,
+        "points": 1178,
         "prev": 2
       },
       {
         "name": "Lucy Campbell",
-        "points": 1137,
+        "points": 1161,
         "prev": 3
       },
       {
-        "name": "Alex Gazan",
-        "points": 923,
+        "name": "Madeline Sturt",
+        "points": 964,
         "prev": 5
       },
       {
-        "name": "Madeline Sturt",
-        "points": 922,
+        "name": "Alex Gazan",
+        "points": 961,
         "prev": 4
       },
       {
-        "name": "Olivia Kerstetter",
-        "points": 887,
+        "name": "Arielle Loewen",
+        "points": 931,
         "prev": 7
       },
       {
-        "name": "Arielle Loewen",
-        "points": 883,
+        "name": "Olivia Kerstetter",
+        "points": 892,
         "prev": 6
       },
       {
         "name": "Paige Rodgers",
-        "points": 821,
-        "prev": 10
-      },
-      {
-        "name": "Danielle Brandon",
-        "points": 818,
+        "points": 871,
         "prev": 8
       },
       {
-        "name": "Ellie Turner",
-        "points": 816,
+        "name": "Elisa Fuliano",
+        "points": 838,
         "prev": 11
+      },
+      {
+        "name": "Danielle Brandon",
+        "points": 834,
+        "prev": 9
       }
-    ]
+    ],
+    "afterEventWomen": 19
   }
 }
