@@ -598,114 +598,127 @@
           "score": "24:36.98"
         }
       ],
-      "women": []
+      "women": [
+        {
+          "name": "Olivia Kerstetter",
+          "score": "27:36.00"
+        },
+        {
+          "name": "Lucy Campbell",
+          "score": "27:46.37"
+        },
+        {
+          "name": "Haley Adams",
+          "score": "28:03.10"
+        }
+      ]
     }
   ],
   "leaderboard": {
-    "afterEvent": 17,
-    "afterLabel": "After Event 17 - End of Day 3",
+    "afterEvent": 18,
+    "afterLabel": "After Event 18",
     "men": [
       {
         "name": "James Sprague",
-        "points": 1114,
+        "points": 1214,
         "prev": 1
       },
       {
         "name": "Dallin Pepper",
-        "points": 1085,
+        "points": 1173,
         "prev": 2
       },
       {
         "name": "Jay Crouch",
-        "points": 1046,
+        "points": 1098,
         "prev": 3
       },
       {
         "name": "Justin Medeiros",
-        "points": 984,
+        "points": 1020,
         "prev": 4
       },
       {
         "name": "Jayson Hopper",
-        "points": 916,
-        "prev": 6
-      },
-      {
-        "name": "Ricky Garard",
-        "points": 906,
+        "points": 1012,
         "prev": 5
       },
       {
-        "name": "Jeffrey Adler",
-        "points": 832,
-        "prev": 8
+        "name": "Ricky Garard",
+        "points": 978,
+        "prev": 6
       },
       {
-        "name": "Roman Khrennikov",
-        "points": 798,
+        "name": "Jeffrey Adler",
+        "points": 892,
         "prev": 7
       },
       {
-        "name": "Guilherme Malheiros",
-        "points": 763,
-        "prev": 10
+        "name": "Roman Khrennikov",
+        "points": 890,
+        "prev": 8
       },
       {
         "name": "Moritz Fiebig",
-        "points": 760,
-        "prev": 11
+        "points": 836,
+        "prev": 10
+      },
+      {
+        "name": "Guilherme Malheiros",
+        "points": 784,
+        "prev": 9
       }
     ],
     "women": [
       {
         "name": "Aimee Cringle",
-        "points": 1190,
+        "points": 1278,
         "prev": 1
       },
       {
         "name": "Emma Lawson",
-        "points": 1074,
+        "points": 1142,
         "prev": 2
       },
       {
         "name": "Lucy Campbell",
-        "points": 1041,
+        "points": 1137,
         "prev": 3
       },
       {
-        "name": "Madeline Sturt",
-        "points": 877,
-        "prev": 4
-      },
-      {
         "name": "Alex Gazan",
-        "points": 863,
+        "points": 923,
         "prev": 5
       },
       {
-        "name": "Arielle Loewen",
-        "points": 811,
-        "prev": 7
+        "name": "Madeline Sturt",
+        "points": 922,
+        "prev": 4
       },
       {
         "name": "Olivia Kerstetter",
-        "points": 787,
-        "prev": 13
+        "points": 887,
+        "prev": 7
       },
       {
-        "name": "Danielle Brandon",
-        "points": 782,
-        "prev": 10
-      },
-      {
-        "name": "Elisa Fuliano",
-        "points": 777,
+        "name": "Arielle Loewen",
+        "points": 883,
         "prev": 6
       },
       {
         "name": "Paige Rodgers",
-        "points": 773,
-        "prev": 9
+        "points": 821,
+        "prev": 10
+      },
+      {
+        "name": "Danielle Brandon",
+        "points": 818,
+        "prev": 8
+      },
+      {
+        "name": "Ellie Turner",
+        "points": 816,
+        "prev": 11
       }
     ]
   }

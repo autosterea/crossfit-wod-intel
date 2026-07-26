@@ -752,6 +752,46 @@
         "games.crossfit.com leaderboard",
         "official broadcast"
       ]
+    },
+    {
+      "id": "2026-18",
+      "order": 18,
+      "stage": "games",
+      "name": "Machine 7200",
+      "aka": null,
+      "day": "Sunday",
+      "description": "For time: 3,600-meter row then 3,600-meter ski (alternating row/ski segments totaling 7,200 m of machine work). Time cap 30 min men / 35 min women. A pure engine test to open the final day.",
+      "format": "for-time",
+      "scoring": "time",
+      "timeCapMin": 30,
+      "winnerMen": "James Sprague",
+      "winningScoreMen": "24:22.46",
+      "winnerWomen": "Olivia Kerstetter",
+      "winningScoreWomen": "27:36.00",
+      "movements": [
+        "Row",
+        "Ski"
+      ],
+      "loads": [],
+      "equipment": [
+        "rower",
+        "ski erg"
+      ],
+      "eventTypes": [
+        "endurance",
+        "machine"
+      ],
+      "modality": "M",
+      "timeDomain": "long",
+      "loadLevel": "none",
+      "environment": "arena",
+      "namedWod": null,
+      "firstAtGames": false,
+      "notes": "Sprague won wire to wire (24:22.46) - his second straight event win after the E17 yoke - leading off the rower and extending on the ski, stretching his overall lead over Pepper (4th) from 29 to 41 with two events left; he is bidding to be the first man to win titles in non-consecutive years. Hopper 2nd (third straight podium), Khrennikov 3rd. Adler, the 2025 machine-event winner, finished 11th - the pre-event history read did not hold. Women: Olivia Kerstetter won 27:36.00 over Campbell 27:46.37 and Adams 28:03.10, and the result detonated the silver race - Campbell 2nd while Lawson went 9th cut the gap from 33 points to FIVE (Lawson 1142, Campbell 1137) with the Fibonacci Final to decide it; Gazan (923) and Sturt (922) sit one point apart for 4th. Cringle 4th on the event, lead 136. Both prior machine-event winners in the field (Adler 2025, Mertens 2023) finished off the podium.",
+      "sources": [
+        "games.crossfit.com leaderboard",
+        "official broadcast results graphic"
+      ]
     }
   ]
 }
