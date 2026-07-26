@@ -353,6 +353,138 @@ type Slide =
 type Carousel = { id: string; label: string; caption: string; slides: Slide[] }
 const CAROUSELS: Carousel[] = [
   {
+    "id": "champs-day3",
+    "label": "Champions Check-In - Day 3",
+    "caption": "CHAMPIONS CHECK-IN, DAY 3 - the day the champions' stories split four ways.\n\nTHE LEADER FINALLY WON: James Sprague (2024 champion) has been winless while sitting atop the board almost continuously since Event 7. Saturday night, with Pepper nine-turned-thirteen points behind him and closing, he won the heaviest test of the week - the 665-lb yoke gauntlet - in 3:20.65. First win of the week, lead out to 29, and per the broadcast, a bid to become the first man ever to win titles in non-consecutive years.\n\nTHE DEFENDER IS CLIMBING: Jayson Hopper (2025 champion) went 3rd on the Echo Thruster and 3rd on the yoke inside one 16-minute window - a double-bronze evening that lifted him to 5th overall.\n\nTHE MACHINE AWAITS: Jeffrey Adler (2023 champion) climbed to 7th - and Sunday opens with a machines-only event. Our almanac note: Adler won the 2025 Run/Row/Run, the most recent machine event in Games history.\n\nTHE HARD DAY: Justin Medeiros (2021, 2022 champion) had the day the title race will remember - a no-rep on his final snatch bar for control overhead. The broadcast's call: 'the door wide open to catch Sprague has all but shut.' He sits 4th at 984, still fighting.\n\nFour champions, all inside the top seven, one day left. Link in bio.",
+    "slides": [
+      {
+        "type": "cover",
+        "kicker": "Champions Check-In - Day 3",
+        "headline": "FOUR CROWNS,\nFOUR STORIES",
+        "sub": "One finally won. One is climbing. One waits for his machines. One got the toughest call of the day. Swipe."
+      },
+      {
+        "type": "point",
+        "num": 1,
+        "kicker": "James Sprague - 2024 Champion",
+        "headline": "THE LEADER\nFINALLY WON",
+        "body": "Winless through sixteen events while holding the overall lead almost continuously since Event 7 - Pepper borrowed the jersey for exactly one event on Friday. Then Pepper won the Echo Thruster and cut the race to its narrowest - and Sprague answered by winning the heaviest test of the week, the 665-lb yoke gauntlet, in 3:20.65. His first event win of these Games, a 29-point lead with three events left, and per the broadcast, a shot at becoming the first man ever to win titles in non-consecutive years.",
+        "source": "Official leaderboard + Games broadcast"
+      },
+      {
+        "type": "point",
+        "num": 2,
+        "kicker": "Hopper + Adler",
+        "headline": "THE CLIMBER AND\nTHE MACHINE MAN",
+        "body": "Jayson Hopper, the defending champion, went 3rd and 3rd in the two-event night window - a double bronze that moved him to 5th overall at 916. Jeffrey Adler, the 2023 champion, climbed to 7th - and Sunday opens with a machines-only test: row 3,600m, ski 3,600m. Our almanac's note for the morning: Adler won the most recent machine event in Games history, the 2025 Run/Row/Run.",
+        "source": "Official leaderboard + Persistence Athletics Games Almanac"
+      },
+      {
+        "type": "point",
+        "num": 3,
+        "kicker": "Justin Medeiros - 2021 + 2022 Champion",
+        "headline": "THE HARDEST\nCALL OF THE DAY",
+        "body": "The two-time champion's Saturday turned on one bar: he stood up his final snatch attempt but never controlled it overhead, and the judges no-repped it. The broadcast called it straight: 'good call, tough break' - and then, 'the door wide open to catch Sprague has all but shut.' He ended the day 4th at 984. Champions do not get garbage time; every miss is expensive. He has three events to make one cheap.",
+        "source": "Games broadcast, Event 15 + official leaderboard"
+      },
+      {
+        "type": "stat",
+        "kicker": "The Crown Count",
+        "headline": "ALL FOUR,\nTOP SEVEN",
+        "stats": [
+          {
+            "big": "1st",
+            "label": "Sprague (2024) - 1114 points, first event win banked, lead 29"
+          },
+          {
+            "big": "4th",
+            "label": "Medeiros (2021, 2022) - 984, the no-rep day, still in the fight"
+          },
+          {
+            "big": "5th",
+            "label": "Hopper (2025) - 916, after a double-bronze night"
+          },
+          {
+            "big": "7th",
+            "label": "Adler (2023) - 832, with his machines waiting Sunday morning"
+          }
+        ],
+        "footnote": "First Games ever with four former men's champions in one field, per the broadcast - and all four are inside the top seven with three events left."
+      },
+      {
+        "type": "cta",
+        "headline": "SUNDAY:\nCROWNS COLLIDE",
+        "body": "Three events. A 29-point title race. A defending champion climbing and two more crowns hunting the podium. Live cards all day - link in bio."
+      }
+    ]
+  },
+  {
+    "id": "rookie-day3",
+    "label": "Rookie Report - Day 3",
+    "caption": "ROOKIE REPORT, DAY 3 - the day a first-year athlete won a CrossFit Games event.\n\nTHE HEADLINE: Hannah Black, 30th overall entering the event, won the Speed Snatch outright - 3 bars in 20.55 seconds, the fastest woman in the field on her favorite test. Her words after, verbatim from the floor: 'I'm a home run hitter and unfortunately for me that comes with a few strikeouts... I'm just really excited that I got to execute on my favorite event so far.'\n\nTHE HEARTBREAK: 19-year-old Bergros Bjornsdottir - the youngest athlete in the field, first Games - led that same snatch final all the way to the last bar, looked over her shoulder mid-rep, and missed 185. Fourth place, and per the broadcast, one glance was the difference. She'll be back.\n\nTHE SPEED: Rachel Noel sprinted to 2nd on the 500m (1:21.31) - 0.33 seconds off the event winner over the full 500 meters. Dylan Hamming ran 4th in the men's sprint (1:14.18) and made the snatch final, finishing 6th there.\n\nThe class of 2026 - all verified first-year athletes in our database - now has an event win to its name. Full report at the link in bio.",
+    "slides": [
+      {
+        "type": "cover",
+        "kicker": "Rookie Report - Day 3",
+        "headline": "A ROOKIE\nWON TODAY",
+        "sub": "Hannah Black took the Speed Snatch outright. Bergros led the final to the last bar at 19. Noel sprinted to 2nd. The class of 2026 arrived. Swipe."
+      },
+      {
+        "type": "point",
+        "num": 1,
+        "kicker": "The Breakthrough",
+        "headline": "BLACK WINS\nTHE SNATCH",
+        "body": "Hannah Black came into Event 15 sitting 30th overall - and won it outright: three bars in 20.55 seconds, the heaviest listed snatch in the women's field (231 lb per the broadcast) finally getting her stage. Per the broadcast, she is the 10th athlete to take a first career event win at these Games. Her advice to the young lifters watching, verbatim: 'There's no like, cutting corners. Building a strength base takes time... it's hard work over a period of time and you'll get there.'",
+        "source": "Official leaderboard + Games broadcast interview"
+      },
+      {
+        "type": "point",
+        "num": 2,
+        "kicker": "The Heartbreak",
+        "headline": "ONE GLANCE\nAT NINETEEN",
+        "body": "Bergros Bjornsdottir - youngest in the field, first Games, CrossFit Reykjavik - squat-snatched her way into the final and led Hannah Black to the very last bar. Then, in the broadcast's words, she 'looked over... lost focus' mid-rep and missed 185. Fourth on the event. The margin between a teenage Games event win and a lesson was one shoulder check. Remember the name.",
+        "source": "Games broadcast, Event 15 final"
+      },
+      {
+        "type": "point",
+        "num": 3,
+        "kicker": "The Speed",
+        "headline": "NOEL AND HAMMING\nCAN FLY",
+        "body": "Rachel Noel took 2nd in the women's 500m sprint at 1:21.31, 0.33 seconds behind the event winner Cringle - pure footspeed from the same rookie whose pacing IQ led our Friday rookie report. On the men's side, Dylan Hamming ran 4th in the sprint (1:14.18), then made the snatch final and finished 6th there - a two-event speed-and-barbell day most veterans would take.",
+        "source": "Official leaderboard, Events 13 and 15"
+      },
+      {
+        "type": "stat",
+        "kicker": "The Class Of 2026",
+        "headline": "ROOKIES,\nBY THE NUMBERS",
+        "stats": [
+          {
+            "big": "1",
+            "label": "event WIN - Hannah Black's Speed Snatch, in 20.55 seconds"
+          },
+          {
+            "big": "2nd",
+            "label": "Noel in the 500m sprint - a rookie on a sprint podium"
+          },
+          {
+            "big": "19",
+            "label": "Bergros' age - and she led an event final to its last bar"
+          },
+          {
+            "big": "4th + 6th",
+            "label": "Hamming's sprint and snatch-final day on the men's side"
+          }
+        ],
+        "footnote": "Rookie statuses verified in our athlete database (first Games appearance, 2026). Placements per official broadcast results graphics and the leaderboard."
+      },
+      {
+        "type": "cta",
+        "headline": "ONE DAY\nLEFT TO LEARN",
+        "body": "Three events Sunday. The rookies have nothing to defend and everything to take. Full rookie coverage and every profile - link in bio."
+      }
+    ]
+  },
+  {
     "id": "day3-records",
     "label": "Day 3 Records + Receipts",
     "caption": "DAY 3 RECORDS AND RECEIPTS - the numbers nobody else pulled.\n\nTHE RECEIPTS: five picks boards posted before Saturday's five events. Five hits. Garard won the sprint (our No. 1, on his 2024 Track and Field win). Vellner won the Pig (No. 1, on his 2021 win at the same weight). Loewen podiumed the Pig (top women's pick, on her 2023 runner-up). Malheiros won the snatch (No. 1, on his 2021 max-snatch title). Pepper won the Echo Thruster (the 2023 Echo champion, receipt printed on the picks board). We don't guess. We check the history.\n\nTHE HONEST GRADE: our Event 20 gap analysis named HSPU, kettlebells and lunges as the biggest untested pieces - the Fibonacci Final is exactly those three. We predicted the wrong combination (clean and jerk + ring muscle-ups). Ingredients right, recipe wrong. We publish both halves.\n\nTHE BOOKS: Cringle's five event wins and a 1,190-point total through 17. Campbell's seventh career win (third of these Games). Vellner's tenth career win in his tenth Games. Sprague's first win of the week on the heaviest test, after leading since Event 7. Hannah Black, the 10th first-time event winner of these Games per the broadcast. And Henrik Haapalainen - who told us himself he is not racing hurt - stood on the yoke podium.\n\nEverything sourced: official board, broadcast, our almanac. Link in bio.",
