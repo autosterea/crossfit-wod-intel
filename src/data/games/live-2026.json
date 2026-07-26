@@ -620,16 +620,16 @@
       "scoreLabel": "REPS",
       "men": [
         {
+          "name": "Bayley Martin",
+          "score": "25 reps"
+        },
+        {
           "name": "Ty Jenkins",
           "score": "24 reps"
         },
         {
-          "name": "Bayley Martin",
-          "score": "24 reps"
-        },
-        {
           "name": "Victor Hoffer",
-          "score": "21 reps"
+          "score": "22 reps"
         }
       ],
       "women": [
@@ -649,58 +649,58 @@
     }
   ],
   "leaderboard": {
-    "afterEvent": 18,
-    "afterLabel": "After Event 18",
+    "afterEvent": 19,
+    "afterLabel": "After Event 19",
     "men": [
       {
         "name": "James Sprague",
-        "points": 1214,
+        "points": 1254,
         "prev": 1
       },
       {
         "name": "Dallin Pepper",
-        "points": 1173,
+        "points": 1211,
         "prev": 2
       },
       {
         "name": "Jay Crouch",
-        "points": 1098,
+        "points": 1132,
         "prev": 3
       },
       {
         "name": "Justin Medeiros",
-        "points": 1020,
+        "points": 1032,
         "prev": 4
       },
       {
         "name": "Jayson Hopper",
-        "points": 1012,
+        "points": 1014,
         "prev": 5
       },
       {
         "name": "Ricky Garard",
-        "points": 978,
+        "points": 1008,
         "prev": 6
       },
       {
-        "name": "Jeffrey Adler",
-        "points": 892,
-        "prev": 7
-      },
-      {
         "name": "Roman Khrennikov",
-        "points": 890,
+        "points": 922,
         "prev": 8
       },
       {
+        "name": "Jeffrey Adler",
+        "points": 910,
+        "prev": 7
+      },
+      {
         "name": "Moritz Fiebig",
-        "points": 836,
-        "prev": 10
+        "points": 850,
+        "prev": 9
       },
       {
         "name": "Guilherme Malheiros",
-        "points": 784,
-        "prev": 9
+        "points": 804,
+        "prev": 10
       }
     ],
     "women": [
@@ -754,7 +754,6 @@
         "points": 834,
         "prev": 9
       }
-    ],
-    "afterEventWomen": 19
+    ]
   }
 }
