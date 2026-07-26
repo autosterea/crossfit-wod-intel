@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-26T18:08:26.551Z",
+  "updatedAt": "2026-07-26T22:08:47.961Z",
   "season": 2026,
   "stage": "games",
   "stageLabel": "2026 CrossFit Games",
@@ -88,70 +88,70 @@
         "name": "Aimee Cringle",
         "country": "United Kingdom",
         "countryCode": "GB",
-        "points": "1278"
+        "points": "1322"
       },
       {
         "rank": 2,
         "name": "Emma Lawson",
         "country": "Canada",
         "countryCode": "CA",
-        "points": "1142"
+        "points": "1178"
       },
       {
         "rank": 3,
         "name": "Lucy Campbell",
         "country": "United Kingdom",
         "countryCode": "GB",
-        "points": "1137"
+        "points": "1161"
       },
       {
         "rank": 4,
-        "name": "Alex Gazan",
-        "country": "United States",
-        "countryCode": "US",
-        "points": "923"
-      },
-      {
-        "rank": 5,
         "name": "Madeline Sturt",
         "country": "Australia",
         "countryCode": "AU",
-        "points": "922"
+        "points": "964"
+      },
+      {
+        "rank": 5,
+        "name": "Alex Gazan",
+        "country": "United States",
+        "countryCode": "US",
+        "points": "961"
       },
       {
         "rank": 6,
-        "name": "Olivia Kerstetter",
-        "country": "United States",
-        "countryCode": "US",
-        "points": "887"
-      },
-      {
-        "rank": 7,
         "name": "Arielle Loewen",
         "country": "United States",
         "countryCode": "US",
-        "points": "883"
+        "points": "931"
+      },
+      {
+        "rank": 7,
+        "name": "Olivia Kerstetter",
+        "country": "United States",
+        "countryCode": "US",
+        "points": "892"
       },
       {
         "rank": 8,
         "name": "Paige Rodgers",
         "country": "United States",
         "countryCode": "US",
-        "points": "821"
+        "points": "871"
       },
       {
         "rank": 9,
-        "name": "Danielle Brandon",
-        "country": "United States",
-        "countryCode": "US",
-        "points": "818"
+        "name": "Elisa Fuliano",
+        "country": "Italy",
+        "countryCode": "IT",
+        "points": "838"
       },
       {
         "rank": 10,
-        "name": "Ellie Turner",
-        "country": "Australia",
-        "countryCode": "AU",
-        "points": "816"
+        "name": "Danielle Brandon",
+        "country": "United States",
+        "countryCode": "US",
+        "points": "834"
       }
     ]
   }
