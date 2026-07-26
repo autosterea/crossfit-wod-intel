@@ -510,6 +510,48 @@
           "score": "3 (24.94)"
         }
       ]
+    },
+    {
+      "num": 16,
+      "name": "Echo Thruster",
+      "short": "Echo Thruster",
+      "scoreLabel": "TIME",
+      "men": [],
+      "women": [
+        {
+          "name": "Ellie Turner",
+          "score": "5:54.27"
+        },
+        {
+          "name": "Lucy Campbell",
+          "score": "6:00.78"
+        },
+        {
+          "name": "Mirjam von Rohr",
+          "score": "6:07.74"
+        }
+      ]
+    },
+    {
+      "num": 17,
+      "name": "Jump Pull Yoke",
+      "short": "Yoke",
+      "scoreLabel": "TIME",
+      "men": [],
+      "women": [
+        {
+          "name": "Lucy Campbell",
+          "score": "3:16.21"
+        },
+        {
+          "name": "Olivia Kerstetter",
+          "score": "3:30.05"
+        },
+        {
+          "name": "Matilde Garnes",
+          "score": "3:38.46"
+        }
+      ]
     }
   ],
   "leaderboard": {
@@ -570,54 +612,55 @@
     "women": [
       {
         "name": "Aimee Cringle",
-        "points": 1028,
+        "points": 1190,
         "prev": 1
       },
       {
         "name": "Emma Lawson",
-        "points": 908,
+        "points": 1074,
         "prev": 2
       },
       {
         "name": "Lucy Campbell",
-        "points": 845,
+        "points": 1041,
         "prev": 3
       },
       {
         "name": "Madeline Sturt",
-        "points": 753,
+        "points": 877,
         "prev": 4
       },
       {
         "name": "Alex Gazan",
-        "points": 749,
-        "prev": 6
-      },
-      {
-        "name": "Elisa Fuliano",
-        "points": 747,
-        "prev": 7
-      },
-      {
-        "name": "Arielle Loewen",
-        "points": 720,
+        "points": 863,
         "prev": 5
       },
       {
-        "name": "Paige Rodgers",
-        "points": 696,
-        "prev": 8
+        "name": "Arielle Loewen",
+        "points": 811,
+        "prev": 7
       },
       {
-        "name": "Kyra Milligan",
-        "points": 693,
-        "prev": 10
+        "name": "Olivia Kerstetter",
+        "points": 787,
+        "prev": 13
       },
       {
         "name": "Danielle Brandon",
-        "points": 691,
+        "points": 782,
+        "prev": 10
+      },
+      {
+        "name": "Elisa Fuliano",
+        "points": 777,
+        "prev": 6
+      },
+      {
+        "name": "Paige Rodgers",
+        "points": 773,
         "prev": 9
       }
-    ]
+    ],
+    "afterEventWomen": 17
   }
 }
