@@ -618,7 +618,20 @@
       "name": "Roll to Support",
       "short": "Roll to Support",
       "scoreLabel": "REPS",
-      "men": [],
+      "men": [
+        {
+          "name": "Ty Jenkins",
+          "score": "24 reps"
+        },
+        {
+          "name": "Bayley Martin",
+          "score": "24 reps"
+        },
+        {
+          "name": "Victor Hoffer",
+          "score": "21 reps"
+        }
+      ],
       "women": [
         {
           "name": "Paige Rodgers",
