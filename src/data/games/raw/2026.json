@@ -5,11 +5,11 @@
   "region": "California",
   "country": "USA",
   "dates": "July 22-26, 2026",
-  "championMen": null,
-  "championWomen": null,
+  "championMen": "James Sprague",
+  "championWomen": "Aimee Cringle",
   "fieldMen": 30,
   "fieldWomen": 30,
-  "inProgress": true,
+  "inProgress": false,
   "formatNotes": "Format overhaul: 20 scored events for 30 men and 30 women across four competition days - July 22, 24, 25, and 26 - with no individual events on Thursday, July 23; the most events in a single Games in the sport's history. Day 1 (July 22) sent the field off-site for seven events at The Ranch in Aromas and the Morgan Hill Outdoor Complex, headlined by a reprised 2007 Hopper and the return of the CrossFit Total, whose three lifts (back squat, shoulder press, deadlift) are each scored as separate events worth a reduced points scale versus a standard event. Event 7 (Swim Standard), along with later events 9, 10, 16, and 17, stream exclusively on FloElite rather than the main CrossFit Games broadcast.",
   "yearSummary": "The 2026 Games are underway in San Jose, the arena days moving to SAP Center after two years in Fort Worth and Albany, with a record 20 scored events spread across four competition days and no individual events on the Thursday rest day. Day 1 sent both divisions off-site for seven events: a rerun of the inaugural 2007 Hopper, a 7,200-meter trail run at The Ranch, all three lifts of the CrossFit Total scored as separate events, a grass-oval bike race, and a pool swim/burpee event exclusive to FloElite. Jay Crouch, who won the reprised Hopper opener alongside his fiancee Madeline Sturt, held the men's overall lead wire-to-wire through six events before the closing pool swim flipped the top of the leaderboard. Aimee Cringle was the story of the women's field, winning three of the seven Day 1 events - the trail run, the CrossFit Total deadlift, and the bike race.",
   "sources": [
@@ -829,6 +829,51 @@
       "sources": [
         "official broadcast results graphic",
         "games.crossfit.com leaderboard"
+      ]
+    },
+    {
+      "id": "2026-20",
+      "order": 20,
+      "stage": "games",
+      "name": "Fibonacci Final",
+      "aka": null,
+      "day": "Sunday",
+      "description": "The 2018 Fibonacci Final rerun and the last event of the 2026 season: ascending 5-8-13 reps of deficit handstand push-ups (14/8 in) and double-kettlebell deadlifts (203/124 lb), then one 89-foot double-kettlebell overhead walking lunge (53/35 lb). 10-minute cap. Third Fibonacci in Games history.",
+      "format": "for-time",
+      "scoring": "time",
+      "timeCapMin": 10,
+      "winnerMen": "Guilherme Malheiros",
+      "winningScoreMen": "5:16.70",
+      "winnerWomen": "Olivia Kerstetter",
+      "winningScoreWomen": "3:46.67",
+      "movements": [
+        "Deficit Handstand Push-Up",
+        "Kettlebell Deadlift",
+        "Overhead Walking Lunge"
+      ],
+      "loads": [
+        "deficit 14/8 in",
+        "double KB deadlift 203/124 lb",
+        "OH KB lunge 53/35 lb"
+      ],
+      "equipment": [
+        "parallettes",
+        "kettlebell"
+      ],
+      "eventTypes": [
+        "chipper",
+        "gymnastics"
+      ],
+      "modality": "GW",
+      "timeDomain": "short",
+      "loadLevel": "moderate",
+      "environment": "arena",
+      "namedWod": "Fibonacci Final",
+      "firstAtGames": false,
+      "notes": "The season closer. Guilherme Malheiros won it (5:16.70, his THIRD event win of the Games after the throw and the speed snatch) over Jay Crouch (5:23.94) and Ricky Garard (5:48.21); Kerstetter won the women (3:46.67), her second win of the day. The Fibonacci settled the podiums beneath the champions: Pepper closed his gap on Sprague from 43 to 27 with a 6th but could not catch him; Crouch (2nd on the event) locked 3rd overall; Medeiros held 4th. FINAL CHAMPIONS: James Sprague (1318) the Fittest Man on Earth - his second title, the first won in non-consecutive years (2024, 2026) - and Aimee Cringle (1394) the Fittest Woman on Earth, both training out of Brute Strength. Our gap analysis had named HSPU, kettlebells and lunges as the untested movements the finale would use; the recipe (deficit HSPU + KB deadlift + KB lunge) hit all three - ingredients right, combination the 2018 Fibonacci not our clean-and-jerk guess.",
+      "sources": [
+        "games.crossfit.com leaderboard",
+        "official broadcast"
       ]
     }
   ]
