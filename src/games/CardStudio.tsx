@@ -353,6 +353,244 @@ type Slide =
 type Carousel = { id: string; label: string; caption: string; slides: Slide[] }
 const CAROUSELS: Carousel[] = [
   {
+    "id": "games-retrospective-2026",
+    "label": "2026 Games: How It Went (the data)",
+    "caption": "HOW THE 2026 GAMES WENT - the whole thing, by the data. We ran all 20 events through CrossFit's own programming lens the way we do 6,800 daily WODs, and the verdict is clear: this was the most complete test the sport has ever built.\n\nTHE BREADTH: 20 events touched every modal domain - four pure-engine tests, five pure-barbell, two pure-gymnastics, and nine mixed - and every time domain, from a max deadlift and a single sandbag throw for distance to a 40-minute trail run and a 7,200m machine grind. Work capacity across broad time and modal domains, exactly as the definition demands.\n\nTHE PROOF IT WORKED: 23 different athletes won at least one event - 12 men, 11 women. No single specialist could hide, and no all-rounder could coast. That spread is the whole argument for a 20-event Games.\n\nTHE CHAMPIONS EARNED IT: Cringle five wins and a 136-point margin; Sprague led almost wire to wire and closed with wins in the yoke and the machine. Both tested across everything, both on top.\n\nAND OUR RECEIPTS: our almanac-based picks called the winners of the sprint, the Pig, the snatch, the Echo Thruster and a rings podium before those events ran, and our gap analysis named the exact movements the Fibonacci finale used. A history read, grounded in 20 years of data.\n\nThe most complete Games ever. Full breakdown at the link in bio.",
+    "slides": [
+      {
+        "type": "cover",
+        "kicker": "The 2026 Games - The Data",
+        "headline": "THE MOST\nCOMPLETE TEST",
+        "sub": "20 events through CrossFit's own programming lens. How the biggest Games in history actually went. Swipe."
+      },
+      {
+        "type": "bars",
+        "kicker": "Modal Domains - all 20 events",
+        "headline": "EVERY DOMAIN,\nTESTED",
+        "bars": [
+          {
+            "label": "Mixed (M+G+W blends)",
+            "pct": 100,
+            "display": "9 events",
+            "color": "#91C640"
+          },
+          {
+            "label": "Pure barbell (W)",
+            "pct": 56,
+            "display": "5 events",
+            "color": "#F4C64A"
+          },
+          {
+            "label": "Pure engine (M)",
+            "pct": 44,
+            "display": "4 events",
+            "color": "#60a5fa"
+          },
+          {
+            "label": "Pure gymnastics (G)",
+            "pct": 22,
+            "display": "2 events",
+            "color": "#C9D2DA"
+          }
+        ],
+        "footnote": "M = monostructural, G = gymnastics, W = weightlifting, per the L1 model. Nine mixed events plus eleven that isolated a single domain - the full spectrum."
+      },
+      {
+        "type": "bars",
+        "kicker": "Time Domains - all 20 events",
+        "headline": "SECONDS TO\nFORTY MINUTES",
+        "bars": [
+          {
+            "label": "Short, 2-16 min",
+            "pct": 100,
+            "display": "6 events",
+            "color": "#91C640"
+          },
+          {
+            "label": "Sprint, under 2 min",
+            "pct": 67,
+            "display": "4 events",
+            "color": "#F4C64A"
+          },
+          {
+            "label": "Max effort, no clock",
+            "pct": 67,
+            "display": "4 events",
+            "color": "#CD8B5B"
+          },
+          {
+            "label": "Medium, 6-20 min",
+            "pct": 67,
+            "display": "4 events",
+            "color": "#60a5fa"
+          },
+          {
+            "label": "Long, 25-40 min",
+            "pct": 33,
+            "display": "2 events",
+            "color": "#C9D2DA"
+          }
+        ],
+        "footnote": "From a single max sandbag throw and three no-clock max lifts to the 7,200m trail run and the row-ski machine grind. Every band, deliberately."
+      },
+      {
+        "type": "stat",
+        "kicker": "The Proof It Worked",
+        "headline": "TWENTY-THREE\nWINNERS",
+        "stats": [
+          {
+            "big": "20",
+            "label": "events - the biggest CrossFit Games ever by event count, in the sport's 20th year"
+          },
+          {
+            "big": "12",
+            "label": "different men won at least one event"
+          },
+          {
+            "big": "11",
+            "label": "different women won at least one event"
+          },
+          {
+            "big": "23",
+            "label": "total athletes with an event win - no specialist could hide, no all-rounder could coast"
+          }
+        ],
+        "footnote": "That spread across 20 events is the entire argument for testing work capacity across broad time and modal domains."
+      },
+      {
+        "type": "point",
+        "num": 1,
+        "kicker": "The Champions Earned It",
+        "headline": "TESTED ACROSS\nEVERYTHING",
+        "body": "Aimee Cringle won five events spanning a trail run, a max deadlift, a bike race, a sprint and a Pig chipper - then held top-tier in nearly all the rest for a 136-point margin. James Sprague led from Event 7 without a single win through sixteen tests, then took the yoke and the machine back to back to close it out. Neither won by specializing. Both won by being complete. That is what the 20-event format rewards.",
+        "source": "Official leaderboard + Persistence Athletics Games Almanac"
+      },
+      {
+        "type": "point",
+        "num": 2,
+        "kicker": "The Receipts",
+        "headline": "WE READ THE\nHISTORY RIGHT",
+        "body": "Before the events ran, our almanac-based picks called the winners of the 500m sprint (Garard), the Triple Pig (Vellner), the Speed Snatch (Malheiros) and the Echo Thruster (Pepper), plus a rings podium (Hoffer) - every one posted pre-event. Our gap analysis named handstand push-ups, kettlebells and lunges as the finale's untested movements, and the Fibonacci used exactly those three. Ingredients right, one recipe missed - and we graded it in public. A 20-year database, working.",
+        "source": "Persistence Athletics picks boards (posted pre-event) + official results"
+      },
+      {
+        "type": "cta",
+        "headline": "THE MOST\nCOMPLETE GAMES.",
+        "body": "Every event, both champions, the full modality breakdown and the live-turned-final leaderboard are on the site - and the almanac now holds all 221-plus events of Games history. Link in bio."
+      }
+    ]
+  },
+  {
+    "id": "champions-2026",
+    "label": "2026 Champions Crowned",
+    "caption": "THE 2026 CROSSFIT GAMES ARE COMPLETE - and we have two new names atop the sport.\n\nJAMES SPRAGUE, Fittest Man on Earth. His second title, and the FIRST man ever to win in non-consecutive years (2024, then 2026). He led from Event 7 almost wire to wire without winning a single event through sixteen tests - then won the yoke and the machine back to back when it mattered most. Unshakable. Final: 1318, over fellow Brute athlete Dallin Pepper (1291) and Jay Crouch (1228).\n\nAIMEE CRINGLE, Fittest Woman on Earth. Great Britain's first. Five event wins, a fortress of a week, a 136-point final margin - the most dominant first-time champion in years. Her words: \"It doesn't feel real. I couldn't do it without these guys.\" Final: 1394, over Emma Lawson (1258) and Lucy Campbell (1229).\n\nBoth champions train out of Brute Strength - the clean sweep of the crowns our Camp Wars series tracked all week. Twenty events, the biggest test the sport has ever run, and it produced two worthy champions. Full breakdown + every final placing at the link in bio.",
+    "slides": [
+      {
+        "type": "cover",
+        "kicker": "The 2026 CrossFit Games",
+        "headline": "TWO NEW\nCHAMPIONS",
+        "sub": "Twenty events. The biggest test in the sport's history. Meet your 2026 Fittest on Earth. Swipe."
+      },
+      {
+        "type": "point",
+        "num": 1,
+        "kicker": "Fittest Man on Earth",
+        "headline": "JAMES SPRAGUE\n1318",
+        "body": "His second title - and the FIRST man ever to win in non-consecutive years (2024, 2026). He led from Event 7 almost wire to wire without an event win through sixteen tests, survived a scoring-revision scare and a 14th on the snatch that shrank his lead, then won the yoke and the machine back to back when it mattered most. The definition of unshakable. He held off fellow Brute athlete Dallin Pepper by 27.",
+        "source": "Official final leaderboard, 20 events"
+      },
+      {
+        "type": "point",
+        "num": 2,
+        "kicker": "Fittest Woman on Earth",
+        "headline": "AIMEE CRINGLE\n1394",
+        "body": "Great Britain's first Fittest Woman on Earth, and one of the most dominant first-time champions the sport has seen: five event wins, a top-tier finish in nearly everything, and a 136-point final margin. Her Triple Pig win by 1:47 was the signature. Her words at the line: 'It doesn't feel real. I couldn't do it without these guys.' Her mom watched from home; her corner was mat-side.",
+        "source": "Official final leaderboard, 20 events"
+      },
+      {
+        "type": "movement",
+        "kicker": "Final Podium - Men",
+        "headline": "THE MEN'S\nPODIUM",
+        "rows": [
+          {
+            "rank": 1,
+            "name": "James Sprague",
+            "pts": 1318,
+            "delta": null
+          },
+          {
+            "rank": 2,
+            "name": "Dallin Pepper",
+            "pts": 1291,
+            "delta": null
+          },
+          {
+            "rank": 3,
+            "name": "Jay Crouch",
+            "pts": 1228,
+            "delta": null
+          }
+        ],
+        "note": "Pepper closed to within 27 on the Fibonacci finale but never caught the jersey. Medeiros 4th (1104), Garard 5th (1100)."
+      },
+      {
+        "type": "movement",
+        "kicker": "Final Podium - Women",
+        "headline": "THE WOMEN'S\nPODIUM",
+        "rows": [
+          {
+            "rank": 1,
+            "name": "Aimee Cringle",
+            "pts": 1394,
+            "delta": null
+          },
+          {
+            "rank": 2,
+            "name": "Emma Lawson",
+            "pts": 1258,
+            "delta": null
+          },
+          {
+            "rank": 3,
+            "name": "Lucy Campbell",
+            "pts": 1229,
+            "delta": null
+          }
+        ],
+        "note": "Lawson held off Campbell by 29 for the silver after a weekend-long duel. Gazan 4th (1041), Sturt 5th (1026)."
+      },
+      {
+        "type": "stat",
+        "kicker": "One Camp, Both Crowns",
+        "headline": "THE BRUTE\nSWEEP",
+        "stats": [
+          {
+            "big": "2/2",
+            "label": "both champions - Sprague and Cringle - train out of Brute Strength"
+          },
+          {
+            "big": "1st",
+            "label": "non-consecutive men's title in history: Sprague 2024 + 2026"
+          },
+          {
+            "big": "5",
+            "label": "Cringle's event wins - the most dominant first-time champion in years"
+          },
+          {
+            "big": "136",
+            "label": "Cringle's final margin over 2nd - a fortress from wire to wire"
+          }
+        ],
+        "footnote": "Both champions train out of Brute Strength, per the official athlete field - a clean sweep of the crowns."
+      },
+      {
+        "type": "cta",
+        "headline": "TWENTY EVENTS.\nTWO CHAMPIONS.",
+        "body": "The full season-close breakdown, both champion stories, and the complete Games almanac are on the site - link in bio."
+      }
+    ]
+  },
+  {
     "id": "champs-day3",
     "label": "Champions Check-In - Day 3",
     "caption": "CHAMPIONS CHECK-IN, DAY 3 - the day the champions' stories split four ways.\n\nTHE LEADER FINALLY WON: James Sprague (2024 champion) has been winless while sitting atop the board almost continuously since Event 7. Saturday night, with Pepper nine-turned-thirteen points behind him and closing, he won the heaviest test of the week - the 665-lb yoke gauntlet - in 3:20.65. First win of the week, lead out to 29, and per the broadcast, a bid to become the first man ever to win titles in non-consecutive years.\n\nTHE DEFENDER IS CLIMBING: Jayson Hopper (2025 champion) went 3rd on the Echo Thruster and 3rd on the yoke inside one 16-minute window - a double-bronze evening that lifted him to 5th overall.\n\nTHE MACHINE AWAITS: Jeffrey Adler (2023 champion) climbed to 7th - and Sunday opens with a machines-only event. Our almanac note: Adler won the 2025 Run/Row/Run, the most recent machine event in Games history.\n\nTHE HARD DAY: Justin Medeiros (2021, 2022 champion) had the day the title race will remember - a no-rep on his final snatch bar for control overhead. The broadcast's call: 'the door wide open to catch Sprague has all but shut.' He sits 4th at 984, still fighting.\n\nFour champions, all inside the top seven, one day left. Link in bio.",
