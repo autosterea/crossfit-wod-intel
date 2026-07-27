@@ -1,10 +1,10 @@
 {
-  "updatedAt": "2026-07-27T00:09:01.129Z",
+  "updatedAt": "2026-07-27T02:08:18.587Z",
   "season": 2026,
   "stage": "games",
   "stageLabel": "2026 CrossFit Games",
   "status": "live",
-  "eventsCompleted": 19,
+  "eventsCompleted": 20,
   "eventsTotal": null,
   "source": "https://c3po.crossfit.com/api/leaderboards/v2/competitions/games/2026/leaderboards?division=1&sort=0&page=1",
   "sourceLabel": "Official CrossFit Games leaderboard (c3po.crossfit.com)",
@@ -16,70 +16,70 @@
         "name": "James Sprague",
         "country": "United States",
         "countryCode": "US",
-        "points": "1254"
+        "points": "1318"
       },
       {
         "rank": 2,
         "name": "Dallin Pepper",
         "country": "United States",
         "countryCode": "US",
-        "points": "1211"
+        "points": "1291"
       },
       {
         "rank": 3,
         "name": "Jay Crouch",
         "country": "Australia",
         "countryCode": "AU",
-        "points": "1132"
+        "points": "1228"
       },
       {
         "rank": 4,
         "name": "Justin Medeiros",
         "country": "United States",
         "countryCode": "US",
-        "points": "1032"
+        "points": "1104"
       },
       {
         "rank": 5,
-        "name": "Jayson Hopper",
-        "country": "United States",
-        "countryCode": "US",
-        "points": "1014"
-      },
-      {
-        "rank": 6,
         "name": "Ricky Garard",
         "country": "Australia",
         "countryCode": "AU",
-        "points": "1008"
+        "points": "1100"
+      },
+      {
+        "rank": 6,
+        "name": "Jayson Hopper",
+        "country": "United States",
+        "countryCode": "US",
+        "points": "1059"
       },
       {
         "rank": 7,
-        "name": "Roman Khrennikov",
-        "country": "United States",
-        "countryCode": "US",
-        "points": "922"
-      },
-      {
-        "rank": 8,
         "name": "Jeffrey Adler",
         "country": "Canada",
         "countryCode": "CA",
-        "points": "910"
+        "points": "970"
+      },
+      {
+        "rank": 8,
+        "name": "Roman Khrennikov",
+        "country": "United States",
+        "countryCode": "US",
+        "points": "946"
       },
       {
         "rank": 9,
-        "name": "Moritz Fiebig",
-        "country": "Germany",
-        "countryCode": "DE",
-        "points": "850"
-      },
-      {
-        "rank": 10,
         "name": "Guilherme Malheiros",
         "country": "Brazil",
         "countryCode": "BR",
-        "points": "804"
+        "points": "904"
+      },
+      {
+        "rank": 10,
+        "name": "Moritz Fiebig",
+        "country": "Germany",
+        "countryCode": "DE",
+        "points": "898"
       }
     ],
     "women": [
