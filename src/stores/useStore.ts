@@ -58,11 +58,13 @@ const initialTheme: Theme = (() => {
 /** Initial tab derived from the URL so deep links + prerendered routes land on
  *  the right view with no flash (e.g. /dashboard -> overview, / -> hero). */
 const initialTab: Tab = (() => {
-  if (typeof window === 'undefined') return 'hero'
+  // Land visitors straight on Today's WOD (the data), not a splash gate. The
+  // branded hero is still reachable via the sidebar logo (navigateTab('hero')).
+  if (typeof window === 'undefined') return 'daily'
   const seg = window.location.pathname.replace(/^\/+|\/+$/g, '')
-  if (!seg) return 'hero'
+  if (!seg) return 'daily'
   const found = (appRoutes as { tab: string; slug: string }[]).find((r) => r.slug === seg)
-  return (found ? found.tab : 'hero') as Tab
+  return (found ? found.tab : 'daily') as Tab
 })()
 
 if (typeof document !== 'undefined') {
