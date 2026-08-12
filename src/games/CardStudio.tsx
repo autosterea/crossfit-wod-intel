@@ -353,6 +353,340 @@ type Slide =
 type Carousel = { id: string; label: string; caption: string; slides: Slide[] }
 const CAROUSELS: Carousel[] = [
   {
+    "id": "repeat-champions-dynasties",
+    "label": "Deep Dive: Repeat champions & the dynasties (Sprague's rare feat)",
+    "caption": "REPEAT CHAMPIONS, AND THE ONE WHO BROKE THE PATTERN. Twenty years of the men's CrossFit Games, eleven different champions - and only four men ever repeated. Every one of them did it back-to-back.\n\nRich Froning took four straight (2011-2014). Mat Fraser stacked a record five (2016-2020). Justin Medeiros went back-to-back (2021-2022). Win it, then defend it - that was the only path anyone ever found to a second title.\n\nThen James Sprague did the thing none of them did. He won in 2024, lost the crown to Jayson Hopper in 2025 (finishing 3rd), and took it back in 2026. The first and only man ever to win the CrossFit Games in non-consecutive years.\n\nDynasties are built on streaks. Sprague built his on a comeback. Full breakdown at the link in bio.",
+    "slides": [
+      {
+        "type": "cover",
+        "kicker": "Deep Dive - The Data",
+        "headline": "BACK-TO-BACK,\nEXCEPT ONE",
+        "sub": "Twenty years of the men's Games. Eleven champions. Only James Sprague ever won it, lost it, and won it back. Swipe."
+      },
+      {
+        "type": "point",
+        "num": 1,
+        "kicker": "The Pattern",
+        "headline": "BUILT ON\nSTREAKS",
+        "body": "For nineteen editions, every man who won the Games more than once did it in an unbroken run. Froning took four straight (2011-2014). Fraser stacked a record five (2016-2020). Medeiros went back-to-back (2021-2022). Win it, then defend it - that was the only path anyone ever found to a repeat.",
+        "source": "Official CrossFit Games results, 2007-2026"
+      },
+      {
+        "type": "stat",
+        "kicker": "The Men's Crown",
+        "headline": "TWENTY YEARS,\nONE EXCEPTION",
+        "stats": [
+          {
+            "big": "20",
+            "label": "editions of the Games, 2007-2026"
+          },
+          {
+            "big": "11",
+            "label": "different men have won the title"
+          },
+          {
+            "big": "4",
+            "label": "of them won it more than once"
+          },
+          {
+            "big": "5",
+            "label": "Fraser's record title streak, 2016-2020"
+          }
+        ],
+        "footnote": "Men's division, computed from official Games results 2007-2026."
+      },
+      {
+        "type": "movement",
+        "kicker": "Multiple Titles",
+        "headline": "MORE THAN\nONE CROWN",
+        "rows": [
+          {
+            "rank": 1,
+            "name": "Mat Fraser",
+            "pts": 5,
+            "delta": null
+          },
+          {
+            "rank": 2,
+            "name": "Rich Froning",
+            "pts": 4,
+            "delta": null
+          },
+          {
+            "rank": 3,
+            "name": "Justin Medeiros",
+            "pts": 2,
+            "delta": null
+          },
+          {
+            "rank": 4,
+            "name": "James Sprague",
+            "pts": 2,
+            "delta": null
+          }
+        ],
+        "note": "The number is titles won. Fraser, Froning and Medeiros stacked theirs consecutively. Sprague's two came split - 2024 and 2026."
+      },
+      {
+        "type": "point",
+        "num": 2,
+        "kicker": "The Exception",
+        "headline": "LOST IT,\nTOOK IT BACK",
+        "body": "Sprague won in 2024, beating Dallin Pepper by 21 points. In 2025 he finished third while Jayson Hopper took the title. Then in 2026 he beat Pepper again, by 27, to reclaim it. No man before him had ever won the Games, lost the crown, and won it back.",
+        "source": "Official CrossFit Games results, 2024-2026"
+      },
+      {
+        "type": "stat",
+        "kicker": "First of His Kind",
+        "headline": "WHAT NO MAN\nHAD DONE",
+        "stats": [
+          {
+            "big": "2",
+            "label": "titles: 2024 and 2026"
+          },
+          {
+            "big": "3rd",
+            "label": "his 2025 finish, behind champion Hopper"
+          },
+          {
+            "big": "2 yrs",
+            "label": "between his first crown and his second"
+          },
+          {
+            "big": "1st",
+            "label": "man ever to repeat non-consecutively"
+          }
+        ],
+        "footnote": "James Sprague, men's division. Official Games results 2024-2026."
+      },
+      {
+        "type": "cta",
+        "headline": "THE WHOLE\nDYNASTY, MAPPED",
+        "body": "Every champion, every streak, every event score - two decades of the Games on the site. We run the numbers straight off the official results. Link in bio."
+      }
+    ]
+  },
+  {
+    "id": "fraser-vs-toomey-goat-ledger",
+    "label": "Deep Dive: Fraser vs Toomey - the GOAT ledger",
+    "caption": "FRASER vs TOOMEY: THE GOAT LEDGER. Two athletes redrew what dominant means, and they did it in opposite directions.\n\nMat Fraser (2016-2020) turned the Games into a demolition. His 2020 title: 14 event wins in 19 tests, a 1.68 average finish, and a 545-point gap over 2nd, the largest championship margin the points era has ever recorded. Five titles, all in a row, the men's record.\n\nTia-Clair Toomey (2017-2022, 2024, 2025) did it with time. Eight titles, more than any athlete in history, across nine seasons, missing only 2023. Her 360-point win in 2020 is the biggest margin ever posted by a woman, and her 43 event wins across her title years bury the field.\n\nHere is the tell: the 9 largest championship margins of the points era all wear one of these two names. The first outsider, Jeffrey Adler with 116 in 2023, sits 10th.\n\nRaw margin vs sheer count. Peak vs longevity. Let the numbers referee. Full head-to-head at the link in bio.",
+    "slides": [
+      {
+        "type": "cover",
+        "kicker": "Deep Dive - The GOAT Ledger",
+        "headline": "FRASER\nvs TOOMEY",
+        "sub": "The two most dominant champions the sport has produced, refereed by their own numbers. Swipe."
+      },
+      {
+        "type": "point",
+        "num": 1,
+        "kicker": "The Count",
+        "headline": "8 TITLES\nTO 5",
+        "body": "Toomey owns 8 Games titles (2017-2022, 2024-2025), the most any athlete has ever won. Fraser stacked 5 straight from 2016 to 2020, the men's record. Two ceilings, both still untouched.",
+        "source": "Official CrossFit Games results, 2007-2025"
+      },
+      {
+        "type": "stat",
+        "kicker": "The Ledger, Side by Side",
+        "headline": "CAREER FOR\nCAREER",
+        "stats": [
+          {
+            "big": "5 - 8",
+            "label": "Games titles (Fraser - Toomey)"
+          },
+          {
+            "big": "27 - 43",
+            "label": "event wins in their title years"
+          },
+          {
+            "big": "545 - 360",
+            "label": "biggest championship margin, points"
+          },
+          {
+            "big": "5 - 6",
+            "label": "longest streak, titles in a row"
+          }
+        ],
+        "footnote": "Fraser leads on peak margin, Toomey on volume and streak. His 545 is the biggest points-era win over 2nd; her 360 is the biggest ever by a woman."
+      },
+      {
+        "type": "point",
+        "num": 2,
+        "kicker": "Fraser: The Margin",
+        "headline": "A 545-POINT\nROUT",
+        "body": "In 2020 Fraser won 14 of 19 events and finished outside the top four just once all week (an 8th). A 1.68 average placement and a 545-point cushion over 2nd make it the most lopsided single Games the sport has seen. Not close, never close.",
+        "source": "Official CrossFit Games results, 2011-2020"
+      },
+      {
+        "type": "point",
+        "num": 3,
+        "kicker": "Toomey: The Reign",
+        "headline": "8 TITLES,\n9 SEASONS",
+        "body": "Toomey won every Games she entered from 2017 through 2025, sitting out only 2023. Six straight (2017-2022) is the longest streak anyone has managed, and the 2024-2025 comeback pushed her to 8, with 43 event wins across those title years. Dominance measured in years, not just points.",
+        "source": "Official CrossFit Games results, 2017-2025"
+      },
+      {
+        "type": "movement",
+        "kicker": "The Biggest Routs (points era)",
+        "headline": "THE BIGGEST\nROUTS",
+        "rows": [
+          {
+            "rank": 1,
+            "name": "Fraser - 2020",
+            "pts": 545,
+            "delta": null
+          },
+          {
+            "rank": 2,
+            "name": "Toomey - 2020",
+            "pts": 360,
+            "delta": null
+          },
+          {
+            "rank": 3,
+            "name": "Toomey - 2021",
+            "pts": 256,
+            "delta": null
+          },
+          {
+            "rank": 4,
+            "name": "Fraser - 2018",
+            "pts": 220,
+            "delta": null
+          },
+          {
+            "rank": 5,
+            "name": "Fraser - 2017",
+            "pts": 216,
+            "delta": null
+          },
+          {
+            "rank": 6,
+            "name": "Fraser - 2016",
+            "pts": 197,
+            "delta": null
+          }
+        ],
+        "note": "Points-era championship margin (winner over 2nd), 2011-2025. The 9 biggest all belong to these two; the next name down is Adler at 116 in 2023."
+      },
+      {
+        "type": "cta",
+        "headline": "THE FULL\nGOAT LEDGER",
+        "body": "Every event, every margin, every title, broken down on the site. The numbers do the talking. Link in bio."
+      }
+    ]
+  },
+  {
+    "id": "biggest-comebacks-2026",
+    "label": "Deep Dive: The biggest comebacks of 2026 (single-event climbs)",
+    "caption": "THE BIGGEST COMEBACKS OF 2026. A 20-event Games is chaos math. After the opening Hopper the entire 30-woman field sat inside 100 points, so the Ranch 7200 run (Event 2) blew the order apart.\n\nRachel Noel finished dead last in the Hopper, ran 7th on the 7.2km, and jumped from 30th to 17th in a single event - a +13 swing, the biggest one-event climb of the 2026 Games. Nika Maisuradze authored the men's version, 25th to 14th on the same run.\n\nAnd the full-Games arcs go further: Olivia Kerstetter bottomed out 29th after the run and finished 6th, 23 places recovered. The lesson for anyone chasing a leaderboard: you rarely need to win the event. You need one clean result while the field is still bunched.\n\nWe ranked every athlete after every one of the 20 events to build this - numbers only, no hype, kept to 2026 on purpose (field sizes and scoring changed too much across eras for an honest all-time board). Full running standings at the link in bio.",
+    "slides": [
+      {
+        "type": "cover",
+        "kicker": "Deep Dive - The Data",
+        "headline": "THE BIGGEST\nCOMEBACKS",
+        "sub": "Twenty events, thirty athletes. We ranked the whole field after every single test to find the wildest one-event climbs up the leaderboard. Swipe."
+      },
+      {
+        "type": "movement",
+        "kicker": "2026 - Biggest Single-Event Climbs",
+        "headline": "DOUBLE-DIGIT\nJUMPS",
+        "rows": [
+          {
+            "rank": 1,
+            "name": "Rachel Noel (W)",
+            "pts": 13,
+            "delta": null
+          },
+          {
+            "rank": 2,
+            "name": "Nika Maisuradze (M)",
+            "pts": 11,
+            "delta": null
+          },
+          {
+            "rank": 3,
+            "name": "Paige Rodgers (W)",
+            "pts": 11,
+            "delta": null
+          },
+          {
+            "rank": 4,
+            "name": "Ella Wilkinson (W)",
+            "pts": 11,
+            "delta": null
+          },
+          {
+            "rank": 5,
+            "name": "Danielle Brandon (W)",
+            "pts": 10,
+            "delta": null
+          },
+          {
+            "rank": 6,
+            "name": "Miley Wade (W)",
+            "pts": 10,
+            "delta": null
+          }
+        ],
+        "note": "Places gained in overall standing on a single event; equal climbs ordered by how deep the hole was. Four of these six came on the Ranch 7200 run (Event 2)."
+      },
+      {
+        "type": "point",
+        "num": 1,
+        "kicker": "Why the Board Whipsaws",
+        "headline": "A BUNCHED\nFIELD",
+        "body": "After Event 1 the whole 30-athlete field sat inside 100 points, with 10th place on 64 and 20th on just 30. So the Ranch 7200 run (Event 2) detonated the order: one strong endurance result vaulted athletes double digits while a weak run buried others. It was the single most volatile test of the Games - 136 overall places changed hands among the men, 134 among the women.",
+        "source": "Persistence Athletics, computed from the 2026 CrossFit Games live leaderboard"
+      },
+      {
+        "type": "point",
+        "num": 2,
+        "kicker": "Who Authored the Surge",
+        "headline": "LAST TO\nSEVENTEENTH",
+        "body": "Rachel Noel finished dead last (30th) in the opening Hopper, then ran 7th on the Ranch 7200 to jump from 30th to 17th - a +13 swing, the biggest single-event climb of 2026. Nika Maisuradze did the men's version: 25th after the Hopper, 6th on the run, 25th to 14th for +11. Neither one won the event. In a bunched field you do not need to win to move - you need one clean result.",
+        "source": "Official CrossFit Games results, 2026"
+      },
+      {
+        "type": "stat",
+        "kicker": "The Numbers Behind the Leaps",
+        "headline": "ONE EVENT,\nBIG SWINGS",
+        "stats": [
+          {
+            "big": "+13",
+            "label": "Rachel Noel on the Ranch run, 30th to 17th - the biggest jump of 2026"
+          },
+          {
+            "big": "+11",
+            "label": "Nika Maisuradze on the same run, 25th to 14th - the men's biggest"
+          },
+          {
+            "big": "23",
+            "label": "places Olivia Kerstetter recovered, from 29th to 6th overall"
+          },
+          {
+            "big": "270",
+            "label": "overall-standing places that changed hands on the Ranch run alone"
+          }
+        ],
+        "footnote": "Standings computed by ranking every athlete on cumulative points after each of the 20 events."
+      },
+      {
+        "type": "point",
+        "num": 3,
+        "kicker": "Bigger Than One Event",
+        "headline": "BASEMENT TO\nTOP TEN",
+        "body": "Single events swing the board, but the full arc is wilder. Olivia Kerstetter bottomed out 29th after the run and clawed back to finish 6th - 23 places recovered. Guilherme Malheiros went 28th to 9th, Paige Rodgers 28th to 8th. We keep this to 2026 on purpose: field sizes and scoring changed too much across eras for an honest all-time single-event climb board.",
+        "source": "Persistence Athletics Games Almanac; 2026 live leaderboard"
+      },
+      {
+        "type": "cta",
+        "headline": "EVERY EVENT'S\nBOARD",
+        "body": "Full running standings after all 20 events, plus every athlete's climb and slide, on the site. Link in bio."
+      }
+    ]
+  },
+  {
     "id": "from-the-floor-bayley-martin",
     "label": "From the Floor: Bayley Martin's first win (transcript story)",
     "caption": "'I JUST LIKE THE WEIRD STUFF.' The story of how a 30th-place finish became a first career Games win, one event later.\n\nSunday morning at the 2026 Games, Bayley Martin finished 30th - dead last of the men - on the Machine 7200. On the final day of a title-tight Games, that is the kind of result that quietly ends a weekend. Then the very next event, the Roll to Support rings test, Martin went out and WON it: 25 reps, the first event win of his career. Thirtieth to first, back to back.\n\nAsked where the rings skill came from, he kept it simple: 'I don't know, I just liked the weird stuff. I just find that I'm good at all the weird things. I like gymnastics, and it was a cool skill to do out on the floor. So I had fun with it and got the W.'\n\nOn bouncing back from last to first: 'It's not over till it's over. I didn't have a good finish in the machine piece, so I just had to come out here and do what I can. Focus on one event at a time and stay in my own lane.'\n\nThe gymnastics specialists owned that event - Victor Hoffer 3rd, Patrick Vellner 4th - but it was Martin, the guy who just likes the weird stuff, who walked away with the win. First of his career. Probably not the last. More stories from the floor at the link in bio.",
