@@ -75,7 +75,7 @@ export default function EraTimeline({ data }: { data: CrossFitData }) {
       <div className="grid grid-cols-2 gap-4">
         {/* Radar comparison */}
         <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-[var(--panel-border)]">
-          <h4 className="text-xs font-medium text-[var(--text-tertiary)] mb-3">Modality Comparison — All Eras</h4>
+          <h4 className="text-xs font-medium text-[var(--text-tertiary)] mb-3">Modality Comparison - All Eras</h4>
           <div style={{width:"100%",height:350}}><ResponsiveContainer width="100%" height="100%">
             <RadarChart data={radarData}>
               <PolarGrid stroke="var(--chart-grid)" />
@@ -103,7 +103,7 @@ export default function EraTimeline({ data }: { data: CrossFitData }) {
 
         {/* Top movements for era */}
         <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-[var(--panel-border)]">
-          <h4 className="text-xs font-medium text-[var(--text-tertiary)] mb-3">Top Movements — {era.name}</h4>
+          <h4 className="text-xs font-medium text-[var(--text-tertiary)] mb-3">Top Movements - {era.name}</h4>
           <div style={{width:"100%",height:350}}><ResponsiveContainer width="100%" height="100%">
             <BarChart data={movementData} layout="vertical" margin={{ left: 100 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" horizontal={false} />
@@ -122,7 +122,7 @@ export default function EraTimeline({ data }: { data: CrossFitData }) {
 
       {/* Structure breakdown */}
       <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-[var(--panel-border)]">
-        <h4 className="text-xs font-medium text-[var(--text-tertiary)] mb-3">Workout Structure — {era.name}</h4>
+        <h4 className="text-xs font-medium text-[var(--text-tertiary)] mb-3">Workout Structure - {era.name}</h4>
         <div style={{width:"100%",height:200}}><ResponsiveContainer width="100%" height="100%">
           <BarChart data={structureData}>
             <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" />

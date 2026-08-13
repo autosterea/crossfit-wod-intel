@@ -102,7 +102,7 @@ export default function LiveLeaderboard() {
               >
                 <div className="games-display text-lg sm:text-xl w-6 sm:w-8 text-center shrink-0" style={{ color: top3 ? '#91C640' : 'var(--text-muted)' }}>{rk}</div>
                 <div className="w-8 text-center text-[11px] sm:text-[12px] games-condensed shrink-0" style={{ color: mv && mv > 0 ? '#5cbb3a' : mv && mv < 0 ? '#d9736b' : 'var(--text-muted)' }}>
-                  {mv == null ? '' : mv > 0 ? `▲${mv}` : mv < 0 ? `▼${-mv}` : '–'}
+                  {mv == null ? '' : mv > 0 ? `▲${mv}` : mv < 0 ? `▼${-mv}` : '-'}
                 </div>
                 {full ? (
                   <AthleteAvatar athlete={full} size={36} rounded="rounded-full" />

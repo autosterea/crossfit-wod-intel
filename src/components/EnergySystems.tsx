@@ -90,7 +90,7 @@ export default function EnergySystems({ data, analysis }: { data: CrossFitData; 
             </BarChart>
           </ResponsiveContainer></div>
           <div className="mt-3 text-[10px] text-[var(--text-muted)] text-center">
-            CrossFit aims for broad work capacity across ALL time domains — sprint to endurance
+            CrossFit aims for broad work capacity across ALL time domains - sprint to endurance
           </div>
         </div>
       </div>
@@ -133,7 +133,7 @@ export default function EnergySystems({ data, analysis }: { data: CrossFitData; 
           </div>
           <div>
             <div className="font-medium text-emerald-400 mb-1">Oxidative (Aerobic)</div>
-            <p>Sustained aerobic effort using oxygen to burn fat and carbs. Dominates in workouts over 2 minutes — Murph, long chippers, endurance pieces. The foundation of fitness and recovery capacity.</p>
+            <p>Sustained aerobic effort using oxygen to burn fat and carbs. Dominates in workouts over 2 minutes - Murph, long chippers, endurance pieces. The foundation of fitness and recovery capacity.</p>
           </div>
         </div>
       </div>

@@ -168,7 +168,7 @@ export default function MovementMap({ data }: { data: CrossFitData }) {
     <div className="space-y-4">
       {/* Header */}
       <div>
-        <h2 className="text-2xl font-bold text-[var(--text-primary)]">Movement Map — Where the Volume Goes</h2>
+        <h2 className="text-2xl font-bold text-[var(--text-primary)]">Movement Map - Where the Volume Goes</h2>
         <p className="text-sm text-[var(--text-tertiary)] mt-1">
           Each rectangle represents a movement. The bigger the rectangle, the more workouts include that movement.
           Color shows the category: <span style={{ color: '#f43f5e' }}>red = Monostructural (cardio)</span>,{' '}

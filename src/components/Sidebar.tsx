@@ -88,7 +88,7 @@ function YearRangeFilter() {
           onChange={(e) => setYearRange([Math.max(MIN_YEAR, Math.min(parseInt(e.target.value) || MIN_YEAR, to)), to])}
           className="w-14 bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded px-1.5 py-0.5 text-[10px] text-[var(--text-secondary)] font-mono text-center focus:border-[#019644]/50 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
         />
-        <span className="text-[var(--text-muted)] text-[10px]">—</span>
+        <span className="text-[var(--text-muted)] text-[10px]">-</span>
         <input type="number" min={from} max={MAX_YEAR} value={to}
           onChange={(e) => setYearRange([from, Math.min(MAX_YEAR, Math.max(parseInt(e.target.value) || MAX_YEAR, from))])}
           className="w-14 bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded px-1.5 py-0.5 text-[10px] text-[var(--text-secondary)] font-mono text-center focus:border-[#019644]/50 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
@@ -150,7 +150,7 @@ export default function Sidebar({ data }: { data: CrossFitData }) {
 
         <YearRangeFilter />
 
-        {/* Games Almanac cross-link — standalone page at /games */}
+        {/* Games Almanac cross-link - standalone page at /games */}
         <a
           href="/games"
           className="mx-2 mt-2 px-3 py-2 rounded-lg border border-[#019644]/40 bg-gradient-to-r from-[#019644]/15 to-[#91C640]/10 hover:from-[#019644]/25 hover:to-[#91C640]/20 transition-colors group block"
@@ -164,7 +164,7 @@ export default function Sidebar({ data }: { data: CrossFitData }) {
           </div>
         </a>
 
-        {/* What Is Fitness? lesson cross-link — standalone page at /fitness */}
+        {/* What Is Fitness? lesson cross-link - standalone page at /fitness */}
         <a
           href="/fitness"
           className="mx-2 mt-2 px-3 py-2 rounded-lg border border-[#019644]/40 bg-gradient-to-r from-[#019644]/15 to-[#91C640]/10 hover:from-[#019644]/25 hover:to-[#91C640]/20 transition-colors group block"
@@ -178,7 +178,7 @@ export default function Sidebar({ data }: { data: CrossFitData }) {
           </div>
         </a>
 
-        {/* CrossFit Now news cross-link — standalone page at /news */}
+        {/* CrossFit Now news cross-link - standalone page at /news */}
         <a
           href="/news"
           className="mx-2 mt-2 px-3 py-2 rounded-lg border border-[#019644]/40 bg-gradient-to-r from-[#019644]/15 to-[#91C640]/10 hover:from-[#019644]/25 hover:to-[#91C640]/20 transition-colors group block"

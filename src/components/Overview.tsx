@@ -57,6 +57,9 @@ function MiniPie({ data, colors, title }: { data: Record<string, number>; colors
 
 export default function Overview({ data }: { data: CrossFitData }) {
   const { overview, trends } = data
+  // Mirror DailyWod's rest-day detection so the banner never shows raw scrape text on article days
+  const tw = data.todaysWod
+  const todayIsRest = !!tw && !((tw.movements?.length ?? 0) > 0 || tw.modality !== 'Unknown' || /(amrap|emom|for time|rounds|reps|tabata)/i.test(tw.wod_raw || ''))
 
   const movementData = useMemo(() =>
     Object.entries(overview.movement_frequency)
@@ -83,7 +86,7 @@ export default function Overview({ data }: { data: CrossFitData }) {
       {/* Header */}
       <div>
         <h2 className="text-2xl font-bold text-[var(--text-primary)]">CrossFit WOD Intelligence</h2>
-        <p className="text-sm text-[var(--text-tertiary)] mt-1">25 years of programming data — analyzed and visualized</p>
+        <p className="text-sm text-[var(--text-tertiary)] mt-1">{overview.years_covered} years of crossfit.com programming, decoded day by day</p>
       </div>
 
       {/* Stat cards */}
@@ -101,17 +104,25 @@ export default function Overview({ data }: { data: CrossFitData }) {
         <div className="bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-rose-500/10 rounded-xl p-5 border border-[var(--panel-border-strong)]">
           <div className="flex items-center gap-2 mb-2">
             <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-            <span className="text-xs font-medium text-green-400">Today's WOD</span>
+            <span className="text-xs font-medium text-green-400">{todayIsRest ? 'Today - Rest Day' : "Today's WOD"}</span>
             <span className="text-xs text-[var(--text-muted)]">{data.todaysWod.date}</span>
           </div>
-          <p className="text-sm text-[var(--text-secondary)] whitespace-pre-line leading-relaxed max-h-32 overflow-y-auto">
-            {data.todaysWod.wod_raw?.split('\n').slice(0, 6).join('\n')}
-          </p>
-          <div className="flex gap-2 mt-3">
-            <span className="px-2 py-0.5 text-[10px] rounded-full bg-blue-500/20 text-blue-300">{data.todaysWod.modality}</span>
-            <span className="px-2 py-0.5 text-[10px] rounded-full bg-purple-500/20 text-purple-300">{data.todaysWod.structure}</span>
-            <span className="px-2 py-0.5 text-[10px] rounded-full bg-emerald-500/20 text-emerald-300">{data.todaysWod.time_domain}</span>
-          </div>
+          {todayIsRest ? (
+            <p className="text-sm text-[var(--text-secondary)] leading-relaxed">
+              crossfit.com posted an article instead of a workout today. The most recent workout is on the Today's WOD tab.
+            </p>
+          ) : (
+            <>
+              <p className="text-sm text-[var(--text-secondary)] whitespace-pre-line leading-relaxed max-h-32 overflow-y-auto">
+                {data.todaysWod.wod_raw?.split('\n').slice(0, 6).join('\n')}
+              </p>
+              <div className="flex gap-2 mt-3">
+                <span className="px-2 py-0.5 text-[10px] rounded-full bg-blue-500/20 text-blue-300">{data.todaysWod.modality}</span>
+                <span className="px-2 py-0.5 text-[10px] rounded-full bg-purple-500/20 text-purple-300">{data.todaysWod.structure}</span>
+                <span className="px-2 py-0.5 text-[10px] rounded-full bg-emerald-500/20 text-emerald-300">{data.todaysWod.time_domain}</span>
+              </div>
+            </>
+          )}
         </div>
       )}
 

@@ -82,21 +82,21 @@ function calcEnergyGrade(energyBalance: number): { grade: LetterGrade; score: nu
 
 function getVarianceComment(grade: LetterGrade): string {
   switch (grade) {
-    case 'A+': return 'Outstanding variety — athletes rarely repeat the same stimulus'
+    case 'A+': return 'Outstanding variety - athletes rarely repeat the same stimulus'
     case 'A': return 'Great movement diversity with minimal repetition bias'
     case 'B': return 'Good variety overall, though some movements appear more than expected'
-    case 'C': return 'Moderate repetition detected — programming could use more variety'
-    case 'D': return 'Significant repetition — the same movements dominate too many workouts'
-    case 'F': return 'Very low variety — workouts are highly repetitive and predictable'
+    case 'C': return 'Moderate repetition detected - programming could use more variety'
+    case 'D': return 'Significant repetition - the same movements dominate too many workouts'
+    case 'F': return 'Very low variety - workouts are highly repetitive and predictable'
   }
 }
 
 function getBalanceComment(grade: LetterGrade): string {
   switch (grade) {
     case 'A+': return 'Near-perfect functional balance across all movement patterns'
-    case 'A': return 'Strong balance — push, pull, squat, and hinge are well-represented'
+    case 'A': return 'Strong balance - push, pull, squat, and hinge are well-represented'
     case 'B': return 'Mostly balanced with minor gaps in some movement patterns'
-    case 'C': return 'Noticeable imbalances — some patterns are under-trained'
+    case 'C': return 'Noticeable imbalances - some patterns are under-trained'
     case 'D': return 'Significant gaps in fundamental movement patterns'
     case 'F': return 'Major imbalances that could lead to compensations and injury risk'
   }
@@ -105,34 +105,34 @@ function getBalanceComment(grade: LetterGrade): string {
 function getCoverageComment(grade: LetterGrade, filledCells?: number, totalCells?: number): string {
   const pct = filledCells && totalCells ? `${Math.round((filledCells / totalCells) * 100)}%` : ''
   switch (grade) {
-    case 'A+': return `Exceptional Hopper coverage${pct ? ` — ${pct} of all possible combinations tested` : ''}`
+    case 'A+': return `Exceptional Hopper coverage${pct ? ` - ${pct} of all possible combinations tested` : ''}`
     case 'A': return `Broad coverage across modality, time, and load dimensions${pct ? ` (${pct} filled)` : ''}`
     case 'B': return 'Good coverage overall but some training zones remain untouched'
-    case 'C': return 'Moderate coverage — meaningful gaps in the training spectrum'
+    case 'C': return 'Moderate coverage - meaningful gaps in the training spectrum'
     case 'D': return 'Many training combinations have never been tested'
-    case 'F': return 'Extremely narrow programming — most of the training map is empty'
+    case 'F': return 'Extremely narrow programming - most of the training map is empty'
   }
 }
 
 function getPushPullComment(grade: LetterGrade, ratio: number): string {
   const direction = ratio > 1 ? 'push-dominant' : 'pull-dominant'
   switch (grade) {
-    case 'A+': return 'Excellent push/pull balance — shoulders are well-protected'
-    case 'A': return 'Very close to ideal — minimal risk of anterior/posterior imbalance'
+    case 'A+': return 'Excellent push/pull balance - shoulders are well-protected'
+    case 'A': return 'Very close to ideal - minimal risk of anterior/posterior imbalance'
     case 'B': return `Slightly ${direction} but within a healthy range`
-    case 'C': return `Moderately ${direction} — could benefit from rebalancing`
-    case 'D': return `Clearly ${direction} — increased shoulder injury risk`
-    case 'F': return `Heavily ${direction} — this ratio needs immediate correction`
+    case 'C': return `Moderately ${direction} - could benefit from rebalancing`
+    case 'D': return `Clearly ${direction} - increased shoulder injury risk`
+    case 'F': return `Heavily ${direction} - this ratio needs immediate correction`
   }
 }
 
 function getSkillComment(grade: LetterGrade): string {
   switch (grade) {
     case 'A+': return 'All ten physical skills are trained with remarkable evenness'
-    case 'A': return 'Skills are well-distributed — a truly general physical preparedness program'
+    case 'A': return 'Skills are well-distributed - a truly general physical preparedness program'
     case 'B': return 'Most skills covered, though some get more emphasis than others'
-    case 'C': return 'Uneven skill development — some domains are under-represented'
-    case 'D': return 'Major skill gaps — this is not truly GPP programming'
+    case 'C': return 'Uneven skill development - some domains are under-represented'
+    case 'D': return 'Major skill gaps - this is not truly GPP programming'
     case 'F': return 'Extreme bias toward a few skills at the expense of others'
   }
 }
@@ -142,7 +142,7 @@ function getEnergyComment(grade: LetterGrade): string {
     case 'A+': return 'Phosphagen, glycolytic, and oxidative pathways are all well-trained'
     case 'A': return 'Strong coverage of all three energy systems with minor bias'
     case 'B': return 'Good overall but one energy system gets noticeably less work'
-    case 'C': return 'Uneven energy system training — one pathway is under-developed'
+    case 'C': return 'Uneven energy system training - one pathway is under-developed'
     case 'D': return 'One or more energy systems are significantly neglected'
     case 'F': return 'Programming overwhelmingly favors one energy system'
   }
@@ -156,7 +156,7 @@ function getTeacherNotes(grades: GradeResult[], gpa: number): string {
   let opening: string
   if (gpa >= 3.8) opening = 'CrossFit\'s programming demonstrates elite-level design across nearly every dimension.'
   else if (gpa >= 3.0) opening = 'Overall, this is strong programming that covers most bases well.'
-  else if (gpa >= 2.0) opening = 'The programming is average — there are clear strengths but also meaningful gaps.'
+  else if (gpa >= 2.0) opening = 'The programming is average - there are clear strengths but also meaningful gaps.'
   else opening = 'There are significant areas for improvement in the programming design.'
 
   const bestNote = `The strongest area is ${best.subject.toLowerCase()}, earning a solid ${best.grade}.`

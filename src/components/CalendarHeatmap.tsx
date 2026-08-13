@@ -67,7 +67,7 @@ function buildYearGrid(year: number, workoutMap: Map<string, Workout>): {
   const totalSlots = startDow + totalDays
   const numCols = Math.ceil(totalSlots / 7)
 
-  // grid[row][col] — row = day of week (0=Sun .. 6=Sat), col = week index
+  // grid[row][col] - row = day of week (0=Sun .. 6=Sat), col = week index
   const grid: (DayCell | null)[][] = Array.from({ length: 7 }, () =>
     Array.from({ length: numCols }, () => null)
   )
@@ -213,7 +213,7 @@ export default function CalendarHeatmap({ data }: { data: CrossFitData }) {
       {/* ── Explainer ─────────────────────────────────────── */}
       <div className="bg-[var(--app-bg)] rounded-xl border border-[var(--panel-border)] p-4">
         <p className="text-sm text-[var(--text-tertiary)] leading-relaxed">
-          Every square is one day. <span className="text-[#39d353] font-medium">Green = workout day</span> (brighter = more complex). <span className="text-[var(--text-muted)]">Dark = rest day</span>. This is 25 years of CrossFit programming at a glance — like a GitHub contribution chart for fitness.
+          Every square is one day. <span className="text-[#39d353] font-medium">Green = workout day</span> (brighter = more complex). <span className="text-[var(--text-muted)]">Dark = rest day</span>. This is 25 years of CrossFit programming at a glance - like a GitHub contribution chart for fitness.
         </p>
       </div>
 

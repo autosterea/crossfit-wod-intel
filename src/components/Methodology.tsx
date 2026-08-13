@@ -120,14 +120,14 @@ export default function Methodology({ data }: Props) {
         <SubHeading>Two Layers of Movement Tracking</SubHeading>
 
         <div className="border border-[var(--panel-border)] rounded-lg bg-[var(--app-bg)] p-4 space-y-2">
-          <h4 className="text-sm font-bold text-emerald-400">Layer 1 — Structured Classification (30 movements)</h4>
+          <h4 className="text-sm font-bold text-emerald-400">Layer 1 - Structured Classification (30 movements)</h4>
           <p className="text-sm text-[var(--text-secondary)]">
             The original dataset classifies each workout into 30 canonical movement categories. This was done during initial data processing by mapping exercise descriptions to standardized names. For example, "Strict Pull-ups," "Kipping Pull-ups," and "Butterfly Pull-ups" all map to "PullUp." This provides consistent tracking but loses granularity.
           </p>
         </div>
 
         <div className="border border-[var(--panel-border)] rounded-lg bg-[var(--app-bg)] p-4 space-y-2">
-          <h4 className="text-sm font-bold text-purple-400">Layer 2 — Text-Parsed Extraction (80 movements)</h4>
+          <h4 className="text-sm font-bold text-purple-400">Layer 2 - Text-Parsed Extraction (80 movements)</h4>
           <p className="text-sm text-[var(--text-secondary)]">
             We additionally scan every workout description using keyword dictionary matching to identify 80 distinct exercises. This catches movements the 30-category system groups together (e.g., "Ring Dip" vs "Bar Dip" vs generic "Dip") and movements it misses entirely (e.g., "Turkish Get-up," "Bear Crawl," "Pegboard").
           </p>
@@ -135,8 +135,8 @@ export default function Methodology({ data }: Props) {
 
         <SubHeading>Limitations of Text Parsing</SubHeading>
         <ul className="list-disc list-outside pl-5 space-y-1.5 text-sm text-[var(--text-secondary)]">
-          <li>Keyword matching is not perfect — if a workout describes a movement using unusual phrasing, it may be missed</li>
-          <li>Some movements share keywords (e.g., "clean" appears in "Clean," "Clean and Jerk," "Squat Clean") — we use longest-match-first to minimize false positives</li>
+          <li>Keyword matching is not perfect - if a workout describes a movement using unusual phrasing, it may be missed</li>
+          <li>Some movements share keywords (e.g., "clean" appears in "Clean," "Clean and Jerk," "Squat Clean") - we use longest-match-first to minimize false positives</li>
           <li>Workout descriptions are sometimes truncated in the source data (limited to ~500 characters), which may cut off movements listed at the end</li>
           <li>Creative workout descriptions or non-standard formatting may cause misclassification</li>
           <li>Estimated false negative rate: <span className="text-amber-400 font-mono">~5-10%</span> of movement mentions may be missed</li>
@@ -201,7 +201,7 @@ export default function Methodology({ data }: Props) {
           <StatMethod
             name="PageRank"
             what="Measures node importance in a network based on the structure of incoming links. Originally developed for ranking web pages."
-            howUsed='Applied to the movement co-occurrence network to identify which movements are most "important" — connected to other highly-connected movements.'
+            howUsed='Applied to the movement co-occurrence network to identify which movements are most "important" - connected to other highly-connected movements.'
             citation='Brin, S. & Page, L. (1998). "The Anatomy of a Large-Scale Hypertextual Web Search Engine." Computer Networks and ISDN Systems, 30(1-7), 107-117.'
           />
 
@@ -247,13 +247,13 @@ export default function Methodology({ data }: Props) {
         <SubHeading>CrossFit's Theoretical Framework</SubHeading>
         <div className="space-y-2">
           <Citation>
-            Glassman, G. (2002). "What Is Fitness?" CrossFit Journal, Issue 1. — Defines fitness as "increased work capacity across broad time and modal domains."
+            Glassman, G. (2002). "What Is Fitness?" CrossFit Journal, Issue 1. - Defines fitness as "increased work capacity across broad time and modal domains."
           </Citation>
           <Citation>
-            Glassman, G. (2007). "Understanding CrossFit." CrossFit Journal, Issue 56. — Describes the methodology of constantly varied functional movements at high intensity.
+            Glassman, G. (2007). "Understanding CrossFit." CrossFit Journal, Issue 56. - Describes the methodology of constantly varied functional movements at high intensity.
           </Citation>
           <Citation>
-            Glassman, G. (2002). "The Garage Gym." CrossFit Journal, Issue 1. — Early programming philosophy.
+            Glassman, G. (2002). "The Garage Gym." CrossFit Journal, Issue 1. - Early programming philosophy.
           </Citation>
         </div>
 
@@ -312,7 +312,7 @@ export default function Methodology({ data }: Props) {
         <SubHeading>Classification Subjectivity</SubHeading>
         <ul className="space-y-2 text-sm text-[var(--text-secondary)]">
           <WarningItem>Movement-to-modality mapping follows CrossFit's standard M/G/W classification, but edge cases exist (e.g., Wall Balls could be argued as Gymnastics or Weightlifting)</WarningItem>
-          <WarningItem>Functional pattern mapping (Push/Pull/Squat/Hinge) is one interpretation — other strength coaches may classify differently</WarningItem>
+          <WarningItem>Functional pattern mapping (Push/Pull/Squat/Hinge) is one interpretation - other strength coaches may classify differently</WarningItem>
           <WarningItem>Time domain boundaries (Sprint &lt; 5min, Short 5-10min, etc.) are approximate and may not match every coach's definition</WarningItem>
         </ul>
 

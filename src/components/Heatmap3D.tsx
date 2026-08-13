@@ -290,7 +290,7 @@ export default function Heatmap3D({ data }: { data: CrossFitData }) {
       {selectedMov !== null && (
         <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-blue-500/20">
           <h3 className="text-sm font-bold text-[var(--text-primary)] mb-3">
-            {getName(displayIndices[selectedMov])} — Top Co-occurrences
+            {getName(displayIndices[selectedMov])} - Top Co-occurrences
           </h3>
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2">
             {displayIndices

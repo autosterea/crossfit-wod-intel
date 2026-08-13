@@ -28,7 +28,7 @@ function DNACard({ movement, data, isSelected, onClick }: {
         <span className="text-2xl font-bold font-mono" style={{ color }}>{movement.total_count.toLocaleString()}</span>
         <span className="text-[10px] text-[var(--text-muted)]">{movement.pct}% of all WODs</span>
       </div>
-      <div className="text-[10px] text-[var(--text-muted)] mt-1">{movement.first_seen} — {movement.last_seen}</div>
+      <div className="text-[10px] text-[var(--text-muted)] mt-1">{movement.first_seen} - {movement.last_seen}</div>
     </button>
   )
 }
@@ -80,7 +80,7 @@ export default function MovementDNA({ data }: { data: CrossFitData }) {
     <div className="space-y-4">
       <div>
         <h2 className="text-2xl font-bold text-[var(--text-primary)]">Movement DNA Profiles</h2>
-        <p className="text-sm text-[var(--text-tertiary)] mt-1">Deep analysis of every movement — frequency, trends, partners, and DNA fingerprint</p>
+        <p className="text-sm text-[var(--text-tertiary)] mt-1">Deep analysis of every movement - frequency, trends, partners, and DNA fingerprint</p>
       </div>
 
       {/* Filter */}

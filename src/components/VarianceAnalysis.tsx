@@ -240,10 +240,10 @@ export default function VarianceAnalysis({
           label="Variance Score"
           subtitle={
             variancePct >= 80
-              ? 'Highly varied — close to truly random selection'
+              ? 'Highly varied - close to truly random selection'
               : variancePct >= 60
-                ? 'Moderately varied — some movements are favored'
-                : 'Low variance — programming is concentrated on fewer movements'
+                ? 'Moderately varied - some movements are favored'
+                : 'Low variance - programming is concentrated on fewer movements'
           }
           color={varianceColor}
         />
@@ -254,7 +254,7 @@ export default function VarianceAnalysis({
             concentrationPct >= 80
               ? 'Love is spread around evenly across movements'
               : concentrationPct >= 60
-                ? 'Somewhat concentrated — a few movements get extra attention'
+                ? 'Somewhat concentrated - a few movements get extra attention'
                 : 'Heavily concentrated on a handful of movements'
           }
           color={concentrationColor}
@@ -274,14 +274,14 @@ export default function VarianceAnalysis({
           <p className="text-xs text-[var(--text-tertiary)] leading-relaxed">
             If CrossFit picked movements completely randomly out of a hat, this would be 100%.
             The actual score tells us how close to perfectly random the programming is.
-            This uses Shannon entropy — the same math that measures how unpredictable a message is.
+            This uses Shannon entropy - the same math that measures how unpredictable a message is.
           </p>
         </div>
         <div className="bg-blue-500/5 rounded-lg p-4 border border-blue-500/10">
           <div className="text-xs font-medium text-blue-400 mb-1">What is this?</div>
           <p className="text-xs text-[var(--text-tertiary)] leading-relaxed">
             Are a few movements hogging all the attention, or is the love spread around? This is
-            the inverse of the Herfindahl-Hirschman Index (HHI) — the same tool economists use
+            the inverse of the Herfindahl-Hirschman Index (HHI) - the same tool economists use
             to measure if a market is dominated by monopolies. 100% means perfectly even.
           </p>
         </div>
@@ -297,10 +297,10 @@ export default function VarianceAnalysis({
 
       {/* ========== PARETO CHART ========== */}
       <div className="bg-[var(--panel-bg)] rounded-xl p-6 border border-[var(--panel-border)]">
-        <SectionTitle>Movement Frequency — Pareto Analysis</SectionTitle>
+        <SectionTitle>Movement Frequency - Pareto Analysis</SectionTitle>
         <ExplainerBox>
           Each bar shows how often a movement appears. The orange line shows the running
-          total — once it crosses the dashed 80% line, you've found the "vital few" movements
+          total - once it crosses the dashed 80% line, you've found the "vital few" movements
           that dominate programming. Everything to the right is the "trivial many."
         </ExplainerBox>
 
@@ -350,7 +350,7 @@ export default function VarianceAnalysis({
               dot={false}
               name="cumPct"
             />
-            {/* 80% threshold reference — rendered as a subtle area at cumPct=80 */}
+            {/* 80% threshold reference - rendered as a subtle area at cumPct=80 */}
           </ComposedChart>
         </ResponsiveContainer></div>
 
@@ -367,18 +367,18 @@ export default function VarianceAnalysis({
             <div className="w-3 h-0.5 bg-orange-500" />
             Cumulative % line
           </div>
-          <div className="text-[var(--text-muted)]">— — 80% threshold</div>
+          <div className="text-[var(--text-muted)]">- - 80% threshold</div>
         </div>
       </div>
 
       {/* ========== AUTOCORRELATION CHART ========== */}
       <div className="bg-[var(--panel-bg)] rounded-xl p-6 border border-[var(--panel-border)]">
-        <SectionTitle>Autocorrelation — Does CrossFit Repeat Patterns?</SectionTitle>
+        <SectionTitle>Autocorrelation - Does CrossFit Repeat Patterns?</SectionTitle>
         <ExplainerBox>
           Does CrossFit repeat patterns on a cycle? Each bar shows how similar today's workout is
           to the workout N days ago. If the bar at "Lag 7" is tall, there's a weekly pattern.
           If "Lag 1" is tall, similar workouts come back-to-back. Highlighted bars are statistically
-          significant — meaning the pattern is unlikely to be random chance.
+          significant - meaning the pattern is unlikely to be random chance.
         </ExplainerBox>
 
         <div style={{width:"100%",height:280}}><ResponsiveContainer width="100%" height="100%">
@@ -446,7 +446,7 @@ export default function VarianceAnalysis({
             <div className="text-xs text-[var(--text-secondary)] max-w-xs">
               {autocorrelation.hasPeriodicity
                 ? `Programming shows a repeating cycle every ~${autocorrelation.dominantPeriod} days. This means CrossFit.com follows a structured pattern, not pure randomness.`
-                : 'No significant repeating cycle detected. The programming does not follow an obvious periodic schedule — it looks genuinely aperiodic.'}
+                : 'No significant repeating cycle detected. The programming does not follow an obvious periodic schedule - it looks genuinely aperiodic.'}
             </div>
           </div>
         </div>
@@ -465,7 +465,7 @@ export default function VarianceAnalysis({
 
       {/* ========== MARKOV TRANSITION HEATMAP ========== */}
       <div className="bg-[var(--panel-bg)] rounded-xl p-6 border border-[var(--panel-border)]">
-        <SectionTitle>Markov Transition Matrix — What Follows What?</SectionTitle>
+        <SectionTitle>Markov Transition Matrix - What Follows What?</SectionTitle>
         <ExplainerBox>
           If today's workout is Gymnastics, what's tomorrow most likely to be? This table shows
           the probability of each transition. Read it row-by-row: pick today's modality on the
@@ -539,7 +539,7 @@ export default function VarianceAnalysis({
             <p className="text-xs text-[var(--text-tertiary)] leading-relaxed">
               If CrossFit.com kept programming forever following these same transition patterns,
               this is what the long-run mix would settle into. It's the mathematical equilibrium
-              — like asking "what does the river look like after all the eddies smooth out?"
+              - like asking "what does the river look like after all the eddies smooth out?"
             </p>
           </div>
 
@@ -594,7 +594,7 @@ export default function VarianceAnalysis({
         <SectionTitle>Rest Day Intelligence</SectionTitle>
         <ExplainerBox>
           Are rest days random, or does CrossFit.com give you rest after harder days? Smart coaches
-          program rest strategically — backing off after high-volume days and ramping up after
+          program rest strategically - backing off after high-volume days and ramping up after
           recovery. Let's see if the data supports deliberate rest-day placement.
         </ExplainerBox>
 
@@ -767,7 +767,7 @@ export default function VarianceAnalysis({
                 {variancePct >= 80
                   ? `At ${variancePct}% variance, CrossFit.com programming is impressively close to truly random movement selection. The "constantly varied" claim holds up well.`
                   : variancePct >= 60
-                    ? `At ${variancePct}% variance, programming is moderately varied but shows clear favorites. It's not random — some movements get significantly more love.`
+                    ? `At ${variancePct}% variance, programming is moderately varied but shows clear favorites. It's not random - some movements get significantly more love.`
                     : `At ${variancePct}% variance, programming is far from random. A small set of movements dominates, undermining the "constantly varied" claim.`}
               </span>
             </div>
@@ -784,7 +784,7 @@ export default function VarianceAnalysis({
                 {hhi.interpretation}. The HHI of {hhi.hhi.toFixed(4)} (normalized: {hhi.normalizedHHI.toFixed(4)})
                 {hhi.normalizedHHI < 0.15
                   ? ' indicates a competitive, well-distributed movement selection.'
-                  : ' suggests moderate concentration — some movements are used disproportionately.'}
+                  : ' suggests moderate concentration - some movements are used disproportionately.'}
               </span>
             </div>
           </div>
@@ -799,7 +799,7 @@ export default function VarianceAnalysis({
               <span className="text-sm text-[var(--text-tertiary)]">
                 {autocorrelation.hasPeriodicity
                   ? `A repeating cycle of ~${autocorrelation.dominantPeriod} days was detected, meaning programming follows a structured template rather than being purely spontaneous.`
-                  : 'No significant repeating cycles were found. Day-to-day programming appears genuinely non-periodic — a point in favor of "constantly varied."'}
+                  : 'No significant repeating cycles were found. Day-to-day programming appears genuinely non-periodic - a point in favor of "constantly varied."'}
               </span>
             </div>
           </div>
@@ -813,8 +813,8 @@ export default function VarianceAnalysis({
               <span className="text-sm text-[var(--text-primary)] font-medium">Rest Days: </span>
               <span className="text-sm text-[var(--text-tertiary)]">
                 {restDay.isStrategic
-                  ? 'Rest days show signs of strategic placement, suggesting an intelligent hand behind the programming — not just a random number generator.'
-                  : 'Rest days appear to follow a fixed schedule rather than responding to training load. This is neither good nor bad — just a scheduling choice.'}
+                  ? 'Rest days show signs of strategic placement, suggesting an intelligent hand behind the programming - not just a random number generator.'
+                  : 'Rest days appear to follow a fixed schedule rather than responding to training load. This is neither good nor bad - just a scheduling choice.'}
               </span>
             </div>
           </div>

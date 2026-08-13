@@ -83,7 +83,7 @@ export default function DailyWod({ data }: { data: CrossFitData }) {
   const looksLikeWorkout = !!workout && (workout.mv.length > 0 || workout.mo !== 'Unknown' || /\b(amrap|emom|for time|rounds|reps|tabata)\b/i.test(workout.raw || ''))
   const isRestDay = !!workout && !looksLikeWorkout
 
-  // Find the most recent date with an actual workout — for the "View most recent workout" CTA on rest days
+  // Find the most recent date with an actual workout - for the "View most recent workout" CTA on rest days
   const mostRecentWorkoutDate = useMemo(() => {
     for (let i = sortedDates.length - 1; i >= 0; i--) {
       const w = datedIndex.get(sortedDates[i])
@@ -155,7 +155,7 @@ export default function DailyWod({ data }: { data: CrossFitData }) {
       {!workout ? (
         <div className="bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-xl p-8 text-center">
           <p className="text-sm text-[var(--text-tertiary)]">No workout posted for {selected}.</p>
-          <p className="text-xs text-[var(--text-muted)] mt-2">Try a different date — use the date picker or the navigation arrows.</p>
+          <p className="text-xs text-[var(--text-muted)] mt-2">Try a different date - use the date picker or the navigation arrows.</p>
         </div>
       ) : isRestDay ? (
         // ─── Rest day / article day presentation ──────────────────────────
@@ -165,7 +165,7 @@ export default function DailyWod({ data }: { data: CrossFitData }) {
               <svg className="w-4 h-4 text-amber-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4m0 4h.01M3 12a9 9 0 1118 0 9 9 0 01-18 0z" />
               </svg>
-              <h2 className="text-sm font-semibold text-amber-700">Rest Day — No Workout Posted</h2>
+              <h2 className="text-sm font-semibold text-amber-700">Rest Day - No Workout Posted</h2>
             </div>
             <div className="px-5 py-4">
               <p className="text-sm text-[var(--text-secondary)] mb-2">
@@ -226,7 +226,7 @@ export default function DailyWod({ data }: { data: CrossFitData }) {
               Movements Detected ({workout.mv.length})
             </h3>
             {workout.mv.length === 0 ? (
-              <p className="text-xs text-[var(--text-muted)]">No movements detected — possibly an article, rest day, or unclassified content.</p>
+              <p className="text-xs text-[var(--text-muted)]">No movements detected - possibly an article, rest day, or unclassified content.</p>
             ) : (
               <div className="flex flex-wrap gap-1.5">
                 {workout.mv.map((mv) => (
@@ -253,14 +253,14 @@ export default function DailyWod({ data }: { data: CrossFitData }) {
                   >
                     <div className="flex-1 min-w-0">
                       <div className="text-xs font-mono text-[var(--text-secondary)] group-hover:text-[#91C640] truncate">
-                        {w.t}{w.nw ? ` — ${w.nw}` : ''}
+                        {w.t}{w.nw ? ` - ${w.nw}` : ''}
                       </div>
                       <div className="text-[10px] text-[var(--text-muted)] mt-0.5 truncate">
                         {formatDate(w.d)} | {w.mo} | {w.st} | {w.td}
                       </div>
                     </div>
                     <div className="ml-3 text-[10px] font-mono text-[#91C640] shrink-0">
-                      {Math.round(score * 100)}%
+                      {Math.min(100, Math.round((score / 1.15) * 100))}%
                     </div>
                   </button>
                 ))}

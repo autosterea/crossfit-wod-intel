@@ -93,9 +93,9 @@ export default function WhatsGaps({
     const gaps = advancedAnalysis.hopper?.gaps || []
     return gaps.map((g) => ({
       severity: 'critical' as Severity,
-      title: `${g.modality} x ${g.timeDomain} — Zero Workouts`,
+      title: `${g.modality} x ${g.timeDomain} - Zero Workouts`,
       description: `The combination of ${g.modality} modality with ${g.timeDomain} time domain has never been programmed.`,
-      why: 'A blind spot in the hopper means athletes have never been tested in this modality-time combination. CrossFit claims to prepare for the unknown — this is a known unknown.',
+      why: 'A blind spot in the hopper means athletes have never been tested in this modality-time combination. CrossFit claims to prepare for the unknown - this is a known unknown.',
       fix: `Program a ${g.modality}-dominant workout in the ${g.timeDomain} time domain. Even one workout fills this gap.`,
     }))
   }, [advancedAnalysis])
@@ -119,7 +119,7 @@ export default function WhatsGaps({
           .join(' ')
         return {
           severity,
-          title: `${patternName} — ${pct}% of Average`,
+          title: `${patternName} - ${pct}% of Average`,
           description: `${patternName} appears ${count} times vs. the average of ${avg.toFixed(0)} across all functional patterns.`,
           why: `Undertrained movement patterns create muscular imbalances and increase injury risk. ${patternName} is a foundational human movement.`,
           fix: `Add more ${patternName.toLowerCase()} movements to weekly programming. Aim for at least ${Math.ceil(avg * 0.8)} total appearances to close the gap.`,
@@ -146,7 +146,7 @@ export default function WhatsGaps({
           .join(' ')
         return {
           severity,
-          title: `${groupName} — ${pct}% of Average Coverage`,
+          title: `${groupName} - ${pct}% of Average Coverage`,
           description: `${groupName} has ${count} total engagements vs. the average of ${avg.toFixed(0)} for all muscle groups.`,
           why: `Muscle group imbalances lead to compensatory movement patterns and increased injury risk over time.`,
           fix: `Incorporate movements targeting ${groupName.toLowerCase()} at least 2-3x per week. Consider accessory work if main programming doesn't cover it.`,
@@ -167,7 +167,7 @@ export default function WhatsGaps({
         const severity: Severity = score < 15 ? 'critical' : 'warning'
         return {
           severity,
-          title: `${skillName} — Score: ${score.toFixed(0)}/100`,
+          title: `${skillName} - Score: ${score.toFixed(0)}/100`,
           description: `${skillName} scores ${score.toFixed(0)} out of 100 on CrossFit's general physical skill assessment.`,
           why: `CrossFit defines fitness as competence across all 10 physical skills. A score below 30 means this skill is rarely developed by the programming.`,
           fix: `Add workouts that specifically develop ${skillName.toLowerCase()}. ${
@@ -199,7 +199,7 @@ export default function WhatsGaps({
       const nameB = data.movementDisplay?.[b] || b
       return {
         severity: 'info' as Severity,
-        title: `${nameA} + ${nameB} — Never Paired`,
+        title: `${nameA} + ${nameB} - Never Paired`,
         description: `These two movements have never appeared together in any workout. Overall pair coverage: ${coveragePct}%.`,
         why: 'Novel movement combinations challenge athletes in unexpected ways. Unseen pairings represent untapped programming variety.',
         fix: `Create a workout combining ${nameA} and ${nameB}. For example, an AMRAP or couplet that pairs them back-to-back.`,
@@ -224,7 +224,7 @@ export default function WhatsGaps({
       const lacking = ppr > 1 ? 'pull' : 'push'
       recs.push({
         severity: 'warning',
-        title: `Push/Pull Imbalance — ${ppr.toFixed(2)}:1 ratio`,
+        title: `Push/Pull Imbalance - ${ppr.toFixed(2)}:1 ratio`,
         description: `Programming heavily favors ${dominant} movements over ${lacking} movements.`,
         why: 'A balanced push-pull ratio prevents shoulder injuries, postural issues, and ensures balanced upper body development.',
         fix: `Increase ${lacking} volume. Target a 0.8-1.2:1 push/pull ratio. Add rows, pull-ups, or face pulls for more pulling; add presses, push-ups, or dips for more pushing.`,
@@ -238,7 +238,7 @@ export default function WhatsGaps({
       const lacking = shr > 1 ? 'hinge' : 'squat'
       recs.push({
         severity: 'warning',
-        title: `Squat/Hinge Imbalance — ${shr.toFixed(2)}:1 ratio`,
+        title: `Squat/Hinge Imbalance - ${shr.toFixed(2)}:1 ratio`,
         description: `Programming heavily favors ${dominant} patterns over ${lacking} patterns.`,
         why: 'The squat and hinge are the two primary lower-body patterns. Imbalance weakens the posterior chain or anterior chain.',
         fix: `Increase ${lacking} movements. Add deadlifts, kettlebell swings, or good mornings for hinge; add squats, lunges, or pistols for squats.`,
@@ -250,7 +250,7 @@ export default function WhatsGaps({
     if (hopperScore < 0.8) {
       recs.push({
         severity: 'critical',
-        title: `Low Hopper Readiness — ${(hopperScore * 100).toFixed(0)}%`,
+        title: `Low Hopper Readiness - ${(hopperScore * 100).toFixed(0)}%`,
         description: `Only ${(hopperScore * 100).toFixed(0)}% of modality x time domain combinations have been covered.`,
         why: 'The "hopper model" is one of CrossFit\'s three fitness standards. Low coverage means athletes are unprepared for random workout selection.',
         fix: `Fill the ${advancedAnalysis.hopper?.gaps?.length || 0} missing modality/time-domain cells. Focus on the least-programmed combinations first.`,
@@ -262,7 +262,7 @@ export default function WhatsGaps({
     if (combScore < 0.5) {
       recs.push({
         severity: 'info',
-        title: `Low Movement Pairing Diversity — ${(combScore * 100).toFixed(0)}% coverage`,
+        title: `Low Movement Pairing Diversity - ${(combScore * 100).toFixed(0)}% coverage`,
         description: `Only ${(combScore * 100).toFixed(0)}% of possible movement pairs have ever been programmed together.`,
         why: 'Novel combinations challenge different energy systems and movement patterns simultaneously, building broader fitness.',
         fix: `Experiment with new movement pairings. Use the missing pairs list above as inspiration for fresh workout designs.`,
@@ -276,10 +276,10 @@ export default function WhatsGaps({
     <div className="space-y-4">
       {/* Header */}
       <div>
-        <h2 className="text-2xl font-bold text-[var(--text-primary)]">What's Missing? — Programming Gap Analysis</h2>
+        <h2 className="text-2xl font-bold text-[var(--text-primary)]">What's Missing? - Programming Gap Analysis</h2>
         <p className="text-sm text-[var(--text-tertiary)] mt-1 max-w-3xl">
           No program is perfect. This page identifies the blind spots in CrossFit's
-          programming — the movements, skills, and combinations that are undertrained
+          programming - the movements, skills, and combinations that are undertrained
           or completely absent. Think of it as a doctor's checkup for the programming.
         </p>
       </div>
@@ -307,7 +307,7 @@ export default function WhatsGaps({
       {/* Section 1: Critical Gaps */}
       {criticalGaps.length > 0 && (
         <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-[var(--panel-border)]">
-          <SectionHeader title="Critical Gaps — Modality x Time Domain Holes" count={criticalGaps.length} severity="critical" />
+          <SectionHeader title="Critical Gaps - Modality x Time Domain Holes" count={criticalGaps.length} severity="critical" />
           <p className="text-[10px] text-[var(--text-muted)] mb-3">
             These modality/time-domain combinations have zero workouts in the entire dataset. Each is a blind spot in hopper readiness.
           </p>

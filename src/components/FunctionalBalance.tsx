@@ -82,7 +82,7 @@ export default function FunctionalBalance({ data, analysis }: { data: CrossFitDa
       <div>
         <h2 className="text-2xl font-bold text-[var(--text-primary)]">Functional Movement Balance</h2>
         <p className="text-sm text-[var(--text-tertiary)] mt-1">
-          Push/Pull, Squat/Hinge, Upper/Lower — how balanced is CrossFit's programming across fundamental movement patterns?
+          Push/Pull, Squat/Hinge, Upper/Lower - how balanced is CrossFit's programming across fundamental movement patterns?
         </p>
       </div>
 

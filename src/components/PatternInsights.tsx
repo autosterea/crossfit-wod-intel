@@ -107,7 +107,7 @@ export default function PatternInsights({ data }: { data: CrossFitData }) {
     const restByDow: Record<string, number> = {}
     const dowNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
     searchIndex.forEach((w) => {
-      // This is a proxy — we count workout days to find which days have fewer
+      // This is a proxy - we count workout days to find which days have fewer
     })
     const workoutsByDow = dowData.map((d: any) => ({ name: d.day, workouts: d.total, restPct: (100 - (d.total / (overview.total_days / 7)) * 100).toFixed(1) }))
     results.push({
@@ -117,7 +117,7 @@ export default function PatternInsights({ data }: { data: CrossFitData }) {
       data: workoutsByDow,
     })
 
-    // 7. Workout complexity over time — avg movements per workout
+    // 7. Workout complexity over time - avg movements per workout
     const yearMovCounts: Record<string, { total: number; count: number }> = {}
     searchIndex.forEach((w) => {
       const year = w.d.substring(0, 4)

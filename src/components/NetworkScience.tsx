@@ -226,7 +226,7 @@ export default function NetworkScience({ data, advancedAnalysis }: { data: Cross
 
       <ExplainerBox>
         Every time two movements appear in the same workout, they form a connection. Over 6,779 workouts, these
-        connections create a network. We can analyze this network the same way Google analyzes the internet — to find
+        connections create a network. We can analyze this network the same way Google analyzes the internet - to find
         which movements are most &ldquo;important,&rdquo; which ones bridge different types of fitness, and which ones form
         natural clusters.
       </ExplainerBox>
@@ -276,7 +276,7 @@ export default function NetworkScience({ data, advancedAnalysis }: { data: Cross
 
       {/* 3. PageRank vs Betweenness Side-by-Side Bar Charts */}
       <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-[var(--panel-border)]">
-        <h3 className="text-sm font-medium text-[var(--text-primary)] mb-2">PageRank vs Betweenness Centrality — Top 15</h3>
+        <h3 className="text-sm font-medium text-[var(--text-primary)] mb-2">PageRank vs Betweenness Centrality - Top 15</h3>
         <ExplainerBox>
           <strong>PageRank</strong> = importance (connected to other important movements). <strong>Betweenness</strong> = bridging power (connecting different groups). A movement high in both is a cornerstone of CrossFit programming.
         </ExplainerBox>
@@ -349,7 +349,7 @@ export default function NetworkScience({ data, advancedAnalysis }: { data: Cross
         <h3 className="text-sm font-medium text-[var(--text-primary)] mb-2">Community Detection</h3>
         <ExplainerBox>
           Communities are groups of movements that tend to appear together more often than with outsiders. Think of them
-          as &ldquo;workout families.&rdquo; The algorithm finds these automatically — no human told it about M/G/W categories.
+          as &ldquo;workout families.&rdquo; The algorithm finds these automatically - no human told it about M/G/W categories.
         </ExplainerBox>
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">

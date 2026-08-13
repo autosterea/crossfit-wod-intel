@@ -177,7 +177,7 @@ function App() {
   }, [])
 
   if (activeTab === 'hero') {
-    return <Hero />
+    return <Hero data={D} />
   }
 
   return (

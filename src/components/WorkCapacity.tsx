@@ -48,7 +48,7 @@ export default function WorkCapacity({ data, analysis }: { data: CrossFitData; a
         <h2 className="text-2xl font-bold text-[var(--text-primary)]">Work Capacity & Statistical Analysis</h2>
         <p className="text-sm text-[var(--text-tertiary)] mt-1">
           CrossFit defines fitness as "increased work capacity across broad time and modal domains."
-          Here's how the programming measures up — with real statistics.
+          Here's how the programming measures up - with real statistics.
         </p>
       </div>
 
@@ -181,7 +181,7 @@ export default function WorkCapacity({ data, analysis }: { data: CrossFitData; a
         <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-[var(--panel-border)]">
           <h3 className="text-xs font-medium text-[var(--text-tertiary)] mb-1">Anomalous Workouts (Z-score &gt; 2.5)</h3>
           <p className="text-[10px] text-[var(--text-muted)] mb-4">
-            These workouts are statistical outliers — unusually complex or unusually simple compared to the average.
+            These workouts are statistical outliers - unusually complex or unusually simple compared to the average.
           </p>
           <div className="space-y-1">
             {anomalies.map((a) => (

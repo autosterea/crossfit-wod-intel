@@ -12,7 +12,7 @@ for (let y = FIRST_YEAR; y <= LAST_YEAR; y++) YEARS.push(y)
 const EXCLUSIVE_COLOR = '#f59e0b'
 const MAX_EVENT_ROWS = 12
 
-/** Tiny per-year frequency strip — one bar per Games year, height scaled by usage (4 levels max). */
+/** Tiny per-year frequency strip - one bar per Games year, height scaled by usage (4 levels max). */
 function FrequencyStrip({ yearCounts }: { yearCounts: Record<string, number> }) {
   return (
     <div className="flex items-end gap-[2px] h-4" aria-hidden>
@@ -35,7 +35,7 @@ function FrequencyStrip({ yearCounts }: { yearCounts: Record<string, number> }) 
   )
 }
 
-/** Expanded card body — every event this movement appeared in, capped at MAX_EVENT_ROWS. */
+/** Expanded card body - every event this movement appeared in, capped at MAX_EVENT_ROWS. */
 function EventList({ stat }: { stat: GamesMovementStat }) {
   const navigate = useGamesStore((s) => s.navigate)
   const events = useMemo(

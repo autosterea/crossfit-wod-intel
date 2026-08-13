@@ -87,7 +87,7 @@ export default function PhysicalSkills({ data, analysis }: { data: CrossFitData;
       <div className="grid grid-cols-2 gap-4">
         {/* Radar */}
         <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-[var(--panel-border)]">
-          <h3 className="text-xs font-medium text-[var(--text-tertiary)] mb-3">Skill Radar — Overall Programming</h3>
+          <h3 className="text-xs font-medium text-[var(--text-tertiary)] mb-3">Skill Radar - Overall Programming</h3>
           <div style={{width:"100%",height:380}}><ResponsiveContainer width="100%" height="100%">
             <RadarChart data={radarData}>
               <PolarGrid stroke="var(--chart-grid)" />

@@ -1,4 +1,5 @@
 import { useStore } from '../stores/useStore'
+import type { CrossFitData } from '../types'
 
 // Real data snippets that scroll in the background
 const DATA_LINES = [
@@ -20,7 +21,7 @@ const DATA_LINES = [
   'Movements tracked: 80 | OGs since 2001: 28 | Newest: Pegboard 2024',
 ]
 
-export default function Hero() {
+export default function Hero({ data }: { data: CrossFitData }) {
   const setActiveTab = useStore((s) => s.setActiveTab)
 
   return (
@@ -28,7 +29,7 @@ export default function Hero() {
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
       style={{ background: 'var(--sidebar-bg)' }}
     >
-      {/* Scrolling data lines — CSS only */}
+      {/* Scrolling data lines - CSS only */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none select-none" style={{ opacity: 0.08 }}>
         <div className="animate-scroll-up" style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 11, lineHeight: '22px', color: '#91C640', whiteSpace: 'pre' }}>
           {[...DATA_LINES, ...DATA_LINES, ...DATA_LINES, ...DATA_LINES].map((line, i) => (
@@ -76,13 +77,13 @@ export default function Hero() {
           Every workout from crossfit.com, 2001 to today, analyzed
         </p>
 
-        {/* Stats — instant, no animation */}
+        {/* Stats - instant, no animation */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
           {[
-            { value: '6,781', label: 'Workouts', color: '#91C640' },
-            { value: '80', label: 'Movements', color: '#019644' },
-            { value: '25', label: 'Years', color: '#a855f7' },
-            { value: '22', label: 'Analysis Tools', color: '#f43f5e' },
+            { value: data.overview.total_workouts.toLocaleString(), label: 'Workouts', color: '#91C640' },
+            { value: String(data.overview.years_covered), label: 'Years', color: '#019644' },
+            { value: data.overview.named_wod_count.toLocaleString(), label: 'Named WODs', color: '#a855f7' },
+            { value: data.overview.hero_wod_count.toLocaleString(), label: 'Hero WODs', color: '#f43f5e' },
           ].map((s) => (
             <div key={s.label} className="bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg p-3">
               <div className="text-xl sm:text-2xl md:text-3xl font-bold font-mono" style={{ color: s.color }}>{s.value}</div>

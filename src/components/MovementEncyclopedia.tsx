@@ -88,11 +88,11 @@ export default function MovementEncyclopedia({ data }: { data: CrossFitData }) {
       {/* Header */}
       <div>
         <h2 className="text-2xl font-bold text-[var(--text-primary)]">
-          Movement Encyclopedia — Every Exercise in 25 Years
+          Movement Encyclopedia - Every Exercise in 25 Years
         </h2>
         <p className="text-sm text-[var(--text-tertiary)] mt-2 max-w-3xl leading-relaxed">
           We scanned every workout description from 2001 to 2026 and found {allMovements.length} distinct
-          exercises. The original data tracked 30 — this is the complete list.
+          exercises. The original data tracked 30 - this is the complete list.
           {mostCommon && rarest && (
             <> From {mostCommon.name} (appearing in {mostCommon.count.toLocaleString()} WODs) to {rarest.name} (appearing just {rarest.count === 1 ? 'once' : `${rarest.count} times`}).</>
           )}

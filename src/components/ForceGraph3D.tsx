@@ -299,7 +299,7 @@ export default function ForceGraph3DView({ data }: { data: CrossFitData }) {
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-2xl font-bold text-[var(--text-primary)]">Movement Force Graph</h2>
-            <p className="text-sm text-[var(--text-tertiary)] mt-1">3D view — drag to rotate, scroll to zoom</p>
+            <p className="text-sm text-[var(--text-tertiary)] mt-1">3D view - drag to rotate, scroll to zoom</p>
           </div>
           <button onClick={() => setView('2d')} className="px-3 py-1.5 text-xs bg-blue-500/20 text-blue-400 rounded-lg border border-blue-500/30 hover:bg-blue-500/30">
             Switch to 2D
@@ -347,7 +347,7 @@ export default function ForceGraph3DView({ data }: { data: CrossFitData }) {
       <div className="bg-blue-500/5 rounded-lg p-4 border border-blue-500/10">
         <div className="text-xs font-medium text-blue-400 mb-1">How to read this</div>
         <p className="text-xs text-[var(--text-tertiary)] leading-relaxed">
-          Each circle is a movement. Bigger = appears in more workouts. Lines connect movements that appear in the same workout — thicker lines = stronger pairing.
+          Each circle is a movement. Bigger = appears in more workouts. Lines connect movements that appear in the same workout - thicker lines = stronger pairing.
           Hover to highlight connections. Click to lock a selection. Drag nodes to rearrange. Scroll to zoom.
         </p>
       </div>

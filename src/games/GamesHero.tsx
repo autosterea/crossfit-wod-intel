@@ -1,7 +1,7 @@
 import { G, LAST_YEAR, FIRST_YEAR } from './gamesData'
 import { useGamesStore } from './gamesStore'
 
-/** Dark broadcast-floodlight hero — stays dark in both themes by design. */
+/** Dark broadcast-floodlight hero - stays dark in both themes by design. */
 export default function GamesHero() {
   const navigate = useGamesStore((s) => s.navigate)
   const stats = [

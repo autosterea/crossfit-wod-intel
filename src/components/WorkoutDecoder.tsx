@@ -132,7 +132,7 @@ export default function WorkoutDecoder({ data }: { data: CrossFitData }) {
       fullMark: 100,
     }))
 
-    // Muscle group data — only non-zero
+    // Muscle group data - only non-zero
     const muscleData = Object.entries(muscles)
       .filter(([, v]) => v > 0)
       .sort((a, b) => b[1] - a[1])
@@ -199,7 +199,7 @@ export default function WorkoutDecoder({ data }: { data: CrossFitData }) {
                 <span className="text-[10px] font-mono text-[var(--text-muted)] whitespace-nowrap pt-0.5">{w.d}</span>
                 <div className="flex-1 min-w-0">
                   <div className="text-xs text-[var(--text-primary)] truncate">
-                    {w.nw ? <span className="text-amber-400 font-medium">{w.nw} — </span> : null}
+                    {w.nw ? <span className="text-amber-400 font-medium">{w.nw} - </span> : null}
                     {w.t}
                   </div>
                   <div className="text-[10px] text-[var(--text-muted)] flex gap-2 mt-0.5">
@@ -511,7 +511,7 @@ export default function WorkoutDecoder({ data }: { data: CrossFitData }) {
                 <div className="text-xs font-medium text-blue-300 mb-1">How to Read This</div>
                 <p className="text-[11px] text-[var(--text-tertiary)] leading-relaxed">
                   Think of this as a nutrition label for workouts. Just like food labels tell you what's
-                  inside your meal, this tells you exactly what's inside any CrossFit workout — which
+                  inside your meal, this tells you exactly what's inside any CrossFit workout - which
                   muscles, which energy system, which skills, and what it's most similar to.
                 </p>
               </div>

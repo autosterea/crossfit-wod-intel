@@ -3,7 +3,7 @@ import { G } from './gamesData'
 import { useGamesStore } from './gamesStore'
 import { Chip, SectionHeading } from './ui'
 
-// Banner ink is fixed (banners stay dark green in both themes) — deliberate
+// Banner ink is fixed (banners stay dark green in both themes) - deliberate
 // exception to the theme-variable rule, mirroring the hero treatment.
 const BANNER_INK = '#f4f6f2'
 

@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 import { G } from './gamesData'
 import { useGamesStore } from './gamesStore'
 
-/** Sticky championship-banner strip of years — the signature navigation. */
+/** Sticky championship-banner strip of years - the signature navigation. */
 export default function YearRibbon() {
   const route = useGamesStore((s) => s.route)
   const navigate = useGamesStore((s) => s.navigate)

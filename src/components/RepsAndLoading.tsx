@@ -110,14 +110,14 @@ export default function RepsAndLoading({ data }: { data: CrossFitData }) {
           <div className="text-[10px] text-[var(--text-tertiary)] mt-1">Estimated total reps per WOD</div>
         </div>
         <div className="bg-gradient-to-br from-blue-500/10 to-indigo-500/10 rounded-xl p-5 border border-blue-500/20">
-          <div className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">Avg Weight — Men (Rx)</div>
+          <div className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">Avg Weight - Men (Rx)</div>
           <div className="text-3xl font-bold font-mono text-blue-400">
             {analysis.avgWeight > 0 ? `${analysis.avgWeight} lb` : 'N/A'}
           </div>
           <div className="text-[10px] text-[var(--text-tertiary)] mt-1">Average men's prescribed load</div>
         </div>
         <div className="bg-gradient-to-br from-rose-500/10 to-pink-500/10 rounded-xl p-5 border border-rose-500/20">
-          <div className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">Avg Weight — Women (Rx)</div>
+          <div className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">Avg Weight - Women (Rx)</div>
           <div className="text-3xl font-bold font-mono text-rose-400">
             {analysis.avgWeightFemale > 0 ? `${analysis.avgWeightFemale} lb` : 'N/A'}
           </div>
@@ -165,7 +165,7 @@ export default function RepsAndLoading({ data }: { data: CrossFitData }) {
         </div>
       </div>
 
-      {/* Rep Scheme Types + Intensity Zones — side by side donut charts */}
+      {/* Rep Scheme Types + Intensity Zones - side by side donut charts */}
       <div className="grid grid-cols-2 gap-4">
         {/* Scheme Types Pie */}
         <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-[var(--panel-border)]">
@@ -236,7 +236,7 @@ export default function RepsAndLoading({ data }: { data: CrossFitData }) {
         </div>
       </div>
 
-      {/* Weight Distribution — Men & Women side by side */}
+      {/* Weight Distribution - Men & Women side by side */}
       <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-[var(--panel-border)]">
         <p className="text-[10px] text-[var(--text-muted)] mb-4">
           CrossFit prescribes different weights for men and women. The format &quot;135/95&quot; means 135 lbs for men, 95 lbs for women. This analysis tracks both.
@@ -244,7 +244,7 @@ export default function RepsAndLoading({ data }: { data: CrossFitData }) {
         <div className="grid grid-cols-2 gap-4">
           {/* Men's weight distribution */}
           <div>
-            <h3 className="text-xs font-medium text-blue-400 mb-3">Prescribed Weight — Men (Rx)</h3>
+            <h3 className="text-xs font-medium text-blue-400 mb-3">Prescribed Weight - Men (Rx)</h3>
             <div style={{ width: '100%', height: 300 }}>
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={analysis.weightDistribution}>
@@ -263,7 +263,7 @@ export default function RepsAndLoading({ data }: { data: CrossFitData }) {
           </div>
           {/* Women's weight distribution */}
           <div>
-            <h3 className="text-xs font-medium text-rose-400 mb-3">Prescribed Weight — Women (Rx)</h3>
+            <h3 className="text-xs font-medium text-rose-400 mb-3">Prescribed Weight - Women (Rx)</h3>
             <div style={{ width: '100%', height: 300 }}>
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={analysis.weightDistributionFemale}>
@@ -314,7 +314,7 @@ export default function RepsAndLoading({ data }: { data: CrossFitData }) {
                 yAxisId="weight"
                 type="monotone"
                 dataKey="avgWeight"
-                name="Avg Weight — Men (lb)"
+                name="Avg Weight - Men (lb)"
                 stroke="#3b82f6"
                 strokeWidth={2}
                 dot={{ r: 3, fill: '#3b82f6' }}
@@ -323,7 +323,7 @@ export default function RepsAndLoading({ data }: { data: CrossFitData }) {
                 yAxisId="weight"
                 type="monotone"
                 dataKey="avgWeightFemale"
-                name="Avg Weight — Women (lb)"
+                name="Avg Weight - Women (lb)"
                 stroke="#f43f5e"
                 strokeWidth={2}
                 dot={{ r: 3, fill: '#f43f5e' }}
@@ -338,11 +338,11 @@ export default function RepsAndLoading({ data }: { data: CrossFitData }) {
           </span>
           <span className="flex items-center gap-1.5 text-[10px] text-[var(--text-muted)]">
             <span className="w-3 h-0.5 rounded" style={{ background: '#3b82f6', display: 'inline-block' }} />
-            Avg Weight — Men in lbs (right axis)
+            Avg Weight - Men in lbs (right axis)
           </span>
           <span className="flex items-center gap-1.5 text-[10px] text-[var(--text-muted)]">
             <span className="w-3 h-0.5 rounded" style={{ background: '#f43f5e', display: 'inline-block' }} />
-            Avg Weight — Women in lbs (right axis)
+            Avg Weight - Women in lbs (right axis)
           </span>
         </div>
       </div>
@@ -363,7 +363,7 @@ export default function RepsAndLoading({ data }: { data: CrossFitData }) {
             <div className="font-medium text-amber-400 mb-1">Power (1-5 reps, explosive)</div>
             <p>
               Olympic lifting and explosive movements at moderate-to-heavy loads. Develops rate of
-              force development — how fast you can generate strength. Snatches, cleans, jerks, and
+              force development - how fast you can generate strength. Snatches, cleans, jerks, and
               plyometrics live here.
             </p>
           </div>
@@ -389,7 +389,7 @@ export default function RepsAndLoading({ data }: { data: CrossFitData }) {
             <div className="font-medium text-purple-400 mb-1">Metabolic (20+ reps / AMRAP / For Time)</div>
             <p>
               High-volume conditioning work that pushes all energy systems simultaneously. Classic
-              CrossFit territory — "Fran," "Murph," AMRAPs, and long chippers. Develops the
+              CrossFit territory - "Fran," "Murph," AMRAPs, and long chippers. Develops the
               cardiovascular engine and mental toughness that define CrossFit fitness.
             </p>
           </div>

@@ -84,7 +84,7 @@ function SectionCard({
   )
 }
 
-/* ── pie chart sub‑component ──────────────────────────────────── */
+/* ── pie chart sub-component ──────────────────────────────────── */
 
 function ComparisonPie({
   data,
@@ -390,7 +390,7 @@ export default function HeadToHead({ data }: { data: CrossFitData }) {
         </div>
       </SectionCard>
 
-      {/* 2. Modality Split — side‑by‑side pie charts */}
+      {/* 2. Modality Split - side-by-side pie charts */}
       <SectionCard title="Modality Split">
         <div className="flex gap-6">
           <ComparisonPie

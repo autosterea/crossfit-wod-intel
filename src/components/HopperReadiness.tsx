@@ -38,8 +38,8 @@ const MODALITY_LABELS: Record<string, string> = {
 
 const TIME_DOMAIN_LABELS: Record<string, string> = {
   Sprint: '<5 min',
-  Short: '5–10 min',
-  Medium: '10–20 min',
+  Short: '5-10 min',
+  Medium: '10-20 min',
   Long: '20+ min',
   'Strength/Skill': 'S/S Focus',
 }
@@ -56,8 +56,8 @@ const GAP_DESCRIPTIONS: Record<string, string> = {
 
 const TIME_DOMAIN_DESCRIPTIONS: Record<string, string> = {
   Sprint: 'under 5 minutes',
-  Short: '5–10 minutes',
-  Medium: '10–20 minutes',
+  Short: '5-10 minutes',
+  Medium: '10-20 minutes',
   Long: 'over 20 minutes',
   'Strength/Skill': 'strength or skill focused (not timed)',
 }
@@ -67,7 +67,7 @@ const SAMPLE_WORKOUTS: Record<string, string> = {
   'MGW-Short': '3 RFT: 12 Thrusters (95/65), 12 Burpees, 400m Run',
   'MGW-Medium': '5 RFT: 15 Wall Balls, 10 Toes-to-Bar, 500m Row',
   'MGW-Long': 'For time: 1 mile Run, 100 Pull-ups, 200 Push-ups, 300 Squats, 1 mile Run (Murph)',
-  'MGW-Strength/Skill': 'EMOM 30: Min 1 — 3 Power Cleans, Min 2 — 5 Strict Pull-ups, Min 3 — 200m Run',
+  'MGW-Strength/Skill': 'EMOM 30: Min 1 - 3 Power Cleans, Min 2 - 5 Strict Pull-ups, Min 3 - 200m Run',
   'M-Sprint': 'Row 500m for time',
   'M-Short': '2K Row for time',
   'M-Medium': '5K Row',
@@ -79,7 +79,7 @@ const SAMPLE_WORKOUTS: Record<string, string> = {
   'G-Long': '30 min AMRAP: 10 Ring Dips, 15 Box Jumps, 20 Sit-ups',
   'G-Strength/Skill': 'Build to max L-sit hold; then 5×5 Strict Handstand Push-ups',
   'W-Sprint': '1RM Snatch (total session under 5 min working time)',
-  'W-Short': 'Grace — 30 Clean & Jerks for time (135/95)',
+  'W-Short': 'Grace - 30 Clean & Jerks for time (135/95)',
   'W-Medium': '10 RFT: 3 Power Cleans (185/125), 3 Front Squats, 3 Push Jerks',
   'W-Long': 'Every 2 min for 30 min: 2 Squat Cleans + 1 Jerk, climbing',
   'W-Strength/Skill': '5×3 Back Squat @85%, then 3×2 Snatch from blocks',
@@ -87,14 +87,14 @@ const SAMPLE_WORKOUTS: Record<string, string> = {
   'MG-Short': 'AMRAP 8: 10 Burpees, 20 Double-unders, 200m Run',
   'MG-Medium': '4 RFT: 400m Run, 20 Pull-ups, 30 Push-ups',
   'MG-Long': 'For time: 100 Burpees, 100 Double-unders, 1 mile Run, 100 Push-ups',
-  'MG-Strength/Skill': 'EMOM 20: Odd — 30s Handstand hold, Even — 250m Row',
+  'MG-Strength/Skill': 'EMOM 20: Odd - 30s Handstand hold, Even - 250m Row',
   'MW-Sprint': '21-15-9: Deadlifts (225/155), 200m Run each round',
   'MW-Short': '3 RFT: 12 Dumbbell Snatches, 400m Run',
   'MW-Medium': '5 RFT: 15 Kettlebell Swings, 12 Box Jumps, 400m Run',
   'MW-Long': '30 min AMRAP: 10 Deadlifts (185/125), 15 Cal Row, 200m Run',
-  'MW-Strength/Skill': 'EMOM 16: Odd — 5 Heavy KB Swings, Even — 250m Row',
-  'GW-Sprint': 'Fran — 21-15-9: Thrusters (95/65), Pull-ups',
-  'GW-Short': 'Elizabeth — 21-15-9: Squat Cleans (135/95), Ring Dips',
+  'MW-Strength/Skill': 'EMOM 16: Odd - 5 Heavy KB Swings, Even - 250m Row',
+  'GW-Sprint': 'Fran - 21-15-9: Thrusters (95/65), Pull-ups',
+  'GW-Short': 'Elizabeth - 21-15-9: Squat Cleans (135/95), Ring Dips',
   'GW-Medium': '5 RFT: 10 Hang Cleans (135/95), 20 Toes-to-Bar',
   'GW-Long': '30 min AMRAP: 5 Deadlifts (275/185), 10 Handstand Push-ups, 15 Box Jumps',
   'GW-Strength/Skill': 'Superset 5×5: Weighted Pull-ups + Push Press',
@@ -193,9 +193,9 @@ export default function HopperReadiness({ data, advancedAnalysis }: { data: Cros
     <div className="space-y-4">
       {/* ── HEADER ── */}
       <div>
-        <h2 className="text-2xl font-bold text-[var(--text-primary)]">The Hopper Model — Are You Ready for Anything?</h2>
+        <h2 className="text-2xl font-bold text-[var(--text-primary)]">The Hopper Model - Are You Ready for Anything?</h2>
         <p className="text-sm text-[var(--text-tertiary)] mt-1">
-          CrossFit's ultimate test of fitness: pull a random workout from a hopper — could you do it well?
+          CrossFit's ultimate test of fitness: pull a random workout from a hopper - could you do it well?
         </p>
       </div>
 
@@ -245,7 +245,7 @@ export default function HopperReadiness({ data, advancedAnalysis }: { data: Cros
             combinations never programmed
           </div>
           <div className="text-[10px] text-[var(--text-muted)] mt-1">
-            These are the blind spots — combinations never programmed.
+            These are the blind spots - combinations never programmed.
           </div>
         </div>
       </div>
@@ -254,7 +254,7 @@ export default function HopperReadiness({ data, advancedAnalysis }: { data: Cros
       <div className="bg-[var(--panel-bg)] rounded-xl p-5 border border-[var(--panel-border)]">
         <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-1">Modality x Time Domain Coverage Heatmap</h3>
         <p className="text-[10px] text-[var(--text-muted)] mb-4">
-          The Glassman Fitness Matrix — work capacity across broad time and modal domains
+          The Glassman Fitness Matrix - work capacity across broad time and modal domains
         </p>
 
         <div className="bg-blue-500/5 rounded-lg p-4 border border-blue-500/10 mb-4">
@@ -262,7 +262,7 @@ export default function HopperReadiness({ data, advancedAnalysis }: { data: Cros
           <p className="text-xs text-[var(--text-tertiary)] leading-relaxed">
             This is THE CrossFit fitness chart. Greg Glassman defined fitness as "work capacity across broad time and modal
             domains." Each cell is a combination of a modality type (what you're doing) and a time domain (how long you're
-            doing it). Bright blue = lots of workouts. Red = a gap in the programming — something that was never trained.
+            doing it). Bright blue = lots of workouts. Red = a gap in the programming - something that was never trained.
           </p>
         </div>
 
@@ -408,7 +408,7 @@ export default function HopperReadiness({ data, advancedAnalysis }: { data: Cros
             <p className="text-xs text-[var(--text-tertiary)] leading-relaxed">
               Every empty cell in the heatmap above represents a "blind spot" in the programming. True hopper-readiness means
               filling ALL cells. These gaps tell us exactly what types of workouts are missing. The more gaps, the more
-              predictable the programming is — and predictability is the enemy of broad fitness.
+              predictable the programming is - and predictability is the enemy of broad fitness.
             </p>
           </div>
 
@@ -456,7 +456,7 @@ export default function HopperReadiness({ data, advancedAnalysis }: { data: Cros
           <p className="text-xs text-[var(--text-tertiary)] leading-relaxed">
             With {combinationCoverage.possiblePairs > 0 ? Math.round((-1 + Math.sqrt(1 + 8 * combinationCoverage.possiblePairs)) / 2) : 'many'} movements,
             there are {combinationCoverage.possiblePairs.toLocaleString()} possible pairs. These are the ones CrossFit has never combined
-            in the same workout. Unseen pairs represent untested movement interactions — your body has never had to transition
+            in the same workout. Unseen pairs represent untested movement interactions - your body has never had to transition
             between them under fatigue.
           </p>
         </div>
@@ -618,7 +618,7 @@ export default function HopperReadiness({ data, advancedAnalysis }: { data: Cros
               ) : (
                 <>
                   Low hopper readiness. The programming has significant blind spots with {hopper.gaps.length} unfilled
-                  combinations. This indicates a specialized rather than broadly fit approach — the opposite of what Glassman's
+                  combinations. This indicates a specialized rather than broadly fit approach - the opposite of what Glassman's
                   hopper model prescribes.
                 </>
               )}

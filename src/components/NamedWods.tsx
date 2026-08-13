@@ -42,7 +42,7 @@ export default function NamedWods({ data }: { data: CrossFitData }) {
       <div>
         <h2 className="text-2xl font-bold text-[var(--text-primary)]">Named WODs Directory</h2>
         <p className="text-sm text-[var(--text-tertiary)] mt-1">
-          {data.namedWods.length} named workouts — heroes, benchmarks, and classics
+          {data.namedWods.length} named workouts - heroes, benchmarks, and classics
         </p>
       </div>
 
