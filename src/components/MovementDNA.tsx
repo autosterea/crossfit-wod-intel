@@ -80,7 +80,7 @@ export default function MovementDNA({ data }: { data: CrossFitData }) {
     <div className="space-y-4">
       <div>
         <h2 className="text-2xl font-bold text-[var(--text-primary)]">Movement DNA Profiles</h2>
-        <p className="text-sm text-[var(--text-tertiary)] mt-1">Deep analysis of every movement - frequency, trends, partners, and DNA fingerprint</p>
+        <p className="text-sm text-[var(--text-tertiary)] mt-1">Pick a movement. See how often it shows up, where it's trending, what it pairs with, and its DNA fingerprint.</p>
       </div>
 
       {/* Filter */}

@@ -213,7 +213,7 @@ export default function CalendarHeatmap({ data }: { data: CrossFitData }) {
       {/* ── Explainer ─────────────────────────────────────── */}
       <div className="bg-[var(--app-bg)] rounded-xl border border-[var(--panel-border)] p-4">
         <p className="text-sm text-[var(--text-tertiary)] leading-relaxed">
-          Every square is one day. <span className="text-[#39d353] font-medium">Green = workout day</span> (brighter = more complex). <span className="text-[var(--text-muted)]">Dark = rest day</span>. This is 25 years of CrossFit programming at a glance - like a GitHub contribution chart for fitness.
+          Every square is one day. <span className="text-[#39d353] font-medium">Green = workout day</span> (brighter = more complex). <span className="text-[var(--text-muted)]">Dark = rest day</span>. It works like a GitHub contribution chart: 25+ years of programming on one grid.
         </p>
       </div>
 

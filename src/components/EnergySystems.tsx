@@ -28,7 +28,7 @@ export default function EnergySystems({ data, analysis }: { data: CrossFitData; 
       <div>
         <h2 className="text-2xl font-bold text-[var(--text-primary)]">Energy Systems & Work Capacity</h2>
         <p className="text-sm text-[var(--text-tertiary)] mt-1">
-          CrossFit targets all three metabolic pathways. This analysis classifies every workout by the dominant energy system it demands.
+          CrossFit trains all three metabolic pathways. Every workout here is tagged by the energy system it hits hardest.
         </p>
       </div>
 

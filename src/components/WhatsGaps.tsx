@@ -278,9 +278,8 @@ export default function WhatsGaps({
       <div>
         <h2 className="text-2xl font-bold text-[var(--text-primary)]">What's Missing? - Programming Gap Analysis</h2>
         <p className="text-sm text-[var(--text-tertiary)] mt-1 max-w-3xl">
-          No program is perfect. This page identifies the blind spots in CrossFit's
-          programming - the movements, skills, and combinations that are undertrained
-          or completely absent. Think of it as a doctor's checkup for the programming.
+          No program is perfect. These are the holes in CrossFit's programming: the
+          movements, skills, and combinations that rarely get trained - or never show up at all.
         </p>
       </div>
 

@@ -220,7 +220,7 @@ export default function NetworkScience({ data, advancedAnalysis }: { data: Cross
       <div>
         <h2 className="text-2xl font-bold text-[var(--text-primary)]">Movement Network Science</h2>
         <p className="text-sm text-[var(--text-tertiary)] mt-1">
-          Graph theory analysis of movement co-occurrence patterns across the entire CrossFit.com programming history.
+          Movements that share a workout form a network. This is that network, built from every WOD since 2001.
         </p>
       </div>
 

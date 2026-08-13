@@ -227,9 +227,9 @@ export default function VarianceAnalysis({
           Is CrossFit Really "Constantly Varied"?
         </h2>
         <p className="text-sm text-[var(--text-tertiary)] leading-relaxed max-w-3xl">
-          Greg Glassman says CrossFit is "constantly varied functional movements at high intensity."
-          Let's test the "varied" part with math. We'll use information theory, concentration
-          indices, and sequence analysis to measure just how random (or not) the programming really is.
+          Glassman calls CrossFit "constantly varied functional movements at high intensity."
+          Does the "varied" part hold up? We ran the math - entropy, concentration,
+          day-to-day sequences - to find out.
         </p>
       </div>
 

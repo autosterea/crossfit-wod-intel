@@ -40,7 +40,7 @@ export default function EraTimeline({ data }: { data: CrossFitData }) {
     <div className="space-y-4">
       <div>
         <h2 className="text-2xl font-bold text-[var(--text-primary)]">CrossFit Era Evolution</h2>
-        <p className="text-sm text-[var(--text-tertiary)] mt-1">How CrossFit programming has evolved across distinct eras</p>
+        <p className="text-sm text-[var(--text-tertiary)] mt-1">CrossFit programming has changed in distinct chunks. Pick an era and see what defined it.</p>
       </div>
 
       {/* Era selector cards */}

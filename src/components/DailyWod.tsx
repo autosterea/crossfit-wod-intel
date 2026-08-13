@@ -195,34 +195,59 @@ export default function DailyWod({ data }: { data: CrossFitData }) {
         </>
       ) : (
         <>
-          {/* Main workout card */}
-          <div className="bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-xl overflow-hidden">
-            <div className="px-5 py-3 border-b border-[var(--panel-border)] flex items-center justify-between flex-wrap gap-2">
-              <h2 className="text-base font-semibold text-[var(--text-primary)] font-mono">{workout.t}</h2>
-              <div className="flex flex-wrap gap-1.5">
+          {/* Main workout card - the whiteboard */}
+          <div className="bg-[var(--panel-bg)] border border-[var(--panel-border)] border-l-2 border-l-[#019644] rounded-xl overflow-hidden">
+            <div className="px-6 md:px-8 pt-5 pb-4 border-b border-[var(--panel-border)] flex items-end justify-between flex-wrap gap-3">
+              <div className="min-w-0">
+                <div className="text-[11px] uppercase tracking-[0.15em] text-[var(--text-tertiary)]">
+                  {formatDate(workout.d)}
+                </div>
                 {workout.nw && (
-                  <span className="px-2 py-0.5 text-[10px] rounded-full bg-[#91C640]/15 text-[#91C640] border border-[#91C640]/30">{workout.nw}</span>
+                  <h2
+                    className="mt-1.5 text-3xl md:text-4xl uppercase text-[var(--text-primary)] leading-none"
+                    style={{ fontFamily: "'Anton', sans-serif", letterSpacing: '1px' }}
+                  >
+                    {workout.nw}
+                  </h2>
                 )}
-                {workout.ih && <span className="px-2 py-0.5 text-[10px] rounded-full bg-rose-500/15 text-rose-400 border border-rose-500/30">Hero WOD</span>}
-                {workout.ib && <span className="px-2 py-0.5 text-[10px] rounded-full bg-amber-500/15 text-amber-400 border border-amber-500/30">Benchmark</span>}
+                <div className="mt-1.5 font-mono text-xs text-[var(--text-muted)]">{workout.t}</div>
               </div>
+              {(workout.ih || workout.ib) && (
+                <div className="flex flex-wrap gap-1.5 shrink-0">
+                  {workout.ih && (
+                    <span className="px-2 py-0.5 text-[10px] uppercase tracking-wider rounded border border-[var(--panel-border)] text-[var(--text-tertiary)]">Hero WOD</span>
+                  )}
+                  {workout.ib && (
+                    <span className="px-2 py-0.5 text-[10px] uppercase tracking-wider rounded border border-[var(--panel-border)] text-[var(--text-tertiary)]">Benchmark</span>
+                  )}
+                </div>
+              )}
             </div>
-            <pre className="px-5 py-4 text-sm text-[var(--text-secondary)] whitespace-pre-wrap font-mono leading-relaxed max-h-72 overflow-y-auto">
+            <pre className="p-6 md:p-8 text-base md:text-lg text-[var(--text-primary)] whitespace-pre-wrap font-mono leading-relaxed">
               {workout.raw || workout.s || '(no description available)'}
             </pre>
-          </div>
-
-          {/* Classification grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-            <Chip label="Modality" value={MODALITY_LABEL[workout.mo] || workout.mo} accent="#019644" />
-            <Chip label="Structure" value={workout.st} accent="#91C640" />
-            <Chip label="Time Domain" value={workout.td} accent="#019644" />
-            <Chip label="Load" value={workout.lp} accent="#91C640" />
+            {/* Classification strip */}
+            <div className="px-6 md:px-8 py-3 border-t border-[var(--panel-border)] flex flex-wrap gap-y-2">
+              {[
+                ['Modality', MODALITY_LABEL[workout.mo] || workout.mo],
+                ['Structure', workout.st],
+                ['Time Domain', workout.td],
+                ['Load', workout.lp],
+              ].map(([label, value], i) => (
+                <div
+                  key={label}
+                  className={`pr-5 ${i > 0 ? 'pl-5 border-l border-[var(--panel-border)]' : ''}`}
+                >
+                  <div className="text-[10px] uppercase tracking-wider text-[var(--text-muted)]">{label}</div>
+                  <div className="text-sm font-medium text-[var(--text-primary)]">{value}</div>
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* Movements */}
           <div className="bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-xl p-4">
-            <h3 className="text-xs font-semibold text-[var(--text-tertiary)] uppercase tracking-wider mb-3">
+            <h3 className="text-[10px] font-semibold text-[var(--text-tertiary)] uppercase tracking-wider mb-3">
               Movements Detected ({workout.mv.length})
             </h3>
             {workout.mv.length === 0 ? (
@@ -240,11 +265,12 @@ export default function DailyWod({ data }: { data: CrossFitData }) {
 
           {/* Similar workouts */}
           {similar.length > 0 && (
-            <div className="bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-xl p-4">
-              <h3 className="text-xs font-semibold text-[var(--text-tertiary)] uppercase tracking-wider mb-3">
+            <details className="group bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-xl">
+              <summary className="list-none [&::-webkit-details-marker]:hidden cursor-pointer select-none px-4 py-3 flex items-center gap-2 text-xs font-semibold text-[var(--text-tertiary)] uppercase tracking-wider hover:text-[var(--text-secondary)] transition-colors">
+                <span className="inline-block text-[var(--text-muted)] transition-transform group-open:rotate-90" aria-hidden="true">›</span>
                 Similar Workouts ({similar.length})
-              </h3>
-              <div className="space-y-1.5">
+              </summary>
+              <div className="px-4 pb-4 space-y-1.5">
                 {similar.map(({ w, score }) => (
                   <button
                     key={w.d + w.t}
@@ -265,19 +291,10 @@ export default function DailyWod({ data }: { data: CrossFitData }) {
                   </button>
                 ))}
               </div>
-            </div>
+            </details>
           )}
         </>
       )}
-    </div>
-  )
-}
-
-function Chip({ label, value, accent }: { label: string; value: string; accent: string }) {
-  return (
-    <div className="bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg px-3 py-2.5">
-      <div className="text-[9px] text-[var(--text-muted)] uppercase tracking-wider font-semibold mb-0.5">{label}</div>
-      <div className="text-sm font-medium" style={{ color: accent }}>{value}</div>
     </div>
   )
 }

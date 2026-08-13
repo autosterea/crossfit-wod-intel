@@ -64,59 +64,54 @@ export default function Hero({ data }: { data: CrossFitData }) {
         </div>
 
         {/* Badge */}
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#019644]/30 bg-[#019644]/10 mb-6">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#019644]/30 bg-[#019644]/10 mb-8">
           <div className="w-1.5 h-1.5 rounded-full bg-[#91C640] animate-pulse" />
-          <span className="text-[10px] text-[#91C640] font-mono">Open Source | Auto-updates daily</span>
+          <span className="text-[10px] text-[#91C640] font-mono">Open source &middot; Updates daily</span>
         </div>
 
         {/* Title */}
-        <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold mb-3 bg-gradient-to-r from-[#91C640] via-[#019644] to-[#91C640] bg-clip-text text-transparent leading-tight">
-          CrossFit WOD Intelligence
+        <h1
+          className="text-4xl sm:text-6xl md:text-7xl mb-4 leading-[0.95] uppercase"
+          style={{ fontFamily: "'Anton', sans-serif", letterSpacing: '1px' }}
+        >
+          <span className="block text-[var(--text-primary)]">Crossfit</span>
+          <span className="block text-[#91C640]">WOD Intelligence</span>
         </h1>
-        <p className="text-[var(--text-tertiary)] text-sm md:text-base mb-8 leading-relaxed">
-          Every workout from crossfit.com, 2001 to today, analyzed
+        <p className="text-[var(--text-tertiary)] text-sm md:text-base mb-10 leading-relaxed">
+          Every WOD posted on crossfit.com since 2001, and what the numbers say
         </p>
 
-        {/* Stats - instant, no animation */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
+        {/* Stats - plain row, no cards */}
+        <div className="flex flex-wrap items-end justify-center gap-x-10 gap-y-6 mb-10">
           {[
-            { value: data.overview.total_workouts.toLocaleString(), label: 'Workouts', color: '#91C640' },
-            { value: String(data.overview.years_covered), label: 'Years', color: '#019644' },
-            { value: data.overview.named_wod_count.toLocaleString(), label: 'Named WODs', color: '#a855f7' },
-            { value: data.overview.hero_wod_count.toLocaleString(), label: 'Hero WODs', color: '#f43f5e' },
+            { value: data.overview.total_workouts.toLocaleString(), label: 'Workouts' },
+            { value: String(data.overview.years_covered), label: 'Years' },
+            { value: data.overview.named_wod_count.toLocaleString(), label: 'Named WODs' },
+            { value: data.overview.hero_wod_count.toLocaleString(), label: 'Hero WODs' },
           ].map((s) => (
-            <div key={s.label} className="bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg p-3">
-              <div className="text-xl sm:text-2xl md:text-3xl font-bold font-mono" style={{ color: s.color }}>{s.value}</div>
-              <div className="text-[10px] text-[var(--text-muted)] mt-0.5">{s.label}</div>
+            <div key={s.label}>
+              <div
+                className="text-3xl sm:text-4xl text-[var(--text-primary)] leading-none"
+                style={{ fontFamily: "'Anton', sans-serif", letterSpacing: '0.5px' }}
+              >
+                {s.value}
+              </div>
+              <div className="text-[10px] uppercase tracking-[0.15em] text-[var(--text-tertiary)] mt-1.5">{s.label}</div>
             </div>
           ))}
         </div>
 
-        {/* Feature pills */}
-        <div className="flex flex-wrap justify-center gap-2 mb-8">
-          {[
-            'Report Card', '10 Physical Skills', 'Push/Pull Balance', 'Energy Systems',
-            'Variance Analysis', 'Hopper Readiness', 'Network Science',
-            'Movement Map', 'Reps & Loading', 'Workout Decoder',
-            'Year vs Year', 'Calendar Heatmap', '80 Movement Encyclopedia',
-          ].map((f) => (
-            <span key={f} className="px-2.5 py-1 text-[9px] sm:text-[10px] text-[var(--text-tertiary)] bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-md">
-              {f}
-            </span>
-          ))}
-        </div>
-
         {/* CTAs */}
-        <div className="flex flex-wrap items-center justify-center gap-2">
+        <div className="flex flex-wrap items-center justify-center gap-3">
           <button
             onClick={() => setActiveTab('daily')}
-            className="px-6 py-2.5 text-sm font-semibold text-white bg-[#019644] hover:bg-[#01b350] rounded-lg transition-colors shadow-lg shadow-[#019644]/20"
+            className="px-6 py-2.5 text-sm font-semibold text-white bg-[#019644] hover:bg-[#01793a] rounded-lg transition-colors"
           >
             Today's WOD →
           </button>
           <button
             onClick={() => setActiveTab('overview')}
-            className="px-6 py-2.5 text-sm font-medium text-[#91C640] bg-[#91C640]/10 hover:bg-[#91C640]/20 border border-[#91C640]/30 rounded-lg transition-colors"
+            className="px-6 py-2.5 text-sm font-medium text-[var(--text-secondary)] border border-[var(--panel-border)] hover:border-[var(--panel-border-strong)] hover:text-[var(--text-primary)] rounded-lg transition-colors"
           >
             Enter Dashboard
           </button>

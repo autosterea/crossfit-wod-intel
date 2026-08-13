@@ -248,7 +248,7 @@ export default function MovementPairs({ data }: { data: CrossFitData }) {
       <div>
         <h2 className="text-2xl font-bold text-[var(--text-primary)]">Movement Pairs</h2>
         <p className="text-sm text-[var(--text-tertiary)] mt-1">
-          Co-occurrence analysis of every movement pairing across the entire CrossFit.com programming history.
+          Which movements get programmed together, and how often - every pairing since 2001.
         </p>
       </div>
 

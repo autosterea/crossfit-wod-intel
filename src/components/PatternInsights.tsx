@@ -143,7 +143,7 @@ export default function PatternInsights({ data }: { data: CrossFitData }) {
     <div className="space-y-4">
       <div>
         <h2 className="text-2xl font-bold text-[var(--text-primary)]">Pattern Detection & Insights</h2>
-        <p className="text-sm text-[var(--text-tertiary)] mt-1">Automatically discovered patterns, anomalies, and non-obvious relationships in 25 years of data</p>
+        <p className="text-sm text-[var(--text-tertiary)] mt-1">What 25+ years of WODs turn up on their own: patterns, oddities, and pairings you would not guess.</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">

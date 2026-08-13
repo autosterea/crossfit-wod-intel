@@ -195,7 +195,7 @@ export default function HopperReadiness({ data, advancedAnalysis }: { data: Cros
       <div>
         <h2 className="text-2xl font-bold text-[var(--text-primary)]">The Hopper Model - Are You Ready for Anything?</h2>
         <p className="text-sm text-[var(--text-tertiary)] mt-1">
-          CrossFit's ultimate test of fitness: pull a random workout from a hopper - could you do it well?
+          Pull a random workout out of a hopper. Could you do it well? That's the test.
         </p>
       </div>
 
