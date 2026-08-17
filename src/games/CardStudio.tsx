@@ -353,6 +353,116 @@ type Slide =
 type Carousel = { id: string; label: string; caption: string; slides: Slide[] }
 const CAROUSELS: Carousel[] = [
   {
+    "id": "rescore-machine-half-weight",
+    "label": "Deep Dive + Tool: The scoring that flips the title (Re-Score Machine launch)",
+    "caption": "THE SCORING THAT FLIPS THE 2026 TITLE. Here is something most fans never noticed: six of the twenty events at the 2026 Games paid HALF points. The three CrossFit Total lifts, the 3D Throw, the 500 Run, and Roll to Support - a win there was worth 50, not 100.\n\nSo we asked the obvious question: what if every event paid the same?\n\nWe re-scored all 20 events on the official 100-point table. The result: DALLIN PEPPER WINS THE 2026 CROSSFIT GAMES, 1501 to Sprague's 1484. Not because of a dropped event or a friendlier format - Pepper beat Sprague by 45 points across those six half-weight tests (Sprague pressed 26th), and doubling their value moves the crown.\n\nTwo weeks ago we tried every other re-scoring and Sprague won them all by MORE. The event weighting is the one lever that flips it. And on the women's side? Nothing touches Cringle - re-weight everything and her margin GROWS to +238.\n\nWe also built you a toy: THE RE-SCORE MACHINE is live on the site. Drag every event's weight yourself and watch the leaderboard recompute in real time. Find the scoring that crowns your athlete - then argue about it in the comments. Link in bio.",
+    "slides": [
+      {
+        "type": "cover",
+        "kicker": "Deep Dive + Interactive Tool",
+        "headline": "THE SCORING\nTHAT FLIPS IT",
+        "sub": "Six of the twenty events paid half points. Weight every test the same and the 2026 men's title changes hands. We ran it - and built a machine so you can too. Swipe."
+      },
+      {
+        "type": "point",
+        "num": 1,
+        "kicker": "The Quiet Rule",
+        "headline": "SIX TESTS,\nHALF POINTS",
+        "body": "At the 2026 Games a win was worth 100 points - except in six events. The three CrossFit Total lifts, the 3D Throw, the 500 Run, and Roll to Support each paid the winner just 50. Fourteen full-weight tests, six half-weight ones. Most fans never clocked it.",
+        "source": "Official 2026 Games leaderboard, per-event points"
+      },
+      {
+        "type": "stat",
+        "kicker": "The What-If",
+        "headline": "EVERY EVENT\nAT 100",
+        "stats": [
+          {
+            "big": "1501",
+            "label": "Pepper's total with all 20 events at full weight"
+          },
+          {
+            "big": "1484",
+            "label": "Sprague's total under the same scoring"
+          },
+          {
+            "big": "+17",
+            "label": "Pepper's winning margin in the re-score"
+          },
+          {
+            "big": "+27",
+            "label": "Sprague's actual margin under the real scoring"
+          }
+        ],
+        "footnote": "All 20 events re-scored on the official 100-point table, exact per-event finishes. Verified two ways."
+      },
+      {
+        "type": "point",
+        "num": 2,
+        "kicker": "Why It Flips",
+        "headline": "PEPPER OWNED\nTHE HALF SIX",
+        "body": "Across the six half-weight tests Pepper outscored Sprague by 45 points - average finish 9.2 to 13.2, with Sprague's shoulder press a 26th. Sprague built his title in the fourteen full-weight events, up 72 there. Restore the six to full value and the crown moves.",
+        "source": "Computed from official per-event finishes"
+      },
+      {
+        "type": "movement",
+        "kicker": "All Events at 100 - Men",
+        "headline": "THE RE-SCORED\nBOARD",
+        "rows": [
+          {
+            "rank": 1,
+            "name": "Dallin Pepper",
+            "pts": 1501,
+            "delta": null
+          },
+          {
+            "rank": 2,
+            "name": "James Sprague",
+            "pts": 1484,
+            "delta": null
+          },
+          {
+            "rank": 3,
+            "name": "Jay Crouch",
+            "pts": 1400,
+            "delta": null
+          },
+          {
+            "rank": 4,
+            "name": "Ricky Garard",
+            "pts": 1267,
+            "delta": null
+          },
+          {
+            "rank": 5,
+            "name": "Justin Medeiros",
+            "pts": 1232,
+            "delta": null
+          },
+          {
+            "rank": 6,
+            "name": "Jayson Hopper",
+            "pts": 1214,
+            "delta": null
+          }
+        ],
+        "note": "Same podium trio, new order at the top. Garard edges past Medeiros for 4th and Malheiros climbs from 9th to 7th."
+      },
+      {
+        "type": "point",
+        "num": 3,
+        "kicker": "The Women",
+        "headline": "CRINGLE IS\nSCORING-PROOF",
+        "body": "Run the same re-score on the women's board and the title does not wobble: Cringle 1643, Lawson 1405 - a 238-point gap, up from 136 under the real scoring. That is now three different re-scorings that cannot touch her. And to be clear on the men too: athletes raced the format they were given. This is a thought experiment, not a protest.",
+        "source": "Same method, women's division"
+      },
+      {
+        "type": "cta",
+        "headline": "NOW YOU\nRE-SCORE IT",
+        "body": "The Re-Score Machine is live on the site: drag every event's weight and watch the whole leaderboard recompute in real time. Find the scoring that crowns your athlete. Link in bio."
+      }
+    ]
+  },
+  {
     "id": "repeat-champions-dynasties",
     "label": "Deep Dive: Repeat champions & the dynasties (Sprague's rare feat)",
     "caption": "REPEAT CHAMPIONS, AND THE ONE WHO BROKE THE PATTERN. Twenty years of the men's CrossFit Games, eleven different champions - and only four men ever repeated. Every one of them did it back-to-back.\n\nRich Froning took four straight (2011-2014). Mat Fraser stacked a record five (2016-2020). Justin Medeiros went back-to-back (2021-2022). Win it, then defend it - that was the only path anyone ever found to a second title.\n\nThen James Sprague did the thing none of them did. He won in 2024, lost the crown to Jayson Hopper in 2025 (finishing 3rd), and took it back in 2026. The first and only man ever to win the CrossFit Games in non-consecutive years.\n\nDynasties are built on streaks. Sprague built his on a comeback. Full breakdown at the link in bio.",

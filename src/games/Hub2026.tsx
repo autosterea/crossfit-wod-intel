@@ -133,6 +133,15 @@ export default function Hub2026() {
         </div>
       )}
 
+      {/* RE-SCORE MACHINE promo */}
+      <section className="mb-3">
+        <button onClick={() => navigate({ view: 'rescore', year: 2026 })}
+          className="cap-card p-4 text-left w-full hover:border-[#91C640]/40 transition-colors">
+          <div className="games-condensed text-[10.5px] uppercase tracking-[0.16em] text-[#91C640] mb-1">New &middot; The Re-Score Machine</div>
+          <div className="games-display text-xl text-[var(--text-primary)] leading-tight mb-1">Re-weight the 2026 Games yourself</div>
+          <p className="text-[12.5px] text-[var(--text-secondary)] leading-relaxed">Six events paid half points - and the weighting decided the men's title. Slide every event's value and watch the leaderboard recompute. <span className="text-[#91C640]">Try it &rarr;</span></p>
+        </button>
+      </section>
       {/* THE BREAKDOWN + INTELLIGENCE promo (surface the analytics features) */}
       <section className="mb-8 grid sm:grid-cols-2 gap-3">
         <button onClick={() => navigate({ view: 'analysis', year: 2026 })}
