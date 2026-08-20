@@ -353,6 +353,440 @@ type Slide =
 type Carousel = { id: string; label: string; caption: string; slides: Slide[] }
 const CAROUSELS: Carousel[] = [
   {
+    "id": "pepper-the-nearly-man",
+    "label": "Athlete Deep Dive: Dallin Pepper, the nearly man (two silvers + the re-score that crowns him)",
+    "caption": "THE BEST MAN NEVER TO WIN A CROSSFIT GAMES. YET.\n\nDallin Pepper is 24 years old and his last five Games finishes read 19-5-2-4-2. Two silver medals in three years, both behind James Sprague: 21 points in 2024, 27 points in 2026. In between, 2025, he missed the podium by 15. To Sprague.\n\nThen there is the finding from our Re-Score Machine: six 2026 events paid half points, Pepper beat Sprague by 45 across those six, and re-scoring all 20 events on the equal 100-point table flips the title. Pepper 1501, Sprague 1484. The weighting was the whole ballgame.\n\nFive podiums this year, a win in the Echo Thruster, and the outright Games lead after Event 9. This is not a hard-luck story. It is a coronation pending.\n\nEvery number is computed from official leaderboard data and our verified Games results archive. Full Pepper profile and the Re-Score Machine: Link in bio.",
+    "slides": [
+      {
+        "type": "cover",
+        "kicker": "Athlete Deep Dive",
+        "headline": "THE BEST MAN\nNEVER TO WIN",
+        "sub": "Two silvers in three years, and a re-score that says champion. The Dallin Pepper file. Swipe."
+      },
+      {
+        "type": "point",
+        "num": 1,
+        "kicker": "The Climb",
+        "headline": "FIVE YEARS,\nONE DIRECTION",
+        "body": "His Games line reads 19-5-2-4-2. A rookie 19th in 2022. Fifth in 2023. Runner-up in 2024. Fourth in 2025. Runner-up again in 2026. He is 24 years old with three teenage world titles (2017-2019) behind him and four straight top-five seasons in the men's field. This is not a guy who caught lightning once. This is a guy who arrives closer every single year.",
+        "source": "Persistence Athletics Games results archive, 2022-2026"
+      },
+      {
+        "type": "point",
+        "num": 2,
+        "kicker": "The Sprague Problem",
+        "headline": "TWENTY-ONE\nPOINTS",
+        "body": "2024: Sprague 806, Pepper 785. Twenty-one points across four days of racing, his first silver. 2025: he slipped to 4th, 15 points off the podium spot Sprague took. 2026: second again, 27 back, to the same man. Two runner-up finishes in three years, both behind James Sprague. The gap has never been the field. It has been one athlete.",
+        "source": "Official Games results, 2024-2026"
+      },
+      {
+        "type": "stat",
+        "kicker": "2026 By The Numbers",
+        "headline": "SECOND.\nAGAIN.",
+        "stats": [
+          {
+            "big": "2nd",
+            "label": "final finish, 1291 points"
+          },
+          {
+            "big": "27",
+            "label": "points behind Sprague"
+          },
+          {
+            "big": "17 of 20",
+            "label": "events inside the top 10"
+          },
+          {
+            "big": "1st",
+            "label": "overall standing after Event 9"
+          }
+        ],
+        "footnote": "He opened 17th in the Hopper, held the outright Games lead after Event 9, and sat 2nd from Event 15 to the finish. Official 2026 leaderboard data."
+      },
+      {
+        "type": "movement",
+        "kicker": "The Weapons",
+        "headline": "FIVE\nPODIUMS",
+        "rows": [
+          {
+            "rank": 1,
+            "name": "Echo Thruster",
+            "pts": 100,
+            "delta": null
+          },
+          {
+            "rank": 2,
+            "name": "Bike Race",
+            "pts": 96,
+            "delta": null
+          },
+          {
+            "rank": 2,
+            "name": "Triple Pig",
+            "pts": 96,
+            "delta": null
+          },
+          {
+            "rank": 3,
+            "name": "Swim Standard",
+            "pts": 92,
+            "delta": null
+          },
+          {
+            "rank": 3,
+            "name": "Climbing Snail",
+            "pts": 92,
+            "delta": null
+          }
+        ],
+        "note": "Per-event finish and points, 2026 Games. One win (4:55.43 in the Echo Thruster), two seconds, two thirds, all five on full-weight events."
+      },
+      {
+        "type": "point",
+        "num": 3,
+        "kicker": "Our Re-Score",
+        "headline": "CHAMPION,\nRE-SCORED",
+        "body": "Six 2026 events paid half points: the three Total lifts, the 3D Throw, the 500 Run, Roll to Support. Pepper outscored Sprague 203 to 158 across those six, a 45-point edge, while Sprague pressed 26th. Re-score all 20 events on the equal 100-point table and the title flips: Pepper 1501, Sprague 1484. He wins by 17. Cut the six half-weight events entirely and Sprague's margin grows to 72. Double the Total lifts instead and Pepper wins by 115. Event weighting is the whole lever, and every re-weighting that pays the lifts in full lands on Pepper's side.",
+        "source": "Persistence Athletics Re-Score Machine"
+      },
+      {
+        "type": "cta",
+        "headline": "THE CROWN\nIS WAITING",
+        "body": "The full Dallin Pepper profile and the Re-Score Machine are live on the site. Re-weight all 20 events yourself and watch the leaderboard recompute in real time. Link in bio."
+      }
+    ]
+  },
+  {
+    "id": "event-win-kings-alltime",
+    "label": "All-Time Career Event-Win Leaderboard",
+    "caption": "45 FOR TOOMEY. 29 FOR FRASER. THE COUNTING STAT NEVER LIES.\n\nChampionships can swing on one bad heat. Event wins cannot. We counted every one of the 241 individual events from 2007 to 2026 and credited every winner, shared wins included.\n\nToomey owns 45, more than the next three women combined. Fraser owns 29, thirteen clear of Froning. Between them, those two won 74 of the 482 division races ever run at the Games - roughly 15 percent.\n\nThe chase is still live. Vellner leads all active men with 10, Campbell leads the 2026 field with 7, and Cringle just banked 5 in a single week. Every number verified against official per-event results in our Games Almanac. Link in bio.",
+    "slides": [
+      {
+        "type": "cover",
+        "kicker": "THE ALL-TIME LEDGER, 2007-2026",
+        "headline": "EVENT WIN\nROYALTY",
+        "sub": "Titles hang banners. Event wins count the days you were the best in the world at something. All 241 events across 20 Games, counted. Swipe."
+      },
+      {
+        "type": "stat",
+        "kicker": "20 GAMES, ONE LEDGER",
+        "headline": "241 EVENTS.\nTWO NAMES.",
+        "stats": [
+          {
+            "big": "241",
+            "label": "individual events run since 2007"
+          },
+          {
+            "big": "45",
+            "label": "Toomey career event wins, all-time record"
+          },
+          {
+            "big": "29",
+            "label": "Fraser career event wins, men's record"
+          },
+          {
+            "big": "15%",
+            "label": "of all 482 division races ever run, won by those two alone"
+          }
+        ],
+        "footnote": "Ties credited to both athletes; the 2009 men's deadlift ladder, a 16-way tie, is credited to no one. 2020 includes online and finals stages. Counted from official per-event results."
+      },
+      {
+        "type": "movement",
+        "kicker": "WOMEN, CAREER EVENT WINS",
+        "headline": "TOOMEY, THEN\nEVERYONE",
+        "rows": [
+          {
+            "rank": 1,
+            "name": "Tia-Clair Toomey",
+            "pts": 45,
+            "delta": null
+          },
+          {
+            "rank": 2,
+            "name": "Annie Thorisdottir",
+            "pts": 14,
+            "delta": null
+          },
+          {
+            "rank": 3,
+            "name": "Katrin Davidsdottir",
+            "pts": 13,
+            "delta": null
+          },
+          {
+            "rank": 4,
+            "name": "Samantha Briggs",
+            "pts": 11,
+            "delta": null
+          },
+          {
+            "rank": 4,
+            "name": "Laura Horvath",
+            "pts": 11,
+            "delta": null
+          },
+          {
+            "rank": 6,
+            "name": "Lucy Campbell",
+            "pts": 7,
+            "delta": null
+          }
+        ],
+        "note": "Toomey-Orr wins counted under Toomey. Kara Webb, later Saunders, also owns 7. Akinwale and Clever sit next on 6. Ties credited to both athletes."
+      },
+      {
+        "type": "movement",
+        "kicker": "MEN, CAREER EVENT WINS",
+        "headline": "FRASER BY\nTHIRTEEN",
+        "rows": [
+          {
+            "rank": 1,
+            "name": "Mat Fraser",
+            "pts": 29,
+            "delta": null
+          },
+          {
+            "rank": 2,
+            "name": "Rich Froning",
+            "pts": 16,
+            "delta": null
+          },
+          {
+            "rank": 3,
+            "name": "Patrick Vellner",
+            "pts": 10,
+            "delta": null
+          },
+          {
+            "rank": 4,
+            "name": "Ricky Garard",
+            "pts": 9,
+            "delta": null
+          },
+          {
+            "rank": 5,
+            "name": "Brent Fikowski",
+            "pts": 8,
+            "delta": null
+          },
+          {
+            "rank": 5,
+            "name": "Guilherme Malheiros",
+            "pts": 8,
+            "delta": null
+          }
+        ],
+        "note": "Josh Bridges also owns 8. Fraser's first career win was a 2014 tie with Froning, both credited. 2020 includes both stages."
+      },
+      {
+        "type": "point",
+        "num": 1,
+        "kicker": "THE GAP",
+        "headline": "MORE THAN\nTHE NEXT 3",
+        "body": "Toomey's 45 event wins are more than the next three women combined: Thorisdottir 14, Davidsdottir 13 and Briggs 11 add up to 38. Fraser's men's record was built in 2020, when he entered the season one win behind Froning's 16 and then won 14 of the year's 19 events across both stages. Toomey went 13 of 19 that same year. The two of them won 27 of the 38 events run in 2020.",
+        "source": "Official per-event results, 2007-2026, PA Games Almanac"
+      },
+      {
+        "type": "point",
+        "num": 2,
+        "kicker": "STILL ADDING",
+        "headline": "THE ACTIVE\nCHASE",
+        "body": "Patrick Vellner leads every active man with 10 career wins, spread across seven different Games since 2017. Ricky Garard sits on 9, Guilherme Malheiros on 8 after three wins this year, Jeffrey Adler on 7. On the women's side, Lucy Campbell reached 7 with three 2026 wins, and Aimee Cringle took 5 events in one week, level with Clever in 2010 and Horvath in 2023 for the most in a single Games by any woman not named Toomey.",
+        "source": "2026 field verified vs live leaderboard, per-event ranks"
+      },
+      {
+        "type": "cta",
+        "headline": "RECEIPTS,\nNOT VIBES",
+        "body": "Every number here is counted from official per-event results across all 20 Games, 2007-2026. Full boards, era notes and the complete event archive live in the PA Games Almanac. Link in bio."
+      }
+    ]
+  },
+  {
+    "id": "games-movement-evolution",
+    "label": "Movement Evolution: What the Games Test Now vs Then",
+    "caption": "THE GAMES NEEDED 7 MOVEMENTS IN 2007. IT HAS NOW USED 103.\n\nThe first Games was three events: a hopper triplet, a trail run, and the CrossFit Total. Seven movements crowned a champion. The Ranch era averaged five events a year. Madison averaged 14.1, and 2026 alone ran 20 events with 31 different movements.\n\nThe test did not just grow, it rotated. Swim, bike and handstand walk did not exist until 2011 and are now fixtures. Meanwhile the kettlebell swing has not been seen since 2010, the overhead squat since 2020, and ring muscle-ups and double-unders since 2023. This year added two movements nobody had ever competed at the Games: the ring Roll to Support and triple-unders.\n\nEvery number in this carousel is computed straight from our Games almanac database, all 241 events from 2007 to 2026, verified against official results. The full movement index, with first year, last year and every appearance, is on the site.\n\nLink in bio.",
+    "slides": [
+      {
+        "type": "cover",
+        "kicker": "20 SEASONS OF MOVEMENT DATA",
+        "headline": "THEN VS\nNOW",
+        "sub": "In 2007 the Games tested 7 movements. In 2026 it used 31 in one weekend, and the all-time count hit 103. What the sport tests now versus what it tested then, computed from every event ever run. Swipe."
+      },
+      {
+        "type": "point",
+        "num": 1,
+        "kicker": "THE ORIGINAL MENU",
+        "headline": "SEVEN\nMOVEMENTS",
+        "body": "The 2007 Games was three events: a hopper triplet of row, pull-up and push jerk, a trail run, and the CrossFit Total. Seven movements decided the first champions. The whole Ranch era averaged 5 events a year. Twenty seasons later, 2026 opened by re-running that entire 2007 program - the Hopper, the ranch run, the Total - then stacked 15 more events on top of it.",
+        "source": "Games almanac database, 2007 + 2026 event files"
+      },
+      {
+        "type": "point",
+        "num": 2,
+        "kicker": "THE NEW STAPLES",
+        "headline": "BUILT\nSINCE 2011",
+        "body": "Swim, bike and handstand walk did not exist at the first four Games. All three debuted in 2011. Since then the bike has appeared in 22 events - only running and rowing appear more often - the swim in 15, the handstand walk in 14. The bar muscle-up arrived in 2012 and has 14 appearances. The yoke came in 2015, the SkiErg in 2016, 9 events each. The modern test was assembled piece by piece.",
+        "source": "Games almanac database, movement first-appearance index"
+      },
+      {
+        "type": "point",
+        "num": 3,
+        "kicker": "QUIETLY RETIRED",
+        "headline": "GONE FROM\nTHE FLOOR",
+        "body": "The kettlebell swing, a gym staple, has appeared at the Games twice ever and not since 2010. The overhead squat made 10 appearances, none since 2020. Ring muscle-ups and double-unders were both last programmed in 2023. And 2026 skipped doubles entirely: it debuted triple-unders instead, plus a first-ever ring skill, the Roll to Support. Two brand-new movements in a single season.",
+        "source": "Games almanac database, movement last-appearance index"
+      },
+      {
+        "type": "stat",
+        "kicker": "THE SPREAD",
+        "headline": "SCALE OF\nTHE TEST",
+        "stats": [
+          {
+            "big": "103",
+            "label": "distinct movements tested since 2007"
+          },
+          {
+            "big": "7",
+            "label": "movements at the entire 2007 Games"
+          },
+          {
+            "big": "31",
+            "label": "movements at the 2026 Games alone"
+          },
+          {
+            "big": "14.1",
+            "label": "avg events per year in the Madison era vs 5 at the Ranch"
+          }
+        ],
+        "footnote": "Computed from all 241 events in the Persistence Athletics Games almanac, 2007-2026."
+      },
+      {
+        "type": "movement",
+        "kicker": "ALL-TIME APPEARANCES",
+        "headline": "THE CORE\nSIX",
+        "rows": [
+          {
+            "rank": 1,
+            "name": "Run",
+            "pts": 45,
+            "delta": null
+          },
+          {
+            "rank": 2,
+            "name": "Row",
+            "pts": 23,
+            "delta": null
+          },
+          {
+            "rank": 3,
+            "name": "Bike",
+            "pts": 22,
+            "delta": null
+          },
+          {
+            "rank": 3,
+            "name": "Snatch",
+            "pts": 22,
+            "delta": null
+          },
+          {
+            "rank": 5,
+            "name": "Clean",
+            "pts": 19,
+            "delta": null
+          },
+          {
+            "rank": 6,
+            "name": "Deadlift",
+            "pts": 18,
+            "delta": null
+          }
+        ],
+        "note": "Games events featuring each movement, 2007-2026. Running is the only movement programmed in all 20 seasons. Bike and snatch are tied at 22; thruster and HSPU also sit at 18 with deadlift."
+      },
+      {
+        "type": "cta",
+        "headline": "THE FULL MOVEMENT INDEX",
+        "body": "All 103 movements, all 241 events, 2007 to 2026: first year, last year, and every appearance, verified against official results. Explore the full almanac movements index on the site. Link in bio."
+      }
+    ]
+  },
+  {
+    "id": "fibonacci-lineage",
+    "label": "Fibonacci Lineage: one final, three eras",
+    "caption": "ONE WORKOUT HAS TESTED THE GAMES IN THREE DIFFERENT ERAS - AND CLOSED TWO OF THEM.\n\nThe Fibonacci Final ended the 2017 Games, came back with a deficit in 2018, and returned nine years after the original to end the 2026 season. Same bells every single time: 203/124-lb double-kettlebell deadlifts, 53/35-lb overhead lunge bells, 89 feet of walking. 5, 8, 13, 89 - all Fibonacci numbers.\n\nWhat changed is the filter. 2018 added a 14/8-inch parallette deficit and only four men finished inside the 6:00 cap. 2026 reran the 2018 test to the inch and stretched the cap to 10:00.\n\nThree editions, six winners, six different names: Collins and Sigmundsdottir, Fraser and Davíðsdóttir, Malheiros and Kerstetter. Nobody has beaten this test twice.\n\nEvery time and placement verified against official Games results. The full lineage lives on our almanac year pages for 2017, 2018 and 2026. Link in bio.",
+    "slides": [
+      {
+        "type": "cover",
+        "kicker": "GAMES HISTORY",
+        "headline": "ONE TEST,\nTHREE ERAS",
+        "sub": "The Fibonacci test closed the Games in 2017, evolved in 2018, and came back to end the 2026 season. Same bells, three generations. Swipe."
+      },
+      {
+        "type": "point",
+        "num": 1,
+        "kicker": "GENERATION ONE",
+        "headline": "2017: THE\nORIGINAL",
+        "body": "The Fibonacci Final debuted as the last event of 2017: 5-8-13 parallette handstand push-ups and double-kettlebell deadlifts at 203/124 lb (women's push-ups ran 3-5-8), then an 89-foot overhead lunge at 53/35 lb. The strict standard wrecked the men's field - Logan Collins was the only man under the 6:00 cap at 5:29.09, with Fraser second at CAP+2. Sara Sigmundsdottir won the women in 3:13.98, and Toomey edged Webb for the title by 2 points.",
+        "source": "2017 Games, Event 13 official results"
+      },
+      {
+        "type": "point",
+        "num": 2,
+        "kicker": "GENERATION TWO",
+        "headline": "2018: THE\nDEFICIT",
+        "body": "One year later the test returned as Event 7 with one brutal addition: a parallette deficit, 14 inches for men, 8 for women. Same bells, same 89-foot lunge, same 6:00 cap, and the women moved to the full 5-8-13 push-up scheme. Only four men finished inside the cap. Mat Fraser won in 4:54.84, still the fastest men's Fibonacci on record, and Katrín Davíðsdóttir took the women in 3:31.73. The deficit turned a shoulder test into a filter.",
+        "source": "2018 Games, Event 7 official results"
+      },
+      {
+        "type": "point",
+        "num": 3,
+        "kicker": "GENERATION THREE",
+        "headline": "2026: THE\nRERUN",
+        "body": "Nine years after the original, the 2026 season ended on the exact 2018 test: same 14/8-inch deficit, same 203/124-lb deadlift bells, same 53/35-lb lunge bells. One change - the cap stretched from 6:00 to 10:00. Guilherme Malheiros won in 5:16.70, his third event win of the Games, over Jay Crouch (5:23.94) and Ricky Garard (5:48.21). Olivia Kerstetter took the women in 3:46.67, her second win of the day, as Sprague and Cringle sealed their titles behind them.",
+        "source": "2026 Games, E20 official leaderboard"
+      },
+      {
+        "type": "stat",
+        "kicker": "THE LINEAGE IN NUMBERS",
+        "headline": "THREE RUNS,\nONE TEST",
+        "stats": [
+          {
+            "big": "3",
+            "label": "editions: 2017, 2018, 2026"
+          },
+          {
+            "big": "6",
+            "label": "winners, none repeated"
+          },
+          {
+            "big": "4:54.84",
+            "label": "fastest men's time - Fraser, 2018"
+          },
+          {
+            "big": "3:13.98",
+            "label": "fastest women's time - Sigmundsdottir, 2017"
+          }
+        ],
+        "footnote": "The loads never moved: 2x203/124-lb deadlift bells and 2x53/35-lb lunge bells in all three editions. Only the deficit (added 2018) and the cap (6:00 to 10:00 in 2026) changed."
+      },
+      {
+        "type": "point",
+        "num": 4,
+        "kicker": "Every Fibonacci Winner",
+        "headline": "SIX CROWNS,\nSIX NAMES",
+        "body": "2017: Logan Collins (5:29.09) and Sara Sigmundsdottir (3:13.98). 2018: Mat Fraser (4:54.84) and Katrin Davidsdottir (3:31.73). 2026: Guilherme Malheiros (5:16.70) and Olivia Kerstetter (3:46.67). Three editions, both divisions, six different athletes. Nobody has beaten this test twice.",
+        "source": "Official Games results, 2017, 2018, 2026"
+      },
+      {
+        "type": "cta",
+        "headline": "THE FULL\nHISTORY",
+        "body": "Every event, every winner, every era from 2007 to 2026 lives in our Games Almanac. Open the 2017, 2018 and 2026 year pages to trace the Fibonacci lineage in full. Link in bio."
+      }
+    ]
+  },
+  {
     "id": "rescore-machine-half-weight",
     "label": "Deep Dive + Tool: The scoring that flips the title (Re-Score Machine launch)",
     "caption": "THE SCORING THAT FLIPS THE 2026 TITLE. Here is something most fans never noticed: six of the twenty events at the 2026 Games paid HALF points. The three CrossFit Total lifts, the 3D Throw, the 500 Run, and Roll to Support - a win there was worth 50, not 100.\n\nSo we asked the obvious question: what if every event paid the same?\n\nWe re-scored all 20 events on the official 100-point table. The result: DALLIN PEPPER WINS THE 2026 CROSSFIT GAMES, 1501 to Sprague's 1484. Not because of a dropped event or a friendlier format - Pepper beat Sprague by 45 points across those six half-weight tests (Sprague pressed 26th), and doubling their value moves the crown.\n\nTwo weeks ago we tried every other re-scoring and Sprague won them all by MORE. The event weighting is the one lever that flips it. And on the women's side? Nothing touches Cringle - re-weight everything and her margin GROWS to +238.\n\nWe also built you a toy: THE RE-SCORE MACHINE is live on the site. Drag every event's weight yourself and watch the leaderboard recompute in real time. Find the scoring that crowns your athlete - then argue about it in the comments. Link in bio.",
