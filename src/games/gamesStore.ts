@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-export type GamesView = 'home' | 'year' | 'evolution' | 'movements' | 'lore' | 'capacity' | 'hub' | 'athlete' | 'cards' | 'intel' | 'analysis' | 'events' | 'rescore'
+export type GamesView = 'home' | 'year' | 'evolution' | 'movements' | 'lore' | 'capacity' | 'hub' | 'athlete' | 'cards' | 'intel' | 'analysis' | 'events' | 'rescore' | 'h2h'
 
 export interface GamesRoute {
   view: GamesView
@@ -22,6 +22,7 @@ const TITLES: Record<GamesView, string> = {
   analysis: 'The Breakdown - 2026 CrossFit Games Analysis | Persistence Athletics',
   events: 'The 20 Events - 2026 CrossFit Games Tracker | Persistence Athletics',
   rescore: 'The Re-Score Machine - 2026 CrossFit Games What-If | Persistence Athletics',
+  h2h: 'Head-to-Head Machine - CrossFit Games Almanac | Persistence Athletics',
 }
 
 export function parseGamesPath(pathname: string): GamesRoute {
@@ -34,6 +35,7 @@ export function parseGamesPath(pathname: string): GamesRoute {
   if (seg === '2026/events') return { view: 'events', year: 2026 }
   if (seg === '2026/intel') return { view: 'intel', year: 2026 }
   if (seg === '2026/rescore') return { view: 'rescore', year: 2026 }
+  if (seg === 'h2h') return { view: 'h2h', year: null }
   if (seg === '2026') return { view: 'hub', year: 2026 }
   if (seg === 'cards') return { view: 'cards', year: 2026 }
   const capacityYear = seg.match(/^capacity\/(\d{4})$/)
@@ -50,6 +52,7 @@ export function routeToPath(route: GamesRoute): string {
   if (route.view === 'hub') return '/games/2026'
   if (route.view === 'intel') return '/games/2026/intel'
   if (route.view === 'rescore') return '/games/2026/rescore'
+  if (route.view === 'h2h') return '/games/h2h'
   if (route.view === 'cards') return '/games/cards'
   if (route.view === 'analysis') return route.slug ? `/games/analysis/${route.slug}` : '/games/analysis'
   if (route.view === 'events') return '/games/2026/events'

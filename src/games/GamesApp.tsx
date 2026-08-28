@@ -20,6 +20,7 @@ const IntelView = lazy(() => import('./IntelView'))
 const AnalysisView = lazy(() => import('./analysis/AnalysisView'))
 const EventsView = lazy(() => import('./events/EventsView'))
 const RescoreView = lazy(() => import('./RescoreView'))
+const H2HView = lazy(() => import('./H2HView'))
 
 class ViewErrorBoundary extends Component<{ children: ReactNode; name: string }, { error: Error | null }> {
   state = { error: null as Error | null }
@@ -227,6 +228,7 @@ export default function GamesApp() {
                 {route.view === 'hub' && <Hub2026 />}
                 {route.view === 'intel' && <IntelView />}
                 {route.view === 'rescore' && <RescoreView />}
+                {route.view === 'h2h' && <H2HView />}
                 {route.view === 'athlete' && <AthleteProfile key={route.slug} />}
                 {route.view === 'cards' && <CardStudio />}
                 {route.view === 'analysis' && <AnalysisView key={route.slug ?? 'index'} />}
