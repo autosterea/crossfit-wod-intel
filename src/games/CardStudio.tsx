@@ -353,6 +353,278 @@ type Slide =
 type Carousel = { id: string; label: string; caption: string; slides: Slide[] }
 const CAROUSELS: Carousel[] = [
   {
+    "id": "two-timers-club",
+    "label": "The Two-Timers Club",
+    "caption": "Winning the CrossFit Games once puts you in the history books. Winning it twice puts you in a club with six other humans. 20 seasons. 40 individual titles. 22 different champions. Only 7 ever repeated, and between them they own 25 of the 40 crowns. James Sprague just became member seven, and his road in was unlike anyone else's: he is the only member who lost the title on the floor (3rd in 2025, one point off silver) and then took it back. Every number in this carousel is computed from official leaderboard data, 2007 to 2026. Davidsdottir by 11 over Toomey herself. Medeiros by 27 over Khrennikov. Sprague by 27 coming off a loss. Margins are facts. Hardest is a debate. Drop your pick below and tag someone who is wrong: whose second title was hardest to win?",
+    "slides": [
+      {
+        "type": "cover",
+        "kicker": "20 SEASONS. 40 TITLES. 22 CHAMPIONS.",
+        "headline": "ONLY SEVEN\nEVER WON\nTWICE",
+        "sub": "Repeating is the rarest feat in this sport. And the newest member of the club took the hardest road anyone has ever walked to a second title. Argue with that after slide five."
+      },
+      {
+        "type": "point",
+        "num": 1,
+        "kicker": "THE MATH",
+        "headline": "15 CHAMPIONS\nNEVER REPEATED",
+        "body": "Across 20 editions of the Games, 22 different athletes have been crowned Fittest on Earth. Fifteen of them never won again. The seven who did own 25 of the 40 titles ever awarded. One win makes you a champion. Two makes you an era.",
+        "source": "games-data.json champions, 2007-2026"
+      },
+      {
+        "type": "movement",
+        "kicker": "THE ROSTER",
+        "headline": "THE TWO-TIMERS CLUB",
+        "rows": [
+          {
+            "rank": 1,
+            "name": "Tia-Clair Toomey",
+            "pts": 8,
+            "delta": null
+          },
+          {
+            "rank": 2,
+            "name": "Mat Fraser",
+            "pts": 5,
+            "delta": null
+          },
+          {
+            "rank": 3,
+            "name": "Rich Froning",
+            "pts": 4,
+            "delta": null
+          },
+          {
+            "rank": 4,
+            "name": "Annie Thorisdottir",
+            "pts": 2,
+            "delta": null
+          },
+          {
+            "rank": 5,
+            "name": "Katrin Davidsdottir",
+            "pts": 2,
+            "delta": null
+          },
+          {
+            "rank": 6,
+            "name": "Justin Medeiros",
+            "pts": 2,
+            "delta": null
+          }
+        ],
+        "note": "Titles per member. Member seven: James Sprague, 2024 and 2026, the only man to lose the crown on the competition floor and take it back. His road gets its own slide."
+      },
+      {
+        "type": "stat",
+        "kicker": "WHAT IT TAKES",
+        "headline": "THE CLOSEST\nCALLS",
+        "stats": [
+          {
+            "big": "2",
+            "label": "Toomey over Webb, 2017. The tightest title in club history"
+          },
+          {
+            "big": "11",
+            "label": "Davidsdottir over Toomey, 2016"
+          },
+          {
+            "big": "21",
+            "label": "Sprague over Pepper, 2024"
+          },
+          {
+            "big": "27",
+            "label": "Medeiros over Khrennikov, 2022"
+          }
+        ],
+        "footnote": "Each member's hardest title, measured in points over silver. Fraser's tightest was 35 in 2019, Thorisdottir's 43 in 2011, Froning's 50 in 2014. Standard points era, 2011 on."
+      },
+      {
+        "type": "point",
+        "num": 2,
+        "kicker": "THE OUTLIER",
+        "headline": "SPRAGUE LOST\nTHE THRONE.\nTHEN TOOK IT BACK",
+        "body": "Five members won their titles in unbroken streaks. Toomey's lone gap year, 2023, was a season she sat out. From 2017 on she never lost a Games she entered. Sprague entered and lost. Champion by 21 in 2024. Third in 2025, one point off silver and 15 off Hopper. Champion again by 27 over Pepper in 2026. He is the only member who dropped the crown on the floor and picked it back up.",
+        "source": "results 2024-2025; live-leaderboard-2026.json"
+      },
+      {
+        "type": "movement",
+        "kicker": "THE DEBATE",
+        "headline": "SECOND TITLES,\nRANKED BY MARGIN",
+        "rows": [
+          {
+            "rank": 1,
+            "name": "Davidsdottir 2016",
+            "pts": 11,
+            "delta": null
+          },
+          {
+            "rank": 2,
+            "name": "Medeiros 2022",
+            "pts": 27,
+            "delta": null
+          },
+          {
+            "rank": 3,
+            "name": "Sprague 2026",
+            "pts": 27,
+            "delta": null
+          },
+          {
+            "rank": 4,
+            "name": "Toomey 2018",
+            "pts": 64,
+            "delta": null
+          },
+          {
+            "rank": 5,
+            "name": "Thorisdottir 2012",
+            "pts": 85,
+            "delta": null
+          },
+          {
+            "rank": 6,
+            "name": "Froning 2012",
+            "pts": 114,
+            "delta": null
+          }
+        ],
+        "note": "Points over silver in each member's second title year. Fraser's 2017 repeat was the widest ever, 216 clear of Fikowski. Margin is one lens. Circumstance is the other: only Sprague repeated after losing the title on the floor."
+      },
+      {
+        "type": "cta",
+        "headline": "WHOSE SECOND TITLE\nWAS HARDEST TO WIN?",
+        "body": "Davidsdottir held off Toomey by 11. Medeiros held off Khrennikov by 27. Sprague came back from losing the crown to win by 27. Margins are facts. Hardest is a debate. Make your case in the comments and tag someone who is wrong about this."
+      }
+    ]
+  },
+  {
+    "id": "streak-is-over",
+    "label": "Toomey reign retrospective + 2026 turning point (flagship, posts Fri Sep 11)",
+    "caption": "The greatest reign in this sport is over, and nobody ended it. Eight titles from 2017 to 2025. A +360 margin in 2020. 45 career event wins when second place all time sits at 29. The one season she missed in that window, 2023, someone else wore the crown until she came back and took it twice more. Then 2026: thirty women on the start list, and Toomey-Orr was not among them. Nobody beat her on a competition floor. The reign ended in her absence, and Aimee Cringle was crowned with a 5.50 average finish while 23 different athletes won events across the two divisions. That is not a weaker champion. That is a different sport. Celebrate the reign. Respect the new queen. Then answer this: does anyone ever build an 8-title reign again?",
+    "slides": [
+      {
+        "type": "cover",
+        "kicker": "VERIFIED NUMBERS ONLY",
+        "headline": "THE GREATEST REIGN\nIN SPORT IS OVER",
+        "sub": "Eight titles. 45 event wins. Zero losses in a Games she entered since 2017. Argue with the claim, not the math."
+      },
+      {
+        "type": "point",
+        "num": 1,
+        "kicker": "THE REIGN",
+        "headline": "EIGHT STARTS.\nEIGHT TITLES.\nZERO DEFEATS.",
+        "body": "From 2017 through 2025 Tia-Clair Toomey-Orr started eight CrossFit Games and won all eight. The one year in that window she was not champion, 2023, she was not on the floor: Laura Horvath took the title while Toomey sat the season out. Entered and beaten? It never happened in nine years.",
+        "source": "games-data.json champions + results 2017-2025"
+      },
+      {
+        "type": "stat",
+        "kicker": "PEAK DOMINANCE",
+        "headline": "2020 WAS NOT A WIN.\nIT WAS AN ERASURE.",
+        "stats": [
+          {
+            "big": "+360",
+            "label": "winning margin, 1025 to 665 over Davidsdottir"
+          },
+          {
+            "big": "13",
+            "label": "event wins in 2020 alone, out of 19"
+          },
+          {
+            "big": "2.58",
+            "label": "her average event finish that year"
+          },
+          {
+            "big": "8",
+            "label": "titles in eight starts, 2017 to 2025"
+          }
+        ],
+        "footnote": "Every figure computed from official Games results in our database."
+      },
+      {
+        "type": "movement",
+        "kicker": "ALL-TIME EVENT WINS",
+        "headline": "45 WINS.\nNOBODY IS CLOSE.",
+        "rows": [
+          {
+            "rank": 1,
+            "name": "Tia-Clair Toomey-Orr",
+            "pts": 45,
+            "delta": null
+          },
+          {
+            "rank": 2,
+            "name": "Mat Fraser",
+            "pts": 29,
+            "delta": null
+          },
+          {
+            "rank": 3,
+            "name": "Rich Froning",
+            "pts": 16,
+            "delta": null
+          },
+          {
+            "rank": 4,
+            "name": "Annie Thorisdottir",
+            "pts": 14,
+            "delta": null
+          },
+          {
+            "rank": 5,
+            "name": "Sam Briggs",
+            "pts": 11,
+            "delta": null
+          },
+          {
+            "rank": 5,
+            "name": "Laura Horvath",
+            "pts": 11,
+            "delta": null
+          }
+        ],
+        "note": "pts = career individual Games event wins. The gap from first to second is 16 wins, as many as Froning's entire career total."
+      },
+      {
+        "type": "point",
+        "num": 2,
+        "kicker": "THE TURNING POINT",
+        "headline": "THE 2026 FIELD LOCKED\nWITHOUT HER.",
+        "body": "Thirty women started the 2026 Games. Toomey-Orr was not one of them. So be precise about the ending: nobody beat her on a competition floor. The reign ended in her absence, and Aimee Cringle was crowned the first champion of the post-Toomey era.",
+        "source": "live-leaderboard-2026.json, 30-woman field"
+      },
+      {
+        "type": "stat",
+        "kicker": "THE NEW ERA",
+        "headline": "THE CROWN CHANGED.\nSO DID THE MATH.",
+        "stats": [
+          {
+            "big": "5.50",
+            "label": "Cringle's average finish across all 20 events"
+          },
+          {
+            "big": "+136",
+            "label": "her winning margin over Emma Lawson"
+          },
+          {
+            "big": "5",
+            "label": "event wins in her title run"
+          },
+          {
+            "big": "23",
+            "label": "different athletes won the 40 events across both divisions"
+          }
+        ],
+        "footnote": "In 2020, 11 athletes won all 38 events across both divisions. Parity is not coming. It is here."
+      },
+      {
+        "type": "cta",
+        "headline": "DOES ANYONE EVER BUILD\nAN 8-TITLE REIGN AGAIN?",
+        "body": "Eight titles took nine seasons of near perfection against a field that kept getting deeper. The 2026 board says dominance is dead: 23 different event winners. Prove us wrong in the comments and bring data."
+      }
+    ]
+  },
+  {
     "id": "pepper-the-nearly-man",
     "label": "Athlete Deep Dive: Dallin Pepper, the nearly man (two silvers + the re-score that crowns him)",
     "caption": "THE BEST MAN NEVER TO WIN A CROSSFIT GAMES. YET.\n\nDallin Pepper is 24 years old and his last five Games finishes read 19-5-2-4-2. Two silver medals in three years, both behind James Sprague: 21 points in 2024, 27 points in 2026. In between, 2025, he missed the podium by 15. To Sprague.\n\nThen there is the finding from our Re-Score Machine: six 2026 events paid half points, Pepper beat Sprague by 45 across those six, and re-scoring all 20 events on the equal 100-point table flips the title. Pepper 1501, Sprague 1484. The weighting was the whole ballgame.\n\nFive podiums this year, a win in the Echo Thruster, and the outright Games lead after Event 9. This is not a hard-luck story. It is a coronation pending.\n\nEvery number is computed from official leaderboard data and our verified Games results archive. Full Pepper profile and the Re-Score Machine: Link in bio.",
