@@ -17,8 +17,20 @@ and 3D visualization.
 - **State:** Zustand (single store at `src/stores/useStore.ts`)
 - **Charts:** Recharts 3
 - **3D:** Three.js + React Three Fiber + `react-force-graph-3d`
-- **Data:** Single JSON bundle at `src/data/crossfit-data.json` (~2.6 MB,
-  loaded at app start) — no API, no server, fully static
+- **Data:** Single JSON bundle at `src/data/crossfit-data.json` (~2.6 MB).
+  Since 2026-09 it is NOT bundled into the JS: the build copies it to
+  public/data/ (scripts/copy-data-to-public.mjs, wired into npm build/predev;
+  public/data/ is gitignored) and the app fetches it at startup
+  (src/data-loader.ts) - main chunk dropped 2.4MB -> ~300KB and the data
+  caches independently of code deploys. No API, no server, fully static.
+  Scraper hardening (2026-09): heavy-day ladder + clock formats extract
+  correctly; a publish-race guard exits WITHOUT writing when the page has no
+  article tag (a 17:30 UTC retry cron in daily-wod.yml picks the day up);
+  prose-article guard stores essays as rest days; repair mode:
+  `node scripts/fetch-daily-wod.mjs YYYY-MM-DD --force` replaces a bad entry
+  with clean stat accounting. Complexity analyses exclude mv=[] entries
+  (2026-09 audit: the 2024-25 dip is partly scaling-text phantom
+  detections - open task: re-detect 2023-01..2026-02 on workout-body text).
 
 ## Data pipeline (autopilot)
 
