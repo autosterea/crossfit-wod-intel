@@ -7,8 +7,9 @@
   "homepage": "https://wod.persistenceathletics.com/",
   "type": "module",
   "scripts": {
+    "predev": "node scripts/copy-data-to-public.mjs",
     "dev": "vite",
-    "build": "node scripts/validate-analysis-posts.mjs && node scripts/build-games-data.mjs && node scripts/build-athlete-intel-2026.mjs && tsc -b && vite build && node scripts/prerender.mjs",
+    "build": "node scripts/validate-analysis-posts.mjs && node scripts/build-games-data.mjs && node scripts/build-athlete-intel-2026.mjs && node scripts/copy-data-to-public.mjs && tsc -b && vite build && node scripts/prerender.mjs",
     "build:intel": "node scripts/build-athlete-intel-2026.mjs",
     "build:intel-history": "node scripts/build-athlete-history-2026.mjs",
     "build:intel-benchmarks": "node scripts/build-athlete-benchmarks-2026.mjs",

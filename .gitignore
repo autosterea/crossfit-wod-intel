@@ -38,3 +38,4 @@ qf_*.html
 qf_*.txt
 *.local.json
 .claude/
+public/data/

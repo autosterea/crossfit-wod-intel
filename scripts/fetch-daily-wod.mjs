@@ -230,6 +230,13 @@ function extractWorkoutSection(text) {
     /^\d+[-–]\d+[-–]\d+/,      // rep schemes like 21-15-9
     /^\d+ rounds/i,
     /complete as many/i,
+    // Heavy-day ladders: "Front squat 3-3-3-2-2-1-1 reps" (movement first, so
+    // the ladder is NOT at line start - match it anywhere in the line)
+    /\d+(?:[-–]\d+){2,}\s*reps?\b/i,
+    // Clock formats: "On a 10-minute clock, complete:"
+    /on a \d+[- ]?min(?:ute)?s?\s+clock/i,
+    /for (?:load|weight)\b/i,
+    /heavy (?:day|single)/i,
   ]
 
   // Markers that signal the end of the workout / start of comments/footer/article body
@@ -253,7 +260,7 @@ function extractWorkoutSection(text) {
     /learn the movement/i,
     // Article-body markers (anything after these is commentary, not the workout)
     /^compare to/i,
-    /^post (?:time|your|results|score|rounds)/i,
+    /^post (?:time|your|results|score|rounds|loads|reps|weights)/i,
     /^stimulus and strategy/i,
     /^scaling:/i,
     /today'?s? hero workout/i,
@@ -311,8 +318,24 @@ if (!workoutText || workoutText.length < 10) {
 // sometimes serves a page with no workout content (e.g. Thursday/Sunday rest
 // days with only an article); without this check, extractWorkoutSection's
 // fallback returns navigation / ad text ("CROSSFIT GAMES TICKETS NOW AVAILABLE").
-const hasWorkoutMarker = /\b(amrap|emom|tabata|for time|for reps|rounds for time|complete as many|every\s+\d+\s*min|max\s*(?:effort|load|reps)|1[- ]?rm|rest day)\b/i.test(workoutText)
-const looksLikeArticle = /\b(tickets now available|crossfit games|sign\s*up|subscribe|workout of the day\s+\d{6}\d*\s*crossfit)\b/i.test(workoutText) && !hasWorkoutMarker
+const hasWorkoutMarker = /\b(amrap|emom|tabata|for time|for reps|rounds for time|complete as many|every\s+\d+\s*min|max\s*(?:effort|load|reps)|1[- ]?rm|rest day|on a \d+[- ]?min(?:ute)?s?\s+clock|for (?:load|weight)|heavy (?:day|single))\b/i.test(workoutText)
+  || /\d+(?:[-–]\d+){2,}\s*reps?\b/i.test(workoutText)
+const looksLikeArticle = (
+  /\b(tickets now available|crossfit games|sign\s*up|subscribe|workout of the day\s+\d{6}\d*\s*crossfit|from the vault|level 1 seminar)\b/i.test(workoutText)
+  // Prose-article signature: no workout marker AND no digits in the opening -
+  // catches essays ("In a world drowning in fitness advice...") that mention a
+  // movement word deep in the body and used to leak through as fake workouts.
+  || !/\d/.test(workoutText.slice(0, 120))
+) && !hasWorkoutMarker
+
+// Publish-race guard: crossfit.com sometimes serves the page before the day's
+// workout is in the <article> block. If we had NO article tag to work from,
+// whatever we extracted came from the full-page fallback (nav, ads, comments) -
+// do not store it. The 17:30 UTC retry run will pick the day up once published.
+if (!articleMatch && !looksLikeArticle) {
+  console.log('[fetch-daily-wod] No <article> block found - page likely not fully published. Exiting WITHOUT writing; retry run will handle it.')
+  process.exit(0)
+}
 
 if (looksLikeArticle) {
   console.log('[fetch-daily-wod] Extracted text looks like article/nav content, not a workout. Treating as rest day.')
@@ -603,10 +626,28 @@ try {
   process.exit(1)
 }
 
-const exists = data.searchIndex.some(w => w.d === dateStr)
-if (exists) {
+const FORCE = process.argv.includes('--force')
+const existingIdx = data.searchIndex.findIndex(w => w.d === dateStr)
+if (existingIdx >= 0 && !FORCE) {
   console.log(`[fetch-daily-wod] WOD for ${dateStr} already exists in searchIndex – skipping.`)
   process.exit(0)
+}
+if (existingIdx >= 0 && FORCE) {
+  // Repair mode: remove the old entry and reverse its aggregate contributions
+  // so the increments below leave every stat consistent.
+  const old = data.searchIndex[existingIdx]
+  console.log(`[fetch-daily-wod] --force: replacing existing ${dateStr} entry ("${(old.s || '').slice(0, 40)}...")`)
+  const dec = (obj, key) => { if (obj[key] != null) { obj[key] -= 1; if (obj[key] <= 0) delete obj[key] } }
+  dec(data.overview.modality, old.mo)
+  dec(data.overview.structure, old.st)
+  dec(data.overview.time_domain, old.td)
+  dec(data.overview.load_profile, old.lp)
+  for (const mv of old.mv || []) dec(data.overview.movement_frequency, mv)
+  if (old.nw) data.overview.named_wod_count -= 1
+  if (old.ih) data.overview.hero_wod_count -= 1
+  if (old.ib) data.overview.benchmark_count -= 1
+  data.overview.total_days -= 1 // re-incremented below
+  data.searchIndex.splice(existingIdx, 1)
 }
 
 // ---------------------------------------------------------------------------
@@ -628,6 +669,8 @@ const newWod = {
 }
 
 data.searchIndex.push(newWod)
+// Repairs of past dates must not disturb chronological order
+data.searchIndex.sort((a, b) => a.d.localeCompare(b.d))
 
 // ---------------------------------------------------------------------------
 // 11. Update todaysWod

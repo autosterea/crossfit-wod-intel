@@ -5,7 +5,8 @@ import './index.css'
 import { lazyReload } from './lazyReload'
 
 // Both apps are lazy so each route only downloads its own bundle:
-// '/' loads the main app (incl. the 2.6MB daily-WOD dataset), '/games'
+// '/' loads the main app (which then fetches the daily-WOD dataset from
+// /data/crossfit-data.json as a static file - not bundled), '/games'
 // loads the Games Almanac (incl. its own data) — never both. lazyReload self-heals
 // a stale-chunk failure after a deploy by reloading once (see src/lazyReload.ts).
 const App = lazyReload(() => import('./App.tsx'))

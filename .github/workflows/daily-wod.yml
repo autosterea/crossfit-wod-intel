@@ -2,7 +2,8 @@ name: Fetch Daily WOD
 
 on:
   schedule:
-    - cron: '0 14 * * *'  # 6am PT (14:00 UTC)
+    - cron: '0 14 * * *'
+    - cron: '30 17 * * *'  # retry pass - picks up late-published workouts the 14:00 run skipped  # 6am PT (14:00 UTC)
   workflow_dispatch:  # Allow manual trigger
 
 permissions:

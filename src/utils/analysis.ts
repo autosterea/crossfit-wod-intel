@@ -182,17 +182,23 @@ export function analyzeData(data: CrossFitData): AnalysisResults {
     .sort((a, b) => b.count - a.count)
 
   // === COMPLEXITY ===
+  // Rest-day and article entries (mv=[]) are excluded: the live scraper stores
+  // every calendar day while the pre-2026 pipeline stored workouts only, so
+  // including zeros makes recent years read artificially low (audited 2026-09).
   const complexityByYearMap: Record<string, number[]> = {}
   let totalComplexity = 0
+  let complexityN = 0
   searchIndex.forEach((w) => {
+    if (!w.mv.length) return
     const c = getWorkoutComplexity(w.mv)
     totalComplexity += c
+    complexityN += 1
     const year = w.d.substring(0, 4)
     if (!complexityByYearMap[year]) complexityByYearMap[year] = []
     complexityByYearMap[year].push(c)
   })
 
-  const avgComplexity = totalComplexity / totalWods
+  const avgComplexity = complexityN ? totalComplexity / complexityN : 0
   const complexityByYear = Object.entries(complexityByYearMap)
     .sort(([a], [b]) => a.localeCompare(b))
     .map(([year, vals]) => ({ year, avg: +(vals.reduce((a, b) => a + b, 0) / vals.length).toFixed(2) }))

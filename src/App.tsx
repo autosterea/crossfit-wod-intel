@@ -1,7 +1,7 @@
-import { lazy, Suspense, useMemo, useEffect, Component, type ReactNode } from 'react'
+import { lazy, Suspense, useMemo, useEffect, useState, Component, type ReactNode } from 'react'
 import { useStore } from './stores/useStore'
 import { tabForPath, navigateTab } from './appRouting'
-import rawData from './data/crossfit-data.json'
+import { loadCrossFitData } from './data-loader'
 import type { CrossFitData } from './types'
 import { analyzeData } from './utils/analysis'
 import { runAdvancedAnalysis } from './utils/advanced-analysis'
@@ -37,19 +37,6 @@ const NamedWods = lazy(() => import('./components/NamedWods'))
 const RepsAndLoading = lazy(() => import('./components/RepsAndLoading'))
 const Methodology = lazy(() => import('./components/Methodology'))
 
-// Handle both parsed object and stringified JSON (vite json.stringify)
-const D: CrossFitData = (typeof rawData === 'string' ? JSON.parse(rawData) : rawData) as CrossFitData
-
-// Verify data loaded correctly
-if (typeof window !== 'undefined') {
-  console.log('[CrossFit] Data loaded:', {
-    type: typeof rawData,
-    totalWorkouts: D?.overview?.total_workouts,
-    searchIndexLen: D?.searchIndex?.length,
-    hasMovementDisplay: !!D?.movementDisplay,
-  })
-}
-
 // Error boundary to catch component crashes
 class ErrorBoundary extends Component<{ children: ReactNode; name: string }, { error: Error | null }> {
   state = { error: null as Error | null }
@@ -72,8 +59,37 @@ function LoadingFallback() {
   return (
     <div className="flex items-center justify-center h-full min-h-[400px]">
       <div className="flex flex-col items-center gap-4">
-        <div className="w-12 h-12 border-2 border-blue-400/30 border-t-blue-400 rounded-full animate-spin" />
+        <div className="w-12 h-12 border-2 border-[#91C640]/30 border-t-[#91C640] rounded-full animate-spin" />
         <p className="text-[var(--text-tertiary)] text-sm">Loading...</p>
+      </div>
+    </div>
+  )
+}
+
+// Full-screen branded loader shown while the dataset downloads at startup.
+function DataLoadingScreen() {
+  return (
+    <div className="flex items-center justify-center h-screen bg-[var(--app-bg)]">
+      <div className="flex flex-col items-center gap-4">
+        <div className="w-12 h-12 border-2 border-[#91C640]/30 border-t-[#91C640] rounded-full animate-spin" />
+        <p className="text-[var(--text-tertiary)] text-sm">Loading 25 years of programming data...</p>
+      </div>
+    </div>
+  )
+}
+
+function DataErrorScreen({ message, onRetry }: { message: string; onRetry: () => void }) {
+  return (
+    <div className="flex items-center justify-center h-screen bg-[var(--app-bg)] p-6">
+      <div className="max-w-md text-center">
+        <h1 className="text-lg font-bold text-[var(--text-primary)] mb-2">Could not load the workout data</h1>
+        <p className="text-xs text-[var(--text-tertiary)] whitespace-pre-wrap mb-4">{message}</p>
+        <button
+          onClick={onRetry}
+          className="px-4 py-2 text-sm rounded-lg bg-[#019644] text-white hover:opacity-90 cursor-pointer"
+        >
+          Retry
+        </button>
       </div>
     </div>
   )
@@ -153,11 +169,11 @@ function YearRangeBadge() {
   )
 }
 
-function App() {
+function AppShell({ data: D }: { data: CrossFitData }) {
   const activeTab = useStore((s) => s.activeTab)
   const yearRange = useStore((s) => s.yearRange)
 
-  const filteredData = useMemo(() => filterDataByYear(D, yearRange), [yearRange])
+  const filteredData = useMemo(() => filterDataByYear(D, yearRange), [D, yearRange])
 
   const analysis = useMemo(() => {
     try { return analyzeData(filteredData) }
@@ -244,6 +260,32 @@ function App() {
       <ShareButton />
     </div>
   )
+}
+
+// Startup gate: fetches the dataset (static /data/crossfit-data.json, no
+// cache-busting - browser + Caddy revalidation handle freshness), shows the
+// branded loader until it arrives, and an error screen with Retry on failure.
+// Only the main '/' app is gated - /games, /fitness and /news are separate
+// chunks that never mount this component.
+function App() {
+  const [data, setData] = useState<CrossFitData | null>(null)
+  const [error, setError] = useState<string | null>(null)
+  const [attempt, setAttempt] = useState(0)
+
+  useEffect(() => {
+    let cancelled = false
+    setError(null)
+    loadCrossFitData()
+      .then((d) => { if (!cancelled) setData(d) })
+      .catch((err: unknown) => {
+        if (!cancelled) setError(err instanceof Error ? err.message : String(err))
+      })
+    return () => { cancelled = true }
+  }, [attempt])
+
+  if (error) return <DataErrorScreen message={error} onRetry={() => setAttempt((a) => a + 1)} />
+  if (!data) return <DataLoadingScreen />
+  return <AppShell data={data} />
 }
 
 export default App
