@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { ARCHETYPES, MODULE_COPY, PAL, SKILLS } from '../../fitnessData'
 import { Legend, Readout } from '../../ui'
 import { ChipRadio } from '../../story/ui/ChipRadio'
-import { CLASS_COLOR, CLASS_LABEL, GENERALIST, fmtVal, floorOf, profileOf, rangeOf, weakestName } from './skillsMath'
+import { CLASS_COLOR, CLASS_LABEL, GENERALIST, fmtVal, floorOf, profileOf, rangeOf, weakestNames } from './skillsMath'
 import { CUSTOM, NONE, useSkExplore, type SkView } from './exploreStore'
 import './skills.css'
 
@@ -10,8 +10,11 @@ import './skills.css'
    only): the tapped skill's definition when there is one, and the Athlete
    chips. Expanded: Wheel | Grid, the readouts (Weakest skill and Range, for
    A and for B; no mean or breadth anywhere), the Compare chips, the class
-   legend and, for Custom, the ten sliders. Every string here already exists
-   in fitnessData or the legacy module. */
+   legend and, for Custom, the ten sliders. A chip pick always shows on the
+   wheel (from the Grid it glides back). Every string here already exists in
+   fitnessData or the legacy module; the closing hint paraphrases the legacy
+   control hint (SkillsModule "Pick Athlete A and a compare ghost. Edit
+   Custom with the sliders."). */
 
 const A_OPTIONS = [...ARCHETYPES.map((a) => ({ value: a.name, label: a.name })), { value: CUSTOM, label: CUSTOM }]
 const B_OPTIONS = [{ value: NONE, label: NONE }, ...ARCHETYPES.map((a) => ({ value: a.name, label: a.name }))]
@@ -30,7 +33,8 @@ function Reads({ who, profile, color, dashed }: { who: string; profile: readonly
           value={
             <>
               <span style={{ color }}>{fmtVal(floorOf(profile))}</span>
-              <span className="sk-skill">{weakestName(profile)}</span>
+              {/* every skill at the floor: a tie is never shown as one skill */}
+              <span className="sk-skill">{weakestNames(profile).join(', ')}</span>
             </>
           }
         />
@@ -48,7 +52,7 @@ export default function SkillsExplore() {
   const info = useSkExplore((s) => s.info)
   const set = useSkExplore.getState
   const A = athlete === CUSTOM ? custom : profileOf(athlete) ?? GENERALIST.profile
-  const B = compare === NONE ? null : profileOf(compare)
+  const B = compare === NONE || compare === athlete ? null : profileOf(compare)
   const aColor = athlete === GENERALIST.name ? PAL.yellowGreen : PAL.chalk
   const skill = info === null ? null : SKILLS[info]
   // a choice made elsewhere (a grid cell, a drag into Custom) scrolls its chip into view
@@ -72,7 +76,7 @@ export default function SkillsExplore() {
           </button>
         </div>
       )}
-      <ChipRadio label="Athlete" className="st-ex-peek" options={A_OPTIONS} value={athlete} onChange={(v) => set().setAthlete(v)} />
+      <ChipRadio label="Athlete" className="st-ex-peek" options={A_OPTIONS} value={athlete} onChange={(v) => set().pickAthlete(v)} />
 
       <div className="sk-view" role="group" aria-label="View">
         {(['wheel', 'grid'] as SkView[]).map((v) => (
@@ -86,7 +90,7 @@ export default function SkillsExplore() {
       {B && <Reads who={compare} profile={B} color={PAL.chalk} dashed />}
 
       <div className="sk-head">Compare</div>
-      <ChipRadio label="Compare" options={B_OPTIONS} value={compare} onChange={(v) => set().setCompare(v)} />
+      <ChipRadio label="Compare" options={B_OPTIONS} value={compare} onChange={(v) => set().pickCompare(v)} />
 
       <Legend items={CLASS_ITEMS} />
 
@@ -118,7 +122,7 @@ export default function SkillsExplore() {
       )}
 
       <p className="st-ex-note">{MODULE_COPY.skills.keyPoints[3]}</p>
-      <p className="st-ex-note">Drag a vertex to reshape it; tap a skill for its definition.</p>
+      <p className="st-ex-note">Pick an athlete and a compare ghost. Edit Custom with the sliders.</p>
     </div>
   )
 }

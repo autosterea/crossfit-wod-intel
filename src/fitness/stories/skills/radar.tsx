@@ -69,15 +69,31 @@ export function arcPolyline(f0: number, f1: number, r: number, z: number, steps 
  * blooms plus a soft halo tinted by the stroke. `place` writes tip i and
  * returns its intensity (0 hides it). Two draw calls for any count.
  */
-export function Heads({ count, tint, place, hot = true }: { count: number; tint: string; place: (T: number, i: number, out: [number, number, number]) => number; hot?: boolean }) {
+export function Heads({
+  count,
+  tint,
+  place,
+  hot = true,
+  scale = 1,
+}: {
+  count: number
+  tint: string
+  place: (T: number, i: number, out: [number, number, number]) => number
+  hot?: boolean
+  /** size multiplier (thin strokes carry a smaller tip) */
+  scale?: number
+}) {
   const halo = useMemo(() => '#' + new THREE.Color(tint).lerp(new THREE.Color('#f4ffe0'), 0.35).getHexString(), [tint])
   return (
     <>
-      <Glows count={count} sizePx={hot ? 46 : 26} colors={[halo]} gain={hot ? 1.5 : 0.55} place={place} />
-      <Glows count={count} sizePx={hot ? 15 : 10} colors={['#f4ffe0']} gain={hot ? 3.2 : 1.3} place={place} />
+      <Glows count={count} sizePx={Math.round((hot ? 46 : 26) * scale)} colors={[halo]} gain={hot ? 1.5 : 0.55} place={place} />
+      <Glows count={count} sizePx={Math.round((hot ? 15 : 10) * scale)} colors={['#f4ffe0']} gain={hot ? 3.2 : 1} place={place} />
     </>
   )
 }
+
+/** A pen tip's intensity along its stroke: it fades in over the first 12% (no blob at the origin) and out at the end. */
+const tipK = (p: number) => (p > 0 && p < 1 ? Math.min(1, p / 0.12, (1 - p) / 0.04) : 0)
 
 /* ---------------------------- construction ---------------------------- */
 
@@ -256,21 +272,54 @@ export function Construction({ vis, z = 0 }: { vis: ConstructionVis; z?: number 
               return p > 0 && p < 1 ? Math.min(1, p / 0.03, (1 - p) / 0.03) : 0
             }}
           />
+          {/* the spokes: only the leading pen (the one about to land and name
+              its skill) is hot; the ones behind it are small cool tips (L4) */}
           <Heads
-            count={N}
+            count={1}
             tint={PAL.chalk}
-            place={(T, i, out) => {
+            scale={0.62}
+            place={(T, _i, out) => {
+              const i = leadSpoke(vis, T)
+              if (i < 0) return 0
               const p = vis.spoke(T, i)
               out[0] = px(i, p * R)
               out[1] = py(i, p * R)
               out[2] = z + 0.02
-              return p > 0 && p < 1 ? Math.min(1, p / 0.06, (1 - p) / 0.04) : 0
+              return tipK(p)
+            }}
+          />
+          <Heads
+            count={N}
+            tint={PAL.chalk}
+            hot={false}
+            scale={0.8}
+            place={(T, i, out) => {
+              if (i === leadSpoke(vis, T)) return 0
+              const p = vis.spoke(T, i)
+              out[0] = px(i, p * R)
+              out[1] = py(i, p * R)
+              out[2] = z + 0.02
+              return 0.75 * tipK(p)
             }}
           />
         </>
       )}
     </>
   )
+}
+
+/** The spoke pen furthest along among those still drawing (-1 when none is). */
+function leadSpoke(vis: ConstructionVis, T: number): number {
+  let best = -1
+  let bp = -1
+  for (let i = 0; i < N; i++) {
+    const p = vis.spoke(T, i)
+    if (p > 0 && p < 1 && p > bp) {
+      bp = p
+      best = i
+    }
+  }
+  return best
 }
 
 /* ------------------------------- fans -------------------------------- */
@@ -342,8 +391,11 @@ function wallGeometry(): THREE.BufferGeometry {
   pos.setUsage(THREE.DynamicDrawUsage)
   const nor = new THREE.BufferAttribute(new Float32Array(N * 4 * 3), 3)
   nor.setUsage(THREE.DynamicDrawUsage)
+  const col = new THREE.BufferAttribute(new Float32Array(N * 4 * 3), 3)
+  col.setUsage(THREE.DynamicDrawUsage)
   g.setAttribute('position', pos)
   g.setAttribute('normal', nor)
+  g.setAttribute('color', col)
   const idx: number[] = []
   for (let i = 0; i < N; i++) {
     const b = i * 4
@@ -353,9 +405,19 @@ function wallGeometry(): THREE.BufferGeometry {
   return g
 }
 
+/**
+ * Per-face shading of the walls (a unit vector in the wheel plane): faces
+ * turned toward the key light (upper right, like the engine's key) are lit,
+ * the ones turned away fall toward shadow, so the depth reads at 1x even
+ * where the wall is 3 px.
+ */
+const WALL_LX = 0.83
+const WALL_LY = 0.56
+
 function writeWalls(g: THREE.BufferGeometry, r: ArrayLike<number>, depth: number): void {
   const p = (g.attributes.position as THREE.BufferAttribute).array as Float32Array
   const n = (g.attributes.normal as THREE.BufferAttribute).array as Float32Array
+  const c = (g.attributes.color as THREE.BufferAttribute).array as Float32Array
   for (let i = 0; i < N; i++) {
     const j = (i + 1) % N
     const x0 = px(i, Math.max(0, r[i]))
@@ -366,12 +428,32 @@ function writeWalls(g: THREE.BufferGeometry, r: ArrayLike<number>, depth: number
     const l = Math.hypot(x1 - x0, y1 - y0) || 1
     const nx = -(y1 - y0) / l
     const ny = (x1 - x0) / l
-    const b = i * 4 * 3
-    p.set([x0, y0, 0, x1, y1, 0, x1, y1, depth, x0, y0, depth], b)
-    for (let k = 0; k < 4; k++) n.set([nx, ny, 0], b + k * 3)
+    const shade = 0.22 + 1.05 * Math.max(0, nx * WALL_LX + ny * WALL_LY)
+    const b = i * 12
+    p[b] = x0
+    p[b + 1] = y0
+    p[b + 2] = 0
+    p[b + 3] = x1
+    p[b + 4] = y1
+    p[b + 5] = 0
+    p[b + 6] = x1
+    p[b + 7] = y1
+    p[b + 8] = depth
+    p[b + 9] = x0
+    p[b + 10] = y0
+    p[b + 11] = depth
+    for (let k = 0; k < 4; k++) {
+      n[b + k * 3] = nx
+      n[b + k * 3 + 1] = ny
+      n[b + k * 3 + 2] = 0
+      c[b + k * 3] = shade
+      c[b + k * 3 + 1] = shade
+      c[b + k * 3 + 2] = shade
+    }
   }
   ;(g.attributes.position as THREE.BufferAttribute).needsUpdate = true
   ;(g.attributes.normal as THREE.BufferAttribute).needsUpdate = true
+  ;(g.attributes.color as THREE.BufferAttribute).needsUpdate = true
 }
 
 /* ---------------------------- profile prism ---------------------------- */
@@ -382,13 +464,47 @@ export interface SolidVis {
   outline: (T: number) => number
   /** rest the outline dimmed toward the slate at full alpha (a ghost) */
   outlineDim?: (T: number) => number
+  /**
+   * 0..1: the outline hands over to a thin ghost stroke (1.75 px, dimmed to
+   * `ghostDim`), so a ghost reads lighter than the line drawn over it
+   */
+  ghost?: (T: number) => number
+  ghostDim?: number
   nodes: (T: number) => number
+  /** vertex node i's size 0..1 (it grows out with its vertex); default: shown once the vertex has left the centre */
+  nodeK?: (T: number, i: number) => number
   /** prism depth (z of the cap) */
   depth: (T: number) => number
   /** HDR rim band under the edge (the speaking element), 0 = off */
   rim: (T: number) => number
   /** outline colour gain (HDR while it speaks) */
   gain?: (T: number) => number
+}
+
+/** The cap's chalk-dust gradient: alpha at the centre, at the edge, and the curve between. */
+export interface CapLook {
+  lo: number
+  hi: number
+  pow: number
+}
+const CAP: CapLook = { lo: 0.03, hi: 0.34, pow: 1.7 }
+
+/** A cached writer of a profile's outline at the cap (one per pen: each keeps its own key). */
+function outlineWriter(src: ProfileSrc, depth: (T: number) => number) {
+  const last = { v: -1, d: -1 }
+  return (T: number, pts: Float32Array): boolean => {
+    const d = depth(T)
+    if (src.v === last.v && d === last.d) return false
+    last.v = src.v
+    last.d = d
+    for (let k = 0; k <= N; k++) {
+      const i = k % N
+      pts[k * 3] = px(i, Math.max(0, src.r[i]))
+      pts[k * 3 + 1] = py(i, Math.max(0, src.r[i]))
+      pts[k * 3 + 2] = d + 0.01
+    }
+    return true
+  }
 }
 
 /**
@@ -402,6 +518,7 @@ export function ProfileSolid({
   nodeRadius,
   vis,
   low,
+  cap = CAP,
 }: {
   src: ProfileSrc
   color: string
@@ -409,6 +526,7 @@ export function ProfileSolid({
   nodeRadius: number
   vis: SolidVis
   low: boolean
+  cap?: CapLook
 }) {
   const fan = useMemo(() => fanGeometry(1), [])
   const fillMat = useMemo(() => makeFillMaterial(color, 'gradient', { additive: !low }), [color, low])
@@ -420,7 +538,8 @@ export function ProfileSolid({
   }, [fan, fillMat])
   const walls = useMemo(() => wallGeometry(), [])
   const wallMat = useMemo(() => {
-    const m = makeRimStandard({ color, rim: color, rimStrength: 0.9, metalness: 0.15, roughness: 0.32, emissiveIntensity: 0.28, transparent: true, opacity: 0.35 })
+    const m = makeRimStandard({ color, rim: color, rimStrength: 0.9, metalness: 0.15, roughness: 0.32, emissiveIntensity: 0.22, transparent: true, opacity: 0.35 })
+    m.vertexColors = true
     m.depthWrite = false
     m.side = THREE.DoubleSide
     return m
@@ -449,32 +568,22 @@ export function ProfileSolid({
     fillMesh.visible = fo > 0.002
     const u = fillMat.uniforms
     u.uOpacity.value = fo
-    u.uLo.value = low ? 0.12 : 0.03
-    u.uHi.value = low ? 0.5 : 0.34
-    u.uPow.value = low ? 1 : 1.7
+    u.uLo.value = low ? 0.12 : cap.lo
+    u.uHi.value = low ? 0.5 : cap.hi
+    u.uPow.value = low ? 1 : cap.pow
     u.uRim.value = vis.rim(T) * (low ? 0.35 : 1)
     u.uRimW.value = 0.38
     u.uRimA.value = 0.5
     const wo = vis.walls(T)
     wallMesh.visible = wo > 0.002 && d > 0.01
-    wallMat.opacity = 0.5 * wo
+    wallMat.opacity = 0.62 * wo
   })
 
   const outline = useMemo(() => new Float32Array((N + 1) * 3), [])
-  const lastO = useRef({ v: -1, d: -1 })
-  const writeOutline = (T: number, pts: Float32Array): boolean => {
-    const d = vis.depth(T)
-    if (src.v === lastO.current.v && d === lastO.current.d) return false
-    lastO.current.v = src.v
-    lastO.current.d = d
-    for (let k = 0; k <= N; k++) {
-      const i = k % N
-      pts[k * 3] = px(i, Math.max(0, src.r[i]))
-      pts[k * 3 + 1] = py(i, Math.max(0, src.r[i]))
-      pts[k * 3 + 2] = d + 0.01
-    }
-    return true
-  }
+  const writeOutline = useMemo(() => outlineWriter(src, vis.depth), [src, vis])
+  const ghostPts = useMemo(() => new Float32Array((N + 1) * 3), [])
+  const writeGhost = useMemo(() => outlineWriter(src, vis.depth), [src, vis])
+  const ghost = vis.ghost
 
   // the base of the prism: its outline on the web and one vertical edge per
   // vertex, so the risen shape reads as a solid (they fade with its height)
@@ -500,11 +609,17 @@ export function ProfileSolid({
     lastP.current.d = d
     for (let i = 0; i < N; i++) {
       const r = Math.max(0, src.r[i])
-      s.set([px(i, r), py(i, r), 0.015, px(i, r), py(i, r), d], i * 6)
+      const o = i * 6
+      s[o] = px(i, r)
+      s[o + 1] = py(i, r)
+      s[o + 2] = 0.015
+      s[o + 3] = s[o]
+      s[o + 4] = s[o + 1]
+      s[o + 5] = d
     }
     return true
   }
-  const rise = (T: number) => Math.max(0, Math.min(1, (vis.depth(T) - 0.1) / 0.6))
+  const rise = (T: number) => Math.max(0, Math.min(1, (vis.depth(T) - 0.1) / 0.5))
 
   return (
     <>
@@ -512,7 +627,27 @@ export function ProfileSolid({
       <primitive object={fillMesh} />
       <Pen points={base} color={color} width={PEN.grid} update={writeBase} opacity={(T) => 0.55 * rise(T) * vis.walls(T)} renderOrder={33} />
       <PenBatch segments={pillars} color={color} width={PEN.grid} update={writePillars} opacity={(T) => 0.7 * rise(T) * vis.walls(T)} renderOrder={33} />
-      <Pen points={outline} color={color} width={PEN.data} update={writeOutline} opacity={vis.outline} dim={vis.outlineDim} gain={vis.gain} renderOrder={34} />
+      <Pen
+        points={outline}
+        color={color}
+        width={PEN.data}
+        update={writeOutline}
+        opacity={ghost ? (T) => vis.outline(T) * (1 - ghost(T)) : vis.outline}
+        dim={vis.outlineDim}
+        gain={vis.gain}
+        renderOrder={34}
+      />
+      {ghost && (
+        <Pen
+          points={ghostPts}
+          color={color}
+          width={1.75}
+          update={writeGhost}
+          opacity={(T) => vis.outline(T) * ghost(T)}
+          dim={() => vis.ghostDim ?? 0.45}
+          renderOrder={34}
+        />
+      )}
       <Nodes
         count={N}
         radius={nodeRadius}
@@ -526,7 +661,7 @@ export function ProfileSolid({
           out[0] = px(i, r)
           out[1] = py(i, r)
           out[2] = vis.depth(T) + 0.02
-          return r > 0.05 ? 1 : 0
+          return vis.nodeK ? vis.nodeK(T, i) : r > 0.05 ? 1 : 0
         }}
       />
     </>
@@ -597,10 +732,15 @@ export function Hatch({ inner, outer, color, alpha, opacity, reveal, z = 0.004 }
         const ang = a1 - ((Math.PI * 2) / N) * (k / HATCH_K)
         const ro = chordRadius(i, outer.r[i], outer.r[j], ang)
         const ri = Math.min(ro, chordRadius(i, inner.r[i], inner.r[j], ang))
-        const c = (i * (HATCH_K + 1) + k) * 2
+        const o = (i * (HATCH_K + 1) + k) * 6
         const cx = Math.cos(ang)
         const cy = Math.sin(ang)
-        p.set([ri * cx, ri * cy, z, ro * cx, ro * cy, z], c * 3)
+        p[o] = ri * cx
+        p[o + 1] = ri * cy
+        p[o + 2] = z
+        p[o + 3] = ro * cx
+        p[o + 4] = ro * cy
+        p[o + 5] = z
       }
     }
     ;(geo.attributes.position as THREE.BufferAttribute).needsUpdate = true
@@ -641,6 +781,8 @@ export function FloorRing({
   hot = false,
   width = PEN.data,
   dash = 0.42,
+  keyline = false,
+  keylineK,
 }: {
   radius: (T: number) => number
   z: number
@@ -655,16 +797,58 @@ export function FloorRing({
   hot?: boolean
   width?: number
   dash?: number
+  /** an ink keyline under the dashes: the ring's edge stays crisp over a fill of its own colour (L10) */
+  keyline?: boolean
+  /** the keyline's own fade (a ring that steps back to a ghost drops its keyline) */
+  keylineK?: (T: number) => number
 }) {
   const unit = useMemo(() => circlePolyline(z), [z])
   const pts = useMemo(() => unit.slice(), [unit])
-  const last = useRef({ r: -1, z: -1 })
-  const write = (T: number, p: Float32Array): boolean => {
+  const keyPts = useMemo(() => unit.slice(), [unit])
+  const write = useMemo(() => ringWriter(unit, radius, z, lift), [unit, radius, z, lift])
+  const writeKey = useMemo(() => ringWriter(unit, radius, z - 0.004, lift), [unit, radius, z, lift])
+  return (
+    <>
+      {keyline && (
+        <Pen
+          points={keyPts}
+          color={PAL.ink}
+          width={width + 3}
+          update={writeKey}
+          progress={progress}
+          opacity={keylineK ? (T) => opacity(T) * keylineK(T) : opacity}
+          renderOrder={35}
+        />
+      )}
+      <Pen
+        points={pts}
+        color={color}
+        width={width}
+        dashed
+        dashSize={dash}
+        gapSize={dash * 0.7}
+        update={write}
+        progress={progress}
+        opacity={opacity}
+        dim={dim}
+        gain={gain}
+        head={head}
+        hot={hot}
+        renderOrder={35}
+      />
+    </>
+  )
+}
+
+/** A cached writer of a circle of radius(T) on the plane z + lift(T). */
+function ringWriter(unit: Float32Array, radius: (T: number) => number, z: number, lift?: (T: number) => number) {
+  const last = { r: -1, z: -1 }
+  return (T: number, p: Float32Array): boolean => {
     const r = radius(T)
     const zz = z + (lift ? lift(T) : 0)
-    if (r === last.current.r && zz === last.current.z) return false
-    last.current.r = r
-    last.current.z = zz
+    if (r === last.r && zz === last.z) return false
+    last.r = r
+    last.z = zz
     for (let k = 0; k < p.length; k += 3) {
       p[k] = unit[k] * r
       p[k + 1] = unit[k + 1] * r
@@ -672,24 +856,6 @@ export function FloorRing({
     }
     return true
   }
-  return (
-    <Pen
-      points={pts}
-      color={color}
-      width={width}
-      dashed
-      dashSize={dash}
-      gapSize={dash * 0.7}
-      update={write}
-      progress={progress}
-      opacity={opacity}
-      dim={dim}
-      gain={gain}
-      head={head}
-      hot={hot}
-      renderOrder={35}
-    />
-  )
 }
 
 /* ------------------------------- minis -------------------------------- */
@@ -754,7 +920,6 @@ export function Minis({ cells, vis, low, z = 0 }: { cells: readonly MiniCell[]; 
     const c = new Float32Array(n * MINI_CIRCLE * 6)
     cells.forEach((cell, k) => {
       const col = lin(cell.lit ? PAL.yellowGreen : PAL.chalk)
-      if (!cell.lit) col.multiplyScalar(0.85)
       for (let i = 0; i < MINI_CIRCLE; i++) c.set([col.r, col.g, col.b, col.r, col.g, col.b], (k * MINI_CIRCLE + i) * 6)
     })
     return c
@@ -870,7 +1035,8 @@ export function Minis({ cells, vis, low, z = 0 }: { cells: readonly MiniCell[]; 
       <PenBatch segments={refRings} color={PAL.chalk} width={PEN.grid} update={writeRef} opacity={(T) => 0.16 * vis.opacity(T)} renderOrder={29} />
       <primitive object={fillMesh} />
       <PenBatch segments={outline} colors={outlineCols} width={PEN.axis} update={writeOutline} opacity={vis.opacity} renderOrder={32} />
-      <PenBatch segments={floors} colors={floorCols} width={PEN.axis} dashed dashSize={0.2} gapSize={0.15} update={writeFloors} opacity={vis.opacity} renderOrder={33} />
+      {/* the floor ring is each cell's payoff: a bold dash that reads at 360 px */}
+      <PenBatch segments={floors} colors={floorCols} width={2.4} dashed dashSize={0.36} gapSize={0.2} update={writeFloors} opacity={vis.opacity} renderOrder={33} />
     </>
   )
 }

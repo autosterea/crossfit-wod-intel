@@ -22,7 +22,10 @@ export function setLabelColor(id: string, css: string): void {
   const w = written.get(id)
   if (w && w.el === el && w.c === css) return
   el.style.setProperty('--c', css)
-  written.set(id, { el, c: css })
+  if (w) {
+    w.el = el
+    w.c = css
+  } else written.set(id, { el, c: css })
 }
 
 const tables = new Map<string, string[]>()

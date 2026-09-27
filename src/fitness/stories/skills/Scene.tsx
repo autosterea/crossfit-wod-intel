@@ -16,11 +16,12 @@ import { impactK } from '../../story/kit/impact'
 import { useLabels, useWorldObstacle, type WorldObstacle } from '../../story/labels/useLabel'
 import type { Layout, LabelSpec, Tier, V3 } from '../../story/types'
 import { DEPTH, ELBOW_R, FLAT, LABEL_R, MINI_R, R, ARC_R, RING_OUT, SIDE, TAGS, grid, useWideNames, type TagKey } from './layout'
-import { pillSize, tagCam, tagPoint } from './tags'
+import { LEAD_N, pillH, pillW, tagCam, tagEnd, tagPoint, writeLeader } from './tags'
 import {
   CLASS_COLOR,
   CLASS_LABEL,
   GENERALIST,
+  MAX_VALUE,
   N,
   POWERLIFTER,
   RANKED,
@@ -43,6 +44,7 @@ import {
   px,
   py,
   setRadius,
+  type CapLook,
   type ConstructionVis,
   type MiniCell,
   type MinisVis,
@@ -55,17 +57,18 @@ import ExploreScene from './ExploreScene'
    01 SKILLS, "Ten spokes, one floor" (DESIGN.md D.2). Six beats, every
    property a pure function of story time T:
      S0 the pen sweeps five rings, then draws the ten spokes clockwise; each
-        skill is named as its spoke lands;
+        skill is named as its spoke lands, and the rim is marked 10;
      S1 a green arc sweeps the four TRAINED skills, colouring each spoke as it
         passes, then a blue arc the four PRACTICED ones;
      S2 the arcs grow toward each other and overlap over power and speed,
         which turn amber (BOTH; the chapter's impact accent);
-     S3 the Generalist's shape grows from the centre, rises into a lit prism
-        as the camera tilts to show its depth, and its floor ring is drawn at
-        its weakest skill;
-     S4 (signature) front-on again: the Powerlifter's dashed outline spikes
-        past the wheel and cuts inside it, the gaps hatch, and the floor ring
-        collapses from 7 to 2, catching on Endurance;
+     S3 the Generalist's shape grows from the centre and rises into a lit
+        prism as the camera tilts to show its depth; its floor ring is drawn
+        at its weakest skill and lights the three vertices it touches;
+     S4 (signature) front-on again: the generalist steps back to a ghost, the
+        Powerlifter's dashed outline spikes past it and cuts inside it, the
+        gaps hatch in the colour of loss, and the floor ring collapses from
+        7 to 2, catching on Endurance, which is named;
      S5 the wheel folds into the first cell of thirteen, sorted by weakest
         skill.
 
@@ -79,6 +82,8 @@ const P = POWERLIFTER.profile
 const G_FLOOR = floorOf(G)
 const P_FLOOR = floorOf(P)
 const P_WEAK = weakestIndex(P)
+/** every vertex the generalist's floor ring touches (a tie is shown as a tie) */
+const G_TIES: number[] = G.map((v, i) => (v === G_FLOOR ? i : -1)).filter((i) => i >= 0)
 /** the warm white of a hot pen tip (the kit's head colour family) */
 const LIGHT = '#e9ffc4'
 
@@ -114,11 +119,12 @@ const practicedProg = (T: number) => at(T, S.classes, 0.5, 0.9, ease.draw)
 const practicedExt = (T: number) => at(T, S.both, 0.05, 0.55, ease.draw)
 /** S2: the overlap turns amber as the two arcs meet over power and speed. */
 const bothOn = (T: number) => at(T, S.both, 0.5, 0.62, ease.settle)
-/** S3: the arcs rest at 35%; S4: they leave the comparison. */
-const arcDim = (T: number) => 1 - 0.65 * at(T, S.gen, 0, 0.15)
+/** S3: the class layer (arcs, spoke colours, name dots, key) rests at 35%; S4: it leaves the comparison. */
+const genDim = (T: number) => at(T, S.gen, 0, 0.15)
+const arcDim = (T: number) => 1 - 0.65 * genDim(T)
 const arcOut = (T: number) => 1 - at(T, S.spec, 0, 0.3)
 
-/** inverse of ease.draw (bisection), for the moment an arc's head passes a spoke */
+/** inverse of ease.draw (bisection), for the moment a pen passes a given fraction of its stroke */
 function invDraw(y: number): number {
   let lo = 0
   let hi = 1
@@ -149,26 +155,34 @@ const nameEmph = (T: number, i: number) => {
 const growV = (T: number, i: number) => stagger(T, S.gen + 0.1, S.gen + 0.55, i, N, 0.22, ease.settle)
 /** S3: the prism rises; S4: it flattens again for the front-on comparison. */
 const genDepth = (T: number) => FLAT + (DEPTH - FLAT) * at(T, S.gen, 0.2, 0.6, ease.settle) * (1 - at(T, S.spec, 0, 0.3, ease.settle))
-/** S4: the generalist rests as a ghost (outline 60%, fill 15%); S5 restores it as it folds. */
-const ghostK = (T: number) => at(T, S.spec, 0, 0.3, ease.settle) * (1 - at(T, S.grid, 0, 0.22, ease.settle))
+/** S4: the generalist steps back to a ghost (outline 45% on a thin stroke, fill 15%); S5 restores it as it folds. */
+const ghostK = (T: number) => at(T, S.spec, 0, 0.25, ease.settle) * (1 - at(T, S.grid, 0, 0.22, ease.settle))
 /** S3 claim: the floor ring is drawn at the weakest skill. */
-const ringDraw = (T: number) => at(T, S.gen, 0.6, 0.9, ease.draw)
-/** S4 claim: the floor collapses from 7 to 2. */
-const collapse = (T: number) => at(T, S.spec, 0.75, 0.95, ease.morph)
+const RING_A = 0.6
+const RING_B = 0.84
+const ringDraw = (T: number) => at(T, S.gen, RING_A, RING_B, ease.draw)
+/** Global T at which the S3 ring's pen passes vertex i (the ring runs clockwise from 12 o'clock, spoke i at i / N of it). */
+const touchT = (i: number) => S.gen + RING_A + (RING_B - RING_A) * invDraw(i / N)
+/** S3: "Weakest skill 7" and its leader; they leave as the generalist steps back (S4). */
+const weakGOut = (T: number) => 1 - at(T, S.spec, 0.08, 0.22)
+/** S4 claim: the floor collapses from 7 to 2 ... */
+const collapse = (T: number) => at(T, S.spec, 0.66, 0.86, ease.morph)
+/** ... and catches on Endurance. */
+const catchK = (T: number) => at(T, S.spec, 0.85, 0.92, ease.settle)
 const specOut = (T: number) => 1 - at(T, S.grid, 0, 0.12)
 
-// S5: the cells land in rank order (40 ms stagger); cell 0 is the folded wheel
+// S5: the cells land in rank order (40 ms stagger) while the wheel folds into cell 0
 const cellGrow = (T: number, k: number) =>
-  k === 0 ? (T >= S.grid + 0.3 ? 1 : 0) : stagger(T, S.grid + 0.25, S.grid + 0.85, k - 1, RANKED.length - 1, 0.15, ease.settle)
+  k === 0 ? (T >= S.grid + 0.3 ? 1 : 0) : stagger(T, S.grid + 0.16, S.grid + 0.76, k - 1, RANKED.length - 1, 0.15, ease.settle)
 const cellRing = (T: number, k: number) =>
-  k === 0 ? (T >= S.grid + 0.3 ? 1 : 0) : stagger(T, S.grid + 0.36, S.grid + 0.96, k - 1, RANKED.length - 1, 0.15, ease.draw)
-
-/* ------------------------------ helpers ------------------------------- */
-
-
-const G_CELLS: MiniCell[] = RANKED.map((r) => ({ profile: r.profile, floor: r.floor, color: r.isG ? PAL.yellowGreen : PAL.chalk, lit: r.isG }))
+  k === 0 ? (T >= S.grid + 0.3 ? 1 : 0) : stagger(T, S.grid + 0.3, S.grid + 0.92, k - 1, RANKED.length - 1, 0.15, ease.draw)
+const gridOn = (T: number) => at(T, S.grid, 0.12, 0.18)
 
 /* ------------------------------ elements ------------------------------ */
+
+const G_CELLS: MiniCell[] = RANKED.map((r) => ({ profile: r.profile, floor: r.floor, color: r.isG ? PAL.yellowGreen : PAL.chalk, lit: r.isG }))
+/** the generalist's cap: a fuller body of light than the default chalk dust, so the centre is lime, not olive */
+const GEN_CAP: CapLook = { lo: 0.07, hi: 0.4, pow: 1.35 }
 
 /** S1, S2: the class arcs. Resting dimmed uses `dim` (no beads), fades use opacity. */
 function ClassArcs() {
@@ -217,110 +231,117 @@ const TAG_TEXT: Record<TagKey, string> = {
   trained: CLASS_LABEL.trained,
   practiced: CLASS_LABEL.practiced,
   both: CLASS_LABEL.both,
-  weak: `Weakest skill ${G_FLOOR}`,
+  weakG: `Weakest skill ${G_FLOOR}`,
+  weakP: `Weakest skill ${P_FLOOR}`,
 }
 const TAG_Z = 0.05
 
-/** The world point of tag k for this layout (a fresh buffer per caller). */
+/** The world point of tag k's pill centre for this layout (into the caller's buffer). */
 function tagWorld(layout: Layout, k: TagKey, out: [number, number, number]): V3 {
-  const [w, h] = pillSize(TAG_TEXT[k])
-  return tagPoint(TAGS[layout][k].slot, w, h, TAG_Z, RING_OUT, out)
+  return tagPoint(TAGS[layout][k].slot, pillW(TAG_TEXT[k]), pillH(), TAG_Z, RING_OUT, out)
 }
+
+/** The vertex the S3 floor tag names: one the ring touches (layout.ts), or the first weakest if the data ever changes. */
+const weakGVertex = (layout: Layout) => (G[TAGS[layout].weakG.from] === G_FLOOR ? TAGS[layout].weakG.from : weakestIndex(G))
 
 /** Where tag k's leader starts at story time T. */
 function tagFrom(layout: Layout, k: TagKey, T: number, out: [number, number, number]): void {
-  const spec = TAGS[layout][k]
-  if (k === 'weak') {
-    const r = G_FLOOR + (P_FLOOR - G_FLOOR) * collapse(T)
-    const a = (spec.from * Math.PI) / 180
-    out[0] = r * Math.cos(a)
-    out[1] = r * Math.sin(a)
+  if (k === 'weakG') {
+    const i = weakGVertex(layout)
+    out[0] = px(i, G_FLOOR)
+    out[1] = py(i, G_FLOOR)
     out[2] = genDepth(T) + 0.03
     return
   }
+  if (k === 'weakP') {
+    out[0] = px(P_WEAK, P_FLOOR)
+    out[1] = py(P_WEAK, P_FLOOR)
+    out[2] = 0.1
+    return
+  }
   const rr = k === 'trained' ? ARC_R - 0.14 : k === 'practiced' ? ARC_R + 0.14 : ARC_R
-  const a = angleOfF(spec.from)
+  const a = angleOfF(TAGS[layout][k].from)
   out[0] = rr * Math.cos(a)
   out[1] = rr * Math.sin(a)
   out[2] = 0.03
 }
 
-const LEAD_A = 4
-const LEAD_B = 8
 /**
  * One tag leader: from what it names, out through the gap between two
- * names (elbow), to the tag. Rewritten only when the tag point, the start or
- * the layout changed (the tag point follows the camera and the focus rect).
+ * names, to its pill. Rewritten only when its start, the tag point or the
+ * layout changed (the tag point follows the camera and the focus rect).
  */
-function TagLeader({ layout, k, color, width, progress, opacity }: { layout: Layout; k: TagKey; color: string; width: number; progress: (T: number) => number; opacity: (T: number) => number }) {
-  const pts = useMemo(() => new Float32Array((LEAD_A + LEAD_B + 1) * 3), [])
-  const st = useMemo(() => ({ a: [0, 0, 0] as [number, number, number], e: [0, 0, 0] as [number, number, number], b: [0, 0, 0] as [number, number, number], key: new Float64Array(7).fill(Number.NaN) }), [])
+function TagLeader({
+  layout,
+  k,
+  color,
+  width,
+  progress,
+  opacity,
+  dim,
+}: {
+  layout: Layout
+  k: TagKey
+  color: string
+  width: number
+  progress: (T: number) => number
+  opacity: (T: number) => number
+  dim?: (T: number) => number
+}) {
+  const pts = useMemo(() => new Float32Array(LEAD_N * 3), [])
+  const st = useMemo(() => ({ a: [0, 0, 0] as [number, number, number], b: [0, 0, 0] as [number, number, number], key: new Float64Array(6).fill(Number.NaN) }), [])
   const write = (T: number, p: Float32Array): boolean => {
     if (opacity(T) <= 0.002) return false
     const spec = TAGS[layout][k]
     tagFrom(layout, k, T, st.a)
-    tagWorld(layout, k, st.b)
+    tagEnd(spec.slot, TAG_TEXT[k], spec.end, TAG_Z, RING_OUT, st.b)
     const K = st.key
-    if (K[0] === st.a[0] && K[1] === st.a[1] && K[2] === st.a[2] && K[3] === st.b[0] && K[4] === st.b[1] && K[5] === (layout === 'P' ? 0 : 1)) return false
-    // tagWorld wrote the tag's own plane depth into st.b[2]
+    const lk = layout === 'P' ? 0 : 1
+    if (K[0] === st.a[0] && K[1] === st.a[1] && K[2] === st.a[2] && K[3] === st.b[0] && K[4] === st.b[1] && K[5] === lk) return false
     K[0] = st.a[0]
     K[1] = st.a[1]
     K[2] = st.a[2]
     K[3] = st.b[0]
     K[4] = st.b[1]
-    K[5] = layout === 'P' ? 0 : 1
-    if (spec.elbow) {
-      const r = Math.hypot(st.a[0], st.a[1]) || 1
-      const R2 = ELBOW_R[layout]
-      st.e[0] = (st.a[0] / r) * R2
-      st.e[1] = (st.a[1] / r) * R2
-    } else {
-      st.e[0] = st.a[0] + (st.b[0] - st.a[0]) * 0.33
-      st.e[1] = st.a[1] + (st.b[1] - st.a[1]) * 0.33
-    }
-    // the elbow stays at the start's depth; the end is the tag point itself
-    // (on the tag plane), so under a tilted camera the line still ends
-    // exactly under its pill
-    st.e[2] = st.a[2]
-    for (let i = 0; i <= LEAD_A; i++) {
-      const f = i / LEAD_A
-      p[i * 3] = st.a[0] + (st.e[0] - st.a[0]) * f
-      p[i * 3 + 1] = st.a[1] + (st.e[1] - st.a[1]) * f
-      p[i * 3 + 2] = st.a[2]
-    }
-    for (let i = 1; i <= LEAD_B; i++) {
-      const f = i / LEAD_B
-      const o = (LEAD_A + i) * 3
-      p[o] = st.e[0] + (st.b[0] - st.e[0]) * f
-      p[o + 1] = st.e[1] + (st.b[1] - st.e[1]) * f
-      p[o + 2] = st.e[2] + (st.b[2] - st.e[2]) * f
-    }
+    K[5] = lk
+    writeLeader(p, st.a, st.b, spec.elbow, ELBOW_R[layout], spec.slot[0] === 'T', spec.run)
     return true
   }
-  return <Pen points={pts} color={color} width={width} update={write} progress={progress} opacity={opacity} renderOrder={36} />
+  return <Pen points={pts} color={color} width={width} update={write} progress={progress} opacity={opacity} dim={dim} renderOrder={36} />
 }
 
 /**
  * The tag leaders (S1 to S4): a thin pen line from the thing named to its
- * callout, drawn just before the callout lands (L2: annotation). The floor
- * leader rides the floor ring as it collapses.
+ * callout, drawn just before the callout lands (L2: annotation), resting
+ * dimmed at full alpha so it never beads. The floor leaders start at a
+ * vertex the floor ring touches and are drawn in the claim's own colour, so
+ * they never read as an eleventh spoke.
  */
 function TagLeaders({ layout }: { layout: Layout }) {
   const w = PEN.grid + 0.25
-  const line = 0.75
+  const rest = () => 0.75
   return (
     <>
-      <TagLeader layout={layout} k="trained" color={PAL.trained} width={w} progress={(T) => at(T, S.classes, 0.3, 0.4, ease.draw)} opacity={(T) => line * (1 - at(T, S.both, 0, 0.12))} />
-      <TagLeader layout={layout} k="practiced" color={PAL.practiced} width={w} progress={(T) => at(T, S.classes, 0.8, 0.9, ease.draw)} opacity={(T) => line * (1 - at(T, S.both, 0, 0.12))} />
-      <TagLeader layout={layout} k="both" color={PAL.both} width={w} progress={(T) => at(T, S.both, 0.58, 0.68, ease.draw)} opacity={(T) => (T >= S.both ? line * (1 - at(T, S.gen, 0, 0.15)) : 0)} />
+      <TagLeader layout={layout} k="trained" color={PAL.trained} width={w} progress={(T) => at(T, S.classes, 0.3, 0.4, ease.draw)} opacity={(T) => 1 - at(T, S.both, 0, 0.12)} dim={rest} />
+      <TagLeader layout={layout} k="practiced" color={PAL.practiced} width={w} progress={(T) => at(T, S.classes, 0.8, 0.9, ease.draw)} opacity={(T) => 1 - at(T, S.both, 0, 0.12)} dim={rest} />
+      <TagLeader layout={layout} k="both" color={PAL.both} width={w} progress={(T) => at(T, S.both, 0.58, 0.68, ease.draw)} opacity={(T) => (T >= S.both ? 1 - at(T, S.gen, 0, 0.15) : 0)} dim={rest} />
       <TagLeader
         layout={layout}
-        k="weak"
+        k="weakG"
+        color={PAL.yellowGreen}
+        width={w}
+        progress={(T) => at(T, S.gen, 0.84, 0.92, ease.draw)}
+        opacity={(T) => (T >= S.gen ? weakGOut(T) : 0)}
+        dim={() => 0.8}
+      />
+      <TagLeader
+        layout={layout}
+        k="weakP"
         color={PAL.chalk}
-        width={PEN.grid}
-        progress={(T) => at(T, S.gen, 0.82, 0.92, ease.draw)}
-        // it leaves with "Weakest skill 7" and returns with "Weakest skill 2", riding the ring down
-        opacity={(T) => (T >= S.gen ? 0.6 * (1 - at(T, S.spec, 0.7, 0.76) + at(T, S.spec, 0.88, 0.95)) * specOut(T) : 0)}
+        width={w}
+        progress={(T) => at(T, S.spec, 0.86, 0.93, ease.draw)}
+        opacity={(T) => (T >= S.spec ? specOut(T) : 0)}
+        dim={() => 0.8}
       />
     </>
   )
@@ -328,15 +349,19 @@ function TagLeaders({ layout }: { layout: Layout }) {
 
 /* ------------------------------- labels -------------------------------- */
 
+/** the skill-name label ids, built once (the colour pass runs every frame) */
+const NAME_IDS: string[] = SKILLS.map((_, i) => `sk-n-${i}`)
+
 function useStoryLabels(layout: Layout) {
   const wide = useWideNames()
   const specs = useMemo<LabelSpec[]>(() => {
     const out: LabelSpec[] = []
     const P_ = layout === 'P'
-    // the ten skill names (S0 to S4), chalk; the dot takes the class colour in S1 / S2
+    // the ten skill names (S0 to S4), chalk; the dot takes the class colour in
+    // S1 / S2, and at the S4 claim every name but Endurance steps back
     SKILLS.forEach((s, i) => {
       out.push({
-        id: `sk-n-${i}`,
+        id: NAME_IDS[i],
         text: s.name,
         tone: 'name',
         color: 'rgba(0, 0, 0, 0)',
@@ -349,8 +374,20 @@ function useStoryLabels(layout: Layout) {
         gapPx: 4,
         priority: 70,
         required: true,
-        cue: (T) => nameIn(T, i) * nameEmph(T, i) * (1 - at(T, S.grid, 0, 0.1)),
+        cue: (T) => nameIn(T, i) * nameEmph(T, i) * (i === P_WEAK ? 1 : 1 - 0.45 * catchK(T)) * (1 - at(T, S.grid, 0, 0.1)),
       })
+    })
+    // the scale: the rim is a rating of 10 (MAX_VALUE), so 7 and 2 read out of 10
+    out.push({
+      id: 'sk-scale',
+      text: String(MAX_VALUE),
+      tone: 'tick',
+      anchor: [0, R, 0.02],
+      prefer: 'W',
+      only: ['W', 'NW'],
+      gapPx: 6,
+      priority: 75,
+      cue: (T) => at(T, S.ten, 0.18, 0.26) * (1 - at(T, S.grid, 0, 0.1)),
     })
     // S1, S2: each family named on a tag in the free space, joined to its
     // arc by a pen-drawn leader (TagLeaders)
@@ -394,8 +431,10 @@ function useStoryLabels(layout: Layout) {
         cue: (T) => at(T, S.both, 0.64, 0.72) * (1 - at(T, S.gen, 0, 0.15)),
       },
     )
-    // S2 to S3: the class key, pinned top-left
-    const keyCue = (T: number) => at(T, S.both, 0.62, 0.74) * (1 - at(T, S.spec, 0, 0.15))
+    // S2 to S3: the class key, pinned top-left. In S3 it recedes with the class
+    // layer (landscape); a portrait phone has no room for a four-chip stack
+    // over the wheel's top names, so there it yields to the athlete key
+    const keyCue = (T: number) => at(T, S.both, 0.62, 0.74) * (1 - (P_ ? 1 : 0.6) * genDim(T)) * (1 - at(T, S.spec, 0, 0.15))
     ;(['trained', 'practiced', 'both'] as const).forEach((c, k) => {
       out.push({ id: `sk-lg-${c}`, text: CLASS_LABEL[c], tone: 'legend', color: CLASS_COLOR[c], anchor: [0, 0, 0], pin: 'top-left', pinOrder: k, cue: keyCue })
     })
@@ -412,14 +451,15 @@ function useStoryLabels(layout: Layout) {
     })
     out.push({
       id: 'sk-w-g',
-      text: `Weakest skill ${G_FLOOR}`,
+      text: TAG_TEXT.weakG,
       tone: 'callout',
       color: PAL.yellowGreen,
-      anchor: tagAnchor('weak'),
+      anchor: tagAnchor('weakG'),
       prefer: 'C',
       only: tagSides,
       priority: 92,
-      cue: (T) => at(T, S.gen, 0.88, 0.96) * (1 - at(T, S.spec, 0.7, 0.76)),
+      // lands as its leader reaches it; leaves as the generalist steps back
+      cue: (T) => at(T, S.gen, 0.9, 0.96) * weakGOut(T),
     })
     // S4: the comparison key and the collapsed floor
     out.push(
@@ -427,20 +467,20 @@ function useStoryLabels(layout: Layout) {
       { id: 'sk-lg-pl', text: 'Powerlifter', tone: 'legend', color: PAL.chalk, anchor: [0, 0, 0], pin: 'top-left', pinOrder: 5, cue: (T) => at(T, S.spec, 0.26, 0.38) * specOut(T) },
       {
         id: 'sk-w-p',
-        text: `Weakest skill ${P_FLOOR}`,
+        text: TAG_TEXT.weakP,
         tone: 'callout',
         color: PAL.chalk,
-        anchor: tagAnchor('weak'),
+        anchor: tagAnchor('weakP'),
         prefer: 'C',
         only: tagSides,
         priority: 92,
-        cue: (T) => at(T, S.spec, 0.9, 0.98) * specOut(T),
+        cue: (T) => at(T, S.spec, 0.91, 0.97) * specOut(T),
       },
     )
-    // S5: the thirteen, named under their cells (a phone uses the short names)
+    // S5: the thirteen, named inside their plates (a phone uses the short names)
     const gr = grid(layout)
     RANKED.forEach((r, k) => {
-      const [cx, cy] = gr.center(k)
+      const [nx, ny] = gr.nameAt(k)
       out.push({
         id: `sk-g-${k}`,
         text: wide ? r.name : r.short,
@@ -449,10 +489,10 @@ function useStoryLabels(layout: Layout) {
         color: r.isG ? PAL.yellowGreen : PAL.chalk,
         dot: false,
         badge: String(r.floor),
-        anchor: [cx, cy - MINI_R - 0.12, 0],
-        prefer: 'S',
-        only: ['S'],
-        gapPx: 5,
+        anchor: [nx, ny, 0],
+        prefer: 'N',
+        only: ['N'],
+        gapPx: 3,
         priority: 80,
         required: true,
         cue: (T) => Math.max(0, Math.min(1, (cellGrow(T, k) - 0.55) * 2.5)),
@@ -463,10 +503,16 @@ function useStoryLabels(layout: Layout) {
   }, [layout, wide])
   useLabels(specs)
 
-  // the skill-name dots take their class colour as the arcs pass (S1, S2), and
-  // leave with the class colours at S4 (the comparison is chalk and green)
+  // the skill-name dots take their class colour as the arcs pass (S1, S2),
+  // rest dimmed with the class layer (S3), and leave with the class colours
+  // at S4 (the comparison is chalk and green), where Endurance's dot comes
+  // back in chalk as the floor catches on it
   useSafeFrame('skills name colours', (T) => {
-    for (let i = 0; i < N; i++) setLabelColor(`sk-n-${i}`, rgba(SKILL_COLORS[i], classK(T, i) * arcOut(T)))
+    const c = catchK(T)
+    for (let i = 0; i < N; i++) {
+      if (i === P_WEAK && c > 0) setLabelColor(NAME_IDS[i], rgba(PAL.chalk, c))
+      else setLabelColor(NAME_IDS[i], rgba(SKILL_COLORS[i], classK(T, i) * arcOut(T) * (1 - 0.55 * genDim(T))))
+    }
   })
 }
 
@@ -551,7 +597,7 @@ function StoryScene({ tier }: { tier: Tier }) {
       spokeOpacity: (T) => 0.55 * focus(T, S.ten) * (1 - 0.45 * at(T, S.classes, 0.03, 0.12) + 0.3 * at(T, S.spec, 0, 0.3)) * constructionOut(T),
       tickOpacity: (T) => 0.34 * focus(T, S.ten) * constructionOut(T),
       classK,
-      classOpacity: (T) => (1 - 0.5 * at(T, S.gen, 0, 0.15)) * arcOut(T) * constructionOut(T),
+      classOpacity: (T) => (1 - 0.75 * genDim(T)) * arcOut(T) * constructionOut(T),
       heads: true,
       key: (T) => T,
       colors: SKILL_COLORS,
@@ -564,11 +610,14 @@ function StoryScene({ tier }: { tier: Tier }) {
       fill: (T) => at(T, S.gen, 0.1, 0.3) * (1 - 0.85 * ghostK(T)) * mainOut(T),
       walls: (T) => at(T, S.gen, 0.2, 0.5) * (1 - ghostK(T)) * mainOut(T),
       outline: (T) => at(T, S.gen, 0.1, 0.14) * mainOut(T),
-      outlineDim: (T) => 1 - 0.4 * ghostK(T),
+      ghost: ghostK,
+      ghostDim: 0.42,
+      // each node grows out with its own vertex (no clump at the centre)
       nodes: (T) => at(T, S.gen, 0.1, 0.2) * (1 - ghostK(T)) * mainOut(T) * (1 - at(T, S.grid, 0, 0.15)),
+      nodeK: (T, i) => Math.min(1, growV(T, i) * 1.6),
       depth: genDepth,
       // the growing shape speaks (its rim blooms), then settles under 1 as the floor ring is drawn
-      rim: (T) => 2.2 * at(T, S.gen, 0.12, 0.4) * (1 - 0.7 * at(T, S.gen, 0.55, 0.75)) * (1 - ghostK(T)),
+      rim: (T) => 2.2 * at(T, S.gen, 0.12, 0.4) * (1 - 0.72 * at(T, S.gen, 0.55, 0.75)) * (1 - ghostK(T)),
     }),
     [],
   )
@@ -590,9 +639,9 @@ function StoryScene({ tier }: { tier: Tier }) {
       RANKED.map((r, k) => ({
         rect: gr.plate(k),
         fill: r.isG ? PAL.yellowGreen : PAL.chalk,
-        fillAlpha: r.isG ? 0.02 : 0.008,
+        fillAlpha: r.isG ? 0.022 : 0.01,
         line: r.isG ? PAL.yellowGreen : PAL.chalk,
-        lineAlpha: r.isG ? 0.32 : 0.06,
+        lineAlpha: r.isG ? 0.36 : 0.05,
       })),
     [gr],
   )
@@ -606,7 +655,7 @@ function StoryScene({ tier }: { tier: Tier }) {
         return cellGrow(_T, k)
       },
       ring: cellRing,
-      opacity: (T) => (T >= S.grid + 0.2 ? 1 : 0),
+      opacity: gridOn,
       key: (T) => T + (layout === 'P' ? 0 : 100),
     }),
     [gr, layout],
@@ -618,41 +667,75 @@ function StoryScene({ tier }: { tier: Tier }) {
         <Construction vis={constructionVis} />
         <ClassArcs />
         <TagLeaders layout={layout} />
-        <ProfileSolid src={gen} color={PAL.yellowGreen} nodeColors={SKILL_COLORS} nodeRadius={layout === 'P' ? 0.4 : 0.27} vis={genVis} low={low} />
-        {/* S3 claim: the generalist's floor ring at its weakest skill (hot pen) */}
+        <ProfileSolid src={gen} color={PAL.yellowGreen} nodeColors={SKILL_COLORS} nodeRadius={layout === 'P' ? 0.4 : 0.27} vis={genVis} low={low} cap={GEN_CAP} />
+        {/* S3 claim: the generalist's floor ring at its weakest skill (hot pen),
+            on an ink keyline so its edge stays crisp over the lime cap (L10) */}
         <FloorRing
           radius={() => G_FLOOR}
           z={0.03}
           lift={genDepth}
           color={PAL.yellowGreen}
           progress={ringDraw}
-          opacity={(T) => at(T, S.gen, 0.6, 0.62) * specOut(T)}
-          dim={(T) => 1 - 0.5 * ghostK(T)}
+          opacity={(T) => at(T, S.gen, RING_A, RING_A + 0.02) * specOut(T)}
+          dim={(T) => 1 - 0.55 * ghostK(T)}
+          gain={(T) => 1.35 * (1 - 0.3 * ghostK(T))}
+          keyline
+          keylineK={(T) => 1 - ghostK(T)}
           head
           hot
         />
-        {/* S4: the gaps, hatched where the Powerlifter falls inside the generalist */}
-        <Hatch inner={pl} outer={gen} color={PAL.chalk} alpha={0.3} opacity={(T) => at(T, S.spec, 0.55, 0.6) * specOut(T)} reveal={(T) => at(T, S.spec, 0.55, 0.75)} />
+        {/* ... and every vertex it touches lights as the ring's pen passes it: the floor is a tie of three */}
+        {G_TIES.map((i) => (
+          <Ripple
+            key={i}
+            position={[px(i, G_FLOOR), py(i, G_FLOOR), DEPTH + 0.06]}
+            color={LIGHT}
+            sizePx={46}
+            k={(T) => cue(T, touchT(i), touchT(i) + 0.12)}
+          />
+        ))}
+        <Glows
+          count={G_TIES.length}
+          sizePx={24}
+          colors={[LIGHT]}
+          gain={1}
+          place={(T, j, out) => {
+            const i = G_TIES[j]
+            out[0] = px(i, G_FLOOR)
+            out[1] = py(i, G_FLOOR)
+            out[2] = genDepth(T) + 0.06
+            return 0.8 * cue(T, touchT(i) - 0.01, touchT(i) + 0.02) * (1 - at(T, S.spec, 0, 0.25))
+          }}
+        />
+        {/* S4: the gaps, hatched in the colour of loss where the Powerlifter falls
+            inside the generalist (the language of Definition's AREA LOST) */}
+        <Hatch inner={pl} outer={gen} color={PAL.sick} alpha={0.3} opacity={(T) => at(T, S.spec, 0.45, 0.5) * specOut(T)} reveal={(T) => at(T, S.spec, 0.45, 0.65)} />
         <Pen
           points={plPts}
           color={PAL.chalk}
-          width={PEN.data}
+          width={3.5}
           dashed
-          dashSize={0.45}
+          dashSize={0.5}
           gapSize={0.3}
           head
           hot
-          progress={(T) => at(T, S.spec, 0.2, 0.6, ease.draw)}
-          opacity={(T) => 0.95 * specOut(T)}
+          progress={(T) => at(T, S.spec, 0.15, 0.5, ease.draw)}
+          opacity={specOut}
+          // it steps back a little as the floor lands, so the claim is the brightest line (L3)
+          dim={(T) => 1 - 0.18 * catchK(T)}
           renderOrder={38}
         />
-        {/* S4 claim (signature): the floor collapses from 7 to 2 and catches on Endurance */}
+        {/* S4 claim (signature): the floor collapses from 7 to 2 and catches on
+            Endurance; it rests as the brightest line on screen */}
         <FloorRing
           radius={(T) => G_FLOOR + (P_FLOOR - G_FLOOR) * collapse(T)}
           z={0.08}
           color={PAL.chalk}
-          opacity={(T) => at(T, S.spec, 0.72, 0.76) * specOut(T)}
-          gain={(T) => 1 + 1.7 * pulse(T, S.spec + 0.74, S.spec + 0.99)}
+          width={4}
+          dash={0.36}
+          opacity={(T) => at(T, S.spec, 0.62, 0.66) * specOut(T)}
+          gain={(T) => 1.15 + 1.5 * pulse(T, S.spec + 0.64, S.spec + 0.92)}
+          keyline
         />
         <Nodes
           count={1}
@@ -665,11 +748,23 @@ function StoryScene({ tier }: { tier: Tier }) {
             out[0] = px(P_WEAK, P_FLOOR)
             out[1] = py(P_WEAK, P_FLOOR)
             out[2] = 0.1
-            return at(T, S.spec, 0.9, 0.98, ease.snap)
+            return at(T, S.spec, 0.84, 0.9, ease.snap)
           }}
         />
-        {/* the floor catches on Endurance: one ring of light where it lands */}
-        <Ripple position={[px(P_WEAK, P_FLOOR), py(P_WEAK, P_FLOOR), 0.12]} color={LIGHT} sizePx={84} k={(T) => at(T, S.spec, 0.92, 1.0)} />
+        {/* the catch: one ring of light where the floor lands, then a faint lit point that stays */}
+        <Ripple position={[px(P_WEAK, P_FLOOR), py(P_WEAK, P_FLOOR), 0.12]} color={LIGHT} sizePx={84} k={(T) => at(T, S.spec, 0.85, 0.97)} />
+        <Glows
+          count={1}
+          sizePx={34}
+          colors={[LIGHT]}
+          gain={1}
+          place={(_T, _i, out) => {
+            out[0] = px(P_WEAK, P_FLOOR)
+            out[1] = py(P_WEAK, P_FLOOR)
+            out[2] = 0.12
+            return 0.7 * catchK(_T) * specOut(_T)
+          }}
+        />
         <Heads
           count={1}
           tint={PAL.chalk}
@@ -677,11 +772,11 @@ function StoryScene({ tier }: { tier: Tier }) {
             out[0] = px(P_WEAK, P_FLOOR)
             out[1] = py(P_WEAK, P_FLOOR)
             out[2] = 0.12
-            return pulse(T, S.spec + 0.88, S.spec + 1.0)
+            return pulse(T, S.spec + 0.8, S.spec + 0.94)
           }}
         />
       </group>
-      <Plates plates={plates} radius={0.35} z={-0.08} vis={(T, k) => cellGrow(T, k)} opacity={(T) => (T >= S.grid + 0.2 ? 1 : 0)} renderOrder={4} />
+      <Plates plates={plates} radius={0.35} z={-0.08} vis={(T, k) => cellGrow(T, k)} opacity={gridOn} renderOrder={4} />
       <Minis cells={G_CELLS} vis={minisVis} low={low} />
     </>
   )

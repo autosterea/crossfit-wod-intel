@@ -24,6 +24,13 @@ export interface SkExploreState {
   enter: number
   setAthlete(name: string): void
   setCompare(name: string): void
+  /**
+   * A chip pick (Athlete or Compare): the choice is shown on the wheel, so a
+   * pick made while the Grid is up glides back to the wheel (a chip tap must
+   * always change the scene).
+   */
+  pickAthlete(name: string): void
+  pickCompare(name: string): void
   /** set one Custom value; switches A to Custom (starting from A's current profile) */
   setSkill(i: number, v: number, from: readonly number[]): void
   setView(v: SkView): void
@@ -40,6 +47,8 @@ export const useSkExplore = create<SkExploreState>((set) => ({
   enter: 0,
   setAthlete: (name) => set({ athlete: name }),
   setCompare: (name) => set({ compare: name }),
+  pickAthlete: (name) => set({ athlete: name, view: 'wheel' }),
+  pickCompare: (name) => set({ compare: name, view: 'wheel' }),
   setSkill: (i, v, from) =>
     set((s) => {
       const base = s.athlete === CUSTOM ? s.custom : from

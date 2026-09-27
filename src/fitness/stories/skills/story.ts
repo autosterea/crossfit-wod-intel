@@ -11,9 +11,10 @@ import { NONE, useSkExplore } from './exploreStore'
    <= 30 characters, bodies <= 140, no new facts, numbers or quotes.
 
    Camera: the wheel is read front-on (L12) with its label ring in the
-   padding; S3 tilts decisively enough to show the prism's depth (L6: the
-   camera reveals a new dimension) and S4 returns front-on for the
-   comparison; S5 frames the grid of thirteen.
+   padding; S3 tilts just enough to show the prism's shaded walls (L6: the
+   camera reveals a new dimension) while its floor ring stays registered
+   with the rings and ticks, and S4 returns front-on for the comparison;
+   S5 frames the grid of thirteen.
    ========================================================================= */
 
 const WHEEL_T: V3 = [0, 0, 0.15]
@@ -23,13 +24,14 @@ const center = (b: Box): V3 => [(b[0][0] + b[1][0]) / 2, (b[0][1] + b[1][1]) / 2
 const FRONT_L: CamPose = { target: WHEEL_T, az: 0, el: 0, fov: 30, fit: WHEEL_BOX, padPx: WHEEL_PAD.L }
 const FRONT_P: CamPose = { ...FRONT_L, padPx: WHEEL_PAD.P }
 /**
- * S3: reveal the solid. D.2 gives L az -10 el 16 and P az -8 el 14; that
- * tilt reads as a mistake and shows no depth (README "Camera poses": depth
- * is the point, so 15 degrees or more). Proposed amendment: L -18 / 22,
- * P -16 / 20.
+ * S3: reveal the solid, close to the D.2 pose (L az -10 el 16, P az -8 el
+ * 14). The depth encodes no data, so the tilt stays small enough that the
+ * cap's floor ring and nodes register with the rings, ticks and spokes
+ * (under 0.25 units off with DEPTH 0.75) while the shaded walls still show
+ * it is a solid: L -12 / 16, P -10 / 15 (proposed amendment).
  */
-const SOLID_L: CamPose = { ...FRONT_L, target: [0, 0, DEPTH / 2], fit: SOLID_BOX, az: -18, el: 22 }
-const SOLID_P: CamPose = { ...SOLID_L, padPx: WHEEL_PAD.P, az: -16, el: 20 }
+const SOLID_L: CamPose = { ...FRONT_L, target: [0, 0, DEPTH / 2], fit: SOLID_BOX, az: -12, el: 16 }
+const SOLID_P: CamPose = { ...SOLID_L, padPx: WHEEL_PAD.P, az: -10, el: 15 }
 /** S5: the grid of thirteen, with its name rows; the top pad leaves room for the pinned key. */
 const GRID: CamPose = {
   target: (l: Layout) => center(grid(l).box),
@@ -129,11 +131,17 @@ export const skillsStory: StoryDef = {
   explore: {
     cam: { L: EXPLORE },
     limits: { az: [-50, 50], el: [0, 50], zoom: [0.8, 1.4] },
+    /**
+     * Explore always opens on the wheel with the generalist, so the drag
+     * handles pulse (B.4) and the first chip a viewer taps changes the scene.
+     * From the comparison and the lineup (S4, S5) the Powerlifter comes along
+     * as the dashed chalk ghost; the Grid is one tap away.
+     */
     initFromBeat(i) {
       const s = useSkExplore.getState()
       s.setAthlete(GENERALIST.name)
-      s.setCompare(i === 4 ? POWERLIFTER.name : NONE)
-      s.setView(i >= 5 ? 'grid' : 'wheel')
+      s.setCompare(i >= 4 ? POWERLIFTER.name : NONE)
+      s.setView('wheel')
       s.setInfo(null)
       s.bumpEnter()
     },

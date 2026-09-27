@@ -55,17 +55,18 @@
   display: flex;
   align-items: baseline;
   gap: 8px;
-  white-space: nowrap;
 }
+/* every skill at the floor (a tie lists them all), wrapping under its number */
 .sk-reads .sk-skill {
+  min-width: 0;
   font-family: var(--st-cond);
   font-weight: 600;
   font-size: 14px;
+  line-height: 1.25;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--st-chalk);
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: normal;
 }
 .sk-who {
   display: flex;
@@ -231,4 +232,27 @@
 /* the skill-name dots have no colour until a class arc passes (S0: "no dot yet") */
 .st-lbl[data-label^='sk-n-'] .st-lbl-dot {
   box-shadow: none;
+}
+
+/* S5 and explore grid names sit inside their plates: a slightly tighter
+   badge and tracking keep "3 WEIGHTLIFTER" inside a 360 px column (12 px
+   type, unchanged) */
+.st-lbl[data-label^='sk-g-'],
+.st-lbl[data-label^='sk-x-g-'] {
+  gap: 4px;
+}
+.st-lbl[data-label^='sk-g-'] .st-lbl-t,
+.st-lbl[data-label^='sk-x-g-'] .st-lbl-t {
+  letter-spacing: 0.03em;
+}
+.st-lbl[data-label^='sk-g-'] .st-lbl-badge,
+.st-lbl[data-label^='sk-x-g-'] .st-lbl-badge {
+  padding: 3px 4px 2px;
+}
+/* a landscape phone's grid column is under 90 px: the tightest tracking */
+@media (orientation: landscape) and (max-height: 500px) {
+  .st-lbl[data-label^='sk-g-'] .st-lbl-t,
+  .st-lbl[data-label^='sk-x-g-'] .st-lbl-t {
+    letter-spacing: 0;
+  }
 }

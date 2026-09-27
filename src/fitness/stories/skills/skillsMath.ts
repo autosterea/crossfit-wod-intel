@@ -45,7 +45,17 @@ export const weakestIndex = (p: ArrayLike<number>): number => {
   for (let i = 1; i < p.length; i++) if (p[i] < p[k]) k = i
   return k
 }
-export const weakestName = (p: readonly number[]): string => SKILLS[weakestIndex(p)].name
+/**
+ * Every skill at the floor, in SKILLS order. A tie is a tie: the Generalist's
+ * floor of 7 is Flexibility, Agility and Accuracy, never just the first of
+ * them (values are compared at the 0.1 step the lesson edits in).
+ */
+export const weakestNames = (p: readonly number[]): string[] => {
+  const lo = floorOf(p)
+  const out: string[] = []
+  for (let i = 0; i < p.length; i++) if (p[i] - lo < 0.05) out.push(SKILLS[i].name)
+  return out
+}
 
 /** A value printed the way the lesson prints it: whole numbers bare, else one decimal. */
 export const fmtVal = (v: number): string => (Math.abs(v - Math.round(v)) < 0.05 ? String(Math.round(v)) : v.toFixed(1))
