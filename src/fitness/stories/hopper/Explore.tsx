@@ -2,11 +2,10 @@ import { useEffect, useRef } from 'react'
 import { HOPPER_DOMAINS, HOPPER_ROSTER, PAL } from '../../fitnessData'
 import { Legend } from '../../ui'
 import { onFrame } from '../../story/clock'
-import { focusRect } from '../../story/camera/focusRect'
 import { ChipRadio } from '../../story/ui/ChipRadio'
 import { EXPLORE_CAP, GEN, NAMES, N_ATH } from './hopperMath'
 import { boardAt } from './timeline'
-import { WORLD } from './layout'
+import { worldNow } from './layout'
 import { ex, useHopExplore, type HopView } from './exploreStore'
 
 /* =========================================================================
@@ -17,14 +16,19 @@ import { ex, useHopExplore, type HopView } from './exploreStore'
    is expanded and the stage legend steps aside). Expanded: New run (a fresh
    seed, shown as "run 51837"), Reset (seed 78331 at draw 40), and the
    Generalist, Top specialist and Leader readouts, written through refs only
-   when a rounded total changes. Every string here already exists in the
-   module, the label lexicon or fitnessData.
+   when a rounded total changes, and the module's own message for who
+   leads (leadMsg: the generalist, or a specialist while its domain keeps
+   coming up). Every string here already exists in the module, the label
+   lexicon or fitnessData.
    ========================================================================= */
 
 const VIEWS: readonly { value: HopView; label: string }[] = [
   { value: 'rails', label: 'Rails' },
   { value: 'runs', label: 'Every run' },
 ]
+
+/** HopperModule.leadMsg: the generalist leads, or a specialist does */
+const LEAD_MSG = ['Across random draws, the generalist accumulates the most points.', 'Keep drawing. A specialist only leads while its own domain keeps coming up.'] as const
 
 const mono: React.CSSProperties = { fontFamily: 'var(--st-mono)', fontVariantNumeric: 'tabular-nums' }
 
@@ -81,10 +85,11 @@ export default function HopperExplore() {
   const spec = useRef<HTMLDivElement>(null)
   const specName = useRef<HTMLDivElement>(null)
   const leader = useRef<HTMLDivElement>(null)
+  const note = useRef<HTMLParagraphElement>(null)
   useEffect(() => {
-    const last = new Float64Array(4).fill(NaN)
+    const last = new Float64Array(5).fill(NaN)
     return onFrame(() => {
-      const b = boardAt(ex.sched, ex.X, WORLD[focusRect.layout].rails.len)
+      const b = boardAt(ex.sched, ex.X, worldNow().rails.len)
       let best = -1
       for (let a = 0; a < N_ATH; a++) if (a !== GEN && (best < 0 || b.totals[a] > b.totals[best])) best = a
       let lead = 0
@@ -99,6 +104,8 @@ export default function HopperExplore() {
         leader.current.textContent = NAMES[lead]
         leader.current.style.color = lead === GEN ? PAL.yellowGreen : 'var(--st-chalk)'
       }
+      const msg = lead === GEN ? 0 : 1
+      if (msg !== last[4] && note.current) note.current.textContent = LEAD_MSG[(last[4] = msg)]
     })
   }, [])
 
@@ -187,7 +194,9 @@ export default function HopperExplore() {
       </div>
       </div>
 
-      <p className="st-ex-note">Across random draws, the generalist accumulates the most points.</p>
+      <p ref={note} className="st-ex-note" aria-live="polite">
+        {LEAD_MSG[0]}
+      </p>
       <p className="st-ex-note">Tap a rail for that athlete's five domain scores.</p>
     </div>
   )

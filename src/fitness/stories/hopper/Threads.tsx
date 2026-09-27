@@ -59,7 +59,8 @@ export function Threads({ frame, construct, opacity, bundle, mine }: ThreadsProp
     last[0] = id
     last[1] = p
     const upto = p * SEGS
-    THREADS.forEach((r, t) => {
+    for (let t = 0; t < THREADS.length; t++) {
+      const r = THREADS[t]
       for (let d = 0; d < SEGS; d++) {
         const o = (t * SEGS + d) * 6
         if (d >= upto) {
@@ -78,7 +79,7 @@ export function Threads({ frame, construct, opacity, bundle, mine }: ThreadsProp
         s[o + 4] = ya + (yb - ya) * e
         s[o + 5] = 0
       }
-    })
+    }
     return true
   }
 

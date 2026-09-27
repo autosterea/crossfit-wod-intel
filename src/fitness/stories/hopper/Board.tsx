@@ -7,7 +7,8 @@ import { Instances } from '../../story/kit/Instances'
 import { PenBatch, Pen, PEN } from '../../story/kit/Pen'
 import { Glows } from '../../story/kit/Halo'
 import { ballOpts, makeRimStandard } from '../../story/kit/materials'
-import { BD, BH, slotY, type World } from './layout'
+import { BD, BH, boardPx, slotY, type World } from './layout'
+import { registry } from '../../story/labels/registry'
 import { boardAt, win, type Board as BoardT, type Sched } from './timeline'
 import { GEN, N_ATH, type Run } from './hopperMath'
 import { hash1 } from '../../story/rng'
@@ -17,27 +18,23 @@ import { hash1 } from '../../story/rng'
    one per rank slot, and on each athlete's rail a bar of 3D bricks laid end
    to end, one brick per draw, coloured by the DRAWN domain and as long as
    that athlete's points x k(T). Bricks fly from the ticket to the bar's
-   end, land and stretch (snap); the rails re-sort by rank, rising rails
-   passing in front. The rail scale k(T) = 0.9 railLen / max(400,
-   leaderTotal(T)) is continuous, so bars grow while the scale settles. At
-   the end of H5 (and in explore) each rail's bricks regroup into five
-   domain bands, so the bands show where each total came from.
+   end, land and stretch (snap); the rails re-sort by rank, a rising rail
+   lifting toward the camera and swelling a little so it passes in front.
+   The rail scale k(T) = 0.9 railLen / max(400, leaderTotal(T)) is
+   continuous, so bars grow while the scale settles. At the end of H5 (and
+   in explore) each rail's bricks regroup into five domain bands, so the
+   bands show where each total came from.
    ========================================================================= */
 
 /** far away: where a hidden pen segment waits (never a zero-length dot) */
 const AWAY = 1e5
 const CUBE = 0.36
+/** how much a rising rail's bricks swell at mid-pass of a default pass (height and depth; the H4 climb swells more) */
+export const SWELL = 0.16
 
 /** The bar end (tip) of athlete a: every brick that has landed, stretched to its length. */
-export function tipOf(s: Sched, X: number, b: BoardT, a: number): number {
-  let sum = 0
-  for (let d = 0; d < b.started; d++) {
-    const i = d * N_ATH + a
-    if (!(s.fly1[i] <= X)) continue
-    const g = win(X, s.str0[i], s.str1[i])
-    sum += s.run.pts[i] * g
-  }
-  return sum * b.k
+export function tipOf(_s: Sched, _X: number, b: BoardT, a: number): number {
+  return b.landed[a] * b.k
 }
 
 /** The gap between bricks: a hairline on big bricks, none once they are thin slivers (the H5 bands). */
@@ -47,22 +44,9 @@ export const railY = (w: World, b: BoardT, a: number) => slotY(w, b.rankPos[a])
 
 /**
  * Brick (d, a) at time X: writes the instance and returns false while it
- * has not left the ticket. `from` is the ticket's launch point; `flat`
- * (0..1) presses the brick into its rail (H6: every rail but P1 and P2
- * steps back).
+ * has not left the ticket. `from` is the ticket's launch point.
  */
-export function placeBrick(
-  w: World,
-  s: Sched,
-  X: number,
-  b: BoardT,
-  d: number,
-  a: number,
-  from: THREE.Vector3,
-  pos: THREE.Vector3,
-  sc: THREE.Vector3,
-  flat = 0,
-): boolean {
+export function placeBrick(w: World, s: Sched, X: number, b: BoardT, d: number, a: number, from: THREE.Vector3, pos: THREE.Vector3, sc: THREE.Vector3): boolean {
   if (d >= s.n) return false
   const i = d * N_ATH + a
   const f0 = s.fly0[i]
@@ -89,9 +73,9 @@ export function placeBrick(
   const st = ease.snap(win(X, s.str0[i], s.str1[i]))
   const cube = Math.min(CUBE, Math.max(0.12, L))
   const len = Math.max(0.01, cube + (L - gp - cube) * st)
-  const f = 1 - 0.88 * flat
-  pos.set(x0 + gp / 2 + len / 2, y - (BH / 2) * (1 - f), z)
-  sc.set(len, BH * f, BD * f)
+  const sw = 1 + SWELL * b.pop[a]
+  pos.set(x0 + gp / 2 + len / 2, y, z)
+  sc.set(len, BH * sw, BD * sw)
   return true
 }
 
@@ -104,15 +88,17 @@ export interface BricksProps {
   run: Run
   /** draws of that run the meshes are sized for */
   draws: number
-  /** whole-board opacity (0 hides it and skips its per-frame work) */
+  /** the athletes this set shows (default all): H6 fades the four rails behind P1 and P2 as their own set */
+  athletes?: readonly number[]
+  /** whole-set opacity (0 hides it and skips its per-frame work) */
   opacity: (T: number) => number
   /** where bricks leave from (the ticket, or the flick card) */
   launch: (T: number, out: THREE.Vector3) => void
-  /** per athlete: how far its bar is pressed into its rail (H6) */
-  flat?: (T: number, a: number) => number
 }
 
 const _from = new THREE.Vector3()
+const _p = new THREE.Vector3()
+const _s = new THREE.Vector3()
 
 /** The brick materials: the ball material in each domain colour (the bricks ARE the drawn tasks). */
 export function useBrickMaterials(): THREE.MeshStandardMaterial[] {
@@ -125,33 +111,102 @@ export function useBrickMaterials(): THREE.MeshStandardMaterial[] {
 }
 
 /**
+ * Every brick of a set, computed once per frame key (story time, explore
+ * time, schedule version, the rails) into flat arrays, so
+ * the five domain meshes only read them, and a held frame (or an idle
+ * explore board) recomputes nothing.
+ */
+interface Field {
+  /** the run these bricks show (a replaced run takes a fresh field: no stale key can match) */
+  run: Run
+  pos: Float32Array
+  scl: Float32Array
+  on: Uint8Array
+  key: Float64Array
+  /** the brick indices (d * N_ATH + a) this set shows, in draw order */
+  idx: Int32Array
+}
+
+/**
  * One brick per (draw, athlete), grouped into five meshes by the DRAWN
  * domain, each in that domain's ball material: five draw calls for the
- * whole board, the domain colour exact and lit like the balls.
+ * whole set, the domain colour exact and lit like the balls.
  */
-export function Bricks({ w, mats, src, run, draws, opacity, launch, flat }: BricksProps) {
+export function Bricks({ w, mats, src, run, draws, athletes, opacity, launch }: BricksProps) {
   const geo = useMemo(() => new RoundedBoxGeometry(1, 1, 1, 1, 0.12), [])
   useEffect(() => () => geo.dispose(), [geo])
-  // the draws of each domain, in draw order
+  const n = Math.min(draws, run.n)
+  // the bricks of each domain (d * N_ATH + a), in draw order
   const lists = useMemo(() => {
     const l: number[][] = HOPPER_DOMAINS.map(() => [])
-    for (let d = 0; d < Math.min(draws, run.n); d++) l[run.dom[d]].push(d)
-    return l
-  }, [run, draws])
-  const place = (dm: number) => (T: number, j: number, pos: THREE.Vector3, _q: THREE.Quaternion, sc: THREE.Vector3) => {
+    for (let d = 0; d < n; d++) for (let a = 0; a < N_ATH; a++) if (!athletes || athletes.includes(a)) l[run.dom[d]].push(d * N_ATH + a)
+    return l.map((x) => Int32Array.from(x))
+  }, [run, n, athletes])
+  const field = useMemo<Field>(() => {
+    const idx: number[] = []
+    for (let d = 0; d < n; d++) for (let a = 0; a < N_ATH; a++) if (!athletes || athletes.includes(a)) idx.push(d * N_ATH + a)
+    return {
+      run,
+      pos: new Float32Array(n * N_ATH * 3),
+      scl: new Float32Array(n * N_ATH * 3),
+      on: new Uint8Array(n * N_ATH),
+      key: new Float64Array(6).fill(NaN),
+      idx: Int32Array.from(idx),
+    }
+  }, [run, n, athletes])
+
+  /** the field at T (recomputed only when its key changes); false when the source is another run */
+  const ensure = (T: number): boolean => {
     const { s, X } = src(T)
     if (s.run !== run) return false
-    const b = boardAt(s, X, w.rails.len)
-    const d = lists[dm][Math.floor(j / N_ATH)]
-    const a = j % N_ATH
-    if (!(s.fly0[d * N_ATH + a] <= X)) return false
+    // the launch point is a function of T (the ticket's place), so T keys it too
+    const k = field.key
+    if (k[0] === T && k[1] === X && k[2] === s.version && k[3] === w.rails.len && k[4] === w.rails.pitch && k[5] === w.rails.x0) return true
+    k[0] = T
+    k[1] = X
+    k[2] = s.version
+    k[3] = w.rails.len
+    k[4] = w.rails.pitch
+    k[5] = w.rails.x0
     launch(T, _from)
-    return placeBrick(w, s, X, b, d, a, _from, pos, sc, flat ? flat(T, a) : 0)
+    const b = boardAt(s, X, w.rails.len)
+    const { pos, scl, on, idx } = field
+    for (let j = 0; j < idx.length; j++) {
+      const i = idx[j]
+      const d = (i / N_ATH) | 0
+      const a = i - d * N_ATH
+      if (!placeBrick(w, s, X, b, d, a, _from, _p, _s)) {
+        on[i] = 0
+        continue
+      }
+      on[i] = 1
+      pos[i * 3] = _p.x
+      pos[i * 3 + 1] = _p.y
+      pos[i * 3 + 2] = _p.z
+      scl[i * 3] = _s.x
+      scl[i * 3 + 1] = _s.y
+      scl[i * 3 + 2] = _s.z
+    }
+    return true
   }
+  const placers = useMemo(
+    () =>
+      lists.map((list) => (T: number, j: number, pos: THREE.Vector3, _q: THREE.Quaternion, sc: THREE.Vector3) => {
+        if (!ensure(T)) return false
+        const i = list[j]
+        if (!field.on[i]) return false
+        pos.set(field.pos[i * 3], field.pos[i * 3 + 1], field.pos[i * 3 + 2])
+        sc.set(field.scl[i * 3], field.scl[i * 3 + 1], field.scl[i * 3 + 2])
+        return true
+      }),
+    // ensure reads src / launch / w through the latest render's closure
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [lists, field, w, src, launch],
+  )
   return (
     <>
       {HOPPER_DOMAINS.map((dmn, dm) => (
-        <Instances key={dmn.key} geometry={geo} material={mats[dm]} count={lists[dm].length * N_ATH} opacity={opacity} renderOrder={22} place={place(dm)} />
+        <Instances key={dmn.key} geometry={geo} material={mats[dm]} count={lists[dm].length} opacity={opacity} renderOrder={22} place={placers[dm]} />
       ))}
     </>
   )
@@ -162,24 +217,24 @@ const _bs = new THREE.Vector3()
 const _bf = new THREE.Vector3()
 
 /**
- * A light rides each brick of a full-ticket draw (H2 to H4, explore's single
- * draws): it rises as the brick flies and fades as it lands and stretches,
- * so the six bricks read as six strokes of light slamming into the rails.
- * Only the brick bound for the draw's new leader is HDR-hot (L4); the other
- * five stay at 0.9.
+ * A light rides the brick bound for the draw's leader (H2 to H4, explore's
+ * single draws): it rises as the brick flies and fades as it lands and
+ * stretches. It is the one speaking HDR element of that moment (L4); the
+ * other five bricks fly unlit by it.
  */
 export function BrickLights({ w, src, launch }: { w: World; src: BricksProps['src']; launch: BricksProps['launch'] }) {
   return (
     <Glows
-      count={N_ATH}
-      sizePx={34}
+      count={1}
+      sizePx={36}
       colors={['#f4ffe0']}
       gain={1.9}
-      place={(T, a, out) => {
+      place={(T, _j, out) => {
         const { s, X } = src(T)
         const b = boardAt(s, X, w.rails.len)
         for (let d = b.started - 1; d >= 0 && d >= b.started - 2; d--) {
           if (s.kind[d] !== 0) continue
+          const a = s.run.leader[d + 1]
           const i = d * N_ATH + a
           const f0 = s.fly0[i]
           const e = s.str1[i]
@@ -189,8 +244,7 @@ export function BrickLights({ w, src, launch }: { w: World; src: BricksProps['sr
           out[0] = _bp.x + _bs.x / 2
           out[1] = _bp.y
           out[2] = _bp.z + BD / 2 + 0.05
-          const hot = s.run.leader[d + 1] === a ? 1 : 0.47
-          return Math.sin(Math.PI * win(X, f0, e)) * hot
+          return Math.sin(Math.PI * win(X, f0, e))
         }
         return 0
       }}
@@ -207,16 +261,18 @@ export interface RailsProps {
   /** resting light 0..1 (chalk 25% at 1) */
   dim: (T: number) => number
   opacity: (T: number) => number
+  /** the light at a drawing tip (0: none, e.g. while rails retract) */
+  tips?: (T: number) => number
 }
 
 /** Six rails, one per rank slot: one PenBatch (chalk 25%), drawn on with a stagger and a light at each tip. */
-export function Rails({ w, draw, dim, opacity }: RailsProps) {
+export function Rails({ w, draw, dim, opacity, tips }: RailsProps) {
   const segs = useMemo(() => new Float32Array(6 * 6).fill(AWAY), [])
-  // the last inputs written (six progresses, x0, len): numbers, never a string key per frame
-  const last = useMemo(() => new Float64Array(8).fill(NaN), [])
+  // the last inputs written (six progresses, x0, len, pitch): numbers, never a string key per frame
+  const last = useMemo(() => new Float64Array(9).fill(NaN), [])
   const z = -BD / 2 - 0.04
   const write = (T: number, s: Float32Array): boolean => {
-    let same = last[6] === w.rails.x0 && last[7] === w.rails.len
+    let same = last[6] === w.rails.x0 && last[7] === w.rails.len && last[8] === w.rails.pitch
     for (let k = 0; k < 6; k++) {
       const p = draw(T, k)
       if (p !== last[k]) {
@@ -227,6 +283,7 @@ export function Rails({ w, draw, dim, opacity }: RailsProps) {
     if (same) return false
     last[6] = w.rails.x0
     last[7] = w.rails.len
+    last[8] = w.rails.pitch
     for (let k = 0; k < 6; k++) {
       const p = last[k]
       const o = k * 6
@@ -257,7 +314,7 @@ export function Rails({ w, draw, dim, opacity }: RailsProps) {
           out[0] = w.rails.x0 + w.rails.len * p
           out[1] = slotY(w, k)
           out[2] = z
-          return p > 0 && p < 1 ? Math.min(1, 4 * Math.min(p, 1 - p)) * opacity(T) : 0
+          return p > 0 && p < 1 ? Math.min(1, 4 * Math.min(p, 1 - p)) * opacity(T) * (tips ? tips(T) : 1) : 0
         }}
       />
     </>
@@ -266,21 +323,54 @@ export function Rails({ w, draw, dim, opacity }: RailsProps) {
 
 /* ------------------------------ ticks ------------------------------ */
 
+const NAME_IDS = Array.from({ length: N_ATH }, (_, a) => 'hop-n-' + a)
+/** a tick: its centre over the bar's top, its size, and how far its top reaches over the bar's top (world) */
+const TICK_Y = 0.22
+const TICK_S = 0.28
+export const TICK_TOP = TICK_Y + 0.55 * TICK_S
+
 /**
- * H3: after a draw's bricks land, a small #91C640 tick appears above the
- * brick of that draw's top scorer (they win the draw, not the tally).
- * Draw 1's tick lands first, as H3 opens, so every draw shows its winner.
+ * Where the tick of draw d sits, world, into out (x, y, z): over its top
+ * scorer's brick, near the brick's start (the middle of a short brick);
+ * when the athlete's name (over the rail's far end) reaches over the
+ * brick, the tick slides left to clear it, never off the brick.
+ */
+export function tickAt(w: World, s: Sched, b: BoardT, d: number, out: Float64Array): Float64Array {
+  const a = s.run.top[d]
+  const i = d * N_ATH + a
+  const x0 = w.rails.x0 + b.k * s.run.prefix[i]
+  const L = b.k * s.run.pts[i]
+  out[0] = x0 + Math.min(L / 2, 0.32)
+  const e = registry.get(NAME_IDS[a])
+  if (e && e.w > 0 && boardPx.unit > 0) {
+    // the name sits NW of the rail's end (gap 5 px): its left edge, less the tick's reach and a little air
+    const clear = w.rails.x0 + w.rails.len - (3.6 + e.w + 7) / boardPx.unit - 0.2
+    if (out[0] > clear) out[0] = Math.max(x0 + Math.min(L / 2, 0.17), clear)
+  }
+  out[1] = railY(w, b, a) + BH / 2 + TICK_Y
+  out[2] = b.lift[a] + BD / 2
+  return out
+}
+const TK = new Float64Array(3)
+
+/**
+ * H3 and H4: after a draw's bricks land, a small #91C640 tick appears above
+ * the brick of that draw's top scorer (they win the draw, not the tally).
+ * Draw 1's tick lands first, as H3 opens, and the unknown draw (H4) keeps
+ * the rule, so every draw shows its winner.
  */
 export function Ticks({ w, src, opacity }: { w: World; src: BricksProps['src']; opacity: (T: number) => number }) {
   const MAX = 5
   const segs = useMemo(() => new Float32Array(MAX * 2 * 6).fill(AWAY), [])
-  const last = useMemo(() => new Float64Array(3).fill(NaN), [])
+  const last = useMemo(() => new Float64Array(5).fill(NaN), [])
   const write = (T: number, out: Float32Array): boolean => {
     const { s, X } = src(T)
-    if (last[0] === X && last[1] === s.version && last[2] === w.rails.len) return false
+    if (last[0] === X && last[1] === s.version && last[2] === w.rails.len && last[3] === w.rails.pitch && last[4] === boardPx.unit) return false
     last[0] = X
     last[1] = s.version
     last[2] = w.rails.len
+    last[3] = w.rails.pitch
+    last[4] = boardPx.unit
     const b = boardAt(s, X, w.rails.len)
     out.fill(AWAY)
     let n = 0
@@ -290,13 +380,11 @@ export function Ticks({ w, src, opacity }: { w: World; src: BricksProps['src']; 
       const g = ease.snap(win(X, t0, s.tick1[d]))
       // not yet grown: nothing (a zero-length segment would draw a dot)
       if (g <= 0.001) continue
-      const a = s.run.top[d]
-      const i = d * N_ATH + a
-      const x0 = w.rails.x0 + b.k * s.run.prefix[d * N_ATH + a]
-      const cx = x0 + (b.k * s.run.pts[i]) / 2
-      const cy = railY(w, b, a) + BH / 2 + 0.3
-      const z = b.lift[a] + BD / 2
-      const sz = 0.3 * g
+      tickAt(w, s, b, d, TK)
+      const cx = TK[0]
+      const cy = TK[1]
+      const z = TK[2]
+      const sz = TICK_S * g
       // a check mark: short stroke down-right, long stroke up-right
       const ax = cx - 0.5 * sz
       const ay = cy + 0.05 * sz
@@ -366,6 +454,19 @@ export interface LeadBracketProps {
   chartTop: THREE.Vector3
 }
 
+/** The bracket's ends on the board: runner-up's bar end x, leader's bar end x, the stroke's y, the guide's top y, z. */
+export function bracketEnds(w: World, src: BricksProps['src'], p1: number, p2: number, T: number, out: Float64Array): Float64Array {
+  const { s, X } = src(T)
+  const b = boardAt(s, X, w.rails.len)
+  out[0] = w.rails.x0 + tipOf(s, X, b, p2)
+  out[1] = w.rails.x0 + tipOf(s, X, b, p1)
+  // just under the leader's bar, clear of the names over the rails' far ends
+  out[2] = railY(w, b, p1) - BH / 2 - 0.16
+  out[3] = railY(w, b, p2) + BH / 2 + 0.04
+  out[4] = BD / 2 + 0.06
+  return out
+}
+
 /**
  * H6 opens on the board: a dashed chalk guide rises from the runner-up's
  * bar end to the leader's bar, and a yellow-green stroke under the leader's
@@ -378,17 +479,6 @@ export function LeadBracket({ w, src, p1, p2, draw, swing, opacity, guide, chart
   const guidePts = useMemo(() => new Float32Array(2 * 3), [])
   const lastL = useMemo(() => new Float64Array(5).fill(NaN), [])
   const lastG = useMemo(() => new Float64Array(2).fill(NaN), [])
-  const ends = (T: number, out: Float64Array) => {
-    const { s, X } = src(T)
-    const b = boardAt(s, X, w.rails.len)
-    out[0] = w.rails.x0 + tipOf(s, X, b, p2)
-    out[1] = w.rails.x0 + tipOf(s, X, b, p1)
-    // just under the leader's bar, clear of the names over the rails' far ends
-    out[2] = railY(w, b, p1) - BH / 2 - 0.16
-    out[3] = railY(w, b, p2) + BH / 2 + 0.04
-    out[4] = BD / 2 + 0.06
-    return out
-  }
   const E = useMemo(() => new Float64Array(5), [])
   const writeLead = (T: number, p: Float32Array): boolean => {
     const m = swing(T)
@@ -398,8 +488,8 @@ export function LeadBracket({ w, src, p1, p2, draw, swing, opacity, guide, chart
     lastL[2] = chartTop.x
     lastL[3] = chartTop.y
     lastL[4] = w.rails.len
-    ends(T, E)
-    // from the runner-up's length to the leader's, on top of the leader's bar ...
+    bracketEnds(w, src, p1, p2, T, E)
+    // from the runner-up's length to the leader's, under the leader's bar ...
     const ax = E[0]
     const ay = E[2]
     const bx = E[1]
@@ -418,7 +508,7 @@ export function LeadBracket({ w, src, p1, p2, draw, swing, opacity, guide, chart
     if (lastG[0] === T && lastG[1] === w.rails.len) return false
     lastG[0] = T
     lastG[1] = w.rails.len
-    ends(T, E)
+    bracketEnds(w, src, p1, p2, T, E)
     p[0] = E[0]
     p[1] = E[3]
     p[2] = E[4]
@@ -446,6 +536,8 @@ export function LeadBracket({ w, src, p1, p2, draw, swing, opacity, guide, chart
         color={PAL.yellowGreen}
         width={PEN.hero}
         update={writeLead}
+        head
+        hot
         progress={(T) => Math.max(0, Math.min(1, (draw(T) - 0.4) / 0.6))}
         opacity={opacity}
         renderOrder={45}

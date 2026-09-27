@@ -1,5 +1,5 @@
 import { at, stagger } from '../../story/cue'
-import { ease } from '../../story/ease'
+import { ease, inOutCubic } from '../../story/ease'
 import { N_ATH, GEN, STORY, type Run } from './hopperMath'
 
 /* =========================================================================
@@ -9,11 +9,17 @@ import { N_ATH, GEN, STORY, type Run } from './hopperMath'
    schedule is in story time T (built once, so the scene is a pure function
    of T); the explore schedule is in explore seconds and grows as the viewer
    draws. One evaluator turns (schedule, time) into the board: counted
-   totals, rank positions, the rail scale k, the ticket face and the pass
-   fade of every rail's labels. It is cached per time on the schedule
-   itself, so the labels (priority -80) and the solids (priority 0) of one
-   frame read the same numbers, and a replaced schedule takes its cache
-   with it.
+   totals, rank positions, where every pass is headed, the rail scale k and
+   the ticket face. It is cached per time on the schedule itself, so the
+   labels (priority -80) and the solids (priority 0) of one frame read the
+   same numbers, and a replaced schedule takes its cache with it.
+
+   A pass is a pass, not a disappearance: a rising rail comes forward (it
+   lifts toward the camera and swells a little) and keeps its name and
+   total; only the rail it passes yields its words while the two cross
+   (Scene.tsx, crowdOf). In a rain of draws a swap that the very next draw
+   undoes is not shown (the display ranks debounce it), so the board never
+   jitters; every swap that holds is shown, and P1 is never debounced.
    ========================================================================= */
 
 export const B = { hopper: 0, draw: 1, score: 2, specialists: 3, unknown: 4, many: 5, every: 6 } as const
@@ -21,12 +27,16 @@ export const B = { hopper: 0, draw: 1, score: 2, specialists: 3, unknown: 4, man
 export interface Board {
   /** counted totals per athlete */
   totals: Float64Array
+  /** the points each athlete's bar shows: every brick that has landed, stretched to its length (the bar's tip is landed x k) */
+  landed: Float64Array
   /** rank slot per athlete, continuous while the rails re-sort */
   rankPos: Float64Array
+  /** where each rail is headed: its rank once every sort that has started is done */
+  dest: Float64Array
   /** depth lift while a rail passes another (rising rails come forward) */
   lift: Float64Array
-  /** 0..1 per athlete: how far the rail's name and total have stepped off while it passes others */
-  fade: Float64Array
+  /** per athlete: how far a rising rail swells as it passes (0 at rest; 1 a default pass, more for the H4 climb) */
+  pop: Float64Array
   /** the rail scale: world units per point */
   k: number
   /** the leader after the last completed sort */
@@ -48,6 +58,12 @@ export interface Sched {
   n: number
   /** bumps whenever a window changes (explore) */
   version: number
+  /**
+   * the DISPLAYED rank slot of athlete a after d draws: rank[d * N_ATH + a].
+   * The run's own ranks, except a one-draw flicker inside a rain (a swap the
+   * next rain draw undoes, P1 untouched) keeps the ranks before it.
+   */
+  rank: Uint8Array
   /** ball drop [0, 1]; NaN: no ball for this draw (the H5 rain) */
   ball0: Float64Array
   ball1: Float64Array
@@ -68,6 +84,8 @@ export interface Sched {
   sort1: Float64Array
   sortA0: Float64Array
   sortA1: Float64Array
+  /** how far a rising rail comes forward in that re-order (world units) */
+  liftAmp: Float64Array
   /** top-scorer tick; NaN: none */
   tick0: Float64Array
   tick1: Float64Array
@@ -82,9 +100,11 @@ export interface Sched {
 
 const newBoard = (): Board => ({
   totals: new Float64Array(N_ATH),
+  landed: new Float64Array(N_ATH),
   rankPos: new Float64Array(N_ATH),
+  dest: new Float64Array(N_ATH),
   lift: new Float64Array(N_ATH),
-  fade: new Float64Array(N_ATH),
+  pop: new Float64Array(N_ATH),
   k: 0,
   leader: GEN,
   leaderSwap: -1,
@@ -94,12 +114,16 @@ const newBoard = (): Board => ({
   grp: new Float64Array(0),
 })
 
+/** The default lift of a rising rail (world units toward the camera at mid-pass). */
+export const LIFT = 0.6
+
 export function emptySched(run: Run, cap: number): Sched {
   const f = (n: number, v = Infinity) => new Float64Array(n).fill(v)
   return {
     run,
     n: 0,
     version: 0,
+    rank: run.rank.slice(0, (cap + 1) * N_ATH),
     ball0: f(cap, NaN),
     ball1: f(cap, NaN),
     flip0: f(cap),
@@ -115,6 +139,7 @@ export function emptySched(run: Run, cap: number): Sched {
     sort1: f(cap),
     sortA0: f(cap * N_ATH),
     sortA1: f(cap * N_ATH),
+    liftAmp: f(cap, LIFT),
     tick0: f(cap, NaN),
     tick1: f(cap, NaN),
     group: () => 1,
@@ -123,17 +148,40 @@ export function emptySched(run: Run, cap: number): Sched {
 }
 
 /**
+ * Rain draws d and d + 1 are both scheduled: when draw d swaps ranks and
+ * draw d + 1 swaps them straight back, with P1 untouched, the displayed
+ * ranks after draw d stay as they were (a one-draw flicker a viewer cannot
+ * follow; the totals still count every point). Call it once draw d + 1 is
+ * scheduled as a rain draw.
+ */
+export function debounceRain(s: Sched, d: number): void {
+  const r = s.run.rank
+  const b = d * N_ATH
+  const m = (d + 1) * N_ATH
+  const e = (d + 2) * N_ATH
+  if (s.run.leader[d + 1] !== s.run.leader[d]) return
+  let moved = false
+  for (let a = 0; a < N_ATH; a++) {
+    if (r[m + a] !== r[b + a]) moved = true
+    if (r[e + a] !== r[b + a]) return
+  }
+  if (!moved) return
+  for (let a = 0; a < N_ATH; a++) s.rank[m + a] = s.rank[b + a]
+}
+
+/**
  * The re-order after draw d runs over [t0, t1]. With a stagger, the rails
  * set off one after another in their NEW rank order (the new P1 first), so
  * the first sort cascades down the board instead of shuffling all at once.
  */
-export function setSort(s: Sched, d: number, t0: number, t1: number, stag = 0): void {
+export function setSort(s: Sched, d: number, t0: number, t1: number, stag = 0, lift = LIFT): void {
   s.sort0[d] = t0
   s.sort1[d] = t1
+  s.liftAmp[d] = lift
   const pass = t1 - t0 - stag * (N_ATH - 1)
   for (let a = 0; a < N_ATH; a++) {
     const i = d * N_ATH + a
-    const o = stag * s.run.rank[(d + 1) * N_ATH + a]
+    const o = stag * s.rank[(d + 1) * N_ATH + a]
     s.sortA0[i] = t0 + o
     s.sortA1[i] = t0 + o + pass
   }
@@ -143,23 +191,32 @@ export function setSort(s: Sched, d: number, t0: number, t1: number, stag = 0): 
 
 /** H5: draws 6 to 40 start at 5 + 35 x easeInQuad(u), u over [H5_A, H5_B] of the beat (D.3). */
 export const H5_A = 0.05
-export const H5_B = 0.78
+export const H5_B = 0.64
 export const h5Start = (d: number) => B.many + H5_A + (H5_B - H5_A) * Math.sqrt((d - 6) / 35)
 /** The continuous draw count of the H5 rain (5 at its start, 40 at its end). */
 export const h5Index = (T: number) => {
   const u = at(T, B.many, H5_A, H5_B)
   return 5 + 35 * u * u
 }
+/** H5: every rail's bricks regroup into five domain bands, finished before the hold (0.85). */
+export const H5_GROUP = [0.7, 0.84] as const
 
 /** Build seconds of the beats whose staggers are authored in milliseconds. */
 const BUILD = { score: 5.0, specialists: 5.5, unknown: 5.5, many: 6.0 }
 /** bricks stagger 35 ms (B.1) */
 const stag = (buildS: number) => 0.035 / buildS
 
-/** H2: the first sort cascades (the new P1 sets off first), and the rank badges land with it (L2). */
-export const H2_SORT = [0.7, 0.9] as const
-/** H4: the rails re-sort and the Generalist takes P1 before the impact (0.62), so the accent lands on a settled P1 */
-export const H4_SORT = [0.5, 0.615] as const
+/** H2: the first sort cascades (the new P1 sets off first); each rank badge lands as its rail arrives (L2). */
+export const H2_SORT = [0.68, 0.92] as const
+/**
+ * H4, the signature: the Generalist's brick lands (0.48), its total passes
+ * the Strongman's (0.49), a tick marks it the draw's top scorer (0.44 to
+ * 0.49), then its rail climbs to P1, lifted clear in front of the
+ * Strongman's; the rails cross at about 0.57, where NEW LEADER lands, and
+ * the impact accent lands on arrival (0.64).
+ */
+export const H4_SORT = [0.5, 0.64] as const
+export const H4_CROSS = 0.565
 
 function storySched(): Sched {
   const s = emptySched(STORY, STORY.n)
@@ -173,6 +230,8 @@ function storySched(): Sched {
     s.cnt0[i] = cnt[0]
     s.cnt1[i] = cnt[1]
   }
+  // the rain (draws 6 to 40) debounces one-draw flickers of P2 to P6
+  for (let d1 = 6; d1 < 40; d1++) debounceRain(s, d1 - 1)
   // draw 1: the ball and the ticket in H1, the bricks, count and sort in H2
   s.ball0[0] = B.draw + 0.15
   s.ball1[0] = B.draw + 0.45
@@ -183,15 +242,16 @@ function storySched(): Sched {
   const st2 = stag(BUILD.score)
   for (let a = 0; a < N_ATH; a++) {
     const o = st2 * a
-    set(0, a, [B.score + 0.3 + o, B.score + 0.5 + o], [B.score + 0.49 + o, B.score + 0.66 + o], [B.score + 0.56, B.score + 0.7])
+    set(0, a, [B.score + 0.3 + o, B.score + 0.5 + o], [B.score + 0.49 + o, B.score + 0.66 + o], [B.score + 0.54, B.score + 0.66])
   }
   // D.3 H2: the totals count, then the rails sort (no rail passes another
-  // before its total is up), 100 ms apart in their new rank order
-  setSort(s, 0, B.score + H2_SORT[0], B.score + H2_SORT[1], 0.1 / BUILD.score)
+  // before its total is up), 90 ms apart in their new rank order
+  setSort(s, 0, B.score + H2_SORT[0], B.score + H2_SORT[1], 0.09 / BUILD.score)
   // H3: draw 1 gets its top-scorer tick first, so every draw shows its winner
   s.tick0[0] = B.specialists
   s.tick1[0] = B.specialists + 0.045
-  // draws 2, 3, 4 in H3: windows at 0.05, 0.35, 0.65, each 0.25 long
+  // draws 2, 3, 4 in H3: windows at 0.05, 0.35, 0.65, each 0.25 long; each
+  // re-order takes 400 ms and ends before the next ball drops
   const st3 = stag(BUILD.specialists)
   ;[0.05, 0.35, 0.65].forEach((w0, j) => {
     const d = j + 1
@@ -203,11 +263,11 @@ function storySched(): Sched {
     s.flip1[d] = W + 0.44 * L
     for (let a = 0; a < N_ATH; a++) {
       const o = st3 * a
-      set(d, a, [W + 0.42 * L + o, W + 0.62 * L + o], [W + 0.6 * L + o, W + 0.78 * L + o], [W + 0.62 * L, W + 0.88 * L])
+      set(d, a, [W + 0.42 * L + o, W + 0.62 * L + o], [W + 0.6 * L + o, W + 0.78 * L + o], [W + 0.62 * L, W + 0.86 * L])
     }
     s.tick0[d] = W + 0.8 * L
     s.tick1[d] = W + 0.94 * L
-    setSort(s, d, W + 0.84 * L, W + 1.0 * L)
+    setSort(s, d, W + 0.84 * L, W + 1.14 * L)
   })
   // draw 5 in H4, slow: the unknown. The Generalist brick lands last.
   {
@@ -227,13 +287,17 @@ function storySched(): Sched {
       const o = 1.6 * st4 * j++
       set(d, a, [W + 0.27 + o, W + 0.33 + o], [W + 0.33 + o, W + 0.39 + o], [W + 0.33 + o, W + 0.41 + o])
     }
-    setSort(s, d, W + H4_SORT[0], W + H4_SORT[1])
+    // the rule H3 set holds on the unknown too: the draw's top scorer (the
+    // Generalist) gets its tick on the grey brick before the claim (L2)
+    s.tick0[d] = W + 0.44
+    s.tick1[d] = W + 0.49
+    setSort(s, d, W + H4_SORT[0], W + H4_SORT[1], 0, 1.0)
   }
   // draws 6 to 40 in H5: the rain
   // H5 end: every rail's bricks slide into five domain bands, so the band
   // lengths show where each total came from (D.3 H5 learning outcome)
   // the bands assemble in legend order (weightlifting first), rails a beat apart
-  s.group = (X, a, dm) => stagger(X + 0.004 * (N_ATH - 1 - a), B.many + 0.82, B.many + 0.98, dm, 5, 0.6, ease.morph)
+  s.group = (X, a, dm) => stagger(X + 0.004 * (N_ATH - 1 - a), B.many + H5_GROUP[0], B.many + H5_GROUP[1], dm, 5, 0.6, ease.morph)
   const st5 = stag(BUILD.many)
   for (let d1 = 6; d1 <= 40; d1++) {
     const d = d1 - 1
@@ -243,17 +307,19 @@ function storySched(): Sched {
     s.kind[d] = 1
     s.flip0[d] = t0
     s.flip1[d] = t0 + flick
-    let last = 0
+    // the six slivers fly 35 ms apart, but their totals count together once
+    // the last has landed: in a rain the draws overlap, so a staggered count
+    // would show one athlete a draw ahead of another and read as a wrong order
+    const c0 = t0 + 0.004 + st5 * (N_ATH - 1) + 0.034
+    const last = c0 + 0.02
     for (let a = 0; a < N_ATH; a++) {
       const o = st5 * a
       const f0 = t0 + 0.004 + o
       const f1 = f0 + 0.034
-      const s1 = f1 + 0.02
-      set(d, a, [f0, f1], [f1, s1], [f1, s1])
-      last = s1
+      set(d, a, [f0, f1], [f1, f1 + 0.02], [c0, last])
     }
-    // a swap in the rain: short (190 ms), its two rails' labels step off while they pass
-    setSort(s, d, last, last + 0.032)
+    // a pass in the rain: 330 ms, long enough to follow (overlapping passes add up)
+    setSort(s, d, last, last + 0.055)
   }
   return s
 }
@@ -270,9 +336,6 @@ export const SCALE_FLOOR = 400
 /** Rails are scaled so the leader fills 90% of the rail: k = 0.9 railLen / max(400, leaderTotal) (D.3, floor amended from 1000). */
 export const railScale = (len: number, leaderTotal: number) => (0.9 * len) / Math.max(SCALE_FLOOR, leaderTotal)
 
-/** A rail's labels step off over the first fifth of its pass and back over the last fifth. */
-const passFade = (p: number) => ease.settle(clamp01(Math.min(p, 1 - p) / 0.2))
-
 const ACC = new Float64Array(5)
 const BASE = new Float64Array(5)
 
@@ -285,9 +348,11 @@ export function boardAt(s: Sched, X: number, railLen: number): Board {
   c.len = railLen
   const b = c.b
   const run = s.run
+  const rank = s.rank
   b.totals.fill(0)
+  b.landed.fill(0)
   b.lift.fill(0)
-  b.fade.fill(0)
+  b.pop.fill(0)
   let started = 0
   for (let d = 0; d < s.n; d++) {
     const i0 = d * N_ATH
@@ -302,24 +367,31 @@ export function boardAt(s: Sched, X: number, railLen: number): Board {
       const i = i0 + a
       const k = ease.count(win(X, s.cnt0[i], s.cnt1[i]))
       if (k > 0) b.totals[a] += run.pts[i] * k
+      if (s.fly1[i] <= X) b.landed[a] += run.pts[i] * win(X, s.str0[i], s.str1[i])
     }
   }
   b.started = started
   // rank positions: the last fully sorted draw, plus the passes in progress
+  // (overlapping passes add up: a rail that passes two others glides two slots)
   let m = 0
   while (m < s.n && s.sort1[m] <= X) m++
-  for (let a = 0; a < N_ATH; a++) b.rankPos[a] = run.rank[m * N_ATH + a]
+  for (let a = 0; a < N_ATH; a++) b.rankPos[a] = b.dest[a] = rank[m * N_ATH + a]
   b.leader = run.leader[m]
   b.leaderSwap = -1
   for (let d = m; d < s.n && s.sort0[d] < X; d++) {
+    const amp = s.liftAmp[d]
     for (let a = 0; a < N_ATH; a++) {
-      const delta = run.rank[(d + 1) * N_ATH + a] - run.rank[d * N_ATH + a]
+      b.dest[a] = rank[(d + 1) * N_ATH + a]
+      const delta = rank[(d + 1) * N_ATH + a] - rank[d * N_ATH + a]
       if (!delta) continue
       const i = d * N_ATH + a
       const p = clamp01(win(X, s.sortA0[i], s.sortA1[i]))
-      b.rankPos[a] += delta * ease.morph(p)
-      b.lift[a] += -Math.sign(delta) * 0.55 * Math.sin(Math.PI * p)
-      b.fade[a] = Math.max(b.fade[a], passFade(p))
+      b.rankPos[a] += delta * inOutCubic(p)
+      const arc = Math.sin(Math.PI * p)
+      if (delta < 0) {
+        b.lift[a] += amp * arc
+        b.pop[a] = Math.max(b.pop[a], (arc * amp) / LIFT)
+      } else b.lift[a] -= 0.35 * amp * arc
     }
     if (run.leader[d + 1] !== run.leader[d]) b.leaderSwap = clamp01(win(X, s.sort0[d], s.sort1[d]))
   }
@@ -341,8 +413,9 @@ export function boardAt(s: Sched, X: number, railLen: number): Board {
     }
     for (let d = 0; d < started; d++) b.grp[d * N_ATH + a] += BASE[run.dom[d]]
   }
+  // the leader's bar fills 90% of the rail: scaled by what the bars show (a count can trail its bricks)
   let lt = 0
-  for (let a = 0; a < N_ATH; a++) lt = Math.max(lt, b.totals[a])
+  for (let a = 0; a < N_ATH; a++) lt = Math.max(lt, b.totals[a], b.landed[a])
   b.k = railScale(railLen, lt)
   // the ticket face: the latest flip that has started
   let f = 0
@@ -366,38 +439,51 @@ export function boardAt(s: Sched, X: number, railLen: number): Board {
   return b
 }
 
+/** The rail headed for P1 (the leader once every started sort is done). */
+export function destLeader(b: Board): number {
+  for (let a = 0; a < N_ATH; a++) if (b.dest[a] === 0) return a
+  return b.leader
+}
+
 /* ------------------------------ story cues ------------------------------ */
 
 /** HUD: DRAW N from H1 on (N is the draw on the ticket), gone as the chart takes over. */
 export const hudOn = (T: number) => at(T, B.draw, 0.08, 0.18) * (1 - at(T, B.every, 0.2, 0.32))
 /** P: the drum and the ticket step aside for the board while the rails draw on (H2 0 to 0.3). */
 export const boardIn = (T: number) => at(T, B.score, 0, 0.3, ease.morph)
-/** The ticket shrinks to a small flick card for the rain (H5). */
-export const ticketShrink = (T: number) => at(T, B.many, 0, 0.07, ease.settle)
 /** H5: the drum spins twice as fast while the draws rain (extra ambient seconds, a function of T). */
 export const spinBoost = (T: number) => 4.4 * ease.morph(at(T, B.many, H5_A, H5_B))
 
 /*
  * H6 "Again and again": the lead becomes the chart.
- *   0.00 to 0.12  every rail but P1 and P2 steps back (focus pull, L3);
- *   0.04 to 0.20  a yellow-green bracket measures the P1 bar past the P2 bar: the lead;
- *   0.20 to 0.42  the board fades, the camera goes front-on to the chart, and
- *                 the bracket swings up into the chart as the lead at draw 40;
- *   0.26 to 0.40  the chart's construction and its words (ticks, DRAWS, the two regions);
- *   0.40 to 0.60  this run's line draws from draw 0 up to the bracket;
- *   0.58 to 0.88  the 64 other hoppers draw on together;
- *   0.88 to 0.98  THIS RUN and the pinned legend land (the claim).
+ *   0.00 to 0.14  every rail but P1 and P2 fades back (focus pull, L3);
+ *   0.04 to 0.20  a yellow-green bracket measures the P1 bar past the P2 bar,
+ *                 and LEAD moves onto it: the lead, in the bars' own units;
+ *   0.18 to 0.34  the chart's construction (zero line, axis, hatch) draws in
+ *                 while the two bars are still there, dimmed;
+ *   0.20 to 0.42  the camera goes front-on to the chart and the bracket
+ *                 swings upright into it, carrying LEAD, as the lead at draw 40;
+ *   0.28 to 0.38  the two bars fade (the chart has taken their place);
+ *   0.30 to 0.38  the chart's words (ticks, DRAWS, the two regions);
+ *   0.38 to 0.58  this run's line draws from draw 0 up to the bracket;
+ *   0.56 to 0.86  the 64 other hoppers draw on together;
+ *   0.86 to 0.98  LEAD hands over to THIS RUN and the pinned legend (the claim).
  */
 export const H6 = {
-  others: [0.0, 0.12],
+  others: [0.0, 0.14],
   bracket: [0.04, 0.2],
-  toChart: [0.2, 0.42],
-  construct: [0.26, 0.4],
-  mine: [0.4, 0.6],
-  bundle: [0.58, 0.88],
-  claim: [0.88, 0.98],
+  construct: [0.18, 0.34],
+  swing: [0.2, 0.42],
+  dimBars: [0.2, 0.26],
+  toChart: [0.28, 0.38],
+  words: [0.3, 0.38],
+  mine: [0.38, 0.58],
+  bundle: [0.56, 0.86],
+  claim: [0.86, 0.96],
 } as const
 /** H6: the board (everything but the P1 and P2 bars) steps back. */
 export const othersBack = (T: number) => at(T, B.every, H6.others[0], H6.others[1], ease.settle)
+/** H6: the P1 and P2 bars dim as the chart starts (they stay until it is half drawn). */
+export const barsDim = (T: number) => at(T, B.every, H6.dimBars[0], H6.dimBars[1])
 /** H6: the whole board fades as the chart takes the rails' place. */
-export const toChart = (T: number) => at(T, B.every, H6.toChart[0], H6.toChart[0] + 0.14, ease.settle)
+export const toChart = (T: number) => at(T, B.every, H6.toChart[0], H6.toChart[1], ease.settle)

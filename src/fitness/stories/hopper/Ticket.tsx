@@ -3,32 +3,32 @@ import { useStoryStore } from '../../story/store'
 import * as THREE from 'three'
 import { HOPPER_DOMAINS, PAL } from '../../fitnessData'
 import { useSafeFrame } from '../../story/useSafeFrame'
-import { SdfText, sdfSafe } from '../../story/kit/SdfText'
+import { SdfText } from '../../story/kit/SdfText'
 import { Pen, PEN } from '../../story/kit/Pen'
 import { useWorldObstacle, type WorldObstacle } from '../../story/labels/useLabel'
-import type { Box } from '../../story/types'
-import { ticketOutline, type TicketXf, type World } from './layout'
+import { ticketOutline, type TicketXf, type World, type MBox, newBox } from './layout'
 import { boardAt, type Sched } from './timeline'
 import { STORY } from './hopperMath'
-import { ex, useHopExplore } from './exploreStore'
 
 /* =========================================================================
    The ticket (DESIGN.md D.3, the one broadcast element kept besides the HUD):
    a plate in the DRAWN domain's colour with a notch in each short side (the
-   drawn ball comes to rest in one), the kicker "DRAW N - DOMAIN" in Barlow
-   Condensed SemiBold and the task name in Anton, both in ink. It flips like
-   a split-flap card: the old face turns away edge-on, the new one turns in
-   and snaps flat. In a rain of draws it shrinks to a small flick card that
-   shows only the domain.
+   drawn ball comes to rest in one), a kicker in Barlow Condensed SemiBold
+   and the task name in Anton, both in ink. It flips like a split-flap card:
+   the old face turns away, the new one turns in and snaps flat.
 
-   SDF words are the only 3D text in this chapter (D.3 "SDF"). Every story
-   face (the five full tickets, the five flick-card domain words) is mounted
-   at load (prewarm) and shown by opacity; nothing re-lays text per frame.
-   The other twenty task names and the two explore kickers (odd and even
-   draws, their text changing once per draw, when it is queued) mount the
-   first time explore opens and stay: they share the story words' SDF
-   program (no shader links), so the load and every layout change typeset
-   15 words, not 37.
+   H1 reads "DRAW 1 - WEIGHTLIFTING" over the task (D.3). On the board the
+   HUD chip already says DRAW N, so the kicker becomes the domain alone, set
+   larger (about 14 px on a 390 phone, from 8): the colour, the legend chip
+   and the word are one chain. In a rain of draws the ticket becomes a small
+   flick card, a plate sized to its one domain word; a flick turns only 64
+   degrees (never edge-on), so it never collapses to a sliver.
+
+   SDF words are the only 3D text in this chapter (D.3 "SDF"). The H1
+   kicker, the five domain words and the story's task names are mounted at
+   load (prewarm) and shown by opacity; nothing re-lays text per frame. The
+   other twenty task names mount the first time explore opens and stay:
+   they share the story words' SDF program (no shader links).
 
    Hyphens: the self-hosted SDF glyph whitelist has no "-" (engine request),
    and troika must never fetch a fallback font, so SdfText sets a space in
@@ -44,9 +44,17 @@ import { ex, useHopExplore } from './exploreStore'
 
 const INK = PAL.ink
 const LIGHT = '#e9ffc4'
-const STORY_FACES = 5
 const KICK_LS = 0.05
 const NAME_LS = 0.02
+/** the board kicker (the domain alone) and the flick card's word, as multiples of the H1 kicker size */
+const BOARD_KICK = 1.22
+const FLICK_WORD = 1.55
+/** the flick card: plate height, notch radius, side air */
+const FLICK_H = 1.15
+const FLICK_NOTCH = 0.3
+const FLICK_AIR = 0.34
+/** a flick card turns at most this far (radians): never edge-on */
+const FLICK_TURN = 1.12
 
 /* ------------------------------ type metrics (from the TTFs) ------------------------------ */
 
@@ -145,102 +153,103 @@ function placeHyphenBars(mesh: THREE.Mesh, idx: readonly number[], bars: (THREE.
   return true
 }
 
+/** A plate (ShapeGeometry) from a closed ticket outline. */
+function plateFrom(outline: Float32Array): THREE.ShapeGeometry {
+  const s = new THREE.Shape()
+  for (let i = 0; i < outline.length / 3 - 1; i++) {
+    const x = outline[i * 3]
+    const y = outline[i * 3 + 1]
+    if (i === 0) s.moveTo(x, y)
+    else s.lineTo(x, y)
+  }
+  s.closePath()
+  return new THREE.ShapeGeometry(s)
+}
+
 /* ------------------------------ the ticket ------------------------------ */
 
 export interface TicketProps {
   w: World
   src: (T: number) => { s: Sched; X: number; story: boolean }
-  /** where the ticket is at T (position and scale, the flick-card shrink included) */
+  /** where the ticket is at T (position and scale) */
   place: (T: number) => TicketXf
+  /** board progress 0..1 (the H1 kicker gives way to the domain word on the board) */
+  board: (T: number) => number
   /** overall light 0..1 (focus pull, the H6 step back) */
   vis: (T: number) => number
-  /** 0 full ticket, 1 the small flick card */
-  shrink: (T: number) => number
   /** H1: the pen traces the border once (progress, and its fade) */
   trace: (T: number) => number
   traceOut: (T: number) => number
   railLen: number
 }
 
-const kickerText = (d: number, dom: number) => `DRAW ${d + 1} - ${HOPPER_DOMAINS[dom].label.toUpperCase()}`
-
-export function Ticket({ w, src, place, vis, shrink, trace, traceOut, railLen }: TicketProps) {
+export function Ticket({ w, src, place, board, vis, trace, traceOut, railLen }: TicketProps) {
   const t = w.ticket
   const outline = useMemo(() => ticketOutline(t.w, t.h, t.notch), [t.w, t.h, t.notch])
-  const plateGeo = useMemo(() => {
-    const s = new THREE.Shape()
-    for (let i = 0; i < outline.length / 3 - 1; i++) {
-      const x = outline[i * 3]
-      const y = outline[i * 3 + 1]
-      if (i === 0) s.moveTo(x, y)
-      else s.lineTo(x, y)
-    }
-    s.closePath()
-    return new THREE.ShapeGeometry(s)
-  }, [outline])
+  const plateGeo = useMemo(() => plateFrom(outline), [outline])
+  // the flick cards: one plate per domain, sized to its word
+  const inner = t.w - 2 * t.notch - 0.3
+  const flick = useMemo(
+    () =>
+      HOPPER_DOMAINS.map((dm) => {
+        const em = barlowEm(dm.label.toUpperCase())
+        const size = Math.min(FLICK_WORD * t.kick, (t.w - 2 * FLICK_NOTCH - 2 * FLICK_AIR) / em)
+        const wd = Math.min(t.w, em * size + 2 * FLICK_NOTCH + 2 * FLICK_AIR)
+        return { size, w: wd, geo: plateFrom(ticketOutline(wd, FLICK_H, FLICK_NOTCH)) }
+      }),
+    [t.kick, t.w],
+  )
   const plateMat = useMemo(() => new THREE.MeshBasicMaterial({ color: PAL.weightlifting, transparent: true, depthWrite: false, toneMapped: false }), [])
   const inkMat = useMemo(() => new THREE.MeshBasicMaterial({ color: INK, transparent: true, depthWrite: false, toneMapped: false }), [])
   const barGeo = useMemo(() => new THREE.PlaneGeometry(1, 1), [])
   useEffect(() => () => plateGeo.dispose(), [plateGeo])
+  useEffect(() => () => flick.forEach((f) => f.geo.dispose()), [flick])
   useEffect(() => () => plateMat.dispose(), [plateMat])
   useEffect(() => () => inkMat.dispose(), [inkMat])
   useEffect(() => () => barGeo.dispose(), [barGeo])
   const colors = useMemo(() => HOPPER_DOMAINS.map((d) => new THREE.Color(d.color)), [])
 
   /* ---------------- layout, all from the type metrics (no per-frame text layout) ---------------- */
-  const inner = t.w - 2 * t.notch - 0.3
   const kickY = t.h / 2 - 0.14 - t.kick * 0.5
   const nameY = (kickY - t.kick * 0.55 + (-t.h / 2 + 0.12)) / 2
-  const kickFit = (s: string) => Math.min(1, inner / (barlowEm(s) * t.kick))
-  // the story's five full tickets
-  const storyKick = useMemo(() => Array.from({ length: STORY_FACES }, (_, d) => kickerText(d, STORY.dom[d])), [])
+  // the board kicker: the domain alone, larger, its caps clear of a two-line name
+  const bKick = BOARD_KICK * t.kick
+  const bKickY = t.h / 2 - 0.1 - bKick * 0.42
+  const h1Kick = useMemo(() => `DRAW 1 - ${HOPPER_DOMAINS[STORY.dom[0]].label.toUpperCase()}`, [])
+  const h1Fit = Math.min(1, inner / (barlowEm(h1Kick) * t.kick))
+  /** per domain: the domain word's scale on the board kicker (1 = the H1 kicker size) */
+  const boardScale = useMemo(() => HOPPER_DOMAINS.map((dm) => Math.min(BOARD_KICK, inner / (barlowEm(dm.label.toUpperCase()) * t.kick))), [inner, t.kick])
   const names = useMemo(() => HOPPER_DOMAINS.map((dm) => dm.tasks.map((task) => balanceName(task, t.name, t.maxW))), [t.name, t.maxW])
-  // the flick card: the domain word alone, as large as the plate allows
-  const flickScale = useMemo(() => HOPPER_DOMAINS.map((dm) => Math.min(1.7, inner / (barlowEm(dm.label.toUpperCase()) * t.kick))), [inner, t.kick])
 
-  /* ---------------- explore: two kicker meshes, odd and even draws ---------------- */
-  // the explore-only words mount the first time explore opens
+  // the explore-only task names mount the first time explore opens
   const mode = useStoryStore((s) => s.mode)
   const [exploreSeen, setExploreSeen] = useState(false)
   useEffect(() => {
     if (mode === 'explore') setExploreSeen(true)
   }, [mode])
-  const storyTasks = useMemo(() => new Set(Array.from({ length: STORY_FACES }, (_, d) => STORY.dom[d] * 5 + STORY.task[d])), [])
-  const exN = useHopExplore((s) => s.n)
-  const exRun = useHopExplore((s) => s.runId)
-  const exKick = useMemo(() => {
-    const out: { d: number; text: string }[] = [
-      { d: -1, text: 'DRAW' },
-      { d: -1, text: 'DRAW' },
-    ]
-    const s = ex.sched
-    for (let d = s.n - 1; d >= 0 && (out[0].d < 0 || out[1].d < 0); d--) {
-      const j = d % 2
-      if (s.kind[d] !== 0 || out[j].d >= 0) continue
-      out[j] = { d, text: kickerText(d, s.run.dom[d]) }
-    }
-    return out
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [exN, exRun])
-  /** the draw whose text each explore kicker mesh has finished laying out (-1 none) */
-  const exSynced = useRef([-1, -1])
+  const storyTasks = useMemo(() => new Set(Array.from({ length: 5 }, (_, d) => STORY.dom[d] * 5 + STORY.task[d])), [])
 
   /* ---------------- refs ---------------- */
   const group = useRef<THREE.Group>(null)
-  const kickG = useRef<(THREE.Group | null)[]>([])
-  const kickBar = useRef<(THREE.Mesh | null)[]>([])
-  const kickReady = useRef<boolean[]>([])
+  const fullPlate = useRef<THREE.Group>(null)
+  const flickPlates = useRef<(THREE.Group | null)[]>([])
+  const kickBar = useRef<THREE.Mesh>(null)
+  const kickReady = useRef(false)
   const domG = useRef<(THREE.Group | null)[]>([])
   const nameBars = useRef<(THREE.Mesh | null)[][]>(HOPPER_DOMAINS.map(() => []))
   const nameReady = useRef<boolean[]>([])
   const hyIdx = useMemo(() => names.map((row) => row.map(hyphens)), [names])
+  const h1Hy = useMemo(() => hyphens(h1Kick), [h1Kick])
 
   // what the ticket shows at T: a pure function of T, cached per T, so the
   // plate (this component's frame) and every SdfText (their own frames) agree
-  const cur = useRef({ T: NaN, X: NaN, v: -1, s: null as Sched | null, face: 0, dom: -1, task: -1, kind: 0, story: false, op: 0, turn: 0 })
+  const cur = useRef({ T: NaN, X: NaN, v: -1, s: null as Sched | null, face: 0, dom: -1, task: -1, kind: 0, story: false, op: 0, turn: 0, bk: 0 })
   const info = (T: number) => {
     const { s, X, story } = src(T)
     const c = cur.current
+    // the light and the board progress can change while T and X rest (explore's damped view switch)
+    c.op = vis(T)
+    c.bk = board(T)
     if (c.T === T && c.X === X && c.s === s && c.v === s.version) return c
     c.T = T
     c.X = X
@@ -248,8 +257,6 @@ export function Ticket({ w, src, place, vis, shrink, trace, traceOut, railLen }:
     c.v = s.version
     const b = boardAt(s, X, railLen)
     c.face = b.face
-    c.turn = b.faceTurn
-    c.op = vis(T)
     if (b.face > 0) {
       const d = b.face - 1
       c.dom = s.run.dom[d]
@@ -257,6 +264,8 @@ export function Ticket({ w, src, place, vis, shrink, trace, traceOut, railLen }:
       c.kind = s.kind[d]
       c.story = story
     }
+    // a flick card never turns edge-on
+    c.turn = c.kind === 1 ? Math.max(-FLICK_TURN, Math.min(FLICK_TURN, b.faceTurn)) : b.faceTurn
     return c
   }
 
@@ -277,21 +286,24 @@ export function Ticket({ w, src, place, vis, shrink, trace, traceOut, railLen }:
       plateMat.color.copy(colors[c.dom])
       plateMat.opacity = op
       inkMat.opacity = Math.min(1, op * 1.3)
-      // the kicker bars: only the face on show, once its text has laid out
-      for (let i = 0; i < STORY_FACES + 2; i++) {
-        const bar = kickBar.current[i]
-        if (!bar) continue
-        let on = false
-        if (c.kind === 0) {
-          if (i < STORY_FACES) on = c.story && d === i
-          else on = !c.story && d % 2 === i - STORY_FACES && exSynced.current[i - STORY_FACES] === d
-        }
-        bar.visible = on && !!kickReady.current[i]
+      if (fullPlate.current) fullPlate.current.visible = c.kind === 0
+      for (let i = 0; i < flickPlates.current.length; i++) {
+        const fp = flickPlates.current[i]
+        if (fp) fp.visible = c.kind === 1 && c.dom === i
       }
-      // the flick card's domain word sits centred, large; the full ticket shows no domain word of its own
+      // the H1 kicker's hyphen bar: only while that face is up and before the board
+      if (kickBar.current) kickBar.current.visible = c.kind === 0 && c.story && d === 0 && c.bk < 0.5 && kickReady.current
+      // the domain words: the board kicker (full ticket) or the flick card's word
       for (let i = 0; i < domG.current.length; i++) {
         const dg = domG.current[i]
-        if (dg) dg.scale.setScalar(flickScale[i])
+        if (!dg) continue
+        if (c.kind === 1) {
+          dg.position.set(0, 0, 0.01)
+          dg.scale.setScalar(flick[i].size / t.kick)
+        } else {
+          dg.position.set(0, bKickY, 0.01)
+          dg.scale.setScalar(boardScale[i])
+        }
       }
       // hyphen bars in the task name on show
       for (let dm = 0; dm < nameBars.current.length; dm++) {
@@ -307,17 +319,17 @@ export function Ticket({ w, src, place, vis, shrink, trace, traceOut, railLen }:
     { hide: group },
   )
 
-  const kickOp = (i: number) => (T: number) => {
+  /** the H1 kicker: story draw 1 before the board */
+  const h1Op = (T: number) => {
     const c = info(T)
-    if (c.face === 0 || c.kind !== 0) return 0
-    const d = c.face - 1
-    if (i < STORY_FACES) return c.story && d === i ? c.op : 0
-    const j = i - STORY_FACES
-    return !c.story && d % 2 === j && exSynced.current[j] === d ? c.op : 0
+    return c.face === 1 && c.kind === 0 && c.story ? c.op * (1 - Math.min(1, c.bk * 2)) : 0
   }
   const domOp = (i: number) => (T: number) => {
     const c = info(T)
-    return c.face > 0 && c.kind === 1 && c.dom === i ? c.op : 0
+    if (c.face === 0 || c.dom !== i) return 0
+    if (c.kind === 1) return c.op
+    // the full ticket: the domain kicker on the board (in H1 the DRAW kicker has it)
+    return c.op * (c.story ? Math.max(0, c.bk * 2 - 1) : 1)
   }
   const taskOp = (i: number) => (T: number) => {
     const c = info(T)
@@ -325,63 +337,62 @@ export function Ticket({ w, src, place, vis, shrink, trace, traceOut, railLen }:
   }
 
   // the ticket is a label obstacle (DOM labels never sit on it)
+  const obox = useMemo(() => newBox(), [])
   const obstacle = useMemo<WorldObstacle>(
     () => ({
-      box: (T): Box | null => {
+      box: (T): MBox | null => {
         const g = group.current
         if (!g || !g.visible) return null
+        const c = info(T)
         const p = place(T)
-        return [
-          [p.x - (t.w / 2) * p.s, p.y - (t.h / 2) * p.s, p.z],
-          [p.x + (t.w / 2) * p.s, p.y + (t.h / 2) * p.s, p.z],
-        ]
+        const hw = ((c.kind === 1 ? flick[c.dom].w : t.w) / 2) * p.s
+        const hh = ((c.kind === 1 ? FLICK_H : t.h) / 2) * p.s
+        obox[0][0] = p.x - hw
+        obox[0][1] = p.y - hh
+        obox[0][2] = p.z
+        obox[1][0] = p.x + hw
+        obox[1][1] = p.y + hh
+        obox[1][2] = p.z
+        return obox
       },
       padPx: 4,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [t, place],
+    [t, place, flick],
   )
   useWorldObstacle('hop-ticket', obstacle)
 
-  const kicker = (i: number, text: string, onSynced?: (m: THREE.Mesh) => void) => {
-    const idx = hyphens(text)
-    return (
-      <group key={'k' + i} ref={(el) => void (kickG.current[i] = el)} position={[0, kickY, 0.01]} scale={kickFit(text)}>
+  return (
+    <group ref={group}>
+      <group ref={fullPlate}>
+        <mesh geometry={plateGeo} material={inkMat} renderOrder={43} scale={[1 + 0.08 / t.w, 1 + 0.08 / t.h, 1]} position={[0, 0, -0.01]} />
+        <mesh geometry={plateGeo} material={plateMat} renderOrder={44} />
+      </group>
+      {flick.map((fl, i) => (
+        <group key={'f' + i} ref={(el) => void (flickPlates.current[i] = el)} visible={false}>
+          <mesh geometry={fl.geo} material={inkMat} renderOrder={43} scale={[1 + 0.08 / fl.w, 1 + 0.08 / FLICK_H, 1]} position={[0, 0, -0.01]} />
+          <mesh geometry={fl.geo} material={plateMat} renderOrder={44} />
+        </group>
+      ))}
+      <group position={[0, kickY, 0.01]} scale={h1Fit}>
         <SdfText
           font="barlowSemi"
-          text={text}
+          text={h1Kick}
           size={t.kick}
           color={INK}
           anchorX="center"
           letterSpacing={KICK_LS}
           position={[0, 0, 0]}
-          opacity={kickOp(i)}
+          opacity={h1Op}
           renderOrder={46}
           onSync={(m) => {
-            kickReady.current[i] = placeHyphenBars(m, idx, [kickBar.current[i]], 'barlowSemi', t.kick, KICK_LS, 0, false)
-            onSynced?.(m)
+            kickReady.current = placeHyphenBars(m, h1Hy, [kickBar.current], 'barlowSemi', t.kick, KICK_LS, 0, false)
           }}
         />
-        <mesh ref={(el) => void (kickBar.current[i] = el)} geometry={barGeo} material={inkMat} renderOrder={46} visible={false} />
+        <mesh ref={kickBar} geometry={barGeo} material={inkMat} renderOrder={46} visible={false} />
       </group>
-    )
-  }
-
-  return (
-    <group ref={group}>
-      <mesh geometry={plateGeo} material={inkMat} renderOrder={43} scale={[1 + 0.08 / t.w, 1 + 0.08 / t.h, 1]} position={[0, 0, -0.01]} />
-      <mesh geometry={plateGeo} material={plateMat} renderOrder={44} />
-      {storyKick.map((text, i) => kicker(i, text))}
-      {exploreSeen &&
-        exKick.map((k, j) =>
-        kicker(STORY_FACES + j, k.text, (m) => {
-          // troika lays out asynchronously: show this mesh only once it holds this draw's text
-          const shown = (m as unknown as { text?: string }).text
-          exSynced.current[j] = shown === sdfSafe(k.text) ? k.d : -1
-        }),
-      )}
       {HOPPER_DOMAINS.map((dm, i) => (
-        <group key={dm.key} ref={(el) => void (domG.current[i] = el)} position={[0, 0, 0.01]}>
+        <group key={dm.key} ref={(el) => void (domG.current[i] = el)} position={[0, bKickY, 0.01]}>
           <SdfText font="barlowSemi" text={dm.label.toUpperCase()} size={t.kick} color={INK} anchorX="center" letterSpacing={KICK_LS} opacity={domOp(i)} renderOrder={46} />
         </group>
       ))}

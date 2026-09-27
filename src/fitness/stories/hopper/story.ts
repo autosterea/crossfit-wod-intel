@@ -1,10 +1,11 @@
-import type { Box, CamPose, Layout, StoryDef, V3 } from '../../story/types'
+import type { Box, CamPose, Layout, StoryDef } from '../../story/types'
 import HopperScene from './Scene'
 import HopperExplore from './Explore'
 import HopperHud from './Hud'
-import { CHART_PAD, LEGEND_PX, WORLD, boardBox, chartBox, drawBox, drumBox, lerpBox, railsBox, type World } from './layout'
-import { exAnim } from './ExploreScene'
+import { CHART_PAD, LEGEND_COL, LEGEND_PX, WORLD, boardBox, chartBox, drawBox, drumBox, hopKey, lerpBox, newBox, railsBox, type HopKey, type MBox, type World } from './layout'
+import { compactNow, exCam } from './ExploreScene'
 import { EXPLORE_EL, useHopExplore } from './exploreStore'
+import { focusRect } from '../../story/camera/focusRect'
 
 /* =========================================================================
    02 THE HOPPER: "The Tally" (DESIGN.md D.3). Seven beats: the hopper, a
@@ -17,83 +18,139 @@ import { EXPLORE_EL, useHopExplore } from './exploreStore'
 
    Camera: the board is compared front-on (az 0, el 8, fov 32: L12 holds at
    el 8); the thread chart is read exactly front-on (H.21). The pinned domain
-   legend owns the top-left corner: the phone poses start under it.
+   legend owns the top-left corner: the phone poses start under it, the
+   landscape ones (L, and S: a short landscape rect) beside it. Every pose
+   writes into scratch boxes (nothing is allocated per frame).
    ========================================================================= */
 
-const center = (b: Box): V3 => [(b[0][0] + b[1][0]) / 2, (b[0][1] + b[1][1]) / 2, (b[0][2] + b[1][2]) / 2]
+type PadBox = { l: number; r: number; t: number; b: number }
+const V: [number, number, number] = [0, 0, 0]
+const centerOf = (b: Box): [number, number, number] => {
+  V[0] = (b[0][0] + b[1][0]) / 2
+  V[1] = (b[0][1] + b[1][1]) / 2
+  V[2] = (b[0][2] + b[1][2]) / 2
+  return V
+}
 
-/** px reserved for the pinned five-chip domain legend (top-left) over the drum poses */
+/** px reserved for the pinned five-chip domain legend (top-left) over the phone's drum poses */
 const LEGEND_BAND = 132
+/** the compact board's top padding: the P1 rail's name clears the HUD chip */
+const COMPACT_T = 92
 
-const pose = (fit: (w: World, l: Layout) => Box, padPx: CamPose['padPx'], el = 8, fov = 32): CamPose => ({
-  target: (l: Layout) => center(fit(WORLD[l], l)),
-  az: 0,
-  el,
-  fov,
-  fit: (l: Layout) => fit(WORLD[l], l),
-  padPx,
+/**
+ * A pose per world key: `fit` writes the world's box into one scratch box,
+ * and the padding comes from the key (the engine hands over 'P' or 'L';
+ * a short landscape focus rect is the S world). On a short phone rect (the
+ * caption expanded) the legend steps aside and a board pose glides to the
+ * rails alone, under the HUD chip (compactNow).
+ */
+const pose = (fit: (w: World, key: HopKey, o: MBox) => MBox, pads: Record<HopKey, PadBox>, board = false, el = 8, fov = 32): CamPose => {
+  const box = newBox()
+  const rails = newBox()
+  const pad: PadBox = { l: 0, r: 0, t: 0, b: 0 }
+  const f = (l: Layout) => {
+    const key = hopKey(l)
+    const w = WORLD[key]
+    fit(w, key, box)
+    const c = compactNow()
+    return board && c > 0 ? lerpBox(box, railsBox(w, key, rails), c, box) : box
+  }
+  return {
+    target: (l: Layout) => centerOf(f(l)),
+    az: 0,
+    el,
+    fov,
+    fit: f,
+    // the engine reads the padding at the layout it resolves; the key is the same frame's
+    get padPx() {
+      const p = pads[hopKey(currentLayout())]
+      const c = compactNow()
+      if (c <= 0) return p
+      pad.l = p.l
+      pad.r = p.r
+      pad.b = p.b
+      pad.t = p.t + ((board ? COMPACT_T : 16) - p.t) * c
+      return pad
+    },
+  }
+}
+/** the engine's layout for the pose being resolved (the director resolves at the focus rect's) */
+const currentLayout = (): Layout => focusRect.layout
+
+const DRUM = pose((w, _k, o) => drumBox(w, o), {
+  P: { l: 18, r: 18, t: LEGEND_BAND, b: 16 },
+  L: { l: LEGEND_COL.L, r: 40, t: 28, b: 28 },
+  S: { l: LEGEND_COL.S, r: 16, t: 16, b: 16 },
 })
-
-const DRUM_P = pose(drumBox, { l: 18, r: 18, t: LEGEND_BAND, b: 16 })
-const DRUM_L = pose(drumBox, { l: 40, r: 40, t: 28, b: 28 })
 // H1: the D.3 centred stack, the drum over its ticket
-const DRAW_P = pose(drawBox, { l: 12, r: 12, t: LEGEND_BAND, b: 12 })
-const DRAW_L = pose(drawBox, { l: 40, r: 40, t: 28, b: 28 })
+const DRAW = pose((w, _k, o) => drawBox(w, o), {
+  P: { l: 12, r: 12, t: LEGEND_BAND, b: 12 },
+  L: { l: LEGEND_COL.L, r: 40, t: 28, b: 28 },
+  S: { l: LEGEND_COL.S, r: 12, t: 12, b: 12 },
+})
 // the board: badges left of the rails; on a phone it starts under the legend
 // (the drum sits beside the ticket in that band, under the HUD chip)
-const BOARD_P = pose(boardBox, { l: 30, r: 8, t: LEGEND_PX, b: 10 })
-const BOARD_L = pose(boardBox, { l: 40, r: 30, t: LEGEND_BAND, b: 18 })
+const BOARD_PADS: Record<HopKey, PadBox> = {
+  P: { l: 30, r: 8, t: LEGEND_PX, b: 10 },
+  L: { l: LEGEND_COL.L, r: 30, t: 28, b: 18 },
+  // S: the ticket's gap over P1 (layout.ts) keeps the P1 rail's name under the HUD chip
+  S: { l: LEGEND_COL.S + 24, r: 8, t: 16, b: 8 },
+}
+const BOARD = pose(boardBox, BOARD_PADS, true)
 // H6: the chart, exactly front-on
+const chartScratch = newBox()
 const CHART: CamPose = {
-  target: (l: Layout) => center(chartBox(WORLD[l])),
+  target: (l: Layout) => centerOf(chartBox(WORLD[hopKey(l)], chartScratch)),
   az: 0,
   el: 0,
   fov: 22,
-  fit: (l: Layout) => chartBox(WORLD[l]),
+  fit: (l: Layout) => chartBox(WORLD[hopKey(l)], chartScratch),
   padPx: CHART_PAD,
 }
 
 /**
  * Explore: the board, or the thread chart while "Every run" is on, fitted
  * like the story's H6 (the chart itself plus its label room), re-fitted
- * every frame. Switching the view orbits to el 0 (the chart) or back to the
- * board's el 8 (exploreStore). The fov stays 32 for both: the chart is flat
- * and seen exactly front-on, so its projection does not depend on it.
+ * every frame. The fit glides from the board to the chart only once the
+ * rails have faded (exCam: from 0.35 of the switch), so the rails are never
+ * seen magnified behind the threads. Switching the view orbits to el 0 (the
+ * chart) or back to the board's el 8 (exploreStore). The fov stays 32 for
+ * both: the chart is flat and seen exactly front-on, so its projection
+ * does not depend on it. With the phone's sheet expanded the board glides
+ * to the rails alone (compactNow).
  */
-const runs = () => useHopExplore.getState().view === 'runs'
-/** the board in explore: with the phone's sheet expanded it glides to the rails alone (exAnim.compact) */
-const exBoardBox = (l: Layout) => lerpBox(boardBox(WORLD[l], l), railsBox(WORLD[l], l), exAnim.compact)
-const exBoard = (pad: { l: number; r: number; t: number; b: number }): CamPose => ({
-  target: (l: Layout) => center(exBoardBox(l)),
-  az: 0,
-  el: EXPLORE_EL,
-  fov: 32,
-  fit: (l: Layout) => exBoardBox(l),
-  get padPx() {
-    // compact: clear of the HUD chip, the only thing left over the rails
-    return { ...pad, t: pad.t + (72 - pad.t) * exAnim.compact }
-  },
-})
-const EX_BOARD_P = exBoard({ l: 30, r: 8, t: LEGEND_PX, b: 10 })
-const EX_BOARD_L = exBoard({ l: 40, r: 30, t: LEGEND_BAND, b: 18 })
-const explorePose = (board: CamPose): CamPose => ({
-  get target() {
-    return runs() ? CHART.target : board.target
-  },
+const exA = newBox()
+const exB = newBox()
+const exC = newBox()
+const exOut = newBox()
+const exPad: PadBox = { l: 0, r: 0, t: 0, b: 0 }
+function exploreBox(l: Layout): MBox {
+  const key = hopKey(l)
+  const w = WORLD[key]
+  lerpBox(boardBox(w, key, exA), railsBox(w, key, exB), compactNow(), exOut)
+  return lerpBox(exOut, chartBox(w, exC), exCam(), exOut)
+}
+const EXPLORE: CamPose = {
+  target: (l: Layout) => centerOf(exploreBox(l)),
   az: 0,
   get el() {
-    return runs() ? 0 : EXPLORE_EL
+    return useHopExplore.getState().view === 'runs' ? 0 : EXPLORE_EL
   },
   fov: 32,
-  get fit() {
-    return runs() ? CHART.fit : board.fit
-  },
+  fit: exploreBox,
   get padPx() {
-    return runs() ? CHART_PAD : board.padPx
+    const b = BOARD_PADS[hopKey(currentLayout())]
+    const c = compactNow()
+    const k = exCam()
+    // compact: the P1 rail's name and total pass under the HUD chip, the only thing left over the rails
+    const t = b.t + (COMPACT_T - b.t) * c
+    exPad.l = b.l + (CHART_PAD.l - b.l) * k
+    exPad.r = b.r + (CHART_PAD.r - b.r) * k
+    exPad.t = t + (CHART_PAD.t - t) * k
+    exPad.b = b.b + (CHART_PAD.b - b.b) * k
+    return exPad
   },
-})
-const EXPLORE_P = explorePose(EX_BOARD_P)
-const EXPLORE_L = explorePose(EX_BOARD_L)
+}
 
 export const hopperStory: StoryDef = {
   key: 'hopper',
@@ -104,7 +161,7 @@ export const hopperStory: StoryDef = {
       body: 'Picture a hopper loaded with an infinite number of physical challenges, with no selective mechanism.',
       source: 'MODULE_COPY.hopper.body s2',
       build: 4.5,
-      cam: { L: DRUM_L, P: DRUM_P },
+      cam: { L: DRUM, P: DRUM },
     },
     {
       id: 'draw',
@@ -114,7 +171,7 @@ export const hopperStory: StoryDef = {
       build: 4.5,
       // the ticket: DRAW 1, the domain and the task
       sceneWords: 6,
-      cam: { L: DRAW_L, P: DRAW_P },
+      cam: { L: DRAW, P: DRAW },
     },
     {
       id: 'score',
@@ -124,7 +181,7 @@ export const hopperStory: StoryDef = {
       build: 5.0,
       // six names and totals, and LEAD
       sceneWords: 9,
-      cam: { L: BOARD_L, P: BOARD_P, window: [0, 0.3] },
+      cam: { L: BOARD, P: BOARD, window: [0, 0.3] },
     },
     {
       id: 'specialists',
@@ -133,7 +190,7 @@ export const hopperStory: StoryDef = {
       source: 'HopperModule.leadMsg[2]',
       build: 5.5,
       sceneWords: 4,
-      cam: { L: BOARD_L, P: BOARD_P },
+      cam: { L: BOARD, P: BOARD },
     },
     {
       // the body is keyPoints[2] with its subject from keyPoints[1] ("Fitness"):
@@ -147,8 +204,9 @@ export const hopperStory: StoryDef = {
       // the signature (A.3): on an Unknown draw the Generalist rail climbs to P1
       signature: true,
       sceneWords: 5,
-      cam: { L: BOARD_L, P: BOARD_P },
-      impact: [0.62, 0.74],
+      cam: { L: BOARD, P: BOARD },
+      // the accent lands as the Generalist's rail arrives at P1 (timeline H4_SORT)
+      impact: [0.64, 0.76],
     },
     {
       id: 'many',
@@ -158,7 +216,7 @@ export const hopperStory: StoryDef = {
       build: 6.0,
       // six final totals and the order they finish in
       sceneWords: 8,
-      cam: { L: BOARD_L, P: BOARD_P },
+      cam: { L: BOARD, P: BOARD },
     },
     {
       id: 'every-run',
@@ -180,7 +238,7 @@ export const hopperStory: StoryDef = {
   // and turns the domain colours muddy. 0.006 keeps the depth cue (known issues).
   fog: { color: '#070a0e', density: 0.006 },
   explore: {
-    cam: { L: EXPLORE_L, P: EXPLORE_P },
+    cam: { L: EXPLORE, P: EXPLORE },
     limits: { az: [-40, 40], el: [0, 35], zoom: [0.6, 1.6] },
     initFromBeat() {
       // explore always opens on the rails, where Draw, x10 and x40 show at

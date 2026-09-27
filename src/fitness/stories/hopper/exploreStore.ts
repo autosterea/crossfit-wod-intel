@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { useStoryStore } from '../../story/store'
 import { EXPLORE_CAP, N_ATH, SEED, STORY_DRAWS, makeRun, type Run } from './hopperMath'
-import { STORY_SCHED, emptySched, setSort, type Sched } from './timeline'
+import { STORY_SCHED, debounceRain, emptySched, setSort, type Sched } from './timeline'
 import { cameraBus } from '../../story/camera/CameraDirector'
 
 /* =========================================================================
@@ -12,11 +12,13 @@ import { cameraBus } from '../../story/camera/CameraDirector'
    story mode stays seeded, F.9) and rains its first 40 draws; Reset goes
    back to seed 78331 at draw 40. Rails | Every run switches the board and
    the thread chart. Tapping a rail shows that athlete's five domain
-   scores.
+   scores. Under reduced motion every draw lands at once (C.13: no
+   autoplay tweening; the state change is a cut).
 
    The run's schedule lives in explore seconds (ex.X), advanced by the
-   scene only while exploring; everything else (the board, the ticket, the
-   drum's drawn balls) reads it through the same evaluator the story uses.
+   scene only while exploring and only while something is still playing;
+   everything else (the board, the ticket, the drum's drawn balls) reads it
+   through the same evaluator the story uses.
    ========================================================================= */
 
 export type HopView = 'rails' | 'runs'
@@ -30,6 +32,8 @@ export const ex = {
   X: 0,
   /** when the last scheduled draw starts (explore seconds) */
   last: -Infinity,
+  /** when the last scheduled window ends (the clock rests after it) */
+  end: -Infinity,
 }
 
 /** A run whose first `done` draws are already complete (their windows lie in the past). */
@@ -56,20 +60,42 @@ function resetRuntime(run: Run, done: number) {
   ex.sched = scheduleDone(run, done)
   ex.X = 0
   ex.last = -Infinity
+  ex.end = -1.9
 }
 resetRuntime(ex.run, STORY_DRAWS)
 
 /**
  * Queue k draws. A single draw plays its whole story (ball, flip, bricks,
- * count, re-sort) over about 1.4 s; a batch rains, each draw a little
- * sooner than the last (x10 about 2 s, x40 about 5 s).
+ * count, re-sort) over about 1.5 s; a batch rains, each draw a little
+ * sooner than the last (x10 about 2 s, x40 about 5 s). Under reduced
+ * motion the windows collapse onto one instant: the draws land at once.
  */
 function queue(k: number): number {
   const s = ex.sched
+  const cut = useStoryStore.getState().reduced
   let added = 0
   for (let j = 0; j < k && s.n < EXPLORE_CAP; j++) {
     const d = s.n
     const single = k === 1
+    if (cut) {
+      const t0 = ex.X
+      s.kind[d] = single ? 0 : 1
+      s.ball0[d] = s.ball1[d] = NaN
+      s.flip0[d] = t0 - 0.002
+      s.flip1[d] = t0 - 0.001
+      for (let a = 0; a < N_ATH; a++) {
+        const i = d * N_ATH + a
+        s.fly0[i] = s.str0[i] = s.cnt0[i] = t0 - 0.002
+        s.fly1[i] = s.str1[i] = s.cnt1[i] = t0 - 0.001
+      }
+      if (j > 0 && s.kind[d - 1] === 1) debounceRain(s, d - 1)
+      setSort(s, d, t0 - 0.002, t0 - 0.001)
+      ex.last = t0
+      ex.end = Math.max(ex.end, t0)
+      s.n++
+      added++
+      continue
+    }
     const gap = single ? 1.15 : Math.max(0.085, 0.42 * Math.pow(0.86, j))
     const t0 = Math.max(ex.X + (j === 0 ? 0.05 : 0), ex.last + (ex.last === -Infinity ? 0 : gap))
     ex.last = t0
@@ -89,7 +115,8 @@ function queue(k: number): number {
         s.cnt0[i] = t0 + 0.8
         s.cnt1[i] = t0 + 1.12
       }
-      setSort(s, d, t0 + 1.12, t0 + 1.42)
+      setSort(s, d, t0 + 1.12, t0 + 1.52)
+      ex.end = Math.max(ex.end, t0 + 1.52)
     } else {
       s.kind[d] = 1
       s.ball0[d] = NaN
@@ -97,7 +124,9 @@ function queue(k: number): number {
       const flick = Math.min(0.16, 0.8 * gap)
       s.flip0[d] = t0
       s.flip1[d] = t0 + flick
-      let last = t0
+      // the six totals of a draw count together once the last sliver lands (the draws overlap)
+      const c0 = t0 + 0.26 + 0.03 * (N_ATH - 1)
+      const last = c0 + 0.14
       for (let a = 0; a < N_ATH; a++) {
         const i = d * N_ATH + a
         const o = 0.03 * a
@@ -105,11 +134,13 @@ function queue(k: number): number {
         s.fly1[i] = t0 + 0.26 + o
         s.str0[i] = t0 + 0.26 + o
         s.str1[i] = t0 + 0.4 + o
-        s.cnt0[i] = s.str0[i]
-        s.cnt1[i] = s.str1[i]
-        last = s.str1[i]
+        s.cnt0[i] = c0
+        s.cnt1[i] = last
       }
-      setSort(s, d, last, last + 0.22)
+      // a swap the next draw of this batch undoes is not shown (one-draw flicker)
+      if (j > 0 && s.kind[d - 1] === 1) debounceRain(s, d - 1)
+      setSort(s, d, last, last + 0.34)
+      ex.end = Math.max(ex.end, last + 0.34)
     }
     s.n++
     added++

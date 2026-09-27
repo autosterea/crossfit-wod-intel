@@ -11,7 +11,7 @@ import { BlobShadow } from '../../story/kit/BlobShadow'
 import { Pen, PEN } from '../../story/kit/Pen'
 import { Glows } from '../../story/kit/Halo'
 import { ballOpts, makeRimStandard, steelOpts } from '../../story/kit/materials'
-import { BALL_R, drumToWorld, drumXf, newDrumXf, type DrumXf, type World } from './layout'
+import { BALL_R, drumToWorld, drumXf, newDrumXf, type World } from './layout'
 import { win, type Sched } from './timeline'
 
 /* =========================================================================
@@ -220,7 +220,7 @@ export function Drum({ w, ambient, dim, hoops, steel, bars, pour, src, board, sl
   const N_SPOKES = 8
 
   /* ---------------------------- balls ---------------------------- */
-  const ballGeo = useMemo(() => new THREE.IcosahedronGeometry(BALL_R, 2), [])
+  const ballGeo = useMemo(() => new THREE.IcosahedronGeometry(BALL_R, 3), [])
   const ballMats = useMemo(() => HOPPER_DOMAINS.map((d) => makeRimStandard({ ...ballOpts(d.color), transparent: true })), [])
   const ballD = useMemo(() => ballMats.map(dimmable), [ballMats])
   useEffect(() => () => ballGeo.dispose(), [ballGeo])
