@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef } from 'react'
+import { useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 import { PAL, SKILLS } from '../../fitnessData'
 import { useSafeFrame } from '../../story/useSafeFrame'
@@ -6,13 +7,15 @@ import { useStoryStore } from '../../story/store'
 import { useBeat } from '../../story/useBeat'
 import { useDragHandle } from '../../story/gestures'
 import { useStageHotspot } from '../../story/hotspots'
+import { focusRect } from '../../story/camera/focusRect'
+import { registry } from '../../story/labels/registry'
 import { Pen, PEN } from '../../story/kit/Pen'
 import { Glows } from '../../story/kit/Halo'
 import { Ripple } from '../../story/kit/Ripple'
 import { Plates, type PlateSpec } from '../../story/kit/Plates'
 import { useLabels, setLabelText, useWorldObstacle, type WorldObstacle } from '../../story/labels/useLabel'
 import type { Box, LabelSpec, Layout, Tier, V3 } from '../../story/types'
-import { ELBOW_R, EX_DEPTH, EX_TAG, LABEL_R, R, RING_OUT, SIDE, grid, useWideNames } from './layout'
+import { ELBOW_R, EX_DEPTH, EX_TAG, LABEL_R, R, RING_OUT, SIDE, grid, useGridKind, useWideNames, type GridKind } from './layout'
 import { CLASS_COLOR, GENERALIST, N, RANKED, SKILL_COLORS, dirX, dirY, fmtVal, profileOf } from './skillsMath'
 import { Construction, FloorRing, Hatch, Heads, Minis, ProfileSolid, newProfile, px, py, type ConstructionVis, type MiniCell, type MinisVis, type SolidVis } from './radar'
 import { LEAD_N, pillH, pillW, tagEnd, tagPoint, writeLeader } from './tags'
@@ -24,9 +27,11 @@ import { CUSTOM, NONE, useSkExplore } from './exploreStore'
    specialist or a Custom shape) with its floor ring at its weakest skill,
    athlete B the dashed chalk comparison with the gaps hatched. Every
    vertex of A is a drag handle (radial, 0 to 10 in steps of 0.1; it turns
-   A into Custom). Tapping a skill's name shows its definition. "Grid" lays
-   out all thirteen, sorted by weakest skill, with A's cell outlined; tapping
-   a cell opens that athlete on the wheel.
+   A into Custom). Tapping a skill's name, or its vertex without dragging,
+   shows its definition. "Grid" lays out all thirteen, sorted by weakest
+   skill, with A's cell outlined; tapping a cell opens that athlete on the
+   wheel. On a phone with the sheet expanded the grid is the two-column list
+   (layout.ts gridKind), so every name always has room.
 
    The "Weakest skill N" callout sits in the free space off the wheel (the
    band under it on a phone, a corner in landscape), like the story's tags,
@@ -70,6 +75,15 @@ const hit = new THREE.Vector3()
 const handleAt: [number, number, number][] = Array.from({ length: N }, () => [0, 0, 0])
 const rippleAt: [number, number, number][] = Array.from({ length: N }, () => [0, 0, 0])
 
+/** The drag handle's reach (px): inside it the handle wins over a name's tap target ... */
+const HANDLE_PX = 22
+/** ... except where a name's centre needs the room: the handle always keeps this core (the dot and a thumb around it). */
+const CORE_PX = 14
+/** A press that travels less than this is a tap (the skill's definition), not a drag. */
+const SLOP_PX = 7
+/** The press in progress on a vertex handle. */
+const press = { on: false, moved: false, sx: 0, sy: 0, v0: 0, a0: 0 }
+
 function useSkillHandles(targetA: readonly number[]) {
   const aRef = useRef(targetA)
   aRef.current = targetA
@@ -78,7 +92,7 @@ function useSkillHandles(targetA: readonly number[]) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useDragHandle({
       id: `sk-h-${i}`,
-      radiusPx: 22,
+      radiusPx: HANDLE_PX,
       anchor: () => {
         if (X.grid > 0.5 || useStoryStore.getState().mode !== 'explore') return OFF
         const o = handleAt[i]
@@ -88,38 +102,244 @@ function useSkillHandles(targetA: readonly number[]) {
         return o
       },
       onStart: () => {
-        X.dragging = i
+        press.on = false
+        press.moved = false
       },
-      onDrag: (ray) => {
+      // A press on a vertex does nothing until it travels SLOP_PX; then the
+      // vertex follows the finger's radial motion from where it was (it
+      // never jumps to the finger). A press that never travels is a tap:
+      // it shows the skill's definition, like a tap on its name, and never
+      // turns the athlete into Custom.
+      onDrag: (ray, ndc) => {
         if (!ray.intersectPlane(plane, hit)) return
         const v = hit.x * dirX(i) + hit.y * dirY(i)
-        useSkExplore.getState().setSkill(i, Math.max(0, Math.min(10, v)), aRef.current)
+        const sx = ((ndc[0] + 1) / 2) * focusRect.W
+        const sy = ((1 - ndc[1]) / 2) * focusRect.H
+        if (!press.on) {
+          press.on = true
+          press.sx = sx
+          press.sy = sy
+          press.v0 = v
+          press.a0 = aRef.current[i]
+          return
+        }
+        if (!press.moved) {
+          if (Math.hypot(sx - press.sx, sy - press.sy) < SLOP_PX) return
+          press.moved = true
+          X.dragging = i
+        }
+        useSkExplore.getState().setSkill(i, Math.max(0, Math.min(10, press.a0 + v - press.v0)), aRef.current)
       },
       onEnd: () => {
+        if (press.on && !press.moved) {
+          const s = useSkExplore.getState()
+          s.setInfo(s.info === i ? null : i)
+        }
+        press.on = false
+        press.moved = false
         X.dragging = -1
       },
     })
   }
 }
 
+/* ---------------------- tap a name for its definition --------------------- */
+
+const _p = new THREE.Vector3()
+const _o = new THREE.Vector3()
+const _d = new THREE.Vector3()
+/** A world box written in place. */
+type MutBox = [[number, number, number], [number, number, number]]
+/** per-skill hotspot boxes, rewritten in place every frame (no allocation) */
+const hotBoxes: MutBox[] = Array.from({ length: N }, (): MutBox => [
+  [0, 0, EX_DEPTH],
+  [0, 0, EX_DEPTH],
+])
+/** A screen rect (stage px), written in place. */
+interface Rc {
+  x0: number
+  y0: number
+  x1: number
+  y1: number
+}
+const rc = (): Rc => ({ x0: 0, y0: 0, x1: 0, y1: 0 })
+/** the name's placed rect, the grown base, three cut candidates and the pick */
+const nameR = rc()
+const baseR = rc()
+const cand: Rc[] = [rc(), rc(), rc(), rc()]
+/** a name's centre counts as tappable only this far inside a target (px): a finger on an edge is a coin toss */
+const MARGIN = 5
+/** the smallest tap target, px */
+const TARGET = 44
+
+/** Grow r to TARGET px in each axis, on the side away from the vertex (vx, vy). */
+function growAway(r: Rc, vx: number, vy: number): void {
+  const nx = TARGET - (r.x1 - r.x0)
+  if (nx > 0) {
+    if (vx <= (r.x0 + r.x1) / 2) r.x1 += nx
+    else r.x0 -= nx
+  }
+  const ny = TARGET - (r.y1 - r.y0)
+  if (ny > 0) {
+    if (vy <= (r.y0 + r.y1) / 2) r.y1 += ny
+    else r.y0 -= ny
+  }
+}
+const copyRc = (to: Rc, from: Rc) => {
+  to.x0 = from.x0
+  to.y0 = from.y0
+  to.x1 = from.x1
+  to.y1 = from.y1
+}
+const SX = 5
+const SY = 3
+/** the handle's disc as it stands against target t: its full reach, less whatever t took */
+const inDisc = (x: number, y: number, vx: number, vy: number, t: Rc, pad: number) =>
+  Math.hypot(x - vx, y - vy) <= HANDLE_PX - pad && !(x >= t.x0 && x <= t.x1 && y >= t.y0 && y <= t.y1)
+const inRect = (x: number, y: number, t: Rc, pad: number) => x >= t.x0 + pad && x <= t.x1 - pad && y >= t.y0 + pad && y <= t.y1 - pad
 /**
- * Tap a skill for its definition: the hotspot sits over the outer part of
- * the skill's name, beyond the reach of a drag handle even at a rating of 10
- * (the handle's 22 px disc ends at about r 11.7 on a phone), so a touch on a
- * vertex always drags and a touch on a name always opens its definition.
+ * How much of the NAME a finger can use for its definition with target t:
+ * sample points over the name rect covered by t or by the vertex handle's
+ * disc (a tap there shows the definition too). The name's centre dominates,
+ * and it only counts when it is MARGIN px inside one of them.
  */
-const HOT_R = LABEL_R + 2.2
-function useSkillHotspots() {
+function coverage(t: Rc, vx: number, vy: number): number {
+  const n = nameR
+  let s = 0
+  for (let a = 0; a <= SX; a++)
+    for (let b = 0; b <= SY; b++) {
+      const x = n.x0 + ((n.x1 - n.x0) * a) / SX
+      const y = n.y0 + ((n.y1 - n.y0) * b) / SY
+      if (inRect(x, y, t, 0) || inDisc(x, y, vx, vy, t, 0.5)) s++
+    }
+  const cx = (n.x0 + n.x1) / 2
+  const cy = (n.y0 + n.y1) / 2
+  if (inRect(cx, cy, t, MARGIN) || inDisc(cx, cy, vx, vy, t, MARGIN)) s += 100
+  return s
+}
+
+/** Unproject stage px (sx, sy) onto the plane z = EX_DEPTH; widen box b to hold it. */
+function widen(cam: THREE.Camera, sx: number, sy: number, b: MutBox, first: boolean): void {
+  _o.setFromMatrixPosition(cam.matrixWorld)
+  _d.set((sx / focusRect.W) * 2 - 1, 1 - (sy / focusRect.H) * 2, 0.5).unproject(cam).sub(_o)
+  const t = Math.abs(_d.z) > 1e-9 ? (EX_DEPTH - _o.z) / _d.z : 0
+  const x = _o.x + _d.x * t
+  const y = _o.y + _d.y * t
+  if (first || x < b[0][0]) b[0][0] = x
+  if (first || y < b[0][1]) b[0][1] = y
+  if (first || x > b[1][0]) b[1][0] = x
+  if (first || y > b[1][1]) b[1][1] = y
+}
+
+/**
+ * The tap target of skill i's name: the name's PLACED rect (wherever the
+ * placer put it: radial, or the tangent fallback of a side name on a
+ * phone), grown to 44 px away from the skill's vertex. The vertex's drag
+ * handle wins inside its 22 px disc (and a tap there shows the definition
+ * too), so when the vertex sits close under its name (a rating near 10) the
+ * target is cut back out of the disc: along x, along y, or at the corner
+ * facing the name, whichever leaves the most of the name tappable. Only
+ * when the name's centre sits just past the disc (a side name on a phone
+ * with its vertex at 10) may the corner reach into the disc, so the centre
+ * is safely inside it; the handle then keeps a 14 px core around its dot.
+ * Returned as a world box on the name plane, so the engine's hotspot
+ * button lands on the same pixels.
+ */
+function skillHotBox(i: number, cam: THREE.Camera | null): Box | null {
+  if (!cam || X.grid >= 0.5) return null
+  const e = registry.get(`sk-x-n-${i}`)
+  if (!e || !e.visible || !e.live || e.rect.w <= 0) return null
+  const n = nameR
+  n.x0 = e.rect.x
+  n.y0 = e.rect.y
+  n.x1 = e.rect.x + e.rect.w
+  n.y1 = e.rect.y + e.rect.h
+  cam.updateMatrixWorld()
+  // the vertex handle of this skill, in stage px
+  _p.set(px(i, X.a.r[i]), py(i, X.a.r[i]), EX_DEPTH).project(cam)
+  const vx = ((_p.x + 1) / 2) * focusRect.W
+  const vy = ((1 - _p.y) / 2) * focusRect.H
+  const keep = HANDLE_PX
+  const ncx = (n.x0 + n.x1) / 2
+  const ncy = (n.y0 + n.y1) / 2
+  const g = baseR
+  copyRc(g, n)
+  growAway(g, vx, vy)
+  let pick = g
+  const dx = Math.max(g.x0 - vx, 0, vx - g.x1)
+  const dy = Math.max(g.y0 - vy, 0, vy - g.y1)
+  if (Math.hypot(dx, dy) < keep) {
+    const gcx = (g.x0 + g.x1) / 2
+    const gcy = (g.y0 + g.y1) / 2
+    // 0: a vertical cut, 1: a horizontal cut
+    const a = cand[0]
+    copyRc(a, g)
+    if (vx <= gcx) a.x0 = Math.max(g.x0, vx + keep)
+    else a.x1 = Math.min(g.x1, vx - keep)
+    const b = cand[1]
+    copyRc(b, g)
+    if (vy <= gcy) b.y0 = Math.max(g.y0, vy + keep)
+    else b.y1 = Math.min(g.y1, vy - keep)
+    // 2: the quadrant beyond the disc, toward the name's centre
+    const c = cand[2]
+    copyRc(c, g)
+    let ux = ncx - vx
+    let uy = ncy - vy
+    const ul = Math.hypot(ux, uy) || 1
+    ux /= ul
+    uy /= ul
+    const qx = vx + keep * ux
+    const qy = vy + keep * uy
+    if (ux >= 0) c.x0 = Math.max(g.x0, qx)
+    else c.x1 = Math.min(g.x1, qx)
+    if (uy >= 0) c.y0 = Math.max(g.y0, qy)
+    else c.y1 = Math.min(g.y1, qy)
+    // 3: the same corner pulled in so the name's centre sits MARGIN + 1 px
+    // inside it, as long as the handle keeps its CORE_PX (a name centred
+    // just past the disc, e.g. a side name on a phone with its vertex at 10)
+    const d = cand[3]
+    copyRc(d, g)
+    let mx = ncx - (ux >= 0 ? 1 : -1) * (MARGIN + 1)
+    let my = ncy - (uy >= 0 ? 1 : -1) * (MARGIN + 1)
+    const md = Math.hypot(mx - vx, my - vy)
+    if (md < CORE_PX) {
+      // slide the corner back out along its line from the vertex to the core
+      mx = vx + ((mx - vx) * CORE_PX) / (md || 1)
+      my = vy + ((my - vy) * CORE_PX) / (md || 1)
+    }
+    if (ux >= 0) d.x0 = Math.max(g.x0, Math.min(qx, mx))
+    else d.x1 = Math.min(g.x1, Math.max(qx, mx))
+    if (uy >= 0) d.y0 = Math.max(g.y0, Math.min(qy, my))
+    else d.y1 = Math.min(g.y1, Math.max(qy, my))
+    let best = -1
+    let bestArea = -1
+    for (let k = 0; k < 4; k++) {
+      const t = cand[k]
+      growAway(t, vx, vy)
+      const s = coverage(t, vx, vy)
+      const area = (t.x1 - t.x0) * (t.y1 - t.y0)
+      if (s > best || (s === best && area > bestArea)) {
+        best = s
+        bestArea = area
+        pick = t
+      }
+    }
+  }
+  const box = hotBoxes[i]
+  widen(cam, pick.x0, pick.y0, box, true)
+  widen(cam, pick.x1, pick.y0, box, false)
+  widen(cam, pick.x1, pick.y1, box, false)
+  widen(cam, pick.x0, pick.y1, box, false)
+  return box
+}
+
+function useSkillHotspots(cam: THREE.Camera) {
+  const camRef = useRef<THREE.Camera | null>(cam)
+  camRef.current = cam
   for (let i = 0; i < N; i++) {
-    const x = HOT_R * dirX(i)
-    const y = HOT_R * dirY(i)
-    const box: Box = [
-      [x - 0.9, y - 0.9, EX_DEPTH],
-      [x + 0.9, y + 0.9, EX_DEPTH],
-    ]
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useStageHotspot(`sk-x-skill-${i}`, {
-      box: () => (X.grid < 0.5 ? box : null),
+      box: () => skillHotBox(i, camRef.current),
       onActivate: () => {
         const s = useSkExplore.getState()
         s.setInfo(s.info === i ? null : i)
@@ -130,8 +350,8 @@ function useSkillHotspots() {
   }
 }
 
-function useCellHotspots(layout: Layout) {
-  const gr = grid(layout)
+function useCellHotspots(kind: GridKind) {
+  const gr = grid(kind)
   for (let k = 0; k < RANKED.length; k++) {
     const [x0, y0, x1, y1] = gr.plate(k)
     const box: Box = [
@@ -176,6 +396,8 @@ function FloorLeader({ layout, color }: { layout: Layout; color: string }) {
 
 export default function ExploreScene({ tier }: { tier: Tier }) {
   const { layout } = useBeat()
+  const kind = useGridKind()
+  const camera = useThree((st) => st.camera)
   const low = tier === 'low'
   const mode = useStoryStore((s) => s.mode)
   const athlete = useSkExplore((s) => s.athlete)
@@ -254,8 +476,8 @@ export default function ExploreScene({ tier }: { tier: Tier }) {
   )
 
   useSkillHandles(targetA)
-  useSkillHotspots()
-  useCellHotspots(layout)
+  useSkillHotspots(camera)
+  useCellHotspots(kind)
 
   const constructionVis = useMemo<ConstructionVis>(
     () => ({
@@ -271,14 +493,17 @@ export default function ExploreScene({ tier }: { tier: Tier }) {
     }),
     [],
   )
+  // With a comparison up, A's light steps back to the S4 ghost level (fill
+  // 15%, no walls, no rim) so the gaps hatch in the same clean colour of
+  // loss as the story; A's outline and nodes (the handles) still carry A.
   const aVis = useMemo<SolidVis>(
     () => ({
-      fill: () => 1 - X.grid,
-      walls: () => 1 - X.grid,
+      fill: () => (1 - X.grid) * (1 - 0.85 * X.bOn),
+      walls: () => (1 - X.grid) * (1 - X.bOn),
       outline: () => 1 - X.grid,
       nodes: () => 1 - X.grid,
       depth: () => EX_DEPTH,
-      rim: () => 0.75 * X.aG,
+      rim: () => 0.75 * X.aG * (1 - X.bOn),
     }),
     [],
   )
@@ -310,7 +535,7 @@ export default function ExploreScene({ tier }: { tier: Tier }) {
     [],
   )
 
-  const gr = grid(layout)
+  const gr = grid(kind)
   const plates = useMemo<PlateSpec[]>(
     () =>
       RANKED.map((r, k) => ({
@@ -325,23 +550,22 @@ export default function ExploreScene({ tier }: { tier: Tier }) {
   const minisVis = useMemo<MinisVis>(
     () => ({
       place: (_T, k, out) => {
-        const [cx, cy] = gr.center(k)
-        out[0] = cx
-        out[1] = cy
+        out[0] = gr.cx[k]
+        out[1] = gr.cy[k]
         return 1
       },
       ring: () => 1,
       opacity: () => X.grid,
-      key: () => (layout === 'P' ? 1 : 2),
+      key: () => (gr.kind === 'P' ? 1 : gr.kind === 'L' ? 2 : 3),
     }),
-    [gr, layout],
+    [gr],
   )
 
   // Grid: A's own cell is outlined (the chips and the grid agree on who A is)
   const selPts = useMemo(() => new Float32Array(5 * 3), [])
   const selKey = useRef(Number.NaN)
   const writeSel = (_T: number, p: Float32Array): boolean => {
-    const key = (layout === 'P' ? 0 : 100) + cellA
+    const key = (gr.kind === 'P' ? 0 : gr.kind === 'L' ? 100 : 200) + cellA
     if (key === selKey.current) return false
     selKey.current = key
     const [x0, y0, x1, y1] = cellA >= 0 ? gr.plate(cellA) : [0, 0, 0, 0]
@@ -390,6 +614,8 @@ export default function ExploreScene({ tier }: { tier: Tier }) {
     out.push({ id: 'sk-x-lg-a', text: athlete, tone: 'legend', color: aColor, anchor: [0, 0, 0], pin: 'top-left', pinOrder: 0, cue: () => (X.grid < 0.5 ? 1 : 0) })
     if (compare !== NONE && compare !== athlete)
       out.push({ id: 'sk-x-lg-b', text: compare, tone: 'legend', color: PAL.chalk, anchor: [0, 0, 0], pin: 'top-left', pinOrder: 1, cue: () => (X.grid < 0.5 ? X.bOn : 0) })
+    // the lineup's names are the point of the Grid: every one is required
+    // (QA fails on a hidden name) and kept clear of its neighbours
     RANKED.forEach((r, k) => {
       const [nx, ny] = gr.nameAt(k)
       out.push({
@@ -401,10 +627,12 @@ export default function ExploreScene({ tier }: { tier: Tier }) {
         dot: false,
         badge: String(r.floor),
         anchor: [nx, ny, 0],
-        prefer: 'N',
-        only: ['N'],
-        gapPx: 3,
+        prefer: gr.nameDir,
+        only: [gr.nameDir],
+        gapPx: gr.nameDir === 'E' ? 5 : 3,
+        sepPx: 3,
         priority: 80,
+        required: true,
         cue: () => (X.grid > 0.5 ? 1 : 0),
       })
     })

@@ -14,6 +14,69 @@
   box-shadow: none;
 }
 
+/* S4 key: the swatch, then the floor badge, then the name ("- - [2] POWERLIFTER"),
+   the badge language of the S5 lineup */
+.st-lbl[data-label='sk-lg-g2'] .st-lbl-dot,
+.st-lbl[data-label='sk-lg-pl'] .st-lbl-dot {
+  order: -1;
+}
+
+/* Every skill name's dot faces the wheel: dot first on the right half
+   (Stamina to Power), dot last on the left half (Coordination to Accuracy),
+   whichever side the placer chose (a side name's tangent fallback on a
+   phone keeps the order its half uses) */
+.st-lbl.st-lbl[data-label='sk-n-1'],
+.st-lbl.st-lbl[data-label='sk-n-2'],
+.st-lbl.st-lbl[data-label='sk-n-3'],
+.st-lbl.st-lbl[data-label='sk-n-4'],
+.st-lbl.st-lbl[data-label='sk-x-n-1'],
+.st-lbl.st-lbl[data-label='sk-x-n-2'],
+.st-lbl.st-lbl[data-label='sk-x-n-3'],
+.st-lbl.st-lbl[data-label='sk-x-n-4'] {
+  flex-direction: row;
+}
+.st-lbl.st-lbl[data-label='sk-n-6'],
+.st-lbl.st-lbl[data-label='sk-n-7'],
+.st-lbl.st-lbl[data-label='sk-n-8'],
+.st-lbl.st-lbl[data-label='sk-n-9'],
+.st-lbl.st-lbl[data-label='sk-x-n-6'],
+.st-lbl.st-lbl[data-label='sk-x-n-7'],
+.st-lbl.st-lbl[data-label='sk-x-n-8'],
+.st-lbl.st-lbl[data-label='sk-x-n-9'] {
+  flex-direction: row-reverse;
+}
+
+/* The peek row: Wheel | Grid, then the Athlete chips scrolling beside it */
+.sk-peekrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 12px;
+}
+.sk-peekrow .st-chiprow {
+  flex: 1;
+  min-width: 0;
+  margin: 0 -14px 0 0;
+  /* --sk-nudge (Explore.tsx useChipPeek) keeps a part of the next chip in view */
+  padding: 2px 16px 2px calc(6px + var(--sk-nudge, 0px));
+  scroll-padding-left: 6px;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 8px, #000 calc(100% - 20px), transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 8px, #000 calc(100% - 20px), transparent 100%);
+}
+.sk-peekrow .st-chip {
+  padding: 0 calc(14px + var(--sk-chip-x, 0px));
+}
+.st-shell--desktop .sk-peekrow {
+  flex-direction: column;
+  align-items: flex-start;
+}
+.st-shell--desktop .sk-peekrow .st-chiprow {
+  margin: 0;
+  padding: 0;
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
 /* Wheel | Grid */
 .sk-view {
   display: inline-flex;
@@ -21,12 +84,12 @@
   border: 1px solid var(--st-line);
   border-radius: 999px;
   overflow: hidden;
-  margin: 0 0 12px;
+  margin: 0;
 }
 .sk-view button {
   height: 44px;
-  min-width: 76px;
-  padding: 0 16px;
+  min-width: 56px;
+  padding: 0 12px;
   font-family: var(--st-cond);
   font-weight: 600;
   font-size: 13px;

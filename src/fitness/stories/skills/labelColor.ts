@@ -7,25 +7,21 @@ import { registry } from '../../story/labels/registry'
    arcs pass them (D.2 S1: "those spokes, dots and labels take the trained
    colour"), as a pure function of T, like setLabelText does for text.
 
-   Writes only when the value or the label's element changed, so a frame
-   costs one comparison per label. React re-renders of the label node keep
-   the imperative value: the spec's own colour never changes, so React never
-   rewrites --c.
+   Writes only when the value changed for that label ELEMENT, so a frame
+   costs one lookup per label. The cache is keyed by the element itself
+   (a WeakMap): a label node that leaves the stage (a chapter change) takes
+   its entry with it, and a new node for the same id starts clean. React
+   re-renders of the label node keep the imperative value: the spec's own
+   colour never changes, so React never rewrites --c.
    ========================================================================= */
 
-const written = new Map<string, { el: HTMLElement | null; c: string }>()
+const written = new WeakMap<HTMLElement, string>()
 
 export function setLabelColor(id: string, css: string): void {
-  const e = registry.get(id)
-  const el = e?.el ?? null
-  if (!el) return
-  const w = written.get(id)
-  if (w && w.el === el && w.c === css) return
+  const el = registry.get(id)?.el
+  if (!el || written.get(el) === css) return
   el.style.setProperty('--c', css)
-  if (w) {
-    w.el = el
-    w.c = css
-  } else written.set(id, { el, c: css })
+  written.set(el, css)
 }
 
 const tables = new Map<string, string[]>()

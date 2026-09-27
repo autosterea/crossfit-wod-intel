@@ -15,7 +15,7 @@ import { Ripple } from '../../story/kit/Ripple'
 import { impactK } from '../../story/kit/impact'
 import { useLabels, useWorldObstacle, type WorldObstacle } from '../../story/labels/useLabel'
 import type { Layout, LabelSpec, Tier, V3 } from '../../story/types'
-import { DEPTH, ELBOW_R, FLAT, LABEL_R, MINI_R, R, ARC_R, RING_OUT, SIDE, TAGS, grid, useWideNames, type TagKey } from './layout'
+import { DEPTH, ELBOW_R, FLAT, LABEL_R, MINI_R, R, ARC_R, RING_OUT, SIDE, TAGS, grid, useGridKind, useWideNames, type GridKind, type TagKey } from './layout'
 import { LEAD_N, pillH, pillW, tagCam, tagEnd, tagPoint, writeLeader } from './tags'
 import {
   CLASS_COLOR,
@@ -52,6 +52,8 @@ import {
 } from './radar'
 import { setLabelColor, rgba } from './labelColor'
 import ExploreScene from './ExploreScene'
+import { useQAProbe } from '../../story/qa'
+import { gridProbe } from './gridProbe'
 
 /* =========================================================================
    01 SKILLS, "Ten spokes, one floor" (DESIGN.md D.2). Six beats, every
@@ -70,7 +72,8 @@ import ExploreScene from './ExploreScene'
         gaps hatch in the colour of loss, and the floor ring collapses from
         7 to 2, catching on Endurance, which is named;
      S5 the wheel folds into the first cell of thirteen, sorted by weakest
-        skill.
+        skill, while the Powerlifter's dashed outline and its floor at 2 fly
+        into the last: the pair just compared lands at opposite ends.
 
    Prewarm (README): everything, the S5 grid and the explore layer included,
    is mounted at load and hidden by T or mode.
@@ -82,6 +85,8 @@ const P = POWERLIFTER.profile
 const G_FLOOR = floorOf(G)
 const P_FLOOR = floorOf(P)
 const P_WEAK = weakestIndex(P)
+/** the Powerlifter's cell in the ranked grid (the last, by the sort) */
+const P_CELL = RANKED.findIndex((r) => r.name === POWERLIFTER.name)
 /** every vertex the generalist's floor ring touches (a tie is shown as a tie) */
 const G_TIES: number[] = G.map((v, i) => (v === G_FLOOR ? i : -1)).filter((i) => i >= 0)
 /** the warm white of a hot pen tip (the kit's head colour family) */
@@ -100,10 +105,13 @@ const nameIn = (T: number, i: number) => cue(T, spokeEnd(i) - 0.035, spokeEnd(i)
 
 /** Everything built before the grid folds away as the wheel becomes cell 0 (S5). */
 const constructionOut = (T: number) => 1 - at(T, S.grid, 0, 0.25)
-/** S5 FLIP: the wheel shrinks into cell 0. */
-const flipK = (T: number) => at(T, S.grid, 0, 0.35, ease.morph)
-/** The big wheel hands over to its mini (cell 0) once it has landed. */
-const mainOut = (T: number) => 1 - at(T, S.grid, 0.3, 0.42)
+/** S5 FLIP: the wheel shrinks into cell 0 (and the Powerlifter into its own). */
+const flipK = (T: number) => at(T, S.grid, 0, 0.28, ease.morph)
+/** The big wheel hands over to its mini (cell 0) as it lands; the flying Powerlifter to its own. */
+const HAND = 0.24
+const mainOut = (T: number) => 1 - at(T, S.grid, HAND, HAND + 0.1)
+/** The flying floor rings dissolve in flight: their dashes are screen-width, so at mini scale they would fray. */
+const ringFly = (T: number) => 1 - at(T, S.grid, 0.08, 0.22)
 
 // S1, S2: class arcs, in fractional spoke positions (clockwise from Strength)
 const PADF = 0.2
@@ -171,11 +179,16 @@ const collapse = (T: number) => at(T, S.spec, 0.66, 0.86, ease.morph)
 const catchK = (T: number) => at(T, S.spec, 0.85, 0.92, ease.settle)
 const specOut = (T: number) => 1 - at(T, S.grid, 0, 0.12)
 
-// S5: the cells land in rank order (40 ms stagger) while the wheel folds into cell 0
+// S5: the two athletes of the comparison fly into their cells (the generalist
+// first, the Powerlifter last) while the other eleven land between them in
+// rank order (40 ms stagger)
+const carried = (k: number) => k === 0 || k === P_CELL
+/** the rank position of cell k among the eleven that grow in place */
+const growOrder = (k: number) => (k < P_CELL ? k - 1 : k - 2)
 const cellGrow = (T: number, k: number) =>
-  k === 0 ? (T >= S.grid + 0.3 ? 1 : 0) : stagger(T, S.grid + 0.16, S.grid + 0.76, k - 1, RANKED.length - 1, 0.15, ease.settle)
+  carried(k) ? (T >= S.grid + HAND ? 1 : 0) : stagger(T, S.grid + 0.16, S.grid + 0.76, growOrder(k), RANKED.length - 2, 0.15, ease.settle)
 const cellRing = (T: number, k: number) =>
-  k === 0 ? (T >= S.grid + 0.3 ? 1 : 0) : stagger(T, S.grid + 0.3, S.grid + 0.92, k - 1, RANKED.length - 1, 0.15, ease.draw)
+  carried(k) ? (T >= S.grid + HAND ? 1 : 0) : stagger(T, S.grid + 0.3, S.grid + 0.92, growOrder(k), RANKED.length - 2, 0.15, ease.draw)
 const gridOn = (T: number) => at(T, S.grid, 0.12, 0.18)
 
 /* ------------------------------ elements ------------------------------ */
@@ -352,7 +365,10 @@ function TagLeaders({ layout }: { layout: Layout }) {
 /** the skill-name label ids, built once (the colour pass runs every frame) */
 const NAME_IDS: string[] = SKILLS.map((_, i) => `sk-n-${i}`)
 
-function useStoryLabels(layout: Layout) {
+/** The rim tick sits on the r = 10 ring halfway between Strength and Accuracy, where no vertex or arc end can land. */
+const SCALE_ANG = (108 * Math.PI) / 180
+
+function useStoryLabels(layout: Layout, kind: GridKind) {
   const wide = useWideNames()
   const specs = useMemo<LabelSpec[]>(() => {
     const out: LabelSpec[] = []
@@ -377,17 +393,20 @@ function useStoryLabels(layout: Layout) {
         cue: (T) => nameIn(T, i) * nameEmph(T, i) * (i === P_WEAK ? 1 : 1 - 0.45 * catchK(T)) * (1 - at(T, S.grid, 0, 0.1)),
       })
     })
-    // the scale: the rim is a rating of 10 (MAX_VALUE), so 7 and 2 read out of 10
+    // the scale: the rim is a rating of 10 (MAX_VALUE), so 7 and 2 read out
+    // of 10. It first appears when a value is first plotted (S3), as a
+    // contour label on the rim ring between two spokes, where no profile
+    // vertex, class arc or name can sit on it
     out.push({
       id: 'sk-scale',
       text: String(MAX_VALUE),
       tone: 'tick',
-      anchor: [0, R, 0.02],
-      prefer: 'W',
-      only: ['W', 'NW'],
-      gapPx: 6,
+      anchor: [R * Math.cos(SCALE_ANG), R * Math.sin(SCALE_ANG), 0.02],
+      prefer: 'C',
+      only: ['C', 'NW', 'N', 'W'],
+      gapPx: 4,
       priority: 75,
-      cue: (T) => at(T, S.ten, 0.18, 0.26) * (1 - at(T, S.grid, 0, 0.1)),
+      cue: (T) => at(T, S.gen, 0.3, 0.42) * (1 - at(T, S.grid, 0, 0.1)),
     })
     // S1, S2: each family named on a tag in the free space, joined to its
     // arc by a pen-drawn leader (TagLeaders)
@@ -461,10 +480,12 @@ function useStoryLabels(layout: Layout) {
       // lands as its leader reaches it; leaves as the generalist steps back
       cue: (T) => at(T, S.gen, 0.9, 0.96) * weakGOut(T),
     })
-    // S4: the comparison key and the collapsed floor
+    // S4: the comparison key and the collapsed floor. Each key chip carries
+    // its athlete's weakest skill as a badge (floorOf), so 7 against 2 is
+    // stated at rest, in the badge language the S5 lineup uses
     out.push(
-      { id: 'sk-lg-g2', text: 'Generalist', tone: 'legend', color: PAL.yellowGreen, anchor: [0, 0, 0], pin: 'top-left', pinOrder: 4, cue: (T) => at(T, S.spec, 0.22, 0.34) * specOut(T) },
-      { id: 'sk-lg-pl', text: 'Powerlifter', tone: 'legend', color: PAL.chalk, anchor: [0, 0, 0], pin: 'top-left', pinOrder: 5, cue: (T) => at(T, S.spec, 0.26, 0.38) * specOut(T) },
+      { id: 'sk-lg-g2', text: 'Generalist', tone: 'legend', color: PAL.yellowGreen, badge: String(G_FLOOR), anchor: [0, 0, 0], pin: 'top-left', pinOrder: 4, cue: (T) => at(T, S.spec, 0.22, 0.34) * specOut(T) },
+      { id: 'sk-lg-pl', text: 'Powerlifter', tone: 'legend', color: PAL.chalk, badge: String(P_FLOOR), anchor: [0, 0, 0], pin: 'top-left', pinOrder: 5, cue: (T) => at(T, S.spec, 0.26, 0.38) * specOut(T) },
       {
         id: 'sk-w-p',
         text: TAG_TEXT.weakP,
@@ -477,8 +498,9 @@ function useStoryLabels(layout: Layout) {
         cue: (T) => at(T, S.spec, 0.91, 0.97) * specOut(T),
       },
     )
-    // S5: the thirteen, named inside their plates (a phone uses the short names)
-    const gr = grid(layout)
+    // S5: the thirteen, named inside their plates (a phone uses the short
+    // names), each kept clear of its neighbours
+    const gr = grid(kind)
     RANKED.forEach((r, k) => {
       const [nx, ny] = gr.nameAt(k)
       out.push({
@@ -490,9 +512,10 @@ function useStoryLabels(layout: Layout) {
         dot: false,
         badge: String(r.floor),
         anchor: [nx, ny, 0],
-        prefer: 'N',
-        only: ['N'],
-        gapPx: 3,
+        prefer: gr.nameDir,
+        only: [gr.nameDir],
+        gapPx: gr.nameDir === 'E' ? 5 : 3,
+        sepPx: 3,
         priority: 80,
         required: true,
         cue: (T) => Math.max(0, Math.min(1, (cellGrow(T, k) - 0.55) * 2.5)),
@@ -500,7 +523,7 @@ function useStoryLabels(layout: Layout) {
     })
     out.push({ id: 'sk-lg-sort', text: 'SORTED BY WEAKEST SKILL', tone: 'legend', color: PAL.yellowGreen, anchor: [0, 0, 0], pin: 'top-left', pinOrder: 6, dot: false, cue: (T) => at(T, S.grid, 0.8, 0.92) })
     return out
-  }, [layout, wide])
+  }, [layout, kind, wide])
   useLabels(specs)
 
   // the skill-name dots take their class colour as the arcs pass (S1, S2),
@@ -523,8 +546,14 @@ function useDataObstacles(gen: { r: Float32Array }, pl: { r: Float32Array }) {
       maxPoints: 4 * N,
       radiusPx: 6,
       points: (T, out) => {
+        // both profiles' vertices and edge midpoints, written inline (no
+        // closure per placement pass): pass 0 the generalist, pass 1 the Powerlifter
         let n = 0
-        const put = (src: Float32Array, z: number) => {
+        for (let pass = 0; pass < 2; pass++) {
+          const on = pass === 0 ? T >= S.gen + 0.2 && T < S.grid : T >= S.spec + 0.4 && T < S.grid
+          if (!on) continue
+          const src = pass === 0 ? gen.r : pl.r
+          const z = pass === 0 ? genDepth(T) : 0
           for (let i = 0; i < N; i++) {
             const j = (i + 1) % N
             out[n * 3] = px(i, src[i])
@@ -537,8 +566,6 @@ function useDataObstacles(gen: { r: Float32Array }, pl: { r: Float32Array }) {
             n++
           }
         }
-        if (T >= S.gen + 0.2 && T < S.grid) put(gen.r, genDepth(T))
-        if (T >= S.spec + 0.4 && T < S.grid) put(pl.r, 0)
         return n
       },
     }),
@@ -551,16 +578,17 @@ function useDataObstacles(gen: { r: Float32Array }, pl: { r: Float32Array }) {
 
 function StoryScene({ tier }: { tier: Tier }) {
   const { layout } = useBeat()
+  const kind = useGridKind()
   const camera = useThree((st) => st.camera)
   useEffect(() => {
     tagCam.cam = camera
   }, [camera])
   const low = tier === 'low'
   const flip = useRef<THREE.Group>(null)
+  const flipP = useRef<THREE.Group>(null)
   const gen = useMemo(() => newProfile(), [])
   const pl = useMemo(() => newProfile(), [])
-  const gr = grid(layout)
-  const cell0 = gr.center(0)
+  const gr = grid(kind)
 
   // one pass per frame fills the shared profile sources and the FLIP (priority
   // -2: before every element that reads them)
@@ -575,18 +603,24 @@ function StoryScene({ tier }: { tier: Tier }) {
       }
       if (mg) gen.v++
       if (mp) pl.v++
+      // S5 FLIP: the wheel into cell 0, the Powerlifter into its own cell
+      const k = flipK(T)
+      const s = 1 + (MINI_R / R - 1) * k
       const g = flip.current
       if (g) {
-        const k = flipK(T)
-        const s = 1 + (MINI_R / R - 1) * k
         g.scale.set(s, s, s)
-        g.position.set(cell0[0] * k, cell0[1] * k, 0)
+        g.position.set(gr.cx[0] * k, gr.cy[0] * k, 0)
+      }
+      const gp = flipP.current
+      if (gp) {
+        gp.scale.set(s, s, s)
+        gp.position.set(gr.cx[P_CELL] * k, gr.cy[P_CELL] * k, 0)
       }
     },
     { priority: -2, hide: flip },
   )
 
-  useStoryLabels(layout)
+  useStoryLabels(layout, kind)
   useDataObstacles(gen, pl)
 
   const constructionVis = useMemo<ConstructionVis>(
@@ -649,16 +683,15 @@ function StoryScene({ tier }: { tier: Tier }) {
   const minisVis = useMemo<MinisVis>(
     () => ({
       place: (_T, k, out) => {
-        const [cx, cy] = gr.center(k)
-        out[0] = cx
-        out[1] = cy
+        out[0] = gr.cx[k]
+        out[1] = gr.cy[k]
         return cellGrow(_T, k)
       },
       ring: cellRing,
       opacity: gridOn,
-      key: (T) => T + (layout === 'P' ? 0 : 100),
+      key: (T) => T + (gr.kind === 'P' ? 0 : gr.kind === 'L' ? 100 : 200),
     }),
-    [gr, layout],
+    [gr],
   )
 
   return (
@@ -676,7 +709,8 @@ function StoryScene({ tier }: { tier: Tier }) {
           lift={genDepth}
           color={PAL.yellowGreen}
           progress={ringDraw}
-          opacity={(T) => at(T, S.gen, RING_A, RING_A + 0.02) * specOut(T)}
+          // it sets off with its wheel into cell 0, dissolving in flight (the mini brings its own)
+          opacity={(T) => at(T, S.gen, RING_A, RING_A + 0.02) * ringFly(T)}
           dim={(T) => 1 - 0.55 * ghostK(T)}
           gain={(T) => 1.35 * (1 - 0.3 * ghostK(T))}
           keyline
@@ -710,33 +744,6 @@ function StoryScene({ tier }: { tier: Tier }) {
         {/* S4: the gaps, hatched in the colour of loss where the Powerlifter falls
             inside the generalist (the language of Definition's AREA LOST) */}
         <Hatch inner={pl} outer={gen} color={PAL.sick} alpha={0.3} opacity={(T) => at(T, S.spec, 0.45, 0.5) * specOut(T)} reveal={(T) => at(T, S.spec, 0.45, 0.65)} />
-        <Pen
-          points={plPts}
-          color={PAL.chalk}
-          width={3.5}
-          dashed
-          dashSize={0.5}
-          gapSize={0.3}
-          head
-          hot
-          progress={(T) => at(T, S.spec, 0.15, 0.5, ease.draw)}
-          opacity={specOut}
-          // it steps back a little as the floor lands, so the claim is the brightest line (L3)
-          dim={(T) => 1 - 0.18 * catchK(T)}
-          renderOrder={38}
-        />
-        {/* S4 claim (signature): the floor collapses from 7 to 2 and catches on
-            Endurance; it rests as the brightest line on screen */}
-        <FloorRing
-          radius={(T) => G_FLOOR + (P_FLOOR - G_FLOOR) * collapse(T)}
-          z={0.08}
-          color={PAL.chalk}
-          width={4}
-          dash={0.36}
-          opacity={(T) => at(T, S.spec, 0.62, 0.66) * specOut(T)}
-          gain={(T) => 1.15 + 1.5 * pulse(T, S.spec + 0.64, S.spec + 0.92)}
-          keyline
-        />
         <Nodes
           count={1}
           radius={layout === 'P' ? 0.42 : 0.28}
@@ -776,6 +783,38 @@ function StoryScene({ tier }: { tier: Tier }) {
           }}
         />
       </group>
+      {/* the Powerlifter: its dashed outline and, from the S4 claim, its floor.
+          In S5 both fly into its cell at the far end of the ranking and hand
+          over to its mini */}
+      <group ref={flipP}>
+        <Pen
+          points={plPts}
+          color={PAL.chalk}
+          width={3.5}
+          dashed
+          dashSize={0.5}
+          gapSize={0.3}
+          head
+          hot
+          progress={(T) => at(T, S.spec, 0.15, 0.5, ease.draw)}
+          opacity={(T) => (T >= S.spec ? mainOut(T) : 0)}
+          // it steps back a little as the floor lands, so the claim is the brightest line (L3)
+          dim={(T) => 1 - 0.18 * catchK(T)}
+          renderOrder={38}
+        />
+        {/* S4 claim (signature): the floor collapses from 7 to 2 and catches on
+            Endurance; it rests as the brightest line on screen */}
+        <FloorRing
+          radius={(T) => G_FLOOR + (P_FLOOR - G_FLOOR) * collapse(T)}
+          z={0.08}
+          color={PAL.chalk}
+          width={4}
+          dash={0.36}
+          opacity={(T) => at(T, S.spec, 0.62, 0.66) * ringFly(T)}
+          gain={(T) => 1.15 + 1.5 * pulse(T, S.spec + 0.64, S.spec + 0.92)}
+          keyline
+        />
+      </group>
       <Plates plates={plates} radius={0.35} z={-0.08} vis={(T, k) => cellGrow(T, k)} opacity={gridOn} renderOrder={4} />
       <Minis cells={G_CELLS} vis={minisVis} low={low} />
     </>
@@ -785,6 +824,8 @@ function StoryScene({ tier }: { tier: Tier }) {
 export default function SkillsScene() {
   const mode = useStoryStore((s) => s.mode)
   const tier = useStoryStore((s) => s.tier)
+  // QA: the lineup's names (story S5 and the explore Grid): placed, apart, inside their plates
+  useQAProbe('sk-grid', gridProbe)
   // Both layers stay mounted (prewarm); the mode only toggles visibility.
   return (
     <>

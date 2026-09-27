@@ -92,8 +92,15 @@ export function Heads({
   )
 }
 
-/** A pen tip's intensity along its stroke: it fades in over the first 12% (no blob at the origin) and out at the end. */
-const tipK = (p: number) => (p > 0 && p < 1 ? Math.min(1, p / 0.12, (1 - p) / 0.04) : 0)
+/**
+ * A spoke has LANDED once its pen is within 3% of the rim: ease.draw creeps
+ * over that last stretch for about a fifth of the stroke's time, and a tip
+ * left there reads as light lagging behind the pen (and sits on the name
+ * that fades in as the spoke lands).
+ */
+const LAND = 0.97
+/** A pen tip's intensity along its stroke: it fades in over the first 12% (no blob at the origin) and is gone within about 40 ms of landing. */
+const tipK = (p: number) => (p > 0 && p < LAND + 0.015 ? Math.min(1, p / 0.12, (LAND + 0.015 - p) / 0.05) : 0)
 
 /* ---------------------------- construction ---------------------------- */
 
@@ -272,8 +279,10 @@ export function Construction({ vis, z = 0 }: { vis: ConstructionVis; z?: number 
               return p > 0 && p < 1 ? Math.min(1, p / 0.03, (1 - p) / 0.03) : 0
             }}
           />
-          {/* the spokes: only the leading pen (the one about to land and name
-              its skill) is hot; the ones behind it are small cool tips (L4) */}
+          {/* the spokes: only the leading pen still drawing is hot; the moment
+              it lands the heat passes to the next one, so the one bright
+              point is always the tip of a line being drawn (L4). The others
+              are small cool tips */}
           <Heads
             count={1}
             tint={PAL.chalk}
@@ -308,13 +317,13 @@ export function Construction({ vis, z = 0 }: { vis: ConstructionVis; z?: number 
   )
 }
 
-/** The spoke pen furthest along among those still drawing (-1 when none is). */
+/** The spoke pen furthest along among those still drawing, landed ones excluded (-1 when none is). */
 function leadSpoke(vis: ConstructionVis, T: number): number {
   let best = -1
   let bp = -1
   for (let i = 0; i < N; i++) {
     const p = vis.spoke(T, i)
-    if (p > 0 && p < 1 && p > bp) {
+    if (p > 0 && p < LAND && p > bp) {
       bp = p
       best = i
     }

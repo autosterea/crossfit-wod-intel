@@ -1,7 +1,7 @@
 import type { Box, CamPose, Layout, StoryDef, V3 } from '../../story/types'
 import SkillsScene from './Scene'
 import SkillsExplore from './Explore'
-import { DEPTH, EX_DEPTH, SOLID_BOX, WHEEL_BOX, WHEEL_PAD, grid } from './layout'
+import { DEPTH, EX_DEPTH, SOLID_BOX, WHEEL_BOX, WHEEL_PAD, grid, gridKind } from './layout'
 import { GENERALIST, POWERLIFTER } from './skillsMath'
 import { NONE, useSkExplore } from './exploreStore'
 
@@ -32,19 +32,21 @@ const FRONT_P: CamPose = { ...FRONT_L, padPx: WHEEL_PAD.P }
  */
 const SOLID_L: CamPose = { ...FRONT_L, target: [0, 0, DEPTH / 2], fit: SOLID_BOX, az: -12, el: 16 }
 const SOLID_P: CamPose = { ...SOLID_L, padPx: WHEEL_PAD.P, az: -10, el: 15 }
-/** S5: the grid of thirteen, with its name rows; the top pad leaves room for the pinned key. */
+/** S5: the grid of thirteen, with its names; the top pad leaves room for the pinned key. */
 const GRID: CamPose = {
-  target: (l: Layout) => center(grid(l).box),
+  target: (l: Layout) => center(grid(gridKind(l)).box),
   az: 0,
   el: 0,
   fov: 30,
-  fit: (l: Layout) => grid(l).box,
+  fit: (l: Layout) => grid(gridKind(l)).box,
   padPx: { l: 16, r: 16, t: 40, b: 12 },
 }
 /**
  * Explore: the wheel with its name ring inside the fit (so one padding
  * serves both views), or the grid. The director re-fits every frame, so the
- * Wheel | Grid toggle glides between them.
+ * Wheel | Grid toggle glides between them. The grid is the same kind the
+ * scene lays out (layout.ts gridKind): a phone with the sheet expanded gets
+ * the two-column list, never five squeezed columns.
  */
 const LABEL_ROOM = 3.1
 const EX_WHEEL: Box = [
@@ -52,11 +54,11 @@ const EX_WHEEL: Box = [
   [10 + LABEL_ROOM, 10 + LABEL_ROOM, EX_DEPTH],
 ]
 const EXPLORE: CamPose = {
-  target: (l: Layout) => (useSkExplore.getState().view === 'grid' ? center(grid(l).box) : WHEEL_T),
+  target: (l: Layout) => (useSkExplore.getState().view === 'grid' ? center(grid(gridKind(l)).box) : WHEEL_T),
   az: 0,
   el: 0,
   fov: 30,
-  fit: (l: Layout) => (useSkExplore.getState().view === 'grid' ? grid(l).box : EX_WHEEL),
+  fit: (l: Layout) => (useSkExplore.getState().view === 'grid' ? grid(gridKind(l)).box : EX_WHEEL),
   padPx: { l: 14, r: 14, t: 40, b: 14 },
 }
 

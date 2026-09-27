@@ -34,9 +34,10 @@ function ringScreenY(cam: THREE.Camera, y: number, z: number): number {
  * wPx / hPx: the tag's size (its callout pill), so it sits inside the rect.
  * ringR: the outer radius of the wheel's name ring (world), whose projected
  * top and bottom bound the free bands on a portrait rect. dxPx moves the
- * point along the pill (a leader that meets the pill off its centre).
+ * point along the pill (a leader that meets the pill off its centre); dyPx
+ * moves it across (a leader that stops at the pill's edge).
  */
-export function tagPoint(slot: Slot, wPx: number, hPx: number, z: number, ringR: number, out: [number, number, number], dxPx = 0): V3 {
+export function tagPoint(slot: Slot, wPx: number, hPx: number, z: number, ringR: number, out: [number, number, number], dxPx = 0, dyPx = 0): V3 {
   const cam = tagCam.cam
   if (!cam) {
     out[0] = slot[1] === 'L' ? -12 : 12
@@ -60,6 +61,7 @@ export function tagPoint(slot: Slot, wPx: number, hPx: number, z: number, ringR:
   } else {
     sy = top ? f.y + 14 + hPx / 2 : f.y + f.h - 14 - hPx / 2
   }
+  sy += dyPx
   // unproject the stage pixel onto the plane z
   const nx = (sx / f.W) * 2 - 1
   const ny = 1 - (sy / f.H) * 2
@@ -94,12 +96,17 @@ export const pillH = (): number => (focusRect.shell === 'desktop' ? 26 : 24)
 /**
  * The world point where a leader meets its pill: `end` 0 is the centre, 1
  * is 16 px short of the pill's inner end (toward the wheel), -1 16 px short
- * of its outer end.
+ * of its outer end. The leader stops at the pill's edge that faces the
+ * wheel (its bottom edge for a top tag, its top edge for a bottom one),
+ * tucked 1 px under the border, so it never shows through the pill's
+ * translucent glass beside the text.
  */
 export function tagEnd(slot: Slot, text: string, end: number, z: number, ringR: number, out: [number, number, number]): V3 {
   const w = pillW(text)
+  const h = pillH()
   const inward = slot[1] === 'L' ? 1 : -1
-  return tagPoint(slot, w, pillH(), z, ringR, out, inward * end * Math.max(0, w / 2 - 16))
+  const edge = (slot[0] === 'T' ? 1 : -1) * Math.max(0, h / 2 - 1)
+  return tagPoint(slot, w, h, z, ringR, out, inward * end * Math.max(0, w / 2 - 16), edge)
 }
 
 /* ------------------------------- leader -------------------------------- */

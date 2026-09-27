@@ -141,19 +141,49 @@ export const EX_TAG: Record<Layout, TagSpec> = {
 
 /* ------------------------------ the grid ------------------------------ */
 
+/**
+ * How the thirteen are laid out (D.2 S5): P 3 x 5 and L 5 x 3, plus S, the
+ * case D.2 did not foresee (proposed amendment): a portrait PHONE whose
+ * focus rect has turned short and wide (the explore sheet expanded, or a
+ * caption card read in full). Five named columns of about 70 px cannot hold
+ * the names there, and three columns cannot hold the rows, so S lists the
+ * thirteen in two columns of seven, each name beside its radar, in the same
+ * rank order.
+ */
+export type GridKind = 'P' | 'L' | 'S'
+
+/** The grid kind for a focus layout on this stage (one choice for the camera, the cells, the names and the hotspots). */
+export function gridKind(layout: Layout): GridKind {
+  if (layout === 'P') return 'P'
+  const f = focusRect
+  const phone = f.shell === 'phone' || f.shell === 'tablet'
+  return phone && (f.w - 28) / 5 < 95 ? 'S' : 'L'
+}
+const kindNow = () => gridKind(focusRect.layout)
+/** The live grid kind; re-renders only when it flips. */
+export function useGridKind(): GridKind {
+  return useSyncExternalStore(subscribeFocus, kindNow)
+}
+
 export interface Grid {
+  kind: GridKind
   cols: number
   rows: number
   /** cell pitch, world units */
   px: number
   py: number
-  /** mini circle centre of ranked cell k */
+  /** mini circle centre of ranked cell k (allocates: set-up only) */
   center: (k: number) => [number, number]
-  /** glass plate behind cell k: [x0, y0, x1, y1] (the circle plus its name row) */
+  /** the same centres, precomputed, for per-frame readers (no allocation) */
+  cx: Float32Array
+  cy: Float32Array
+  /** glass plate behind cell k: [x0, y0, x1, y1] (the circle plus its name) */
   plate: (k: number) => [number, number, number, number]
-  /** the anchor of cell k's name row: just inside the plate's bottom edge */
+  /** the anchor of cell k's name: inside the plate, under the circle (P, L) or beside it (S) */
   nameAt: (k: number) => [number, number]
-  /** everything the camera must fit: circles, plates and name rows */
+  /** the side the name sits on from its anchor */
+  nameDir: 'N' | 'E'
+  /** everything the camera must fit: circles, plates and names */
   box: Box
 }
 
@@ -161,56 +191,72 @@ export interface Grid {
  * Room under each circle for its name row (world units): the name sits
  * INSIDE its plate, above the plate's bottom edge.
  */
-const NAME_ROOM: Record<Layout, number> = { P: 2.7, L: 2.5 }
+const NAME_ROOM: Record<'P' | 'L', number> = { P: 2.7, L: 2.5 }
 const PLATE_PAD = 0.35
 /** gap between neighbouring plates */
 const GUTTER = 0.35
+/** S: the column pitch; a column holds the radar and a name of about 100 px at the smallest scale (360 px, sheet expanded) */
+const S_PITCH = 31
 
-const cache = new Map<Layout, Grid>()
+const cache = new Map<GridKind, Grid>()
 
 /**
  * S5 grid. P: 3 columns x 5 rows. The rows are height-bound on a phone, so
  * wide columns cost no size: the column pitch is 12.4 (D.2 says 8.2;
  * proposed amendment), which gives each name with its badge its own column
- * at 360 px. L: 5 x 3 at 8.8 (D.2 8.2). A short last row is centred, so the
- * Powerlifter closes the grid on its own under the middle column (P).
+ * at 360 px. L: 5 x 3 at 8.8 (D.2 8.2). S: 2 x 7, names beside the radars.
+ * A short last row is centred, so the Powerlifter closes the grid on its
+ * own.
  */
-export function grid(layout: Layout): Grid {
-  const hit = cache.get(layout)
+export function grid(kind: GridKind): Grid {
+  const hit = cache.get(kind)
   if (hit) return hit
-  const P = layout === 'P'
-  const cols = P ? 3 : 5
   const n = RANKED.length
+  const S = kind === 'S'
+  const P = kind === 'P'
+  const cols = S ? 2 : P ? 3 : 5
   const rows = Math.ceil(n / cols)
-  const room = NAME_ROOM[layout]
-  const px = P ? 12.4 : 8.8
-  const py = 2 * MINI_R + PLATE_PAD + room + GUTTER
-  const cellH = 2 * MINI_R + PLATE_PAD + room
+  const room = S ? 0 : NAME_ROOM[kind as 'P' | 'L']
+  const px = S ? S_PITCH : P ? 12.4 : 8.8
+  const cellH = 2 * MINI_R + (S ? 2 * PLATE_PAD : PLATE_PAD + room)
+  const py = cellH + GUTTER
   const blockH = (rows - 1) * py + cellH
   // the circle centre of the top row, so the block is centred on the origin
   const top = blockH / 2 - PLATE_PAD - MINI_R
-  const center = (k: number): [number, number] => {
+  /** the centre x of cell k's column (a short last row is centred) */
+  const colX = (k: number): number => {
     const r = Math.floor(k / cols)
     const inRow = Math.min(cols, n - r * cols)
     const c = (k % cols) + (cols - inRow) / 2
-    return [(c - (cols - 1) / 2) * px, top - r * py]
+    return (c - (cols - 1) / 2) * px
   }
+  const rowY = (k: number): number => top - Math.floor(k / cols) * py
   const hw = px / 2 - GUTTER / 2
+  // S: the radar sits at the left of its plate, the name to its right
+  const center = (k: number): [number, number] => [S ? colX(k) - hw + PLATE_PAD + MINI_R : colX(k), rowY(k)]
   const plate = (k: number): [number, number, number, number] => {
-    const [x, y] = center(k)
-    return [x - hw, y - MINI_R - room, x + hw, y + MINI_R + PLATE_PAD]
+    const x = colX(k)
+    const y = rowY(k)
+    return S ? [x - hw, y - MINI_R - PLATE_PAD, x + hw, y + MINI_R + PLATE_PAD] : [x - hw, y - MINI_R - room, x + hw, y + MINI_R + PLATE_PAD]
   }
   const nameAt = (k: number): [number, number] => {
     const [x, y] = center(k)
-    return [x, y - MINI_R - room + 0.02]
+    return S ? [x + MINI_R + 0.45, y] : [x, y - MINI_R - room + 0.02]
+  }
+  const cx = new Float32Array(n)
+  const cy = new Float32Array(n)
+  for (let k = 0; k < n; k++) {
+    const c = center(k)
+    cx[k] = c[0]
+    cy[k] = c[1]
   }
   const halfW = ((cols - 1) / 2) * px + hw
   const box: Box = [
     [-halfW, -blockH / 2, 0],
     [halfW, blockH / 2, 0],
   ]
-  const g: Grid = { cols, rows, px, py, center, plate, nameAt, box }
-  cache.set(layout, g)
+  const g: Grid = { kind, cols, rows, px, py, center, cx, cy, plate, nameAt, nameDir: S ? 'E' : 'N', box }
+  cache.set(kind, g)
   return g
 }
 
@@ -220,7 +266,10 @@ export function grid(layout: Layout): Grid {
  * per column) use the short names (D.2 allows them). Re-renders only when the
  * answer flips.
  */
-const wideNow = () => (focusRect.w - 32) / (focusRect.layout === 'P' ? 3 : 5) >= 205
+const wideNow = () => {
+  const k = gridKind(focusRect.layout)
+  return k !== 'S' && (focusRect.w - 32) / grid(k).cols >= 205
+}
 export function useWideNames(): boolean {
   return useSyncExternalStore(subscribeFocus, wideNow)
 }
