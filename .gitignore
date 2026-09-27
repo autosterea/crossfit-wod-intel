@@ -39,3 +39,7 @@ qf_*.txt
 *.local.json
 .claude/
 public/data/
+
+# fitness v2 rebuild local outputs
+dist-dev
+dist-preview
