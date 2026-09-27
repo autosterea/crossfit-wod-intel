@@ -64,6 +64,13 @@ export interface IntroLayout {
   /** z and cap size of the HEALTH word on the floor in front of the solid */
   healthZ: number
   healthSize: number
+  /**
+   * I4: the x offset (from the chart's centre) of the lane the lifetime
+   * surface travels down on its way to tile 06. On a phone tile 06 sits under
+   * tile 04 (the chart's), so the surface steps left of the chart's column
+   * before it passes it; on desktop they fold to opposite corners (0).
+   */
+  healthLane: number
   tiles: TileLayout
   boxes: { i0: Box; i1: Box; i2: Box; i4: Box }
 }
@@ -98,6 +105,7 @@ const P: IntroLayout = {
   depth: 6,
   healthZ: 1.45,
   healthSize: 0.95,
+  healthLane: -1.3,
   tiles: {
     c: [
       [-2.05, 3.45],
@@ -149,6 +157,7 @@ const L: IntroLayout = {
   depth: 6,
   healthZ: 1.05,
   healthSize: 1.1,
+  healthLane: 0,
   tiles: {
     c: [
       [-5.0, 2.45],

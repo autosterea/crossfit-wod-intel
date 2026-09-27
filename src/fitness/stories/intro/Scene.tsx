@@ -24,7 +24,9 @@ import { TheMap } from './Map'
         curve, light sweeping in under it, and the claim AREA = FITNESS;
      I3 the area extrudes back through every age into a lit lifetime
         landscape: HEALTH;
-     I4 everything folds into the six-tile map of the lesson.
+     I4 everything folds into the six-tile map of the lesson: the chart
+        and the surface fold into 04 and 06, the pen redraws the four
+        models in 01, 02, 03 and 05, and the tiles light 4 then 6.
 
    Prewarm (README): every element of every beat is mounted at load and
    driven by T, so no shader links mid-story. Explore shows the same map
@@ -35,14 +37,19 @@ import { TheMap } from './Map'
 const FF_RATE = 2.4
 /** Leaving explore, the scene runs back to the story's T in about the camera's glide (0.9 s). */
 const REWIND_S = 0.8
+/** Leaving explore, the scene rewinds continuously only when the story is within this many beats of the map. */
+const REWIND_MAX = 1
 
 /**
- * The explore clock. Entering explore CUTS to the start of the fold (never
- * earlier: a fast-forward through the title and the models under the map
- * pose read as noise) and plays only the fold into the six tiles. Leaving,
- * the scene runs back to the story's T while the camera glides home, so the
- * map never pops to the story beat in one frame. Both are cuts under
- * reduced motion. No per-frame state beyond this one mutable record.
+ * The explore clock, symmetric both ways. Entering explore CUTS to the start
+ * of the fold (never earlier: a fast-forward through the title and the
+ * models under the map pose reads as noise) and plays only the fold into the
+ * six tiles. Leaving, when the story's T is within one beat of the map (the
+ * lifetime beat or the map itself) the scene runs back to it while the
+ * camera glides home; from any earlier beat it CUTS to the story's frame, so
+ * a whole story never strobes past in reverse through the wrong camera.
+ * Both are cuts under reduced motion. No per-frame state beyond this one
+ * mutable record.
  */
 const rewind = { rate: 0 }
 function ExploreClock() {
@@ -70,7 +77,7 @@ function ExploreClock() {
       }
       // back to story: run the scene back (or on) to the story's T, then hand over
       const gap = T - exploreTime.T
-      if (st.reduced || Math.abs(gap) < 1e-4) {
+      if (st.reduced || Math.abs(gap) < 1e-4 || (rewind.rate === 0 && Math.abs(gap) > REWIND_MAX)) {
         exploreTime.on = false
         exploreTime.T = T
         bumpObstacles()
@@ -95,24 +102,6 @@ function ExploreClock() {
     },
     [],
   )
-  return null
-}
-
-/**
- * STOPGAP for engine request 1 (remove when it lands): the caption card
- * renders its Read more block only for chapters with MODULE_COPY, so the
- * intro's expanded detent was an empty 72% glass card that squeezed the
- * stage to about 200 px. Hold the intro card at peek or default.
- */
-function IntroDetentClamp() {
-  useEffect(() => {
-    const clamp = () => {
-      const st = useStoryStore.getState()
-      if (st.def?.key === 'intro' && st.detent === 'expanded') st.setDetent('default')
-    }
-    clamp()
-    return useStoryStore.subscribe(clamp)
-  }, [])
   return null
 }
 
@@ -144,7 +133,6 @@ export default function IntroScene() {
   return (
     <>
       <ExploreClock />
-      <IntroDetentClamp />
       <SlateGlow />
       <Labels layout={layout} />
       <Title L={L} />

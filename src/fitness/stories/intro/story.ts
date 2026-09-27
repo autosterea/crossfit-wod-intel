@@ -31,12 +31,16 @@ const I2 = front('i2', { l: 12, r: 12, t: 14, b: 34 }, { l: 28, r: 28, t: 28, b:
 const I4 = front('i4', { l: 8, r: 8, t: 10, b: 8 }, 24)
 
 /* I3: the lifetime solid, seen from the front left and above so the ages
-   recede into depth (D.1: P az -14 el 38; L az -32, raised from el 26 to 44
-   so the lit surface, not the front wall, is the subject). The fit frames
-   the solid's real silhouette: its surface ridge at every age, its floor,
-   the age axis and HEALTH on the floor in front. */
+   recede into depth (D.1: P az -14 el 38). L is az -16 el 30 (D.1 said az
+   -32 el 26): at az -32 the right end of the wide front edge recedes so far
+   that the power curve, which FALLS left to right in I2, appeared to rise.
+   This pose keeps the front edge falling on screen (its projected right
+   end sits below its left end, about -0.11 of its width) while the lit
+   surface and the ages still read in depth. The fit frames the solid's real
+   silhouette: its surface ridge at every age, its floor, the age axis and
+   HEALTH on the floor in front. */
 const I3_P = { az: -14, el: 38 }
-const I3_L = { az: -32, el: 44 }
+const I3_L = { az: -16, el: 30 }
 
 function solidPoints(l: Layout): V3[] {
   const L = layoutOf(l)
@@ -124,7 +128,7 @@ export const introStory: StoryDef = {
       sceneWords: 8,
       signature: true,
       cta: 'begin',
-      // front-on early, so the glyphs fly into the grid undistorted
+      // front-on early, so the chart and the surface fold into the grid undistorted
       cam: { L: I4.L, P: I4.P, window: [0, 0.24] },
     },
   ],

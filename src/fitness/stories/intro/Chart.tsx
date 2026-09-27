@@ -1,11 +1,11 @@
-import { useEffect, useMemo, useRef } from 'react'
-import * as THREE from 'three'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import type * as THREE from 'three'
 import { PAL, POWER_DURATIONS, POWER_DURATION_LABELS } from '../../fitnessData'
-import { Pen, PenBatch, PEN } from '../../story/kit/Pen'
+import { PenBatch, PEN } from '../../story/kit/Pen'
 import { AreaFill } from '../../story/kit/Fill'
 import { Halo } from '../../story/kit/Halo'
+import { Plates, type PlateSpec } from '../../story/kit/Plates'
 import { SdfText } from '../../story/kit/SdfText'
-import { lin } from '../../story/kit/materials'
 import { useSafeFrame } from '../../story/useSafeFrame'
 import { bumpObstacles, useLabels, useWorldObstacle, type WorldObstacle } from '../../story/labels/useLabel'
 import type { Box, LabelSpec, Tier, V3 } from '../../story/types'
@@ -33,10 +33,15 @@ import { exploreDim } from './emphasis'
    (data), light sweeps in under it left to right behind a hot front (the
    area), and the claim AREA = FITNESS lands inside the area. The time
    axis is named at its two ends, 1 s and 1 hr (broad time). In I3 the
-   curve settles onto the youngest slice of the lifetime surface, the
-   luminous area recedes to the solid's faint front face, and the power
-   axis shortens to the solid's front edge (its ticks step back); in I4
-   the whole chart folds into tile 04 and returns to the Generalist curve.
+   curve settles onto the youngest slice of the lifetime surface and the
+   luminous area stays on as the FRONT SLICE of the lifetime volume (its
+   light handed over to the slice that travels back through the ages), and
+   the power axis shortens to the solid's front edge (its ticks step back);
+   in I4 the whole chart folds into tile 04 and returns to the Generalist
+   curve at full light.
+
+   Every stroke that moves writes its segment buffer in place (PenBatch,
+   scalar writes keyed on the value that moves it): no allocation per frame.
    ========================================================================= */
 
 const N = 72
@@ -114,14 +119,13 @@ export function Chart({ L, tier }: { L: IntroLayout; tier: Tier }) {
     return new Float32Array(s)
   }, [c])
 
-  // data: the curve and the area share one top edge
+  // data: the curve (as N - 1 segments) and the area share one top edge
   const curve = useMemo(() => {
-    const a = new Float32Array(N * 3)
-    for (let i = 0; i < N; i++) {
-      const u = i / (N - 1)
-      a[i * 3] = cx(c, u)
-      a[i * 3 + 1] = cy(c, gv(u))
-      a[i * 3 + 2] = 0.03
+    const a = new Float32Array((N - 1) * 6)
+    for (let i = 0; i < N - 1; i++) {
+      const u0 = i / (N - 1)
+      const u1 = (i + 1) / (N - 1)
+      a.set([cx(c, u0), cy(c, gv(u0)), 0.03, cx(c, u1), cy(c, gv(u1)), 0.03], i * 6)
     }
     return a
   }, [c])
@@ -134,14 +138,19 @@ export function Chart({ L, tier }: { L: IntroLayout; tier: Tier }) {
     return a
   }, [c])
   const lastC = useRef({ v: NaN, c: null as unknown })
-  const writeCurve = (T: number, p: Float32Array): boolean => {
+  const writeCurve = (T: number, s: Float32Array): boolean => {
     const k = sliceMorph(T) * (1 - fold(T, TILE))
     // numeric key (no per-frame string): the value and the layout's chart object
     const lk = lastC.current
     if (lk.v === k && lk.c === c) return false
     lk.v = k
     lk.c = c
-    for (let i = 0; i < N; i++) p[i * 3 + 1] = cy(c, frontV(T, i / (N - 1)))
+    // point i ends segment i - 1 and starts segment i
+    for (let i = 0; i < N; i++) {
+      const y = cy(c, frontV(T, i / (N - 1)))
+      if (i > 0) s[(i - 1) * 6 + 4] = y
+      if (i < N - 1) s[i * 6 + 1] = y
+    }
     return true
   }
   const lastA = useRef({ v: NaN, c: null as unknown })
@@ -158,8 +167,13 @@ export function Chart({ L, tier }: { L: IntroLayout; tier: Tier }) {
 
   // the sweep front: a vertical stroke of light from the baseline to the curve
   const front = useMemo(() => new Float32Array(6), [])
+  const lastF = useRef({ v: NaN, c: null as unknown })
   const writeFront = (T: number, p: Float32Array): boolean => {
     const u = sweep(T)
+    const lk = lastF.current
+    if (lk.v === u && lk.c === c) return false
+    lk.v = u
+    lk.c = c
     p[0] = p[3] = cx(c, u)
     p[1] = c.y0
     p[4] = cy(c, gv(u))
@@ -205,10 +219,10 @@ export function Chart({ L, tier }: { L: IntroLayout; tier: Tier }) {
           rimWidth={0.16}
           renderOrder={12}
         />
-        <Pen points={front} color={LIGHT} width={PEN.data} update={writeFront} opacity={frontOn} gain={() => 2.4} renderOrder={44} />
+        <PenBatch segments={front} color={LIGHT} width={PEN.data} update={writeFront} opacity={frontOn} gain={() => 2.4} renderOrder={44} />
         {low && <Halo position={haloPos} sizePx={70} color={PAL.yellowGreen} intensity={(T) => 0.6 * frontOn(T)} />}
         {/* the claim edge: a crisp pen on top of the light (L10) */}
-        <Pen points={curve} color={PAL.yellowGreen} width={PEN.data} update={writeCurve} progress={curveDraw} head hot dim={dim04} renderOrder={45} />
+        <PenBatch segments={curve} color={PAL.yellowGreen} width={PEN.data} byArc update={writeCurve} progress={curveDraw} head hot dim={dim04} renderOrder={45} />
         <Claim L={L} />
       </group>
     </group>
@@ -217,34 +231,32 @@ export function Chart({ L, tier }: { L: IntroLayout; tier: Tier }) {
 
 /* ------------------------------ the claim ------------------------------ */
 
-function roundedRect(w: number, h: number, r: number): THREE.ShapeGeometry {
-  const s = new THREE.Shape()
-  s.moveTo(-w / 2 + r, -h / 2)
-  s.lineTo(w / 2 - r, -h / 2)
-  s.quadraticCurveTo(w / 2, -h / 2, w / 2, -h / 2 + r)
-  s.lineTo(w / 2, h / 2 - r)
-  s.quadraticCurveTo(w / 2, h / 2, w / 2 - r, h / 2)
-  s.lineTo(-w / 2 + r, h / 2)
-  s.quadraticCurveTo(-w / 2, h / 2, -w / 2, h / 2 - r)
-  s.lineTo(-w / 2, -h / 2 + r)
-  s.quadraticCurveTo(-w / 2, -h / 2, -w / 2 + r, -h / 2)
-  return new THREE.ShapeGeometry(s, 6)
-}
-
-/** AREA = FITNESS: ink on a yellow-green plate with an ink keyline, inside the area (D.1 I2). */
+/**
+ * AREA = FITNESS (D.1 I2): ink on a yellow-green plate inside the area, with
+ * a 1 px ink hairline (the kit plate's border) that separates it from the
+ * luminous area without a heavy sticker outline, like the Definition
+ * chapter's thin bordered callouts.
+ */
 function Claim({ L }: { L: IntroLayout }) {
   const c = L.chart
   const group = useRef<THREE.Group>(null)
   const size = L.title.lines === 2 ? 0.5 : 0.62
-  const w = BARLOW_BOLD.claim * size + size * 1.0
   const h = BARLOW_BOLD.cap * size + size * 0.78
-  const geo = useMemo(() => roundedRect(1, 1, 0.16), [])
-  const mat = useMemo(() => new THREE.MeshBasicMaterial({ color: PAL.yellowGreen, transparent: true, depthWrite: false, toneMapped: false }), [])
-  const ink = useMemo(() => new THREE.MeshBasicMaterial({ color: PAL.ink, transparent: true, depthWrite: false, toneMapped: false }), [])
-  useEffect(() => () => geo.dispose(), [geo])
-  useEffect(() => () => mat.dispose(), [mat])
-  useEffect(() => () => ink.dispose(), [ink])
-  const base = useMemo(() => lin(PAL.yellowGreen), [])
+  // the plate is centred on the laid-out text (troika's block bounds, which
+  // include the letter spacing): measured once per layout, never per frame
+  const [text, setText] = useState({ x: 0, w: BARLOW_BOLD.claim * size })
+  const w = text.w + size * 1.0
+  const onSync = (m: THREE.Mesh) => {
+    const info = (m as unknown as { textRenderInfo?: { blockBounds: number[] } }).textRenderInfo
+    if (!info) return
+    const [x0, , x1] = info.blockBounds
+    const next = { x: (x0 + x1) / 2, w: x1 - x0 }
+    setText((prev) => (Math.abs(prev.x - next.x) < 1e-4 && Math.abs(prev.w - next.w) < 1e-4 ? prev : next))
+  }
+  const plate = useMemo<PlateSpec[]>(
+    () => [{ rect: [text.x - w / 2, -h / 2, text.x + w / 2, h / 2], fill: PAL.yellowGreen, fillAlpha: 1, line: PAL.ink, lineAlpha: 1 }],
+    [text.x, w, h],
+  )
   const px = cx(c, 0.5)
   const py = cy(c, 0.2)
   const op = (T: number) => claimIn(T) * (1 - claimOut(T))
@@ -252,32 +264,37 @@ function Claim({ L }: { L: IntroLayout }) {
     const g = group.current
     if (!g) return
     const a = claimIn(T)
-    const o = op(T)
-    g.visible = o > 0.002
+    g.visible = op(T) > 0.002
     g.position.set(px, py - 0.3 * (1 - a), 0.08)
     const s = 0.9 + 0.1 * a
     g.scale.set(s, s, 1)
-    mat.opacity = o
-    ink.opacity = Math.min(1, o * 1.4)
-    mat.color.copy(base)
   }, { hide: group })
   // the plate is an obstacle for the label placer while it is up (one prebuilt box)
   const obstacle = useMemo<WorldObstacle>(() => {
     const b: Box = [
-      [px - w / 2, py - h / 2, 0.08],
-      [px + w / 2, py + h / 2, 0.08],
+      [px + text.x - w / 2, py - h / 2, 0.08],
+      [px + text.x + w / 2, py + h / 2, 0.08],
     ]
     return {
       box: (T: number): Box | null => (eff(T) >= 3.2 || claimIn(T) * (1 - claimOut(T)) < 0.05 ? null : b),
       padPx: 6,
     }
-  }, [px, py, w, h])
+  }, [px, py, w, h, text.x])
   useWorldObstacle('intro-claim', obstacle)
   return (
     <group ref={group}>
-      <mesh geometry={geo} material={ink} renderOrder={45} scale={[w + size * 0.2, h + size * 0.2, 1]} position={[0, 0, -0.005]} />
-      <mesh geometry={geo} material={mat} renderOrder={46} scale={[w, h, 1]} />
-      <SdfText font="barlowBold" text="AREA = FITNESS" size={size} color={PAL.ink} opacity={(T) => Math.min(1, op(T) * 1.25)} position={[0, -0.02, 0.01]} letterSpacing={0.04} renderOrder={47} />
+      <Plates plates={plate} radius={h * 0.24} z={0} vis={() => 1} opacity={op} renderOrder={46} />
+      <SdfText
+        font="barlowBold"
+        text="AREA = FITNESS"
+        size={size}
+        color={PAL.ink}
+        opacity={(T) => Math.min(1, op(T) * 1.25)}
+        position={[0, -0.02, 0.01]}
+        letterSpacing={0.04}
+        renderOrder={47}
+        onSync={onSync}
+      />
     </group>
   )
 }

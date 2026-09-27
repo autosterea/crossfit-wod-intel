@@ -9,18 +9,39 @@ import { useLabels, useWorldObstacle, type WorldObstacle } from '../../story/lab
 import { at } from '../../story/cue'
 import type { Box, LabelSpec, V3 } from '../../story/types'
 import type { IntroLayout } from './layout'
-import { N_PTS, REVERSED, closeIndex, dialInk, heroShapes, humpInk, humpsSize, morphFlow, penReversed, pointColors, segColors, toSegments, type HeroShapes } from './introMath'
+import {
+  N_PTS,
+  REVERSED,
+  cellDy,
+  closeIndex,
+  dialInk,
+  footOf,
+  heroShapes,
+  humpInk,
+  humpsSize,
+  morphFlow,
+  penReversed,
+  pointColors,
+  segColors,
+  toSegments,
+  DOT_R,
+  type HeroShapes,
+} from './introMath'
 import {
   BEAT,
+  MORPH_SHARE,
   STAGGER,
+  WIN,
+  WIN_W,
   closeGlint,
   copyOn,
   dockX,
   dockY,
   dotPop,
+  dotPopMap,
   eff,
-  fold,
   fullName,
+  glyphDraw,
   heroOn,
   inkProgress,
   morphK,
@@ -43,7 +64,8 @@ import { exploreDim } from './emphasis'
    the ten sides are the ten skills); when the line moves on, a still copy
    holds the cell. The rest frame of I1 is the four models, large and
    named. In I2 they dock to the D.1 row (short names) as the chart
-   arrives, and in I4 each flies into its map tile.
+   arrives; in I4, hidden since I3, each is redrawn by the pen in its
+   map tile, one stroke at a time, so nothing crosses the stage.
    ========================================================================= */
 
 /** The model each copy becomes in the map: tiles 01, 02, 03 and 05. */
@@ -53,23 +75,31 @@ const NAMES = ['skills', 'hopper', 'pathways', 'continuum'].map((k) => MODULES.f
 const FULL_TEXT = NAMES.map((m) => m.label)
 const SHORT_TEXT = NAMES.map((m) => m.mobileLabel ?? m.label)
 
-/** Copy c's transform at T: its cell (I1) -> its docked slot (I2) -> its tile (I4). */
+/**
+ * Copy c's transform at T: its cell (I1, the humps standing on the dial's
+ * floor line) -> its docked slot (I2) -> its tile (I4). In I4 the copy is
+ * not flown across the stage: it has been hidden since I3, and the pen
+ * redraws it in its tile (timeline.glyphDraw).
+ */
 export function copyXf(T: number, c: number, L: IntroLayout, out: { x: number; y: number; s: number }): void {
+  const r = L.cells.r
+  if (eff(T) >= BEAT.map) {
+    const tile = L.tiles.c[TILE_OF_COPY[c]]
+    out.x = tile[0]
+    out.y = tile[1] + L.tiles.lift
+    out.s = L.tiles.r / r
+    return
+  }
   const gx = dockX(T, c)
   const gy = dockY(T, c)
-  const d = fold(T, TILE_OF_COPY[c])
   const cx = L.cells.xs[c]
-  const cy = L.cells.ys[c]
+  const cy = L.cells.ys[c] + cellDy(L, c)
   const dx = L.dock.xs[c]
   const dy = L.dock.y
-  const ds = L.dock.r / L.cells.r
-  const tile = L.tiles.c[TILE_OF_COPY[c]]
-  const tx = tile[0]
-  const ty = tile[1] + L.tiles.lift
-  const ts = L.tiles.r / L.cells.r
-  out.x = cx + (dx - cx) * gx + (tx - dx) * d
-  out.y = cy + (dy - cy) * gy + (ty - dy) * d
-  out.s = 1 + (ds - 1) * gy + (ts - ds) * d
+  const ds = L.dock.r / r
+  out.x = cx + (dx - cx) * gx
+  out.y = cy + (dy - cy) * gy
+  out.s = 1 + (ds - 1) * gy
 }
 
 /* ------------------------------ the hero ------------------------------ */
@@ -123,12 +153,26 @@ function inkVisible(T: number, j: number): number {
   return 1
 }
 
+/**
+ * One number that names the hero stroke's shape at T: the title slide before
+ * the first morph (-2..-1), w + k while morph w runs, w while shape w rests.
+ * It changes only while the line moves, so a pen at rest writes nothing.
+ */
+function heroKey(T: number): number {
+  if (morphK(T, 0) <= 0) return -1 - titleSlide(T)
+  for (let w = 0; w < 4; w++) {
+    const k = morphK(T, w)
+    if (k < 1) return w + Math.max(0, k)
+  }
+  return 4
+}
+
 /** Per-layout hero buffers: a new layout gives new shapes and so new caches. */
 interface HeroCache {
   pts: Float32Array
   tmp: Float32Array
   key: number
-  /** the T each ink pen last wrote its segments at */
+  /** the hero key each ink pen last wrote its segments at */
   last: number[]
 }
 
@@ -137,11 +181,10 @@ function Hero({ L, shapes }: { L: IntroLayout; shapes: HeroShapes }) {
     () => ({ pts: new Float32Array(shapes.world[0].length), tmp: new Float32Array(shapes.world[0].length), key: NaN, last: [NaN, NaN, NaN, NaN, NaN] }),
     [shapes],
   )
-  const hero = (T: number): Float32Array => {
-    const e = eff(T)
-    if (e !== cache.key) {
+  const hero = (T: number, key: number): Float32Array => {
+    if (key !== cache.key) {
       writeHero(T, shapes, 0.5, cache.pts, cache.tmp)
-      cache.key = e
+      cache.key = key
     }
     return cache.pts
   }
@@ -172,11 +215,11 @@ function Hero({ L, shapes }: { L: IntroLayout; shapes: HeroShapes }) {
           opacity={(T) => inkVisible(T, j)}
           update={(T, s) => {
             if (!inkVisible(T, j)) return false
-            const e = eff(T)
-            if (cache.last[j] === e) return false
-            cache.last[j] = e
+            const key = heroKey(T)
+            if (cache.last[j] === key) return false
+            cache.last[j] = key
             // a reversed pen is written from the stroke's end, so its draw-on rides that morph's front
-            toSegments(hero(T), s, penReversed(j))
+            toSegments(hero(T, key), s, penReversed(j))
             return true
           }}
         />
@@ -188,8 +231,8 @@ function Hero({ L, shapes }: { L: IntroLayout; shapes: HeroShapes }) {
 /* ------------------------------ the copies ----------------------------- */
 
 const xf = { x: 0, y: 0, s: 1 }
-/** world radius of a drum dot at full size */
-const DOT_R = 0.2
+/** a copy's stroke: whole in I1 and I2; in I4 the pen redraws it in its tile */
+const copyDraw = (T: number, c: number) => (eff(T) >= BEAT.map ? glyphDraw(T, c) : 1)
 
 function Copy({ L, shapes, c }: { L: IntroLayout; shapes: HeroShapes; c: number }) {
   const group = useRef<THREE.Group>(null)
@@ -214,6 +257,9 @@ function Copy({ L, shapes, c }: { L: IntroLayout; shapes: HeroShapes; c: number 
         pointColors={pc}
         width={PEN.data}
         renderOrder={34}
+        head
+        hot
+        progress={(T) => copyDraw(T, c)}
         opacity={(T) => (copyOn(T, c) ? rowFade(T) : 0)}
         dim={(T) => Math.max(0.2, rowDim(T) * exploreDim(TILE_OF_COPY[c]))}
       />
@@ -241,7 +287,7 @@ function DrumDots({ L, shapes }: { L: IntroLayout; shapes: HeroShapes }) {
         out[2] = 0.06
         const vis = rowFade(T)
         if (vis <= 0.002) return 0
-        return dotPop(T, i) * (0.45 + 0.55 * d.s)
+        return (eff(T) >= BEAT.map ? dotPopMap(T, i) : dotPop(T, i)) * (0.45 + 0.55 * d.s)
       }}
       opacity={(T) => Math.min(1, rowFade(T)) * (0.35 + 0.65 * Math.max(0, (rowDim(T) - 0.35) / 0.65)) * exploreDim(1)}
     />
@@ -253,20 +299,45 @@ function DrumDots({ L, shapes }: { L: IntroLayout; shapes: HeroShapes }) {
 /** 1 at full brightness, 0.45 with the row dimmed under the chart. */
 const rowLabelDim = (T: number) => 0.45 + 0.55 * Math.max(0, (rowDim(T) - 0.35) / 0.65)
 
-function useModelLabels(L: IntroLayout, shapes: HeroShapes) {
+/**
+ * While the line travels from the drum down to the humps (morph 2) it has to
+ * cross the band of the top row's names: its front and pen pass the Skills
+ * name early in the morph, the rest of the stroke falls past the Hopper's
+ * name until the humps land. Each name steps back while the line passes it
+ * (and returns the moment it is clear), so the newest idea is never under an
+ * old label (L3). `c` is the model whose name is crossed.
+ */
+const ramp = (x: number, a: number, b: number) => (x <= a ? 0 : x >= b ? 1 : (x - a) / (b - a))
+const LAND2 = BEAT.models + WIN[2] + WIN_W * MORPH_SHARE
+const crossing = (T: number, c: number) => {
+  if (c > 1) return 0
+  const k = morphK(T, 2)
+  if (k <= 0) return 0
+  if (c === 0) return ramp(k, 0.12, 0.22) * (1 - ramp(k, 0.55, 0.7))
+  return ramp(k, 0.2, 0.3) * (1 - ramp(eff(T), LAND2, LAND2 + 0.025))
+}
+
+function useModelLabels(L: IntroLayout) {
   const specs = useMemo<LabelSpec[]>(() => {
-    // one baseline per row: every name hangs below the lowest mark of the
-    // row, the tallest glyph's foot or the drum's bottom dot (DrumDots size)
-    const half = Math.max(...shapes.half)
-    const dotR = Math.max(...shapes.dots.map((d) => -d[1]))
-    const foot = (s: number) => Math.max(half * s, dotR * s + DOT_R * (0.45 + 0.55 * s))
+    // I1: every name in a row hangs one gap under that row's lowest mark (the
+    // drum's bottom dot; the humps and the dial share one floor line), so no
+    // name floats loose. Docked (I2): one baseline under the whole row.
+    const ys = L.cells.ys
+    const rowLow = ys.map((y) => {
+      let low = Infinity
+      for (let m = 0; m < ys.length; m++) if (Math.abs(ys[m] - y) < 1e-6) low = Math.min(low, ys[m] + cellDy(L, m) - footOf(L, m, 1))
+      return low
+    })
+    const dockFoot = (s: number) => Math.max(footOf(L, 0, s), footOf(L, 1, s), footOf(L, 2, s), footOf(L, 3, s))
     const anchorOf = (c: number) => {
       const out: [number, number, number] = [0, 0, 0]
       const t = { x: 0, y: 0, s: 1 }
       return (T: number): V3 => {
         copyXf(T, c, L, t)
+        const gy = eff(T) >= BEAT.map ? 1 : dockY(T, c)
+        const docked = t.y - dockFoot(t.s)
         out[0] = t.x
-        out[1] = t.y - foot(t.s) - 0.06
+        out[1] = rowLow[c] + (docked - rowLow[c]) * gy - 0.06
         out[2] = 0.02
         return out
       }
@@ -285,7 +356,7 @@ function useModelLabels(L: IntroLayout, shapes: HeroShapes) {
       priority: 72,
       required: true,
       // named as it closes (D.1), held through the I1 rest, gone as it docks
-      cue: (T: number) => fullName(T, c),
+      cue: (T: number) => fullName(T, c) * (1 - 0.8 * crossing(T, c)),
     }))
     const short = NAMES.map<LabelSpec>((m, c) => ({
       id: `intro-m-${c}`,
@@ -304,7 +375,7 @@ function useModelLabels(L: IntroLayout, shapes: HeroShapes) {
       cue: (T: number) => shortName(T, c) * rowLabelDim(T) * (1 - at(eff(T), BEAT.lifetime, 0, 0.2)),
     }))
     return [...full, ...short]
-  }, [L, shapes])
+  }, [L])
   useLabels(specs)
 
   // I2: the docked row is a mark the axis titles never sit on
@@ -330,7 +401,7 @@ function useModelLabels(L: IntroLayout, shapes: HeroShapes) {
 
 export function TheLine({ L }: { L: IntroLayout }) {
   const shapes = useMemo(() => heroShapes(L), [L])
-  useModelLabels(L, shapes)
+  useModelLabels(L)
   return (
     <>
       <Hero L={L} shapes={shapes} />

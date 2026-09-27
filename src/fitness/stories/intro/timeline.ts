@@ -116,10 +116,10 @@ export const fullName = (T: number, c: number) => nameIn(T, c) * (1 - A(T, BEAT.
 /** The short name rides the docked copy (I2), dimmed with the row, gone in I3. */
 export const shortName = (T: number, c: number) => A(T, BEAT.definition, DOCK_Y[c][1] - 0.01, DOCK_Y[c][1] + 0.03)
 
-/** The docked row: dimmed to 35% under the chart (I2), gone in I3, back for the map (I4). */
-export const rowDim = (T: number) => 1 - 0.65 * A(T, BEAT.definition, 0, 0.15) + 0.65 * A(T, BEAT.map, 0, 0.25)
-/** Gone in I3; in I4 the glyphs fade back in only once they are already flying to their tiles. */
-export const rowFade = (T: number) => 1 - A(T, BEAT.lifetime, 0, 0.2) + A(T, BEAT.map, 0.12, 0.24)
+/** The docked row: dimmed to 35% under the chart (I2), gone in I3; full again in the map (I4). */
+export const rowDim = (T: number) => (eff(T) >= BEAT.map ? 1 : 1 - 0.65 * A(T, BEAT.definition, 0, 0.15))
+/** Gone in I3; in I4 each glyph is shown again only as the pen redraws it in its tile (glyphDraw). */
+export const rowFade = (T: number) => (eff(T) >= BEAT.map ? 1 : 1 - A(T, BEAT.lifetime, 0, 0.2))
 
 /* ---------------------------- I2 definition ---------------------------- */
 
@@ -143,46 +143,95 @@ export const sliceMorph = (T: number) => A(T, BEAT.lifetime, 0.05, 0.25, ease.mo
 export const extrude = (T: number) => A(T, BEAT.lifetime, 0.1, 0.7, ease.draw)
 /** the back edge is a hot scanner line while ages are added, then rests */
 export const scannerHot = (T: number) => (extrude(T) > 0 ? 1 - A(T, BEAT.lifetime, 0.7, 0.86) : 0)
-export const skirtIn = (T: number) => A(T, BEAT.lifetime, 0.1, 0.3)
+/** the walls of light arrive with the extrusion and leave first as the map begins */
+export const wallsIn = (T: number) => A(T, BEAT.lifetime, 0.1, 0.16) * (1 - A(T, BEAT.map, 0, 0.05))
+/**
+ * The travelling slice: while the ages are added, the back wall carries the
+ * I2 area's light back through the ages (at HOT of its density), then it
+ * settles to the density of the rest of the volume (0.72 to 0.9).
+ */
+export const backHot = (T: number) => A(T, BEAT.lifetime, 0.08, 0.14) * (1 - A(T, BEAT.lifetime, 0.72, 0.9, ease.settle))
 export const ageAxisDraw = (T: number) => A(T, BEAT.lifetime, 0.1, 0.7, ease.draw)
-/** the age axis belongs to the upright landscape; it leaves before the fold */
-export const ageAxisOut = (T: number) => 1 - A(T, BEAT.map, 0, 0.12)
+/** the age axis belongs to the upright landscape; it leaves first as the map begins */
+export const ageAxisOut = (T: number) => 1 - A(T, BEAT.map, 0, 0.06)
 /**
  * The power axis and its ticks step back while the landscape stands (the
  * surface's own height and isolines read power there), and return as the
  * chart folds into the Capacity tile.
  */
 export const powerAxisOut = (T: number) => A(T, BEAT.lifetime, 0.02, 0.2, ease.settle) * (1 - A(T, BEAT.map, 0, 0.3))
+/** The I2 area's density kept by the front face (the first slice) of the lifetime volume. */
+export const FACE_REST = 0.55
 /**
- * The area is one face of the volume in I3: it recedes to a whisper so the
- * lit lifetime surface speaks (L3), and comes back as it folds into the
- * Capacity tile.
+ * The area is the FRONT SLICE of the volume in I3: its light hands over to
+ * the travelling back wall and it rests at FACE_REST, still recognisably the
+ * I2 area (L3: the lit surface and the travelling slice speak). It returns to
+ * full as it folds into the Capacity tile.
  */
-export const faceDim = (T: number) => 1 - 0.95 * A(T, BEAT.lifetime, 0.1, 0.45, ease.settle) + 0.95 * A(T, BEAT.map, 0, 0.3)
-export const ageLabel = (T: number) => A(T, BEAT.lifetime, 0.55, 0.7) * (1 - A(T, BEAT.map, 0, 0.1))
-export const healthIn = (T: number) => A(T, BEAT.lifetime, 0.75, 1, ease.settle) * (1 - A(T, BEAT.map, 0, 0.08))
+export const faceDim = (T: number) =>
+  1 - (1 - FACE_REST) * A(T, BEAT.lifetime, 0.12, 0.5, ease.settle) + (1 - FACE_REST) * A(T, BEAT.map, 0, 0.3)
+/**
+ * The age axis is named as its pen draws it (L2 per element): "20" as the pen
+ * leaves the front, AGE as it passes the middle, "80" as it reaches that age.
+ * `f` is the share of the drawn axis where the label's anchor sits.
+ */
+export const ageTick = (T: number, f: number) => {
+  const d = ageAxisDraw(T)
+  const k = d <= f ? 0 : d >= f + 0.07 ? 1 : (d - f) / 0.07
+  return k * (1 - A(T, BEAT.map, 0, 0.05))
+}
+export const healthIn = (T: number) => A(T, BEAT.lifetime, 0.75, 1, ease.settle) * (1 - A(T, BEAT.map, 0, 0.05))
 
 /* -------------------------------- I4 map ------------------------------- */
 
 /**
- * Tile i (MODULES order) folds in with a 50 ms stagger (0.01 of the 5 s
- * beat), settle (D.1 I4). The chart (04) and the landscape (06) are the
- * subjects on screen and fold at once; the four glyphs launch from the
- * docked row 0.1 later, when the camera has come most of the way back
- * front-on, so they fly into the grid undistorted.
+ * I4 is an orderly handover, never a crossing (D.1 amendment in the report):
+ *   0.00 to 0.05  the walls, HEALTH and the ages leave (the age axis by 0.06);
+ *   0.00 to 0.30  the curve plus area folds into tile 04 first: the area stays
+ *                 the definition, and it clears the middle of the stage;
+ *   0.00 to 0.44  the lifetime surface shrinks and steps aside into its own
+ *                 lane (layout healthLane), goes DOWN it once the chart has
+ *                 landed, and only then ACROSS into tile 06, so the two never
+ *                 share the same part of the screen;
+ *   0.16 to 0.52  the pen redraws the four models (hidden since I3) in tiles
+ *                 01, 02, 03 and 05, one stroke at a time, each tile clear by
+ *                 then: nothing ever flies across the stage;
+ *   rings and names light 01, 02, 03, 05 first (the four models landing),
+ *   then 04 CAPACITY and 06 HEALTH, so the count visibly grows from 4 to 6.
  */
-const FOLD_START = [0.1, 0.1, 0.1, 0, 0.1, 0]
-export const fold = (T: number, i: number) => {
-  const a = FOLD_START[i] + 0.01 * i
-  return A(T, BEAT.map, a, a + 0.4, ease.settle)
-}
+const FOLD_START = [0, 0, 0, 0, 0, 0] as const
+const FOLD_LEN = [0.3, 0.3, 0.3, 0.3, 0.3, 0.16] as const
+/** the chart (04) folds into its tile; for the surface (06) this is its shrink and turn */
+export const fold = (T: number, i: number) => A(T, BEAT.map, FOLD_START[i], FOLD_START[i] + FOLD_LEN[i], ease.settle)
+/** the surface's flight to tile 06: aside into its lane... */
+export const surfAside = (T: number) => A(T, BEAT.map, 0, 0.12, ease.settle)
+/** ...down the lane... */
+export const surfDown = (T: number) => A(T, BEAT.map, 0.08, 0.32, ease.morph)
+/** ...then across into the tile */
+export const surfAcross = (T: number) => A(T, BEAT.map, 0.24, 0.44, ease.morph)
+
+/* The four glyphs (Line.TILE_OF_COPY: tiles 01, 02, 03, 05) are redrawn in this order, then 04 and 06 are framed. */
+const G0 = 0.16
+const GS = 0.09
+const GD = 0.09
+/** the end of the pen's redraw of glyph c (0..3, tiles 01, 02, 03, 05) */
+const glyphEnd = (c: number) => G0 + c * GS + GD
+/** the pen redraws glyph c in its tile, one stroke at a time (one hot head, L4) */
+export const glyphDraw = (T: number, c: number) => A(T, BEAT.map, G0 + c * GS, glyphEnd(c), ease.draw)
+/** when each tile's ring lights: at its glyph's landing, then 04 and 06 last */
+const RING_AT = [glyphEnd(0), glyphEnd(1), glyphEnd(2), 0.56, glyphEnd(3), 0.62] as const
+/** when each tile's name fades in: each model as it lands, then 04 and 06 (to 0.8) */
+const NAME_AT = [glyphEnd(0) + 0.04, glyphEnd(1) + 0.04, glyphEnd(2) + 0.04, 0.62, glyphEnd(3) + 0.04, 0.69] as const
 /** the faint accent ring of each tile */
-export const plateIn = (T: number, i: number) => A(T, BEAT.map, 0.3 + 0.01 * i, 0.55 + 0.01 * i, ease.settle)
-/** tile labels (0.50 to 0.80) */
-export const tileName = (T: number, i: number) => stagger(eff(T), BEAT.map + 0.5, BEAT.map + 0.8, i, 6, 0.5)
+export const plateIn = (T: number, i: number) => A(T, BEAT.map, RING_AT[i] - 0.03, RING_AT[i] + 0.12, ease.settle)
+/** tile labels */
+export const tileName = (T: number, i: number) => A(T, BEAT.map, NAME_AT[i], NAME_AT[i] + 0.11)
 /** the Health tile's slow turn starts once it has landed */
 export const turnOn = (T: number) => A(T, BEAT.map, 0.45, 0.85, ease.settle)
 /** the tile's ridgelines and crisp front edge draw on as it folds in */
-export const tileLines = (T: number) => A(T, BEAT.map, 0.18, 0.45, ease.settle)
+export const tileLines = (T: number) => A(T, BEAT.map, 0.12, 0.38, ease.settle)
 /** the tiles are tappable once they have landed */
 export const tilesLive = (T: number) => A(T, BEAT.map, 0.5, 0.6) > 0
+/** the drum's five dots pop back onto its rim as the pen closes it in tile 02 */
+export const dotPopMap = (T: number, i: number) =>
+  stagger(eff(T), BEAT.map + G0 + GS + 0.5 * GD, BEAT.map + glyphEnd(1) + 0.04, i, 5, 0.6, ease.snap)

@@ -149,16 +149,23 @@
   color: var(--st-body);
 }
 
-/* the peek sheet's one-line blurb of the picked model (B.5 rows use the
-   same one-line blurb); the expanded sheet and desktop show it in full */
+/* the peek sheet names the picked model by its full title (every MODULES
+   title fits in two lines at 360 px, so nothing is ever cut mid-word); the
+   expanded sheet and desktop show the title and full blurb in the model card */
 .in-ex-line {
   margin: 8px 2px 0;
-  font-size: 13px;
-  line-height: 1.35;
-  color: var(--st-body);
-  white-space: nowrap;
+  font-family: var(--st-cond);
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1.3;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--st-chalk);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
   overflow: hidden;
-  text-overflow: ellipsis;
   border-left: 2px solid var(--acc);
   padding-left: 8px;
 }

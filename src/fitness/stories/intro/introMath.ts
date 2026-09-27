@@ -144,21 +144,43 @@ function toRim(pts: Float32Array, cx: number, cy: number, r: number): Float32Arr
 
 /** Humps width and height for a cell radius. */
 export const humpsSize = (r: number) => ({ w: 2 * r * 1.12, h: 2 * r * 0.78 })
+/** The drum's rim radius as a share of the cell radius: with its dots it spans about the decagon's size. */
+export const DRUM_K = 0.92
+/** World radius of a drum dot at full size. */
+export const DOT_R = 0.2
+
+/**
+ * Model c's vertical offset inside its I1 cell: the humps stand on the same
+ * floor line as the dial beside them (their baseline at the cell's rim), so
+ * every name hangs the same distance under its model. The offset blends out
+ * as the models dock (Line.copyXf).
+ */
+export function cellDy(L: IntroLayout, c: number): number {
+  return c === 2 ? -(L.cells.r - humpsSize(L.cells.r).h / 2) : 0
+}
+
+/** Distance from model c's origin down to its lowest mark at scale s (the drum: its bottom dot). */
+export function footOf(L: IntroLayout, c: number, s: number): number {
+  const r = L.cells.r
+  if (c === 1) return r * DRUM_K * s + DOT_R * (0.45 + 0.55 * s)
+  if (c === 2) return (humpsSize(r).h / 2) * s
+  return r * s
+}
 
 export function heroShapes(L: IntroLayout): HeroShapes {
   const r = L.cells.r
   const u = L.underline
   const line = shift(underline(u.x1 - u.x0), (u.x0 + u.x1) / 2, u.y)
   const hs = humpsSize(r)
-  const local = [decagon(r), drumGlyph(r * 0.97), humps(hs.w, hs.h), dialGlyph(r)]
-  const world = [line, ...local.map((p, c) => shift(p, L.cells.xs[c], L.cells.ys[c]))]
+  const local = [decagon(r), drumGlyph(r * DRUM_K), humps(hs.w, hs.h), dialGlyph(r)]
+  const world = [line, ...local.map((p, c) => shift(p, L.cells.xs[c], L.cells.ys[c] + cellDy(L, c)))]
   for (let j = 1; j < world.length; j++) if (penReversed(j)) world[j] = reversed(world[j])
   return {
     world,
     soft: [null, null, null, null, toRim(world[4], L.cells.xs[3], L.cells.ys[3], r)],
     local,
     half: local.map(halfHeight),
-    dots: drumDots(r * 0.97),
+    dots: drumDots(r * DRUM_K),
   }
 }
 
@@ -253,16 +275,16 @@ export function pointColors(n: number, ink: (i: number) => [number, number, numb
   return out
 }
 
-/** Polyline -> segment buffer (in place); `rev` writes it from the last point back, so draw-on runs from the end. */
+/**
+ * Polyline -> segment buffer (in place, scalar writes: no views, no
+ * allocation); `rev` writes it from the last point back, so draw-on runs
+ * from the end.
+ */
 export function toSegments(pts: Float32Array, segs: Float32Array, rev = false): void {
   const n = pts.length / 3
-  if (!rev) {
-    for (let i = 0; i < n - 1; i++) segs.set(pts.subarray(i * 3, i * 3 + 6), i * 6)
-    return
-  }
   for (let k = 0; k < n - 1; k++) {
-    const a = (n - 1 - k) * 3
-    const b = (n - 2 - k) * 3
+    const a = (rev ? n - 1 - k : k) * 3
+    const b = (rev ? n - 2 - k : k + 1) * 3
     const o = k * 6
     segs[o] = pts[a]
     segs[o + 1] = pts[a + 1]

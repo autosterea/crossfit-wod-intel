@@ -6,11 +6,11 @@ import { useIntroExplore } from './exploreStore'
 import './intro.css'
 
 /* Intro explore controls (D.1 "Explore (intro)"). Peek (whole rows only):
-   the six models as a chip row and the picked model's blurb on one line
-   (B.5's one-line blurb), both marked .st-ex-peek; the map lights the
-   picked tile, and every tile stays tappable. Expanded: the picked model's
-   title, full blurb and a button that opens it. Every string already
-   exists in MODULES (fitnessData.ts); "Open" is UI copy. */
+   the six models as a chip row and the picked model's full title (it always
+   fits in two lines, so no sentence is ever cut), both marked .st-ex-peek;
+   the map lights the picked tile, and every tile stays tappable. Expanded:
+   the picked model's title, full blurb and a button that opens it. Every
+   string already exists in MODULES (fitnessData.ts); "Open" is UI copy. */
 
 export default function IntroExplore() {
   const sel = useIntroExplore((s) => s.sel)
@@ -27,7 +27,7 @@ export default function IntroExplore() {
         onChange={(v) => setSel(v)}
       />
       <p className="st-ex-peek in-ex-line" style={{ ['--acc' as string]: m.accent }}>
-        {m.blurb}
+        {m.title}
       </p>
       <div className="st-ex-model" style={{ ['--acc' as string]: m.accent }}>
         <div className="st-ex-model-h">
