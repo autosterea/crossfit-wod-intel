@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { DEFINITION_TEXT, HUNDRED_WORDS, INTRO_TEXT, MODULES, SOURCES } from '../../fitnessData'
 import type { FitnessView } from '../../lessonTypes'
 import { useFitnessStore } from '../../fitnessStore'
@@ -15,27 +14,7 @@ import './intro.css'
    legacy IntroView's, restyled.
    ========================================================================= */
 
-/**
- * STOPGAP for engine request 1 (remove when it lands): the caption card
- * renders its Read more block only for chapters with MODULE_COPY, so the
- * intro's expanded detent is an empty 72% glass card that squeezes the
- * stage to about 200 px. Hold the intro card at peek or default. It lives
- * here, in the DOM hub that FitnessApp renders for the intro whatever the
- * WebGL state, so it also covers the no-WebGL fallback.
- */
-function useIntroDetentClamp() {
-  useEffect(() => {
-    const clamp = () => {
-      const st = useStoryStore.getState()
-      if (st.def?.key === 'intro' && st.detent === 'expanded') st.setDetent('default')
-    }
-    clamp()
-    return useStoryStore.subscribe(clamp)
-  }, [])
-}
-
 export default function IntroNotes({ stageRef }: { stageRef: React.RefObject<HTMLDivElement | null> }) {
-  useIntroDetentClamp()
   const def = useStoryStore((s) => s.def)
   const reduced = useStoryStore((s) => s.reduced)
   const navigate = useFitnessStore((s) => s.navigate)

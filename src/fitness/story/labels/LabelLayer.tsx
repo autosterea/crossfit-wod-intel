@@ -267,7 +267,9 @@ export function LabelPlacer() {
     }
     if (!dirty) return
 
-    // ---- inputs
+    // ---- inputs. The placement fields of each spec (prefer, center, gapPx,
+    // priority, only) are read here on every pass and never cached: chapters
+    // may declare them as getters of story time (types.ts LabelSpec, H.53).
     let n = 0
     for (const e of registry.values()) {
       if (!e.el) continue

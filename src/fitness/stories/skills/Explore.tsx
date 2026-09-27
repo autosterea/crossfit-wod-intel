@@ -1,7 +1,8 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useSyncExternalStore } from 'react'
+import { useLayoutEffect, useMemo, useRef, useSyncExternalStore } from 'react'
 import { ARCHETYPES, MODULE_COPY, PAL, SKILLS } from '../../fitnessData'
 import { Legend, Readout } from '../../ui'
 import { ChipRadio } from '../../story/ui/ChipRadio'
+import { setExploreSheetOpen } from '../../story/ui/ExplorePanel'
 import { focusRect, subscribeFocus } from '../../story/camera/focusRect'
 import { CLASS_COLOR, CLASS_LABEL, GENERALIST, fmtVal, floorOf, profileOf, rangeOf, shortName, weakestNames } from './skillsMath'
 import { CUSTOM, NONE, useSkExplore, type SkView } from './exploreStore'
@@ -138,19 +139,15 @@ export default function SkillsExplore() {
   const aOptions = useMemo(() => [...ARCHETYPES.map((a) => ({ value: a.name, label: compact ? shortName(a.name) : a.name })), { value: CUSTOM, label: CUSTOM }], [compact])
   const bOptions = useMemo(() => [{ value: NONE, label: NONE }, ...ARCHETYPES.map((a) => ({ value: a.name, label: compact ? shortName(a.name) : a.name }))], [compact])
   useChipPeek(peekRow, compact)
-  // a choice made elsewhere (a grid cell, a drag into Custom) scrolls its chip into view
-  useEffect(() => {
-    const el = root.current?.querySelector<HTMLElement>('[role="radiogroup"][aria-label="Athlete"] [aria-checked="true"]')
-    el?.scrollIntoView({ block: 'nearest', inline: 'nearest' })
-  }, [athlete])
+  // a choice made elsewhere (a grid cell, a drag into Custom) scrolls its
+  // chip into view: the engine's ChipRadio does it for every row (H.53)
 
   const pickView = (v: SkView) => {
     set().setView(v)
     if (v !== 'grid') return
     // the lineup needs the stage: on a phone an expanded sheet drops to the
-    // peek (the engine's own grab handle), where the Grid gets its 3 x 5 layout
-    const panel = root.current?.closest('.st-explore')
-    if (panel?.classList.contains('is-open')) panel.querySelector<HTMLButtonElement>('.st-grab')?.click()
+    // peek, where the Grid gets its 3 x 5 layout
+    setExploreSheetOpen(false)
   }
 
   return (

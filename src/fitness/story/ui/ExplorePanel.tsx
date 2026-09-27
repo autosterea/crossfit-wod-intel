@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useStoryStore } from '../store'
 import { cameraBus } from '../camera/CameraDirector'
 import { IconBack, IconReset } from './icons'
@@ -10,10 +10,27 @@ import { useObservedCard } from '../camera/focusRect'
    hosts the chapter's Explore component plus the engine's Back to story,
    Reset view and the optional Scrub | Orbit toggle. */
 
+/*
+ * A chapter can open or collapse the phone controls sheet (Skills drops an
+ * expanded sheet to the peek when its Grid needs the stage). Only the mounted
+ * panel listens; on desktop the panel has no detents and this is a no-op.
+ * Integration, H.53 (Skills clicked the engine's own grab handle).
+ */
+let sheetSetter: ((open: boolean) => void) | null = null
+export function setExploreSheetOpen(open: boolean): void {
+  sheetSetter?.(open)
+}
+
 export function ExplorePanel({ cardRef, shell }: { cardRef: React.RefObject<HTMLDivElement | null>; shell: string }) {
   const def = useStoryStore((s) => s.def)
   const scrub = useStoryStore((s) => s.scrub)
   const [open, setOpen] = useState(false)
+  useEffect(() => {
+    sheetSetter = setOpen
+    return () => {
+      if (sheetSetter === setOpen) sheetSetter = null
+    }
+  }, [])
   const phone = shell === 'phone' || shell === 'tablet'
   const observe = useObservedCard(cardRef)
   if (!def) return null

@@ -1,34 +1,19 @@
 import type { ReactNode } from 'react'
 import type { ModuleKey } from './lessonTypes'
-import { sourcesFor, CROSS_LINKS, MODULE_COPY, moduleByKey, type CrossLink } from './fitnessData'
+import { sourcesFor, CROSS_LINKS, type CrossLink } from './fitnessData'
 
 /* =========================================================================
-   Shared UI kit for the What Is Fitness lesson.
-   - "Control" widgets (Segmented, Slider, Presets, Readout, Bar, Legend) are
-     styled with the dark .wf-* classes for use inside the stage glass panel.
-   - "Content" widgets (LessonHeading, SectionCard, KeyPoints, SourceList,
-     CrossLinks) are theme-aware for the scrolling page below the stage.
+   Shared UI widgets for the What Is Fitness lesson.
+   - "Control" widgets (Slider, Readout, Legend) are styled with the dark
+     .wf-* classes for the explore panel (always dark glass).
+   - "Content" widgets (KeyPoints, SourceList, CrossLinks) are theme-aware,
+     for the Notes below the stage.
+   The legacy page shell (ModulePage, LessonHeading, SectionCard, StatTile)
+   and the unused controls (Segmented, PresetButtons, Bar, ControlHead) were
+   retired with the LessonStage pages at integration (H.52).
    ========================================================================= */
 
 /* ------------------------- content (theme-aware) ----------------------- */
-
-export function LessonHeading({ kicker, title, right }: { kicker?: string; title: string; right?: ReactNode }) {
-  return (
-    <div className="flex items-end justify-between gap-4 mb-5">
-      <div>
-        {kicker && (
-          <div className="wf-condensed text-[12px] uppercase tracking-[0.2em] text-[#91C640] mb-1">{kicker}</div>
-        )}
-        <h2 className="wf-display text-2xl sm:text-3xl text-[var(--text-primary)]">{title}</h2>
-      </div>
-      {right}
-    </div>
-  )
-}
-
-export function SectionCard({ children, className = '' }: { children: ReactNode; className?: string }) {
-  return <div className={`wf-card p-4 sm:p-5 ${className}`}>{children}</div>
-}
 
 export function KeyPoints({ points, accent = '#91C640' }: { points: string[]; accent?: string }) {
   return (
@@ -40,18 +25,6 @@ export function KeyPoints({ points, accent = '#91C640' }: { points: string[]; ac
         </li>
       ))}
     </ul>
-  )
-}
-
-export function StatTile({ stat, label, sub, accent }: { stat: string; label: string; sub?: string; accent?: string }) {
-  return (
-    <div className="wf-card p-3.5 text-center">
-      <div className="wf-display text-3xl sm:text-4xl" style={{ color: accent ?? 'var(--text-primary)' }}>
-        {stat}
-      </div>
-      <div className="wf-condensed uppercase tracking-[0.12em] text-[11px] text-[#91C640] mt-1">{label}</div>
-      {sub && <div className="text-[10.5px] text-[var(--text-muted)] mt-0.5">{sub}</div>}
-    </div>
   )
 }
 
@@ -99,102 +72,7 @@ export function CrossLinks({ moduleKey }: { moduleKey: ModuleKey }) {
   )
 }
 
-/**
- * Standard page shell for a module: the interactive stage (passed as children)
- * followed by the faithful explanation, key points, optional module-specific
- * `extra` sections, then cross-links and sources. Keeps all six module pages
- * visually consistent so each module file only has to build its 3D scene.
- */
-export function ModulePage({
-  moduleKey,
-  children,
-  extra,
-}: {
-  moduleKey: ModuleKey
-  children: ReactNode
-  extra?: ReactNode
-}) {
-  const meta = moduleByKey(moduleKey)
-  const copy = MODULE_COPY[moduleKey]
-  return (
-    <div className="max-w-6xl mx-auto px-4">
-      {children}
-
-      <div className="mt-8 grid lg:grid-cols-3 gap-5 items-start">
-        <div className="lg:col-span-2 wf-card p-5 sm:p-6 wf-rise wf-rise-1">
-          <LessonHeading kicker={`${meta.num} / ${copy.eyebrow}`} title={meta.title} />
-          <p className="text-[14px] leading-relaxed text-[var(--text-secondary)]">{copy.body}</p>
-        </div>
-        <div className="wf-card p-5 wf-rise wf-rise-2">
-          <div className="wf-condensed text-[12px] uppercase tracking-[0.2em] text-[var(--text-tertiary)] mb-3">
-            Key points
-          </div>
-          <KeyPoints points={copy.keyPoints} accent={meta.accent} />
-        </div>
-      </div>
-
-      {extra && <div className="mt-6">{extra}</div>}
-
-      <div className="mt-6 grid lg:grid-cols-3 gap-5 items-start">
-        <div className="lg:col-span-2">
-          <div className="wf-condensed text-[12px] uppercase tracking-[0.2em] text-[var(--text-tertiary)] mb-3">
-            Keep exploring
-          </div>
-          <CrossLinks moduleKey={moduleKey} />
-        </div>
-        <div className="wf-card p-5">
-          <SourceList moduleKey={moduleKey} />
-        </div>
-      </div>
-    </div>
-  )
-}
-
 /* ------------------------- controls (dark glass) ----------------------- */
-
-export function Segmented<T extends string>({
-  options,
-  value,
-  onChange,
-}: {
-  options: { value: T; label: string }[]
-  value: T
-  onChange: (v: T) => void
-}) {
-  return (
-    <div className="wf-btns">
-      {options.map((o) => (
-        <button
-          key={o.value}
-          className={`wf-btn ${o.value === value ? 'active' : ''}`}
-          onClick={() => onChange(o.value)}
-        >
-          {o.label}
-        </button>
-      ))}
-    </div>
-  )
-}
-
-export function PresetButtons<T extends string>({
-  options,
-  value,
-  onChange,
-}: {
-  options: T[]
-  value: T
-  onChange: (v: T) => void
-}) {
-  return (
-    <div className="wf-btns">
-      {options.map((o) => (
-        <button key={o} className={`wf-btn ${o === value ? 'primary' : ''}`} onClick={() => onChange(o)}>
-          {o}
-        </button>
-      ))}
-    </div>
-  )
-}
 
 export function Slider({
   label,
@@ -249,20 +127,6 @@ export function Readout({ label, value, sub, color }: { label: string; value: Re
   )
 }
 
-export function Bar({ label, value, color, max = 100 }: { label: string; value: number; color: string; max?: number }) {
-  return (
-    <div className="wf-bar-row">
-      <div className="wf-bar-top">
-        <span>{label}</span>
-        <span className="s">{Math.round(value)}</span>
-      </div>
-      <div className="wf-track">
-        <div className="wf-fill" style={{ width: `${Math.max(0, Math.min(100, (value / max) * 100))}%`, background: color }} />
-      </div>
-    </div>
-  )
-}
-
 export function Legend({ items }: { items: { label: string; color: string }[] }) {
   return (
     <div className="wf-legend">
@@ -272,15 +136,6 @@ export function Legend({ items }: { items: { label: string; color: string }[] })
           {it.label}
         </span>
       ))}
-    </div>
-  )
-}
-
-export function ControlHead({ children, right }: { children: ReactNode; right?: ReactNode }) {
-  return (
-    <div className="wf-c-head">
-      <span>{children}</span>
-      {right}
     </div>
   )
 }

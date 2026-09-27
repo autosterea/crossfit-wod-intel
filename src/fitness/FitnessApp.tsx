@@ -1,4 +1,4 @@
-import { Suspense, lazy, useEffect, useRef, useState, Component, type ReactNode } from 'react'
+import { Suspense, lazy, useEffect, useRef, useState } from 'react'
 import './fitness.css'
 import { useFitnessStore } from './fitnessStore'
 import { MODULES } from './fitnessData'
@@ -9,47 +9,17 @@ import { StoryStage } from './story/Stage'
 import { Notes } from './story/ui/Notes'
 import { useStoryStore } from './story/store'
 import { asset } from './story/url'
-import { cachedStory, hasStory, loadStory, prefetchStory } from './stories'
+import { cachedStory, loadStory, prefetchStory } from './stories'
 import type { StoryDef } from './story/types'
 
 /* =========================================================================
-   The /fitness shell. Chapters registered in stories/index.ts render on the
-   story engine (full-bleed stage, caption card, Notes below). The others
-   still render their legacy LessonStage module until they are migrated.
+   The /fitness shell: every view is a chapter on the story engine
+   (full-bleed stage, caption card, Notes below). The legacy LessonStage
+   pages were retired at integration (DESIGN.md G, H.52).
    ========================================================================= */
 
-const IntroView = lazy(() => import('./modules/IntroView'))
-const SkillsModule = lazy(() => import('./modules/SkillsModule'))
-const HopperModule = lazy(() => import('./modules/HopperModule'))
-const PathwaysModule = lazy(() => import('./modules/PathwaysModule'))
-const ContinuumModule = lazy(() => import('./modules/ContinuumModule'))
-const HealthModule = lazy(() => import('./modules/HealthModule'))
 // The intro's Notes are the lesson hub (DESIGN.md B.6), owned by its story chapter.
 const IntroNotes = lazy(() => import('./stories/intro/Notes'))
-
-class ViewErrorBoundary extends Component<{ children: ReactNode; name: string }, { error: Error | null }> {
-  state = { error: null as Error | null }
-  static getDerivedStateFromError(error: Error) {
-    return { error }
-  }
-  render() {
-    if (this.state.error) {
-      return (
-        <div className="p-6 my-8 mx-4 bg-red-500/10 border border-red-500/30 rounded-xl">
-          <h3 className="text-red-400 font-bold text-sm mb-2">Error in {this.props.name}</h3>
-          <pre className="text-xs text-red-600/80 whitespace-pre-wrap">{this.state.error.message}</pre>
-          <button
-            onClick={() => this.setState({ error: null })}
-            className="mt-3 px-3 py-1 text-xs bg-red-500/20 text-red-400 rounded hover:bg-red-500/30"
-          >
-            Retry
-          </button>
-        </div>
-      )
-    }
-    return this.props.children
-  }
-}
 
 const ORDER: FitnessView[] = ['intro', ...MODULES.map((m) => m.key as FitnessView)]
 const labelOf = (v: FitnessView) => (v === 'intro' ? 'Overview' : MODULES.find((m) => m.key === v)!.label)
@@ -135,14 +105,6 @@ function FitnessFooter() {
   )
 }
 
-function ViewLoading() {
-  return (
-    <div className="flex items-center justify-center min-h-[60vh]">
-      <div className="w-10 h-10 border-2 border-[#91C640]/30 border-t-[#91C640] rounded-full animate-spin" />
-    </div>
-  )
-}
-
 /**
  * A chapter on the story engine: stage, then Notes, then chapter cards.
  * The stage is PERSISTENT across story chapters (decision 15): StoryView and
@@ -199,24 +161,6 @@ function StoryView({ view }: { view: FitnessView }) {
   )
 }
 
-function LegacyView({ view }: { view: FitnessView }) {
-  return (
-    <main className="pt-5 st-legacy">
-      <Suspense fallback={<ViewLoading />}>
-        <ViewErrorBoundary name={view} key={view}>
-          {view === 'intro' && <IntroView />}
-          {view === 'skills' && <SkillsModule />}
-          {view === 'hopper' && <HopperModule />}
-          {view === 'pathways' && <PathwaysModule />}
-          {view === 'continuum' && <ContinuumModule />}
-          {view === 'health' && <HealthModule />}
-        </ViewErrorBoundary>
-      </Suspense>
-      <LessonNav />
-    </main>
-  )
-}
-
 export default function FitnessApp() {
   const route = useFitnessStore((s) => s.route)
   const syncFromLocation = useFitnessStore((s) => s.syncFromLocation)
@@ -265,7 +209,7 @@ export default function FitnessApp() {
   return (
     <div className="st-root min-h-screen bg-[var(--app-bg)]">
       <TopBar />
-      {hasStory(route.view) ? <StoryView view={route.view} key="story" /> : <LegacyView view={route.view} />}
+      <StoryView view={route.view} />
       <FitnessFooter />
     </div>
   )

@@ -7,6 +7,7 @@ import { cameraBus } from './camera/CameraDirector'
 import { pb, startBeat } from './playback'
 import { dropQueryKeys } from './url'
 import { readyState } from './ready'
+import { suppressHotspotClick } from './hotspots'
 import type { V3 } from './types'
 
 /* =========================================================================
@@ -69,13 +70,16 @@ export function handleScreenPositions(): { id: string; x: number; y: number }[] 
 const isUi = (t: EventTarget | null) =>
   t instanceof Element && !!t.closest('button, a, input, select, textarea, [data-no-gesture], .st-card, .st-explore, .st-sheet')
 
+/** a stage hotspot (story/hotspots.tsx): a button, but swipe-transparent in story mode */
+const hotOf = (t: EventTarget | null): Element | null => (t instanceof Element ? t.closest('.st-hot') : null)
+
 /* ------------------------------ stage --------------------------------- */
 
 export function useStageGestures(stageRef: { current: HTMLElement | null }): void {
   useEffect(() => {
     const el = stageRef.current
     if (!el) return
-    let start: { x: number; y: number; t: number; id: number } | null = null
+    let start: { x: number; y: number; t: number; id: number; hot: Element | null } | null = null
     let release: (() => void) | null = null
     const pointers = new Map<number, { x: number; y: number }>()
     let pinch0 = 0
@@ -189,13 +193,16 @@ export function useStageGestures(stageRef: { current: HTMLElement | null }): voi
     // outside the stage (over the top bar, outside the window) still ends it.
     const onDown = (e: PointerEvent) => {
       const st = useStoryStore.getState()
-      if (st.mode !== 'story' || isUi(e.target) || readyState.pendingView) return
+      suppressHotspotClick(null)
+      const hot = hotOf(e.target)
+      if (st.mode !== 'story' || (!hot && isUi(e.target)) || readyState.pendingView) return
       if (e.pointerType === 'mouse' && e.button !== 0) return
-      start = { x: e.clientX, y: e.clientY, t: e.timeStamp, id: e.pointerId }
+      start = { x: e.clientX, y: e.clientY, t: e.timeStamp, id: e.pointerId, hot }
       release?.()
       release = st.beginInteraction()
-      // touch keeps the browser's vertical pan (pan-y); mouse and pen capture
-      if (e.pointerType !== 'touch') {
+      // touch keeps the browser's vertical pan (pan-y); mouse and pen capture,
+      // except on a hotspot, whose own click must still reach the button
+      if (e.pointerType !== 'touch' && !hot) {
         try {
           el.setPointerCapture(e.pointerId)
         } catch {
@@ -216,8 +223,15 @@ export function useStageGestures(stageRef: { current: HTMLElement | null }): voi
       const dy = e.clientY - s.y
       const dt = e.timeStamp - s.t
       if (Math.abs(dx) > 48 && Math.abs(dx) > 1.5 * Math.abs(dy) && dt < 600) {
+        if (s.hot) suppressHotspotClick(s.hot)
         if (dx < 0) st.next()
         else st.prev()
+        return
+      }
+      if (s.hot) {
+        // a press on a hotspot: a tap belongs to the button (its click);
+        // anything that travelled is a gesture, not a tap
+        if (Math.hypot(dx, dy) >= 10) suppressHotspotClick(s.hot)
         return
       }
       if (dt < 250 && Math.hypot(dx, dy) < 8) {

@@ -122,6 +122,15 @@ export interface StoryDef {
 export type Tone = 'tick' | 'name' | 'callout' | 'readout' | 'legend'
 export type Dir = 'N' | 'NE' | 'E' | 'SE' | 'S' | 'SW' | 'W' | 'NW' | 'C'
 
+/**
+ * A label's spec. `anchor` and `cue` are functions of T. The placement
+ * fields `prefer`, `center`, `gapPx`, `priority` and `only` are READ ON EVERY
+ * PLACEMENT PASS, never snapshotted, so a chapter may declare them as
+ * getters that follow story time (a rail that rises takes precedence as it
+ * passes another, a name lifts over a tick, a spoke name rides its row's
+ * direction): Hopper, Pathways and Continuum rely on this (H.53). Keep a
+ * getter a cheap pure function of story state; it runs every placement.
+ */
 export interface LabelSpec {
   id: string
   text: string

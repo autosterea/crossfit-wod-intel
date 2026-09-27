@@ -11,7 +11,7 @@ import {
   type WorldObstacle,
 } from './registry'
 
-export { setLabelText, bumpObstacles } from './registry'
+export { setLabelText, setLabelColor, bumpObstacles } from './registry'
 export type { WorldObstacle, LabelMode } from './registry'
 
 export interface UseLabelsOpts {

@@ -125,6 +125,27 @@ export function setLabelText(id: string, text: string): void {
   if (e.txt && !e.short) e.txt.textContent = text
 }
 
+/**
+ * Imperative data-colour update (integration H.53; Skills and Continuum each
+ * wrote one). A label's data colour (its dot, border and callout text, the
+ * CSS variable --c) comes from `spec.color`; this recolours one label from
+ * story time or explore state without React, like setLabelText does for text:
+ * the skill names taking their class colour as the arcs pass (D.2 S1), a
+ * pinned chip following its value's colour. It writes only when the value
+ * changed for that label ELEMENT (a WeakMap keyed by the node, so a node
+ * that leaves the stage takes its entry with it and a new node for the same
+ * id starts clean). React never rewrites --c after mount unless the spec's
+ * own colour changes, so the imperative value holds. Allocation-free: pass a
+ * cached string (see Skills' rgba table).
+ */
+const colorWritten = new WeakMap<HTMLElement, string>()
+export function setLabelColor(id: string, css: string): void {
+  const el = registry.get(id)?.el
+  if (!el || colorWritten.get(el) === css) return
+  el.style.setProperty('--c', css)
+  colorWritten.set(el, css)
+}
+
 /* ------------------------------ obstacles ------------------------------ */
 
 /** A DOM obstacle: a rect in stage CSS px, or null when absent. */

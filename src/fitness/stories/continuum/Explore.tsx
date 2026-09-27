@@ -1,4 +1,4 @@
-import { useEffect, useRef, useSyncExternalStore } from 'react'
+import { useSyncExternalStore } from 'react'
 import { BIOMARKERS, CONTINUUM_EXAMPLES, PAL } from '../../fitnessData'
 import { Readout, Slider } from '../../ui'
 import { ChipRadio } from '../../story/ui/ChipRadio'
@@ -14,31 +14,6 @@ import { selectSpoke, spokeVersion, subscribeSpoke } from './keySel'
 
 const PROFILE_CHIPS = PROFILE_OPTIONS.map((p) => ({ value: p, label: p }))
 
-/**
- * The chip row scrolls sideways on a phone, and a drag on the dial (or a
- * slider) switches the profile to Custom, the last chip, often off-screen:
- * bring the checked chip into view whenever the profile changes (the kit's
- * ChipRadio only scrolls on its own arrow keys). Horizontal only, so the
- * sheet never jumps.
- */
-function useCheckedChipInView(row: React.RefObject<HTMLDivElement | null>, profile: string) {
-  useEffect(() => {
-    const host = row.current
-    const strip = host?.querySelector<HTMLElement>('[role=radiogroup]')
-    const chip = strip?.querySelector<HTMLElement>('[aria-checked=true]')
-    if (!strip || !chip) return
-    const s = strip.getBoundingClientRect()
-    const c = chip.getBoundingClientRect()
-    const pad = 16
-    let dx = 0
-    if (c.left < s.left + pad) dx = c.left - s.left - pad
-    else if (c.right > s.right - pad) dx = c.right - s.right + pad
-    if (!dx) return
-    const reduced = typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
-    strip.scrollBy({ left: dx, behavior: reduced ? 'auto' : 'smooth' })
-  }, [row, profile])
-}
-
 export default function ContinuumExplore() {
   const positions = useContExplore((s) => s.positions)
   const profile = useContExplore((s) => s.profile)
@@ -47,11 +22,9 @@ export default function ContinuumExplore() {
   const mean = meanOf(positions)
   const word = stateWord(mean)
   const titleCase = word.word[0] + word.word.slice(1).toLowerCase()
-  const host = useRef<HTMLDivElement>(null)
-  useCheckedChipInView(host, profile)
 
   return (
-    <div ref={host} className="st-ex">
+    <div className="st-ex">
       <ChipRadio label="Profile" className="st-ex-peek" options={PROFILE_CHIPS} value={profile} onChange={(v) => set().setProfile(v)} />
 
       <Readout

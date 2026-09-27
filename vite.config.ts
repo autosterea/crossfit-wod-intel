@@ -20,11 +20,51 @@ import tailwindcss from '@tailwindcss/vite'
 const pkg = (...names: string[]) =>
   new RegExp(`[\\\\/]node_modules[\\\\/](?:${names.join('|')})[\\\\/]`)
 
+// The shared `three` chunk is the one every /fitness route downloads first, so
+// it holds only what the lesson can use. These three.js files are imported by
+// the WOD app's force graph alone (three-render-objects pulls the whole
+// WebGPU build, about 950 KB before minification, plus its Trackball / Orbit /
+// Fly / Drag controls and the examples EffectComposer), and drei's `Html` only
+// by the WOD app's heatmap. Left out of `three`, they fall to the force-graph
+// group (which captures its own dependencies) or to the chunk that imports
+// them, and the lesson never downloads them. fitness-v2 integration, H.52.
+const THREE_VENDOR = pkg(
+  'three',
+  '@react-three[\\\\/]fiber',
+  '@react-three[\\\\/]drei',
+  '@react-three',
+  'three-stdlib',
+  'troika-three-text',
+  'troika-three-utils',
+  'troika-worker-utils',
+  '@react-spring',
+  '@use-gesture',
+  'zustand',
+  'react-reconciler',
+  'its-fine',
+  'suspend-react',
+  'maath',
+)
+const NOT_FOR_THE_LESSON = new RegExp(
+  '[\\\\/]node_modules[\\\\/](?:' +
+    'three[\\\\/]build[\\\\/]three\\.(?:webgpu|tsl)' +
+    '|three[\\\\/]examples[\\\\/]jsm[\\\\/](?:controls|postprocessing|shaders|renderers)[\\\\/]' +
+    '|@react-three[\\\\/]drei[\\\\/]web[\\\\/]Html)',
+)
+
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   base: '/',
   build: {
     rolldownOptions: {
+      // n8ao (an ambient-occlusion pass) is imported by @react-three/postprocessing's
+      // single-file barrel, and its package does not declare `sideEffects: false`,
+      // so about 117 KB of unused code rode in the lesson's `three` chunk. Nothing
+      // imports N8AO, so it is dropped; every other module keeps its default
+      // (undefined = the package's own sideEffects field). fitness-v2 H.52.
+      treeshake: {
+        moduleSideEffects: (id: string) => (/[\\/]node_modules[\\/]n8ao[\\/]/.test(id) ? false : undefined),
+      },
       output: {
         codeSplitting: {
           groups: [
@@ -74,23 +114,7 @@ export default defineConfig({
               // three.js core (and zustand) into the force-graph chunk.
               name: 'three',
               priority: 45,
-              test: pkg(
-                'three',
-                '@react-three[\\\\/]fiber',
-                '@react-three[\\\\/]drei',
-                '@react-three',
-                'three-stdlib',
-                'troika-three-text',
-                'troika-three-utils',
-                'troika-worker-utils',
-                '@react-spring',
-                '@use-gesture',
-                'zustand',
-                'react-reconciler',
-                'its-fine',
-                'suspend-react',
-                'maath',
-              ),
+              test: (id: string) => THREE_VENDOR.test(id) && !NOT_FOR_THE_LESSON.test(id),
             },
             {
               // recharts and its d3 chart deps (bundled under victory-vendor),

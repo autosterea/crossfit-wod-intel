@@ -194,16 +194,27 @@ class PenCore {
 export function polylineToSegments(pts: Float32Array): Float32Array {
   const n = pts.length / 3
   const out = new Float32Array(Math.max(0, n - 1) * 6)
-  for (let i = 0; i < n - 1; i++) {
-    out.set(pts.subarray(i * 3, i * 3 + 6), i * 6)
-  }
+  writePolyline(pts, out)
   return out
 }
 
-/** Write a polyline into an existing segment buffer (in place). */
+/**
+ * Write a polyline into an existing segment buffer (in place). A scalar loop:
+ * `subarray` allocates a view per segment, and pen `update` writers call this
+ * on every frame they change (integration H.53, the intro's report).
+ */
 export function writePolyline(pts: Float32Array, segs: Float32Array): void {
   const n = pts.length / 3
-  for (let i = 0; i < n - 1; i++) segs.set(pts.subarray(i * 3, i * 3 + 6), i * 6)
+  for (let i = 0; i < n - 1; i++) {
+    const a = i * 3
+    const o = i * 6
+    segs[o] = pts[a]
+    segs[o + 1] = pts[a + 1]
+    segs[o + 2] = pts[a + 2]
+    segs[o + 3] = pts[a + 3]
+    segs[o + 4] = pts[a + 4]
+    segs[o + 5] = pts[a + 5]
+  }
 }
 
 /*

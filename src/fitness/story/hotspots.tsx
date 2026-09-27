@@ -12,8 +12,9 @@ import type { Box, Mode } from './types'
    projected 3D things, for example the intro map's chapter tiles (D.1 I4).
    Labels are aria-hidden and never interactive; a hotspot is the opposite:
    a DOM button sized to the screen rect of a world box, updated through
-   refs every placement pass (no React state per frame), exempt from the
-   stage gestures (they ignore buttons), with a visible focus ring.
+   refs every placement pass (no React state per frame), with a visible
+   focus ring. A tap activates it and never toggles pause; a horizontal
+   swipe that starts on it still steps the story (see suppressHotspotClick).
 
      useStageHotspot('intro-tile-skills', {
        box: (T) => (at(T, 4, 0.5, 0.6) > 0 ? TILE_BOX[0] : null),  // world box or null (hidden)
@@ -46,6 +47,24 @@ interface Entry {
 }
 
 const registry = new Map<string, Entry>()
+
+/*
+ * Hotspots are swipe-transparent (integration, H.53): a finger that lands on
+ * a hotspot and swipes sideways steps the story like a swipe anywhere else on
+ * the stage (the intro map's tiles cover most of a phone's stage). The stage
+ * gesture tracker (gestures.ts) starts on a hotspot press too; when that press
+ * turns out to be a swipe or a drag, it marks the button so the click the
+ * browser may still deliver (a mouse always gets one) is eaten. A tap and the
+ * keyboard (Enter / Space) activate the button as usual.
+ */
+let eatClickOn: Element | null = null
+let eatTimer = 0
+export function suppressHotspotClick(el: Element | null): void {
+  eatClickOn = el
+  window.clearTimeout(eatTimer)
+  // a touch that moved gets no click at all: never let the mark outlive the gesture
+  if (el) eatTimer = window.setTimeout(() => (eatClickOn = null), 400)
+}
 let setVersion = 0
 const subs = new Set<() => void>()
 const bump = () => {
@@ -93,7 +112,13 @@ function HotspotButton({ e }: { e: Entry }) {
       aria-label={e.spec.ariaLabel}
       tabIndex={-1}
       style={{ visibility: 'hidden' }}
-      onClick={() => e.spec.onActivate()}
+      onClick={(ev) => {
+        if (eatClickOn && eatClickOn === ev.currentTarget) {
+          eatClickOn = null
+          return
+        }
+        e.spec.onActivate()
+      }}
     />
   )
 }

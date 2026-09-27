@@ -4,7 +4,7 @@ import { useStoryStore } from '../store'
 import { clock } from '../clock'
 import { Segments } from './Segments'
 import { Transport } from './Transport'
-import { MODULES, MODULE_COPY, PAL, moduleByKey } from '../../fitnessData'
+import { DEFINITION_TEXT, INTRO_TEXT, MODULES, MODULE_COPY, PAL, moduleByKey } from '../../fitnessData'
 import { useFitnessStore } from '../../fitnessStore'
 import type { Beat, StoryDef } from '../types'
 import type { FitnessView, ModuleKey } from '../../lessonTypes'
@@ -64,6 +64,36 @@ export function withTerms(body: string, terms?: Beat['terms']): ReactNode {
     rest = rest.slice(best + key.length)
   }
   return parts
+}
+
+/**
+ * The Read more block of the expanded detent (B.2) and the desktop disclosure:
+ * a chapter's MODULE_COPY body and key points. The intro has no MODULE_COPY;
+ * its Read more is the essay's framing (INTRO_TEXT) and the definition
+ * (DEFINITION_TEXT), the same copy its Notes hub opens with.
+ */
+export function readMoreFor(view: FitnessView): { paras: readonly string[]; points: readonly string[] } {
+  if (view === 'intro') return { paras: [INTRO_TEXT, DEFINITION_TEXT], points: [] }
+  const c = MODULE_COPY[view as ModuleKey]
+  return { paras: [c.body], points: c.keyPoints }
+}
+
+function ReadMoreBody({ view }: { view: FitnessView }) {
+  const { paras, points } = readMoreFor(view)
+  return (
+    <>
+      {paras.map((p) => (
+        <p key={p}>{p}</p>
+      ))}
+      {points.length > 0 && (
+        <ul>
+          {points.map((k) => (
+            <li key={k}>{k}</li>
+          ))}
+        </ul>
+      )}
+    </>
+  )
 }
 
 function NextChapterCta({ view }: { view: FitnessView }) {
@@ -165,7 +195,6 @@ export function CaptionCard({ cardRef, shell }: { cardRef: React.RefObject<HTMLD
   const accent = accentFor(def.key)
   const last = index >= def.beats.length - 1
   const done = last && phase === 'done'
-  const copy = def.key !== 'intro' ? MODULE_COPY[def.key as ModuleKey] : null
   const instant = clock.held
   const tIn = reduced ? { duration: 0.12 } : { duration: 0.22, ease: [0.22, 1, 0.36, 1] as const }
   const tOut = reduced ? { duration: 0.12 } : { duration: 0.16, ease: [0.4, 0, 1, 1] as const }
@@ -216,7 +245,7 @@ export function CaptionCard({ cardRef, shell }: { cardRef: React.RefObject<HTMLD
             {showBody && (
               <p className="st-body">
                 {withTerms(beat.body, beat.terms)}
-                {phone && copy && (
+                {phone && (
                   <>
                     {' '}
                     <button
@@ -234,35 +263,31 @@ export function CaptionCard({ cardRef, shell }: { cardRef: React.RefObject<HTMLD
           </motion.div>
         </AnimatePresence>
       </div>
-      {phone && detent === 'expanded' && copy && (
+      {phone && detent === 'expanded' && (
         <div className="st-more">
           <div className="st-more-h">Read more</div>
-          <p>{copy.body}</p>
-          <ul>
-            {copy.keyPoints.map((k) => (
-              <li key={k}>{k}</li>
-            ))}
-          </ul>
+          <ReadMoreBody view={def.key} />
         </div>
       )}
-      {!phone && copy && (
+      {!phone && (
         <details className="st-more st-more--inline" data-no-gesture>
           <summary>
             Read more <IconChevron />
           </summary>
-          <p>{copy.body}</p>
-          <ul>
-            {copy.keyPoints.map((k) => (
-              <li key={k}>{k}</li>
-            ))}
-          </ul>
+          <ReadMoreBody view={def.key} />
         </details>
       )}
       <Transport />
       {done && beat.cta === 'begin' && (
+        // [Explore][Begin the lesson]: on a phone the finished map's only other
+        // way into explore is the transport pill, which hides on the finished
+        // last beat (H.27), so the row carries it (integration, H.53).
         <div className="st-cta-row">
-          <button type="button" className="st-btn st-btn--solid st-btn--wide" onClick={() => navigate({ view: 'skills' })}>
-            Begin the lesson
+          <button type="button" className="st-btn st-btn--outline" onClick={() => useStoryStore.getState().setMode('explore')}>
+            Explore
+          </button>
+          <button type="button" className="st-btn st-btn--solid" onClick={() => navigate({ view: 'skills' })}>
+            <span className="st-btn-l">Begin the lesson</span>
           </button>
         </div>
       )}

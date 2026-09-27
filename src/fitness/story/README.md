@@ -146,8 +146,9 @@ export default function ExampleScene() {
 ```
 
 The chapter registers itself: `stories/index.ts` discovers every `stories/<view>/story.ts` at build
-time (import.meta.glob), so never edit that file. Leave the legacy
-`modules/*Module.tsx` in place; integration deletes it once the story has landed.
+time (import.meta.glob), so never edit that file. All seven views are stories;
+the legacy `modules/*Module.tsx` pages and `LessonStage.tsx` were deleted at
+integration (H.52).
 
 ## Reading time
 
@@ -209,7 +210,8 @@ time (import.meta.glob), so never edit that file. Leave the legacy
 | `useChapterFog` | fog, Hopper and Health only (or set `fog` on the StoryDef) |
 | `useDragHandle` | explore-mode drag handles that win over orbit; `onDrag(ray, ndc)` |
 | `useStageHotspot(id, { box, onActivate, ariaLabel, modes })` | a REAL focusable button over a projected 3D box (see Hotspots) |
-| `<ChipRadio label options value onChange/>` | the explore chip row as a real radiogroup (roving tab stop, arrows select) |
+| `<ChipRadio label options value onChange/>` | the explore chip row as a real radiogroup (roving tab stop, arrows select). The checked chip is kept in view whenever `value` changes, from a chip or from anywhere else (a drag that turns the profile into Custom, a grid cell): only the row scrolls, only when the chip is not fully visible, and a cut chip stays visible past each fade so the row reads as scrollable (a row that opens while the web fonts load is placed once they are in). Never scroll it yourself (H.53) |
+| `setExploreSheetOpen(open)` (ui/ExplorePanel) | open or collapse the phone controls sheet from your Explore (Skills drops an expanded sheet to the peek when its Grid needs the stage); a no-op on desktop. Never click the engine's grab handle (H.53) |
 
 Pen widths are screen pixels by role: `PEN.grid` 1.25, `PEN.axis` 2,
 `PEN.data` 3, `PEN.hero` 4.5.
@@ -319,6 +321,17 @@ All reading text is DOM, on the fixed type scale, never perspective-scaled.
 - `mode`: labels are 'story' by default and hide in explore; pass
   `{ mode: 'explore' }` for explore labels (register them only while exploring).
 - `setLabelText(id, text)` updates text without React (counters).
+  `setLabelColor(id, css)` does the same for the data colour (the dot,
+  border and callout text, CSS `--c`): skill names taking their class colour
+  as the arcs pass, a pinned chip following its value's colour. It writes
+  only when the colour changed for that node; pass cached strings so a
+  per-frame caller allocates nothing (Skills' `rgba()` table, H.53).
+- **Dynamic placement fields**: `prefer`, `center`, `gapPx`, `priority` and
+  `only` are read on every placement pass, never snapshotted, so they may be
+  getters of story time (`get priority() { return 97 + rank(clock.T) }`): a
+  rail that rises places first as it passes another, a name lifts over a
+  tick, a spoke name keeps its own row's side through a morph (Hopper,
+  Pathways, Continuum). Keep a getter a cheap pure function (H.53).
 - `badge`: a small mono badge before a name, in the label colour (a computed
   rank such as "P1"). `sepPx`: horizontal clearance kept on each side; ticks
   default to 6, so two tick labels always keep at least 12 px apart (show fewer
@@ -353,8 +366,11 @@ hotspot: `useStageHotspot(id, { box: (T) => Box | null, onActivate,
 ariaLabel, modes? })` renders a real `<button>` sized to the screen rect of
 that world box (never smaller than 44 x 44), positioned through refs on every
 placement pass, out of the tab order while `box` returns null, with a visible
-focus ring. Stage gestures ignore buttons, so tapping a hotspot never toggles
-pause. `modes`: 'story' (default), 'explore' or 'both'.
+focus ring. A tap activates it and never toggles pause. Hotspots are
+swipe-transparent in story mode (H.53): a horizontal swipe that starts on one
+steps the story like a swipe anywhere on the stage (the intro map's tiles
+cover most of a phone's stage), and the click it might still produce is
+eaten. `modes`: 'story' (default), 'explore' or 'both'.
 `__story.hotspots()` lists their rects for QA.
 
 ## Camera poses
@@ -498,8 +514,8 @@ generalist or the claim, never a specialist's low score. No em or en dashes.
 ## QA contract
 
 - `?beat=N&t=X` renders beat N at progress X and holds; `?explore=1` opens
-  explore; `?tier=high|medium|low`; `?motion=reduce|full`; `?detent=`;
-  `?qa=stub` puts a 3-beat stub story on chapters without one (QA only).
+  explore; `?tier=high|medium|low`; `?motion=reduce|full`; `?detent=`.
+  (The `?qa=stub` stub story is gone: every chapter is a story.)
 - The stage root carries `data-story-ready="1"` once the chapter is LOADED and
   two frames rendered after the last seek. Loaded never goes back to false on a
   seek, so the slate never covers a scrub (H.15).
@@ -530,6 +546,9 @@ generalist or the claim, never a specialist's low score. No em or en dashes.
    link places labels exactly as scrubbing there), and runs your chapter
    UNPINNED at 3x on virtual clocks: 60 fps and a 30 fps cap are never
    demoted; an uneven 20 fps phone must end on LOW in still mode.
+   A gate that throws (a selector that never appears) is reported as that
+   gate's FAIL and the run continues; nav-away-and-back and the persistent
+   canvas use the Previous card on the last chapter (Health).
 5. `node scripts/story-qa.mjs shots <url> <dir> phone "<view>?beat=N&t=1" ...`
    for every beat on `phone`, `p360`, `p430`, `phone3x` and `desktop`, plus a
    mid-beat frame per beat and `?explore=1`. Look at every one, phone first:

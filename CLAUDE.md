@@ -315,42 +315,96 @@ Games, athlete tagging).
 ## What Is Fitness lesson (`/fitness`)
 
 A third standalone page (alongside `/` and `/games`), served by the same SPA
-bundle. `src/main.tsx` branches `/fitness`* to the lazy
-`src/fitness/FitnessApp.tsx` chunk. An interactive 3D lesson teaching Greg
-Glassman's 2002 "What Is Fitness?" essay + the CrossFit Level 1 Training
-Guide, in six React Three Fiber modules + an intro hub.
+bundle. `src/main.tsx` strips the deploy base, then branches `/fitness`* to the
+lazy `src/fitness/FitnessApp.tsx` chunk. It teaches Greg Glassman's 2002 "What
+Is Fitness?" essay and the CrossFit Level 1 Training Guide as seven animated
+three.js STORIES (v2, "CHALKLINE", branch `fitness-v2`): the intro ("The
+Line") plus six chapters, skills, hopper, pathways, definition, continuum and
+health. Each chapter is a sequence of beats a coach's pen draws on a dark
+slate, with a caption card, autoplay, swipe / transport stepping, scrubbing,
+an explore mode, and a Notes section below the stage.
 
-- **Routing/shell:** `src/fitness/fitnessStore.ts` (zustand pushState router,
-  mirrors gamesStore) and `FitnessApp.tsx` (PA top bar + module nav + prev/next
-  stepper + footer with CrossFit/Glassman/L1 citations and Games cross-links).
-- **Harness:** `src/fitness/LessonStage.tsx` is the shared R3F hero every
-  module builds against (Canvas + 3-light rig + OrbitControls with
-  auto-rotate-pause; both overlay panels collapse to launcher pills so the 3D
-  is unobstructed; explanation collapsed by default since its text also renders
-  below the stage via `ModulePage`; on phones the camera auto-pulls-back 1.28x
-  so wide models fit portrait). `src/fitness/ui.tsx` = `ModulePage` shell +
-  dark-glass control widgets. `src/fitness/fitness.css` = PA-themed design
-  system (loads its own Anton/Barlow fonts).
-- **Data:** `src/fitness/fitnessData.ts` is the single source of truth (palette,
-  13 archetype skill profiles, Gastin-anchored energy crossover table,
-  Critical-Power curves, L1 continuum biomarkers, aging model, all faithful copy
-  + verified SOURCES). `src/fitness/lessonMath.ts` = math helpers. Numbers were
-  researched + adversarially verified.
-- **Modules** (`src/fitness/modules/*.tsx`, one self-contained file each):
-  SkillsModule (10-skill radar, compare 13 archetypes), HopperModule (brushed-
-  steel tumbling drum + 6 procedural human athletes posed per drawn task,
-  running-average scoring), PathwaysModule (3 metabolic ribbons), DefinitionModule
-  (power-duration area = fitness), ContinuumModule (L1 sickness-wellness-fitness
-  parallel marker axes), HealthModule (capacity-over-age surface), IntroView.
-- **Constraints:** TypeScript strict; NO external/CDN assets in the 3D (no drei
-  `<Environment preset>` or `<Text>` default font - use CanvasTexture sprites or
-  `<Html>`; metal via metalness+lights, no envMap); 3D stays dark in both themes;
-  per-frame work is ref-based; no em/en dashes. No new dependencies were added
-  (three / @react-three/fiber / drei were already present), so VPS deploy needs
-  no `npm ci`.
-- **To extend:** add to `MODULES` in fitnessData + a `modules/XModule.tsx`
-  wrapping `<ModulePage moduleKey><LessonStage controls={...}>{scene}</LessonStage></ModulePage>`,
-  then register the view in FitnessApp.
+- **Binding spec:** `src/fitness/DESIGN.md` (laws, visual system, engine API,
+  a storyboard and acceptance checklist per chapter, and dated amendments in
+  section H). Read it before touching the lesson. The module author's guide is
+  `src/fitness/story/README.md` (kit table, labels, camera poses, explore,
+  prewarm, pacing, QA contract, checklist before a commit).
+- **Engine:** `src/fitness/story/` owns ONE persistent stage for all seven
+  views (Canvas, lights, a procedural environment, the backdrop, the post
+  stack, the camera director, the DOM label layer, hotspots, the HUD slot, the
+  slate), the story clock and store, playback, gestures and keyboard, the
+  caption card / transport / chapter sheet / explore panel / Notes UI, and the
+  visual kit (`story/kit`: Pen, PenBatch, MorphPen, AreaFill, AreaStrips,
+  LightField, Nodes, Instances, Plates, Glows, Ripple, Halo, SdfText, chart
+  frames, materials). A chapter change swaps only the Scene, labels and
+  captions; the WebGL context survives.
+- **Chapters:** `src/fitness/stories/<view>/` (`story.ts` = the StoryDef with
+  beats and copy, `Scene.tsx`, `Explore.tsx`, optional `Hud.tsx`, and the
+  module math moved verbatim into `<view>Math.ts`). `stories/index.ts`
+  auto-discovers every `stories/<view>/story.ts` (import.meta.glob); each
+  chapter is its own lazy chunk and the next one is prefetched when idle.
+  `stories/definition/` is the reference chapter. The legacy LessonStage
+  pages (`modules/*.tsx`, `LessonStage.tsx`) were retired at integration
+  (DESIGN.md H.52).
+- **The seek contract:** every frame is a pure function of story time
+  T = beat index + t (no Math.random, performance.now, physics or history in
+  scene code; ambient motion runs on a separate clock that freezes on seek).
+  `?beat=N&t=X` renders and holds exactly that frame, `?explore=1` opens
+  explore, `?tier=high|medium|low` pins quality (reviewer screenshots must
+  pass it), `?motion=reduce` and `?detent=` exist for QA. The stage carries
+  `data-story-ready="1"` once loaded and two frames after the last seek.
+  `window.__story` exposes `seek`, `play`, `next`, `prev`, `explore`,
+  `state()`, `stats()` (draw calls, triangles, geometries, textures, tier,
+  DPR, programs), `labels()`, `project()`, `chartRect()` and QA probes.
+- **Quality tiers:** HIGH (DPR up to 2, MSAA, 7-level bloom, grain), MEDIUM
+  (the phone default: DPR up to 1.5, half-res bloom, SMAA), LOW (no composer,
+  renderer tone mapping, halos instead of bloom). Tone mapping is Neutral
+  (never ACES). The engine owns the adaptive policy (it never demotes a
+  steady 60 fps or a 30 fps capped phone). Mobile budget per frame on MEDIUM:
+  at most 120 draw calls and 250k triangles, read with `__story.stats()`.
+- **Data:** `src/fitness/fitnessData.ts` is the single source of truth
+  (palette, archetype skill profiles, Gastin-anchored energy crossover
+  table, Critical-Power curves, L1 continuum biomarkers, aging model, all
+  faithful copy and verified SOURCES); `lessonMath.ts` holds the math
+  helpers. Numbers were researched and adversarially verified: never change
+  them, and captions only restate existing copy (a caption audit enforces it).
+- **Dependencies and fonts (owner-authorised for v2):** `postprocessing` and
+  `@react-three/postprocessing` (bloom, Neutral tone mapping, SMAA), and
+  `@react-three/fiber` 9.8 (which that package needs). `public/fonts/` holds
+  self-hosted OFL copies of Anton and Barlow Condensed (licences alongside)
+  for the few in-scene SDF words; `story/kit/SdfText.tsx` is the only way to
+  use drei `<Text>`, and it passes only glyphs those TTFs cover, so troika
+  never fetches a CDN font. Page fonts come from Google Fonts CSS only.
+  Because package.json changed, the VPS rebuild runs `npm ci` when this
+  ships.
+- **Rule changes the owner authorised (DESIGN.md wins over this file on
+  these):** the post-processing dependencies above; an environment map, but
+  only the engine's procedural drei `<Environment>` built from
+  `<Lightformer>`s (never an `<Environment preset>` or any HDRI fetch); drei
+  `<Text>`, but only through SdfText with the self-hosted fonts. Still
+  forbidden: drei `<Html>`, CDN or runtime network assets beyond the site and
+  Google Fonts CSS, shadow maps, ContactShadows, gridHelper. Unchanged house
+  rules: analytics stay, brand colours are fixed, 3D stays dark, no dashes,
+  no Node runtime, TypeScript strict, per-frame work in refs (never React
+  state per frame, never allocations in hot paths).
+- **Payload:** `vite.config.ts` keeps the WOD app's force-graph code
+  (including three's WebGPU build and example controls) and drei `Html` out
+  of the shared `three` chunk, and drops the unused n8ao pass, so a `/fitness`
+  first load pulls only react, three (core, R3F, drei parts, postprocessing,
+  troika), motion, the lesson shell and the current chapter (about 550 KB
+  gzipped JS).
+- **Base path:** the app works under `/` and under `/preview/` (the owner's
+  review build): `fitnessStore.ts` and `main.tsx` strip `BASE_URL`, and every
+  asset (PA logo, SDF fonts) resolves from it.
+- **QA before every lesson commit (from the worktree):**
+  `node scripts/fitness-gate.mjs` (scene-code grep gate plus the caption
+  audit), `node scripts/story-qa.mjs check <served build> <view>` (labels at
+  360 / 390 / 430, budget, continuity, scrub, nav back, persistent canvas,
+  keys, reduced motion, shell, hit bands, tiers, re-fit, font failure,
+  touch, tap queue, determinism), the TypeScript build for base `/` and
+  `/preview/`, and a dash check over `src/fitness`.
+- **To extend:** add a chapter folder under `src/fitness/stories/` following
+  the README (and a storyboard in DESIGN.md D); it registers itself.
 
 ## Standalone share/announcement cards (`public/share/posts/`)
 

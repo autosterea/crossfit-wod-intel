@@ -1,28 +1,10 @@
-import { registry } from '../../story/labels/registry'
-
 /* =========================================================================
-   setLabelColor (local; listed as an engine request). A label's data colour
-   (its dot, border and callout text: the CSS variable --c) is fixed by its
-   spec. The skills chapter recolours the ten skill-name dots as the class
-   arcs pass them (D.2 S1: "those spokes, dots and labels take the trained
-   colour"), as a pure function of T, like setLabelText does for text.
-
-   Writes only when the value changed for that label ELEMENT, so a frame
-   costs one lookup per label. The cache is keyed by the element itself
-   (a WeakMap): a label node that leaves the stage (a chapter change) takes
-   its entry with it, and a new node for the same id starts clean. React
-   re-renders of the label node keep the imperative value: the spec's own
-   colour never changes, so React never rewrites --c.
+   Cached rgba() strings for the skill-name label colours. The setter itself
+   is the engine's setLabelColor (story/labels, promoted from this file at
+   integration, H.53); it is re-exported here so the chapter's imports stay.
    ========================================================================= */
 
-const written = new WeakMap<HTMLElement, string>()
-
-export function setLabelColor(id: string, css: string): void {
-  const el = registry.get(id)?.el
-  if (!el || written.get(el) === css) return
-  el.style.setProperty('--c', css)
-  written.set(el, css)
-}
+export { setLabelColor } from '../../story/labels/useLabel'
 
 const tables = new Map<string, string[]>()
 const STEPS = 20

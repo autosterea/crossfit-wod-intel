@@ -11,8 +11,9 @@
 //                 calls <= 120, triangles <= 250k
 //       continuity (N, 1) and (N + 1, 0) render the same pixels (< 0.5%)
 //       scrub     dragging the beat scrubber never shows the slate
-//       navback   chapter -> next chapter -> back: canvas present, no fallback
-//       persist   (with ?qa=stub) story -> story: the SAME canvas element and
+//       navback   chapter -> next chapter (the previous one from the last
+//                 chapter) -> back: canvas present, no fallback
+//       persist   story -> story: the SAME canvas element and
 //                 a stable programs count, no fallback
 //       keys      pause during a glide wins; arrows in explore / sheet never step;
 //                 leaving explore or stepping drops ?beat ?t ?explore
@@ -31,7 +32,7 @@
 //       determinism  a deep link places labels exactly as scrubbing there does
 //       QA_ONLY=touch,determinism (env) runs only the named gates
 //   node scripts/story-qa.mjs shots <baseUrl> <outDir> <viewport> <query> [query...]
-//       viewport: phone | p360 | p430 | phone3x | desktop | land
+//       viewport: phone | p360 | p430 | phone3x | desktop | land | safari (390x664, Safari with toolbars)
 //       query: e.g. "definition?beat=3&t=1" (tier is added: medium on phones, high on desktop)
 //
 // Software WebGL (SwiftShader) is slow: allow a few minutes for `check`.
@@ -63,6 +64,8 @@ const VPS = {
   phone3x: { viewport: { width: 390, height: 844 }, deviceScaleFactor: 3, isMobile: true, hasTouch: true, tier: 'medium' },
   desktop: { viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1, isMobile: false, hasTouch: false, tier: 'high' },
   land: { viewport: { width: 844, height: 390 }, deviceScaleFactor: 1, isMobile: true, hasTouch: true, tier: 'medium' },
+  // an iPhone's real Safari viewport with the toolbars showing (shots only; not a gate yet)
+  safari: { viewport: { width: 390, height: 664 }, deviceScaleFactor: 1, isMobile: true, hasTouch: true, tier: 'medium' },
 }
 const ARGS = ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist']
 // THREE.Clock: one deprecation warning is emitted by module-level code of the
@@ -136,6 +139,16 @@ const fail = (m) => {
   console.log('FAIL ' + m)
 }
 const ok = (m) => console.log('ok   ' + m)
+// A gate that throws (a selector that never appears, a timeout) is reported
+// as that gate's FAIL and the run continues with the next gate, so one
+// missing element never hides every later result (integration, H.53).
+const gate = async (name, fn) => {
+  try {
+    await fn()
+  } catch (e) {
+    fail(`${name}: threw ${String((e && e.message) || e).split(String.fromCharCode(10))[0].slice(0, 300)}`)
+  }
+}
 const browser = await chromium.launch({ args: ARGS })
 
 // beats and peaks
@@ -157,6 +170,7 @@ beats.forEach((_, i) => {
 // 1 + 2. labels at three widths, budget on the phone (every sampled t; the
 //        report gives the true maximum)
 const maxStats = { calls: 0, triangles: 0, points: 0, at: '' }
+await gate('labels', async () => {
 if (want('labels')) for (const vpName of ['p360', 'phone', 'p430']) {
   const { ctx, page, errs } = await open(browser, vpName)
   await page.goto(url(`${view}?beat=0&t=1`, 'medium'), { waitUntil: 'load', timeout: 90000 })
@@ -192,8 +206,10 @@ if (want('labels')) for (const vpName of ['p360', 'phone', 'p430']) {
   if (errs.length) fail(`${vpName} console: ${errs.slice(0, 4).join(' | ')}`)
   await ctx.close()
 }
+})
 
 // 3. continuity: (N, 1) vs (N + 1, 0), pixels of the stage canvas only
+await gate('continuity', async () => {
 if (want('continuity')) {
   const { ctx, page } = await open(browser, 'phone')
   await page.goto(url(`${view}?beat=0&t=1`, 'medium'), { waitUntil: 'load', timeout: 90000 })
@@ -244,8 +260,10 @@ if (want('continuity')) {
   }
   await ctx.close()
 }
+})
 
 // 4. scrub: drag across the beat segments; the slate must never appear
+await gate('scrub', async () => {
 if (want('scrub')) {
   const { ctx, page } = await open(browser, 'phone', { hasTouch: false, isMobile: false })
   await page.goto(url(view, 'medium'), { waitUntil: 'load', timeout: 90000 })
@@ -264,14 +282,16 @@ if (want('scrub')) {
   else ok('scrub: no slate mid-drag')
   await ctx.close()
 }
+})
 
-// 5. nav away and back (a legacy chapter or the next story), then 4 s
+// 5. nav away and back (the next chapter, or the previous one from the last), then 4 s
+await gate('navback', async () => {
 if (want('navback')) {
   const { ctx, page, errs } = await open(browser, 'phone')
   await page.goto(url(view, 'medium'), { waitUntil: 'load', timeout: 90000 })
   await waitReady(page)
   const path0 = await page.evaluate(() => location.pathname)
-  await page.evaluate(() => document.querySelector('.st-lessonnav-card.is-next')?.click())
+  await page.evaluate(() => (document.querySelector('.st-lessonnav-card.is-next') ?? document.querySelector('button.st-lessonnav-card'))?.click())
   await page.waitForTimeout(1500)
   await page.goBack()
   await page.waitForTimeout(400)
@@ -290,11 +310,13 @@ if (want('navback')) {
   if (errs.length) console.log('     navback console: ' + errs.slice(0, 4).join(' | '))
   await ctx.close()
 }
+})
 
-// 6. persistent stage between two story chapters (?qa=stub)
+// 6. persistent stage between two story chapters (every chapter is a story)
+await gate('persist', async () => {
 if (want('persist')) {
   const { ctx, page } = await open(browser, 'phone')
-  await page.goto(url(`${view}?qa=stub`, 'medium'), { waitUntil: 'load', timeout: 90000 })
+  await page.goto(url(view, 'medium'), { waitUntil: 'load', timeout: 90000 })
   await waitReady(page)
   await page.waitForTimeout(800)
   const before = await page.evaluate(() => {
@@ -302,7 +324,7 @@ if (want('persist')) {
     c.dataset.qaMark = 'persist'
     return window.__story.stats().programs
   })
-  await page.evaluate(() => document.querySelector('.st-lessonnav-card.is-next')?.click())
+  await page.evaluate(() => (document.querySelector('.st-lessonnav-card.is-next') ?? document.querySelector('button.st-lessonnav-card'))?.click())
   await waitReady(page, 30000)
   await page.waitForTimeout(800)
   const mid = await page.evaluate(() => ({ view: window.__story?.view, same: document.querySelector('.st-stage canvas')?.dataset.qaMark === 'persist', n: document.querySelectorAll('canvas').length }))
@@ -320,8 +342,10 @@ if (want('persist')) {
   if (after.programs > before + 2) fail(`persist: programs grew ${before} -> ${after.programs}`)
   await ctx.close()
 }
+})
 
 // 7. keyboard and playback intent
+await gate('keys', async () => {
 if (want('keys')) {
   const { ctx, page } = await open(browser, 'desktop')
   await page.goto(url(view, 'high'), { waitUntil: 'load', timeout: 90000 })
@@ -357,7 +381,9 @@ if (want('keys')) {
   await page.setViewportSize({ width: 390, height: 844 })
   await page.waitForTimeout(600)
   await page.click('.st-chapchip')
-  await page.waitForTimeout(500)
+  // the sheet moves focus in once it has opened: wait for that, not a fixed
+  // 500 ms (SwiftShader frame times made the fixed wait flaky, H.53)
+  await page.waitForFunction(() => !!document.activeElement?.closest('.st-sheet'), null, { timeout: 5000 }).catch(() => undefined)
   const s0 = await page.evaluate(() => ({ i: window.__story.state().index, inSheet: !!document.activeElement?.closest('.st-sheet') }))
   await page.keyboard.press('ArrowRight')
   await page.keyboard.press('Escape')
@@ -367,8 +393,10 @@ if (want('keys')) {
   else ok('sheet: focus moves in, arrows ignored, focus returns to the chip')
   await ctx.close()
 }
+})
 
 // 8. reduced motion
+await gate('reduced', async () => {
 if (want('reduced')) {
   const { ctx, page } = await open(browser, 'phone', { reducedMotion: 'reduce' })
   await page.goto(url(view, 'medium'), { waitUntil: 'load', timeout: 90000 })
@@ -398,14 +426,18 @@ if (want('reduced')) {
   else ok(`reduced explore: explore opened from the last beat is fitted at once${s2 ? ` (fills ${s2.fill.toFixed(2)})` : ''}`)
   await ctx.close()
 }
+})
 
 // 9. shell: on the finished last beat every card button sits inside the card
 //    and the viewport (360 / 390 / 430 portrait and a landscape phone), the
 //    stage never scrolls sideways, and first-screen controls are 44 px targets.
+await gate('shell', async () => {
 if (want('shell')) for (const vpName of ['p360', 'phone', 'p430', 'land']) {
   const { ctx, page } = await open(browser, vpName)
   await page.goto(url(`${view}?beat=${beats.length - 1}&t=1`, 'medium'), { waitUntil: 'load', timeout: 90000 })
   await waitReady(page)
+  // button widths are measured with the web fonts, never the fallback (H.53)
+  await page.evaluate(() => document.fonts.ready)
   await page.waitForTimeout(600)
   const r = await page.evaluate(() => {
     const vw = window.innerWidth
@@ -445,9 +477,11 @@ if (want('shell')) for (const vpName of ['p360', 'phone', 'p430', 'land']) {
   else ok(`${vpName} shell: card buttons inside the card and viewport, no sideways scroll, targets >= 44 px`)
   await ctx.close()
 }
+})
 
 // 10. phone hit bands: the scrubber band always hits the scrubber, never the
 //     grab handle; the grab handle's own band (above the card edge) hits it.
+await gate('hitbands', async () => {
 if (want('hitbands')) for (const vpName of ['p360', 'phone']) {
   const { ctx, page } = await open(browser, vpName)
   await page.goto(url(`${view}?beat=1&t=1`, 'medium'), { waitUntil: 'load', timeout: 90000 })
@@ -473,6 +507,7 @@ if (want('hitbands')) for (const vpName of ['p360', 'phone']) {
   else ok(`${vpName} grab handle: its own 44 px band above the scrubber`)
   await ctx.close()
 }
+})
 
 // 11. adaptive quality on virtual clocks (H.29, H.38). UNPINNED (no ?tier) at
 //     3x. Every rAF advances the page's performance.now by the next step of a
@@ -521,6 +556,7 @@ async function virtualClock(pattern, seconds) {
   await ctx.close()
   return { v, ...r, summary: r.log.map((e) => `${e.at}s ${e.tier}@${e.dpr} ${e.why}`).join(', ') }
 }
+await gate('tiers', async () => {
 if (want('tiers')) for (const [name, pattern] of [
   ['60 fps', [16.667]],
   ['30 fps (capped)', [33.333]],
@@ -533,18 +569,22 @@ if (want('tiers')) for (const [name, pattern] of [
   else if (worse.length || lower.length || r.s.tier !== start.tier) fail(`tiers ${name}: a healthy phone was demoted: ${r.summary}`)
   else ok(`tiers ${name}: ${Math.round(r.v)} virtual s, no demotion (${r.summary}; now ${r.s.tier}@${r.s.dpr}, still ${r.s.still})`)
 }
+})
+await gate('tiers', async () => {
 if (want('tiers')) {
   // uneven 20 fps: 30 / 70 ms frames
   const r = await virtualClock([30, 70], 36)
   if (r.s.tier !== 'low' || !r.s.still) fail(`tiers 20 fps uneven: expected LOW and still mode, got ${r.s.tier} still ${r.s.still} (${r.summary})`)
   else ok(`tiers 20 fps uneven: degraded to LOW and still mode (${r.summary})`)
 }
+})
 
 // 12. explore re-fits to the sheet (E.3): open explore on the phone, expand
 //     the controls sheet, collapse it, Reset view. At every step the chart
 //     frame box projects inside the focus rect and no visible label is clipped.
 //     Definition also toggles the domains in the expanded sheet, collapses,
 //     and checks every domain curve still starts at x(0) and ends at x(1).
+await gate('refit', async () => {
 if (want('refit')) {
   const { ctx, page, errs } = await open(browser, 'phone')
   await page.goto(url(`${view}?beat=${Math.min(3, beats.length - 1)}&t=1`, 'medium'), { waitUntil: 'load', timeout: 90000 })
@@ -607,9 +647,11 @@ if (want('refit')) {
   if (errs.length) fail(`explore refit console: ${errs.slice(0, 3).join(' | ')}`)
   await ctx.close()
 }
+})
 
 // 13. a failed font never strands the chapter on the slate (H.39): abort
 //     every self-hosted TTF; the story must still become ready and play.
+await gate('fontfail', async () => {
 if (want('fontfail')) {
   const { ctx, page, errs } = await open(browser, 'phone')
   await ctx.route(/\/fonts\/[^/]+\.ttf/, (r) => r.abort())
@@ -628,11 +670,13 @@ if (want('fontfail')) {
   if (unexpected.length) fail(`fontfail console: ${unexpected.slice(0, 3).join(' | ')}`)
   await ctx.close()
 }
+})
 
 // 14. real touch on the phone card (H.47), through CDP touch events (a mouse
 //     never shows this): a vertical finger drag on the grab handle moves the
 //     card between detents, the Read more link opens the expanded detent, and
 //     a vertical finger drag on the card body still scrolls the page.
+await gate('touch', async () => {
 if (want('touch')) {
   const { ctx, page } = await open(browser, 'phone')
   await page.goto(url(`${view}?beat=1&t=1`, 'medium'), { waitUntil: 'load', timeout: 90000 })
@@ -670,9 +714,11 @@ if (want('touch')) {
   else ok(`touch: grab drag up -> expanded, down -> default, Read more -> expanded, body drag scrolls the page ${res.scrolled} px`)
   await ctx.close()
 }
+})
 
 // 15. playback intent: taps inside a next glide queue up, and a viewer's
 //     step from a deep link leaves the hold and plays the new beat.
+await gate('queue', async () => {
 if (want('queue')) {
   const { ctx, page } = await open(browser, 'phone', { hasTouch: false, isMobile: false })
   await page.goto(url(view, 'medium'), { waitUntil: 'load', timeout: 90000 })
@@ -697,10 +743,12 @@ if (want('queue')) {
   else ok(`held step: Next from a deep link plays beat 2 (t ${b.t.toFixed(2)})`)
   await ctx.close()
 }
+})
 
 // 16. label determinism: a deep link lays labels out exactly as the same
 //     (N, t) reached by scrubbing through the chapter (hysteresis must not
 //     leak across a seek).
+await gate('determinism', async () => {
 if (want('determinism')) {
   const { ctx, page } = await open(browser, 'phone')
   // id -> [x, y] of every visible label
@@ -743,6 +791,7 @@ if (want('determinism')) {
   if (!diffs) ok(`labels determinism: ${beats.length} beats lay out the same (within 2 px) from a deep link and after scrubbing`)
   await ctx.close()
 }
+})
 
 await browser.close()
 writeFileSync(join(process.cwd(), 'story-qa-report.local.json'), JSON.stringify({ view, failures }, null, 1))

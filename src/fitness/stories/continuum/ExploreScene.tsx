@@ -7,7 +7,7 @@ import { useSafeFrame } from '../../story/useSafeFrame'
 import { gestureBus, useDragHandle } from '../../story/gestures'
 import { focusRect, subscribeFocus } from '../../story/camera/focusRect'
 import { PenBatch, PEN } from '../../story/kit/Pen'
-import { setLabelText, useLabels, useWorldObstacle, type WorldObstacle } from '../../story/labels/useLabel'
+import { setLabelColor, setLabelText, useLabels, useWorldObstacle, type WorldObstacle } from '../../story/labels/useLabel'
 import type { LabelSpec, V3 } from '../../story/types'
 import { N, STATES, STATE_COLORS, STOP_FIT, STOP_WELL, betterText, shortName, shortName2, spectrumHex as spectrumHexOf, spectrumLinear, stateIndex, stopText, tickText, valueText } from './continuumMath'
 import { HUB, R, bowl, compactStage, dialPoint, keyMode, radiusOf, shortStage, spokeAngle } from './layout'
@@ -16,17 +16,6 @@ import { live, snapLive, useContExplore } from './exploreStore'
 import { keySel, selectSpoke, spokeVersion, subscribeSpoke } from './keySel'
 import { OUTLINE_T } from './materials'
 import { put } from './kitx'
-
-/**
- * A pinned chip's colour follows its value (the selected marker's live value
- * chip): the chip's data colour is its `--c`, written straight to its node
- * only when the value's text changes, like setLabelText writes the text
- * (proposed for promotion as setLabelColor, engine_requests).
- */
-function setLabelColor(id: string, css: string): void {
-  const el = document.querySelector<HTMLElement>('.st-lbl[data-label="' + id + '"]')
-  if (el) el.style.setProperty('--c', css)
-}
 
 /* =========================================================================
    Continuum explore (DESIGN.md D.6 "Explore", C.12). Not driven by T: the
