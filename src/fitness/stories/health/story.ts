@@ -1,9 +1,11 @@
-import type { Box, CamPose, StoryDef } from '../../story/types'
+import type { CamPose, StoryDef } from '../../story/types'
 import HealthScene from './Scene'
 import { pickAge } from './pick'
 import HealthExplore from './Explore'
 import HealthHud from './Hud'
-import { claimBox, planeBox, sliceBox, volumeBox } from './layout'
+import { POST_CAP, POST_CAP_LOW, sliceBox } from './layout'
+import { silPose, type SilSpec } from './frame'
+import { G50, GL } from './timeline'
 import { useHealthExplore } from './exploreStore'
 import { LIFELONG, SEDENTARY, STARTS_50 } from './healthMath'
 
@@ -13,63 +15,76 @@ import { LIFELONG, SEDENTARY, STARTS_50 } from './healthMath'
    characters, bodies <= 140, no new facts, numbers or quotes; computed
    values (the volumes, fitness at an age) live in labels and the HUD only.
 
-   Camera: L0 is a chart read front-on (az 0, el 4, fov 30). From L1 the
-   camera rises to reveal age running into depth (L6: a new dimension) and
-   stays oblique: the health surfaces are inherently 3D, read through
-   colour, isolines and readouts (L12's exception). Portrait poses look
-   down more steeply, so age recedes up the phone screen.
+   Camera: L0 is a chart read front-on and level (az 0, el 0, fov 30). From
+   L1 the camera rises to reveal age running into depth (L6: a new
+   dimension) and stays oblique, from the front-RIGHT (see the note over the
+   poses): the health surfaces are inherently 3D, read through colour,
+   isolines and readouts (L12's exception). Every 3D pose is fitted to the
+   silhouette its beat ends on (frame.ts), clear of the HUD chip and the
+   pinned key, so the landscape fills the phone's tall focus rect.
    ========================================================================= */
 
-/**
- * A pose that fits `fit`. Perspective pushes the near bottom of an oblique
- * box further down the screen than its far top rises, so looking at the
- * box's centre left the solid low in the frame; the look-at point sits
- * lower and nearer (`lift` and `near`, in box fractions) so the projected
- * solid is centred in the focus rect.
- */
-const pose = (az: number, el: number, fit: () => Box, padPx: CamPose['padPx'], fov = 30, lift = 0.5, near = 0): CamPose => ({
+/** L0: a chart read front-on, level (el 0), so its verticals project exactly vertical (no stair-stepped axis). */
+const slicePose = (padPx: CamPose['padPx']): CamPose => ({
   target: () => {
-    const b = fit()
-    return [(b[0][0] + b[1][0]) / 2, b[0][1] + (b[1][1] - b[0][1]) * lift, (b[0][2] + b[1][2]) / 2 + (b[1][2] - b[0][2]) * near]
+    const b = sliceBox()
+    return [(b[0][0] + b[1][0]) / 2, (b[0][1] + b[1][1]) / 2, (b[0][2] + b[1][2]) / 2]
   },
-  az,
-  el,
-  fov,
-  fit: () => fit(),
+  az: 0,
+  el: 0,
+  fov: 30,
+  fit: sliceBox,
   padPx,
 })
 
-/* padding: room for the labels (duration ticks under the front edge, the age
-   ticks west of the left edge, CAPACITY by the post) and, from L2, the HUD
-   chip in the top-right corner. The volume boxes' top runs flat at 0.66 of
-   capacity across all ages, above the landscape at the back, so the top
-   pads can be small. */
-const PAD_L0_P = { l: 14, r: 14, t: 56, b: 60 }
-const PAD_L0_L = { l: 40, r: 40, t: 64, b: 70 }
-const PAD_P = { l: 40, r: 14, t: 10, b: 46 }
-const PAD_L = { l: 72, r: 40, t: 24, b: 56 }
-const PAD_HUD_P = { l: 40, r: 14, t: 22, b: 46 }
-const PAD_HUD_L = { l: 72, r: 40, t: 40, b: 56 }
+/* padding: room for the labels (the duration ticks under the front edge,
+   the age ticks east of the right edge). The HUD chip, the pinned key and
+   CAPACITY over its post are kept clear point by point (frame.ts), so the
+   top pad stays small and the landscape takes the height. */
+const PAD_L0_P = { l: 16, r: 16, t: 30, b: 38 }
+const PAD_L0_L = { l: 40, r: 40, t: 56, b: 64 }
+// l: CAPACITY is centred over the post, which is the leftmost point of the 3D beats
+const PAD_P = { l: 36, r: 14, t: 10, b: 38 }
+const PAD_L = { l: 60, r: 36, t: 20, b: 52 }
 
 /** the 3D beats use a slightly wider lens than the chart (depth reads through perspective) */
-const FOV3 = 36
-const LIFT = 0.36
-const NEAR = 0.1
-const SLICE_L = pose(0, 4, sliceBox, PAD_L0_L)
-const SLICE_P = pose(0, 4, sliceBox, PAD_L0_P)
-const STACK_L = pose(-34, 26, volumeBox, PAD_L, FOV3, LIFT, NEAR)
-const STACK_P = pose(-16, 26, volumeBox, PAD_P, FOV3, LIFT, NEAR)
-const CLAIM_L = pose(-34, 26, claimBox, PAD_HUD_L, FOV3, LIFT, NEAR)
-const CLAIM_P = pose(-16, 26, claimBox, PAD_HUD_P, FOV3, LIFT, NEAR)
+const FOV3 = 34
+
+/* what each pose must hold (frame.ts): the landscape the beat ends on plus its extras */
+const SIL_STACK: SilSpec = { grids: [GL], post: POST_CAP }
+const SIL_CLAIM: SilSpec = { grids: [GL], post: POST_CAP, claim: true, hud: true }
+// L3 and L4 share one frame (the L4 key reserved from L3, so the sink never re-frames)
+const SIL_LINE: SilSpec = { grids: [GL], post: POST_CAP, plane: true, hud: true, key: 1 }
+// L5 ends on "Starts at 50" over the dashed Sedentary outline (inside it); the axis spans the data
+const SIL_WAVE: SilSpec = { grids: [G50], post: POST_CAP_LOW, plane: true, hud: true, key: 1 }
+const SIL_HOLD: SilSpec = { grids: [GL], post: POST_CAP, plane: true, hud: true, key: 3 }
+const SIL_EXPLORE: SilSpec = { grids: [GL], post: POST_CAP, plane: true, hud: true }
+
+/*
+ * The camera looks from the front-RIGHT: the landscape falls from the power
+ * ridge (1 s) toward long durations (1 hr), so its lid faces +x and the
+ * engine's key light; from there the lid reads in full, the power ridge is
+ * the skyline (the lift at 50 shows in silhouette), the capacity axis stands
+ * against the slate over "1 s", and the age ticks run up the right edge,
+ * nowhere near CAPACITY.
+ */
+const SLICE_L = slicePose(PAD_L0_L)
+const SLICE_P = slicePose(PAD_L0_P)
+const STACK_L = silPose(34, 26, FOV3, PAD_L, SIL_STACK)
+const STACK_P = silPose(18, 28, FOV3, PAD_P, SIL_STACK)
+const CLAIM_L = silPose(34, 26, FOV3, PAD_L, SIL_CLAIM)
+const CLAIM_P = silPose(18, 28, FOV3, PAD_P, SIL_CLAIM)
 // L3 and L4: a slight rise so the plane reads (D.7)
-const LINE_L = pose(-34, 30, planeBox, PAD_HUD_L, FOV3, LIFT, NEAR)
-const LINE_P = pose(-16, 34, planeBox, PAD_HUD_P, FOV3, LIFT, NEAR)
-// L5: the lift happens in the back half of life (50 to 85), so the camera
-// looks down more steeply and those ages open up (D.7 gives P el 48 here)
-const WAVE_L = pose(-30, 38, planeBox, PAD_HUD_L, FOV3, 0.3, 0.02)
-const WAVE_P = pose(-14, 44, planeBox, PAD_HUD_P, FOV3, 0.3, 0.02)
-const HOLD_L = pose(-40, 24, planeBox, PAD_HUD_L, FOV3, LIFT, NEAR)
-const HOLD_P = pose(-22, 26, planeBox, PAD_HUD_P, FOV3, LIFT, NEAR)
+const LINE_L = silPose(34, 30, FOV3, PAD_L, SIL_LINE)
+const LINE_P = silPose(18, 32, FOV3, PAD_P, SIL_LINE)
+// L5: framed on the lifted landscape; the lift at 48 to 55 faces the camera as a lit ramp and
+// steps the power ridge's skyline up, over the dashed Sedentary outline it rose from
+const WAVE_L = silPose(30, 26, FOV3, PAD_L, SIL_WAVE)
+const WAVE_P = silPose(13, 37, FOV3, PAD_P, SIL_WAVE)
+const HOLD_L = silPose(40, 26, FOV3, PAD_L, SIL_HOLD)
+const HOLD_P = silPose(24, 32, FOV3, PAD_P, SIL_HOLD)
+const EXPLORE_L = silPose(34, 30, FOV3, PAD_L, SIL_EXPLORE)
+const EXPLORE_P = silPose(18, 32, FOV3, PAD_P, SIL_EXPLORE)
 
 export const healthStory: StoryDef = {
   key: 'health',
@@ -154,13 +169,14 @@ export const healthStory: StoryDef = {
   Explore: HealthExplore,
   Hud: HealthHud,
   explore: {
-    cam: { L: LINE_L, P: LINE_P },
+    cam: { L: EXPLORE_L, P: EXPLORE_P },
     limits: { az: [-75, 75], el: [8, 70], zoom: [0.6, 1.6] },
     scrubToggle: true,
     initFromBeat(i) {
       const s = useHealthExplore.getState()
       s.setProfile(i === 4 ? SEDENTARY.name : i === 5 ? STARTS_50.name : LIFELONG.name)
-      s.setAge(i === 6 ? 85 : 45)
+      // the slice opens mid-life, where its whole profile shows (it glides there from the story's frame)
+      s.setAge(50)
       s.setShowLine(true)
       s.setCompare(true)
     },

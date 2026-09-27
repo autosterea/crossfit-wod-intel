@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { PAL, spectrumCss } from '../../fitnessData'
 import { Readout } from '../../ui'
 import { ChipRadio } from '../../story/ui/ChipRadio'
@@ -23,8 +24,9 @@ export default function HealthExplore() {
   const compare = useHealthExplore((s) => s.compare)
   const set = useHealthExplore.getState
   const p = profileByName(name)
-  const volume = healthScore(p)
-  const fitness = fitnessAt(p, age)
+  // the volume depends on the profile only: never recomputed while the slice is dragged
+  const volume = useMemo(() => healthScore(profileByName(name)), [name])
+  const fitness = useMemo(() => fitnessAt(profileByName(name), age), [name, age])
   const isLife = p.name === LIFELONG.name
 
   return (
@@ -102,7 +104,7 @@ export default function HealthExplore() {
         )}
       </div>
 
-      <p className="st-ex-note">The amber slice is the fitness curve from model 04, at one age. Health is every slice you will ever live, stacked.</p>
+      <p className="st-ex-note">The amber slice is the fitness curve from chapter 04, at one age. Health is every slice you will ever live, stacked.</p>
     </div>
   )
 }

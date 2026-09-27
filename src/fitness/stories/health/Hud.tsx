@@ -18,23 +18,21 @@ export default function HealthHud() {
   const num = useRef<HTMLSpanElement>(null)
   const mode = useStoryStore((s) => s.mode)
   useHudOpacity(root, (T) => (useStoryStore.getState().mode === 'explore' ? 1 : hudOpacity(T)))
-  useEffect(
-    () =>
-      onFrame(() => {
-        const n = num.current
-        if (!n) return
-        const v = useStoryStore.getState().mode === 'explore' ? scoreOfMean(HS.score) : hudValue(clock.T)
-        const s = String(v)
-        if (n.textContent !== s) n.textContent = s
-        const c = spectrumCss(v / 100)
-        if (n.dataset.c !== c) {
-          n.dataset.c = c
-          n.style.color = c
-          n.style.textShadow = '0 0 18px ' + c.replace('rgb(', 'rgba(').replace(')', ', 0.35)')
-        }
-      }),
-    [mode],
-  )
+  useEffect(() => {
+    // the integer is compared first: strings are built only on the frames the number changes
+    let last = -1
+    return onFrame(() => {
+      const n = num.current
+      if (!n) return
+      const v = useStoryStore.getState().mode === 'explore' ? scoreOfMean(HS.score) : hudValue(clock.T)
+      if (v === last) return
+      last = v
+      n.textContent = String(v)
+      const c = spectrumCss(v / 100)
+      n.style.color = c
+      n.style.textShadow = '0 0 18px ' + c.replace('rgb(', 'rgba(').replace(')', ', 0.35)')
+    })
+  }, [mode])
   return (
     <div ref={root} className="st-hud-in">
       <div className="st-hud-eyebrow">VOLUME = HEALTH</div>

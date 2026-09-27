@@ -2,7 +2,7 @@ import { useSyncExternalStore } from 'react'
 import { INDEPENDENCE_LINE } from '../../fitnessData'
 import { map } from '../../lessonMath'
 import { focusRect, subscribeFocus } from '../../story/camera/focusRect'
-import type { Box, V3 } from '../../story/types'
+import type { Box } from '../../story/types'
 import { AGE_MAX, AGE_MIN } from './healthMath'
 
 /* =========================================================================
@@ -15,9 +15,9 @@ import { AGE_MAX, AGE_MIN } from './healthMath'
    and 18 deep but at most 6.2 tall: seen from any elevation that shows
    age, its relief read as a shallow tray. The duration axis is narrower and
    the capacity scale taller, most of all on a portrait stage (a phone held
-   upright), so the relief reads against the 18 units of depth and the
-   solid fills the screen. Axes carry labels and
-   isolines, so the aspect is a presentation choice; ages, heights relative
+   upright), where the landscape must fill a tall focus rect and its relief
+   (the sink, the lift at 50) must read as height. The capacity axis has no
+   numbers, so the aspect is a presentation choice; ages, heights relative
    to each other and every computed number are identical. The world follows
    the STAGE aspect, never the focus rect, so an explore sheet detent never
    reshapes the landscape.
@@ -29,10 +29,12 @@ export interface World {
   /** world height of capacity 1.0 */
   YS: number
   key: 'wide' | 'narrow'
+  /** 0 wide, 1 narrow (numeric cache keys) */
+  id: number
 }
 
-export const WIDE: World = { XW: 8, YS: 9, key: 'wide' }
-export const NARROW: World = { XW: 4.4, YS: 10, key: 'narrow' }
+export const WIDE: World = { XW: 8, YS: 10, key: 'wide', id: 0 }
+export const NARROW: World = { XW: 4.4, YS: 16, key: 'narrow', id: 1 }
 
 /** Portrait stage (a phone held upright): the narrow, tall landscape. */
 export const narrowNow = (): boolean => focusRect.W / Math.max(1, focusRect.H) < 0.75
@@ -50,18 +52,22 @@ export const Z1 = -9
 export const PLANE_M = 0.5
 /** its front edge lies just in front of the volume's front face */
 export const PLANE_FRONT = 0.03
-/** the capacity axis post at the front-left corner rises to capacity 0.95 */
-export const POST_CAP = 0.95
-/** top of the fitted slice box in L0: capacity 1.03 (D.7) */
-export const TOP_CAP = 1.03
 /**
- * Top of the fitted VOLUME boxes (L1 on). A box's top runs flat across every
- * age, and its back-top edge sets the top of the frame; at capacity 1.03 it
- * left a wide empty band over the landscape, whose back (age 85) never rises
- * above 0.64. The front peak and the capacity post project well below that
- * edge at these elevations, so nothing is cut.
+ * The capacity axis: the post over "1 s" (the front-left corner), the chart's
+ * y axis in L0 and the solid's own front-left edge from L1. The camera looks
+ * from the front-RIGHT (the side the landscape faces: it falls from the power
+ * ridge toward long durations), so the post stands against the slate and
+ * CAPACITY sits over it, while the age ticks run up the right floor edge.
+ * It reaches capacity 0.95 over the lifelong landscapes; over the lifted
+ * "Starts at 50" landscape (L5, peak 0.38) the axis spans the data shown,
+ * 0.52, so the frame holds the landscape rather than an empty axis.
  */
-export const VOL_TOP_CAP = 0.66
+export const POST_CAP = 0.95
+export const POST_CAP_LOW = 0.52
+/** length of the age tick marks, outward from the right floor edge */
+export const AGE_TICK = 0.42
+/** top of the fitted slice box in L0 */
+export const TOP_CAP = 0.97
 export { INDEPENDENCE_LINE }
 
 export const zOfAge = (age: number) => map(age, AGE_MIN, AGE_MAX, Z0, Z1)
@@ -69,10 +75,11 @@ export const ageOfZ = (z: number) => map(z, Z0, Z1, AGE_MIN, AGE_MAX)
 export const xOf = (u: number, XW: number) => -XW + 2 * XW * u
 export const uOfX = (x: number, XW: number) => (x + XW) / (2 * XW)
 
+/** where the explore drag handle (and its knob) sits along the amber slice (duration u) */
+export const HANDLE_U = 0.3
+
 /** z of the L0 slice (age 30). */
 export const Z30 = zOfAge(30)
-
-/* ------------------------------ fitted boxes ------------------------------ */
 
 /** L0: the age-30 slice, front-on (D.7 L0). */
 export const sliceBox = (): Box => {
@@ -83,34 +90,7 @@ export const sliceBox = (): Box => {
   ]
 }
 
-/** L1 on: the volume [-XW, 0, -9]..[XW, 0.66 YS, 9]. */
-export const volumeBox = (): Box => {
-  const W = worldNow()
-  return [
-    [-W.XW, 0, Z1],
-    [W.XW, VOL_TOP_CAP * W.YS, Z0],
-  ]
-}
-
-/** L2: the volume plus the floor strip in front that carries the SDF claim. */
-export const claimBox = (): Box => {
-  const W = worldNow()
-  return [
-    [-W.XW, 0, Z1],
-    [W.XW, VOL_TOP_CAP * W.YS, Z0 + FLOOR_TEXT_Z + 0.9],
-  ]
-}
-
-/** L3 on: the volume plus the independence plane's margin. */
-export const planeBox = (): Box => {
-  const W = worldNow()
-  return [
-    [-W.XW - PLANE_M, 0, Z1 - PLANE_M],
-    [W.XW + PLANE_M, VOL_TOP_CAP * W.YS, Z0],
-  ]
-}
-
-export const centerOf = (b: Box): V3 => [(b[0][0] + b[1][0]) / 2, (b[0][1] + b[1][1]) / 2, (b[0][2] + b[1][2]) / 2]
-
 /** The floor claim sits this far in front of the front edge (its centre line). */
-export const FLOOR_TEXT_Z = 2.6
+export const FLOOR_TEXT_Z = 4.3
+/** The claim's world size (Anton cap height): it spans 92% of the duration axis. */
+export const claimSize = (W: World) => Math.min(1.9, (2 * W.XW * 0.92) / 7.2)

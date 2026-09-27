@@ -14,7 +14,7 @@ import {
   sampleGrid,
   scoreOfMean,
 } from './healthMath'
-import { INDEPENDENCE_LINE, Z0, Z30 } from './layout'
+import { INDEPENDENCE_LINE, POST_CAP, POST_CAP_LOW, Z0, Z30 } from './layout'
 
 /* =========================================================================
    06 HEALTH timeline (DESIGN.md D.7): every cue of the seven beats as a pure
@@ -30,6 +30,7 @@ export const B = { slice: 0, stack: 1, volume: 2, line: 3, sink: 4, anyAge: 5, h
 
 /** the hot L-stroke: capacity axis down, then the duration baseline */
 export const axesDraw = (T: number) => at(T, B.slice, 0, 0.16, ease.draw)
+
 /** "1 s", "1 hr", DURATION, CAPACITY fade in as the axes land */
 export const axisTicks = (T: number) => at(T, B.slice, 0.12, 0.24)
 /** the pen draws the age-30 fitness curve */
@@ -48,6 +49,9 @@ export const axesZ = (T: number) => lerp(Z30, Z0, axesSlide(T))
 export const frameDraw = (T: number) => at(T, B.stack, 0.1, 0.42, ease.draw)
 /** age ticks 20, 40, 60, 80 and AGE */
 export const ageTicks = (T: number) => at(T, B.stack, 0.26, 0.42)
+/** the capacity axis spans the data shown: 0.95 over the lifelong landscapes, 0.52 over the lifted one (L5) */
+export const postCap = (T: number) =>
+  POST_CAP + (POST_CAP_LOW - POST_CAP) * (at(T, B.anyAge, 0, 0.18, ease.morph) - at(T, B.hold, 0, 0.35, ease.morph))
 
 /** The 14 slices at ages 20, 25, ... 85. */
 export const SLICE_AGES = Array.from({ length: 14 }, (_, k) => 20 + 5 * k)
@@ -102,6 +106,8 @@ export const planeOn = (T: number) => at(T, B.line, 0.1, 0.22)
 /** the crisp red edge (L10), hot while it draws */
 export const edgeDraw = (T: number) => at(T, B.line, 0.55, 0.85, ease.draw)
 export const lineCallout = (T: number) => at(T, B.line, 0.84, 0.96)
+/** the red pen where the landscape meets the plane lands once the plane is in place */
+export const contourOn = (T: number) => at(T, B.line, 0.6, 0.8)
 
 /* ---------------------------- L4 stop training ---------------------------- */
 
@@ -123,17 +129,40 @@ export const indep70 = (T: number) => at(T, B.sink, 0.86, 0.96) * (1 - at(T, B.a
 
 export const SCAN_FROM = 45
 export const SCAN_TO = 85
-/** the scanner appears at 45, sweeps to 85 (linear, time-true) and stays at the far end */
-export const scanOn = (T: number) => at(T, B.anyAge, 0, 0.15) * (1 - at(T, B.hold, 0, 0.15))
-export const scanAge = (T: number) => SCAN_FROM + (SCAN_TO - SCAN_FROM) * at(T, B.anyAge, 0.15, 0.85)
-/** everything up to the scanner's start adopts the new profile as it appears */
-export const scanPre = (T: number) => at(T, B.anyAge, 0, 0.15, ease.settle)
+/** where the scanner enters: a little in front of age 20, so at t = 0 nothing has lifted yet (continuity) */
+export const SCAN_IN = 17
+/** the approach: 0 to 0.15, from the front edge to age 45; then the time-true sweep to 85 */
+const APPROACH = 0.15
+const SWEEP = 0.7
+const V_SWEEP = (SCAN_TO - SCAN_FROM) / SWEEP
+/** quadratic approach that hands over to the sweep at its own speed (no jolt at 45) */
+const K_APP = (SCAN_FROM - SCAN_IN - V_SWEEP * APPROACH) / (APPROACH * APPROACH)
+/** the scanner fades in at the front edge and stays at the far end */
+export const scanOn = (T: number) => at(T, B.anyAge, 0, 0.05) * (1 - at(T, B.hold, 0, 0.15))
+/**
+ * The scanner's age. It enters at the front (age 20) and runs to 45 over
+ * the first 15% of the beat, lifting the young ages as it passes, then sweeps
+ * 45 to 85 linearly (D.7). The surface changes only behind the scanner, so
+ * the curtain is the only cause of the lift on screen.
+ */
+export function scanAge(T: number): number {
+  if (T < B.anyAge) return SCAN_IN
+  if (T >= B.hold) return SCAN_TO
+  const t = T - B.anyAge
+  if (t < APPROACH) {
+    const r = APPROACH - t
+    return SCAN_FROM - V_SWEEP * r - K_APP * r * r
+  }
+  return Math.min(SCAN_TO, SCAN_FROM + V_SWEEP * (t - APPROACH))
+}
+/** the curtain of light over the scanner line fades once the sweep lands; the hot line stays */
+export const curtainOn = (T: number) => scanOn(T) * (1 - at(T, B.anyAge, 0.86, 0.97))
 /**
  * Weight of "Starts at 50" at one age: 1 behind the scanner, a 3-year bow
  * wave just ahead of it, 0 beyond. At t = 1 (scanner at 85) every age is 1,
  * so the surface equals gridFor(Starts at 50) exactly (D.7 L5).
  */
-export const waveW = (age: number, pre: number, s: number) => pre * smoothstep(age - 3, age, s)
+export const waveW = (age: number, s: number) => smoothstep(age - 3, age, s)
 export const s50Name = (T: number) => at(T, B.anyAge, 0.8, 0.9) * (1 - at(T, B.hold, 0, 0.12))
 export const indep85 = (T: number) => at(T, B.anyAge, 0.86, 0.96) * (1 - at(T, B.hold, 0, 0.12))
 
@@ -144,6 +173,8 @@ export const backW = (T: number) => at(T, B.hold, 0, 0.45, ease.morph)
 export const ghostIn = (T: number) => at(T, B.hold, 0.15, 0.4)
 export const ageSliceOn = (T: number) => at(T, B.hold, 0.4, 0.46)
 export const ageSliceAge = (T: number) => 20 + 65 * at(T, B.hold, 0.42, 0.9)
+/** the slice is the speaking element (HDR) while it rides, and stays lit at 85 */
+export const ageSliceRun = (T: number) => at(T, B.hold, 0.4, 0.46)
 export const volReadouts = (T: number) => at(T, B.hold, 0.3, 0.42)
 export const indep90 = (T: number) => at(T, B.hold, 0.9, 0.98)
 
@@ -157,7 +188,8 @@ export const G50 = 2
 const COLS = G.map(colSums)
 const ROWS = G.map(rowSums)
 const N = ND * NA
-const MEANS = COLS.map((c) => c.reduce((s, v) => s + v, 0) / N)
+/** mean capacity of each story grid (the volume, before the score scaling) */
+export const MEANS = COLS.map((c) => c.reduce((s, v) => s + v, 0) / N)
 
 /**
  * The displayed surface at T, as a blend of two grids:
@@ -169,12 +201,10 @@ export interface Blend {
   a: number
   b: number
   k: number
-  pre: number
   s: number
 }
 
 export function blendAt(T: number, out: Blend): Blend {
-  out.pre = 0
   out.s = 0
   if (T < B.sink) {
     out.kind = 0
@@ -191,7 +221,6 @@ export function blendAt(T: number, out: Blend): Blend {
     out.a = GS
     out.b = G50
     out.k = 0
-    out.pre = scanPre(T)
     out.s = scanAge(T)
   } else {
     out.kind = 3
@@ -208,7 +237,7 @@ export function blendW(bl: Blend, u: number, age: number): number {
     case 1:
       return sinkW(u, bl.k)
     case 2:
-      return waveW(age, bl.pre, bl.s)
+      return waveW(age, bl.s)
     case 3:
       return bl.k
     default:
@@ -230,7 +259,7 @@ export function writeBlend(bl: Blend, out: Float32Array): void {
   }
 }
 
-const _bl: Blend = { kind: 0, a: 0, b: 0, k: 0, pre: 0, s: 0 }
+const _bl: Blend = { kind: 0, a: 0, b: 0, k: 0, s: 0 }
 
 /** Capacity of the story surface at (u, age) at story time T (labels, pens). */
 export function capAt(T: number, u: number, age: number): number {
@@ -250,7 +279,7 @@ export function meanAt(T: number): number {
   if (bl.kind === 1) {
     for (let di = 0; di < ND; di++) s += lerp(COLS[bl.a][di], COLS[bl.b][di], sinkW(di / (ND - 1), bl.k))
   } else {
-    for (let ai = 0; ai < NA; ai++) s += lerp(ROWS[bl.a][ai], ROWS[bl.b][ai], waveW(ageOfRow(ai), bl.pre, bl.s))
+    for (let ai = 0; ai < NA; ai++) s += lerp(ROWS[bl.a][ai], ROWS[bl.b][ai], waveW(ageOfRow(ai), bl.s))
   }
   return s / N
 }
@@ -297,6 +326,7 @@ if (import.meta.env.DEV) {
     indep85,
     claimIn,
     fuse,
+    postCap,
   ]
   for (let n = 1; n < 7; n++) {
     probes.forEach((f, i) => {

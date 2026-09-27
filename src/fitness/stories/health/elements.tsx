@@ -4,30 +4,34 @@ import { PAL, agingCapacity } from '../../fitnessData'
 import { useSafeFrame } from '../../story/useSafeFrame'
 import { AreaFill, AreaStrips } from '../../story/kit/Fill'
 import { Pen, PenBatch, PEN } from '../../story/kit/Pen'
+import { Nodes } from '../../story/kit/Nodes'
 import { SdfText } from '../../story/kit/SdfText'
 import { impactK } from '../../story/kit/impact'
 import { focus } from '../../story/cue'
 import { useStoryStore } from '../../story/store'
 import { useWorldObstacle, type WorldObstacle } from '../../story/labels/useLabel'
-import type { Box } from '../../story/types'
-import { LIFELONG, ND, sampleGrid } from './healthMath'
-import { FLOOR_TEXT_Z, POST_CAP, Z0, Z1, Z30, xOf, zOfAge, type World } from './layout'
+import { AGE_MIN, LIFELONG, ND, sampleGrid } from './healthMath'
+import { AGE_TICK, FLOOR_TEXT_Z, HANDLE_U, POST_CAP, Z0, Z1, Z30, claimSize, xOf, zOfAge, type World } from './layout'
 import { HS } from './state'
-import { B, FLY, SLICE_AGES, ageTicks, areaSweep, axesDraw, axesZ, claimIn, curveDraw, frameDraw, fuse, l0Out, sliceP } from './timeline'
+import { B, FLY, SLICE_AGES, ageSliceRun, ageTicks, areaSweep, axesDraw, axesZ, claimIn, curveDraw, frameDraw, fuse, l0Out, postCap, sliceP } from './timeline'
 
 /* =========================================================================
    Story-built elements of 06 HEALTH (DESIGN.md D.7):
-     L0  the hot L-stroke axes, the age-30 fitness curve (a callback to
-         chapter 04) and its luminous area;
-     L1  the axes slide forward to the front edge, the floor frame draws
-         with the age axis first, and the 14 slices are dealt in, one per
-         five years of life, before they fuse into the surface;
+     L0  the hot L-stroke axes (capacity down the left, then the duration
+         baseline), the age-30 fitness curve (a callback to chapter 04) and
+         its luminous area;
+     L1  the axes slide forward to the front edge (the post becomes the
+         capacity axis on the solid's front-left corner), the floor frame
+         draws with the age axis (the right edge, facing the camera) first,
+         and the 14 slices are dealt in, one per five years of life, before
+         they fuse into the surface;
      L2  the floor claim VOLUME = HEALTH;
      L5  the scanner: a curtain of light across x at the scanner's age,
          rising from the landscape; its line on the landscape is the
          chapter's one hot element (lit x1.8 by the impact accent);
      L6  the amber age slice: the fitness curve at one age, a pen on the
-         landscape plus its cross-section seen through the solid.
+         landscape plus its cross-section seen through the solid; in
+         explore a knob on it is the drag handle.
    ========================================================================= */
 
 /** far outside every view: where a segment waits before it is needed (never a zero-length dot) */
@@ -52,54 +56,100 @@ const lifeAt = (u: number, age: number) => agingCapacity(u, age, LIFELONG)
 
 /* ------------------------------- L0 chart ------------------------------- */
 
+/** the capacity post is one segment: a straight stroke needs no subdivision (the pen clips by arc length), and
+    a translucent stroke would show its joins as beads */
+const POST_K = 1
+
 /**
- * The construction: the capacity axis post (down) and the duration baseline
- * (right) as ONE hot stroke, at the age-30 slice in L0; in L1 it slides
- * forward to become the front edge of the landscape (age 20).
+ * The construction: the capacity axis (down the left, over "1 s") and the
+ * duration baseline (right) as ONE hot stroke at the age-30 slice in L0: two
+ * batches whose progress windows split the draw by arc length, so the pen
+ * head runs down the post and straight on along the baseline. In L1 both
+ * slide forward to the front edge (age 20): the post becomes the capacity
+ * axis of the solid, standing on its front-left corner, and the baseline its
+ * front edge. The post spans the data shown (postCap).
  */
 export function Axes({ W }: { W: World }) {
-  const segs = useMemo(() => {
+  const postLen = POST_CAP * W.YS
+  const split = postLen / (postLen + 2 * W.XW)
+  const post = useMemo(() => {
     const pts: number[] = []
-    pushLine(pts, [-W.XW, POST_CAP * W.YS, Z30], [-W.XW, 0, Z30], 14, false)
-    pushLine(pts, [-W.XW, 0, Z30], [W.XW, 0, Z30], 30, true)
+    pushLine(pts, [-W.XW, POST_CAP * W.YS, Z30], [-W.XW, 0, Z30], POST_K, false)
     return toSegs(pts)
   }, [W])
-  const last = useRef('')
-  const update = (T: number, s: Float32Array): boolean => {
-    const z = isExplore() ? Z0 : axesZ(T)
-    const key = W.key + '|' + z
-    if (key === last.current) return false
-    last.current = key
+  const base = useMemo(() => {
+    const pts: number[] = []
+    pushLine(pts, [-W.XW, 0, Z30], [W.XW, 0, Z30], 1, false)
+    return toSegs(pts)
+  }, [W])
+  const zNow = (T: number) => (isExplore() ? Z0 : axesZ(T))
+  const lastB = useRef({ buf: null as Float32Array | null, z: NaN })
+  const updateBase = (T: number, s: Float32Array): boolean => {
+    const z = zNow(T)
+    const l = lastB.current
+    if (z === l.z && s === l.buf) return false
+    l.z = z
+    l.buf = s
     for (let i = 2; i < s.length; i += 3) s[i] = z
     return true
   }
+  const lastP = useRef({ buf: null as Float32Array | null, z: NaN, h: NaN })
+  const updatePost = (T: number, s: Float32Array): boolean => {
+    const z = zNow(T)
+    const h = (isExplore() ? POST_CAP : postCap(T)) * W.YS
+    const l = lastP.current
+    if (z === l.z && h === l.h && s === l.buf) return false
+    l.z = z
+    l.h = h
+    l.buf = s
+    for (let k = 0; k < POST_K; k++) {
+      const o = k * 6
+      s[o + 1] = h * (1 - k / POST_K)
+      s[o + 4] = h * (1 - (k + 1) / POST_K)
+      s[o + 2] = s[o + 5] = z
+    }
+    return true
+  }
   return (
-    <PenBatch
-      segments={segs}
-      update={update}
-      width={PEN.axis}
-      byArc
-      head
-      hot
-      progress={(T) => (isExplore() ? 1 : axesDraw(T))}
-      opacity={(T) => 0.62 * (isExplore() ? 1 : focus(T, B.slice))}
-      renderOrder={30}
-    />
+    <>
+      <PenBatch
+        segments={post}
+        update={updatePost}
+        width={PEN.axis}
+        byArc
+        head
+        hot
+        progress={(T) => (isExplore() ? 1 : Math.min(1, axesDraw(T) / split))}
+        opacity={(T) => 0.66 * (isExplore() ? 1 : focus(T, B.slice))}
+        renderOrder={30}
+      />
+      <PenBatch
+        segments={base}
+        update={updateBase}
+        width={PEN.axis}
+        byArc
+        head
+        hot
+        progress={(T) => (isExplore() ? 1 : Math.max(0, (axesDraw(T) - split) / (1 - split)))}
+        opacity={(T) => 0.62 * (isExplore() ? 1 : focus(T, B.slice))}
+        renderOrder={30}
+      />
+    </>
   )
 }
 
-/** L1: the floor frame, the age axis first (front-left to back-left: the edge that faces the camera), then back and right; plus the age tick marks. */
+/** L1: the floor frame, the age axis first (front-right to back-right: the edge that faces the camera), then back and left; plus the age tick marks. */
 export function FloorFrame({ W }: { W: World }) {
   const segs = useMemo(() => {
     const pts: number[] = []
-    pushLine(pts, [-W.XW, 0, Z0], [-W.XW, 0, Z1], 36, false)
-    pushLine(pts, [-W.XW, 0, Z1], [W.XW, 0, Z1], 20, true)
-    pushLine(pts, [W.XW, 0, Z1], [W.XW, 0, Z0], 36, true)
+    pushLine(pts, [W.XW, 0, Z0], [W.XW, 0, Z1], 1, false)
+    pushLine(pts, [W.XW, 0, Z1], [-W.XW, 0, Z1], 1, true)
+    pushLine(pts, [-W.XW, 0, Z1], [-W.XW, 0, Z0], 1, true)
     return toSegs(pts)
   }, [W])
   const ticks = useMemo(() => {
     const out = new Float32Array(4 * 6)
-    ;[20, 40, 60, 80].forEach((a, i) => out.set([-W.XW, 0, zOfAge(a), -W.XW - 0.42, 0, zOfAge(a)], i * 6))
+    ;[20, 40, 60, 80].forEach((a, i) => out.set([W.XW, 0, zOfAge(a), W.XW + AGE_TICK, 0, zOfAge(a)], i * 6))
     return out
   }, [W])
   const vis = (T: number) => (isExplore() ? 1 : focus(T, B.stack))
@@ -171,19 +221,22 @@ const NS = SLICE_AGES.length
 /** each slice's own curve (exact Lifelong trainer capacities) */
 const SLICE_CAP = SLICE_AGES.map((a) => Float32Array.from({ length: SN }, (_, i) => lifeAt(i / (SN - 1), a)))
 const SLICE_COLORS = SLICE_AGES.map(() => PAL.yellowGreen)
+const slicesOn = (T: number) => (T < B.stack || T >= B.volume || isExplore() ? 0 : 1 - fuse(T))
 
 /**
  * The 14 slices at ages 20 to 85, every five years, dealt in from the
  * front one after another: each slides back to its own age and rises
  * from the floor as it goes (the age-30 one is the L0 curve itself). They
- * fuse into the surface at the end of L1.
+ * fuse into the surface at the end of L1. Their writers run only while the
+ * slices are up (L1), so the rest of the chapter pays nothing for them.
  */
 export function Slices({ W }: { W: World }) {
-  const lastF = useRef('')
+  const lastF = useRef({ w: -1, T: NaN })
   const writeFills = (T: number, top: Float32Array, bottom: Float32Array): boolean => {
-    const key = W.key + '|' + T
-    if (key === lastF.current) return false
-    lastF.current = key
+    const l = lastF.current
+    if (l.w === W.id && l.T === T) return false
+    l.w = W.id
+    l.T = T
     for (let k = 0; k < NS; k++) {
       const p = sliceP(T, k)
       const z = zOfAge(SLICE_AGES[k]) + FLY * (1 - p)
@@ -198,11 +251,15 @@ export function Slices({ W }: { W: World }) {
     return true
   }
   const segs = useMemo(() => new Float32Array(NS * (SN - 1) * 6).fill(AWAY), [])
-  const lastP = useRef('')
+  const lastP = useRef({ buf: null as Float32Array | null, w: -1, T: NaN })
   const writePens = (T: number, s: Float32Array): boolean => {
-    const key = W.key + '|' + T
-    if (key === lastP.current) return false
-    lastP.current = key
+    // PenBatch runs its writer before its visibility check: skip it while the slices are down
+    if (slicesOn(T) <= 0) return false
+    const l = lastP.current
+    if (l.buf === s && l.w === W.id && l.T === T) return false
+    l.buf = s
+    l.w = W.id
+    l.T = T
     for (let k = 0; k < NS; k++) {
       const p = sliceP(T, k)
       const z = zOfAge(SLICE_AGES[k]) + FLY * (1 - p) + 0.02
@@ -222,7 +279,6 @@ export function Slices({ W }: { W: World }) {
     }
     return true
   }
-  const on = (T: number) => (T < B.stack || T >= B.volume || isExplore() ? 0 : 1 - fuse(T))
   return (
     <>
       <AreaStrips
@@ -230,7 +286,7 @@ export function Slices({ W }: { W: World }) {
         points={SN}
         colors={SLICE_COLORS}
         write={writeFills}
-        opacity={on}
+        opacity={slicesOn}
         lo={0}
         hi={0.16}
         gamma={5}
@@ -240,7 +296,7 @@ export function Slices({ W }: { W: World }) {
         rimAlpha={0.3}
         renderOrder={11}
       />
-      <PenBatch segments={segs} color={PAL.yellowGreen} width={PEN.axis} update={writePens} opacity={on} renderOrder={31} />
+      <PenBatch segments={segs} color={PAL.yellowGreen} width={PEN.axis} update={writePens} opacity={slicesOn} renderOrder={31} />
     </>
   )
 }
@@ -249,26 +305,35 @@ export function Slices({ W }: { W: World }) {
 
 /** SDF "VOLUME = HEALTH" laid on the floor in front (Anton, chalk 22%); a label obstacle while up. */
 export function FloorClaim({ W }: { W: World }) {
-  const size = Math.min(1.9, (2 * W.XW * 0.92) / 7.2)
+  const size = claimSize(W)
   const z = Z0 + FLOOR_TEXT_Z
   const on = (T: number) => (isExplore() ? 0 : claimIn(T))
+  // two rows of points along the word (not its screen box: seen obliquely the word runs on a
+  // diagonal, and its bounding rect would cover the duration labels under the front edge)
   const obstacle = useMemo<WorldObstacle>(
     () => ({
-      box: (T: number): Box | null =>
-        on(T) < 0.05
-          ? null
-          : [
-              [-W.XW * 0.95, 0, z - size * 0.55],
-              [W.XW * 0.95, 0.02, z + size * 0.55],
-            ],
-      padPx: 4,
+      points: (T: number, o: Float32Array): number => {
+        if (on(T) < 0.05) return 0
+        let n = 0
+        for (const dz of [-0.28 * size, 0.28 * size]) {
+          for (let i = 0; i < 16; i++) {
+            o[n * 3] = -W.XW * 0.9 + (1.8 * W.XW * i) / 15
+            o[n * 3 + 1] = 0.02
+            o[n * 3 + 2] = z + dz
+            n++
+          }
+        }
+        return n
+      },
+      maxPoints: 32,
+      radiusPx: 9,
     }),
     [W, size, z],
   )
   useWorldObstacle('health-claim', obstacle)
   return (
     <group position={[0, 0.02, z]} rotation={[-Math.PI / 2, 0, 0]}>
-      <SdfText font="anton" text="VOLUME = HEALTH" size={size} color={PAL.chalk} opacity={(T) => 0.22 * on(T)} letterSpacing={0.03} renderOrder={44} />
+      <SdfText font="anton" text="VOLUME = HEALTH" size={size} color={PAL.chalk} opacity={(T) => 0.24 * on(T)} letterSpacing={0.03} renderOrder={44} />
     </group>
   )
 }
@@ -281,7 +346,7 @@ const surfY = (u: number, age: number, YS: number) => sampleGrid(HS.grid, u, age
 /* ------------------------------- L5 scanner ------------------------------- */
 
 /** height of the scanner's curtain above the landscape, in capacity units */
-const SCAN_H = 0.24
+const SCAN_H = 0.2
 const SCAN_COLORS = [PAL.yellowGreen]
 
 /**
@@ -289,32 +354,42 @@ const SCAN_COLORS = [PAL.yellowGreen]
  * x at the scanner's age, standing on the landscape (brightest where it
  * meets it, fading upward). Its line on the landscape is the speaking
  * element: hot, and lit x1.8 by the impact accent as the wave passes 50.
+ * Once the sweep lands at 85 the curtain fades and only the hot line
+ * stays, so the far end of the landscape is not hidden behind a haze.
  */
 export function Scanner({ W }: { W: World }) {
   const group = useRef<THREE.Group>(null)
   const line = useMemo(() => new Float32Array(ND * 3), [])
-  const lastL = useRef('')
+  // the scanner enters a little in front of age 20; it is drawn on the landscape
+  const drawnAge = () => Math.max(AGE_MIN, HS.scanAge)
+  const lastL = useRef({ w: -1, ver: -1, a: NaN })
   const updateLine = (_T: number, p: Float32Array): boolean => {
-    const key = W.key + '|' + HS.gridVer + '|' + HS.scanAge
-    if (key === lastL.current) return false
-    lastL.current = key
+    const l = lastL.current
+    const a = drawnAge()
+    if (l.w === W.id && l.ver === HS.gridVer && l.a === a) return false
+    l.w = W.id
+    l.ver = HS.gridVer
+    l.a = a
     for (let i = 0; i < ND; i++) {
       const u = i / (ND - 1)
       p[i * 3] = xOf(u, W.XW)
-      p[i * 3 + 1] = surfY(u, HS.scanAge, W.YS) + 0.06
+      p[i * 3 + 1] = surfY(u, a, W.YS) + 0.06
       p[i * 3 + 2] = 0
     }
     return true
   }
-  const lastC = useRef('')
+  const lastC = useRef({ w: -1, ver: -1, a: NaN })
   const writeCurtain = (_T: number, top: Float32Array, bottom: Float32Array): boolean => {
-    const key = W.key + '|' + HS.gridVer + '|' + HS.scanAge
-    if (key === lastC.current) return false
-    lastC.current = key
+    const l = lastC.current
+    const a = drawnAge()
+    if (l.w === W.id && l.ver === HS.gridVer && l.a === a) return false
+    l.w = W.id
+    l.ver = HS.gridVer
+    l.a = a
     for (let i = 0; i < ND; i++) {
       const u = i / (ND - 1)
       top[i * 3] = xOf(u, W.XW)
-      const y = surfY(u, HS.scanAge, W.YS)
+      const y = surfY(u, a, W.YS)
       top[i * 3 + 1] = y + SCAN_H * W.YS
       top[i * 3 + 2] = 0
       bottom[i] = y
@@ -327,13 +402,13 @@ export function Scanner({ W }: { W: World }) {
       const g = group.current
       if (!g) return
       g.visible = HS.scanOp > 0.004
-      g.position.z = zOfAge(HS.scanAge)
+      g.position.z = zOfAge(drawnAge())
     },
     { hide: group },
   )
   return (
     <group ref={group}>
-      <AreaStrips strips={1} points={ND} colors={SCAN_COLORS} write={writeCurtain} opacity={() => HS.scanOp} lo={0.5} hi={0} gamma={0.75} additive renderOrder={23} />
+      <AreaStrips strips={1} points={ND} colors={SCAN_COLORS} write={writeCurtain} opacity={() => HS.curtainOp} lo={0.5} hi={0} gamma={0.75} additive renderOrder={23} />
       <Pen
         points={line}
         update={updateLine}
@@ -354,16 +429,19 @@ const SLICE_FILL = [PAL.well]
 /**
  * The amber age slice: the fitness curve at one age as a pen on the
  * landscape, plus its cross-section down to the floor (inside the solid:
- * seen through the lit walls, and when explore orbits low).
+ * seen through the lit walls, and when explore orbits low). In explore a
+ * lit amber knob on it marks the drag handle.
  */
 export function AgeSlice({ W }: { W: World }) {
   const group = useRef<THREE.Group>(null)
   const line = useMemo(() => new Float32Array(ND * 3), [])
-  const lastL = useRef('')
+  const lastL = useRef({ w: -1, ver: -1, a: NaN })
   const updateLine = (_T: number, p: Float32Array): boolean => {
-    const key = W.key + '|' + HS.gridVer + '|' + HS.sliceAge
-    if (key === lastL.current) return false
-    lastL.current = key
+    const l = lastL.current
+    if (l.w === W.id && l.ver === HS.gridVer && l.a === HS.sliceAge) return false
+    l.w = W.id
+    l.ver = HS.gridVer
+    l.a = HS.sliceAge
     for (let i = 0; i < ND; i++) {
       const u = i / (ND - 1)
       p[i * 3] = xOf(u, W.XW)
@@ -372,11 +450,13 @@ export function AgeSlice({ W }: { W: World }) {
     }
     return true
   }
-  const lastF = useRef('')
+  const lastF = useRef({ w: -1, ver: -1, a: NaN })
   const writeFill = (_T: number, top: Float32Array, bottom: Float32Array): boolean => {
-    const key = W.key + '|' + HS.gridVer + '|' + HS.sliceAge
-    if (key === lastF.current) return false
-    lastF.current = key
+    const l = lastF.current
+    if (l.w === W.id && l.ver === HS.gridVer && l.a === HS.sliceAge) return false
+    l.w = W.id
+    l.ver = HS.gridVer
+    l.a = HS.sliceAge
     for (let i = 0; i < ND; i++) {
       const u = i / (ND - 1)
       top[i * 3] = xOf(u, W.XW)
@@ -397,22 +477,39 @@ export function AgeSlice({ W }: { W: World }) {
     { hide: group },
   )
   return (
-    <group ref={group}>
-      <AreaStrips
-        strips={1}
-        points={ND}
-        colors={SLICE_FILL}
-        write={writeFill}
-        opacity={() => HS.sliceOp}
-        lo={0.03}
-        hi={0.22}
-        gamma={1.2}
-        rim={() => 0.6}
-        rimWidth={0.14}
-        rimAlpha={0.35}
-        renderOrder={24}
+    <>
+      <group ref={group}>
+        <AreaStrips
+          strips={1}
+          points={ND}
+          colors={SLICE_FILL}
+          write={writeFill}
+          opacity={() => HS.sliceOp}
+          lo={0.04}
+          hi={0.26}
+          gamma={1.2}
+          rim={() => 0.7}
+          rimWidth={0.16}
+          rimAlpha={0.4}
+          renderOrder={24}
+        />
+        <Pen points={line} update={updateLine} color={PAL.well} width={PEN.data + 0.5} opacity={() => HS.sliceOp} gain={(T) => (isExplore() ? 1.6 : 1.4 + 0.9 * ageSliceRun(T))} renderOrder={46} />
+      </group>
+      <Nodes
+        count={1}
+        radius={W.key === 'narrow' ? 0.34 : 0.3}
+        color={PAL.well}
+        rimStrength={0.7}
+        emissiveIntensity={0.85}
+        opacity={() => (isExplore() ? HS.sliceOp : 0)}
+        place={(_T, _i, out) => {
+          out[0] = xOf(HANDLE_U, W.XW)
+          out[1] = surfY(HANDLE_U, HS.sliceAge, W.YS) + 0.08
+          out[2] = zOfAge(HS.sliceAge)
+          return isExplore() ? 1 : 0
+        }}
       />
-      <Pen points={line} update={updateLine} color={PAL.well} width={PEN.data} opacity={() => HS.sliceOp} gain={() => 1.3} renderOrder={46} />
-    </group>
+    </>
   )
 }
+

@@ -4,7 +4,7 @@ import { PAL, spectrum } from '../../fitnessData'
 import { useSafeFrame } from '../../story/useSafeFrame'
 import { makeFillMaterial, makeSurfaceMaterial, type SurfaceUniforms } from '../../story/kit/materials'
 import { AreaStrips } from '../../story/kit/Fill'
-import { Pen, PenBatch, PEN } from '../../story/kit/Pen'
+import { PenBatch, PEN } from '../../story/kit/Pen'
 import { NA, ND, PERIM, ageOfRow } from './healthMath'
 import { PLANE_FRONT, PLANE_M, Z0, Z1, xOf, zOfAge, type World } from './layout'
 import { HS } from './state'
@@ -14,22 +14,26 @@ import { waveW } from './timeline'
    The health landscape (DESIGN.md D.7 "World", B.9 "Surface"):
      Surface   the 56 x 46 capacity grid, vertex-coloured by the sickness /
                wellness / fitness spectrum (spectrum(cap / 0.9)), isolines
-               every 0.1 of capacity, the sick tint and hatch below the
-               independence height; heights, colours and normals are
-               rewritten only on the frames the grid changes (allocation
-               free: a linear-light spectrum table and central differences).
+               every 0.1 of capacity, a quiet sick tint below the
+               independence height, and a fresnel sheen at grazing angles;
+               heights, colours and normals are rewritten only on the frames
+               the grid changes (allocation free).
      IsoGhost  the isoline-only duplicate (the pour's see-through surface,
-               the L6 Sedentary ghost, the explore comparison).
-     Walls     the volume's skirt: one translucent strip of light around the
-               perimeter from the floor to min(level, surface), with an HDR
-               rim at its top edge, so the pour rises as a line of light.
-     Sheet     the top of the light while it pours: min(level, surface), a
-               faint sheet whose waterline (where the level meets the
-               landscape) glows hot.
-     Plane     the independence plane: PAL.sick at 10% with a crisp pen edge.
+               the explore comparison).
+     Walls     the volume's skirt: translucent light from the floor to
+               min(level, surface), brightest under the rim, so the volume
+               reads as a body of light (A.1: the amount of light is the
+               amount); its HDR rim rises with the pour.
+     Glow      the light the volume spills onto the slate around its base,
+               in proportion to the volume shown.
+     Contour   the crisp red pen where the landscape meets the independence
+               plane (L10), so the part under the line reads as data.
+     Plane     the independence plane: PAL.sick with a crisp pen edge.
    ========================================================================= */
 
 const N = ND * NA
+/** far outside every view: where a segment waits before it is needed (never a zero-length dot) */
+const AWAY = 1e5
 
 /** Linear-light spectrum table: vertex colours are linear, the PAL hexes are sRGB. */
 const LUT = (() => {
@@ -134,14 +138,53 @@ function writeGrid(g: THREE.BufferGeometry, grid: Float32Array, W: World, yOff =
 /* ------------------------------- surface ------------------------------- */
 
 /** a slightly rougher finish than a solid, so the key softbox never lies on the landscape as a grey sheen */
-const SURFACE_ROUGH = 0.66
+const SURFACE_ROUGH = 0.62
 /** albedo lift so the spectrum reads at its true hue under the engine lights */
 const SURFACE_GAIN = 1.15
+/** isolines strong enough to read at phone scale (B.9 default 0.18) */
+const ISO_A = 0.36
+/**
+ * Below the independence height: a quiet tint and a sparse hatch. Round 1
+ * flooded a sunken landscape with red and warning-tape stripes; the plane,
+ * its crisp contour pen and the tint now carry "below the line" while the
+ * shading and isolines stay readable underneath.
+ */
+const SICK_MIX = 0.36
+const HATCH_A = 0.07
+
+/**
+ * A fresnel sheen on the kit surface material (engine request: a `sheen`
+ * option on makeSurfaceMaterial). Chained onto the kit's own shader edit, so
+ * the kit material is extended, never copied: grazing angles pick up a cool
+ * highlight, which gives the lid the finish of a lit glaze instead of paint.
+ */
+function addSheen(m: THREE.MeshStandardMaterial, k: number): void {
+  const base = m.onBeforeCompile
+  m.onBeforeCompile = (shader, renderer) => {
+    base.call(m, shader, renderer)
+    shader.uniforms.uSheen = { value: k }
+    shader.fragmentShader = shader.fragmentShader
+      .replace('void main() {', 'uniform float uSheen;' + NL + 'void main() {')
+      .replace(
+        '#include <opaque_fragment>',
+        [
+          'float stFr = pow( 1.0 - clamp( abs( dot( normal, geometryViewDir ) ), 0.0, 1.0 ), 3.0 );',
+          'outgoingLight += ( outgoingLight * 0.9 + vec3( 0.05, 0.06, 0.07 ) ) * stFr * uSheen;',
+          '#include <opaque_fragment>',
+        ].join(NL),
+      )
+  }
+  const key = m.customProgramCacheKey.bind(m)
+  m.customProgramCacheKey = () => key() + '-health-sheen'
+}
+const NL = String.fromCharCode(10)
 
 export function Surface({ W }: { W: World }) {
   const geo = useMemo(() => makeGridGeometry(W, true), [W])
   const mat = useMemo(() => {
-    return makeSurfaceMaterial({ yScale: W.YS, opacity: 1, isoAlpha: 0.22, hatchAlpha: 0.2, roughness: SURFACE_ROUGH })
+    const m = makeSurfaceMaterial({ yScale: W.YS, opacity: 1, isoAlpha: ISO_A, hatchAlpha: HATCH_A, sickMix: SICK_MIX, roughness: SURFACE_ROUGH })
+    addSheen(m, 0.9)
+    return m
   }, [W])
   useEffect(() => () => geo.dispose(), [geo])
   useEffect(() => () => mat.dispose(), [mat])
@@ -176,7 +219,7 @@ export function Surface({ W }: { W: World }) {
 
 export function IsoGhost({ W }: { W: World }) {
   const geo = useMemo(() => makeGridGeometry(W, false), [W])
-  const mat = useMemo(() => makeSurfaceMaterial({ yScale: W.YS, isolinesOnly: true, isoAlpha: 0.22 }), [W])
+  const mat = useMemo(() => makeSurfaceMaterial({ yScale: W.YS, isolinesOnly: true, isoAlpha: 0.26 }), [W])
   useEffect(() => () => geo.dispose(), [geo])
   useEffect(() => () => mat.dispose(), [mat])
   const mesh = useRef<THREE.Mesh>(null)
@@ -204,17 +247,21 @@ export function IsoGhost({ W }: { W: World }) {
 const PN = PERIM.length
 const pxOf = (i: number, XW: number) => xOf((i % ND) / (ND - 1), XW)
 const pzOf = (i: number) => zOfAge(ageOfRow(Math.floor(i / ND)))
+/** grid indices of the four corners: front-left, front-right, back-right, back-left */
+const CORNERS = [0, ND - 1, NA * ND - 1, (NA - 1) * ND] as const
 
 /* -------------------------------- walls -------------------------------- */
 
 const WALL_COLORS = [PAL.yellowGreen]
 
 export function Walls({ W }: { W: World }) {
-  const last = useRef('')
+  const last = useRef({ w: -1, ver: -1, lv: NaN })
   const write = (_T: number, top: Float32Array, bottom: Float32Array): boolean => {
-    const key = W.key + '|' + HS.gridVer + '|' + HS.level
-    if (key === last.current) return false
-    last.current = key
+    const l = last.current
+    if (l.w === W.id && l.ver === HS.gridVer && l.lv === HS.level) return false
+    l.w = W.id
+    l.ver = HS.gridVer
+    l.lv = HS.level
     const lv = HS.level
     for (let k = 0; k < PN; k++) {
       const i = PERIM[k]
@@ -233,13 +280,13 @@ export function Walls({ W }: { W: World }) {
       colors={WALL_COLORS}
       write={write}
       opacity={() => HS.wallsOp}
-      lo={0.015}
-      hi={0.17}
-      gamma={1.8}
+      lo={0.01}
+      hi={0.26}
+      gamma={1.6}
       additive
       rim={() => HS.wallRim}
-      rimWidth={0.22}
-      rimAlpha={0.62}
+      rimWidth={0.45}
+      rimAlpha={0.7}
       renderOrder={12}
     />
   )
@@ -250,16 +297,20 @@ export function Walls({ W }: { W: World }) {
 const SICK_COLORS = [PAL.sick]
 
 /**
- * The part of the volume under the independence line, tinted PAL.sick on the
- * walls with a crisp red rim at the line: the plane cuts the solid, and the
- * layer daily tasks need is visible all the way round (L3 on).
+ * The part of the walls under the independence line: a faint additive red
+ * with a crisp red rim at the line, so the plane visibly cuts the solid all
+ * the way round (L3 on). Quiet on purpose: under a sunken landscape nearly
+ * all of the wall is below the line, and a strong tint read as "dependent at
+ * every age" (see the F.5 note in the chapter report).
  */
 export function BelowLine({ W }: { W: World }) {
-  const last = useRef('')
+  const last = useRef({ w: -1, ver: -1, cap: NaN })
   const write = (_T: number, top: Float32Array, bottom: Float32Array): boolean => {
-    const key = W.key + '|' + HS.gridVer + '|' + HS.planeCap
-    if (key === last.current) return false
-    last.current = key
+    const l = last.current
+    if (l.w === W.id && l.ver === HS.gridVer && l.cap === HS.planeCap) return false
+    l.w = W.id
+    l.ver = HS.gridVer
+    l.cap = HS.planeCap
     for (let k = 0; k < PN; k++) {
       const i = PERIM[k]
       top[k * 3] = pxOf(i, W.XW)
@@ -276,15 +327,98 @@ export function BelowLine({ W }: { W: World }) {
       colors={SICK_COLORS}
       write={write}
       opacity={() => HS.planeOp * HS.wallsOp}
-      lo={0.1}
-      hi={0.26}
-      gamma={1.4}
-      rim={() => 1.1}
-      rimWidth={0.08}
-      rimAlpha={0.7}
+      lo={0.02}
+      hi={0.11}
+      gamma={1.2}
+      additive
+      rim={() => 1.4}
+      rimWidth={0.07}
+      rimAlpha={0.75}
       renderOrder={13}
     />
   )
+}
+
+/* ------------------------------ floor glow ------------------------------ */
+
+/** how far the glow spills past the footprint, world units */
+const GLOW_M = 3.2
+const GLOW_NX = 14
+const GLOW_NZ = 22
+
+/**
+ * The light the volume spills onto the slate around its base (a soft pool,
+ * brightest at the foot of the walls), scaled by the volume shown: the
+ * sunken Sedentary landscape spills little, the lifelong one a lot. It
+ * grounds the solid on the slate without a shadow map.
+ */
+export function FloorGlow({ W }: { W: World }) {
+  const geo = useMemo(() => {
+    const nx = GLOW_NX
+    const nz = GLOW_NZ
+    const x0 = -W.XW - GLOW_M
+    const x1 = W.XW + GLOW_M
+    const z0 = Z1 - GLOW_M
+    const z1 = Z0 + GLOW_M
+    const pos = new Float32Array((nx + 1) * (nz + 1) * 3)
+    const aT = new Float32Array((nx + 1) * (nz + 1))
+    const idx: number[] = []
+    for (let j = 0; j <= nz; j++) {
+      for (let i = 0; i <= nx; i++) {
+        const k = j * (nx + 1) + i
+        const x = x0 + ((x1 - x0) * i) / nx
+        const z = z0 + ((z1 - z0) * j) / nz
+        pos[k * 3] = x
+        pos[k * 3 + 1] = 0.005
+        pos[k * 3 + 2] = z
+        const ox = Math.max(0, Math.abs(x) - W.XW)
+        const oz = Math.max(0, z - Z0, Z1 - z)
+        const d = Math.hypot(ox, oz)
+        aT[k] = d <= 0 ? 0.55 : Math.exp(-d / 1.1)
+        if (i < nx && j < nz) idx.push(k, k + nx + 1, k + 1, k + 1, k + nx + 1, k + nx + 2)
+      }
+    }
+    // the walls' foot is the brightest line: pull the vertices on the footprint edge to 1
+    for (let j = 0; j <= nz; j++) {
+      for (let i = 0; i <= nx; i++) {
+        const k = j * (nx + 1) + i
+        const x = pos[k * 3]
+        const z = pos[k * 3 + 2]
+        const onX = Math.abs(Math.abs(x) - W.XW) < (x1 - x0) / nx / 2 && z <= Z0 + 0.01 && z >= Z1 - 0.01
+        const onZ = (Math.abs(z - Z0) < (z1 - z0) / nz / 2 || Math.abs(z - Z1) < (z1 - z0) / nz / 2) && Math.abs(x) <= W.XW + 0.01
+        if (onX || onZ) aT[k] = 1
+      }
+    }
+    const g = new THREE.BufferGeometry()
+    g.setAttribute('position', new THREE.BufferAttribute(pos, 3))
+    g.setAttribute('aT', new THREE.BufferAttribute(aT, 1))
+    g.setAttribute('aU', new THREE.BufferAttribute(new Float32Array(aT.length), 1))
+    g.setAttribute('aH', new THREE.BufferAttribute(new Float32Array(aT.length).fill(1), 1))
+    g.setIndex(idx)
+    return g
+  }, [W])
+  const mat = useMemo(() => {
+    const m = makeFillMaterial(PAL.yellowGreen, 'gradient', { additive: true })
+    m.uniforms.uLo.value = 0
+    m.uniforms.uHi.value = 0.1
+    m.uniforms.uPow.value = 1.6
+    return m
+  }, [])
+  useEffect(() => () => geo.dispose(), [geo])
+  useEffect(() => () => mat.dispose(), [mat])
+  const mesh = useRef<THREE.Mesh>(null)
+  useSafeFrame(
+    'health floor glow',
+    () => {
+      const m = mesh.current
+      if (!m) return
+      const op = HS.wallsOp * Math.min(1, HS.volK)
+      m.visible = op > 0.004
+      mat.uniforms.uOpacity.value = op
+    },
+    { hide: mesh },
+  )
+  return <mesh ref={mesh} geometry={geo} material={mat} renderOrder={6} frustumCulled={false} />
 }
 
 /* -------------------------------- sheet -------------------------------- */
@@ -323,7 +457,7 @@ export function Sheet({ W }: { W: World }) {
   useEffect(() => () => geo.dispose(), [geo])
   useEffect(() => () => mat.dispose(), [mat])
   const mesh = useRef<THREE.Mesh>(null)
-  const seen = useRef('')
+  const seen = useRef({ geo: null as THREE.BufferGeometry | null, ver: -1, mode: -1, s: NaN, lv: NaN })
   useSafeFrame(
     'health pour sheet',
     () => {
@@ -334,15 +468,19 @@ export function Sheet({ W }: { W: World }) {
       mat.uniforms.uOpacity.value = HS.sheetOp
       mat.uniforms.uLo.value = HS.sheetMode === 1 ? 0 : 0.05
       const wave = HS.sheetMode === 1
-      const key = W.key + '|' + HS.gridVer + '|' + (wave ? 'w' + HS.wavePre + '|' + HS.waveS : HS.level)
-      if (key === seen.current) return
-      seen.current = key
+      const k = seen.current
+      if (k.geo === geo && k.ver === HS.gridVer && k.mode === HS.sheetMode && k.s === HS.waveS && k.lv === HS.level) return
+      k.geo = geo
+      k.ver = HS.gridVer
+      k.mode = HS.sheetMode
+      k.s = HS.waveS
+      k.lv = HS.level
       const lv = wave ? 2 : Math.max(0, HS.level)
       const p = (geo.attributes.position as THREE.BufferAttribute).array as Float32Array
       const t = (geo.attributes.aT as THREE.BufferAttribute).array as Float32Array
       for (let ai = 0; ai < NA; ai++) {
         const age = ageOfRow(ai)
-        const bw = wave ? waveW(age, HS.wavePre, HS.waveS) : 0
+        const bw = wave ? waveW(age, HS.waveS) : 0
         const wake = wave && age < HS.waveS ? bw * Math.max(0, 1 - (HS.waveS - age) / 8) : 0
         const band = Math.max(4 * bw * (1 - bw), 0.75 * wake)
         for (let di = 0; di < ND; di++) {
@@ -363,25 +501,51 @@ export function Sheet({ W }: { W: World }) {
 
 /* ---------------------------- ghost outline ---------------------------- */
 
-/** The ghost's footprint edge as a dashed chalk outline (a comparison, L8). */
+/**
+ * The ghost landscape as a dashed chalk outline (a comparison, L8): its rim
+ * all the way round, and where it stands ABOVE the landscape shown (L4: the
+ * Lifelong landscape the surface sank from) its four corner posts down to
+ * the surface, so what was lost reads as a box above the slab.
+ */
 export function GhostOutline({ W }: { W: World }) {
-  const pts = useMemo(() => new Float32Array(PN * 3), [])
-  const last = useRef('')
-  const update = (_T: number, p: Float32Array): boolean => {
-    const key = W.key + '|' + HS.ghostVer
-    if (key === last.current) return false
-    last.current = key
-    for (let k = 0; k < PN; k++) {
-      const i = PERIM[k]
-      p[k * 3] = pxOf(i, W.XW)
-      p[k * 3 + 1] = HS.ghost[i] * W.YS + 0.02
-      p[k * 3 + 2] = pzOf(i)
+  const segs = useMemo(() => new Float32Array((PN - 1 + 4) * 6), [])
+  const last = useRef({ w: -1, g: -1, s: -1 })
+  const update = (_T: number, s: Float32Array): boolean => {
+    const l = last.current
+    if (l.w === W.id && l.g === HS.ghostVer && l.s === HS.gridVer) return false
+    l.w = W.id
+    l.g = HS.ghostVer
+    l.s = HS.gridVer
+    for (let k = 0; k < PN - 1; k++) {
+      const a = PERIM[k]
+      const b = PERIM[k + 1]
+      const o = k * 6
+      s[o] = pxOf(a, W.XW)
+      s[o + 1] = HS.ghost[a] * W.YS + 0.02
+      s[o + 2] = pzOf(a)
+      s[o + 3] = pxOf(b, W.XW)
+      s[o + 4] = HS.ghost[b] * W.YS + 0.02
+      s[o + 5] = pzOf(b)
+    }
+    for (let c = 0; c < 4; c++) {
+      const i = CORNERS[c]
+      const o = (PN - 1 + c) * 6
+      const top = HS.ghost[i] * W.YS
+      const bot = HS.grid[i] * W.YS
+      if (top - bot < 0.15) {
+        s.fill(AWAY, o, o + 6)
+        continue
+      }
+      s[o] = s[o + 3] = pxOf(i, W.XW)
+      s[o + 2] = s[o + 5] = pzOf(i)
+      s[o + 1] = bot + 0.03
+      s[o + 4] = top + 0.02
     }
     return true
   }
   return (
-    <Pen
-      points={pts}
+    <PenBatch
+      segments={segs}
       update={update}
       color={PAL.chalk}
       width={PEN.axis}
@@ -396,20 +560,24 @@ export function GhostOutline({ W }: { W: World }) {
 
 /* ---------------------------- solid outline ---------------------------- */
 
+/** front-right, back-right, back-left: the front-left corner is the capacity post */
+const EDGE_CORNERS = [CORNERS[1], CORNERS[2], CORNERS[3]] as const
+
 /**
  * The solid's crisp edges (L10): the landscape's rim all the way round, and
- * the three vertical corner edges (the fourth, front-left, is the capacity
+ * three vertical corner edges (the fourth, front-left, is the capacity
  * post). With them the fused surface reads as the top of a SOLID, not as a
  * sheet floating over the floor frame.
  */
 export function SolidOutline({ W }: { W: World }) {
   // rim: PN - 1 segments; corners: 3 segments
   const segs = useMemo(() => new Float32Array((PN - 1 + 3) * 6), [])
-  const last = useRef('')
+  const last = useRef({ w: -1, ver: -1 })
   const update = (_T: number, s: Float32Array): boolean => {
-    const key = W.key + '|' + HS.gridVer
-    if (key === last.current) return false
-    last.current = key
+    const l = last.current
+    if (l.w === W.id && l.ver === HS.gridVer) return false
+    l.w = W.id
+    l.ver = HS.gridVer
     for (let k = 0; k < PN - 1; k++) {
       const a = PERIM[k]
       const b = PERIM[k + 1]
@@ -421,17 +589,117 @@ export function SolidOutline({ W }: { W: World }) {
       s[o + 4] = HS.grid[b] * W.YS + 0.03
       s[o + 5] = pzOf(b)
     }
-    const corners = [ND - 1, NA * ND - 1, (NA - 1) * ND]
-    corners.forEach((i, c) => {
+    for (let c = 0; c < 3; c++) {
+      const i = EDGE_CORNERS[c]
       const o = (PN - 1 + c) * 6
       s[o] = s[o + 3] = pxOf(i, W.XW)
       s[o + 2] = s[o + 5] = pzOf(i)
       s[o + 1] = 0
       s[o + 4] = HS.grid[i] * W.YS + 0.03
-    })
+    }
     return true
   }
-  return <PenBatch segments={segs} color={PAL.chalk} width={PEN.axis} update={update} opacity={() => 0.55 * HS.edgeOp} renderOrder={31} />
+  return <PenBatch segments={segs} color={PAL.chalk} width={PEN.axis} update={update} opacity={() => 0.6 * HS.edgeOp} renderOrder={31} />
+}
+
+/* ------------------------------ contour ------------------------------ */
+
+/** the most contour segments ever written (the Sedentary line crosses about 120 cells) */
+const MAX_C = 640
+
+/**
+ * Where the landscape meets the independence plane: marching squares over
+ * the displayed grid at the plane's height, as one crisp red pen (L10). It
+ * outlines the part of the surface under the line, so that region reads as
+ * data rather than as a stain. Rewritten only when the grid or the plane
+ * height changes.
+ */
+export function Contour({ W }: { W: World }) {
+  const segs = useMemo(() => new Float32Array(MAX_C * 6).fill(AWAY), [])
+  const last = useRef({ w: -1, ver: -1, cap: NaN })
+  const update = (_T: number, s: Float32Array): boolean => {
+    if (HS.contourOp <= 0.002) return false
+    const l = last.current
+    if (l.w === W.id && l.ver === HS.gridVer && l.cap === HS.planeCap) return false
+    l.w = W.id
+    l.ver = HS.gridVer
+    l.cap = HS.planeCap
+    const c = HS.planeCap
+    const g = HS.grid
+    const y = c * W.YS + 0.05
+    const dxw = (2 * W.XW) / (ND - 1)
+    const dz = (Z1 - Z0) / (NA - 1)
+    let n = 0
+    // one crossing point on a cell edge between two corners (xa, za) -> (xb, zb)
+    const px = (xa: number, xb: number, va: number, vb: number) => xa + ((xb - xa) * (c - va)) / (vb - va)
+    for (let ai = 0; ai < NA - 1 && n < MAX_C; ai++) {
+      const za = Z0 + dz * ai
+      const zb = za + dz
+      for (let di = 0; di < ND - 1 && n < MAX_C; di++) {
+        const v00 = g[ai * ND + di]
+        const v01 = g[ai * ND + di + 1]
+        const v10 = g[(ai + 1) * ND + di]
+        const v11 = g[(ai + 1) * ND + di + 1]
+        const code = (v00 > c ? 1 : 0) | (v01 > c ? 2 : 0) | (v11 > c ? 4 : 0) | (v10 > c ? 8 : 0)
+        if (code === 0 || code === 15) continue
+        const xa = -W.XW + dxw * di
+        const xb = xa + dxw
+        // edge points: bottom (z = za, v00 -> v01), right (x = xb, v01 -> v11), top (z = zb, v10 -> v11), left (x = xa, v00 -> v10)
+        const bx = px(xa, xb, v00, v01)
+        const rz = px(za, zb, v01, v11)
+        const tx = px(xa, xb, v10, v11)
+        const lz = px(za, zb, v00, v10)
+        const put = (x1: number, z1: number, x2: number, z2: number) => {
+          if (n >= MAX_C) return
+          const o = n * 6
+          s[o] = x1
+          s[o + 1] = y
+          s[o + 2] = z1
+          s[o + 3] = x2
+          s[o + 4] = y
+          s[o + 5] = z2
+          n++
+        }
+        switch (code) {
+          case 1:
+          case 14:
+            put(bx, za, xa, lz)
+            break
+          case 2:
+          case 13:
+            put(bx, za, xb, rz)
+            break
+          case 3:
+          case 12:
+            put(xa, lz, xb, rz)
+            break
+          case 4:
+          case 11:
+            put(xb, rz, tx, zb)
+            break
+          case 6:
+          case 9:
+            put(bx, za, tx, zb)
+            break
+          case 7:
+          case 8:
+            put(xa, lz, tx, zb)
+            break
+          case 5:
+            put(bx, za, xa, lz)
+            put(xb, rz, tx, zb)
+            break
+          case 10:
+            put(bx, za, xb, rz)
+            put(xa, lz, tx, zb)
+            break
+        }
+      }
+    }
+    s.fill(AWAY, n * 6)
+    return true
+  }
+  return <PenBatch segments={segs} color={PAL.sick} width={2.25} update={update} opacity={() => 0.95 * HS.contourOp * HS.planeOp} gain={() => 1.15} renderOrder={32} />
 }
 
 /* ------------------------ the independence plane ------------------------ */
@@ -446,12 +714,21 @@ function linePts(ax: number, az: number, bx: number, bz: number, k: number): Flo
   return out
 }
 
+/** Polyline -> segment buffer. */
+function segsOf(p: Float32Array): Float32Array {
+  const n = p.length / 3
+  const out = new Float32Array((n - 1) * 6)
+  for (let i = 0; i < n - 1; i++) out.set(p.subarray(i * 3, i * 3 + 6), i * 6)
+  return out
+}
+
 /**
- * PAL.sick at 6.5% at the independence height (D.7 says 10%; over the red
- * below-line tint 10% smothered the sunken landscape), reaching a little past the
- * footprint at the sides and the back. Its front edge lies on the volume's
- * front face (a front margin would cross the duration ticks), drawn as the
- * crisp hot pen the claim needs (L10); the other three edges follow thinner.
+ * PAL.sick at 6.5% at the independence height (D.7 says 10%; over the
+ * below-line tint 10% smothered the sunken landscape), reaching a little past
+ * the footprint at the sides and the back. Its front edge lies on the
+ * volume's front face (a front margin would cross the duration ticks),
+ * drawn as the crisp hot pen the claim needs (L10); the other three edges
+ * follow thinner.
  */
 export function IndependencePlane({ W }: { W: World }) {
   const zf = Z0 + PLANE_FRONT
@@ -482,46 +759,51 @@ export function IndependencePlane({ W }: { W: World }) {
     },
     { hide: mesh },
   )
-  const front = useMemo(() => linePts(x0, zf, x1, zf, 40), [x0, x1, zf])
+  // straight edges are single segments (no joins to bead at partial opacity)
+  const front = useMemo(() => segsOf(linePts(x0, zf, x1, zf, 1)), [x0, x1, zf])
   const rest = useMemo(() => {
-    const a = linePts(x1, zf, x1, zb, 30)
-    const b = linePts(x1, zb, x0, zb, 30)
-    const c = linePts(x0, zb, x0, zf, 30)
+    const a = linePts(x1, zf, x1, zb, 1)
+    const b = linePts(x1, zb, x0, zb, 1)
+    const c = linePts(x0, zb, x0, zf, 1)
     const out = new Float32Array(a.length + b.length + c.length - 6)
     out.set(a, 0)
     out.set(b.subarray(3), a.length)
     out.set(c.subarray(3), a.length + b.length - 3)
-    return out
+    return segsOf(out)
   }, [x0, x1, zf, zb])
-  const lastF = useRef('')
-  const lastR = useRef('')
-  const lift = (p: Float32Array, last: { current: string }): boolean => {
+  // keyed on the buffer too: a new pen core (a new world) starts from y = 0
+  const lastF = useRef({ buf: null as Float32Array | null, y: NaN })
+  const lastR = useRef({ buf: null as Float32Array | null, y: NaN })
+  const lift = (s: Float32Array, last: { current: { buf: Float32Array | null; y: number } }): boolean => {
     const y = HS.planeCap * W.YS + 0.015
-    const key = W.key + '|' + y
-    if (key === last.current) return false
-    last.current = key
-    for (let i = 1; i < p.length; i += 3) p[i] = y
+    const l = last.current
+    if (y === l.y && s === l.buf) return false
+    l.y = y
+    l.buf = s
+    for (let i = 1; i < s.length; i += 3) s[i] = y
     return true
   }
   return (
     <>
       <mesh ref={mesh} geometry={geo} material={mat} renderOrder={22} frustumCulled={false} />
-      <Pen
-        points={front}
-        update={(_T, p) => lift(p, lastF)}
+      <PenBatch
+        segments={front}
+        update={(_T, s) => lift(s, lastF)}
         color={PAL.sick}
         width={PEN.data}
+        byArc
         progress={() => Math.min(1, HS.edge / 0.6)}
         opacity={() => Math.min(1, HS.planeOp * 1.5) * (0.4 + 0.6 * HS.planeFrame)}
         head
         hot
         renderOrder={32}
       />
-      <Pen
-        points={rest}
-        update={(_T, p) => lift(p, lastR)}
+      <PenBatch
+        segments={rest}
+        update={(_T, s) => lift(s, lastR)}
         color={PAL.sick}
         width={PEN.axis}
+        byArc
         progress={() => Math.max(0, (HS.edge - 0.55) / 0.45)}
         opacity={() => 0.7 * Math.min(1, HS.planeOp * 1.5) * HS.planeFrame}
         renderOrder={32}

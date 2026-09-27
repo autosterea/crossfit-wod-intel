@@ -1,12 +1,12 @@
 import { useDragHandle } from '../../story/gestures'
 import { useQAProbe } from '../../story/qa'
 import { sampleGrid } from './healthMath'
-import { useWorld, xOf, zOfAge, type World } from './layout'
+import { HANDLE_U, useWorld, xOf, zOfAge, type World } from './layout'
 import { HS, useHealthState } from './state'
 import { pickAge } from './pick'
 import { useHealthExplore } from './exploreStore'
 import { useHealthExploreLabels, useHealthLabels } from './labels'
-import { BelowLine, GhostOutline, IndependencePlane, IsoGhost, Sheet, SolidOutline, Surface, Walls } from './landscape'
+import { BelowLine, Contour, FloorGlow, GhostOutline, IndependencePlane, IsoGhost, Sheet, SolidOutline, Surface, Walls } from './landscape'
 import { AgeSlice, AgeThirty, Axes, FloorClaim, FloorFrame, Scanner, Slices } from './elements'
 
 /* =========================================================================
@@ -21,11 +21,13 @@ import { AgeSlice, AgeThirty, Axes, FloorClaim, FloorFrame, Scanner, Slices } fr
                   moment); the HUD counts the running integral;
      L3 line      the independence plane rises into place, its crisp edge;
      L4 sink      stop training: the landscape sinks toward the line, the
-                  power ridge first, and the red below-line tint spreads;
-     L5 any-age   the scanner sweeps from 45 and the landscape lifts behind
-                  it like a wave (the signature beat);
-     L6 hold      back to the lifelong landscape over the Sedentary ghost,
-                  the amber age slice riding from 20 to 85.
+                  power ridge first, under the dashed box of what was lost;
+                  a crisp red contour outlines the part under the line;
+     L5 any-age   the scanner enters at the front, runs to 45, then sweeps
+                  to 85, and the landscape lifts behind it like a wave (the
+                  signature beat); only the curtain changes the surface;
+     L6 hold      back to the lifelong landscape over the dashed Sedentary
+                  outline, the amber age slice riding from 20 to 85.
    One scene serves story and explore: state.ts writes the chapter state
    from T (story) or damps it toward the explore store (explore), and every
    element renders from it. Everything is mounted at load (prewarm).
@@ -34,8 +36,8 @@ import { AgeSlice, AgeThirty, Axes, FloorClaim, FloorFrame, Scanner, Slices } fr
 function useSliceHandle(W: World) {
   useDragHandle({
     id: 'health-age',
-    anchor: () => [xOf(0.3, W.XW), sampleGrid(HS.grid, 0.3, HS.sliceAge) * W.YS + 0.06, zOfAge(HS.sliceAge)],
-    radiusPx: 26,
+    anchor: () => [xOf(HANDLE_U, W.XW), sampleGrid(HS.grid, HANDLE_U, HS.sliceAge) * W.YS + 0.08, zOfAge(HS.sliceAge)],
+    radiusPx: 28,
     onDrag(ray) {
       const a = pickAge(ray)
       if (a !== null) useHealthExplore.getState().setAge(a)
@@ -59,6 +61,7 @@ export default function HealthScene() {
   }))
   return (
     <>
+      <FloorGlow W={W} />
       <Axes W={W} />
       <FloorFrame W={W} />
       <AgeThirty W={W} />
@@ -71,6 +74,7 @@ export default function HealthScene() {
       <GhostOutline W={W} />
       <SolidOutline W={W} />
       <IndependencePlane W={W} />
+      <Contour W={W} />
       <Scanner W={W} />
       <AgeSlice W={W} />
       <FloorClaim W={W} />

@@ -28,7 +28,10 @@ import {
   beforeOutline,
   planeFrame,
   OUTLINE_SWITCH,
-  scanPre,
+  curtainOn,
+  contourOn,
+  meanAt,
+  MEANS,
   solidEdge,
   wallRim,
   wallsOn,
@@ -71,9 +74,8 @@ export const HS = {
   sheetOp: 0,
   /** 0: the pour's waterline (L2); 1: the scanner's bow wave on the landscape (L5) */
   sheetMode: 0,
-  /** the wave's parameters (L5): pre-lift and the scanner's age */
-  wavePre: 0,
-  waveS: 45,
+  /** the wave's scanner age (L5) */
+  waveS: 17,
   /** the independence plane's height in capacity units */
   planeCap: 0,
   planeOp: 0,
@@ -83,15 +85,21 @@ export const HS = {
   /** capacity under which the surface takes the sick tint (-1e9 = none) */
   indepCap: -1e9,
   scanOp: 0,
-  scanAge: 45,
+  /** the curtain of light above the scanner line (it fades once the sweep lands) */
+  curtainOp: 0,
+  scanAge: 17,
+  /** the red pen where the landscape meets the independence plane */
+  contourOp: 0,
+  /** volume shown relative to the Lifelong trainer's (the floor glow under the solid) */
+  volK: 1,
   sliceOp: 0,
   sliceAge: 45,
   /** explore: the volume of the grid shown (HUD) */
   score: 0,
 }
 
-const _bl: Blend = { kind: 0, a: 0, b: 0, k: 0, pre: 0, s: 0 }
-const last = { kind: -1, a: -1, b: -1, k: -1, pre: -1, s: -1, ghost: -1 }
+const _bl: Blend = { kind: 0, a: 0, b: 0, k: 0, s: 0 }
+const last = { kind: -1, a: -1, b: -1, k: -1, s: -1, ghost: -1 }
 const grids = new Map<string, Float32Array>()
 const gridOf = (name: string) => {
   let g = grids.get(name)
@@ -106,12 +114,11 @@ const damp = THREE.MathUtils.damp
 function storyState(T: number): void {
   HS.explore = false
   const bl = blendAt(T, _bl)
-  if (bl.kind !== last.kind || bl.a !== last.a || bl.b !== last.b || bl.k !== last.k || bl.pre !== last.pre || bl.s !== last.s) {
+  if (bl.kind !== last.kind || bl.a !== last.a || bl.b !== last.b || bl.k !== last.k || bl.s !== last.s) {
     last.kind = bl.kind
     last.a = bl.a
     last.b = bl.b
     last.k = bl.k
-    last.pre = bl.pre
     last.s = bl.s
     writeBlend(bl, HS.grid)
     HS.gridVer++
@@ -126,8 +133,10 @@ function storyState(T: number): void {
   }
   const pg = Math.max(0, pourGhost(T))
   const gi = ghostIn(T)
-  HS.ghostOp = T < B.line ? pg : T >= B.hold ? 0.85 * gi : 0
-  HS.outlineOp = T < OUTLINE_SWITCH ? lostOutline(T) : beforeOutline(T)
+  // the isoline ghost is the pour's see-through surface (L2) only: the Sedentary ghost of L6
+  // has a single isoline (its peak is 0.18), so the dashed outline carries that comparison
+  HS.ghostOp = T < B.line ? pg : 0
+  HS.outlineOp = T < OUTLINE_SWITCH ? lostOutline(T) : beforeOutline(T) * (T >= B.hold ? 0.55 + 0.45 * gi : 1)
   HS.planeFrame = planeFrame(T)
   HS.surfOp = T < B.volume ? fuse(T) : 1 - pg
   HS.edgeOp = solidEdge(T) * (T >= B.line && T < B.sink ? focus(T, B.volume) : 1)
@@ -143,7 +152,6 @@ function storyState(T: number): void {
   } else {
     HS.sheetMode = 1
     HS.sheetOp = T >= B.anyAge ? scanOn(T) : 0
-    HS.wavePre = scanPre(T)
     HS.waveS = scanAge(T)
   }
   HS.planeCap = planeCap(T)
@@ -151,9 +159,12 @@ function storyState(T: number): void {
   HS.edge = edgeDraw(T)
   HS.indepCap = T >= B.line ? HS.planeCap - 0.0003 : -1e9
   HS.scanOp = scanOn(T)
+  HS.curtainOp = curtainOn(T)
   HS.scanAge = scanAge(T)
   HS.sliceOp = ageSliceOn(T)
   HS.sliceAge = ageSliceAge(T)
+  HS.contourOp = contourOn(T)
+  HS.volK = T < B.volume ? 1 : meanAt(T) / MEANS[GL]
 }
 
 function exploreState(dtRaw: number): void {
@@ -197,8 +208,11 @@ function exploreState(dtRaw: number): void {
   HS.edge = 1
   HS.indepCap = st.showLine ? INDEPENDENCE_LINE - 0.0003 : -1e9
   HS.scanOp = damp(HS.scanOp, 0, 10, dt)
+  HS.curtainOp = damp(HS.curtainOp, 0, 10, dt)
   HS.sliceOp = damp(HS.sliceOp, 1, 8, dt)
   HS.sliceAge = damp(HS.sliceAge, st.age, 10, dt)
+  HS.contourOp = damp(HS.contourOp, st.showLine ? 1 : 0, 8, dt)
+  HS.volK = HS.score / MEANS[GL]
 }
 
 const FOG = '#070a0e'
