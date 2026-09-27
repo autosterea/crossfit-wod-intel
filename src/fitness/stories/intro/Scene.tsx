@@ -5,7 +5,7 @@ import { useSafeFrame } from '../../story/useSafeFrame'
 import { backdropState } from '../../story/kit/Backdrop'
 import { bumpObstacles } from '../../story/labels/useLabel'
 import { layoutOf } from './layout'
-import { END_T, exploreTime, glowUp } from './timeline'
+import { BEAT, END_T, exploreTime, glowUp } from './timeline'
 import { Title } from './Title'
 import { TheLine } from './Line'
 import { Chart, useChartLabels } from './Chart'
@@ -16,11 +16,12 @@ import { TheMap } from './Map'
    INTRO, "The Line" (DESIGN.md D.1). Five beats, every property a pure
    function of story time T:
      I0 the Anton title rises; a hot pen draws its underline;
-     I1 the line lifts off and becomes, in turn, the Skills decagon, the
-        Hopper drum, the three Energy humps and the Continuum dial, each
-        redrawn in its own ink, named as it closes, then docked in a row;
-     I2 two axes, the Generalist power curve, light sweeping in under it,
-        and the claim AREA = FITNESS;
+     I1 the line lifts off and travels from cell to cell, becoming in turn
+        the Skills decagon, the Hopper drum, the three Energy humps and the
+        Continuum dial, each redrawn in its own ink and named as it closes:
+        the beat rests on the four models, large and named;
+     I2 the models dock in a row as two axes draw, the Generalist power
+        curve, light sweeping in under it, and the claim AREA = FITNESS;
      I3 the area extrudes back through every age into a lit lifetime
         landscape: HEALTH;
      I4 everything folds into the six-tile map of the lesson.
@@ -30,27 +31,59 @@ import { TheMap } from './Map'
    (the tiles stay tappable) through the explore time in timeline.ts.
    ========================================================================= */
 
-/** Explore time: fast-forward from the beat the viewer left to the finished map (beats per second). */
+/** Explore time: the fold into the map plays at this rate on entry (beats per second). */
 const FF_RATE = 2.4
+/** Leaving explore, the scene runs back to the story's T in about the camera's glide (0.9 s). */
+const REWIND_S = 0.8
 
+/**
+ * The explore clock. Entering explore CUTS to the start of the fold (never
+ * earlier: a fast-forward through the title and the models under the map
+ * pose read as noise) and plays only the fold into the six tiles. Leaving,
+ * the scene runs back to the story's T while the camera glides home, so the
+ * map never pops to the story beat in one frame. Both are cuts under
+ * reduced motion. No per-frame state beyond this one mutable record.
+ */
+const rewind = { rate: 0 }
 function ExploreClock() {
   useSafeFrame(
     'intro explore time',
     (T, _A, dt) => {
       const st = useStoryStore.getState()
-      const on = st.mode === 'explore'
-      if (on && !exploreTime.on) exploreTime.T = st.reduced ? END_T : Math.min(END_T, Math.max(exploreTime.T, 0))
-      exploreTime.on = on
-      if (!on) {
-        // the next entry starts from the story's current time
+      const step = Math.min(0.1, dt)
+      if (st.mode === 'explore') {
+        if (!exploreTime.on) {
+          exploreTime.on = true
+          exploreTime.T = st.reduced ? END_T : Math.min(END_T, Math.max(T, BEAT.map))
+          rewind.rate = 0
+        }
+        if (exploreTime.T < END_T) {
+          exploreTime.T = st.reduced ? END_T : Math.min(END_T, exploreTime.T + step * FF_RATE)
+          // labels and hotspots follow the explore time, which moves without T
+          bumpObstacles()
+        }
+        return
+      }
+      if (!exploreTime.on) {
         exploreTime.T = T
         return
       }
-      if (exploreTime.T < END_T) {
-        exploreTime.T = st.reduced ? END_T : Math.min(END_T, exploreTime.T + Math.min(0.1, dt) * FF_RATE)
-        // labels and hotspots follow the explore time, which moves without T
+      // back to story: run the scene back (or on) to the story's T, then hand over
+      const gap = T - exploreTime.T
+      if (st.reduced || Math.abs(gap) < 1e-4) {
+        exploreTime.on = false
+        exploreTime.T = T
         bumpObstacles()
+        return
       }
+      if (rewind.rate === 0) rewind.rate = Math.max(FF_RATE, Math.abs(gap) / REWIND_S)
+      const d = step * rewind.rate
+      exploreTime.T = Math.abs(gap) <= d ? T : exploreTime.T + Math.sign(gap) * d
+      if (exploreTime.T === T) {
+        exploreTime.on = false
+        rewind.rate = 0
+      }
+      bumpObstacles()
     },
     // before the labels (-80), hotspots (-79) and every kit element (0) read it
     { priority: -85 },
@@ -62,6 +95,24 @@ function ExploreClock() {
     },
     [],
   )
+  return null
+}
+
+/**
+ * STOPGAP for engine request 1 (remove when it lands): the caption card
+ * renders its Read more block only for chapters with MODULE_COPY, so the
+ * intro's expanded detent was an empty 72% glass card that squeezed the
+ * stage to about 200 px. Hold the intro card at peek or default.
+ */
+function IntroDetentClamp() {
+  useEffect(() => {
+    const clamp = () => {
+      const st = useStoryStore.getState()
+      if (st.def?.key === 'intro' && st.detent === 'expanded') st.setDetent('default')
+    }
+    clamp()
+    return useStoryStore.subscribe(clamp)
+  }, [])
   return null
 }
 
@@ -93,6 +144,7 @@ export default function IntroScene() {
   return (
     <>
       <ExploreClock />
+      <IntroDetentClamp />
       <SlateGlow />
       <Labels layout={layout} />
       <Title L={L} />

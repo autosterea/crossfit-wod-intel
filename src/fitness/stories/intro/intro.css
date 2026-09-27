@@ -149,6 +149,23 @@
   color: var(--st-body);
 }
 
+/* the peek sheet's one-line blurb of the picked model (B.5 rows use the
+   same one-line blurb); the expanded sheet and desktop show it in full */
+.in-ex-line {
+  margin: 8px 2px 0;
+  font-size: 13px;
+  line-height: 1.35;
+  color: var(--st-body);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-left: 2px solid var(--acc);
+  padding-left: 8px;
+}
+.st-explore:not(.is-peek) .in-ex-line {
+  display: none;
+}
+
 /* the map's tile buttons (stage hotspots over the six tiles): hover adds
    emphasis only, a press answers at once (B.12) */
 .st-stage[data-view='intro'] .st-hot {

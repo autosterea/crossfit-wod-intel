@@ -8,10 +8,12 @@ import type { Box, Layout, V3 } from '../../story/types'
 
    Tuned from the D.1 start values (amendment proposal in the chapter
    report): the phone title is sized from Anton's measured advance widths
-   so that FITNESS? fills the focus rect (I0 acceptance), the underline
-   spans the word it underlines, and the formation spot, the docked row and
-   the chart are stacked so that each beat's subject fills the tall phone
-   rect instead of leaving a band of empty slate.
+   so that FITNESS? fills the focus rect (I0 acceptance), and the underline
+   spans the word it underlines. In I1 each model forms in its OWN cell (a
+   2 x 2 grid on a phone, a row of four on desktop): the line travels from
+   cell to cell like a coach drawing four diagrams on one whiteboard, so the
+   rest frame of the beat is the four models, large and named, not an empty
+   slate over a row of icons. They dock to the D.1 row as the chart arrives.
    ========================================================================= */
 
 /** Anton advance widths in em (measured from public/fonts/Anton-Regular.ttf). */
@@ -52,15 +54,18 @@ export interface TileLayout {
 export interface IntroLayout {
   title: TitleLayout
   underline: { y: number; x0: number; x1: number }
-  /** where each model forms (centre, radius) */
-  form: { c: readonly [number, number]; r: number }
-  /** docked row: y, slot x, glyph scale */
-  dock: { y: number; xs: readonly number[]; s: number }
+  /** I1: the cell each model forms in (centre per model, one radius) */
+  cells: { xs: readonly number[]; ys: readonly number[]; r: number }
+  /** I2: the docked row under the chart (y, slot x, glyph radius) */
+  dock: { y: number; xs: readonly number[]; r: number }
   chart: ChartLayout
   /** depth of the lifetime solid (ages run into -z) */
   depth: number
+  /** z and cap size of the HEALTH word on the floor in front of the solid */
+  healthZ: number
+  healthSize: number
   tiles: TileLayout
-  boxes: { i0: Box; i1: Box; i2: Box; i3: Box; i4: Box }
+  boxes: { i0: Box; i1: Box; i2: Box; i4: Box }
 }
 
 const box = (x0: number, y0: number, x1: number, y1: number, z0 = 0, z1 = 0): Box => [
@@ -85,10 +90,14 @@ const P: IntroLayout = {
     x2: (-ANTON.fitness * P_SIZE) / 2,
   },
   underline: { y: P_B2 - 0.42, x0: -2.25, x1: 2.25 },
-  form: { c: [0, -0.35], r: 2.1 },
-  dock: { y: -3.98, xs: [-2.85, -0.95, 0.95, 2.85], s: 0.36 },
+  // two rows of two under the dimmed title; the names hang below each row
+  cells: { xs: [-1.9, 1.9, -1.9, 1.9], ys: [0.62, 0.62, -3.18, -3.18], r: 1.45 },
+  // the D.1 row (0.36 of the D.1 formation radius 2.1), a clear band under the time axis titles
+  dock: { y: -4.2, xs: [-2.85, -0.95, 0.95, 2.85], r: 0.756 },
   chart: { x0: -3.4, x1: 3.4, y0: -2.35, H: 6.6 },
   depth: 6,
+  healthZ: 1.45,
+  healthSize: 0.95,
   tiles: {
     c: [
       [-2.05, 3.45],
@@ -106,13 +115,11 @@ const P: IntroLayout = {
   boxes: {
     // I0: the title and its underline fill the width of the focus rect
     i0: box(-2.3, P_B2 - 0.62, 2.3, P_B1 + P_CAP + 0.08),
-    // I1: the dimmed title (slid up 0.5), the formation spot and the docked row
-    // (its names hang below the glyphs: the camera pads reserve their band in px)
-    i1: box(-3.75, -4.76, 3.75, P_B1 + P_CAP + 0.58),
+    // I1: the dimmed title (slid up 0.5) over the 2 x 2 models (the bottom
+    // row's names hang below the box: the camera pads reserve their band)
+    i1: box(-3.75, -4.62, 3.75, P_B1 + P_CAP + 0.58),
     // I2: the chart and the dimmed row under it
-    i2: box(-3.75, -4.76, 3.75, 4.5),
-    // I3: the lifetime solid (front face at z 0, ages to z -6) and HEALTH on the floor in front
-    i3: box(-3.5, -2.45, 3.5, 1.75, -6.2, 1.8),
+    i2: box(-3.75, -4.98, 3.75, 4.5),
     // I4: the six-tile map
     i4: box(-4.0, -5.1, 4.0, 5.1),
   },
@@ -135,10 +142,13 @@ const L: IntroLayout = {
     x2: -L_W / 2 + ANTON.whatIsSp * L_SIZE,
   },
   underline: { y: L_B - 0.4, x0: -3.7, x1: 3.7 },
-  form: { c: [0, -1.2], r: 1.95 },
-  dock: { y: -4.7, xs: [-3.6, -1.2, 1.2, 3.6], s: 0.36 },
+  // one row of four under the dimmed title
+  cells: { xs: [-4.8, -1.6, 1.6, 4.8], ys: [-0.75, -0.75, -0.75, -0.75], r: 1.24 },
+  dock: { y: -4.7, xs: [-3.6, -1.2, 1.2, 3.6], r: 0.702 },
   chart: { x0: -4.6, x1: 4.6, y0: -2.9, H: 6.2 },
   depth: 6,
+  healthZ: 1.05,
+  healthSize: 1.1,
   tiles: {
     c: [
       [-5.0, 2.45],
@@ -155,9 +165,8 @@ const L: IntroLayout = {
   },
   boxes: {
     i0: box(-3.8, L_B - 0.6, 3.8, L_B + L_CAP + 0.08),
-    i1: box(-4.4, -5.42, 4.4, L_B + L_CAP + 0.58),
+    i1: box(-6.35, -2.0, 6.35, L_B + L_CAP + 0.58),
     i2: box(-4.9, -5.42, 4.9, 3.6),
-    i3: box(-4.7, -3.0, 4.7, 1.0, -6.2, 1.8),
     i4: box(-7.45, -4.85, 7.45, 4.85),
   },
 }
@@ -179,4 +188,55 @@ export function chartPivot(c: ChartLayout): [number, number] {
 /** Uniform scale that fits a w x h world rect inside a tile's glyph area. */
 export function tileFit(t: TileLayout, w: number, h: number): number {
   return Math.min((t.w * 0.78) / w, (t.h * 0.66) / h)
+}
+
+/* ------------------------- the I3 oblique fit -------------------------- */
+
+const DEG = Math.PI / 180
+
+/**
+ * A fit box whose eight corners project (orthographically, for this az / el)
+ * exactly onto the projected extent of `pts`, and its centre, which then
+ * projects onto the middle of that extent. The camera fits the box corners,
+ * so an ordinary bounding box of an oblique solid frames the empty volume
+ * above its low back edge and in front of it; this one frames the solid.
+ * Its z range is the points' real depth range.
+ */
+export function obliqueFit(pts: readonly V3[], az: number, el: number): { box: Box; target: V3 } {
+  const sa = Math.sin(az * DEG)
+  const ca = Math.cos(az * DEG)
+  const se = Math.sin(el * DEG)
+  const ce = Math.cos(el * DEG)
+  // camera right = (ca, 0, -sa), up = (-sa se, ce, -ca se)
+  const R = (p: V3) => p[0] * ca - p[2] * sa
+  const U = (p: V3) => -p[0] * sa * se + p[1] * ce - p[2] * ca * se
+  let r0 = Infinity
+  let r1 = -Infinity
+  let u0 = Infinity
+  let u1 = -Infinity
+  let z0 = Infinity
+  let z1 = -Infinity
+  for (const p of pts) {
+    r0 = Math.min(r0, R(p))
+    r1 = Math.max(r1, R(p))
+    u0 = Math.min(u0, U(p))
+    u1 = Math.max(u1, U(p))
+    z0 = Math.min(z0, p[2])
+    z1 = Math.max(z1, p[2])
+  }
+  const zr0 = -z0 * sa
+  const zr1 = -z1 * sa
+  const x1 = (r1 - Math.max(zr0, zr1)) / ca
+  const x0 = (r0 - Math.min(zr0, zr1)) / ca
+  const xu0 = -x0 * sa * se
+  const xu1 = -x1 * sa * se
+  const zu0 = -z0 * ca * se
+  const zu1 = -z1 * ca * se
+  const y1 = (u1 - Math.max(xu0, xu1) - Math.max(zu0, zu1)) / ce
+  const y0 = (u0 - Math.min(xu0, xu1) - Math.min(zu0, zu1)) / ce
+  const b: Box = [
+    [x0, y0, z0],
+    [x1, y1, z1],
+  ]
+  return { box: b, target: boxCenter(b) }
 }

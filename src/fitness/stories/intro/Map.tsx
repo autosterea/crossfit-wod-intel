@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react'
-import { MODULES } from '../../fitnessData'
+import { MODULES, PAL } from '../../fitnessData'
 import type { FitnessView } from '../../lessonTypes'
 import { Plates, type PlateSpec } from '../../story/kit/Plates'
 import { useStageHotspot } from '../../story/hotspots'
@@ -16,7 +16,9 @@ import { useIntroExplore } from './exploreStore'
    its chapter accent, named "01 SKILLS" to "06 HEALTH" (a numbered badge
    and the name), and each a REAL button (a stage hotspot sized to the
    projected tile) that opens its chapter. In explore the same six tiles
-   stay tappable, and the model picked in the panel is lit.
+   stay tappable by their name strip, so a one-finger drag that starts on
+   the artwork orbits the map; the model picked in the panel is lit. The
+   glass stays near the slate: the 1 px ring carries each accent.
    ========================================================================= */
 
 export function tileRect(L: IntroLayout, i: number): [number, number, number, number] {
@@ -27,15 +29,21 @@ export function tileRect(L: IntroLayout, i: number): [number, number, number, nu
 
 function TileHotspot({ L, i }: { L: IntroLayout; i: number }) {
   const m = MODULES[i]
-  const box = useMemo<Box>(() => {
+  const boxes = useMemo(() => {
     const [x0, y0, x1, y1] = tileRect(L, i)
-    return [
+    const whole: Box = [
       [x0, y0, 0],
       [x1, y1, 0],
     ]
+    // explore: the badge-and-name strip along the tile's foot
+    const strip: Box = [
+      [x0, y0, 0],
+      [x1, y0 + (y1 - y0) * 0.3, 0],
+    ]
+    return { whole, strip }
   }, [L, i])
   useStageHotspot(`intro-tile-${m.key}`, {
-    box: (T) => (tilesLive(T) ? box : null),
+    box: (T) => (tilesLive(T) ? (useStoryStore.getState().mode === 'explore' ? boxes.strip : boxes.whole) : null),
     onActivate: () => useFitnessStore.getState().navigate({ view: m.key as FitnessView }),
     ariaLabel: m.title,
     modes: 'both',
@@ -53,11 +61,12 @@ export function TheMap({ L }: { L: IntroLayout }) {
         const lit = exploring && m.key === sel
         return {
           rect: tileRect(L, i),
-          // linear-light alphas: a whisper of glass and a 1 px accent ring
-          fill: m.accent,
-          fillAlpha: lit ? 0.03 : 0.012,
+          // linear-light alphas: a whisper of neutral glass (an accent fill
+          // turns amber brown on the slate) and a 1 px ring in the accent
+          fill: lit ? m.accent : PAL.chalk,
+          fillAlpha: lit ? 0.02 : 0.0045,
           line: m.accent,
-          lineAlpha: lit ? 0.85 : exploring ? 0.18 : 0.34,
+          lineAlpha: lit ? 0.9 : exploring ? 0.2 : 0.42,
         }
       }),
     [L, sel, exploring],

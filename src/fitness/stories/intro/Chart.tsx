@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef } from 'react'
 import * as THREE from 'three'
-import { PAL, POWER_DURATIONS } from '../../fitnessData'
+import { PAL, POWER_DURATIONS, POWER_DURATION_LABELS } from '../../fitnessData'
 import { Pen, PenBatch, PEN } from '../../story/kit/Pen'
 import { AreaFill } from '../../story/kit/Fill'
 import { Halo } from '../../story/kit/Halo'
@@ -20,6 +20,7 @@ import {
   curveDraw,
   eff,
   fold,
+  powerAxisOut,
   sliceMorph,
   sweep,
   ticksDraw,
@@ -30,10 +31,12 @@ import { exploreDim } from './emphasis'
    One definition (D.1 I2): the coach's chart. Two axes are drawn in one L
    stroke by a hot pen (construction), the pen draws the Generalist curve
    (data), light sweeps in under it left to right behind a hot front (the
-   area), and the claim AREA = FITNESS lands inside the area. In I3 the
-   curve settles onto the youngest slice of the lifetime surface and the
-   luminous area becomes the solid's front face; in I4 the whole chart
-   folds into tile 04 and returns to the Generalist curve.
+   area), and the claim AREA = FITNESS lands inside the area. The time
+   axis is named at its two ends, 1 s and 1 hr (broad time). In I3 the
+   curve settles onto the youngest slice of the lifetime surface, the
+   luminous area recedes to the solid's faint front face, and the power
+   axis shortens to the solid's front edge (its ticks step back); in I4
+   the whole chart folds into tile 04 and returns to the Generalist curve.
    ========================================================================= */
 
 const N = 72
@@ -65,6 +68,7 @@ export function Chart({ L, tier }: { L: IntroLayout; tier: Tier }) {
   }, { hide: outer })
 
   // construction: ONE continuous L stroke, down the power axis then along time (L11)
+  const AX_V = 22
   const axes = useMemo(() => {
     const s: number[] = []
     const seg = (a: V3, b: V3, k: number) => {
@@ -74,17 +78,38 @@ export function Chart({ L, tier }: { L: IntroLayout; tier: Tier }) {
         s.push(a[0] + (b[0] - a[0]) * f0, a[1] + (b[1] - a[1]) * f0, 0, a[0] + (b[0] - a[0]) * f1, a[1] + (b[1] - a[1]) * f1, 0)
       }
     }
-    seg([c.x0, cy(c, 1.02), 0], [c.x0, c.y0, 0], 22)
+    seg([c.x0, cy(c, 1.02), 0], [c.x0, c.y0, 0], AX_V)
     seg([c.x0, c.y0, 0], [c.x1, c.y0, 0], 28)
     return new Float32Array(s)
   }, [c])
-  // tick marks at the eight benchmark durations (interval axis) and at v 0.5 and 1.0
+  // I3: the power axis shortens to the solid's front-left edge, so no stray
+  // chalk line crosses the lifetime surface (the landscape's own height reads power)
+  const lastAx = useRef({ v: NaN, c: null as unknown })
+  const writeAxes = (T: number, s: Float32Array): boolean => {
+    const k = powerAxisOut(T)
+    const lk = lastAx.current
+    if (lk.v === k && lk.c === c) return false
+    lk.v = k
+    lk.c = c
+    const top = cy(c, 1.02) + (cy(c, frontV(T, 0)) - cy(c, 1.02)) * k
+    for (let i = 0; i < AX_V; i++) {
+      s[i * 6 + 1] = top + (c.y0 - top) * (i / AX_V)
+      s[i * 6 + 4] = top + (c.y0 - top) * ((i + 1) / AX_V)
+    }
+    return true
+  }
+  // tick marks at the eight benchmark durations (interval axis)
   const ticks = useMemo(() => {
     const s: number[] = []
     POWER_DURATIONS.forEach((_, i) => {
       const x = cx(c, i / (POWER_DURATIONS.length - 1))
       s.push(x, c.y0, 0, x, c.y0 - 0.16, 0)
     })
+    return new Float32Array(s)
+  }, [c])
+  // and at v 0.5 and 1.0 on the power axis (they step back in I3)
+  const vTicks = useMemo(() => {
+    const s: number[] = []
     for (const v of [0.5, 1]) s.push(c.x0, cy(c, v), 0, c.x0 - 0.16, cy(c, v), 0)
     return new Float32Array(s)
   }, [c])
@@ -148,11 +173,21 @@ export function Chart({ L, tier }: { L: IntroLayout; tier: Tier }) {
 
   const low = tier === 'low'
   const dim04 = () => exploreDim(TILE)
+  // the LOW-tier bloom stand-in rides the sweep front (one preallocated point)
+  const haloAt = useMemo<V3>(() => [0, 0, 0.1], [])
+  const haloPos = (T: number): V3 => {
+    const u = sweep(T)
+    const p = haloAt as [number, number, number]
+    p[0] = cx(c, u)
+    p[1] = cy(c, gv(u))
+    return haloAt
+  }
   return (
     <group ref={outer}>
       <group position={[-px, -py, 0]}>
-        <PenBatch segments={axes} color={PAL.chalk} width={PEN.axis} byArc head hot progress={axesDraw} opacity={() => 0.55} dim={dim04} renderOrder={31} />
+        <PenBatch segments={axes} color={PAL.chalk} width={PEN.axis} byArc head hot progress={axesDraw} update={writeAxes} opacity={() => 0.55} dim={dim04} renderOrder={31} />
         <PenBatch segments={ticks} color={PAL.chalk} width={PEN.axis} progress={ticksDraw} opacity={() => 0.5} dim={dim04} renderOrder={31} />
+        <PenBatch segments={vTicks} color={PAL.chalk} width={PEN.axis} progress={ticksDraw} opacity={(T) => 0.5 * (1 - powerAxisOut(T))} dim={dim04} renderOrder={31} />
         {/* the luminous area (H.20): an additive gradient with an HDR rim under the edge */}
         <AreaFill
           top={top}
@@ -171,7 +206,7 @@ export function Chart({ L, tier }: { L: IntroLayout; tier: Tier }) {
           renderOrder={12}
         />
         <Pen points={front} color={LIGHT} width={PEN.data} update={writeFront} opacity={frontOn} gain={() => 2.4} renderOrder={44} />
-        {low && <Halo position={(T) => [cx(c, sweep(T)), cy(c, gv(sweep(T))), 0.1] as V3} sizePx={70} color={PAL.yellowGreen} intensity={(T) => 0.6 * frontOn(T)} />}
+        {low && <Halo position={haloPos} sizePx={70} color={PAL.yellowGreen} intensity={(T) => 0.6 * frontOn(T)} />}
         {/* the claim edge: a crisp pen on top of the light (L10) */}
         <Pen points={curve} color={PAL.yellowGreen} width={PEN.data} update={writeCurve} progress={curveDraw} head hot dim={dim04} renderOrder={45} />
         <Claim L={L} />
@@ -226,21 +261,17 @@ function Claim({ L }: { L: IntroLayout }) {
     ink.opacity = Math.min(1, o * 1.4)
     mat.color.copy(base)
   }, { hide: group })
-  // the plate is an obstacle for the label placer while it is up
-  const obstacle = useMemo<WorldObstacle>(
-    () => ({
-      box: (T: number): Box | null =>
-        op(T) < 0.05 || eff(T) >= 3.2
-          ? null
-          : [
-              [px - w / 2, py - h / 2, 0.08],
-              [px + w / 2, py + h / 2, 0.08],
-            ],
+  // the plate is an obstacle for the label placer while it is up (one prebuilt box)
+  const obstacle = useMemo<WorldObstacle>(() => {
+    const b: Box = [
+      [px - w / 2, py - h / 2, 0.08],
+      [px + w / 2, py + h / 2, 0.08],
+    ]
+    return {
+      box: (T: number): Box | null => (eff(T) >= 3.2 || claimIn(T) * (1 - claimOut(T)) < 0.05 ? null : b),
       padPx: 6,
-    }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [px, py, w, h],
-  )
+    }
+  }, [px, py, w, h])
   useWorldObstacle('intro-claim', obstacle)
   return (
     <group ref={group}>
@@ -278,6 +309,31 @@ export function useChartLabels(L: IntroLayout) {
         only: ['S'],
         gapPx: 8,
         priority: 78,
+        required: true,
+        cue: axisTitles,
+      },
+      // broad time, shown: the span of the axis at its two ends (D.5 / D.7 precedent)
+      {
+        id: 'intro-tk-first',
+        text: POWER_DURATION_LABELS[0],
+        tone: 'tick',
+        anchor: [cx(c, 0), c.y0 - 0.16, 0],
+        prefer: 'S',
+        only: ['S'],
+        gapPx: 5,
+        priority: 80,
+        required: true,
+        cue: axisTitles,
+      },
+      {
+        id: 'intro-tk-last',
+        text: POWER_DURATION_LABELS[POWER_DURATION_LABELS.length - 1],
+        tone: 'tick',
+        anchor: [cx(c, 1), c.y0 - 0.16, 0],
+        prefer: 'S',
+        only: ['S'],
+        gapPx: 5,
+        priority: 80,
         required: true,
         cue: axisTitles,
       },

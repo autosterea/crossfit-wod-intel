@@ -8,9 +8,10 @@ import { ease } from '../../story/ease'
    and (N, 1) equals (N + 1, 0).
 
    Explore (C.12) shows the six-tile map from any beat: while exploring, the
-   scene reads an EXPLORE time that runs quickly from the beat the viewer
-   left to the end of the map beat (a fast-forward, damped in Scene.tsx; a
-   cut under reduced motion). Story mode never reads it.
+   scene reads an EXPLORE time. On entry it cuts to the start of the fold
+   (never earlier) and runs quickly to the finished map; on "Back to story"
+   it runs back to the story's T before the story takes over again (a cut
+   under reduced motion). Story mode never reads it.
    ========================================================================= */
 
 export const BEAT = { title: 0, models: 1, definition: 2, lifetime: 3, map: 4 } as const
@@ -19,7 +20,7 @@ export const END_T = 5
 
 /** Mutable explore time, written once per frame by the scene before anything reads it. */
 export const exploreTime = { on: false, T: END_T }
-/** The time the scene shows: story T, or the explore time while exploring. */
+/** The time the scene shows: story T, or the explore time while exploring (or rewinding). */
 export const eff = (T: number): number => (exploreTime.on ? exploreTime.T : T)
 
 const A = (T: number, n: number, a: number, b: number, e = ease.linear) => at(eff(T), n, a, b, e)
@@ -45,13 +46,10 @@ export const WIN = [0.12, 0.32, 0.52, 0.72] as const
 export const WIN_W = 0.2
 /** The morph itself uses this share of its window; the shape then rests, named. */
 export const MORPH_SHARE = 0.72
-/** Per-point stagger of the morph along the stroke (tween.morphPoints). */
+/** Per-point stagger of the morph along the stroke (introMath.morphFlow). */
 export const STAGGER = 0.42
-/** The copy's flight to its docked slot (D.1: 0.08 of the beat, settle). */
-export const FLY = 0.08
-export const flyStart = (c: number) => WIN[c] + WIN_W
 
-/** Morph w (shape w -> shape w + 1), 0..1 linear in T; morphPoints eases each point. */
+/** Morph w (shape w -> shape w + 1), 0..1 linear in T; morphFlow eases each point. */
 export const morphK = (T: number, w: number) => A(T, BEAT.models, WIN[w], WIN[w] + WIN_W * MORPH_SHARE)
 
 /**
@@ -66,12 +64,15 @@ export function inkProgress(T: number, j: number): number {
   return Math.max(0, Math.min(1, (k - (1 - STAGGER) / 2) / STAGGER))
 }
 
-/** The hero line exists until the dial's copy takes its place in the fourth slot. */
-export const heroOn = (T: number) => eff(T) < BEAT.models + flyStart(3)
-
-/** Copy c flies from the formation spot to its docked slot. */
-export const fly = (T: number, c: number) => A(T, BEAT.models, flyStart(c), flyStart(c) + FLY, ease.settle)
-export const copyOn = (T: number, c: number) => eff(T) >= BEAT.models + flyStart(c)
+/**
+ * The moment the line leaves model c for the next cell (the dial, the last
+ * one, hands over at 0.92, where D.1 ended the hero). From then on a still
+ * copy of the model holds its cell.
+ */
+export const leaveAt = (c: number) => (c < 3 ? WIN[c + 1] : WIN[3] + WIN_W)
+/** The hero line exists until the dial's copy takes its place. */
+export const heroOn = (T: number) => eff(T) < BEAT.models + leaveAt(3)
+export const copyOn = (T: number, c: number) => eff(T) >= BEAT.models + leaveAt(c)
 
 /** The moment morph c lands its last point (the shape closes): a short glint where its ends meet. */
 export const closeGlint = (T: number, c: number) => {
@@ -87,6 +88,33 @@ export const nameIn = (T: number, c: number) => A(T, BEAT.models, WIN[c] + 0.6 *
 /** The drum's five domain dots pop onto its rim as it closes. */
 export const dotPop = (T: number, i: number) =>
   stagger(eff(T), BEAT.models + WIN[1] + 0.55 * WIN_W, BEAT.models + WIN[1] + 0.9 * WIN_W, i, 5, 0.6, ease.snap)
+
+/**
+ * I2 0 to 0.15: the four models leave their cells for the D.1 docked row as
+ * the axes draw, in an order in which no model ever crosses another (phone
+ * 2 x 2): Energy and Continuum (the bottom row) slide into the right half
+ * of the row, Skills then drops into slot 1, and the Hopper swings across
+ * ahead of its drop into slot 2. Separate x and y windows per model.
+ */
+const DOCK_X = [
+  [0.025, 0.11],
+  [0.05, 0.13],
+  [0, 0.075],
+  [0, 0.075],
+] as const
+const DOCK_Y = [
+  [0.025, 0.11],
+  [0.06, 0.15],
+  [0, 0.075],
+  [0, 0.075],
+] as const
+export const dockX = (T: number, c: number) => A(T, BEAT.definition, DOCK_X[c][0], DOCK_X[c][1], ease.settle)
+export const dockY = (T: number, c: number) => A(T, BEAT.definition, DOCK_Y[c][0], DOCK_Y[c][1], ease.settle)
+
+/** The full MODULES label names a model in its cell (formed, then held for the I1 rest). */
+export const fullName = (T: number, c: number) => nameIn(T, c) * (1 - A(T, BEAT.definition, 0, 0.04))
+/** The short name rides the docked copy (I2), dimmed with the row, gone in I3. */
+export const shortName = (T: number, c: number) => A(T, BEAT.definition, DOCK_Y[c][1] - 0.01, DOCK_Y[c][1] + 0.03)
 
 /** The docked row: dimmed to 35% under the chart (I2), gone in I3, back for the map (I4). */
 export const rowDim = (T: number) => 1 - 0.65 * A(T, BEAT.definition, 0, 0.15) + 0.65 * A(T, BEAT.map, 0, 0.25)
@@ -120,10 +148,17 @@ export const ageAxisDraw = (T: number) => A(T, BEAT.lifetime, 0.1, 0.7, ease.dra
 /** the age axis belongs to the upright landscape; it leaves before the fold */
 export const ageAxisOut = (T: number) => 1 - A(T, BEAT.map, 0, 0.12)
 /**
- * The area is one face of the volume in I3: it recedes to let the lifetime
- * surface speak (L3), and comes back as it folds into the Capacity tile.
+ * The power axis and its ticks step back while the landscape stands (the
+ * surface's own height and isolines read power there), and return as the
+ * chart folds into the Capacity tile.
  */
-export const faceDim = (T: number) => 1 - 0.5 * A(T, BEAT.lifetime, 0.1, 0.45, ease.settle) + 0.5 * A(T, BEAT.map, 0, 0.3)
+export const powerAxisOut = (T: number) => A(T, BEAT.lifetime, 0.02, 0.2, ease.settle) * (1 - A(T, BEAT.map, 0, 0.3))
+/**
+ * The area is one face of the volume in I3: it recedes to a whisper so the
+ * lit lifetime surface speaks (L3), and comes back as it folds into the
+ * Capacity tile.
+ */
+export const faceDim = (T: number) => 1 - 0.95 * A(T, BEAT.lifetime, 0.1, 0.45, ease.settle) + 0.95 * A(T, BEAT.map, 0, 0.3)
 export const ageLabel = (T: number) => A(T, BEAT.lifetime, 0.55, 0.7) * (1 - A(T, BEAT.map, 0, 0.1))
 export const healthIn = (T: number) => A(T, BEAT.lifetime, 0.75, 1, ease.settle) * (1 - A(T, BEAT.map, 0, 0.08))
 
@@ -147,5 +182,7 @@ export const plateIn = (T: number, i: number) => A(T, BEAT.map, 0.3 + 0.01 * i, 
 export const tileName = (T: number, i: number) => stagger(eff(T), BEAT.map + 0.5, BEAT.map + 0.8, i, 6, 0.5)
 /** the Health tile's slow turn starts once it has landed */
 export const turnOn = (T: number) => A(T, BEAT.map, 0.45, 0.85, ease.settle)
+/** the tile's ridgelines and crisp front edge draw on as it folds in */
+export const tileLines = (T: number) => A(T, BEAT.map, 0.18, 0.45, ease.settle)
 /** the tiles are tappable once they have landed */
 export const tilesLive = (T: number) => A(T, BEAT.map, 0.5, 0.6) > 0

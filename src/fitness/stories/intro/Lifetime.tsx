@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef } from 'react'
 import * as THREE from 'three'
 import { PAL, spectrum } from '../../fitnessData'
-import { Pen, PEN } from '../../story/kit/Pen'
+import { Pen, PenBatch, PEN } from '../../story/kit/Pen'
 import { AreaStrips } from '../../story/kit/Fill'
 import { SdfText } from '../../story/kit/SdfText'
 import { makeSurfaceMaterial, type SurfaceUniforms } from '../../story/kit/materials'
@@ -9,8 +9,8 @@ import { useSafeFrame } from '../../story/useSafeFrame'
 import { useLabels } from '../../story/labels/useLabel'
 import type { LabelSpec, V3 } from '../../story/types'
 import { chartPivot, cx, cy, tileFit, type IntroLayout } from './layout'
-import { NA, NU, capAt } from './introMath'
-import { ageAxisDraw, ageAxisOut, ageLabel, eff, extrude, fold, healthIn, scannerHot, skirtIn, turnOn } from './timeline'
+import { CAPACITY, NA, NU, capAt, rowOfAge } from './introMath'
+import { ageAxisDraw, ageAxisOut, ageLabel, eff, extrude, fold, healthIn, scannerHot, skirtIn, tileLines, turnOn } from './timeline'
 import { exploreDim } from './emphasis'
 
 /* =========================================================================
@@ -19,9 +19,12 @@ import { exploreDim } from './emphasis'
    Lifelong trainer's capacity surface (agingCapacity, the Health chapter's
    data): a lit, glossy landscape with isolines, over translucent walls of
    light, the curve as its front edge. A hot scanner line rides the back
-   edge while the ages are added. HEALTH lies on the floor in front. In I4
-   the landscape shrinks into tile 06 and turns slowly (the one ambient
-   motion of the intro, on the ambient clock A).
+   edge while the ages are added. HEALTH lies on the floor in front, and
+   the age axis is named AGE with its two ends, 20 and 80 (the Health
+   chapter's ticks), so depth reads as age. In I4 the landscape shrinks
+   into tile 06, where five crisp age slices (the front one in the curve's
+   yellow-green) draw it as line art like its neighbours, and it turns
+   slowly (the one ambient motion of the intro, on the ambient clock A).
    ========================================================================= */
 
 /** tile 06 (MODULES order) */
@@ -32,7 +35,14 @@ const NS = 28
 /** the tile's three-quarter view: a turn about y, then a tilt toward the camera */
 const TILE_YAW = -0.5
 const TILE_TILT = 0.42
-const TURN = (15 * Math.PI) / 180
+// +/- 8 degrees: small enough that the ambient clock's freeze on a pause (A = 2.5 T) barely moves it
+const TURN = (8 * Math.PI) / 180
+/** the age rows the tile draws as fine chalk slices between its front (the curve) and back (the scanner) edges */
+const SLICES = [5, 10, 15] as const
+/** the tile's lines sit this far above the surface (world units before the tile scale), clear of its depth */
+const TILE_LIFT = 0.09
+/** the Health chapter's age ticks (D.7 lexicon) shown at the two ends of the age axis */
+const AGE_TICKS = ['20', '80'] as const
 
 /** spectrum(cap / 0.9) as linear RGB, 256 steps (no allocation per vertex per frame) */
 const LUT = (() => {
@@ -56,19 +66,27 @@ export function Lifetime({ L }: { L: IntroLayout }) {
   const D = L.depth
   const outer = useRef<THREE.Group>(null)
   const [pxc] = chartPivot(c)
-  const piv: V3 = [pxc, c.y0 + c.H * 0.3, -D / 2]
+  const piv = useMemo<V3>(() => [pxc, c.y0 + c.H * 0.3, -D / 2], [pxc, c.y0, c.H, D])
   const tile = L.tiles.c[TILE]
-  // the tile view: fit the turned, tilted solid's projected bounds inside the tile
+  // the tile view: fit the turned, tilted SURFACE's projected bounds inside the
+  // tile (the glass skirt below it is all but invisible there)
   const tileView = useMemo(() => {
+    let cMin = Infinity
+    let cMax = -Infinity
+    for (let i = 0; i < CAPACITY.length; i++) {
+      cMin = Math.min(cMin, CAPACITY[i])
+      cMax = Math.max(cMax, CAPACITY[i])
+    }
     const e = new THREE.Euler(TILE_TILT, TILE_YAW, 0)
     const v = new THREE.Vector3()
+    const p = new THREE.Vector3(piv[0], piv[1], piv[2])
     let x0 = Infinity
     let x1 = -Infinity
     let y0 = Infinity
     let y1 = -Infinity
     for (let k = 0; k < 8; k++) {
-      v.set(k & 1 ? c.x1 : c.x0, k & 2 ? c.y0 + c.H * 0.88 : c.y0, k & 4 ? -D : 0)
-      v.sub(new THREE.Vector3(piv[0], piv[1], piv[2])).applyEuler(e)
+      v.set(k & 1 ? c.x1 : c.x0, k & 2 ? cy(c, cMax) : cy(c, cMin) - 0.3, k & 4 ? -D : 0)
+      v.sub(p).applyEuler(e)
       x0 = Math.min(x0, v.x)
       x1 = Math.max(x1, v.x)
       y0 = Math.min(y0, v.y)
@@ -77,8 +95,7 @@ export function Lifetime({ L }: { L: IntroLayout }) {
     const s = tileFit(L.tiles, (x1 - x0) * 1.04, (y1 - y0) * 1.04)
     // offset so the rotated solid's bounds centre on the tile's glyph spot
     return { s, dx: -((x0 + x1) / 2) * s, dy: -((y0 + y1) / 2) * s }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [c, D])
+  }, [c, D, piv, L.tiles])
 
   /* ---- the surface ---- */
   const geo = useMemo(() => {
@@ -106,12 +123,12 @@ export function Lifetime({ L }: { L: IntroLayout }) {
     g.setIndex(idx)
     return g
   }, [])
-  const mat = useMemo(() => makeSurfaceMaterial({ yScale: c.H, y0: c.y0, isoStep: 0.1, isoAlpha: 0.2, roughness: 0.42, metalness: 0.06 }), [c.H, c.y0])
+  const mat = useMemo(() => makeSurfaceMaterial({ yScale: c.H, y0: c.y0, isoStep: 0.1, isoAlpha: 0.3, roughness: 0.34, metalness: 0.06 }), [c.H, c.y0])
   useEffect(() => () => geo.dispose(), [geo])
   useEffect(() => () => mat.dispose(), [mat])
   // a lit, glossy landscape (A.2): the procedural environment carries most of its light
   useEffect(() => {
-    mat.envMapIntensity = 1.5
+    mat.envMapIntensity = 1.8
   }, [mat])
   const mesh = useMemo(() => {
     const m = new THREE.Mesh(geo, mat)
@@ -211,12 +228,13 @@ export function Lifetime({ L }: { L: IntroLayout }) {
     )
     g.scale.setScalar(1 + (tv.s - 1) * k)
     g.rotation.set(TILE_TILT * k, TILE_YAW * k + turn, 0)
-    // isolines read world height: they belong to the upright landscape, not the tilted tile
+    // isolines read world height: they belong to the upright landscape (the
+    // tile carries its own crisp age slices instead)
     const u = mat.userData.surface as SurfaceUniforms
-    u.uIsoA.value = 0.22 * (1 - k)
-    // the tilted tile faces the key light: a satin finish keeps its colours
-    mat.roughness = 0.4 + 0.22 * k
-    mat.color.setScalar(exploreDim(TILE))
+    u.uIsoA.value = 0.34 * (1 - k)
+    // the tilted tile faces the key light: a satin finish, lifted, keeps its colours luminous
+    mat.roughness = 0.34 + 0.26 * k
+    mat.color.setScalar(exploreDim(TILE) * (1 + 0.28 * k))
   }, { hide: outer })
 
   /* ---- the walls of light (left, right, back, front) ---- */
@@ -293,7 +311,36 @@ export function Lifetime({ L }: { L: IntroLayout }) {
     return a
   }, [c, D])
 
-  const hSize = L.title.lines === 2 ? 0.95 : 1.1
+  /* ---- the volume's front-right vertical: a crisp edge for a glass solid (L10;
+     the front-left one is the power axis, which the chart owns). It belongs
+     to the standing landscape and leaves before the fold. ---- */
+  const edge = useMemo(() => new Float32Array([c.x1, c.y0, 0, c.x1, cy(c, capAt(1, 0)), 0]), [c])
+
+  /* ---- the tile's line art: the age-20 front edge in the curve's
+     yellow-green and three fine chalk age slices, lifted just off the surface ---- */
+  const frontEdge = useMemo(() => {
+    const a = new Float32Array(NU * 3)
+    for (let i = 0; i < NU; i++) {
+      const u = i / (NU - 1)
+      a.set([cx(c, u), cy(c, capAt(u, 0)) + TILE_LIFT, 0.004], i * 3)
+    }
+    return a
+  }, [c])
+  const slices = useMemo(() => {
+    const segs = new Float32Array(SLICES.length * (NU - 1) * 6)
+    let o = 0
+    for (const a of SLICES) {
+      const z = (-D * a) / (NA - 1)
+      for (let i = 0; i < NU - 1; i++) {
+        const u0 = i / (NU - 1)
+        const u1 = (i + 1) / (NU - 1)
+        segs.set([cx(c, u0), cy(c, capAt(u0, a)) + TILE_LIFT, z, cx(c, u1), cy(c, capAt(u1, a)) + TILE_LIFT, z], o)
+        o += 6
+      }
+    }
+    return segs
+  }, [c, D])
+
   return (
     <group ref={outer} position={piv as unknown as [number, number, number]}>
       <group position={[-piv[0], -piv[1], -piv[2]]}>
@@ -303,13 +350,14 @@ export function Lifetime({ L }: { L: IntroLayout }) {
           points={NS}
           colors={wallColors}
           write={writeWalls}
-          opacity={(T) => (extrude(T) > 0.004 ? skirtIn(T) * exploreDim(TILE) : 0)}
-          lo={0.006}
-          hi={0.085}
-          gamma={1.8}
-          rim={() => 0.45}
+          opacity={(T) => (extrude(T) > 0.004 ? skirtIn(T) * exploreDim(TILE) * (1 - 0.55 * fold(T, TILE)) : 0)}
+          // glass, not a khaki block: light only near each wall's top edge (linear-light alphas add fast)
+          lo={0.0015}
+          hi={0.024}
+          gamma={3}
+          rim={() => 0.6}
           rimWidth={0.1}
-          rimAlpha={0.22}
+          rimAlpha={0.26}
           renderOrder={11}
         />
         <Pen
@@ -323,11 +371,22 @@ export function Lifetime({ L }: { L: IntroLayout }) {
           renderOrder={44}
         />
         <Pen points={ageAxis} color={PAL.chalk} width={PEN.axis} head hot progress={ageAxisDraw} opacity={(T) => 0.55 * ageAxisOut(T)} dim={() => exploreDim(TILE)} renderOrder={31} />
-        <group position={[pxc, c.y0 + 0.01, 1.05]} rotation={[-Math.PI / 2, 0, 0]}>
+        <Pen points={edge} color={PAL.chalk} width={PEN.axis} opacity={(T) => (extrude(T) > 0.004 ? skirtIn(T) * ageAxisOut(T) : 0)} dim={() => 0.55} renderOrder={31} />
+        <PenBatch
+          segments={slices}
+          color={PAL.chalk}
+          width={PEN.grid}
+          progress={tileLines}
+          opacity={(T) => (tileLines(T) > 0 ? 1 : 0)}
+          dim={() => 0.5 * exploreDim(TILE)}
+          renderOrder={33}
+        />
+        <Pen points={frontEdge} color={PAL.yellowGreen} width={PEN.data} progress={tileLines} opacity={(T) => (tileLines(T) > 0 ? 1 : 0)} dim={() => exploreDim(TILE)} renderOrder={34} />
+        <group position={[pxc, c.y0 + 0.01, L.healthZ]} rotation={[-Math.PI / 2, 0, 0]}>
           <SdfText
             font="barlowBold"
             text="HEALTH"
-            size={hSize}
+            size={L.healthSize}
             color={PAL.chalk}
             opacity={(T) => 0.42 * healthIn(T)}
             letterSpacing={0.12}
@@ -342,19 +401,33 @@ export function Lifetime({ L }: { L: IntroLayout }) {
 export function useLifetimeLabels(L: IntroLayout) {
   const specs = useMemo<LabelSpec[]>(() => {
     const c = L.chart
+    const cue = (T: number) => (eff(T) < 4.2 ? ageLabel(T) : 0)
+    const zOf = (age: number) => (-L.depth * rowOfAge(age)) / (NA - 1)
     return [
       {
         id: 'intro-age',
         text: 'AGE',
         tone: 'tick',
-        anchor: [c.x0, c.y0, -(L.depth + 0.35)],
+        anchor: [c.x0, c.y0, -L.depth * 0.5],
         prefer: 'W',
-        only: ['W', 'NW', 'N', 'SW'],
-        gapPx: 8,
+        only: ['W', 'NW', 'SW'],
+        gapPx: 10,
         priority: 80,
         required: true,
-        cue: (T: number) => (eff(T) < 4.2 ? ageLabel(T) : 0),
+        cue,
       },
+      ...AGE_TICKS.map<LabelSpec>((t) => ({
+        id: `intro-age-${t}`,
+        text: t,
+        tone: 'tick',
+        anchor: [c.x0, c.y0, zOf(Number(t))],
+        prefer: 'W',
+        only: ['W', 'NW', 'SW'],
+        gapPx: 6,
+        priority: 82,
+        required: true,
+        cue,
+      })),
     ]
   }, [L])
   useLabels(specs)
