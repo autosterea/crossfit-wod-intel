@@ -44,9 +44,10 @@ export const pathwaysStory: StoryDef = {
       body: 'Stored ATP and creatine phosphate. Explosive power, but the tiny store is largely spent within 10 to 15 seconds of all-out effort.',
       terms: { 'Stored ATP and creatine phosphate': 'phosphagen' },
       source: 'fitnessData.ENERGY_SYSTEMS[0].fuel + description',
-      build: 5.0,
-      // the cursor callout and the duration string, read at the end of the sweep (H.40)
-      sceneWords: 7,
+      // the cursor reads 3 s and holds before it sweeps (review r2)
+      build: 5.5,
+      // the stamped 3 s reading, the 10 s callout and the duration string, read at the end of the sweep (H.40)
+      sceneWords: 11,
       cam: { L: CHART },
     },
     {
@@ -65,9 +66,10 @@ export const pathwaysStory: StoryDef = {
       body: 'Carbohydrate and fat with oxygen. Slow to ramp, it overtakes the anaerobic systems past about 75 seconds.',
       terms: { 'Carbohydrate and fat with oxygen': 'oxidative' },
       source: 'fitnessData.ENERGY_SYSTEMS[2].fuel + description',
-      build: 5.5,
-      // the callout, "2 min and beyond" and the Marathon chip (H.40)
-      sceneWords: 9,
+      // the 75 s hold is 0.17 of the beat (review r2; D.4 0.06)
+      build: 6.5,
+      // the stamped 75 s reading, the 1 hr callout, "2 min and beyond" and the Marathon chip (H.40)
+      sceneWords: 13,
       cam: { L: CHART },
     },
     {
@@ -87,15 +89,16 @@ export const pathwaysStory: StoryDef = {
       title: 'The dominant engine changes',
       body: 'Example efforts on the curve. Watch the dominant engine change.',
       source: 'MODULES[2].blurb s2 + PathwaysModule ControlHead "Example efforts" + MODULE_COPY.definition.body ("the curve")',
-      build: 6.5,
-      // the result chip and the benchmark names (H.40)
-      sceneWords: 12,
+      // four stops 0.19 apart, each chip up about 1.3 s (review r2; D.4 6.5 s)
+      build: 9.0,
+      // the result chip, the two tags and the benchmark names (H.40)
+      sceneWords: 15,
       cam: { L: CHART },
     },
     {
       id: 'all-three',
       title: 'Train all three',
-      body: 'Total fitness requires training all three. The two most common faults are favoring one or two and over-training oxidative.',
+      body: 'Total fitness requires training all three. The two most common faults are favoring one or two, and over-training the oxidative engine.',
       source: 'MODULE_COPY.pathways.body s3 to s4',
       build: 5.0,
       // the three engine names under the brackets and the Fran chip (H.40)

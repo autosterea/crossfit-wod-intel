@@ -42,22 +42,36 @@ export const newBox = (): Box => ({ x: 0, y: 0, w: 0, h: 0, on: false })
 
 /* ------------------------------ px map -------------------------------- */
 
-/** world <-> stage px on the chart plane (z = 0): the camera is front-on, so the map is affine. */
+/**
+ * world <-> stage px on the chart plane (z = 0). The story camera is
+ * front-on, so the map is affine and separable (px(x), py(y)). Explore's
+ * Orbit can turn the chart away (az +/-45, el 0 to 35): then the map is
+ * projective, `affine` goes false (review r2), and the explore chips fall
+ * back to plain anchored placement instead of this layout.
+ */
 export class PxMap {
   ax = 0
   bx = 1
   ay = 0
   by = -1
+  /** the separable map predicts the two other chart corners within 1.5 px */
+  affine = true
   private v = new THREE.Vector3()
+  private sx(): number {
+    return ((this.v.x + 1) / 2) * focusRect.W
+  }
+  private sy(): number {
+    return ((1 - this.v.y) / 2) * focusRect.H
+  }
   update(camera: THREE.Camera, f: ChartFrame): void {
     camera.updateMatrixWorld()
     const v = this.v
     v.set(f.x(0), f.y(0), 0).project(camera)
-    const x0 = ((v.x + 1) / 2) * focusRect.W
-    const y0 = ((1 - v.y) / 2) * focusRect.H
+    const x0 = this.sx()
+    const y0 = this.sy()
     v.set(f.x(1), f.y(f.vMax), 0).project(camera)
-    const x1 = ((v.x + 1) / 2) * focusRect.W
-    const y1 = ((1 - v.y) / 2) * focusRect.H
+    const x1 = this.sx()
+    const y1 = this.sy()
     const dx = f.x(1) - f.x(0)
     const dy = f.y(f.vMax) - f.y(0)
     if (!Number.isFinite(x1 - x0) || Math.abs(x1 - x0) < 1e-3 || Math.abs(y1 - y0) < 1e-3) return
@@ -65,6 +79,12 @@ export class PxMap {
     this.ax = x0 - this.bx * f.x(0)
     this.by = (y1 - y0) / dy
     this.ay = y0 - this.by * f.y(0)
+    // the other two corners: where a separable map puts them vs where they project
+    v.set(f.x(1), f.y(0), 0).project(camera)
+    let err = Math.max(Math.abs(this.sx() - x1), Math.abs(this.sy() - y0))
+    v.set(f.x(0), f.y(f.vMax), 0).project(camera)
+    err = Math.max(err, Math.abs(this.sx() - x0), Math.abs(this.sy() - y1))
+    this.affine = err < 1.5
   }
   px(wx: number): number {
     return this.ax + this.bx * wx
@@ -91,13 +111,24 @@ export function boundsInto(out: Rect): Rect {
   return out
 }
 
-/** A label's size in px: measured by the label layer once it is live, estimated before (one frame). */
+/**
+ * A label's size in px: measured by the label layer once it is live,
+ * estimated otherwise. The measure is used only while it is of the label's
+ * CURRENT text (the layer measures during placement, after this layout has
+ * run, so a text written this frame would otherwise be sized by the last
+ * one; review r2): a stale measure falls back to the estimate for the one
+ * frame until the layer re-measures.
+ */
 export function sizeInto(id: string, text: string, tone: 'callout' | 'name', out: { w: number; h: number }): void {
   const e = registry.get(id)
   if (e && e.w > 0 && e.measured) {
-    out.w = e.w
-    out.h = e.h
-    return
+    const mc = e.spec.minChars
+    const key = mc && e.text.length <= mc ? '#' + mc : e.text
+    if (e.measured.startsWith(key + '|')) {
+      out.w = e.w
+      out.h = e.h
+      return
+    }
   }
   const desk = focusRect.shell === 'desktop'
   if (tone === 'callout') {
@@ -107,6 +138,69 @@ export function sizeInto(id: string, text: string, tone: 'callout' | 'name', out
     out.w = text.length * (desk ? 7.6 : 7.1) + 4
     out.h = desk ? 16 : 15
   }
+}
+
+/*
+ * An exact, history-free pill size for a callout text (review r2): a label
+ * is measured by the layer only once it is live, so a chip that is shown
+ * only if it fits (the stamped readings, the tags, full or short) would
+ * otherwise decide on an estimate or on a stale measure, and a deep link
+ * and a scrub could decide differently. A hidden probe with the SAME label
+ * classes, inside the label layer (so it inherits the stage's type), is
+ * measured once per text, shell and font state.
+ */
+interface ProbeSize {
+  w: number
+  h: number
+  mc: number
+  shell: string
+  fonts: string
+}
+/** keyed by the text itself (no key string built per frame); a size is re-measured when the shell, the fonts or the reservation change */
+const probeCache = new Map<string, ProbeSize>()
+let probe: HTMLDivElement | null = null
+let probeTxt: HTMLSpanElement | null = null
+let layerEl: Element | null = null
+export function measureCallout(text: string, out: { w: number; h: number }, minChars = 0): void {
+  const fonts = typeof document !== 'undefined' && document.fonts ? document.fonts.status : 'loaded'
+  const hit = probeCache.get(text)
+  if (hit && hit.mc === minChars && hit.shell === focusRect.shell && hit.fonts === fonts) {
+    out.w = hit.w
+    out.h = hit.h
+    return
+  }
+  if (!layerEl || !layerEl.isConnected) layerEl = typeof document !== 'undefined' ? document.querySelector('.st-labels') : null
+  const layer = layerEl
+  if (!layer) {
+    sizeInto('', text, 'callout', out)
+    return
+  }
+  if (!probe || !probe.isConnected || probe.parentElement !== layer) {
+    probe = document.createElement('div')
+    probe.className = 'st-lbl st-lbl--callout'
+    probe.setAttribute('aria-hidden', 'true')
+    probe.style.visibility = 'hidden'
+    probeTxt = document.createElement('span')
+    probeTxt.className = 'st-lbl-t'
+    probe.appendChild(probeTxt)
+    layer.appendChild(probe)
+  }
+  if (probeTxt) {
+    probeTxt.textContent = text
+    // the layer reserves minChars on the text span (a readout that counts keeps its width)
+    probeTxt.style.minWidth = minChars ? `${minChars}ch` : ''
+  }
+  const w = probe.offsetWidth
+  const h = probe.offsetHeight
+  if (w <= 0) {
+    sizeInto('', text, 'callout', out)
+    return
+  }
+  // bounded: the cursor's texts are finite (durations x shares), but never let it grow without end
+  if (probeCache.size > 600) probeCache.clear()
+  probeCache.set(text, { w, h, mc: minChars, shell: focusRect.shell, fonts })
+  out.w = w
+  out.h = h
 }
 
 export interface Blockers {
@@ -140,6 +234,23 @@ function floorMin(floor: Floor, x0: number, x1: number): number {
   return m
 }
 
+/** Does the connector from the node (nx, ny) to (cx, cy) run through a blocker (the first 6 px, the node's own glow, excepted)? */
+function linkBlocked(nx: number, ny: number, cx: number, cy: number, bl: Blockers): boolean {
+  const len = Math.hypot(cx - nx, cy - ny)
+  if (len < 8) return false
+  const n = Math.min(24, Math.ceil(len / 4))
+  for (let s = 0; s <= n; s++) {
+    const t = (6 + ((len - 6) * s) / n) / len
+    const x = nx + (cx - nx) * t
+    const y = ny + (cy - ny) * t
+    for (let i = 0; i < bl.n; i++) {
+      const r = bl.r[i]
+      if (x > r.x + 1 && x < r.x + r.w - 1 && y > r.y + 1 && y < r.y + r.h - 1) return true
+    }
+  }
+  return false
+}
+
 /* ------------------------------- flag --------------------------------- */
 
 export interface Flag extends Box {
@@ -155,9 +266,12 @@ export const newFlag = (): Flag => ({ ...newBox(), nx: 0, ny: 0, cx: 0, cy: 0 })
  * Place a w x h pill for the node (nx, ny): over the node if it can, else
  * slid right; its bottom `margin` px over the floor along its width, lifted
  * over any blocker in its column. [xMin, xMax] is the span the pill may use
- * (the power axis on the left, the Marathon leader's lane on the right).
+ * (the power axis on the left, the Marathon leader's lane on the right);
+ * yTop is the highest its top may go (the focus rect by default; explore's
+ * Marathon keeps inside the oxidative lane).
  */
-export function solveFlag(f: Flag, nx: number, ny: number, w: number, h: number, floor: Floor, xMin: number, xMax: number, bl: Blockers, B: Rect, margin = 8): void {
+export function solveFlag(f: Flag, nx: number, ny: number, w: number, h: number, floor: Floor, xMin: number, xMax: number, bl: Blockers, B: Rect, margin = 8, yTop = -Infinity): void {
+  const top = Math.max(B.y, yTop)
   const L = Math.max(B.x, xMin)
   const R = Math.min(B.x + B.w, xMax) - w
   f.nx = nx
@@ -180,7 +294,9 @@ export function solveFlag(f: Flag, nx: number, ny: number, w: number, h: number,
       }
       if (!lifted) break
     }
-    if (yb - h < B.y) continue
+    if (yb - h < top) continue
+    // and its connector must not run through another chip, name or pole (review r2: a leader across a stamped reading hid it)
+    if (linkBlocked(nx, ny, Math.max(x, Math.min(x + w, nx)), Math.max(yb - h, Math.min(yb, ny)), bl)) continue
     f.x = x
     f.y = yb - h
     found = true
@@ -193,6 +309,25 @@ export function solveFlag(f: Flag, nx: number, ny: number, w: number, h: number,
   f.on = found
   f.cx = Math.max(f.x, Math.min(f.x + w, nx))
   f.cy = Math.max(f.y, Math.min(f.y + h, ny))
+}
+
+/**
+ * A flag with a full text and a short one (review r2: the stamped readings
+ * and the P5 tags). The full text is tried first; the pill may slide at most
+ * `slack` px right of its node, so it never drifts away from what it
+ * describes. Returns 1 (full), 2 (short) or 0 (neither found a free spot).
+ */
+export function solveFlagFit(f: Flag, nx: number, ny: number, wF: number, hF: number, wS: number, hS: number, floor: Floor, xMin: number, slack: number, bl: Blockers, B: Rect): 0 | 1 | 2 {
+  solveFlag(f, nx, ny, wF, hF, floor, xMin, nx + wF + slack, bl, B)
+  if (f.on) return 1
+  solveFlag(f, nx, ny, wS, hS, floor, xMin, nx + wS + slack, bl, B)
+  return f.on ? 2 : 0
+}
+
+/** Add a placed flag, its pill and the connector under it, as blockers. */
+export function blockFlag(b: Blockers, f: Flag): void {
+  addBlocker(b, f.x - 3, f.y - 3, f.w + 6, f.h + 6)
+  addBlocker(b, Math.min(f.nx, f.cx) - 4, Math.min(f.cy, f.ny), Math.abs(f.nx - f.cx) + 8, Math.abs(f.ny - f.cy))
 }
 
 /* ------------------------------ cluster ------------------------------- */

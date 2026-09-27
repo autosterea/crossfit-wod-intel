@@ -5,7 +5,7 @@ import { Readout } from '../../ui'
 import { ChipRadio } from '../../story/ui/ChipRadio'
 import { useStoryStore } from '../../story/store'
 import { usePwExplore } from './exploreStore'
-import { COLOR, LEAD_U, NAME, PEAK_ORDER_TEXT, SLIDER_MAX, SLIDER_MIN, T_MAX, contribAtT, dominantOf, sliderToT, tToSlider } from './pathwaysMath'
+import { COLOR, HANDOVER, NAME, PEAK_ORDER_TEXT, SLIDER_MAX, SLIDER_MIN, T_MAX, contribAtT, dominantOf, sliderToT, tToSlider } from './pathwaysMath'
 
 /* =========================================================================
    Pathways explore controls (DESIGN.md D.4 "Explore"). Peek (whole rows
@@ -18,8 +18,8 @@ import { COLOR, LEAD_U, NAME, PEAK_ORDER_TEXT, SLIDER_MAX, SLIDER_MIN, T_MAX, co
 
 const KEYS = ['phosphagen', 'glycolytic', 'oxidative'] as const
 const P = (u: number) => `${(u * 100).toFixed(1)}%`
-/** The slider track: each engine's colour over the durations it leads (the same ranges as the strips under the axis). */
-const TRACK = `linear-gradient(90deg, ${COLOR.phosphagen} 0 ${P(LEAD_U[1])}, ${COLOR.glycolytic} ${P(LEAD_U[1])} ${P(LEAD_U[2])}, ${COLOR.oxidative} ${P(LEAD_U[2])} 100%)`
+/** The slider track: the same colours as the strip under the axis, cross-fading across the two handover zones. */
+const TRACK = `linear-gradient(90deg, ${COLOR.phosphagen} 0 ${P(HANDOVER[0][0])}, ${COLOR.glycolytic} ${P(HANDOVER[0][1])} ${P(HANDOVER[1][0])}, ${COLOR.oxidative} ${P(HANDOVER[1][1])} 100%)`
 
 /* A 44 px range input (B.4: sliders get 44 px hit areas); local until the
    kit restyles ui.tsx Slider (engine request in the chapter report). */
@@ -183,8 +183,9 @@ export default function PathwaysExplore() {
         ))}
       </div>
 
+      {/* "Height is power output" only while the height IS power (review r2: Share plots the share of energy supply) */}
       <p className="st-ex-note">
-        Height is power output. Peak power order: <b>{PEAK_ORDER_TEXT}</b>. Oxidative outlasts the others, it is not more powerful.
+        {share ? '' : 'Height is power output. '}Peak power order: <b>{PEAK_ORDER_TEXT}</b>. Oxidative outlasts the others, it is not more powerful.
       </p>
     </div>
   )

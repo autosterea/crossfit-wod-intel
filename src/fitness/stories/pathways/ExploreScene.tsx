@@ -34,12 +34,12 @@ import {
   type Shares,
 } from './pathwaysMath'
 import { bandTopAt, stackTopAt } from './bands'
-import { Construction, DurationStrips, MarathonChevron, type ConstructionVis } from './chart'
-import { AXIS_ORDER, FLOW_CURVES, makeFlowState, segLine, setFlowMorph, type BandSource } from './geom'
+import { Construction, HandoverStrip, LaneAxes, MarathonChevron, type ConstructionVis } from './chart'
+import { AXIS_ORDER, FLOW_CURVES, makeFlowState, setFlowMorph, type BandSource } from './geom'
 import { BandFill, BandPen, Envelope } from './elements'
 import { River } from './River'
-import { LANE_NAME_U, ROW, TICKS, legendX, narrowChart, pxPerUnit, underAxis, type UnderAxis } from './layout'
-import { PxMap, addBlocker, addHud, boundsInto, newBlockers, newFlag, putSig, sizeInto, solveFlag, type Floor } from './annot'
+import { LANE_NAME_U, ROW, TICKS, narrowChart, pxPerUnit, stringX, underAxis, type UnderAxis } from './layout'
+import { PxMap, addHud, addBlocker, blockFlag, boundsInto, measureCallout, newBlockers, newFlag, putSig, sizeInto, solveFlag, type Floor } from './annot'
 import { usePwExplore } from './exploreStore'
 import { shown } from './shown'
 
@@ -48,12 +48,19 @@ import { shown } from './shown'
    the cursor, Stacked | Lanes and Power | Share damp toward the explore
    store, and the river keeps flowing on the ambient clock. Scrub drags the
    cursor (the default here: this is a chart you read front-on); a pin, or a
-   benchmark chip, jumps to that benchmark. The cursor's readout and the
-   Marathon chip are laid out like the story's (annot.ts).
+   benchmark chip, jumps to that benchmark.
+
+   Layout (annot.ts), once per frame before the labels: the cursor's
+   readout, then the Marathon chip clear of it and its pole (with the lanes
+   open it stays inside the oxidative lane, under the glycolytic baseline,
+   or folds into its chevron), then the lane names, each sliding along its
+   own lane to stay clear of both (review r2). Under a real Orbit the chart is no longer front-on,
+   the stage-px map stops being separable, and the chips fall back to plain
+   anchored placement with the placer's own leaders.
    ========================================================================= */
 
 const STATIC: ConstructionVis = {
-  axes: { progress: () => 1, dim: () => 0.55 },
+  axes: { progress: () => 1, dim: () => 0.55 * (1 - 0.8 * shown.m) },
   ticks: { progress: () => 1, dim: () => 0.6 },
 }
 
@@ -73,9 +80,17 @@ const SRC: BandSource = { m: () => shown.m, s: () => shown.s, front: () => FULL 
 const PIN_COLORS = PINS.map((p) => COLOR[p.dominant])
 const KEYS = ['phosphagen', 'glycolytic', 'oxidative'] as const
 const CUR_IDS = KEYS.map((k) => `pwx-cur-${k}`)
+const CURP_IDS = KEYS.map((k) => `pwx-curp-${k}`)
 /** Band index (bottom to top) of each engine. */
 const BAND_OF: Record<(typeof KEYS)[number], number> = { phosphagen: 2, glycolytic: 1, oxidative: 0 }
 const MARA_TEXT = MARATHON ? `${MARATHON.name} - ${fmtDuration(MARATHON.seconds)}` : ''
+/** Where each lane's name may sit along its lane (bottom to top), first choice first. */
+const LANE_NAME_TRY: readonly (readonly number[])[] = [
+  [LANE_NAME_U[0], uOf(120), uOf(60), uOf(30), uOf(14), uOf(7), uOf(1200)],
+  [LANE_NAME_U[1], uOf(30), uOf(8)],
+  [LANE_NAME_U[2], uOf(20), uOf(6)],
+]
+const LANE_TEXT = [0, 1, 2].map((b) => NAME[KEYS[2 - b]])
 
 /** v of band b's top at u in the displayed mode. */
 const topV = (b: number, u: number) => bandTopAt(b, u, shown.m, shown.s)
@@ -96,6 +111,12 @@ function arrivedPin(): number {
 }
 /** The band the cursor's node sits on: the stack top while stacked, the dominant engine's lane once the lanes open. */
 const nodeV = (u: number) => (shown.m < 0.5 ? stackTopAt(u, shown.s) : topV(BAND_OF[dominantAtT(shown.t)], u))
+/** "Power output" and "Share of energy supply" trade places as Power | Share damps (never both at once). */
+const powerTitle = () => Math.max(0, 1 - 2.2 * shown.s)
+const shareTitle = () => Math.max(0, 2.2 * shown.s - 1.2)
+
+const overlaps = (x: number, y: number, w: number, h: number, r: { x: number; y: number; w: number; h: number }, pad: number) =>
+  x < r.x + r.w + pad && x + w > r.x - pad && y < r.y + r.h + pad && y + h > r.y - pad
 
 export default function ExploreScene({ frame, tier }: { frame: ChartFrame; tier: Tier }) {
   const { layout } = useBeat()
@@ -145,7 +166,9 @@ export default function ExploreScene({ frame, tier }: { frame: ChartFrame; tier:
 
   // the river's band curves follow Power | Share: the power curves are static
   // (FLOW_CURVES) and the share curves are sampled once, so a toggle only
-  // blends two Float32Arrays per frame (no allocation, no per-sample math)
+  // blends two Float32Arrays (no allocation, no per-sample math). `force`:
+  // the river repacked its power curves (a refit), so the blend must be
+  // written again even though Share has not moved (review r2).
   const live = useMemo(
     () => ({
       a: [new Float32Array(128), new Float32Array(128), new Float32Array(128)] as [Float32Array, Float32Array, Float32Array],
@@ -154,8 +177,8 @@ export default function ExploreScene({ frame, tier }: { frame: ChartFrame; tier:
     }),
     [],
   )
-  const liveCurves = () => {
-    if (live.s === shown.s) return null
+  const liveCurves = (force: boolean) => {
+    if (!force && live.s === shown.s) return null
     live.s = shown.s
     const s = shown.s
     for (let b = 0; b < 3; b++) {
@@ -171,11 +194,27 @@ export default function ExploreScene({ frame, tier }: { frame: ChartFrame; tier:
   /* ------------------------------ layout ------------------------------ */
 
   const an = useMemo(
-    () => ({ pxm: new PxMap(), B: { x: 0, y: 0, w: 0, h: 0 } as Rect, bl: newBlockers(16), cur: newFlag(), curOn: 0, mara: newFlag(), sz: { w: 0, h: 0 }, sig: new Float64Array(8), ver: 0 }),
+    () => ({
+      pxm: new PxMap(),
+      B: { x: 0, y: 0, w: 0, h: 0 } as Rect,
+      bl: newBlockers(20),
+      cur: newFlag(),
+      curOn: 0,
+      mara: newFlag(),
+      maraOn: 0,
+      sz: { w: 0, h: 0 },
+      sig: new Float64Array(12),
+      ver: 0,
+      laneU: [LANE_NAME_U[0], LANE_NAME_U[1], LANE_NAME_U[2]],
+      // the readout's text (rebuilt only when it changes)
+      key: -1,
+      text: calloutText(T_MIN),
+      c: { phosphagen: 0, glycolytic: 0, oxidative: 0 } as Shares,
+    }),
     [],
   )
   // the surfaces the chips keep clear of, in stage px: the cursor's band (the
-  // stack top, or its engine's lane), and the highest band anywhere (Marathon)
+  // stack top, or its engine's lane), and the oxidative river (Marathon)
   const floors = useMemo(() => {
     const uAt = (sx: number) => Math.max(0, Math.min(1, (an.pxm.wx(sx) - frame.x0) / frame.FW))
     const cursor: Floor = (sx) => {
@@ -196,28 +235,76 @@ export default function ExploreScene({ frame, tier }: { frame: ChartFrame; tier:
       const { pxm, B, bl } = an
       pxm.update(camera, frame)
       boundsInto(B)
+
+      // the readout's text first, so it is sized and placed with the text it shows (review r2)
+      contribInto(shown.t, an.c)
+      const d = dominantOf(an.c)
+      // at a chosen benchmark the readout carries its name, as the story's result chips do
+      const pin = arrivedPin()
+      const key = calloutKey(shown.t, KEYS.indexOf(d), Math.round(an.c[d])) * 16 + pin + 1
+      if (key !== an.key) {
+        an.key = key
+        an.text = pin >= 0 ? PINS[pin].name + ' - ' + calloutText(shown.t) : calloutText(shown.t)
+      }
+      for (let i = 0; i < 3; i++) {
+        setLabelText(CUR_IDS[i], an.text)
+        setLabelText(CURP_IDS[i], an.text)
+      }
+
       const u = cursorUx()
       const nx = pxm.px(frame.x(u))
       const ny = pxm.py(frame.y(nodeV(u)))
       const tipX = pxm.px(frame.x(1) + 0.32)
       const axisX = pxm.px(frame.x(0))
+      const chosen = beyond()
+      an.curOn = chosen ? 0 : 1
+
+      // 1. the cursor's readout, clear of every pin, left of the Marathon's leader
       bl.n = 0
       addHud(bl)
-      if (shown.m < 0.5) for (let k = 0; k < PINS.length; k++) {
-        const x = pxm.px(frame.x(PU[k]))
-        const y = pxm.py(frame.y(pinV(PU[k])))
-        if (Math.abs(x - nx) > 1 || Math.abs(y - ny) > 1) addBlocker(bl, x - 8, y - 8, 16, 16)
-      }
-      an.curOn = beyond() ? 0 : 1
+      if (shown.m < 0.5)
+        for (let k = 0; k < PINS.length; k++) {
+          const x = pxm.px(frame.x(PU[k]))
+          const y = pxm.py(frame.y(pinV(PU[k])))
+          if (Math.abs(x - nx) > 1 || Math.abs(y - ny) > 1) addBlocker(bl, x - 8, y - 8, 16, 16)
+        }
       if (an.curOn) {
-        sizeInto(CUR_IDS[KEYS.indexOf(dominantAtT(shown.t))], '00 SEC - GLYCOLYTIC 00%', 'callout', an.sz)
+        measureCallout(an.text, an.sz, 24)
         solveFlag(an.cur, nx, ny, an.sz.w, an.sz.h, floors.cursor, axisX + 6, tipX - 10, bl, B)
-        const f = an.cur
-        addBlocker(bl, f.x - 3, f.y - 3, f.w + 6, f.h + 6)
-        addBlocker(bl, Math.min(f.nx, f.cx) - 4, Math.min(f.cy, f.ny), Math.abs(f.nx - f.cx) + 8, Math.abs(f.ny - f.cy))
+        blockFlag(bl, an.cur)
+      } else an.cur.on = false
+
+      // 2. the Marathon chip, right-aligned over its chevron, clear of the
+      // readout and its pole; with the lanes open it keeps inside the
+      // oxidative lane (under the glycolytic baseline), else it folds into
+      // its chevron, unless it is the chosen benchmark
+      measureCallout(MARA_TEXT, an.sz)
+      const laneTop = shown.m >= 0.5 && !chosen ? pxm.py(frame.y(LANE_BASE[1])) + 2 : -Infinity
+      solveFlag(an.mara, tipX, pxm.py(frame.y(0)), an.sz.w, an.sz.h, floors.top, axisX + 6, B.x + B.w, bl, B, 8, laneTop)
+      an.maraOn = an.mara.on || chosen ? 1 : 0
+
+      // 3. the lane names slide along their own lanes, clear of both chips
+      for (let b = 0; b < 3; b++) {
+        const tries = LANE_NAME_TRY[b]
+        sizeInto(`pwx-lane-${b}`, LANE_TEXT[b], 'name', an.sz)
+        const w = an.sz.w + 14
+        const h = an.sz.h
+        let pick = tries[0]
+        for (let j = 0; j < tries.length; j++) {
+          const lx = pxm.px(frame.x(tries[j]))
+          const ly = pxm.py(frame.y(topV(b, tries[j])))
+          const x0 = b === 2 ? lx + 4 : lx - w / 2
+          const y0 = ly - 10 - h
+          const clearCur = !an.curOn || !overlaps(x0, y0, w, h, an.cur, 4)
+          const clearMara = !an.maraOn || !overlaps(x0, y0, w, h, an.mara, 4)
+          if (clearCur && clearMara && x0 >= B.x && x0 + w <= B.x + B.w) {
+            pick = tries[j]
+            break
+          }
+        }
+        an.laneU[b] = pick
       }
-      sizeInto('pwx-mara', MARA_TEXT, 'callout', an.sz)
-      solveFlag(an.mara, tipX, pxm.py(frame.y(0)), an.sz.w, an.sz.h, floors.top, axisX + 6, B.x + B.w, bl, B)
+
       const s = an.sig
       let moved = putSig(s, 0, an.cur.x)
       moved = putSig(s, 1, an.cur.y) || moved
@@ -225,6 +312,9 @@ export default function ExploreScene({ frame, tier }: { frame: ChartFrame; tier:
       moved = putSig(s, 3, an.mara.y) || moved
       moved = putSig(s, 4, an.cur.nx) || moved
       moved = putSig(s, 5, an.cur.ny) || moved
+      moved = putSig(s, 6, an.maraOn * 100) || moved
+      moved = putSig(s, 7, pxm.affine ? 100 : 0) || moved
+      for (let b = 0; b < 3; b++) moved = putSig(s, 8 + b, an.laneU[b] * 1000) || moved
       if (moved) {
         an.ver++
         bumpObstacles()
@@ -232,6 +322,8 @@ export default function ExploreScene({ frame, tier }: { frame: ChartFrame; tier:
     },
     { priority: -84 },
   )
+  /** The solver-placed chips hold while the chart is front-on; under a real Orbit the plain labels take over. */
+  const flat = () => (an.pxm.affine ? 1 : 0)
 
   // cursor: a core sample from the axis to the node, and the connector to its readout
   const cur = useMemo(() => new Float32Array(6), [])
@@ -307,26 +399,18 @@ export default function ExploreScene({ frame, tier }: { frame: ChartFrame; tier:
     })
   }
 
-  // lane baselines while the lanes are open
-  const laneSegs = useMemo(() => {
-    const s: number[] = []
-    for (const v of [LANE_BASE[1], LANE_BASE[2]]) {
-      const a = segLine([frame.x(0), frame.y(v), -0.01], [frame.x(1), frame.y(v), -0.01], 1)
-      s.push(a[0], a[1], a[2], a[3], a[4], a[5])
-    }
-    return new Float32Array(s)
-  }, [frame])
-
   // labels (explore only)
   const narrow = narrowChart(layout)
   const specs = useMemo<LabelSpec[]>(() => {
     const x = frame.x
     const y = frame.y
     const yRow = y(0) - ua.strip
-    const lx = legendX(frame)
+    const sx = stringX(frame)
     const at0 = (b: { x: number; y: number; h: number }) => pt(an.pxm.wx(b.x), an.pxm.wy(b.y + b.h), 0.08)
     const out: LabelSpec[] = [
-      { id: 'pwx-ax-y', text: 'Power output', tone: 'tick', anchor: [x(0), y(frame.vMax), 0], prefer: 'E', only: ['E', 'NE', 'SE'], gapPx: 8, priority: 78 },
+      { id: 'pwx-ax-y', text: 'Power output', tone: 'tick', anchor: [x(0), y(frame.vMax), 0], prefer: 'E', only: ['E', 'NE', 'SE'], gapPx: 8, priority: 78, cue: powerTitle },
+      // Share mode: the height is the share of energy supply, not power (review r2)
+      { id: 'pwx-ax-ys', text: 'Share of energy supply', tone: 'tick', anchor: [x(0), y(frame.vMax), 0], prefer: 'E', only: ['E', 'NE', 'SE'], gapPx: 8, priority: 78, cue: shareTitle },
       { id: 'pwx-ax-x', text: 'Effort duration (log)', tone: 'tick', anchor: [x(0.5), yRow, 0], prefer: 'S', only: ['S'], gapPx: ROW.title, priority: 78 },
     ]
     TICKS.forEach((t, j) => {
@@ -341,16 +425,17 @@ export default function ExploreScene({ frame, tier }: { frame: ChartFrame; tier:
         text: sys.duration,
         tone: 'name',
         color: sys.color,
-        anchor: [lx[k], yRow, 0],
+        anchor: [sx[k], yRow, 0],
         prefer: 'S',
         only: ['S'],
         gapPx: ROW.band,
         priority: 74,
       })
     })
-    KEYS.forEach((key) => {
+    KEYS.forEach((key, i) => {
+      const cue = () => (an.curOn && dominantAtT(shown.t) === key ? 1 : 0)
       out.push({
-        id: `pwx-cur-${key}`,
+        id: CUR_IDS[i],
         text: calloutText(T_MIN),
         tone: 'callout',
         color: COLOR[key],
@@ -361,16 +446,34 @@ export default function ExploreScene({ frame, tier }: { frame: ChartFrame; tier:
         gapPx: 0,
         leader: true,
         priority: 95,
-        cue: () => (an.curOn && dominantAtT(shown.t) === key ? 1 : 0),
+        cue: () => cue() * flat(),
+      })
+      // under a real Orbit: anchored at the node, the placer's own placement and leader
+      out.push({
+        id: CURP_IDS[i],
+        text: calloutText(T_MIN),
+        tone: 'callout',
+        color: COLOR[key],
+        minChars: 24,
+        anchor: () => {
+          const u = cursorUx()
+          return pt(x(u), y(nodeV(u)), 0.08)
+        },
+        prefer: 'N',
+        only: ['N', 'NE', 'NW'],
+        gapPx: 12,
+        leader: true,
+        priority: 95,
+        cue: () => cue() * (1 - flat()),
       })
     })
     for (let b = 0; b < 3; b++) {
       out.push({
         id: `pwx-lane-${b}`,
-        text: NAME[KEYS[2 - b]],
+        text: LANE_TEXT[b],
         tone: 'name',
         color: BAND_COLORS[b],
-        anchor: () => pt(x(LANE_NAME_U[b]), y(topV(b, LANE_NAME_U[b])), 0.05),
+        anchor: () => pt(x(an.laneU[b]), y(topV(b, an.laneU[b])), 0.05),
         prefer: b === 2 ? 'NE' : 'N',
         gapPx: 10,
         leader: true,
@@ -378,7 +481,8 @@ export default function ExploreScene({ frame, tier }: { frame: ChartFrame; tier:
         cue: () => Math.max(0, shown.m * 1.4 - 0.4),
       })
     }
-    if (MARATHON)
+    if (MARATHON) {
+      const maraCue = () => (beyond() ? 1 : 0.6)
       out.push({
         id: 'pwx-mara',
         text: MARA_TEXT,
@@ -390,8 +494,22 @@ export default function ExploreScene({ frame, tier }: { frame: ChartFrame; tier:
         gapPx: 0,
         priority: 88,
         leader: true,
-        cue: () => (beyond() ? 1 : 0.6),
+        cue: () => maraCue() * an.maraOn * flat(),
       })
+      out.push({
+        id: 'pwx-marap',
+        text: MARA_TEXT,
+        tone: 'callout',
+        color: COLOR[MARATHON.dominant],
+        anchor: [x(1) + 0.32, y(0), 0.05],
+        prefer: 'NW',
+        only: ['NW', 'N'],
+        gapPx: 12,
+        priority: 88,
+        leader: true,
+        cue: () => maraCue() * (1 - flat()),
+      })
+    }
     // the chosen benchmark is named at its pin
     PINS.forEach((p, k) => {
       out.push({
@@ -412,24 +530,6 @@ export default function ExploreScene({ frame, tier }: { frame: ChartFrame; tier:
     return out
   }, [frame, narrow, PU, ua, an])
   useLabels(mode === 'explore' ? specs : NO_LABELS, { mode: 'explore' })
-
-  // cursor callout text (computed): rebuilt only when it changes, written every
-  // frame (a no-op when equal) so a re-registered label always shows it
-  const txt = useRef({ key: -1, text: '', c: { phosphagen: 0, glycolytic: 0, oxidative: 0 } as Shares })
-  useSafeFrame('pathways explore callout', () => {
-    if (useStoryStore.getState().mode !== 'explore') return
-    const r = txt.current
-    contribInto(shown.t, r.c)
-    const d = dominantOf(r.c)
-    // at a chosen benchmark the readout carries its name, as the story's result chips do
-    const at = arrivedPin()
-    const k = calloutKey(shown.t, KEYS.indexOf(d), Math.round(r.c[d])) * 16 + at + 1
-    if (k !== r.key) {
-      r.key = k
-      r.text = at >= 0 ? PINS[at].name + ' - ' + calloutText(shown.t) : calloutText(shown.t)
-    }
-    for (const id of CUR_IDS) setLabelText(id, r.text)
-  })
 
   // labels never cover the curves, the pins, the cursor or the leaders
   const obstacle = useMemo<WorldObstacle>(
@@ -459,10 +559,12 @@ export default function ExploreScene({ frame, tier }: { frame: ChartFrame; tier:
         out[n * 3 + 1] = frame.y(nodeV(u))
         out[n * 3 + 2] = 0
         n++
-        // the leaders, short of the pill each one ends on
+        // the leaders, short of the pill each one ends on (front-on only: they are drawn only then)
+        if (!an.pxm.affine) return n
         for (let j = 0; j < 2; j++) {
           const f = j === 0 ? an.cur : an.mara
           if (j === 0 && !an.curOn) continue
+          if (j === 1 && !an.maraOn) continue
           const len = Math.hypot(f.cx - f.nx, f.cy - f.ny)
           if (len < 20) continue
           const steps = Math.min(19, Math.floor((len - 14) / 10))
@@ -503,8 +605,8 @@ export default function ExploreScene({ frame, tier }: { frame: ChartFrame; tier:
           return u
         }}
       />
-      <DurationStrips frame={frame} ua={ua} reveal={() => 1} opacity={() => 0.13} />
-      <PenBatch segments={laneSegs} color={PAL.chalk} width={PEN.grid} opacity={() => shown.m} dim={() => 0.4} renderOrder={29} />
+      <HandoverStrip frame={frame} ua={ua} reveal={() => 1} opacity={() => 0.22} />
+      <LaneAxes frame={frame} opacity={() => shown.m} />
       {[0, 1, 2].map((b) => (
         <BandPen key={b} frame={frame} b={b} src={SRC} head={false} opacity={() => 1} />
       ))}
@@ -517,10 +619,10 @@ export default function ExploreScene({ frame, tier }: { frame: ChartFrame; tier:
         update={(_T, p) => {
           if (lastMara.current === an.ver) return false
           lastMara.current = an.ver
-          writeLink(an.mara, p, true)
+          writeLink(an.mara, p, an.maraOn > 0)
           return true
         }}
-        opacity={() => (beyond() ? 1 : 0.6)}
+        opacity={() => (beyond() ? 1 : 0.6) * an.maraOn * flat()}
         dim={() => 0.7}
         renderOrder={46}
       />
@@ -551,7 +653,7 @@ export default function ExploreScene({ frame, tier }: { frame: ChartFrame; tier:
           writeLink(an.cur, p, an.curOn > 0)
           return true
         }}
-        opacity={() => an.curOn}
+        opacity={() => an.curOn * flat()}
         dim={() => 0.62}
         renderOrder={46}
       />

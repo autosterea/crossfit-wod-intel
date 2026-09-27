@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import * as THREE from 'three'
 import { hash2 } from '../../story/rng'
 import { engineUniforms, lin } from '../../story/kit/materials'
@@ -188,8 +188,12 @@ export function River({
   frame: ChartFrame
   tier: Tier
   uniforms: (T: number, A: number) => RiverUniforms
-  /** explore: curves to repack this frame (null = unchanged) */
-  liveCurves?: () => readonly [Float32Array, Float32Array, Float32Array] | null
+  /**
+   * explore: curves to repack this frame (null = unchanged). `force` is true
+   * right after the river packed its own power curves (a new frame, a
+   * refit), so live curves must be written again even if they did not move.
+   */
+  liveCurves?: (force: boolean) => readonly [Float32Array, Float32Array, Float32Array] | null
   z?: number
   renderOrder?: number
 }) {
@@ -242,6 +246,10 @@ export function River({
   useEffect(() => () => geometry.dispose(), [geometry])
   useEffect(() => () => material.dispose(), [material])
 
+  // review r2: this effect repacks the POWER curves on every refit; explore's
+  // Share blend must then be written again on the next frame, or the Share
+  // motes fall out of their bands
+  const repacked = useRef(true)
   useEffect(() => {
     const u = material.uniforms
     packCurve(FLOW_CURVES[0], u.uA.value as THREE.Vector4[])
@@ -252,6 +260,7 @@ export function River({
     u.uY0.value = frame.y0
     u.uH.value = frame.FH
     u.uZ.value = z
+    repacked.current = true
   }, [material, frame, z])
 
   useSafeFrame(
@@ -262,7 +271,8 @@ export function River({
       points.visible = tier !== 'low' && s.opacity > 0.002
       if (!points.visible) return
       const u = material.uniforms
-      const lc = liveCurves?.()
+      const lc = liveCurves ? liveCurves(repacked.current) : null
+      repacked.current = false
       if (lc) {
         packCurve(lc[0], u.uA.value as THREE.Vector4[])
         packCurve(lc[1], u.uB.value as THREE.Vector4[])

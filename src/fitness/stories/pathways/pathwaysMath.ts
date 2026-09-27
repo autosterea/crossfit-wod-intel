@@ -332,6 +332,51 @@ const FLIP1 = leadEnd('phosphagen', 0)
 /** Axis-order extents (phosphagen, glycolytic, oxidative) of each engine's lead: [0, flip 1, flip 2, 1]. */
 export const LEAD_U: readonly number[] = [0, FLIP1, leadEnd('glycolytic', FLIP1 + 1e-6), 1]
 
+/* ----------------------- the duration strings' ranges ------------------- */
+
+/** Seconds named in a duration string: "10 sec to 2 min" gives [10, 120]. */
+const secsIn = (s: string): number[] => Array.from(s.matchAll(/(\d+)\s*(sec|min)/g), (m) => Number(m[1]) * (m[2] === 'min' ? 60 : 1))
+const lastOf = (a: number[], fb: number) => (a.length ? a[a.length - 1] : fb)
+/** The textbook cuts of ENERGY_SYSTEMS[].duration ("0 to 10 sec", "10 sec to 2 min", "2 min and beyond"): 10 s and 120 s. */
+const CUT_S: readonly [number, number] = [lastOf(secsIn(SYS[0].duration), 10), lastOf(secsIn(SYS[1].duration), 120)]
+/** "largely spent within 10 to 15 seconds" (ENERGY_SYSTEMS[0].description): the phosphagen handover. */
+const SPENT_S = (() => {
+  const m = SYS[0].description.match(/(\d+)\s*to\s*(\d+)\s*seconds/)
+  return m ? [Number(m[1]), Number(m[2])] : [CUT_S[0], CUT_S[0] * 1.5]
+})()
+/** u of each duration string's range, axis order: [0, 10 s, 2 min, 1] (the P6 brackets, the strings' positions). */
+export const RANGE_U: readonly number[] = [0, uOf(CUT_S[0]), uOf(CUT_S[1]), 1]
+/**
+ * The two handover zones, u (review r2). The engines do not switch at a
+ * line: the strips cross-fade from one colour to the next across a zone
+ * that holds both the textbook cut and where the data hands over, so the
+ * strips, the strings, the callouts and the caption all agree on screen:
+ *   phosphagen to glycolytic: 10 s to 15 s (the 0 to 10 sec string ends at
+ *   10 s, the description says "10 to 15 seconds", the lead flips at ~12 s);
+ *   glycolytic to oxidative: from where oxidative becomes the largest share
+ *   (~55 s, LEAD_U) to 2 min (the strings), the caption's 75 s inside.
+ */
+export const HANDOVER: readonly (readonly [number, number])[] = [
+  [uOf(SPENT_S[0]), uOf(SPENT_S[1])],
+  [Math.min(LEAD_U[2], uOf(CUT_S[1]) - 0.02), uOf(CUT_S[1])],
+]
+const smooth01 = (a: number, b: number, x: number) => {
+  const t = clamp((x - a) / Math.max(1e-9, b - a), 0, 1)
+  return t * t * (3 - 2 * t)
+}
+/** Weight 0..1 of engine k (axis order) in the strip at u: 1 on its own stretch, cross-fading across the handovers. */
+export function stripWeight(k: number, u: number): number {
+  const a = smooth01(HANDOVER[0][0], HANDOVER[0][1], u)
+  const b = smooth01(HANDOVER[1][0], HANDOVER[1][1], u)
+  return k === 0 ? 1 - a : k === 1 ? a - b : b
+}
+/** u extent of engine k's strip (axis order), handovers included: where its colour is ever present. */
+export const STRIP_EXTENT: readonly (readonly [number, number])[] = [
+  [0, HANDOVER[0][1]],
+  [HANDOVER[0][0], HANDOVER[1][1]],
+  [HANDOVER[1][0], 1],
+]
+
 /* ----------------------------- benchmarks ----------------------------- */
 
 /** The benchmarks inside the axis (studs); Marathon (12600 s) is never plotted on it (F.7). */
@@ -339,11 +384,8 @@ export const PINS = ENERGY_BENCHMARKS.filter((b) => b.seconds <= T_MAX)
 export const OFF_AXIS = ENERGY_BENCHMARKS.filter((b) => b.seconds > T_MAX)
 export const MARATHON = OFF_AXIS[0] ?? null
 export const pinIndex = (name: string): number => PINS.findIndex((b) => b.name === name)
-/** Axis slot (0 phosphagen, 1 glycolytic, 2 oxidative) whose lead range holds pin k. */
-export const PIN_SLOT: readonly number[] = PINS.map((p) => {
-  const u = uOf(p.seconds)
-  return u < LEAD_U[1] ? 0 : u < LEAD_U[2] ? 1 : 2
-})
+/** Axis slot (0 phosphagen, 1 glycolytic, 2 oxidative) of pin k's dominant engine (ENERGY_BENCHMARKS[].dominant). */
+export const PIN_SLOT: readonly number[] = PINS.map((p) => (p.dominant === 'phosphagen' ? 0 : p.dominant === 'glycolytic' ? 1 : 2))
 
 if (import.meta.env.DEV) {
   // the drawn curves pass through every table row
@@ -353,8 +395,13 @@ if (import.meta.env.DEV) {
   })
   const top = Math.max(...Array.from({ length: N_U }, (_, i) => TABLE.power[0][i] + TABLE.power[1][i] + TABLE.power[2][i]))
   if (top > 1) console.warn(`[pathways] stack top ${top.toFixed(3)} exceeds v = 1`)
-  // every pin's `dominant` agrees with the lead range it sits in
-  PINS.forEach((p, k) => {
-    if ((['phosphagen', 'glycolytic', 'oxidative'] as const)[PIN_SLOT[k]] !== p.dominant) console.warn(`[pathways] ${p.name} sits outside its engine's lead range`)
+  // every pin's `dominant` agrees with the lead range it sits in (the callouts say the same)
+  PINS.forEach((p) => {
+    const u = uOf(p.seconds)
+    const lead = u < LEAD_U[1] ? 'phosphagen' : u < LEAD_U[2] ? 'glycolytic' : 'oxidative'
+    if (lead !== p.dominant) console.warn(`[pathways] ${p.name} sits outside its engine's lead range`)
   })
+  // the strings' shared cut, and the handovers hold the lead flips
+  if (secsIn(SYS[1].duration)[0] !== CUT_S[0] || secsIn(SYS[2].duration)[0] !== CUT_S[1]) console.warn('[pathways] the duration strings do not share their cuts')
+  if (!(HANDOVER[0][0] <= LEAD_U[1] && LEAD_U[1] <= HANDOVER[0][1])) console.warn('[pathways] the first lead flip is outside its handover zone')
 }

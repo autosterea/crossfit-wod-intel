@@ -62,9 +62,10 @@ export default function PathwaysHud() {
             <span ref={nums[i]} className="st-hud-num" style={{ color: COLOR[k], textShadow: `0 0 14px ${COLOR[k]}55`, minWidth: '2ch', textAlign: 'right' }}>
               0
             </span>
-            <span aria-hidden="true" style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'flex-start', lineHeight: 1, gap: 1 }}>
+            {/* the % over the engine's initial, both at the 11 px floor (B.1; review r2), set tight */}
+            <span aria-hidden="true" style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'flex-start', lineHeight: 0.92, gap: 0 }}>
               <span style={{ fontFamily: 'var(--st-mono)', fontSize: 11, color: 'var(--st-muted)' }}>%</span>
-              <span style={{ fontFamily: 'var(--st-cond)', fontWeight: 700, fontSize: 9.5, letterSpacing: '0.04em', color: COLOR[k] }}>{NAME[k][0]}</span>
+              <span style={{ fontFamily: 'var(--st-cond)', fontWeight: 700, fontSize: 11, letterSpacing: '0.02em', color: COLOR[k] }}>{NAME[k][0]}</span>
             </span>
             <span style={HIDDEN}>percent</span>
           </span>
