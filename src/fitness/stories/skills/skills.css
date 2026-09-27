@@ -1,0 +1,234 @@
+/* =========================================================================
+   Skills chapter styles (local; scoped with .sk- and to this chapter's own
+   label ids). The stage and explore panel are always dark (--st-*).
+   ========================================================================= */
+
+/* a dashed swatch for the dashed chalk specialist in the pinned keys (S4, explore) */
+.st-lbl[data-label='sk-lg-pl'] .st-lbl-dot,
+.st-lbl[data-label='sk-x-lg-b'] .st-lbl-dot {
+  width: 14px;
+  height: 0;
+  border-radius: 0;
+  background: none;
+  border-top: 2px dashed #eef3f6;
+  box-shadow: none;
+}
+
+/* Wheel | Grid */
+.sk-view {
+  display: inline-flex;
+  flex: none;
+  border: 1px solid var(--st-line);
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 0 0 12px;
+}
+.sk-view button {
+  height: 44px;
+  min-width: 76px;
+  padding: 0 16px;
+  font-family: var(--st-cond);
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--st-muted);
+  background: transparent;
+  border: 0;
+}
+.sk-view button[aria-pressed='true'] {
+  background: rgba(145, 198, 64, 0.16);
+  color: #91c640;
+}
+
+/* readouts side by side */
+.sk-reads {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 8px;
+}
+.sk-reads .wf-readout {
+  margin-bottom: 8px;
+  min-width: 0;
+}
+.sk-reads .big {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  white-space: nowrap;
+}
+.sk-reads .sk-skill {
+  font-family: var(--st-cond);
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--st-chalk);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sk-who {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 2px 0 6px;
+  font-family: var(--st-cond);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--st-muted);
+}
+.sk-who i {
+  flex: none;
+  width: 16px;
+  height: 0;
+  border-top: 2.5px solid currentColor;
+}
+.sk-who i.is-dash {
+  border-top-style: dashed;
+}
+.sk-head {
+  margin: 6px 0 6px;
+  font-family: var(--st-cond);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--st-muted);
+}
+
+/* the tapped skill: a card in the peek (its name, its class, its definition) */
+.sk-info {
+  position: relative;
+  margin: 0 0 10px;
+  padding: 10px 52px 10px 12px;
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--c, #eef3f6) 45%, transparent);
+  background: rgba(7, 10, 14, 0.55);
+}
+.sk-info-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--st-cond);
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--st-chalk);
+}
+.sk-info-name i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--c);
+  flex: none;
+}
+.sk-info-name small {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--c);
+}
+.sk-info p {
+  margin: 4px 0 0;
+  font-family: var(--st-sans);
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--st-body);
+}
+.sk-info-x {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  background: transparent;
+  color: var(--st-muted);
+  font-size: 18px;
+}
+
+/* sliders (Custom): 44 px hit areas */
+.sk-sl {
+  margin: 0 0 2px;
+}
+.sk-sl-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--st-cond);
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--st-chalk);
+}
+.sk-sl-row span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+.sk-sl-row i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex: none;
+}
+.sk-sl-row b {
+  font-family: var(--st-mono);
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--st-chalk);
+}
+.sk-range {
+  -webkit-appearance: none;
+  appearance: none;
+  display: block;
+  width: 100%;
+  height: 44px;
+  margin: -6px 0 -4px;
+  background: transparent;
+  cursor: pointer;
+}
+.sk-range::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(238, 243, 246, 0.16);
+}
+.sk-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 24px;
+  height: 24px;
+  margin-top: -10px;
+  border-radius: 50%;
+  background: var(--c, #91c640);
+  border: 2px solid #070a0e;
+  box-shadow: 0 0 0 4px rgba(238, 243, 246, 0.08);
+}
+.sk-range::-moz-range-track {
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(238, 243, 246, 0.16);
+}
+.sk-range::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--c, #91c640);
+  border: 2px solid #070a0e;
+}
+.sk-range:focus-visible {
+  outline: 2px solid #91c640;
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+/* the skill-name dots have no colour until a class arc passes (S0: "no dot yet") */
+.st-lbl[data-label^='sk-n-'] .st-lbl-dot {
+  box-shadow: none;
+}
