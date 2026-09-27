@@ -11,10 +11,18 @@ import { DEPTH, HUB, R, bowl, radiusOf, spokeAngle } from './layout'
 
    Zone disc: spectrum(p) at 16% alpha on the BOWL (the centre is DEPTH
    deeper), lit through its analytic normal so the pit reads as a pit once
-   the camera tilts (C4), darker toward sickness, with faint contour lines
-   every 0.1 of the continuum (a topographic reading of the depth). C6
+   the camera tilts (C4), shaded by DEPTH (darkest at the bottom of the pit),
+   with contour lines at equal steps of depth: they bunch toward the centre
+   where the wall is steepest, a topographic reading of the pit. C6
    brightens it x2 in the band between the WELL circle and the athlete
    polygon only (no new hue), then darkens the pit by 20%.
+
+   Pit shadow: a slate overlay on the bowl, drawn over the spokes and rings
+   and under the person, deepest at the centre: the spokes darken as they
+   descend into the pit (C4 on).
+
+   Word backing: a soft slate disc behind the SDF state word, so the word
+   reads over the polygon of its own colour.
 
    Person: the radar polygon as a luminous membrane in spectrum(mean): faint
    at the centre, light gathered toward its edge (the area reads as an
@@ -131,8 +139,9 @@ export function makeDiscMaterial(): THREE.ShaderMaterial {
         vec3 n = normalize( vec3( -fp * dir, 1.0 ) );
         vec3 L = normalize( vec3( 0.15, 0.85, 0.5 ) );
         float lit = 0.34 + 0.95 * max( dot( n, L ), 0.0 );
-        // darker and deeper toward sickness
-        float shade = mix( 0.3, 1.0, smoothstep( 0.0, 0.8, r / uR ) );
+        // shaded by depth: the bottom of the pit is the darkest
+        float dq = q * q;
+        float shade = mix( 1.0, 0.16, pow( dq, 0.75 ) );
         // C6: the pit darkens by 20% inside the WELL circle
         shade *= 1.0 - 0.2 * uPit * ( 1.0 - smoothstep( uWellR - 0.4, uWellR, r ) );
 
@@ -159,11 +168,11 @@ export function makeDiscMaterial(): THREE.ShaderMaterial {
         vec3 c = col * lit * shade * k * uHot;
         float a = uAlpha * k * ( 0.72 + 0.28 * p );
 
-        // faint contour lines every 0.1 of the continuum (the depth, read as a map)
-        float g = p * 10.0;
+        // contour lines at equal steps of depth (a topographic map of the pit)
+        float g = dq * 9.0;
         float fw = max( fwidth( g ), 1e-4 );
-        float iso = ( 1.0 - smoothstep( 0.0, fw * 1.1, abs( fract( g - 0.5 ) - 0.5 ) ) ) * step( uHub + 0.05, r ) * step( r, uR - 0.05 );
-        c = mix( c, toLinear( uChalk ) * 0.9, iso * uIso );
+        float iso = ( 1.0 - smoothstep( 0.0, fw * 1.2, abs( fract( g - 0.5 ) - 0.5 ) ) ) * step( uHub + 0.05, r ) * step( 0.02, dq );
+        c = mix( c, toLinear( uChalk ) * mix( 0.95, 0.55, dq ), iso * uIso );
         a = max( a, iso * uIso );
 
         gl_FragColor = vec4( c, a * edge * uOpacity );
@@ -179,6 +188,9 @@ export function makeDiscMaterial(): THREE.ShaderMaterial {
 }
 
 /* ------------------------------ person -------------------------------- */
+
+/** Where labels treat the outline as an obstacle between two dots (clear of the dots, so a value can sit beside its dot). */
+export const OUTLINE_T = [0.3, 0.5, 0.7]
 
 /** Sub-points per polygon edge (the outline and the membrane follow the bowl). */
 export const EDGE_SUB = 6
@@ -314,5 +326,85 @@ export function makePersonMaterial(): THREE.ShaderMaterial {
     depthWrite: false,
     blending: THREE.AdditiveBlending,
     side: THREE.DoubleSide,
+  })
+}
+
+/* ----------------------------- pit shadow ------------------------------ */
+
+/** The pit's shadow: slate, deepest at the centre, zero beyond about 0.64 R. uK is its strength. */
+export function makePitMaterial(): THREE.ShaderMaterial {
+  return new THREE.ShaderMaterial({
+    uniforms: {
+      uK: { value: 0 },
+      uR: { value: R },
+      uSlate: { value: srgb(PAL.ink) },
+    },
+    vertexShader: /* glsl */ `
+      varying float vR;
+      void main() {
+        vR = length( position.xy );
+        vec3 p = position;
+        p.z += 0.03;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4( p, 1.0 );
+      }
+    `,
+    fragmentShader: /* glsl */ `
+      uniform float uK;
+      uniform float uR;
+      uniform vec3 uSlate;
+      varying float vR;
+      vec3 toLinear( vec3 c ) {
+        return mix( c / 12.92, pow( ( c + 0.055 ) / 1.055, vec3( 2.4 ) ), step( 0.04045, c ) );
+      }
+      void main() {
+        float x = 1.0 - smoothstep( 0.0, 0.64, vR / uR );
+        float a = uK * pow( x, 1.25 ) * 0.78;
+        if ( a <= 0.002 ) discard;
+        gl_FragColor = vec4( toLinear( uSlate ), a );
+        #include <tonemapping_fragment>
+        #include <colorspace_fragment>
+      }
+    `,
+    transparent: true,
+    depthWrite: false,
+    side: THREE.DoubleSide,
+  })
+}
+
+/* ---------------------------- word backing ----------------------------- */
+
+/** A soft slate ellipse on a unit quad (scaled to the word), alpha uOpacity at its core. */
+export function makeBackingMaterial(): THREE.ShaderMaterial {
+  return new THREE.ShaderMaterial({
+    uniforms: {
+      uOpacity: { value: 0 },
+      uSlate: { value: srgb(PAL.ink) },
+    },
+    vertexShader: /* glsl */ `
+      varying vec2 vUv;
+      void main() {
+        vUv = uv;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+      }
+    `,
+    fragmentShader: /* glsl */ `
+      uniform float uOpacity;
+      uniform vec3 uSlate;
+      varying vec2 vUv;
+      vec3 toLinear( vec3 c ) {
+        return mix( c / 12.92, pow( ( c + 0.055 ) / 1.055, vec3( 2.4 ) ), step( 0.04045, c ) );
+      }
+      void main() {
+        float d = length( vUv * 2.0 - 1.0 );
+        float a = uOpacity * ( 1.0 - smoothstep( 0.3, 1.0, d ) );
+        if ( a <= 0.002 ) discard;
+        gl_FragColor = vec4( toLinear( uSlate ), a );
+        #include <tonemapping_fragment>
+        #include <colorspace_fragment>
+      }
+    `,
+    transparent: true,
+    depthWrite: false,
+    depthTest: false,
   })
 }

@@ -4,22 +4,26 @@ import { BIOMARKERS, PAL } from '../../fitnessData'
 import { useStoryStore } from '../../story/store'
 import { useBeat } from '../../story/useBeat'
 import { useSafeFrame } from '../../story/useSafeFrame'
-import { useDragHandle } from '../../story/gestures'
-import { focusVersion, subscribeFocus } from '../../story/camera/focusRect'
+import { gestureBus, useDragHandle } from '../../story/gestures'
+import { focusRect, subscribeFocus } from '../../story/camera/focusRect'
 import { PenBatch, PEN } from '../../story/kit/Pen'
 import { setLabelText, useLabels, useWorldObstacle, type WorldObstacle } from '../../story/labels/useLabel'
-import type { Dir, LabelSpec, V3 } from '../../story/types'
-import { N, STATES, STOPS, STOP_FIT, STOP_WELL, betterText, shortName, spectrumLinear, stateWord, tickText, valueText } from './continuumMath'
-import { HUB, R, bowl, dialPoint, keyMode, radiusOf, shortStage, spokeAngle } from './layout'
-import { Circles, Disc, Person, SpokeHighlight, sizesFor, type PersonSrc } from './dial'
+import type { LabelSpec, V3 } from '../../story/types'
+import { N, STATES, STOP_FIT, STOP_WELL, betterText, shortName, shortName2, spectrumHex as spectrumHexOf, spectrumLinear, stateWord, stopText, tickText, valueText } from './continuumMath'
+import { HUB, R, bowl, compactStage, dialPoint, keyMode, radiusOf, shortStage, spokeAngle } from './layout'
+import { Circles, Disc, Person, PitShadow, SpokeHighlight, sizesFor, type PersonSrc } from './dial'
 import { live, snapLive, useContExplore } from './exploreStore'
 import { keySel, selectSpoke, spokeVersion, subscribeSpoke } from './keySel'
+import { OUTLINE_T } from './materials'
 
 /* =========================================================================
    Continuum explore (DESIGN.md D.6 "Explore", C.12). Not driven by T: the
    dial stands finished, the person follows the explore state (chips,
-   sliders, drag handles) with damped motion, and a tapped dot or key row
-   shows that marker's own scale along its spoke.
+   sliders, drag handles) with damped motion. A tapped dot or key row
+   selects that marker: its spoke lights, the state word and the fill step
+   back, its live value sits beside its dot on a glass chip, and its full
+   name, better direction and sick / well / fit values are pinned chips in
+   the corners (they never fight the spoke names for room).
    ========================================================================= */
 
 const SEGS = 24
@@ -27,10 +31,11 @@ const damp = THREE.MathUtils.damp
 const _v: number[] = [0, 0, 0]
 const NO_LABELS: LabelSpec[] = []
 
-/** Damped word opacities and orb colour. */
+/** Damped word opacities, orb colour and selection quiet. */
 const exWord = new Float64Array(STATES.length)
 const exOrb = new THREE.Color(PAL.well)
 const _target = new THREE.Color()
+const exQuiet = { v: 0 }
 
 const EX_PERSON: PersonSrc = {
   pos: (_T, i) => live.pos[i],
@@ -47,6 +52,7 @@ const EX_PERSON: PersonSrc = {
   wordLift: () => 1,
   vis: () => 1,
   highlight: () => keySel.i,
+  quiet: () => exQuiet.v,
 }
 
 /** The ten finished spokes on the bowl, in the spectrum (one draw call), plus the WELL, FIT and tip ticks. */
@@ -60,13 +66,11 @@ function StaticDial() {
       const a = spokeAngle(i)
       for (let s = 0; s < SEGS; s++) {
         const o = (i * SEGS + s) * 6
-        const u0 = s / SEGS
-        const u1 = (s + 1) / SEGS
-        const r0 = radiusOf(u0)
-        const r1 = radiusOf(u1)
+        const r0 = radiusOf(s / SEGS)
+        const r1 = radiusOf((s + 1) / SEGS)
         segs.set([r0 * Math.cos(a), r0 * Math.sin(a), bowl(r0), r1 * Math.cos(a), r1 * Math.sin(a), bowl(r1)], o)
-        spectrumLinear(u0, c0)
-        spectrumLinear(u1, c1)
+        spectrumLinear(s / SEGS, c0)
+        spectrumLinear((s + 1) / SEGS, c1)
         cols.set([c0.r, c0.g, c0.b, c1.r, c1.g, c1.b], o)
       }
     }
@@ -98,23 +102,69 @@ function StaticDial() {
   )
 }
 
-/** A drag handle on dot i, constrained to its spoke (it switches the profile to Custom); a tap selects the marker. */
-function DotHandle({ i }: { i: number }) {
+/* ------------------------------ dragging ------------------------------ */
+
+/**
+ * ONE handle for the ten dots, hit-tested by the NEAREST dot: the engine
+ * takes the first registered handle within its radius, and on a phone the
+ * Sedentary dots sit 12 px apart near the hub, so ten handles grabbed the
+ * wrong one. A window capture listener records where the finger landed
+ * (it runs before the stage's own capture listener), the handle's anchor is
+ * the dot nearest that point, and the drag moves that dot along its spoke.
+ */
+const pick = { x: -1e4, y: -1e4, i: 0, active: -1 }
+const _p = new THREE.Vector3()
+
+function nearestDot(): number {
+  const cam = gestureBus.camera
+  if (!cam) return 0
+  let best = 0
+  let bd = Infinity
+  for (let i = 0; i < N; i++) {
+    dialPoint(i, live.pos[i], _v, 0, 0.06)
+    _p.set(_v[0], _v[1], _v[2]).project(cam)
+    const d = Math.hypot(((_p.x + 1) / 2) * focusRect.W - pick.x, ((1 - _p.y) / 2) * focusRect.H - pick.y)
+    if (d < bd) {
+      bd = d
+      best = i
+    }
+  }
+  return best
+}
+
+function DotHandles() {
+  const mode = useStoryStore((s) => s.mode)
+  useEffect(() => {
+    if (mode !== 'explore') return
+    const onDown = (e: PointerEvent) => {
+      const st = (e.target as Element | null)?.closest?.('.st-stage')
+      if (!st) return
+      const r = st.getBoundingClientRect()
+      pick.x = e.clientX - r.left
+      pick.y = e.clientY - r.top
+      pick.i = nearestDot()
+    }
+    window.addEventListener('pointerdown', onDown, true)
+    return () => window.removeEventListener('pointerdown', onDown, true)
+  }, [mode])
   const g = useRef({ start: null as null | [number, number], moved: false })
   const plane = useMemo(() => new THREE.Plane(new THREE.Vector3(0, 0, 1), 0), [])
   const hit = useMemo(() => new THREE.Vector3(), [])
   useDragHandle({
-    id: `cont-dot-${i}`,
+    id: 'cont-dots',
     radiusPx: 22,
     anchor: () => {
-      dialPoint(i, live.pos[i], _v, 0, 0.06)
+      dialPoint(pick.i, live.pos[pick.i], _v, 0, 0.06)
       return [_v[0], _v[1], _v[2]] as V3
     },
     onStart: () => {
+      pick.active = pick.i
       g.current.start = null
       g.current.moved = false
     },
     onDrag: (ray, ndc) => {
+      const i = pick.active
+      if (i < 0) return
       const s = g.current
       if (!s.start) {
         s.start = [ndc[0], ndc[1]]
@@ -135,17 +185,11 @@ function DotHandle({ i }: { i: number }) {
       if (keySel.i !== i) selectSpoke(i)
     },
     onEnd: () => {
-      if (!g.current.moved) selectSpoke(i)
+      if (pick.active >= 0 && !g.current.moved) selectSpoke(pick.active)
+      pick.active = -1
     },
   })
   return null
-}
-
-/** Tangential side for a label beside dot i. */
-function sideOf(i: number): Dir {
-  const a = ((((spokeAngle(i) / Math.PI) * 180 - 90) % 360) + 360) % 360
-  const dirs: Dir[] = ['E', 'NE', 'N', 'NW', 'W', 'SW', 'S', 'SE']
-  return dirs[Math.round(a / 45) % 8]
 }
 
 export default function ExploreScene() {
@@ -153,10 +197,12 @@ export default function ExploreScene() {
   const mode = useStoryStore((s) => s.mode)
   const reduced = useStoryStore((s) => s.reduced)
   const S = sizesFor(layout)
-  // the key and the dot values follow the focus rect (a rotation, a sheet)
-  useSyncExternalStore(subscribeFocus, focusVersion)
-  const key = keyMode()
-  const dotValues = !key && !shortStage()
+  // the key and the dot values follow the focus rect (re-render only when a decision flips)
+  const key = useSyncExternalStore(subscribeFocus, keyMode)
+  const short = useSyncExternalStore(subscribeFocus, shortStage)
+  const compact = useSyncExternalStore(subscribeFocus, compactStage)
+  const dotValues = !key && !short && !compact
+  const phone = layout === 'P'
 
   // entering explore starts from the targets (no replayed climb)
   useEffect(() => {
@@ -165,6 +211,7 @@ export default function ExploreScene() {
     const k = STATES.findIndex((s) => s.word === stateWord(live.mean).word)
     for (let w = 0; w < STATES.length; w++) exWord[w] = w === k ? 1 : 0
     exOrb.set(stateWord(live.mean).css)
+    exQuiet.v = keySel.i >= 0 ? 1 : 0
   }, [mode])
 
   useSafeFrame(
@@ -192,79 +239,76 @@ export default function ExploreScene() {
       _target.set(sw.css)
       if (reduced) exOrb.copy(_target)
       else exOrb.lerp(_target, 1 - Math.exp(-8 * dt))
+      const q = keySel.i >= 0 ? 1 : 0
+      exQuiet.v = reduced ? q : damp(exQuiet.v, q, 10, dt)
     },
     { priority: -12 },
   )
 
-  // labels (explore mode only): the ten names, the live values and the two
-  // circles always; the selected marker's full name, its scale along the
-  // spoke and its better direction only while it is selected (the cap of
-  // 96 labels per view counts story and explore together)
+  // labels (explore mode only): the ten names and the live values always
+  // (landscape: every value; portrait: the selected one); the selected
+  // marker's full name, direction and reference values as pinned chips
   const sel = useSyncExternalStore(subscribeSpoke, spokeVersion)
   const base = useMemo<LabelSpec[]>(() => {
     const out: LabelSpec[] = []
     for (let i = 0; i < N; i++) {
       const a = spokeAngle(i)
       out.push({
-        id: `ce-tip-${i}`,
-        text: shortName(i),
+        id: `cnx-tip-${i}`,
+        text: compact ? shortName2(i) : shortName(i),
         tone: 'name',
         dot: false,
         anchor: [R * Math.cos(a), R * Math.sin(a), 0],
         prefer: 'radial',
         center: [0, 0, 0],
-        gapPx: 9,
+        gapPx: compact ? 6 : 9,
         priority: 75,
       })
-      // the live value beside the dot: every dot on landscape, the selected one on portrait
+      // landscape: the live value beside every dot, outward along its spoke, on a glass chip
+      // (portrait: the key lists them, and the selected one is a pinned chip)
       out.push({
-        id: `ce-val-${i}`,
+        id: `cnx-val-${i}`,
         text: valueText(i, live.pos[i]),
         tone: 'tick',
         anchor: () => {
           dialPoint(i, live.pos[i], _v, 0, 0.06)
           return [_v[0], _v[1], _v[2]] as V3
         },
-        prefer: dotValues ? sideOf(i) : 'radial',
+        prefer: 'radial',
         center: [0, 0, 0],
-        gapPx: 12,
+        gapPx: 15,
+        leader: true,
         priority: 86,
-        cue: () => (dotValues ? 1 : keySel.i === i ? 1 : 0),
+        cue: () => (dotValues ? 1 : 0),
       })
     }
-    const circ = (id: string, text: string, color: string, p: number) => {
-      const a = 108 * (Math.PI / 180)
-      const r = radiusOf(p)
-      out.push({ id, text, tone: 'name', color, anchor: [r * Math.cos(a), r * Math.sin(a), bowl(r)], prefer: 'C', priority: 60 })
-    }
-    circ('ce-well', STATES[1].word, PAL.well, STOP_WELL)
-    circ('ce-fit', STATES[2].word, PAL.fit, STOP_FIT)
     return out
-  }, [key, dotValues])
+  }, [dotValues, compact])
   const picked = useMemo<LabelSpec[]>(() => {
     if (sel < 0) return NO_LABELS
-    const a = spokeAngle(sel)
-    // the full name and the better direction are pinned glass chips in the
-    // top-left corner (they never fight the ten spoke names for room)
+    const refPin = phone ? 'top-right' : 'top-left'
     const out: LabelSpec[] = [
-      { id: 'ce-full', text: BIOMARKERS[sel].name, tone: 'legend', color: PAL.chalk, anchor: [0, 0, 0], pin: 'top-left', pinOrder: 0, priority: 95 },
-      { id: 'ce-better', text: betterText(sel), tone: 'legend', color: PAL.yellowGreen, anchor: [0, 0, 0], pin: 'top-left', pinOrder: 1, priority: 94 },
+      { id: 'cnx-full', text: BIOMARKERS[sel].name, tone: 'legend', color: PAL.chalk, anchor: [0, 0, 0], pin: 'top-left', pinOrder: 0, priority: 95 },
+      { id: 'cnx-better', text: betterText(sel), tone: 'legend', color: PAL.yellowGreen, anchor: [0, 0, 0], pin: 'top-left', pinOrder: 2, priority: 94 },
     ]
-    // its sick, well and fit values along the spoke
-    STOPS.slice(0, 3).forEach((p, s) => {
-      const r = radiusOf(p)
+    // a phone dial has no room for a value beside a dot in its middle: the live value is a chip under the name
+    if (!dotValues)
+      out.push({ id: 'cnx-live', text: valueText(sel, live.pos[sel]), tone: 'legend', color: spectrumHexOf(live.pos[sel]), anchor: [0, 0, 0], pin: 'top-left', pinOrder: 1, priority: 95 })
+    const refColors = [PAL.sick, PAL.well, PAL.fit]
+    for (let s = 0; s < 3; s++) {
       out.push({
-        id: `ce-sc-${s}`,
-        text: tickText(sel, s),
-        tone: 'tick',
-        anchor: [r * Math.cos(a), r * Math.sin(a), bowl(r)],
-        prefer: sideOf(sel),
-        gapPx: 8,
-        priority: 84,
+        id: `cnx-ref-${s}`,
+        text: `${STATES[s].word} ${s < 2 ? tickText(sel, s) : stopText(sel, s)}`,
+        tone: 'legend',
+        color: refColors[s],
+        anchor: [0, 0, 0],
+        pin: refPin,
+        pinOrder: 2 + s,
+        priority: 93,
       })
-    })
+    }
     return out
-  }, [sel])
+  }, [sel, phone, dotValues])
   useLabels(mode === 'explore' ? base : NO_LABELS, { mode: 'explore' })
   useLabels(mode === 'explore' ? picked : NO_LABELS, { mode: 'explore' })
 
@@ -280,7 +324,8 @@ export default function ExploreScene() {
         const t = valueText(i, live.pos[i])
         if (lastTxt.current[i] !== t) {
           lastTxt.current[i] = t
-          setLabelText(`ce-val-${i}`, t)
+          setLabelText(`cnx-val-${i}`, t)
+          if (i === keySel.i) setLabelText('cnx-live', t)
         }
       }
     },
@@ -290,47 +335,74 @@ export default function ExploreScene() {
   const marks = useMemo<WorldObstacle>(
     () => ({
       mode: 'explore',
-      maxPoints: 64,
-      radiusPx: 8,
+      maxPoints: 96,
+      radiusPx: 7,
       points: (_T, out) => {
         let n = 0
+        const put = (x: number, y: number, z: number) => {
+          out[n * 3] = x
+          out[n * 3 + 1] = y
+          out[n * 3 + 2] = z
+          n++
+        }
         for (let i = 0; i < N; i++) {
           dialPoint(i, live.pos[i], _v, 0, 0.06)
-          out[n * 3] = _v[0]
-          out[n * 3 + 1] = _v[1]
-          out[n * 3 + 2] = _v[2]
-          n++
+          put(_v[0], _v[1], _v[2])
+          const j = (i + 1) % N
+          const ra = radiusOf(live.pos[i])
+          const rb = radiusOf(live.pos[j])
+          const ax = ra * Math.cos(spokeAngle(i))
+          const ay = ra * Math.sin(spokeAngle(i))
+          const bx = rb * Math.cos(spokeAngle(j))
+          const by = rb * Math.sin(spokeAngle(j))
+          for (let e = 0; e < 3; e++) {
+            const x = ax + (bx - ax) * OUTLINE_T[e]
+            const y = ay + (by - ay) * OUTLINE_T[e]
+            put(x, y, bowl(Math.hypot(x, y)))
+          }
         }
-        for (let j = 0; j < 32; j++) {
-          const a = (j / 32) * Math.PI * 2
-          out[n * 3] = R * Math.cos(a)
-          out[n * 3 + 1] = R * Math.sin(a)
-          out[n * 3 + 2] = 0
-          n++
+        // the rim between the spokes (the tips stay free for the names)
+        for (let j = 0; j < N * 3; j++) {
+          const a = ((72 - 36 * Math.floor(j / 3) + ((j % 3) - 1) * 7) * Math.PI) / 180
+          put(R * Math.cos(a), R * Math.sin(a), 0)
         }
-        out[n * 3] = 0
-        out[n * 3 + 1] = 0
-        out[n * 3 + 2] = bowl(0) + S.orb
-        n++
+        put(0, 0, bowl(0) + S.orb)
         return n
       },
     }),
     [S.orb],
   )
   useWorldObstacle('cont-ex-marks', marks)
+  const word = useMemo<WorldObstacle>(
+    () => ({
+      mode: 'explore',
+      padPx: 4,
+      box: () => {
+        let chars = 0
+        for (let k = 0; k < STATES.length; k++) if (exWord[k] > 0.3) chars = Math.max(chars, STATES[k].word.length)
+        if (!chars || exQuiet.v > 0.5) return null
+        const w = chars * S.word * 0.5
+        return [
+          [-w / 2, S.wordY - S.word * 0.5, 0.6],
+          [w / 2, S.wordY + S.word * 0.5, 0.6],
+        ]
+      },
+    }),
+    [S.word, S.wordY],
+  )
+  useWorldObstacle('cont-ex-word', word)
 
-  const discVis = useMemo(() => ({ opacity: () => 1 }), [])
-  const circlesVis = useMemo(() => ({ progress: () => 1, opacity: () => 0.7 }), [])
+  const discVis = useMemo(() => ({ opacity: () => 1, iso: () => 0.3 }), [])
+  const circlesVis = useMemo(() => ({ progress: () => 1, opacity: () => 0.7, wellDim: () => 0.4 }), [])
   return (
     <>
       <Disc vis={discVis} />
       <StaticDial />
       <Circles vis={circlesVis} />
+      <PitShadow k={() => 0.75} />
       <SpokeHighlight vis={() => (mode === 'explore' ? 1 : 0)} />
       <Person src={EX_PERSON} layout={layout} site="continuum explore person" />
-      {Array.from({ length: N }, (_, i) => (
-        <DotHandle key={i} i={i} />
-      ))}
+      <DotHandles />
     </>
   )
 }

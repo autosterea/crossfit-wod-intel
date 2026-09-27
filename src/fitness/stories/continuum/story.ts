@@ -2,7 +2,7 @@ import type { StoryDef } from '../../story/types'
 import ContinuumScene from './Scene'
 import ContinuumExplore from './Explore'
 import ContinuumHud from './Hud'
-import { DIAL_FRAME, DIAL_L, DIAL_P, EXPLORE_L, EXPLORE_P, LINE, NEAR_L, NEAR_P, ROWS, TILT_L, TILT_P, TWO } from './layout'
+import { DIAL_FRAME, DIAL_L, DIAL_P, EXPLORE_L, EXPLORE_P, HEDGE_L, HEDGE_P, LINE, NEAR_L, NEAR_P, ROWS_L, ROWS_P, TILT_L, TILT_P } from './layout'
 import { ATHLETE, AVERAGE } from './continuumMath'
 import { useContExplore } from './exploreStore'
 import { clearSpoke } from './keySel'
@@ -14,10 +14,12 @@ import { clearSpoke } from './keySel'
    Colour-linked terms paint sickness, wellness and fitness (and the worked
    examples) in the continuum's own colours, the same as the scene.
 
-   Camera: the rows and the dial are read front-on (L12); the C3 camera
-   widens to all ten rows, then re-fits to the dial while the rows swing into
-   it; C4 tilts (el 24) to reveal the pit (L6, a new dimension); C5 and C6
-   return toward front-on (el 8) for the comparison.
+   Camera: the rows and the dial are read front-on (L12). C0 to C2 frame
+   the one line at the centre of the table to come; the C3 camera widens to
+   all ten rows, holds the table, then re-fits to the dial while the rows
+   swing into it; C4 tilts (el 24) to reveal the pit (L6, a new dimension);
+   C5 and C6 return toward front-on (el 8) for the comparison, and C6 leaves
+   a slot under the dial for its claim.
    ========================================================================= */
 
 export const continuumStory: StoryDef = {
@@ -52,7 +54,7 @@ export const continuumStory: StoryDef = {
       build: 4.0,
       // "10%" and "LOWER IS BETTER"
       sceneWords: 4,
-      cam: { L: TWO },
+      cam: { L: LINE },
     },
     {
       id: 'dial',
@@ -61,16 +63,16 @@ export const continuumStory: StoryDef = {
       source: 'CONTINUUM_EXAMPLES[2] + ContinuumModule.note',
       terms: { sickness: 'sick', fitness: 'fit' },
       build: 6.0,
-      // the signature beat (A.3): the ten spoke names, WELL, FIT and SICKNESS are read in the finished dial
+      // the signature beat (A.3): the ten spoke names, WELL, FIT, SICKNESS and FITNESS are read in the finished dial
       signature: true,
-      sceneWords: 14,
+      sceneWords: 15,
       cam: {
         L: DIAL_L,
         P: DIAL_P,
         window: [0, 0.9],
         keys: [
-          { t: 0.3, L: ROWS },
-          { t: 0.44, L: ROWS },
+          { t: 0.3, L: ROWS_L, P: ROWS_P },
+          { t: 0.52, L: ROWS_L, P: ROWS_P },
         ],
       },
     },
@@ -83,7 +85,7 @@ export const continuumStory: StoryDef = {
       build: 4.5,
       // the tilt, the state word, the score and the ten values landing (the second half of the signature, A.3)
       sceneWords: 8,
-      cam: { L: TILT_L, P: TILT_P },
+      cam: { L: TILT_L, P: TILT_P, window: [0, 0.32] },
     },
     {
       id: 'super',
@@ -106,7 +108,7 @@ export const continuumStory: StoryDef = {
       build: 4.5,
       // "Preventive medicine" on the lit band
       sceneWords: 3,
-      cam: { L: NEAR_L, P: NEAR_P },
+      cam: { L: HEDGE_L, P: HEDGE_P },
     },
   ],
   Scene: ContinuumScene,

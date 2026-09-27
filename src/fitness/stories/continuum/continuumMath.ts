@@ -52,12 +52,25 @@ export function fmtMarker(value: number, unit: string): string {
 }
 
 /** D.6: the mean in BIOMARKERS order; the state word is always stateWord(meanOf(...)). */
-export const meanOf = (positions: readonly number[]): number => positions.reduce((s, v) => s + v, 0) / positions.length
+export const meanOf = (positions: ArrayLike<number>): number => {
+  let s = 0
+  for (let i = 0; i < positions.length; i++) s += positions[i]
+  return s / positions.length
+}
 
 /** "toward fitness" score out of 100 (the module's readout: Math.round(mean * 100)). */
 export const scoreOf = (mean: number): number => Math.round(mean * 100)
 
 export const shortName = (i: number): string => SHORT_NAME[BIOMARKERS[i].name] ?? BIOMARKERS[i].name
+
+/**
+ * The four spokes that point left and right (18 and 162 degrees from the
+ * horizontal). On a phone their names break onto two lines at the first
+ * space ("Rel." over "strength"), the same SHORT_NAME, so the dial gets back
+ * the width a one-line name would take beside the rim.
+ */
+export const SIDE_SPOKE = (i: number): boolean => Math.abs(Math.cos(((90 - 36 * i) * Math.PI) / 180)) > 0.9
+export const shortName2 = (i: number): string => (SIDE_SPOKE(i) ? shortName(i).replace(' ', '\n') : shortName(i))
 
 const profile = (name: string) => {
   const p = CONTINUUM_PROFILES.find((q) => q.name === name)
@@ -80,17 +93,23 @@ export const STOP_FIT = STOPS[2]
 /** The four state words the SDF layer can show, from the same banding (never typed by hand). */
 export const STATES: StateWord[] = STOPS.map((p) => stateWord(p))
 
+const num = (i: number, stop: number): string => String(Math.round(markerValueAt(BIOMARKERS[i], STOPS[stop]) * 1000) / 1000)
+const withUnit = (i: number, v: string): string => (BIOMARKERS[i].unit === '%' ? v + '%' : v + ' ' + BIOMARKERS[i].unit)
+
 /** A tick value at a stop, exactly as the data states it (no rounding), the unit on the elite tick only. */
 export function tickText(i: number, stop: number): string {
-  const m = BIOMARKERS[i]
-  const v = markerValueAt(m, STOPS[stop])
-  const s = String(Math.round(v * 1000) / 1000)
-  if (stop < STOPS.length - 1) return s
-  return m.unit === '%' ? s + '%' : s + ' ' + m.unit
+  const s = num(i, stop)
+  return stop < STOPS.length - 1 ? s : withUnit(i, s)
 }
+
+/** A reference value (a sick, well or fit stop) with its unit, for a scale read on its own. */
+export const stopText = (i: number, stop: number): string => withUnit(i, num(i, stop))
 
 export const BP = BIOMARKERS.findIndex((m) => m.name === 'Systolic blood pressure')
 export const BODY_FAT = BIOMARKERS.findIndex((m) => m.name === 'Body fat')
+export const HDL = BIOMARKERS.findIndex((m) => m.name === 'HDL cholesterol')
+export const TRIGLYC = BIOMARKERS.findIndex((m) => m.name === 'Triglycerides')
+export const BONE = BIOMARKERS.findIndex((m) => m.name === 'Bone density')
 
 /**
  * The worked examples as the data writes them: CONTINUUM_EXAMPLES[0] gives
@@ -129,9 +148,10 @@ export function spectrumLinear(t: number, out: THREE.Color = _c): THREE.Color {
   return out.setRGB(r, g, b, THREE.SRGBColorSpace)
 }
 
-/** CSS colour of spectrum(t). */
+const _hex = new THREE.Color()
+/** CSS colour of spectrum(t) (a module scratch colour: only the string is new). */
 export function spectrumHex(t: number): string {
-  return '#' + spectrumLinear(t, new THREE.Color()).getHexString()
+  return '#' + spectrumLinear(t, _hex).getHexString()
 }
 
 /** Better direction callout text, from betterDirection. */
