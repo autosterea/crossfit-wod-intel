@@ -280,6 +280,13 @@ export interface PenProps {
   update?: (T: number, pts: Float32Array) => boolean
   /** extra multiplier for the line colour (speaking element) */
   gain?: (T: number) => number
+  /**
+   * Dim toward the slate at full alpha: 1 = full colour, 0.45 = a ghost.
+   * Use this, never `opacity`, for a line that RESTS dimmed (a ghost, a
+   * de-emphasised curve): translucent strokes show their segment caps as
+   * beads. Keep `opacity` for fades in and out.
+   */
+  dim?: (T: number) => number
 }
 
 /** A single pen stroke along a polyline. */
@@ -298,6 +305,7 @@ export function Pen({
   renderOrder = 30,
   update,
   gain,
+  dim,
 }: PenProps) {
   const tierLow = useStoryStore((s) => s.tier === 'low')
   const pts = useMemo(() => toFloat(points).slice(), [points])
@@ -356,6 +364,7 @@ export function Pen({
       const live = p < 1 ? 1 : 0
       u.uGlowAmt.value = (hot ? 0.9 : 0.55) * live
       u.uGain.value = gain ? gain(T) : 1
+      u.uDim.value = dim ? Math.max(0, Math.min(1, dim(T))) : 1
       if (headObj && p < 1) placeHead(headObj, core.headPos, headK(p) * Math.min(1, op * 2), hot, tierLow)
     } catch (err) {
       core.line.visible = false
@@ -396,6 +405,8 @@ export interface PenBatchProps {
   head?: boolean
   hot?: boolean
   gain?: (T: number) => number
+  /** dim toward the slate at full alpha (see Pen `dim`) */
+  dim?: (T: number) => number
 }
 
 /** Many segments in one draw call (grids, axes, ticks, bars, merged outlines). */
@@ -415,6 +426,7 @@ export function PenBatch({
   head = false,
   hot = false,
   gain,
+  dim,
 }: PenBatchProps) {
   const tierLow = useStoryStore((s) => s.tier === 'low')
   const core = useMemo(() => {
@@ -458,6 +470,7 @@ export function PenBatch({
         mat.uniforms.uGlowAmt.value = (hot ? 0.9 : 0.55) * (p < 1 ? 1 : 0)
       }
       if (gain) mat.uniforms.uGain.value = gain(T)
+      if (dim) mat.uniforms.uDim.value = Math.max(0, Math.min(1, dim(T)))
       if (headObj && p < 1) placeHead(headObj, core.headPos, headK(p) * Math.min(1, op * 2), hot, tierLow)
     } catch (err) {
       core.line.visible = false

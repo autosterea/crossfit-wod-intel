@@ -31,6 +31,24 @@ import type { Tier } from '../types'
    ========================================================================= */
 
 const INCLINE_RUN = 4
+
+/**
+ * Monitor bounds RELATIVE to the measured refresh rate (amendment H.38).
+ * drei's `refreshrate` is the highest fps it has seen. A phone the browser
+ * caps at 30 fps (iOS Low Power Mode, Android battery savers) measures about
+ * 30, and a steady rate at its cap is healthy: dropping quality cannot beat
+ * a vsync cap, so fixed [45, 58] bounds would strip its bloom for nothing.
+ * A window declines below max(26, min(45, 0.8 r)) and inclines at
+ * min(58, 0.93 r). The 26 fps floor still demotes a device that cannot hold
+ * 26 fps whatever its cap (an uneven 20 fps phone ends on LOW, then still).
+ * Under a 50 fps refresh nothing inclines: a capped device runs at its cap
+ * whatever the GPU load, so its steady rate says nothing about headroom.
+ */
+export function qualityBounds(r: number): [number, number] {
+  const lo = Math.max(26, Math.min(45, 0.8 * r))
+  const hi = r < 50 ? 1e9 : Math.max(lo + 2, Math.min(58, 0.93 * r))
+  return [lo, hi]
+}
 /** A run of inclines breaks if no incline arrived for this long (s of frame time). */
 const RUN_GAP = 4.5
 
@@ -151,7 +169,7 @@ export function Quality() {
           iterations={12}
           factor={1}
           flipflops={Infinity}
-          bounds={(r) => (r > 90 ? [50, 90] : [45, 58])}
+          bounds={qualityBounds}
           onDecline={onDecline}
           onIncline={onIncline}
         />

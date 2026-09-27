@@ -21,12 +21,13 @@ import { Backdrop } from './kit/Backdrop'
 import { engineUniforms } from './kit/materials'
 import { useChapterFog } from './kit/fog'
 import { gestureBus, useStageGestures, useStoryKeys } from './gestures'
-import { readyDom, readyState, readyTick, setPending } from './ready'
+import { readyDom, readyState, readyTick, sceneComplete, setPending } from './ready'
 import { CaptionCard } from './ui/CaptionCard'
 import { ExplorePanel } from './ui/ExplorePanel'
 import { HudSlot } from './ui/Hud'
 import { Slate } from './ui/Slate'
 import { markDone } from './ui/progress'
+import { reportOnce } from './safe'
 import { IconPause, IconPlay } from './ui/icons'
 
 /* =========================================================================
@@ -66,32 +67,34 @@ function UiPump() {
  * load (hidden) never links a shader mid-story (README "Prewarm"). On composer
  * tiers the scene renders into a half-float target, so the compile runs with a
  * render target bound to produce that program variant, not the screen one.
+ *
+ * It uses the SYNCHRONOUS gl.compile (amendment H.39). compileAsync issues
+ * exactly the same GL work first (it calls compile) and then polls program
+ * readiness from a timer; when a material is disposed while it waits (a
+ * chart frame replaced during load) that timer throws an uncaught TypeError
+ * ("reading 'isReady'") and the promise never resolves. Here the driver's
+ * parallel link finishes during the next two frames, still under the slate.
  */
 function ReadyProbe() {
   const gl = useThree((s) => s.gl)
   const scene = useThree((s) => s.scene)
   const camera = useThree((s) => s.camera)
-  const compiling = useRef('')
   const rt = useMemo(() => new THREE.WebGLRenderTarget(4, 4, { type: THREE.HalfFloatType, depthBuffer: false }), [])
   useEffect(() => () => rt.dispose(), [rt])
   useFrame(() => {
     const st = useStoryStore.getState()
     const key = st.def?.key ?? ''
-    if (key && readyState.sceneKey === key && readyState.compiledKey !== key && compiling.current !== key) {
-      compiling.current = key
+    if (key && sceneComplete(key) && readyState.compiledKey !== key) {
       const prev = gl.getRenderTarget()
       if (TIERS[st.tier].composer) gl.setRenderTarget(rt)
-      let p: Promise<unknown>
       try {
-        p = gl.compileAsync(scene, camera)
-      } catch {
-        p = Promise.resolve()
+        gl.compile(scene, camera)
+      } catch (err) {
+        reportOnce('shader prewarm', err)
       }
       gl.setRenderTarget(prev)
-      p.catch(() => undefined).then(() => {
-        if (compiling.current === key) readyState.compiledKey = key
-        compiling.current = ''
-      })
+      readyState.compiledKey = key
+      readyState.compiledFrame = readyState.frames
     }
     readyTick()
   }, -60)

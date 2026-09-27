@@ -36,18 +36,28 @@ export const pb = {
 
 const words = (s: string) => s.split(/\s+/).filter(Boolean).length
 
+/** Seconds a signature beat's finished frame stays up, at least (A.3, H.40). */
+export const SIGNATURE_HOLD = 4
+
 /**
  * Hold time scales with the number of words (L14). Reading starts at the
- * caption swap (t = 0), so the whole build counts as reading time
- * (amendment H.29): a beat stays on screen for its reading time,
- * 0.4 s + 0.23 s per word (about 250 words per minute, a phone reader's
- * pace), and never holds less than 2 s after its build:
- * hold = clamp(0.4 + 0.23 x words - build, 2, 7).
+ * caption swap (t = 0), so the whole build counts as reading time for the
+ * CAPTION (amendment H.30). The scene's own words (callouts, readouts, the
+ * claim; `beat.sceneWords`) land at the end of the build, so they are read
+ * AFTER it (amendment H.40), and a chapter's signature beat holds its
+ * finished frame for at least SIGNATURE_HOLD seconds:
+ *   hold = clamp(max(0.4 + 0.23 x captionWords - build,
+ *                    0.8 + 0.23 x sceneWords,
+ *                    signature ? 4 : 2), 2, 7)
+ * Beats without scene words or the flag keep the H.30 pace (the fast opening).
  */
 export function holdFor(beat: Beat | undefined): number {
   if (!beat) return 3
   const w = words(beat.title) + words(beat.body)
-  return Math.max(2, Math.min(7, 0.4 + 0.23 * w - beat.build))
+  const caption = 0.4 + 0.23 * w - beat.build
+  const scene = beat.sceneWords ? 0.8 + 0.23 * beat.sceneWords : 0
+  const floor = beat.signature ? SIGNATURE_HOLD : 2
+  return Math.max(2, Math.min(7, Math.max(caption, scene, floor)))
 }
 
 /** Start beat n at t = 0 in the build phase. */

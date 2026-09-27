@@ -91,13 +91,20 @@ export function CaptionCard({ cardRef, shell }: { cardRef: React.RefObject<HTMLD
   const phone = shell === 'phone' || shell === 'tablet'
 
   // Card gestures: vertical drag between detents, horizontal swipe steps beats.
+  // On a real touch screen only the TOP BAND of the card (the grab row, and
+  // the scrubber band over the eyebrow row, see Segments) is touch-action
+  // none, so a vertical finger drag there reaches this logic; the card body
+  // stays pan-y so the page still scrolls to the Notes (H.47).
   const drag = useRef<{ x: number; y: number; t: number; id: number; release: () => void } | null>(null)
+  /** a drag that started on the grab handle changed the detent: eat its click */
+  const eatClick = useRef(false)
   useEffect(() => {
     const el = cardRef.current
     if (!el) return
     const down = (e: PointerEvent) => {
       const target = e.target as Element
-      if (target.closest('button, a, input, [data-no-gesture], .st-more')) return
+      eatClick.current = false
+      if (target.closest('button, a, input, [data-no-gesture], .st-more') && !target.closest('.st-grab')) return
       drag.current?.release()
       drag.current = { x: e.clientX, y: e.clientY, t: e.timeStamp, id: e.pointerId, release: useStoryStore.getState().beginInteraction() }
       // a mouse released outside the card still ends the drag (and the hold)
@@ -123,8 +130,10 @@ export function CaptionCard({ cardRef, shell }: { cardRef: React.RefObject<HTMLD
         return
       }
       if (!phone) return
-      if (dy < -28 && Math.abs(dy) > Math.abs(dx)) st.setDetent(st.detent === 'peek' ? 'default' : 'expanded')
-      else if (dy > 28 && Math.abs(dy) > Math.abs(dx)) st.setDetent(st.detent === 'expanded' ? 'default' : 'peek')
+      if (Math.abs(dy) > 28 && Math.abs(dy) > Math.abs(dx)) {
+        st.nudgeDetent(dy < 0 ? 'up' : 'down')
+        eatClick.current = true
+      }
     }
     const cancel = () => {
       drag.current?.release()
@@ -173,8 +182,14 @@ export function CaptionCard({ cardRef, shell }: { cardRef: React.RefObject<HTMLD
         <button
           type="button"
           className="st-grab"
-          aria-label={detent === 'peek' ? 'Show caption' : 'Minimise caption'}
-          onClick={() => useStoryStore.getState().setDetent(detent === 'peek' ? 'default' : 'peek')}
+          aria-label={detent === 'peek' ? 'Show caption' : detent === 'expanded' ? 'Show less' : 'Minimise caption'}
+          onClick={() => {
+            if (eatClick.current) {
+              eatClick.current = false
+              return
+            }
+            useStoryStore.getState().setDetent(detent === 'default' ? 'peek' : 'default')
+          }}
         >
           <span />
         </button>
@@ -198,7 +213,24 @@ export function CaptionCard({ cardRef, shell }: { cardRef: React.RefObject<HTMLD
             exit={reduced || instant ? { opacity: 0, transition: { duration: instant ? 0 : 0.12 } } : { opacity: 0, y: -8, transition: tOut }}
           >
             <h2 className={`st-title${phone && detent === 'peek' ? ' is-peek' : ''}`}>{beat.title}</h2>
-            {showBody && <p className="st-body">{withTerms(beat.body, beat.terms)}</p>}
+            {showBody && (
+              <p className="st-body">
+                {withTerms(beat.body, beat.terms)}
+                {phone && copy && (
+                  <>
+                    {' '}
+                    <button
+                      type="button"
+                      className="st-more-link"
+                      aria-expanded={detent === 'expanded'}
+                      onClick={() => useStoryStore.getState().setDetent(detent === 'expanded' ? 'default' : 'expanded')}
+                    >
+                      {detent === 'expanded' ? 'Less' : 'Read more'}
+                    </button>
+                  </>
+                )}
+              </p>
+            )}
           </motion.div>
         </AnimatePresence>
       </div>

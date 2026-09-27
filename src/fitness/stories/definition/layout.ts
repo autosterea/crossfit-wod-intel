@@ -22,6 +22,9 @@ export const FRAME_OPTS: ChartFrameOpts = {
   vMax: 1.1,
 }
 
+/** The D2 fan angles (story keys and the explore domains orbit). */
+export const FAN_ORBIT = { L: { az: -30, el: 18 }, P: { az: -32, el: 22 } } as const
+
 /** The domain fan spans z from -2.6 to 2.6 (D.5). */
 export const FAN_Z = 2.6
 /** Top of the fanned domain curves in v (max of curve x domain scale, with room). */
@@ -89,17 +92,17 @@ export function lineup(layout: Layout, f: ChartFrame): Lineup {
   if (hit) return hit
   const n = RANKED.length
   // per kind: mini size, the label band above the mini, pads and the gap between plates
+  // P (H.48): the rows are HEIGHT-limited on a phone (seven rows in about
+  // 480 px), so the mini gets the height the pads gave up: 1.35 tall (was
+  // 0.95), a label band just tall enough for the 20 px pill, tighter pads.
   const K = {
-    P: { MW: 10.8, MH: 0.95, LB: 0.66, cols: 1, colGap: 0 },
-    L1: { MW: 13, MH: 1.55, LB: 0.52, cols: 1, colGap: 0 },
-    L2: { MW: 8, MH: 1.25, LB: 0.78, cols: 2, colGap: 1.3 },
+    P: { MW: 10.8, MH: 1.35, LB: 0.78, cols: 1, colGap: 0, lift: 0.05, padT: 0.08, padB: 0.3, gap: 0.14 },
+    L1: { MW: 13, MH: 1.55, LB: 0.52, cols: 1, colGap: 0, lift: 0.08, padT: 0.16, padB: 0.34, gap: 0.22 },
+    L2: { MW: 8, MH: 1.25, LB: 0.78, cols: 2, colGap: 1.3, lift: 0.08, padT: 0.16, padB: 0.34, gap: 0.22 },
   }[kind]
-  const { MW, MH, LB, cols, colGap } = K
-  const labelY = MH + 0.08
-  const padT = 0.16
-  const padB = 0.34
+  const { MW, MH, LB, cols, colGap, padT, padB, gap } = K
+  const labelY = MH + K.lift
   const padX = 0.3
-  const gap = 0.22
   const RP = labelY + LB + padT + padB + gap
   const rows = Math.ceil(n / cols)
   const colW = MW + 2 * padX

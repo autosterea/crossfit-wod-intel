@@ -40,6 +40,13 @@ if (typeof document !== 'undefined' && document.fonts) {
     fontsReady = true
     for (const e of registry.values()) e.measured = ''
   })
+  // A web font requested AFTER fonts.ready resolved (a label's own font face
+  // is only fetched once a label using it renders) must re-measure too, or
+  // pinned legends right-align on fallback-font widths.
+  document.fonts.addEventListener?.('loadingdone', () => {
+    for (const e of registry.values()) e.measured = ''
+    labelTextVersion.v++
+  })
 }
 
 function LabelNode({ e }: { e: LabelEntry }) {
@@ -163,6 +170,7 @@ const newInput = (): PlaceInput => ({
   priority: 0,
   last: null,
   leader: false,
+  leaderAlways: false,
   pin: null,
   pinOrder: 0,
   only: undefined,
@@ -180,6 +188,13 @@ function projectPx(camera: THREE.Camera, x: number, y: number, z: number): boole
   return true
 }
 
+/**
+ * The union of the visible legend labels pinned top-right (stage px) and
+ * their strongest opacity, for scene lines that must keep clear of the pinned
+ * key's glass chips (kit/hudClip.ts). Updated on every placement pass.
+ */
+export const pinBox = { x: 0, y: 0, w: 0, h: 0, opacity: 0 }
+
 /** Canvas side: the placement loop at priority -80, after the camera director. */
 export function LabelPlacer() {
   const camera = useThree((s) => s.camera)
@@ -193,6 +208,9 @@ export function LabelPlacer() {
     /** dirty-check signature */
     sig: new Float64Array(28),
     warnedLive: '',
+    /** story time at the previous frame, and whether the last placement used side memory */
+    lastT: Number.NaN,
+    usedMemory: false,
   })
 
   const obsAt = (s: typeof st.current, n: number): Rect => {
@@ -233,6 +251,13 @@ export function LabelPlacer() {
     dirty = put(sig, 24, obstaclesVersion()) || dirty
     dirty = put(sig, 25, fontsReady ? 1 : 0) || dirty
     dirty = put(sig, 26, W * 10000 + H) || dirty
+    // Side memory (hysteresis, H.4) only while story time MOVES: it keeps a
+    // label from flipping sides during a build or a scrub. When T comes to
+    // rest, one memoryless pass lays the labels out as a pure function of T,
+    // so a deep link, a seek and autoplay agree on every resting frame (H.51).
+    const tMoving = T !== s.lastT
+    s.lastT = T
+    if (!tMoving && s.usedMemory) dirty = true
     // a fade in progress keeps placing until it settles
     for (const e of registry.values()) {
       if (e.visible && e.alpha < 1) {
@@ -308,8 +333,9 @@ export function LabelPlacer() {
       inp.cy = cy
       const pri = e.spec.priority ?? PRI[e.spec.tone]
       inp.priority = e.spec.required ? Math.max(REQUIRED_PRIORITY, pri) : pri
-      inp.last = e.dir
+      inp.last = tMoving ? e.dir : null
       inp.leader = !!e.spec.leader
+      inp.leaderAlways = e.spec.leader === 'always'
       inp.pin = e.spec.pin ?? null
       inp.pinOrder = e.spec.pinOrder ?? n
       inp.only = e.spec.only
@@ -394,6 +420,7 @@ export function LabelPlacer() {
       }
     }
 
+    s.usedMemory = tMoving
     const b = s.bounds
     b.x = focusRect.x + 8
     b.y = focusRect.y + 8
@@ -452,6 +479,28 @@ export function LabelPlacer() {
           e.leader.style.opacity = String(0.55 * op)
         } else e.leader.style.opacity = '0'
       }
+    }
+    // the pinned top-right key, for lines that must stop before its chips
+    let px0 = Infinity
+    let py0 = Infinity
+    let px1 = -Infinity
+    let py1 = -Infinity
+    let pop = 0
+    for (let i = 0; i < n; i++) {
+      const e = s.live[i]
+      if (e.spec.pin !== 'top-right' || !e.visible || e.opacity <= 0.01) continue
+      px0 = Math.min(px0, e.rect.x)
+      py0 = Math.min(py0, e.rect.y)
+      px1 = Math.max(px1, e.rect.x + e.rect.w)
+      py1 = Math.max(py1, e.rect.y + e.rect.h)
+      pop = Math.max(pop, e.opacity)
+    }
+    pinBox.opacity = pop
+    if (pop > 0) {
+      pinBox.x = px0
+      pinBox.y = py0
+      pinBox.w = px1 - px0
+      pinBox.h = py1 - py0
     }
   }, -80)
   return null

@@ -29,6 +29,15 @@ export default defineConfig({
         codeSplitting: {
           groups: [
             {
+              // React itself, claimed FIRST (fitness-v2 H.49). Unclaimed, it
+              // landed in the 1.5 MB `forcegraph` chunk, so every route that
+              // renders React (the /fitness lesson included) downloaded the
+              // whole force-graph stack before it could start.
+              name: 'react',
+              priority: 50,
+              test: pkg('react', 'react-dom', 'scheduler'),
+            },
+            {
               // react-force-graph-3d and the WebGL force-graph stack it drives,
               // plus the d3-force* / spatial-index deps that are specific to it
               // (claimed before the generic `charts` group can grab d3-*).
@@ -60,8 +69,11 @@ export default defineConfig({
             },
             {
               // three.js + the React Three Fiber renderer + drei helpers.
+              // Claimed BEFORE `forcegraph` (fitness-v2 H.49): groups also take
+              // their modules' dependencies, so three-forcegraph used to pull
+              // three.js core (and zustand) into the force-graph chunk.
               name: 'three',
-              priority: 30,
+              priority: 45,
               test: pkg(
                 'three',
                 '@react-three[\\\\/]fiber',
@@ -76,7 +88,6 @@ export default defineConfig({
                 'zustand',
                 'react-reconciler',
                 'its-fine',
-                'scheduler',
                 'suspend-react',
                 'maath',
               ),

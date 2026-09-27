@@ -54,11 +54,18 @@ export interface StoryState {
   seek(n: number, t: number, opts?: { hold?: boolean }): void
   setMode(m: Mode): void
   setDetent(d: Detent): void
+  /** one detent step: 'up' toward expanded, 'down' toward peek (phone card drag) */
+  nudgeDetent(dir: 'up' | 'down'): void
   beginInteraction(): () => void
   setSheet(open: boolean): void
 }
 
-const isLast = () => clock.index >= clock.beats - 1
+/**
+ * The beat the story is on or already heading to: during a next / prev glide
+ * that is the glide's target, so taps that land inside the 350 ms glide
+ * queue up instead of re-targeting the same beat.
+ */
+const baseIndex = () => (pb.glide ? Math.max(0, Math.min(clock.beats - 1, Math.round(pb.glide.to))) : clock.index)
 
 /** One rule everywhere: t = 1 on the last beat is 'done', t = 1 elsewhere is 'hold'. */
 export function phaseAt(i: number, t: number, beats: number): Phase {
@@ -134,12 +141,16 @@ export const useStoryStore = create<StoryState>((set, get) => ({
     if (user) {
       haptic()
       dropSeekQuery()
+      // A viewer's own step leaves the deep link's hold: the new beat builds
+      // and the story plays on (reduced motion still cuts to end states).
+      if (clock.held && !s.reduced) clock.held = false
     }
-    if (isLast()) {
+    const base = baseIndex()
+    if (base >= clock.beats - 1) {
       navigateChapter(1)
       return
     }
-    const n = clock.index + 1
+    const n = base + 1
     const beats = s.def.beats.length
     if (s.reduced || clock.held) {
       pb.glide = null
@@ -149,10 +160,12 @@ export const useStoryStore = create<StoryState>((set, get) => ({
       return
     }
     if (s.mode === 'explore') get().setMode('story')
-    if (s.phase === 'build' && clock.t < 1 && s.playing) {
-      glideTo(n, 350, 'settle', (paused) => {
+    if (pb.glide || (s.phase === 'build' && clock.t < 1 && s.playing)) {
+      // glide onward from wherever T is now (a queued tap keeps the pause intent)
+      const paused = pb.glide?.paused ?? false
+      glideTo(n, 350, 'settle', (p) => {
         startBeat(n)
-        set({ playing: !paused })
+        set({ playing: !(p || paused) })
       })
       return
     }
@@ -163,15 +176,20 @@ export const useStoryStore = create<StoryState>((set, get) => ({
   prev(user = true) {
     const s = get()
     if (!s.def) return
-    if (user) {
-      haptic()
-      dropSeekQuery()
-    }
-    if (clock.index === 0 && (clock.t < 0.15 || s.reduced || clock.held)) {
+    if (user) haptic()
+    const base = baseIndex()
+    if (base === 0 && !pb.glide && (clock.t < 0.15 || s.reduced || clock.held)) {
+      if (user) dropSeekQuery()
       navigateChapter(-1)
       return
     }
-    const n = clock.index === 0 ? 0 : clock.index - 1
+    // a viewer's own step leaves the deep link's hold and plays the beat it lands on
+    const wasHeld = user && clock.held && !s.reduced
+    if (user) {
+      dropSeekQuery()
+      if (wasHeld) clock.held = false
+    }
+    const n = base === 0 ? 0 : base - 1
     const beats = s.def.beats.length
     if (s.reduced || clock.held) {
       pb.glide = null
@@ -181,7 +199,7 @@ export const useStoryStore = create<StoryState>((set, get) => ({
       return
     }
     if (s.mode === 'explore') get().setMode('story')
-    const wasPlaying = s.playing || s.phase === 'done'
+    const wasPlaying = s.playing || s.phase === 'done' || wasHeld || !!pb.glide
     glideTo(n, 450, 'settle', (paused) => {
       startBeat(n)
       set({ playing: wasPlaying && !paused })
@@ -224,6 +242,12 @@ export const useStoryStore = create<StoryState>((set, get) => ({
 
   setDetent(d) {
     set({ detent: d })
+  },
+
+  nudgeDetent(dir) {
+    const d = get().detent
+    if (dir === 'up') set({ detent: d === 'peek' ? 'default' : 'expanded' })
+    else set({ detent: d === 'expanded' ? 'default' : 'peek' })
   },
 
   beginInteraction() {

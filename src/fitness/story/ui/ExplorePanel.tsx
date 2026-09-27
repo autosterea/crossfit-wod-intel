@@ -36,7 +36,7 @@ export function ExplorePanel({ cardRef, shell }: { cardRef: React.RefObject<HTML
           <IconBack />
           <span>Back to story</span>
         </button>
-        <button type="button" className="st-chip st-chip--reset" aria-label="Reset view" title="Reset view" onClick={() => void (cameraBus.tweenExplore = 600)}>
+        <button type="button" className="st-chip st-chip--reset" aria-label="Reset view" title="Reset view" onClick={() => cameraBus.resetView()}>
           <IconReset />
           <span className="st-chip-label">Reset view</span>
         </button>

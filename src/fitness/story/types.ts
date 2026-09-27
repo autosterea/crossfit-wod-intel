@@ -69,6 +69,14 @@ export interface Beat {
   eyebrow?: string
   /** seconds for t: 0 -> 1 during autoplay */
   build: number
+  /**
+   * Words of the scene labels, readouts and claim that land late in this
+   * beat (read AFTER the build): they lengthen the hold (H.40). Count what
+   * the finished frame asks the viewer to read, e.g. "ZONE WON" = 2.
+   */
+  sceneWords?: number
+  /** The chapter's signature beat (A.3): its finished frame holds at least 4 s (H.40). */
+  signature?: boolean
   cam: CamSpec
   /** intro last beat: "Begin the lesson" solid CTA */
   cta?: 'begin'
@@ -133,8 +141,12 @@ export interface LabelSpec {
   priority?: number
   /** visibility 0..1 (multiplied into opacity) */
   cue?: (T: number) => number
-  /** allow a leader line when displaced more than 12 px */
-  leader?: boolean
+  /**
+   * true: allow a leader line when displaced more than 12 px.
+   * 'always': the label is leadered to its anchor wherever it lands (a
+   * callout that names a curve from a gap, e.g. D4 "DOMAINS: THE HOPPER").
+   */
+  leader?: boolean | 'always'
   /** readout width reservation in ch */
   minChars?: number
   /** legend tone: pinned to the focus rect, not anchored */

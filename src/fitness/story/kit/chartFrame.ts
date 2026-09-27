@@ -79,15 +79,48 @@ const aspectKey = (o: ChartFrameOpts) =>
 
 const cache = new Map<string, { q: number; frame: ChartFrame }>()
 
-/** The frame for these options at the current focus rect (cached, stable identity). */
+/** Two frames with the same numbers are the same frame (the aspect is clamped, so many rects map to one). */
+const sameFrame = (a: ChartFrame, b: ChartFrame) =>
+  a.FW === b.FW && a.FH === b.FH && a.x0 === b.x0 && a.y0 === b.y0 && a.vMax === b.vMax &&
+  a.box[0][2] === b.box[0][2] && a.box[1][2] === b.box[1][2]
+
+/**
+ * The frame for these options at the current focus rect (cached, stable
+ * identity). A new object is created only when the frame's NUMBERS change:
+ * on a phone the aspect is clamped at minAspect, so a detent toggle, a
+ * rotation back or the last beat's CTA row change the rect but not the
+ * frame, and nothing built from `[frame]` (geometry, label arrays) rebuilds.
+ */
 export function frameFor(o: ChartFrameOpts): ChartFrame {
   const k = optsKey(o)
   const q = aspectKey(o)
   const hit = cache.get(k)
   if (hit && hit.q === q) return hit.frame
   const frame = computeChartFrame(o)
+  if (hit && sameFrame(hit.frame, frame)) {
+    hit.q = q
+    return hit.frame
+  }
+  frameIds.set(frame, ++frameSeq)
   cache.set(k, { q, frame })
   return frame
+}
+
+const frameIds = new WeakMap<ChartFrame, number>()
+let frameSeq = 0
+/**
+ * A small number that changes whenever a chart frame is replaced. Put it in
+ * the key of any cached writer (`update` / `write` callbacks that skip work
+ * when nothing changed), so a frame change always rewrites the geometry:
+ * `${frameId(frame)}|${...}`.
+ */
+export function frameId(f: ChartFrame): number {
+  let id = frameIds.get(f)
+  if (id === undefined) {
+    id = ++frameSeq
+    frameIds.set(f, id)
+  }
+  return id
 }
 
 /* ------------------------ the chapter's frame ------------------------ */
@@ -105,11 +138,18 @@ export function storyFrame(): ChartFrame {
   return frameFor(storyOpts)
 }
 
-/** React: the active chapter's frame; re-renders only when the frame changes. */
-export function useStoryFrame(): ChartFrame {
+/**
+ * React: the active chapter's chart frame (StoryDef.frame); the component
+ * re-renders on focus-rect changes and gets a new object only when the frame
+ * itself changes. (Not a frame CALLBACK: for per-frame code see useSafeFrame.)
+ */
+export function useChapterChart(): ChartFrame {
   useSyncExternalStore(subscribeFocus, focusVersion)
   return storyFrame()
 }
+
+/** Old name of useChapterChart (kept so existing code compiles). */
+export const useStoryFrame = useChapterChart
 
 /** React: a frame for explicit options (secondary charts inside a chapter). */
 export function useChartFrame(o: ChartFrameOpts): ChartFrame {

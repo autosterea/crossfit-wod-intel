@@ -1,10 +1,11 @@
-import { useRef, type ReactNode } from 'react'
+import { Component, Suspense, useEffect, useRef, type ReactNode } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { Text } from '@react-three/drei'
 import type * as THREE from 'three'
 import { clock } from '../clock'
 import { reportOnce } from '../safe'
 import { asset } from '../url'
+import { readyState, readyTick } from '../ready'
 
 /* =========================================================================
    <SdfText/> (DESIGN.md C.11, L7): drei <Text> (troika SDF) with the
@@ -70,7 +71,48 @@ export interface SdfTextProps {
   children?: ReactNode
 }
 
-export function SdfText({
+/**
+ * Each SdfText suspends inside its OWN boundary (amendment H.39). troika
+ * never resolves a font that failed to load, so one failed TTF request used
+ * to hold the whole chapter Suspense (and the slate) forever. Now a missing
+ * font hides only that word; readiness waits for pending words (so the
+ * prewarm compiles them) but gives up after the readiness timeout.
+ */
+function SdfPending() {
+  useEffect(() => {
+    readyState.sdfPending++
+    return () => {
+      readyState.sdfPending = Math.max(0, readyState.sdfPending - 1)
+      readyTick(false)
+    }
+  }, [])
+  return null
+}
+
+class SdfBoundary extends Component<{ children: ReactNode; text: string }, { failed: boolean }> {
+  state = { failed: false }
+  static getDerivedStateFromError() {
+    return { failed: true }
+  }
+  componentDidCatch(err: Error) {
+    reportOnce('<SdfText> "' + this.props.text + '"', err)
+  }
+  render() {
+    return this.state.failed ? null : this.props.children
+  }
+}
+
+export function SdfText(props: SdfTextProps) {
+  return (
+    <SdfBoundary text={props.text}>
+      <Suspense fallback={<SdfPending />}>
+        <SdfTextInner {...props} />
+      </Suspense>
+    </SdfBoundary>
+  )
+}
+
+function SdfTextInner({
   font,
   text,
   size,

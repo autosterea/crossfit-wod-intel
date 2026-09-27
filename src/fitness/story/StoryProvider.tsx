@@ -8,11 +8,12 @@ import { readStats } from './quality/stats'
 import { labelCounts, labelsSnapshot } from './labels/LabelLayer'
 import { focusRect } from './camera/focusRect'
 import { initialTier } from './quality/tiers'
-import { setStoryFrameOpts } from './kit/chartFrame'
+import { setStoryFrameOpts, storyFrame } from './kit/chartFrame'
 import { initQuality, quality } from './quality/Quality'
 import { isSettled, markSeek, readyState, resetReady } from './ready'
 import { gestureBus } from './gestures'
 import { hotspotsSnapshot } from './hotspots'
+import { probeIds, runProbe } from './qa'
 import * as THREE from 'three'
 
 /* =========================================================================
@@ -162,6 +163,9 @@ function registerQA(def: StoryDef): void {
         detent: s.detent,
         layout: focusRect.layout,
         phase: s.phase,
+        /** LOW under 24 fps: the canvas renders on demand (C.10) */
+        still: s.still,
+        loaded: s.loaded,
         focus: { x: focusRect.x, y: focusRect.y, w: focusRect.w, h: focusRect.h, W: focusRect.W, H: focusRect.H },
       }
     },
@@ -169,6 +173,9 @@ function registerQA(def: StoryDef): void {
       return readStats(useStoryStore.getState().tier)
     },
     labels: () => labelsSnapshot(),
+    /** QA: a chapter's read-only probe (useQAProbe), e.g. geometry end points */
+    probe: (id: string) => runProbe(id),
+    probes: () => probeIds(),
     /** QA: stage hotspots (real buttons over projected 3D boxes) */
     hotspots: () => hotspotsSnapshot(),
     /** QA: adaptive-quality changes (tier, dpr, reason, frame-time seconds) since the page booted */
@@ -182,6 +189,31 @@ function registerQA(def: StoryDef): void {
       cam.updateMatrixWorld()
       const v = new THREE.Vector3(x, y, z).project(cam)
       return { x: ((v.x + 1) / 2) * focusRect.W, y: ((1 - v.y) / 2) * focusRect.H, camera: cam.position.toArray().map((n) => Math.round(n * 1000) / 1000) }
+    },
+    /**
+     * QA: the chapter's chart frame box (StoryDef.frame) projected with the
+     * live camera, in stage px, or null without a frame. Explore re-fit
+     * checks assert it stays inside the focus rect at every sheet detent.
+     */
+    chartRect() {
+      const cam = gestureBus.camera
+      if (!cam || !def.frame) return null
+      cam.updateMatrixWorld()
+      const b = storyFrame().box
+      let x0 = Infinity
+      let y0 = Infinity
+      let x1 = -Infinity
+      let y1 = -Infinity
+      for (let i = 0; i < 8; i++) {
+        const v = new THREE.Vector3(b[i & 1 ? 1 : 0][0], b[i & 2 ? 1 : 0][1], b[i & 4 ? 1 : 0][2]).project(cam)
+        const px = ((v.x + 1) / 2) * focusRect.W
+        const py = ((1 - v.y) / 2) * focusRect.H
+        x0 = Math.min(x0, px)
+        x1 = Math.max(x1, px)
+        y0 = Math.min(y0, py)
+        y1 = Math.max(y1, py)
+      }
+      return { x: x0, y: y0, w: x1 - x0, h: y1 - y0 }
     },
     /** QA settle: loaded and two frames rendered after the latest seek (H.15) */
     get ready() {

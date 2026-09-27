@@ -1,13 +1,12 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { PAL, POWER_DURATIONS, POWER_TASKS, ENERGY_SYSTEMS } from '../../fitnessData'
 import { PenBatch, PEN } from '../../story/kit/Pen'
-import type { ChartFrame } from '../../story/kit/chartFrame'
+import { frameId, type ChartFrame } from '../../story/kit/chartFrame'
 import { lin } from '../../story/kit/materials'
+import { hudClipX } from '../../story/kit/hudClip'
+import { useSafeFrame } from '../../story/useSafeFrame'
 import { AXIS, valAt, GENERALIST } from './definitionMath'
 import * as THREE from 'three'
-import { useEffect } from 'react'
-import { useFrame } from '@react-three/fiber'
-import { clock } from '../../story/clock'
 
 /* =========================================================================
    Shared chart construction for the Definition story and explore scenes:
@@ -34,6 +33,9 @@ function lineSegs(out: number[], a: [number, number, number], b: [number, number
 }
 
 export const TICK_LEN = 0.2
+/** the y references (0.5 and 1.0) and the pen segments per reference line */
+const GRID_V = [0.5, 1.0] as const
+const GRID_SEGS = 16
 export const BAND_H = 0.34
 
 /** u of the energy-system band boundaries: 0, 10 s, 120 s, 1. */
@@ -75,9 +77,38 @@ export interface ChartVis {
 export function ChartConstruction({ frame, vis }: { frame: ChartFrame; vis: ChartVis }) {
   const grid = useMemo(() => {
     const s: number[] = []
-    for (const v of [0.5, 1.0]) lineSegs(s, [frame.x(0), frame.y(v), 0], [frame.x(1), frame.y(v), 0], 16)
+    for (const v of GRID_V) lineSegs(s, [frame.x(0), frame.y(v), 0], [frame.x(1), frame.y(v), 0], GRID_SEGS)
     return new Float32Array(s)
   }, [frame])
+  // The reference lines stop before the HUD chip instead of running under its
+  // glass (H.45); they retract as the chip fades in and return as it goes.
+  const gridKey = useRef({ fid: -1, e0: 0, e1: 0 })
+  const writeGrid = (_T: number, s: Float32Array): boolean => {
+    const x0 = frame.x(0)
+    const x1 = frame.x(1)
+    const e0 = hudClipX(x0, x1, frame.y(GRID_V[0]), 0)
+    const e1 = hudClipX(x0, x1, frame.y(GRID_V[1]), 0)
+    const fid = frameId(frame)
+    const g = gridKey.current
+    if (g.fid === fid && Math.abs(g.e0 - e0) < 1e-4 && Math.abs(g.e1 - e1) < 1e-4) return false
+    g.fid = fid
+    g.e0 = e0
+    g.e1 = e1
+    GRID_V.forEach((v, li) => {
+      const xe = li === 0 ? e0 : e1
+      const y = frame.y(v)
+      for (let i = 0; i < GRID_SEGS; i++) {
+        const o = (li * GRID_SEGS + i) * 6
+        s[o] = x0 + ((xe - x0) * i) / GRID_SEGS
+        s[o + 1] = y
+        s[o + 2] = 0
+        s[o + 3] = x0 + ((xe - x0) * (i + 1)) / GRID_SEGS
+        s[o + 4] = y
+        s[o + 5] = 0
+      }
+    })
+    return true
+  }
   const axes = useMemo(() => {
     const s: number[] = []
     // ONE continuous L stroke, the way a coach draws axes on a whiteboard:
@@ -98,7 +129,7 @@ export function ChartConstruction({ frame, vis }: { frame: ChartFrame; vis: Char
   }, [frame])
   return (
     <>
-      <PenBatch segments={grid} color={PAL.chalk} width={PEN.grid} progress={vis.grid.progress} opacity={vis.grid.opacity} renderOrder={29} />
+      <PenBatch segments={grid} color={PAL.chalk} width={PEN.grid} progress={vis.grid.progress} opacity={vis.grid.opacity} update={writeGrid} renderOrder={29} />
       <PenBatch segments={axes} color={PAL.chalk} width={PEN.axis} progress={vis.axes.progress} opacity={vis.axes.opacity} byArc head={vis.axes.head} hot={vis.axes.head} />
       <PenBatch segments={ticks} color={PAL.chalk} width={PEN.axis} progress={vis.ticks.progress} opacity={vis.ticks.opacity} />
     </>
@@ -139,8 +170,8 @@ export function EnergyBands({ frame, opacity }: { frame: ChartFrame; opacity: Fn
     },
     [mesh],
   )
-  useFrame(() => {
-    const o = opacity(clock.T)
+  useSafeFrame('definition energy bands', (T) => {
+    const o = opacity(T)
     mesh.visible = o > 0.002
     ;(mesh.material as THREE.MeshBasicMaterial).opacity = o
   })

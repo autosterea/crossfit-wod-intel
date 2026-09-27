@@ -107,13 +107,13 @@ export default {
 import { useMemo } from 'react'
 import { at, focus } from '../../story/cue'
 import { ease } from '../../story/ease'
-import { useStoryFrame } from '../../story/kit/chartFrame'
+import { useChapterChart } from '../../story/kit/chartFrame'
 import { Pen, PenBatch, PEN } from '../../story/kit/Pen'
 import { useLabels, useWorldObstacle, type WorldObstacle } from '../../story/labels/useLabel'
 import type { LabelSpec } from '../../story/types'
 
 export default function ExampleScene() {
-  const f = useStoryFrame()                          // the same frame the camera fits
+  const f = useChapterChart()                        // the same frame the camera fits
   const axes = useMemo(() => new Float32Array([f.x(0), f.y(0), 0, f.x(1), f.y(0), 0, f.x(0), f.y(0), 0, f.x(0), f.y(1), 0]), [f])
   const curve = useMemo(() => new Float32Array([f.x(0), f.y(0.8), 0, f.x(0.5), f.y(0.6), 0, f.x(1), f.y(0.4), 0]), [f])
   const labels = useMemo<LabelSpec[]>(() => [
@@ -163,12 +163,16 @@ Register the chapter in `../stories/index.ts` (one line) and delete its legacy
 - Easing tokens (`story/ease.ts`): `draw` (line draw-on), `settle` (arrivals),
   `snap` (dots, bricks), `morph` (topology and camera), `count` (numbers),
   `exit`, `linear`.
-- Pacing (H.29): a beat stays up for its reading time, about 250 words per
-  minute: hold = `clamp(0.4 + 0.23 x words - build, 2, 7)` seconds. Reading
-  starts at the caption swap, so the build IS reading time: make it move from
-  frame 1 (the first beat starts as the slate fades, with no pre-roll). An empty
-  or static opening is the owner's first 10 s; Definition draws its axes with a
-  hot pen at 0 s and starts its first curve at about 6 s.
+- Pacing (H.30, H.40): a beat stays up for its reading time, about 250 words
+  per minute. Reading the CAPTION starts at the caption swap, so the build IS
+  reading time: make it move from frame 1 (the first beat starts as the slate
+  fades, with no pre-roll). The scene's own words (callouts, readouts, the
+  claim) land at the end of the build and are read after it: count them in
+  `beat.sceneWords`. Mark the chapter's signature beat (A.3) `signature: true`
+  and its finished frame holds at least 4 s:
+  hold = `clamp(max(0.4 + 0.23 x captionWords - build, 0.8 + 0.23 x sceneWords, signature ? 4 : 2), 2, 7)`.
+  Keep the opening beats free of both so the opening stays fast (Definition
+  draws its axes with a hot pen at 0 s and starts its first curve at about 6 s).
 - `useCueState(fn)`: React state derived from T that re-renders only when the
   value changes (which caption variant or DOM panel to show). Never use it for
   anything that changes every frame.
@@ -177,8 +181,8 @@ Register the chapter in `../stories/index.ts` (one line) and delete its legacy
 
 | Component / helper | Use |
 |---|---|
-| `<Pen points progress opacity head hot dashed update gain/>` | one stroke; draw-on by arc length, exact under seek; `update(T, pts)` mutates the polyline in place. `head` rides a two-layer luminous tip (hot core plus a tinted halo) that stays at full brightness on faint strokes; `gain(T)` lifts or dims the colour (dim a line with gain, not opacity: overlapping segment caps show as beads at low opacity) |
-| `<PenBatch segments colors progress opacity byArc update head hot gain/>` | many segments in ONE draw call (grids, axes, ticks, bars, merged outlines). With `byArc` and `head` on one continuous path (axes as one L stroke) the pen tip travels along it. Park segments you do not want yet far away (x = 1e5), never at zero length (a zero-length segment draws a round dot) |
+| `<Pen points progress opacity head hot dashed update gain dim/>` | one stroke; draw-on by arc length, exact under seek; `update(T, pts)` mutates the polyline in place. `head` rides a two-layer luminous tip (hot core plus a tinted halo) that stays at full brightness on faint strokes; `gain(T)` lifts the colour (HDR for the speaking element). A line that RESTS dimmed (a ghost, a de-emphasised curve) uses `dim(T)` (0.45 = a ghost): it mixes toward the slate at FULL alpha. Never leave a stroke at partial `opacity`: a translucent LineSegments2 shows its overlapping segment caps as beads (a dotted line). `opacity` is for fades in and out |
+| `<PenBatch segments colors progress opacity byArc update head hot gain dim/>` | many segments in ONE draw call (grids, axes, ticks, bars, merged outlines). With `byArc` and `head` on one continuous path (axes as one L stroke) the pen tip travels along it. Park segments you do not want yet far away (x = 1e5), never at zero length (a zero-length segment draws a round dot). Coincident lines of two colours: draw the one behind wider (a rim), see Definition `DomainFan` |
 | `<MorphPen shapes weights stagger/>` | one pen blending 256-point shapes from `kit/shapes.ts` |
 | `<AreaFill top baseline bottom? color mode reveal level opacity additive rim gamma/>` | area strips; gradient, hatch or solid; `bottom` makes a band between two curves; `additive` + `rim` + `gamma` make a luminous area with an HDR rim that blooms (H.20); `level` pours, `reveal` sweeps |
 | `<AreaStrips strips points colors write rim rimWidth rimAlpha rimScale/>` | several strips (one slice per series at its own depth, the seven minis of a lineup) in ONE draw call; `rimScale` gives each strip its own rim, so only the speaking strip goes HDR |
@@ -186,12 +190,17 @@ Register the chapter in `../stories/index.ts` (one line) and delete its legacy
 | `<Glows count sizePx colors place gain/>` | many additive glow points in ONE call (a dot flaring as the pen passes it, the light at a growing bar's end); `place(T, i, out)` returns the intensity |
 | `<Ripple position color k sizePx/>` | one expanding ring of light where something lands (`k(T)` runs 0 to 1 over about 600 ms), hot at the start |
 | `<Instances geometry material count place colors opacity/>` | any repeated SOLID (slabs, bricks, parts, tiles) in ONE call; `place(T, i, pos, quat, scale)` writes each instance; return false to hide it |
-| `<LightField frame count curveA curveB uniforms/>` | constant-density light particles (pour, spill with streaks, condense); counts come from `TIERS[tier].particleScale` |
-| `<Nodes count radius color place/>` | instanced dots, one draw call |
+| `<LightField frame count curveA curveB curveC uniforms bandColors hMax/>` | constant-density light particles. `uniforms(T, A)` returns the mode: 0 POUR (a level rises, particles fall into their slots), 1 SPILL / CONDENSE (inside A only falls red, inside B only condenses amber), 2 FLOW (the Pathways river: three bands, curveA bottom, curveB, curveC top, as band THICKNESS in v units; each mote keeps its height inside its band and drifts along time with `flow: 0.035 * A`; `stack` 1 stacked / 0 on `lane` baselines, `thick` scales heights, `bandOn` floods each band in turn). Counts: `TIERS[tier].particleScale`; FLOW uses `FLOW_COUNT[tier]` (6000 / 3300 / 0). LOW renders the fills instead |
+| `<Nodes count radius color colors place opacity/>` | data dots, ONE draw call: impostor spheres (a lit, rimmed, anti-aliased sphere drawn on a camera-facing quad), perfectly round at any DPR. They draw after the pens and sit on the line they mark |
+| `makeRimStandard(ballOpts(color))` | Hopper balls (B.9 "ballMaterial"): rim and emissive in the ball's own colour. Pair with `<Instances>` |
+| `<BlobShadow count radius place strength/>` | soft contact shadows under solids (balls, bricks, the prism, the orb), ONE draw call; `place(T, i, out)` writes the floor point and returns the strength (smaller as the solid lifts). No shadow maps anywhere |
+| `makeSurfaceMaterial({ yScale, y0, independence, isoStep, isoAlpha, sickMix, hatchAlpha, isolinesOnly })` | the Health surface (B.9): vertex colours (`spectrum(cap / 0.9)`), world-y isolines every 0.1 of capacity, and below the independence height the colour mixed toward `PAL.sick` with a hatch. Uniforms on `material.userData.surface` (move the independence height or fade isolines from T without a recompile). `isolinesOnly` is the ghost surface |
 | `<SdfText font text size color opacity/>` | drei Text with the SELF-HOSTED fonts only (`anton`, `barlowSemi`, `barlowBold`); only for large words that belong to the 3D world. Register it as a world obstacle so labels avoid it |
 | `<Halo position sizePx color intensity/>` | additive glow point; the LOW-tier stand-in for bloom |
 | `makeRimStandard(opts)`, `steelOpts` | lit solids with a fresnel rim (PBR against the procedural environment) |
-| `useStoryFrame()`, `storyFrame()` | the chapter's engine-owned adaptive chart frame (`StoryDef.frame`); poses get it as `fit(layout, frame)` |
+| `useChapterChart()`, `storyFrame()` | the chapter's engine-owned adaptive chart frame (`StoryDef.frame`); poses get it as `fit(layout, frame)`. (`useStoryFrame` is the old name of the same hook; it is a chart frame, not a frame callback) |
+| `frameId(frame)` | a number that changes whenever the chart frame is replaced: put it in the key of every cached writer (see "Cached writers") |
+| `hudClipX(x0, x1, y, z?)` | the world x where a horizontal line must stop to clear the glass in the top-right corner (the HUD chip and the pinned legend key), so a gridline never runs under it; call it inside a pen `update` writer |
 | `useChartFrame(opts)` | a second, explicit frame inside a chapter |
 | `intervalAxis`, `logAxis` | the time axes |
 | `useCounter(labelId, { value, format })`, `useDomCounter(ref, { value, format })` | counting readouts written imperatively; `value` is a pure function of T |
@@ -203,6 +212,84 @@ Register the chapter in `../stories/index.ts` (one line) and delete its legacy
 
 Pen widths are screen pixels by role: `PEN.grid` 1.25, `PEN.axis` 2,
 `PEN.data` 3, `PEN.hero` 4.5.
+
+**Who changes the kit (the parallel phase).** Six chapter builders share
+`story/kit`, `story/labels`, `story/camera` and the engine. During the
+parallel phase: (1) never write a private copy of a kit material or
+component; (2) kit and engine changes are APPEND-ONLY (a new prop with a
+default that keeps today's behaviour, a new export, a new mode), never a
+change of an existing default or signature; (3) every such change gets a
+dated H amendment in `../DESIGN.md` and a row in this table, in the same
+commit; (4) anything that is not append-only goes to the foundation lead,
+who owns the kit. Never edit another chapter's files.
+
+**Render order** (C.16; transparent objects need an explicit order):
+
+| renderOrder | what |
+|---|---|
+| -1000 | backdrop |
+| 4 | glass plates |
+| 5 | blob shadows |
+| 10 to 14 | fills, bands, hatches, area strips |
+| 20 | surfaces, solids |
+| 29 to 34 | grid, construction lines, data pens, bars |
+| 40 | LightField particles |
+| 44 to 46 | hero curves, claim plates, SDF words |
+| 47 | Nodes (data dots) |
+| 50 | pen heads, halos, glows, ripples |
+
+## Your own per-frame code
+
+Most chapters need a little per-frame code of their own (a drum spin, a
+river flow, a morph). Use the engine's guarded hook, never a bare `useFrame`:
+
+```tsx
+import { useSafeFrame } from '../../story/useSafeFrame'
+
+const drum = useRef<THREE.Group>(null)
+useSafeFrame('hopper drum', (T, A) => {
+  drum.current!.rotation.x = A * 0.8          // ambient motion runs on A
+  drum.current!.position.y = at(T, 0, 0, 0.3) // story motion runs on T
+}, { hide: drum })
+```
+
+- **T** (`clock.T`) is story time, `index + t`. Everything that tells the
+  story is a pure function of T.
+- **A** (`clock.A`) is the ambient clock (L5): seconds that run only in
+  unheld autoplay and in explore. Whenever the story is held, seeked or under
+  reduced motion it FREEZES as `A = T x 2.5`, so a deep link still renders
+  the same pixels. Drum spin, ball tumble and river flow use A; nothing else.
+  Never read `performance.now()` or `Date.now()` in scene code.
+- **Why guarded**: R3F calls every `useFrame` in one loop and renders only
+  after it, so ONE throw in a bare `useFrame` skips every render and freezes
+  the whole stage. `useSafeFrame` catches it, hides `hide.current`, warns once
+  with your site name and stops calling that callback. The stage keeps going.
+- **Priority**: 0 (the default) or negative. The engine runs the clock at
+  -100, the camera at -90, labels at -80, DOM listeners at -70 and readiness
+  at -60, so at 0 you already see this frame's T and camera. A POSITIVE
+  priority takes over rendering on LOW (no composer) and blacks out the stage;
+  `useSafeFrame` clamps it to 0 and warns.
+- **Allocate nothing per frame**: reuse vectors (module-level scratch).
+
+**Cached writers.** A pen `update` or strip `write` that skips work when
+nothing changed must key on everything its output depends on, INCLUDING the
+chart frame: `frameId(frame) + '|' + T` (or your own state). An effect that
+resets a cache after a frame change runs after the commit, and a frame can
+render in between with the new closure and the old key: the geometry then
+stays in the old frame's scale (the explore domain fan was misregistered that
+way after a sheet detent change).
+
+## Beats: the fields
+
+- `title` (at most 30 characters) and `body` (at most 140), restating copy in
+  `fitnessData.ts` or the module files; `source` names it.
+- `terms`: colour-linked caption terms, `{ 'exact substring': PAL key }`. The
+  caption paints each term in its data colour (for example
+  `{ 'Stored ATP and creatine phosphate': 'phosphagen' }`), so the word and
+  the element being built share one colour (B.11). Match the body exactly.
+- `build` (seconds for t 0 to 1), `cam` (poses, see below), `impact` (the
+  chapter's single impact accent window), `eyebrow` and `cta` (intro only).
+- `sceneWords` and `signature`: pacing (see "Reading time").
 
 ## Labels
 
@@ -218,8 +305,10 @@ All reading text is DOM, on the fixed type scale, never perspective-scaled.
 - `anchor`: a world point or `(T, layout) => V3`.
 - `prefer`: the side you want; `only` restricts the sides (use `['S']` for
   x-axis ticks and `['W']` for y-axis ticks so they stay registered);
-  `leader: true` allows a displaced label with a leader line; `short` is a
-  fallback text.
+  `leader: true` allows a displaced label with a leader line;
+  `leader: 'always'` draws the leader wherever the label lands (a callout
+  that names a curve from a gap: "DOMAINS: THE HOPPER", "ZONE WON");
+  `short` is a fallback text.
 - `priority`: higher places first (defaults: callout 90, readout 85, name 60,
   tick 30). Give the labels that must never move (ticks, axis titles) a high
   priority and `only`, and let annotations yield.
@@ -288,6 +377,15 @@ Each beat has `cam: { L, P?, window?, keys? }`. A pose is
   with `morph`; `keys` add mid-beat keyframes (see the Definition D2 fan).
 - Free orbit exists only in explore mode (drei OrbitControls, limits from
   `explore.limits`); the director tweens back on "Back to story".
+- **Focus insets**: a DOM panel of your own over the stage (the Continuum
+  portrait key) must not cover the subject: `useFocusInset(ref, 'top' |
+  'bottom', id)` (camera/focusRect.ts) removes it from the focus rect while it
+  is mounted, and every pose re-fits. The HUD chip is not an inset (it is a
+  label obstacle, and lines clear it with `hudClipX`).
+- **Re-fit is automatic**, story and explore: the caption detent, the explore
+  sheet, a rotation or a new chart frame re-fit the current pose (explore
+  keeps the viewer's orbit angles and zoom). Under reduced motion every
+  camera change is a cut, including entering explore and Reset view.
 
 ## Explore mode
 
@@ -299,6 +397,11 @@ nothing is hover-only. Mark the one row that belongs in the phone peek with
 `className="st-ex-peek"` (the peek shows whole rows only; the rest appears on
 expand). `scrubToggle` + `onScrub(ray, ndc, phase)` route drags to your chapter:
 intersect the ray with your chart plane, exactly like a drag handle.
+When a control turns on something that lives in DEPTH (a fan of curves at
+different z), reveal it: `cameraBus.orbitTo(az, el)` glides the explore orbit
+there (L6: the camera moves to reveal a new dimension) and `orbitTo(0, 0)`
+returns front-on; the viewer's own drag cancels it. Front-on, curves at
+different depths project at different widths and read as misregistered.
 
 ## Prewarm: mount everything at load
 
@@ -326,6 +429,16 @@ T and removes it as a label obstacle at 0. `useDomCounter(ref, { value,
 format })` counts a number into a DOM node. A listener that throws is removed
 with a warning; it never stops the loop.
 
+## Readiness and fonts
+
+The slate stays up until the chapter chunk, the page fonts, your Scene, every
+`SdfText` word and the shader prewarm are in. Each `SdfText` suspends inside
+its OWN boundary, so a failed font request hides only that word; readiness
+waits for pending words but gives up 8 s after the chapter mounted and the
+page fonts resolved (15 s at most), with one console warning naming what was
+missing, and the story plays over what did load. Never add your own Suspense
+around the whole scene.
+
 ## Reduced motion
 
 Handled by the engine: no autoplay, every beat shows `t = 1`, steps cut, the
@@ -339,8 +452,10 @@ Every chapter callback the engine calls inside a frame loop (label cues and
 anchors, obstacle boxes and points, pen, fill, light, glow and instance
 callbacks, pose functions, frame listeners) is caught at the call site: that
 one element is hidden and the console gets ONE warning naming it (`[story]
-<Pen> callback threw ...`). The stage keeps rendering. Treat any such warning
-as a bug. (Render errors are caught by the Scene's error boundary.)
+<Pen> callback threw ...`). The stage keeps rendering. Your OWN per-frame code
+gets the same guarantee only through `useSafeFrame` (a bare `useFrame` that
+throws freezes the stage). Treat any such warning as a bug. (Render errors
+are caught by the Scene's error boundary.)
 
 ## Light and colour in linear space
 
@@ -349,7 +464,7 @@ alphas read much stronger than on a web page (alpha 0.03 of chalk is about
 +40 sRGB levels on the slate), and translucent layers that overlap on screen
 add up fast into a milky wash. Keep translucent fills faint (glass plates
 about 0.007; depth slices about 0.1 and only near their edge), put the light
-in a thin rim or a crisp pen, and dim a line with `gain`, not opacity.
+in a thin rim or a crisp pen, and rest a dimmed line with `dim`, not opacity.
 
 ## Quality tiers and budgets
 
@@ -388,8 +503,14 @@ generalist or the claim, never a specialist's low score. No em or en dashes.
   two frames rendered after the last seek. Loaded never goes back to false on a
   seek, so the slate never covers a scrub (H.15).
 - `window.__story`: `seek(n, t)`, `play()`, `pause()`, `next()`, `prev()`,
-  `explore(on)`, `state()`, `stats()`, `labels()`, `labelCounts()`,
-  `project(x, y, z)`, `ready`.
+  `explore(on)`, `state()` (includes `still`, `loaded`, `focus`), `stats()`,
+  `labels()`, `labelCounts()`, `project(x, y, z)`, `chartRect()` (the chart
+  frame box projected, stage px), `probe(id)` / `probes()`, `qualityLog()`,
+  `ready`.
+- `useQAProbe(id, fn)` (story/qa.ts) exposes a read-only snapshot a
+  screenshot cannot check, e.g. the end points of a geometry buffer
+  (Definition registers `def-fan`, and story-qa proves the domain fan stays
+  registered after a sheet detent change).
 
 ## Checklist before you commit
 
@@ -402,8 +523,12 @@ generalist or the claim, never a specialist's low score. No em or en dashes.
    keyboard and URL drift, reduced motion. All must pass.
    It also checks the finished last beat's card (every button inside the card
    and the viewport at 360 / 390 / 430 and landscape, 44 px targets), the
-   scrubber's hit band, and runs your chapter UNPINNED at 3x on a virtual
-   60 fps clock: a healthy phone must never be demoted.
+   scrubber's hit band, the explore re-fit at every sheet detent (the chart
+   stays inside the focus rect), a failed-font load, real CDP finger drags on
+   the card, tap queueing and deep-link stepping, label determinism (a deep
+   link places labels exactly as scrubbing there), and runs your chapter
+   UNPINNED at 3x on virtual clocks: 60 fps and a 30 fps cap are never
+   demoted; an uneven 20 fps phone must end on LOW in still mode.
 5. `node scripts/story-qa.mjs shots <url> <dir> phone "<view>?beat=N&t=1" ...`
    for every beat on `phone`, `p360`, `p430`, `phone3x` and `desktop`, plus a
    mid-beat frame per beat and `?explore=1`. Look at every one, phone first:

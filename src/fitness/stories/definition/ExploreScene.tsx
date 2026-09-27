@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useRef } from 'react'
-import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { MODAL_DOMAINS, PAL, POWER_DURATION_LABELS, POWER_TASKS } from '../../fitnessData'
-import type { ChartFrame } from '../../story/kit/chartFrame'
+import { frameId, type ChartFrame } from '../../story/kit/chartFrame'
+import { useSafeFrame } from '../../story/useSafeFrame'
+import { useQAProbe } from '../../story/qa'
 import { Pen, PenBatch, PEN } from '../../story/kit/Pen'
 import { AreaFill } from '../../story/kit/Fill'
 import { LightField, sampleCurve } from '../../story/kit/LightField'
@@ -13,7 +14,9 @@ import { useLabels, setLabelText, useWorldObstacle, type WorldObstacle } from '.
 import { useBeat } from '../../story/useBeat'
 import { useStoryStore } from '../../story/store'
 import type { LabelSpec, V3 } from '../../story/types'
-import { FAN_Z } from './layout'
+import { FAN_Z, FAN_ORBIT } from './layout'
+import { cameraBus } from '../../story/camera/CameraDirector'
+import { focusRect } from '../../story/camera/focusRect'
 import { CURVE_BY_KEY, GENERALIST, domainScale, valAt } from './definitionMath'
 import { ChartConstruction, EnergyBands, TASK_U, TICK_LEN, curvePolyline, curveTop, gv, type ChartVis } from './chart'
 import { useDefExplore } from './exploreStore'
@@ -62,6 +65,27 @@ export default function ExploreScene({ frame, tier }: { frame: ChartFrame; tier:
   useEffect(() => {
     shown.mix = 0
   }, [replay])
+  // The domains live in DEPTH: front-on, five curves at five depths look
+  // misregistered (the nearest projects widest). Turning them on orbits to
+  // the D2 fan angle (L6: the camera moves to reveal a new dimension);
+  // turning them off returns front-on. The viewer's own drag cancels it.
+  const mode = useStoryStore((s) => s.mode)
+  const firstDomains = useRef(true)
+  useEffect(() => {
+    if (mode !== 'explore') {
+      firstDomains.current = true
+      return
+    }
+    // entering explore from D2 (domains already on) also reveals the depth
+    if (firstDomains.current && !showDomains) {
+      firstDomains.current = false
+      return
+    }
+    firstDomains.current = false
+    const fanPose = focusRect.layout === 'P' ? FAN_ORBIT.P : FAN_ORBIT.L
+    if (showDomains) cameraBus.orbitTo(fanPose.az, fanPose.el)
+    else cameraBus.orbitTo(0, 0)
+  }, [showDomains, mode])
   useEffect(() => {
     shown.samples = target.slice()
     shown.mix = 1
@@ -70,7 +94,7 @@ export default function ExploreScene({ frame, tier }: { frame: ChartFrame; tier:
   }, [])
 
   const scales = useMemo(() => domainScale(athlete), [athlete])
-  useFrame((_, dtRaw) => {
+  useSafeFrame('definition explore damping', (_T, _A, dtRaw) => {
     const dt = Math.min(0.05, dtRaw)
     let moved = false
     for (let i = 0; i < shown.samples.length; i++) {
@@ -83,7 +107,7 @@ export default function ExploreScene({ frame, tier }: { frame: ChartFrame; tier:
     shown.fan = damp(shown.fan, showDomains ? 1 : 0, 6, dt)
     shown.ghost = damp(shown.ghost, !isG && ghostOn ? 1 : 0, 8, dt)
     shown.isG = damp(shown.isG, isG ? 1 : 0, 8, dt)
-  }, -10)
+  }, { priority: -10 })
 
   const gCurve = useMemo(() => curvePolyline(frame, gv, 0.02), [frame])
   const aCurve = useMemo(() => curvePolyline(frame, gv, 0.04), [frame])
@@ -92,10 +116,11 @@ export default function ExploreScene({ frame, tier }: { frame: ChartFrame; tier:
   const liveB = useMemo(() => new Float32Array(128), [])
   const count = Math.round(9000 * TIERS[tier].particleScale)
 
-  const lastA = useRef(-1)
+  const lastA = useRef('')
   const writeActive = (_T: number, pts: Float32Array): boolean => {
-    if (lastA.current === shown.version) return false
-    lastA.current = shown.version
+    const key = frameId(frame) + '|' + shown.version
+    if (lastA.current === key) return false
+    lastA.current = key
     const n = pts.length / 3
     for (let i = 0; i < n; i++) {
       const u = i / (n - 1)
@@ -105,20 +130,21 @@ export default function ExploreScene({ frame, tier }: { frame: ChartFrame; tier:
     }
     return true
   }
-  const lastTop = useRef(-1)
+  const lastTop = useRef('')
   const writeTop = (_T: number, top: Float32Array): boolean => {
-    if (lastTop.current === shown.version) return false
-    lastTop.current = shown.version
+    const key = frameId(frame) + '|' + shown.version
+    if (lastTop.current === key) return false
+    lastTop.current = key
     const n = top.length / 2
     for (let i = 0; i < n; i++) top[i * 2 + 1] = frame.y(activeV(i / (n - 1)))
     return true
   }
   const lastB = useRef(-1)
   useEffect(() => {
-    lastA.current = -1
-    lastTop.current = -1
+    lastA.current = ''
+    lastTop.current = ''
     lastB.current = -1
-  }, [isG, frame])
+  }, [isG])
 
   // domain fan for the active athlete
   const N = 72
@@ -132,8 +158,10 @@ export default function ExploreScene({ frame, tier }: { frame: ChartFrame; tier:
     return { segs, cols }
   }, [])
   const fanKey = useRef('')
+  const fanBufRef = useRef<Float32Array | null>(null)
   const writeFan = (_T: number, s: Float32Array): boolean => {
-    const key = `${shown.version}|${shown.fan.toFixed(4)}|${athlete}`
+    fanBufRef.current = s
+    const key = `${frameId(frame)}|${shown.version}|${shown.fan.toFixed(4)}|${athlete}`
     if (key === fanKey.current) return false
     fanKey.current = key
     MODAL_DOMAINS.forEach((_, k) => {
@@ -158,15 +186,16 @@ export default function ExploreScene({ frame, tier }: { frame: ChartFrame; tier:
   // TRANSIENTLY (getState inside the frame loop and the label functions),
   // never through a React subscription: no re-render per drag event.
   const probeRef = useRef<number | null>(useDefExplore.getState().probe)
-  useFrame(() => {
+  useSafeFrame('definition explore probe', () => {
     probeRef.current = useDefExplore.getState().probe
-  }, -11)
+  }, { priority: -11 })
   const probePts = useMemo(() => new Float32Array(6), [])
-  const lastProbe = useRef<number | null>(-1)
+  const lastProbe = useRef('')
   const writeProbe = (_T: number, pts: Float32Array): boolean => {
     const p = probeRef.current
-    if (p === lastProbe.current) return false
-    lastProbe.current = p
+    const key = frameId(frame) + '|' + p
+    if (key === lastProbe.current) return false
+    lastProbe.current = key
     const u = p ?? 0
     pts[0] = pts[3] = frame.x(u)
     pts[1] = frame.y(0)
@@ -175,7 +204,9 @@ export default function ExploreScene({ frame, tier }: { frame: ChartFrame; tier:
     return true
   }
 
-  // labels
+  // labels (a chart narrower than 520 px shows the phone tick set: the sheet
+  // can make the rect landscape-shaped while it is still phone-narrow)
+  const narrow = layout === 'P' || focusRect.w < 520
   const specs = useMemo<LabelSpec[]>(() => {
     const x = frame.x
     const y = frame.y
@@ -240,7 +271,7 @@ export default function ExploreScene({ frame, tier }: { frame: ChartFrame; tier:
         cue: () => (probeRef.current === null || isG ? 0 : 1),
       },
     ]
-    const tickIdx = layout === 'P' ? [0, 1, 3, 5, 7] : [0, 1, 2, 3, 4, 5, 6, 7]
+    const tickIdx = narrow ? [0, 1, 3, 5, 7] : [0, 1, 2, 3, 4, 5, 6, 7]
     tickIdx.forEach((i) => {
       out.push({ id: `ex-tk-${i}`, text: POWER_DURATION_LABELS[i], tone: 'tick', anchor: [x(i / 7), y0 - TICK_LEN, 0], prefer: 'S', only: ['S'], gapPx: 5, priority: 80 })
     })
@@ -261,9 +292,8 @@ export default function ExploreScene({ frame, tier }: { frame: ChartFrame; tier:
       })
     })
     return out
-  }, [frame, layout, athlete, isG, scales])
+  }, [frame, layout, athlete, isG, scales, narrow])
   // Explore labels exist only while exploring (the layer itself stays mounted for prewarm).
-  const mode = useStoryStore((s) => s.mode)
   useLabels(mode === 'explore' ? specs : NO_LABELS, { mode: 'explore' })
 
   // explore labels avoid the live curve, the ghost and the task dots
@@ -305,11 +335,31 @@ export default function ExploreScene({ frame, tier }: { frame: ChartFrame; tier:
   useWorldObstacle('def-ex-data', obstacle)
 
   // probe readouts (computed valAt), written imperatively
-  useFrame(() => {
+  useSafeFrame('definition explore readouts', () => {
     const p = probeRef.current
     if (p === null) return
     setLabelText('ex-probe-a', activeV(p).toFixed(2))
     setLabelText('ex-probe-g', gv(p).toFixed(2))
+  })
+
+  // QA (story-qa "fan registration"): the ends of each domain curve as drawn,
+  // and the frame's axis ends, so a test can prove the fan follows the frame
+  useQAProbe('def-fan', () => {
+    const s = fanBufRef.current
+    const segs = N - 1
+    return {
+      fan: shown.fan,
+      x0: frame.x(0),
+      x1: frame.x(1),
+      y0: frame.y(0),
+      curves: s
+        ? MODAL_DOMAINS.map((_, k) => {
+            const a = k * segs * 6
+            const b = (k * segs + segs - 1) * 6
+            return { start: [s[a], s[a + 1], s[a + 2]], end: [s[b + 3], s[b + 4], s[b + 5]] }
+          })
+        : [],
+    }
   })
 
   const place = (_T: number, i: number, out: [number, number, number]) => {
@@ -356,7 +406,7 @@ export default function ExploreScene({ frame, tier }: { frame: ChartFrame; tier:
         />
       )}
       <Nodes count={POWER_TASKS.length} radius={0.15} color={PAL.chalk} place={place} rimStrength={0.5} emissiveIntensity={0.55} />
-      <Pen points={gCurve} color={PAL.yellowGreen} width={PEN.data} opacity={() => 0.45 * shown.ghost} renderOrder={44} />
+      <Pen points={gCurve} color={PAL.yellowGreen} width={PEN.data} opacity={() => Math.min(1, shown.ghost * 2.5)} dim={() => 0.45} renderOrder={44} />
       <PenBatch segments={fanBuf.segs} colors={fanBuf.cols} width={PEN.data} update={writeFan} opacity={() => Math.min(1, shown.fan * 1.5)} renderOrder={31} />
       <Pen
         key={isG ? 'g' : 's'}

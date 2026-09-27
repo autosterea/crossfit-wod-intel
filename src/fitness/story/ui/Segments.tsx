@@ -4,6 +4,7 @@ import { clock, onFrame, setIT } from '../clock'
 import { pb, startBeat, haptic } from '../playback'
 import { markSeek } from '../ready'
 import { dropQueryKeys } from '../url'
+import { focusRect } from '../camera/focusRect'
 
 /* Beat segments (DESIGN.md B.2, C.3): one 3 px bar per beat inside a 24 px
    hit area. Fills are written through refs from the engine loop. Dragging
@@ -55,7 +56,7 @@ export function Segments({ accent }: { accent: string }) {
   useEffect(() => {
     const el = row.current
     if (!el) return
-    let drag: { x: number; moved: boolean; release: () => void; lastBeat: number } | null = null
+    let drag: { x: number; y: number; moved: boolean; release: () => void; lastBeat: number } | null = null
     const toT = (clientX: number) => {
       const r = el.getBoundingClientRect()
       const f = Math.max(0, Math.min(1, (clientX - r.left) / r.width))
@@ -65,7 +66,7 @@ export function Segments({ accent }: { accent: string }) {
       e.stopPropagation()
       el.setPointerCapture(e.pointerId)
       const st = useStoryStore.getState()
-      drag = { x: e.clientX, moved: false, release: st.beginInteraction(), lastBeat: clock.index }
+      drag = { x: e.clientX, y: e.clientY, moved: false, release: st.beginInteraction(), lastBeat: clock.index }
     }
     const move = (e: PointerEvent) => {
       if (!drag) return
@@ -95,7 +96,13 @@ export function Segments({ accent }: { accent: string }) {
       drag = null
       d.release()
       if (!d.moved) {
-        jumpTo(Math.min(n - 1, Math.floor(toT(e.clientX))))
+        // the band sits over the card's eyebrow row: on a phone a vertical
+        // drag there moves the card between detents (a real finger drag on the
+        // card body scrolls the page), a tap jumps to that beat
+        const dy = e.clientY - d.y
+        const phone = focusRect.shell === 'phone' || focusRect.shell === 'tablet'
+        if (phone && Math.abs(dy) > 24) useStoryStore.getState().nudgeDetent(dy < 0 ? 'up' : 'down')
+        else if (e.type !== 'pointercancel') jumpTo(Math.min(n - 1, Math.floor(toT(e.clientX))))
       } else {
         clock.held = false
         useStoryStore.setState({ playing: false })

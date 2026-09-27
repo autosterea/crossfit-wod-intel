@@ -110,6 +110,14 @@ export function makeBackdropMaterial(): THREE.ShaderMaterial {
 
 /* -------------------------------- pen --------------------------------- */
 
+/**
+ * The slate a dimmed pen fades toward (linear). A pen dimmed with `dim`
+ * mixes its colour toward this at FULL alpha: a translucent LineSegments2
+ * shows its overlapping round segment caps as beads (a dotted line), an
+ * opaque dimmed one stays a clean stroke (H.32, H.41).
+ */
+const PEN_SLATE = new THREE.Color('#0b1310')
+
 const penMaterials = new Set<LineMaterial>()
 
 export interface PenMatOpts {
@@ -145,6 +153,8 @@ export function makePenMaterial(o: PenMatOpts): LineMaterial {
   m.uniforms.uGlowAmt = { value: 0 }
   m.uniforms.uGlow = { value: new THREE.Color('#f4ffe0').multiplyScalar(1.6) }
   m.uniforms.uGain = { value: 1 }
+  m.uniforms.uDim = { value: 1 }
+  m.uniforms.uSlate = { value: PEN_SLATE }
   m.onBeforeCompile = (shader) => {
     shader.vertexShader = shader.vertexShader.replace(
       'void main() {',
@@ -153,14 +163,14 @@ export function makePenMaterial(o: PenMatOpts): LineMaterial {
     shader.fragmentShader = shader.fragmentShader
       .replace(
         'void main() {',
-        'uniform float uHead;\nuniform float uGlowLen;\nuniform float uGlowAmt;\nuniform vec3 uGlow;\nuniform float uGain;\nvarying float vArc;\nvoid main() {',
+        'uniform float uHead;\nuniform float uGlowLen;\nuniform float uGlowAmt;\nuniform vec3 uGlow;\nuniform float uGain;\nuniform float uDim;\nuniform vec3 uSlate;\nvarying float vArc;\nvoid main() {',
       )
       .replace(
         'gl_FragColor = vec4( diffuseColor.rgb, alpha );',
-        'float gk = uGlowAmt * smoothstep( uHead - uGlowLen, uHead, vArc );\n\t\t\tdiffuseColor.rgb = mix( diffuseColor.rgb * uGain, uGlow, gk );\n\t\t\tgl_FragColor = vec4( diffuseColor.rgb, alpha );',
+        'float gk = uGlowAmt * smoothstep( uHead - uGlowLen, uHead, vArc );\n\t\t\tdiffuseColor.rgb = mix( uSlate, mix( diffuseColor.rgb * uGain, uGlow, gk ), uDim );\n\t\t\tgl_FragColor = vec4( diffuseColor.rgb, alpha );',
       )
   }
-  m.customProgramCacheKey = () => 'st-pen-1'
+  m.customProgramCacheKey = () => 'st-pen-2'
   penMaterials.add(m)
   const dispose = m.dispose.bind(m)
   m.dispose = () => {
@@ -487,3 +497,268 @@ export function makeRimStandard(o: RimOpts): THREE.MeshStandardMaterial {
 }
 
 export const steelOpts: RimOpts = { color: '#9aa4a8', metalness: 0.95, roughness: 0.28, rim: '#91c640', rimStrength: 0.2, emissiveIntensity: 0 }
+
+/* ------------------------------- dots --------------------------------- */
+
+export interface DotOpts {
+  color: string
+  /** world radius at instance scale 1 */
+  radius: number
+  /** fresnel rim strength */
+  rim?: number
+  /** self-light 0..1 */
+  emissive?: number
+  /** multiply by the InstancedMesh instanceColor */
+  perInstance?: boolean
+}
+
+/**
+ * Impostor sphere dots (H.42): a camera-facing quad per instance whose
+ * fragment shader draws a lit sphere with a specular highlight, a fresnel rim
+ * in the dot's colour, a soft outer glow and a silhouette anti-aliased with
+ * fwidth, so dots are perfectly round at any DPR and never faceted. Kept under
+ * 1.0 so a dot never blooms unless it is the speaking element (L4).
+ */
+export function makeDotMaterial(o: DotOpts): THREE.ShaderMaterial {
+  return new THREE.ShaderMaterial({
+    uniforms: {
+      uColor: { value: lin(o.color) },
+      uRadius: { value: o.radius },
+      uRim: { value: o.rim ?? 0.45 },
+      uEmissive: { value: o.emissive ?? 0.35 },
+      uOpacity: { value: 1 },
+    },
+    vertexShader: /* glsl */ `
+      uniform float uRadius;
+      varying vec2 vQ;
+      varying vec3 vTint;
+      void main() {
+        vQ = position.xy;
+        #ifdef USE_INSTANCING_COLOR
+        vTint = instanceColor;
+        #else
+        vTint = vec3( 1.0 );
+        #endif
+        #ifdef USE_INSTANCING
+        mat4 mvI = modelViewMatrix * instanceMatrix;
+        #else
+        mat4 mvI = modelViewMatrix;
+        #endif
+        vec4 c = mvI * vec4( 0.0, 0.0, 0.0, 1.0 );
+        float s = uRadius * 0.5 * ( length( mvI[ 0 ].xyz ) + length( mvI[ 1 ].xyz ) );
+        // sit at the front of the sphere, so the dot covers the line it marks
+        c.z += s;
+        // room for the anti-aliased edge and the soft outer glow
+        c.xy += position.xy * s * 1.35;
+        gl_Position = projectionMatrix * c;
+      }
+    `,
+    fragmentShader: /* glsl */ `
+      uniform vec3 uColor;
+      uniform float uRim;
+      uniform float uEmissive;
+      uniform float uOpacity;
+      varying vec2 vQ;
+      varying vec3 vTint;
+      void main() {
+        vec2 p = vQ * 1.35;
+        float r = length( p );
+        float aa = max( fwidth( r ), 1e-4 );
+        float disc = 1.0 - smoothstep( 1.0 - aa, 1.0 + aa, r );
+        float glow = ( 1.0 - smoothstep( 1.0, 1.35, r ) ) * ( 1.0 - disc );
+        if ( disc + glow < 0.004 ) discard;
+        vec3 base = uColor * vTint;
+        float z = sqrt( max( 0.0, 1.0 - min( 1.0, r * r ) ) );
+        vec3 n = vec3( p, z );
+        vec3 L = normalize( vec3( -0.45, 0.62, 0.64 ) );
+        float diff = max( dot( n, L ), 0.0 );
+        float spec = pow( max( dot( normalize( L + vec3( 0.0, 0.0, 1.0 ) ), n ), 0.0 ), 42.0 );
+        float fres = pow( 1.0 - z, 2.2 );
+        vec3 lit = base * ( uEmissive + ( 1.0 - uEmissive ) * ( 0.2 + 0.8 * diff ) );
+        vec3 col = lit + vec3( 0.32 * spec ) + base * fres * uRim;
+        col = min( col, vec3( 0.97 ) );
+        vec3 outc = mix( base * 0.8, col, disc );
+        float a = ( disc + 0.2 * glow * glow ) * uOpacity;
+        gl_FragColor = vec4( outc, a );
+        #include <tonemapping_fragment>
+        #include <colorspace_fragment>
+      }
+    `,
+    transparent: true,
+    depthWrite: false,
+  })
+}
+
+/* ------------------------------- balls -------------------------------- */
+
+/** Hopper balls (B.9 "ballMaterial"): makeRimStandard(ballOpts(PAL.gymnastics)). Rim and emissive in the ball's own colour. */
+export const ballOpts = (color: string): RimOpts => ({
+  color,
+  metalness: 0.1,
+  roughness: 0.35,
+  emissive: color,
+  emissiveIntensity: 0.25,
+  rim: color,
+  rimStrength: 0.35,
+})
+
+/* ------------------------------ surface ------------------------------- */
+
+export interface SurfaceOpts {
+  /** world y of capacity 1.0 (Health: YS = 7.2) */
+  yScale: number
+  /** world y of capacity 0 (default 0) */
+  y0?: number
+  /** isoline spacing in capacity units (default 0.1) */
+  isoStep?: number
+  /** isoline chalk strength (default 0.18) */
+  isoAlpha?: number
+  /** world y of the independence height; below it the colour mixes toward PAL.sick with a hatch. Omit for none. */
+  independence?: number
+  /** how far the colour mixes toward PAL.sick below the independence height (default 0.55) */
+  sickMix?: number
+  /** hatch strength below the independence height (default 0.25) */
+  hatchAlpha?: number
+  /** the Health ghost: draw ONLY the isolines (transparent, no fill) */
+  isolinesOnly?: boolean
+  /** a translucent surface (sets transparent; animate material.opacity) */
+  opacity?: number
+  roughness?: number
+  metalness?: number
+}
+
+export interface SurfaceUniforms {
+  uYS: { value: number }
+  uY0: { value: number }
+  uIso: { value: number }
+  uIsoA: { value: number }
+  uIndep: { value: number }
+  uSickMix: { value: number }
+  uHatchA: { value: number }
+}
+
+/**
+ * The Health surface (B.9 "Surface"): MeshStandardMaterial with VERTEX
+ * COLOURS (spectrum(cap / 0.9) per vertex) plus an onBeforeCompile tweak:
+ *   world-y isolines every isoStep of capacity (fwidth-based, about 1 px,
+ *   chalk at isoAlpha), and below the independence height the colour mixed
+ *   sickMix toward PAL.sick with a 45 degree screen hatch at hatchAlpha.
+ * Roughness 0.55, metalness 0.05. The uniforms live on
+ * `material.userData.surface` (SurfaceUniforms), so a beat can move the
+ * independence height or fade the isolines from T without a recompile.
+ * `isolinesOnly` makes the ghost surface: only the isolines are drawn.
+ */
+export function makeSurfaceMaterial(o: SurfaceOpts): THREE.MeshStandardMaterial {
+  const iso = !!o.isolinesOnly
+  const m = new THREE.MeshStandardMaterial({
+    vertexColors: !iso,
+    color: '#ffffff',
+    roughness: o.roughness ?? 0.55,
+    metalness: o.metalness ?? 0.05,
+    transparent: iso || o.opacity !== undefined,
+    opacity: o.opacity ?? 1,
+    depthWrite: !iso,
+    side: THREE.DoubleSide,
+  })
+  const u: SurfaceUniforms = {
+    uYS: { value: o.yScale },
+    uY0: { value: o.y0 ?? 0 },
+    uIso: { value: o.isoStep ?? 0.1 },
+    uIsoA: { value: o.isoAlpha ?? 0.18 },
+    uIndep: { value: o.independence ?? -1e9 },
+    uSickMix: { value: o.sickMix ?? 0.55 },
+    uHatchA: { value: o.hatchAlpha ?? 0.25 },
+  }
+  m.userData.surface = u
+  const sick = lin('#ef4444')
+  const chalk = lin('#eef3f6')
+  const isoLine = iso
+    ? 'outgoingLight = uChalk; diffuseColor.a *= clamp( stIso * uIsoA * 3.0, 0.0, 1.0 ); if ( diffuseColor.a < 0.004 ) discard;'
+    : 'outgoingLight = mix( outgoingLight, uChalk, stIso * uIsoA ); outgoingLight = mix( outgoingLight, uChalk * 0.8, stHatch * stBelow * uHatchA );'
+  m.onBeforeCompile = (shader) => {
+    Object.assign(shader.uniforms, u, { uSick: { value: sick }, uChalk: { value: chalk }, uDpr: engineUniforms.uDpr })
+    shader.vertexShader = shader.vertexShader
+      .replace('void main() {', 'varying float vSurfY;' + NL + 'void main() {')
+      .replace('#include <project_vertex>', '#include <project_vertex>' + NL + 'vSurfY = ( modelMatrix * vec4( transformed, 1.0 ) ).y;')
+    shader.fragmentShader = shader.fragmentShader
+      .replace(
+        'void main() {',
+        [
+          'uniform float uYS;',
+          'uniform float uY0;',
+          'uniform float uIso;',
+          'uniform float uIsoA;',
+          'uniform float uIndep;',
+          'uniform float uSickMix;',
+          'uniform float uHatchA;',
+          'uniform vec3 uSick;',
+          'uniform vec3 uChalk;',
+          'uniform float uDpr;',
+          'varying float vSurfY;',
+          'void main() {',
+        ].join(NL),
+      )
+      .replace(
+        '#include <color_fragment>',
+        ['#include <color_fragment>', 'float stBelow = step( vSurfY, uIndep );', 'diffuseColor.rgb = mix( diffuseColor.rgb, uSick, uSickMix * stBelow );'].join(NL),
+      )
+      .replace(
+        '#include <opaque_fragment>',
+        [
+          'float stC = ( vSurfY - uY0 ) / max( uYS * uIso, 1e-5 );',
+          'float stIso = 1.0 - smoothstep( 0.0, 1.0, abs( fract( stC - 0.5 ) - 0.5 ) / max( fwidth( stC ), 1e-5 ) );',
+          'float stHatch = step( 0.5, fract( ( gl_FragCoord.x + gl_FragCoord.y ) / ( 7.0 * uDpr ) ) );',
+          isoLine,
+          '#include <opaque_fragment>',
+        ].join(NL),
+      )
+  }
+  m.customProgramCacheKey = () => (iso ? 'st-surface-iso-1' : 'st-surface-1')
+  return m
+}
+
+const NL = String.fromCharCode(10)
+
+/* ---------------------------- blob shadow ----------------------------- */
+
+/**
+ * Blob shadows (B.9): a soft radial darkening on a flat quad under a solid,
+ * the only shadow in the lesson (no shadow maps, no ContactShadows). The
+ * radial falloff is computed in the shader (the same curve as the 64 px
+ * gradient texture the spec names, without the texture). Instanced: per
+ * instance strength in the `aK` attribute.
+ */
+export function makeBlobMaterial(): THREE.ShaderMaterial {
+  return new THREE.ShaderMaterial({
+    uniforms: { uStrength: { value: 0.55 } },
+    vertexShader: /* glsl */ `
+      attribute float aK;
+      varying vec2 vQ;
+      varying float vK;
+      void main() {
+        vQ = position.xz;
+        vK = aK;
+        #ifdef USE_INSTANCING
+        gl_Position = projectionMatrix * modelViewMatrix * instanceMatrix * vec4( position, 1.0 );
+        #else
+        gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+        #endif
+      }
+    `,
+    fragmentShader: /* glsl */ `
+      uniform float uStrength;
+      varying vec2 vQ;
+      varying float vK;
+      void main() {
+        float r2 = dot( vQ, vQ );
+        float a = pow( max( 0.0, 1.0 - r2 ), 2.0 ) * vK * uStrength;
+        if ( a < 0.002 ) discard;
+        gl_FragColor = vec4( 0.0, 0.0, 0.0, a );
+        #include <tonemapping_fragment>
+        #include <colorspace_fragment>
+      }
+    `,
+    transparent: true,
+    depthWrite: false,
+  })
+}

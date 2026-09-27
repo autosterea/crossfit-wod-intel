@@ -30,6 +30,8 @@ export interface PlaceInput {
   priority: number
   last: Dir | null
   leader: boolean
+  /** draw the leader wherever the label lands, not only when displaced */
+  leaderAlways: boolean
   /** pinned labels (legend) skip anchoring and stack in their corner */
   pin: 'top-left' | 'top-right' | null
   pinOrder: number
@@ -304,7 +306,11 @@ export class Placer {
     const r = this.r
     for (let j = 0; j < nd; j++) {
       rectInto(r, this.dirs[j], L.ax, L.ay, w, L.h, L.gap)
-      if (this.free(r, bounds)) return this.accept(o, r, this.dirs[j], short)
+      if (this.free(r, bounds)) {
+        this.accept(o, r, this.dirs[j], short)
+        if (L.leaderAlways) this.leaderTo(o, L)
+        return true
+      }
     }
     const pref = this.dirs[0]
     // Slide along the preferred side so the label stays inside the rect.
@@ -316,7 +322,7 @@ export class Placer {
     const moved = Math.hypot(r.x - rx, r.y - ry)
     if (this.free(r, bounds) && (moved <= 12 || L.leader)) {
       this.accept(o, r, pref, short)
-      if (moved > 12) this.leaderTo(o, L)
+      if (moved > 12 || L.leaderAlways) this.leaderTo(o, L)
       return true
     }
     // Vertical stagger tiers with a leader line.

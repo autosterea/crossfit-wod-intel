@@ -2,7 +2,7 @@ import type { Box, CamPose, StoryDef, V3 } from '../../story/types'
 import DefinitionScene from './Scene'
 import DefinitionExplore from './Explore'
 import DefinitionHud from './Hud'
-import { CHART_PAD, FRAME_OPTS, chartBox, fanBox, fanCenter, lineup } from './layout'
+import { CHART_PAD, FAN_Z, FRAME_OPTS, chartBox, fanBox, fanCenter, lineup } from './layout'
 import { useDefExplore } from './exploreStore'
 import { GENERALIST, POWERLIFTER } from './definitionMath'
 import { storyFrame } from '../../story/kit/chartFrame'
@@ -42,6 +42,22 @@ const COL_P: CamPose = {
   padPx: { l: 6, r: 6, t: 8, b: 6 },
 }
 const COL_L: CamPose = { ...COL_P, padPx: { l: 16, r: 16, t: 16, b: 16 } }
+/**
+ * Explore: the front-on chart; while the five domains are shown (they live
+ * in depth, z from -FAN_Z to FAN_Z) the fit takes their depth too, so the
+ * nearest curve never runs off the stage when the view orbits to reveal it.
+ * The director re-fits from this every frame, gliding as the toggle flips.
+ */
+const EXPLORE: CamPose = {
+  ...CHART,
+  fit: (_l, f): Box =>
+    useDefExplore.getState().showDomains
+      ? [
+          [f.box[0][0], f.box[0][1], -FAN_Z],
+          [f.box[1][0], f.box[1][1], FAN_Z],
+        ]
+      : f.box,
+}
 
 const plane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0)
 const hit = new THREE.Vector3()
@@ -71,6 +87,8 @@ export const definitionStory: StoryDef = {
       body: 'CrossFit adds one move: average the curve across every modal domain. The hopper supplies the domains.',
       source: 'POWER_CONCEPT s4 + MODULE_COPY.definition.body s3',
       build: 5.5,
+      // the five domain names, read in the converged frame (H.40)
+      sceneWords: 7,
       cam: {
         L: CHART,
         window: [0, 0.9],
@@ -86,6 +104,9 @@ export const definitionStory: StoryDef = {
       body: 'Fitness is the area under that averaged curve. It is measurable, it is observable, and it leaves no room for opinion.',
       source: 'MODULE_COPY.definition.keyPoints[2] + DEFINITION_TEXT s3',
       build: 5.0,
+      // the signature beat (A.3): the claim lands at t 0.8, so its frame holds (H.40)
+      signature: true,
+      sceneWords: 5,
       cam: { L: CHART },
       impact: [0.8, 0.92],
     },
@@ -95,6 +116,8 @@ export const definitionStory: StoryDef = {
       body: 'The ten skills set its height, the hopper supplies the domains, the pathways are the time axis.',
       source: 'MODULE_COPY.definition.body s3',
       build: 4.5,
+      // the three callouts (H.40)
+      sceneWords: 10,
       cam: { L: CHART },
     },
     {
@@ -103,6 +126,10 @@ export const definitionStory: StoryDef = {
       body: 'A specialist wins one point on the axis. The generalist wins the integral.',
       source: 'POWER_CONCEPT s6 to s7',
       build: 5.5,
+      // the densest frame and the second half of the signature moment (A.3):
+      // Generalist, for scale, 94, Powerlifter, ZONE WON, AREA LOST, 37 and the HUD (H.40)
+      signature: true,
+      sceneWords: 13,
       cam: { L: CHART },
     },
     {
@@ -119,7 +146,7 @@ export const definitionStory: StoryDef = {
   Hud: DefinitionHud,
   frame: FRAME_OPTS,
   explore: {
-    cam: { L: CHART },
+    cam: { L: EXPLORE },
     limits: { az: [-55, 55], el: [0, 45], zoom: [0.6, 1.6] },
     scrubToggle: true,
     initFromBeat(i) {
