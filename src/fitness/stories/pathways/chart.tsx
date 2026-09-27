@@ -3,16 +3,17 @@ import { PAL } from '../../fitnessData'
 import { Pen, PenBatch, PEN } from '../../story/kit/Pen'
 import { AreaStrips } from '../../story/kit/Fill'
 import { frameId, type ChartFrame } from '../../story/kit/chartFrame'
-import { BRACKET_U } from './pathwaysMath'
+import { LEAD_U } from './pathwaysMath'
 import { TICKS, type UnderAxis } from './layout'
 import { AXIS_COLOR, lineSegs, type Fn } from './geom'
 
 /* =========================================================================
    Pathways chart construction (DESIGN.md D.4), shared by the story and the
    explore layers: the axes (one continuous L stroke, the way a coach draws
-   them), the time tick marks, the three duration strips directly under the
-   axis (the energy bands chapter 04 calls back to, H.11) and the P6
-   brackets. Pure geometry plus functions of T.
+   them), the time tick marks, the three lead strips directly under the axis
+   (each engine's colour where the callouts and the pins say it leads, cut at
+   the dominance flips LEAD_U; review r1) and the P6 brackets over the same
+   ranges. Pure geometry plus functions of T.
    ========================================================================= */
 
 /**
@@ -50,9 +51,9 @@ export function Construction({ frame, vis, uOfS, ua }: { frame: ChartFrame; vis:
 }
 
 /**
- * The three duration strips directly under the time axis (the Definition
- * energy bands, H.11): strip k (axis order) sweeps in left to right with
- * reveal(T, k) and rests faint; `bright(T)` lifts them (P6 brackets). One draw call.
+ * The three lead strips directly under the time axis: strip k (axis order)
+ * covers the range where engine k supplies the most (LEAD_U), sweeps in left
+ * to right with reveal(T, k) and rests faint. One draw call.
  */
 export function DurationStrips({ frame, reveal, opacity, ua }: { frame: ChartFrame; reveal: (T: number, k: number) => number; opacity: Fn; ua: UnderAxis }) {
   const NP = 2
@@ -73,8 +74,8 @@ export function DurationStrips({ frame, reveal, opacity, ua }: { frame: ChartFra
     const y0 = frame.y(0) - ua.strip
     for (let k = 0; k < 3; k++) {
       const r = k === 0 ? r0 : k === 1 ? r1 : r2
-      const xa = frame.x(BRACKET_U[k]) + (k > 0 ? 0.03 : 0)
-      const xb = frame.x(BRACKET_U[k + 1]) - (k < 2 ? 0.03 : 0)
+      const xa = frame.x(LEAD_U[k]) + (k > 0 ? 0.03 : 0)
+      const xb = frame.x(LEAD_U[k + 1]) - (k < 2 ? 0.03 : 0)
       const xe = xa + (xb - xa) * r
       for (let i = 0; i < NP; i++) {
         const o = k * NP + i
@@ -109,8 +110,8 @@ export function Brackets({ frame, draw, gain, opacity, ua }: { frame: ChartFrame
   const paths = useMemo(
     () =>
       [0, 1, 2].map((k) => {
-        const xa = frame.x(BRACKET_U[k]) + (k > 0 ? 0.05 : 0.02)
-        const xb = frame.x(BRACKET_U[k + 1]) - (k < 2 ? 0.05 : 0.02)
+        const xa = frame.x(LEAD_U[k]) + (k > 0 ? 0.05 : 0.02)
+        const xb = frame.x(LEAD_U[k + 1]) - (k < 2 ? 0.05 : 0.02)
         const yTop = frame.y(0) - 0.06
         const yLow = frame.y(0) - ua.strip
         const pts: number[] = []

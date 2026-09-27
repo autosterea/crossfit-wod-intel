@@ -1,20 +1,27 @@
-import { at, pulse, stagger } from '../../story/cue'
+import { at, focus, pulse, stagger } from '../../story/cue'
 import { ease } from '../../story/ease'
 import { FLOOD_W } from './bands'
-import { PINS, pinIndex, tOf, uOf } from './pathwaysMath'
+import { PINS, PIN_SLOT, pinIndex, tOf, uOf } from './pathwaysMath'
 
 /* =========================================================================
    The Pathways story clock: every visible property is a pure function of
    story time T = beat + t (L5), built from cue windows, so a deep link, a
    scrub and autoplay render the same pixels and (N, 1) = (N + 1, 0).
 
-     P0 three       axes, then the chalk envelope: power falls with duration
-     P1 phosphagen  the rose band floods; the cursor sweeps 3 s to 15 s
-     P2 glycolytic  the amber band floods beneath it; 15 s to 30 s
-     P3 oxidative   the blue base rises; 30 s to 1 hr, pausing at 75 s and 10 min
+     P0 three       axes, then the chalk envelope: power falls with duration;
+                    three dim engines glow under it
+     P1 phosphagen  the rose band floods; the cursor sweeps 3 s to 10 s
+     P2 glycolytic  the amber band floods; 10 s to 30 s (the lead flips here)
+     P3 oxidative   the blue base floods; 30 s to 1 hr, pausing at 75 s and 10 min
      P4 power       the stack separates into three lanes on one scale (signature)
      P5 workouts    lanes back to the stack, benchmark pins, the cursor visits four
-     P6 all-three   three duration brackets, the cursor parks at Fran
+     P6 all-three   each engine's lead range is bracketed and lights its pins;
+                    the cursor parks at Fran
+
+   D.4 amendment (review r1): P1 ends at 10 s, the end of its own "0 to 10
+   sec" string and still phosphagen-led (53%), and P2 sweeps 10 s to 30 s,
+   so the callout turns from Phosphagen to Glycolytic inside the Glycolytic
+   beat (at about 12 s), as the P2 caption and D.4's P2 cue describe.
    ========================================================================= */
 
 export const P = { three: 0, phos: 1, gly: 2, oxi: 3, power: 4, workouts: 5, all: 6 } as const
@@ -37,8 +44,15 @@ export const front = (T: number, b: number) => at(T, FLOOD_BEAT[b], 0.05, 0.35, 
 export const flooding = (T: number, b: number) => pulse(T, FLOOD_BEAT[b] + 0.04, FLOOD_BEAT[b] + 0.5)
 /** Motes appear in a band only once it has flooded (D.4 River). */
 export const moteOn = (T: number, b: number) => at(T, FLOOD_BEAT[b], 0.28, 0.44)
-/** The neutral P0 fill rises under the envelope, recedes once the engines start to explain it, and gives way as the bands flood. */
-export const neutralOn = (T: number) => at(T, P.three, 0.36, 0.5) * (1 - 0.8 * at(T, P.phos, 0, 0.3)) * (1 - at(T, P.oxi, 0.3, 0.45))
+/**
+ * P0's three engines, dim and unnamed, rising behind the envelope pen (the
+ * caption: three engines, each dominating a different range). Each gives
+ * way to its own flood, so the stack always reaches the floor and every
+ * beat lights exactly one engine.
+ */
+export const ghostOn = (T: number, b: number) => (T < P.three + 0.36 ? 0 : 1 - at(T, FLOOD_BEAT[b], 0.3, 0.5))
+/** An engine is introduced once its flood has started (the HUD dims the others). */
+export const introduced = (T: number, b: number) => at(T, FLOOD_BEAT[b], 0.02, 0.3)
 
 /* ----------------------------- P4 / P5 lanes --------------------------- */
 
@@ -49,12 +63,12 @@ export const envOn = (T: number) => 1 - at(T, P.power, 0, 0.18) + at(T, P.workou
 export const laneLines = (T: number) => at(T, P.power, 0.3, 0.5) * (1 - at(T, P.workouts, 0, 0.18))
 export const laneNames = (T: number) => at(T, P.power, 0.45, 0.6) * (1 - at(T, P.workouts, 0, 0.14))
 export const orderClaim = (T: number) => at(T, P.power, 0.6, 0.76) * (1 - at(T, P.workouts, 0, 0.14))
-/** "Power output" yields to the phosphagen lane at the top-left while the stack is apart. */
-export const yTitle = (T: number) => construct(T) * Math.min(1, 1 - at(T, P.power, 0.02, 0.12) + at(T, P.workouts, 0.15, 0.3))
+/** "Power output" stays on through the lanes: the one power scale is the P4 claim (review r1). */
+export const yTitle = (T: number) => construct(T)
 
 /* -------------------------------- cursor ------------------------------- */
 
-const U15 = uOf(15)
+const U10 = uOf(10)
 const U30 = uOf(30)
 const U75 = uOf(75)
 const U600 = uOf(600)
@@ -83,8 +97,8 @@ function sweepP3(T: number): number {
 
 /** u of the cursor at story time T. */
 export function cursorU(T: number): number {
-  if (T < P.gly) return U15 * at(T, P.phos, 0.35, 0.9)
-  if (T < P.oxi) return U15 + (U30 - U15) * at(T, P.gly, 0.35, 0.9)
+  if (T < P.gly) return U10 * at(T, P.phos, 0.35, 0.9)
+  if (T < P.oxi) return U10 + (U30 - U10) * at(T, P.gly, 0.35, 0.9)
   if (T < P.power) return sweepP3(T)
   if (T < P.workouts + 0.4) return 1
   if (T < P.all) {
@@ -114,7 +128,6 @@ export const hudOn = (T: number) => at(T, P.phos, 0.3, 0.4) * (1 - at(T, P.power
 
 /** Pin k drops (snap, 70 ms stagger). */
 export const pinDrop = (T: number, k: number) => stagger(T, P.workouts + 0.25, P.workouts + 0.45, k, PINS.length, 0.45, ease.snap)
-export const pinsIn = (T: number) => (T >= P.workouts + 0.25 ? 1 : 0)
 /** Result chip of stop k: from its arrival to the next one (the last stays; it leaves as P6 starts). */
 export function resultOn(T: number, k: number): number {
   const a = at(T, P.workouts, STOP_AT[k] - 0.01, STOP_AT[k] + 0.02)
@@ -123,6 +136,8 @@ export function resultOn(T: number, k: number): number {
 }
 /** The P6 Fran chip. */
 export const franChip = (T: number) => at(T, P.all, 0.86, 0.94)
+/** The pin name cue (the result chip, or the Fran chip, replaces the name it describes). */
+export const pinNameOn = (T: number, k: number) => at(T, P.workouts, 0.34 + 0.012 * k, 0.44 + 0.012 * k) * Math.max(0.6, focus(T, P.workouts))
 
 /* --------------------------------- P6 ---------------------------------- */
 
@@ -130,6 +145,11 @@ export const franChip = (T: number) => at(T, P.all, 0.86, 0.94)
 export const bracketDraw = (T: number, k: number) => at(T, P.all, 0.1 + 0.03 * k, 0.36 + 0.03 * k, ease.draw)
 /** Each band pulses once, in sequence (x1.4 for 0.08). */
 export const bracketPulse = (T: number, k: number) => pulse(T, P.all + 0.42 + 0.09 * k, P.all + 0.5 + 0.09 * k)
+/** A pin lights with the bracket of the engine that leads its range (the workouts span all three). */
+export const pinLit = (T: number, k: number) => bracketPulse(T, PIN_SLOT[k])
+/** The bracket names replace the duration strings under the axis in P6 (the strings leave first, so the row never holds both). */
+export const bracketNames = (T: number) => at(T, P.all, 0.2, 0.34)
+export const legendOut = (T: number) => at(T, P.all, 0.08, 0.18)
 
 /* ------------------------- duration strips & strings -------------------- */
 

@@ -41,7 +41,7 @@ export const pathwaysStory: StoryDef = {
     {
       id: 'phosphagen',
       title: 'Phosphagen',
-      body: 'Stored ATP and creatine phosphate. Immediate, explosive power, but the store is tiny and largely spent within 10 to 15 seconds.',
+      body: 'Stored ATP and creatine phosphate. Explosive power, but the tiny store is largely spent within 10 to 15 seconds of all-out effort.',
       terms: { 'Stored ATP and creatine phosphate': 'phosphagen' },
       source: 'fitnessData.ENERGY_SYSTEMS[0].fuel + description',
       build: 5.0,
@@ -62,7 +62,7 @@ export const pathwaysStory: StoryDef = {
     {
       id: 'oxidative',
       title: 'Oxidative',
-      body: 'Carbohydrate and fat with oxygen. Slow to ramp but enormous in capacity, it overtakes the others past about 75 seconds.',
+      body: 'Carbohydrate and fat with oxygen. Slow to ramp, it overtakes the anaerobic systems past about 75 seconds.',
       terms: { 'Carbohydrate and fat with oxygen': 'oxidative' },
       source: 'fitnessData.ENERGY_SYSTEMS[2].fuel + description',
       build: 5.5,
@@ -73,7 +73,7 @@ export const pathwaysStory: StoryDef = {
     {
       id: 'power',
       title: 'Longest, not strongest',
-      body: 'Ribbon height is power output. Oxidative outlasts the others, it is not more powerful.',
+      body: 'Height is power output. Oxidative outlasts the others, it is not more powerful.',
       source: 'PathwaysModule.note',
       build: 5.5,
       // the signature (A.3): the river separates into three lanes on one power
@@ -85,8 +85,8 @@ export const pathwaysStory: StoryDef = {
     {
       id: 'workouts',
       title: 'The dominant engine changes',
-      body: 'Slide through effort duration and watch the dominant engine change.',
-      source: 'MODULES[2].blurb s2',
+      body: 'Example efforts on the curve. Watch the dominant engine change.',
+      source: 'MODULES[2].blurb s2 + PathwaysModule ControlHead "Example efforts" + MODULE_COPY.definition.body ("the curve")',
       build: 6.5,
       // the result chip and the benchmark names (H.40)
       sceneWords: 12,
@@ -95,10 +95,10 @@ export const pathwaysStory: StoryDef = {
     {
       id: 'all-three',
       title: 'Train all three',
-      body: 'Total fitness requires training all three. Favoring one or two, and over-training the oxidative engine, are the most common faults.',
+      body: 'Total fitness requires training all three. The two most common faults are favoring one or two and over-training oxidative.',
       source: 'MODULE_COPY.pathways.body s3 to s4',
       build: 5.0,
-      // the three bracket strings and the Fran chip (H.40)
+      // the three engine names under the brackets and the Fran chip (H.40)
       sceneWords: 12,
       cam: { L: CHART },
       impact: [0.7, 0.82],

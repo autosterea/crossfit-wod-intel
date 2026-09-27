@@ -2,21 +2,21 @@ import { useMemo, useRef } from 'react'
 import { PAL } from '../../fitnessData'
 import { Pen, PEN } from '../../story/kit/Pen'
 import { AreaStrips } from '../../story/kit/Fill'
-import { LightField, FLOW_COUNT, type LightFieldUniforms } from '../../story/kit/LightField'
 import { frameId, type ChartFrame } from '../../story/kit/chartFrame'
 import type { Tier } from '../../story/types'
-import { BAND_COLORS, H_MAX, N_U } from './pathwaysMath'
-import { arcAtU, arcTable, bandRange, bandTop, floodAt, stackTop, thAt } from './bands'
-import { FLOW_CURVES, type BandSource, type Fn } from './geom'
+import { BAND_COLORS, N_U } from './pathwaysMath'
+import { arcAtU, arcTable, bandRange, bandTop, floodAt, stackTop } from './bands'
+import type { BandSource, Fn } from './geom'
 
 /* =========================================================================
    The river's parts (DESIGN.md D.4), driven by plain state functions so the
    story layer (functions of T) and the explore layer (damped explore state)
    render the same elements:
-     BandFill   one luminous band (AreaStrips): stacked, flooding, or a lane
+     BandFill   one luminous band (AreaStrips): stacked, flooding, or a lane;
+                at a low `level` it is P0's dim, unnamed engine
      BandPen    the crisp top edge of a band (L10), drawn behind the flood front
-     River      the LightField FLOW motes: constant density, thinning with power
      Envelope   the chalk top of the stack (total power)
+   The motes are River.tsx.
    ========================================================================= */
 
 /** Per band (bottom to top) light multiplier: equal perceived brightness for rose, amber and blue. */
@@ -30,6 +30,9 @@ export function BandFill({
   opacity,
   rim,
   tier,
+  level = 1,
+  soft,
+  renderOrder,
 }: {
   frame: ChartFrame
   b: number
@@ -37,6 +40,11 @@ export function BandFill({
   opacity: Fn
   rim: Fn
   tier: Tier
+  /** light level: 1 is the flooded band, about 0.3 is P0's dim engine */
+  level?: number
+  /** width in u of the flood's soft zone (default FLOOD_W); small = a clean wipe */
+  soft?: number
+  renderOrder?: number
 }) {
   const colors = useMemo(() => [BAND_COLORS[b]], [b])
   const last = useRef({ fid: -1, m: -1, s: -1, f: -1 })
@@ -54,7 +62,7 @@ export function BandFill({
     L.f = f
     for (let i = 0; i < N_U; i++) {
       const u = i / (N_U - 1)
-      bandRange(b, i, m, s, floodAt(f, u), r)
+      bandRange(b, i, m, s, floodAt(f, u, soft), r)
       top[i * 3] = frame.x(u)
       top[i * 3 + 1] = frame.y(r[1])
       top[i * 3 + 2] = 0
@@ -65,7 +73,7 @@ export function BandFill({
   const low = tier === 'low'
   // the rose has about half the luminance of the amber and the blue, so it
   // carries more light to read as equally luminous (linear-light blending)
-  const k = LUMA_K[b]
+  const k = LUMA_K[b] * level
   return (
     <AreaStrips
       strips={1}
@@ -79,8 +87,8 @@ export function BandFill({
       additive={!low}
       rim={rim}
       rimWidth={0.14}
-      rimAlpha={low ? 0.7 : 0.5}
-      renderOrder={10 + b}
+      rimAlpha={(low ? 0.7 : 0.5) * Math.min(1, level * 1.5)}
+      renderOrder={renderOrder ?? 10 + b}
     />
   )
 }
@@ -162,76 +170,4 @@ export function Envelope({ frame, progress, opacity, dim, head }: { frame: Chart
     return a
   }, [frame])
   return <Pen points={pts} color={PAL.chalk} width={PEN.data} progress={progress} opacity={opacity} dim={dim} head={head} hot={head} renderOrder={45} />
-}
-
-/**
- * P0's faint neutral fill: it rises under the envelope behind the pen
- * (reveal = u of the pen head) and gives way to each band as it floods
- * (top-down for phosphagen and glycolytic, from the floor for oxidative).
- */
-export function NeutralFill({ frame, reveal, src, opacity }: { frame: ChartFrame; reveal: Fn; src: BandSource; opacity: Fn }) {
-  const colors = useMemo(() => [PAL.chalk], [])
-  const last = useRef({ fid: -1, r: -1, f0: -1, f1: -1, f2: -1 })
-  const write = (T: number, top: Float32Array, bottom: Float32Array): boolean => {
-    const rv = reveal(T)
-    const f0 = src.front(T, 0)
-    const f1 = src.front(T, 1)
-    const f2 = src.front(T, 2)
-    const fid = frameId(frame)
-    const L = last.current
-    if (L.fid === fid && L.r === rv && L.f0 === f0 && L.f1 === f1 && L.f2 === f2) return false
-    L.fid = fid
-    L.r = rv
-    L.f0 = f0
-    L.f1 = f1
-    L.f2 = f2
-    for (let i = 0; i < N_U; i++) {
-      const u = i / (N_U - 1)
-      const kr = floodAt(rv, u)
-      const tO = thAt(0, i, 0)
-      const tG = thAt(1, i, 0)
-      const tP = thAt(2, i, 0)
-      const lo = tO * floodAt(f0, u)
-      const hi = Math.max(lo, (tO + tG + tP - tP * floodAt(f2, u) - tG * floodAt(f1, u)) * kr)
-      top[i * 3] = frame.x(u)
-      top[i * 3 + 1] = frame.y(hi)
-      top[i * 3 + 2] = -0.02
-      bottom[i] = frame.y(Math.min(lo, hi))
-    }
-    return true
-  }
-  return <AreaStrips strips={1} points={N_U} colors={colors} write={write} opacity={opacity} lo={0.004} hi={0.032} gamma={1.1} renderOrder={9} />
-}
-
-/** The river: constant-density motes in the three band colours (L9), flowing left to right on the ambient clock. */
-export function River({
-  frame,
-  tier,
-  uniforms,
-  liveCurves,
-}: {
-  frame: ChartFrame
-  tier: Tier
-  uniforms: (T: number, A: number) => LightFieldUniforms
-  liveCurves?: () => { a: Float32Array; b: Float32Array; c?: Float32Array } | null
-}) {
-  const [a, b, c] = FLOW_CURVES
-  const count = FLOW_COUNT[tier]
-  if (count <= 0) return null
-  return (
-    <LightField
-      frame={frame}
-      count={count}
-      curveA={a}
-      curveB={b}
-      curveC={c}
-      hMax={H_MAX}
-      bandColors={BAND_COLORS}
-      uniforms={uniforms}
-      liveCurves={liveCurves}
-      sizePx={3}
-      z={0.01}
-      renderOrder={40}
-    />
-  )
 }

@@ -1,17 +1,19 @@
 import { useEffect, useMemo, useRef } from 'react'
+import { useThree } from '@react-three/fiber'
 import { ENERGY_SYSTEMS, PAL } from '../../fitnessData'
 import { fmtDuration } from '../../lessonMath'
 import { at, focus } from '../../story/cue'
 import { useStoryStore } from '../../story/store'
 import { useBeat } from '../../story/useBeat'
 import { onFrame, clock } from '../../story/clock'
+import { useSafeFrame } from '../../story/useSafeFrame'
 import { useChapterChart, type ChartFrame } from '../../story/kit/chartFrame'
 import { Pen, PenBatch, PEN } from '../../story/kit/Pen'
 import { Nodes } from '../../story/kit/Nodes'
 import { Glows } from '../../story/kit/Halo'
 import { impactK } from '../../story/kit/impact'
-import { setLabelText, useLabels, useWorldObstacle, type WorldObstacle } from '../../story/labels/useLabel'
-import type { LabelSpec, Layout, Tier, V3 } from '../../story/types'
+import { bumpObstacles, setLabelText, useLabels, useWorldObstacle, type WorldObstacle } from '../../story/labels/useLabel'
+import type { LabelSpec, Layout, Rect, Tier, V3 } from '../../story/types'
 import {
   BAND_COLORS,
   COLOR,
@@ -20,20 +22,38 @@ import {
   NAME,
   PEAK_ORDER_TEXT,
   PINS,
+  POWER_MAX,
   T_MIN,
   calloutKey,
   calloutText,
   contribInto,
   dominantAtT,
   dominantOf,
+  pinIndex,
   uOf,
   type Shares,
 } from './pathwaysMath'
-import { bandTopAt, stackTopAt, uAtArc, FLOOD_W } from './bands'
+import { bandTopAt, stackTopAt, uAtArc } from './bands'
 import { Brackets, Construction, DurationStrips, MarathonChevron, type ConstructionVis } from './chart'
-import { AXIS_ORDER, BAND_OF_AXIS, LIGHT, envelopeArc, makeFlowState, segLine, setFlowMorph, type BandSource } from './geom'
-import { BandFill, BandPen, Envelope, NeutralFill, River } from './elements'
-import { LANE_NAME_U, ROW, TICKS, bandStringX, narrowChart, pxPerUnit, underAxis, type UnderAxis } from './layout'
+import { AXIS_COLOR, AXIS_ORDER, BAND_OF_AXIS, LIGHT, envelopeArc, makeFlowState, segLine, setFlowMorph, type BandSource } from './geom'
+import { BandFill, BandPen, Envelope } from './elements'
+import { River } from './River'
+import { LANE_NAME_U, ROW, TICKS, bracketNameX, legendX, narrowChart, pxPerUnit, underAxis, type UnderAxis } from './layout'
+import {
+  PxMap,
+  addBlocker,
+  addHud,
+  blockBox,
+  boundsInto,
+  newBlockers,
+  newCluster,
+  newFlag,
+  putSig,
+  sizeInto,
+  solveCluster,
+  solveFlag,
+  type Floor,
+} from './annot'
 import {
   FLOOD_BEAT,
   FRAN_PIN,
@@ -41,6 +61,7 @@ import {
   STOP_PIN,
   axesDraw,
   bracketDraw,
+  bracketNames,
   bracketPulse,
   construct,
   curCallout,
@@ -53,13 +74,16 @@ import {
   flooding,
   franChip,
   front,
+  ghostOn,
   lanesM,
   laneLines,
   laneNames,
+  legendOut,
   moteOn,
-  neutralOn,
   orderClaim,
   pinDrop,
+  pinLit,
+  pinNameOn,
   resultOn,
   stripOn,
   ticksDraw,
@@ -71,16 +95,17 @@ import ExploreScene from './ExploreScene'
    03 ENERGY SYSTEMS, "Three engines, one river" (DESIGN.md D.4). Seven
    beats, every property a pure function of story time T (L5):
      P0 a hot pen draws the axes, then the chalk envelope: the most power you
-        can hold falls as the effort gets longer;
-     P1 to P3 the three engines flood in as luminous bands under that line,
-        each one with its own duration string under the axis, while a cursor
-        reads the share of supply at the durations each engine rules;
+        can hold falls as the effort gets longer; three dim, unnamed engines
+        glow under it, each strongest over a different stretch of time;
+     P1 to P3 each engine in turn floods to full light with its river of
+        motes, while a cursor reads the share of supply as it sweeps the
+        durations that engine rules;
      P4 the stack separates into three lanes on ONE power scale (signature):
         the rose spike is the tallest, the blue lane the lowest and longest;
      P5 back to the stack; real benchmarks drop onto the curve as pins and
-        the cursor visits four of them;
-     P6 three duration brackets, each band pulsing with its bracket, and the
-        cursor parks at Fran, which draws on all three.
+        the cursor visits four of them, a photo-finish chip at each;
+     P6 each engine's lead range is bracketed and lights its pins in turn,
+        and the cursor parks at Fran, which draws on all three.
    Prewarm (README): the whole story and the explore layer are mounted at
    load and hidden by T or mode, so no shader links mid-story.
    ========================================================================= */
@@ -104,6 +129,10 @@ const BAND_KEY = ['oxidative', 'glycolytic', 'phosphagen'] as const
 
 /** The dominant engine's colour for a pin (ENERGY_BENCHMARKS[].dominant). */
 const PIN_COLORS = PINS.map((p) => COLOR[p.dominant])
+const PIN_U = PINS.map((p) => uOf(p.seconds))
+/** The benchmark cluster (D.4): Fran, 1 Mile Run, 2k Row, in axis order. */
+const CLUSTER = [pinIndex('Fran'), pinIndex('1 Mile Run'), pinIndex('2k Row')]
+const IN_CLUSTER = PINS.map((_, k) => CLUSTER.includes(k))
 
 /* ------------------------------ helpers -------------------------------- */
 
@@ -112,13 +141,203 @@ const envV = (u: number) => stackTopAt(u, 0)
 /** v of band b's top at u for lanes morph m. */
 const topV = (b: number, u: number, m: number) => bandTopAt(b, u, m, 0)
 
-/* ------------------------------ cursor ---------------------------------- */
+/* ------------------------------ chips ----------------------------------- */
 
 const DOM_ORDER = ['phosphagen', 'glycolytic', 'oxidative'] as const
 const DOM_COLORS = DOM_ORDER.map((k) => COLOR[k])
 const CUR_IDS = DOM_ORDER.map((k) => `pw-cur-${k}`)
+/** P5 result chips: name, duration and the dominant engine (D.4). */
+const RES_TEXT = STOP_PIN.map((k) => (k >= 0 ? `${PINS[k].name} - ${fmtDuration(PINS[k].seconds)} - ${NAME[PINS[k].dominant]}` : ''))
+const RES_IDS = STOP_PIN.map((_, s) => `pw-res-${s}`)
+const PIN_IDS = PINS.map((_, k) => `pw-pin-${k}`)
+const FRAN_TEXT = FRAN_PIN >= 0 ? `${PINS[FRAN_PIN].name} - ${fmtDuration(PINS[FRAN_PIN].seconds)}` : ''
+/** Marathon: never plotted on the axis (F.7); its chip carries its own duration so it reads as off the chart by design. */
+const MARA_TEXT = MARATHON ? `${MARATHON.name} - ${fmtDuration(MARATHON.seconds)}` : ''
+/**
+ * The Marathon chip: with its chevron in P3, where the axis runs out; it
+ * steps aside as the lanes open and does not return (P5 and P6 read the
+ * eight pins; the chevron keeps saying the axis goes on).
+ */
+const maraOn = (T: number) => at(T, P.oxi, 0.88, 0.96) * Math.max(0.55, focus(T, P.oxi)) * (1 - at(T, P.power, 0, 0.15))
+/** The chevron tip sits this far (world units) past the axis end (chart.tsx MarathonChevron). */
+const CHEVRON_DX = 0.32
 
-function Cursor({ frame, ppu }: { frame: ChartFrame; ppu: number }) {
+/** Cue of the chip describing pin k (the result chip at its stop, the P6 Fran chip). */
+function chipOf(T: number, k: number): number {
+  const s = STOP_PIN.indexOf(k)
+  const r = s >= 0 ? resultOn(T, s) : 0
+  return k === FRAN_PIN ? Math.max(r, franChip(T)) : r
+}
+/** Pin k's name: on with the pins, and gone as soon as the chip that describes it starts. */
+const pinName = (T: number, k: number) => pinNameOn(T, k) * (1 - Math.min(1, 4 * chipOf(T, k)))
+
+/* ---------------------------- annotation ------------------------------- */
+
+/**
+ * The per-frame layout of the cursor chip, the Marathon chip and the
+ * cluster names (annot.ts), between the camera (-90) and the labels (-80).
+ */
+function useStoryAnnot(frame: ChartFrame) {
+  const camera = useThree((s) => s.camera)
+  const st = useMemo(
+    () => ({
+      pxm: new PxMap(),
+      B: { x: 0, y: 0, w: 0, h: 0 } as Rect,
+      bl: newBlockers(32),
+      cur: newFlag(),
+      curCue: 0,
+      mara: newFlag(),
+      maraCue: 0,
+      clu: newCluster(),
+      cluCue: 0,
+      sz: { w: 0, h: 0 },
+      cx: [0, 0, 0],
+      cy: [0, 0, 0],
+      cw: [0, 0, 0],
+      ch: [0, 0, 0],
+      show: [false, false, false],
+      sig: new Float64Array(24),
+      ver: 0,
+    }),
+    [],
+  )
+  // the envelope in stage px: the surface every chip keeps clear of
+  const floor = useMemo<Floor>(
+    () => (sx) => {
+      const u = Math.max(0, Math.min(1, (st.pxm.wx(sx) - frame.x0) / frame.FW))
+      return st.pxm.py(frame.y(envV(u)))
+    },
+    [st, frame],
+  )
+  useSafeFrame(
+    'pathways annot',
+    (T) => {
+      if (useStoryStore.getState().mode !== 'story') return
+      const { pxm, B, bl } = st
+      pxm.update(camera, frame)
+      boundsInto(B)
+      const pinsOn = T >= P.workouts + 0.3 && lanesM(T) < 0.5
+      // the cursor chip: whichever of the callouts and result chips is up
+      let cue = 0
+      let id = ''
+      let text = ''
+      const dom = dominantAtT(cursorT(T))
+      for (let i = 0; i < 3; i++) {
+        const c = dom === DOM_ORDER[i] ? curCallout(T) : 0
+        if (c > cue) {
+          cue = c
+          id = CUR_IDS[i]
+          text = '00 SEC - GLYCOLYTIC 00%'
+        }
+      }
+      for (let s = 0; s < STOP_PIN.length; s++) {
+        const c = resultOn(T, s)
+        if (c > cue) {
+          cue = c
+          id = RES_IDS[s]
+          text = RES_TEXT[s]
+        }
+      }
+      if (franChip(T) > cue) {
+        cue = franChip(T)
+        id = 'pw-res-fran'
+        text = FRAN_TEXT
+      }
+      st.curCue = cue
+      const u = cursorU(T)
+      const nx = pxm.px(frame.x(u))
+      const ny = pxm.py(frame.y(envV(u)))
+      const tx = frame.x(1) + CHEVRON_DX
+      const ty = frame.y(0)
+      const tipX = pxm.px(tx)
+      const axisX = pxm.px(frame.x(0))
+
+      // the cluster names (P5, P6)
+      bl.n = 0
+      addHud(bl)
+      if (pinsOn) for (let k = 0; k < PINS.length; k++) if (!IN_CLUSTER[k]) addBlocker(bl, pxm.px(frame.x(PIN_U[k])) - 6, pxm.py(frame.y(envV(PIN_U[k]))) - 6, 12, 12)
+      st.cluCue = 0
+      if (pinsOn) {
+        for (let j = 0; j < 3; j++) {
+          const k = CLUSTER[j]
+          const c = k >= 0 ? pinName(T, k) : 0
+          st.cluCue = Math.max(st.cluCue, c)
+          st.show[j] = c > 0.01
+          st.cx[j] = pxm.px(frame.x(PIN_U[k]))
+          st.cy[j] = pxm.py(frame.y(envV(PIN_U[k])))
+          sizeInto(PIN_IDS[k], PINS[k].name, 'name', st.sz)
+          st.cw[j] = st.sz.w
+          st.ch[j] = st.sz.h
+        }
+        const pole = cue > 0.01 && T >= P.workouts
+        solveCluster(st.clu, st.cx, st.cy, st.cw, st.ch, st.show, floor, bl, B, pole ? nx : null, ny)
+      } else st.clu.layout = -1
+
+      // the cursor chip, over the cluster names and every pin
+      bl.n = 0
+      addHud(bl)
+      if (pinsOn) {
+        for (let k = 0; k < PINS.length; k++) {
+          const x = pxm.px(frame.x(PIN_U[k]))
+          const y = pxm.py(frame.y(envV(PIN_U[k])))
+          if (Math.abs(x - nx) > 1 || Math.abs(y - ny) > 1) addBlocker(bl, x - 8, y - 8, 16, 16)
+        }
+        if (st.clu.layout >= 0 || st.cluCue > 0)
+          for (let j = 0; j < 3; j++) {
+            const c = st.clu
+            blockBox(bl, c.r[j])
+            // and its leader: a chip never sits across one
+            if (c.r[j].on) addBlocker(bl, Math.min(c.px[j], c.ex[j]) - 2, Math.min(c.py[j], c.ey[j]), Math.abs(c.px[j] - c.ex[j]) + 4, Math.abs(c.py[j] - c.ey[j]))
+          }
+      }
+      const maraCue = maraOn(T)
+      st.maraCue = maraCue
+      if (cue > 0.001) {
+        sizeInto(id, text, 'callout', st.sz)
+        solveFlag(st.cur, nx, ny, st.sz.w, st.sz.h, floor, axisX + 6, maraCue > 0.001 ? tipX - 10 : B.x + B.w, bl, B)
+      } else st.cur.on = false
+
+      // the Marathon chip, right-aligned over its chevron, clear of the cursor chip and its pole
+      if (maraCue > 0.001) {
+        if (cue > 0.001) {
+          const f = st.cur
+          addBlocker(bl, f.x - 3, f.y - 3, f.w + 6, f.h + 6)
+          addBlocker(bl, Math.min(f.nx, f.cx) - 4, Math.min(f.cy, f.ny), Math.abs(f.nx - f.cx) + 8, Math.abs(f.ny - f.cy))
+        }
+        sizeInto('pw-mara', MARA_TEXT, 'callout', st.sz)
+        solveFlag(st.mara, tipX, pxm.py(ty), st.sz.w, st.sz.h, floor, axisX + 6, B.x + B.w, bl, B)
+      } else st.mara.on = false
+
+      // re-place the labels when the layout moved without T moving (widths measured, the HUD measured)
+      const s = st.sig
+      // (the node too: a pill clamped at the right edge stays put while its pole follows the cursor)
+      let moved = putSig(s, 0, st.cur.x)
+      moved = putSig(s, 1, st.cur.y) || moved
+      moved = putSig(s, 2, st.cur.nx) || moved
+      moved = putSig(s, 3, st.cur.ny) || moved
+      moved = putSig(s, 4, st.mara.x) || moved
+      moved = putSig(s, 5, st.mara.y) || moved
+      moved = putSig(s, 6, st.mara.nx) || moved
+      moved = putSig(s, 7, st.clu.layout) || moved
+      for (let j = 0; j < 3; j++) {
+        moved = putSig(s, 8 + 3 * j, st.clu.r[j].x) || moved
+        moved = putSig(s, 9 + 3 * j, st.clu.r[j].y) || moved
+        moved = putSig(s, 10 + 3 * j, st.clu.py[j]) || moved
+      }
+      if (moved) {
+        st.ver++
+        bumpObstacles()
+      }
+    },
+    { priority: -85 },
+  )
+  return st
+}
+type StoryAnnot = ReturnType<typeof useStoryAnnot>
+
+/* ------------------------------ cursor ---------------------------------- */
+
+function Cursor({ frame, ppu, an }: { frame: ChartFrame; ppu: number; an: StoryAnnot }) {
   const pts = useMemo(() => new Float32Array(6), [])
   const last = useRef<{ u: number; f: ChartFrame | null }>({ u: -1, f: null })
   const update = (T: number, p: Float32Array): boolean => {
@@ -135,6 +354,29 @@ function Cursor({ frame, ppu }: { frame: ChartFrame; ppu: number }) {
     p[5] = 0.05
     return true
   }
+  // the connector from the node to its chip (a pole when the chip is over the node)
+  const link = useMemo(() => new Float32Array(6), [])
+  const lastLink = useRef(-1)
+  const writeLink = (_T: number, p: Float32Array): boolean => {
+    if (lastLink.current === an.ver) return false
+    lastLink.current = an.ver
+    const f = an.cur
+    const { pxm } = an
+    const len = Math.hypot(f.cx - f.nx, f.cy - f.ny)
+    if (len < 5) {
+      p.fill(AWAY)
+      return true
+    }
+    // start just off the node (its glow), end on the pill's edge
+    const k = Math.min(0.45, 5 / len)
+    p[0] = pxm.wx(f.nx + (f.cx - f.nx) * k)
+    p[1] = pxm.wy(f.ny + (f.cy - f.ny) * k)
+    p[2] = 0.05
+    p[3] = pxm.wx(f.cx)
+    p[4] = pxm.wy(f.cy)
+    p[5] = 0.05
+    return true
+  }
   // 7 px node (D.4), coloured by the engine that dominates under the cursor
   const nodeScale = 3.5 / ppu / 0.1
   return (
@@ -148,6 +390,7 @@ function Cursor({ frame, ppu }: { frame: ChartFrame; ppu: number }) {
         gain={(T) => 1 + 0.8 * cursorFlash(T)}
         renderOrder={46}
       />
+      <Pen points={link} color={PAL.chalk} width={PEN.grid} update={writeLink} opacity={() => an.curCue} dim={() => 0.62} renderOrder={46} />
       <Nodes
         count={3}
         radius={0.1}
@@ -184,13 +427,12 @@ function Cursor({ frame, ppu }: { frame: ChartFrame; ppu: number }) {
 
 /* ------------------------------- pins ----------------------------------- */
 
-function Pins({ frame, ppu }: { frame: ChartFrame; ppu: number }) {
-  const PU = useMemo(() => PINS.map((p) => uOf(p.seconds)), [])
+function Pins({ frame, ppu, an }: { frame: ChartFrame; ppu: number; an: StoryAnnot }) {
   const segs = useMemo(() => new Float32Array(PINS.length * 6).fill(AWAY), [])
   const last = useRef<{ T: number; fid: ChartFrame | null }>({ T: -1, fid: null })
   const headY = (T: number, k: number) => {
     const a = pinDrop(T, k)
-    return frame.y(envV(PU[k])) + (1 - a) * DROP
+    return frame.y(envV(PIN_U[k])) + (1 - a) * DROP
   }
   const write = (T: number, s: Float32Array): boolean => {
     if (T === last.current.T && frame === last.current.fid) return false
@@ -203,7 +445,7 @@ function Pins({ frame, ppu }: { frame: ChartFrame; ppu: number }) {
         s.fill(AWAY, o, o + 6)
         continue
       }
-      const x = frame.x(PU[k])
+      const x = frame.x(PIN_U[k])
       const y0 = frame.y(0)
       const y1 = headY(T, k)
       // the stem grows up from the axis as the head falls onto the curve
@@ -223,9 +465,35 @@ function Pins({ frame, ppu }: { frame: ChartFrame; ppu: number }) {
     const a = pinDrop(T, k)
     return a > 0.85 && a < 1.2 ? Math.max(0, 1 - Math.abs(a - 1) * 6) : 0
   }
+  // the cluster names' leaders (annot.ts): pin head to name
+  const leads = useMemo(() => new Float32Array(18).fill(AWAY), [])
+  const lastLead = useRef(-1)
+  const writeLeads = (_T: number, s: Float32Array): boolean => {
+    if (lastLead.current === an.ver) return false
+    lastLead.current = an.ver
+    const c = an.clu
+    const { pxm } = an
+    for (let j = 0; j < 3; j++) {
+      const o = j * 6
+      const len = Math.hypot(c.ex[j] - c.px[j], c.ey[j] - c.py[j])
+      if (!c.r[j].on || len < 7) {
+        s.fill(AWAY, o, o + 6)
+        continue
+      }
+      const k = Math.min(0.45, 5 / len)
+      s[o] = pxm.wx(c.px[j] + (c.ex[j] - c.px[j]) * k)
+      s[o + 1] = pxm.wy(c.py[j] + (c.ey[j] - c.py[j]) * k)
+      s[o + 2] = 0.04
+      s[o + 3] = pxm.wx(c.ex[j])
+      s[o + 4] = pxm.wy(c.ey[j])
+      s[o + 5] = 0.04
+    }
+    return true
+  }
   return (
     <>
       <PenBatch segments={segs} color={PAL.chalk} width={PEN.grid} update={write} opacity={(T) => 0.36 * vis(T)} renderOrder={33} />
+      <PenBatch segments={leads} color={PAL.chalk} width={PEN.grid} update={writeLeads} opacity={() => an.cluCue} dim={() => 0.62} renderOrder={46} />
       <Nodes
         count={PINS.length}
         radius={0.1}
@@ -236,22 +504,36 @@ function Pins({ frame, ppu }: { frame: ChartFrame; ppu: number }) {
         emissiveIntensity={0.55}
         place={(T, k, out) => {
           const a = pinDrop(T, k)
-          out[0] = frame.x(PU[k])
+          out[0] = frame.x(PIN_U[k])
           out[1] = headY(T, k)
           out[2] = 0.06
-          return a > 0.02 ? headScale : 0
+          // P6: a pin swells as its engine's bracket lights it
+          return a > 0.02 ? headScale * (1 + 0.45 * pinLit(T, k)) : 0
         }}
       />
       <Glows
         count={PINS.length}
-        sizePx={24}
+        sizePx={26}
         colors={PIN_COLORS}
-        gain={1.3}
+        gain={1.5}
         place={(T, k, out) => {
-          out[0] = frame.x(PU[k])
-          out[1] = frame.y(envV(PU[k]))
+          out[0] = frame.x(PIN_U[k])
+          out[1] = frame.y(envV(PIN_U[k]))
           out[2] = 0.09
           return land(T, k) * vis(T)
+        }}
+      />
+      {/* P6: each engine's bracket lights the familiar workouts it leads: they span all three */}
+      <Glows
+        count={PINS.length}
+        sizePx={46}
+        colors={PIN_COLORS}
+        gain={2.4}
+        place={(T, k, out) => {
+          out[0] = frame.x(PIN_U[k])
+          out[1] = frame.y(envV(PIN_U[k]))
+          out[2] = 0.09
+          return pinLit(T, k) * vis(T)
         }}
       />
     </>
@@ -273,16 +555,43 @@ function LaneLines({ frame }: { frame: ChartFrame }) {
   return <PenBatch segments={segs} color={PAL.chalk} width={PEN.grid} opacity={laneLines} dim={() => 0.4} renderOrder={29} />
 }
 
+/** The Marathon chip's leader: from the chevron tip up to its chip. */
+function MaraLink({ an }: { an: StoryAnnot }) {
+  const link = useMemo(() => new Float32Array(6), [])
+  const last = useRef(-1)
+  const write = (_T: number, p: Float32Array): boolean => {
+    if (last.current === an.ver) return false
+    last.current = an.ver
+    const f = an.mara
+    const len = Math.hypot(f.cx - f.nx, f.cy - f.ny)
+    if (len < 6) {
+      p.fill(AWAY)
+      return true
+    }
+    const k = Math.min(0.45, 4 / len)
+    p[0] = an.pxm.wx(f.nx + (f.cx - f.nx) * k)
+    p[1] = an.pxm.wy(f.ny + (f.cy - f.ny) * k)
+    p[2] = 0.05
+    p[3] = an.pxm.wx(f.cx)
+    p[4] = an.pxm.wy(f.cy)
+    p[5] = 0.05
+    return true
+  }
+  return <Pen points={link} color={PAL.oxidative} width={PEN.grid} update={write} opacity={() => an.maraCue} dim={() => 0.7} renderOrder={46} />
+}
+
 /* ------------------------------- labels --------------------------------- */
 
-function useStoryLabels(frame: ChartFrame, layout: Layout, ua: UnderAxis) {
+function useStoryLabels(frame: ChartFrame, layout: Layout, ua: UnderAxis, an: StoryAnnot) {
   const narrow = narrowChart(layout)
   const specs = useMemo<LabelSpec[]>(() => {
     const x = frame.x
     const y = frame.y
     const yRow = y(0) - ua.strip
-    // the duration strings, packed so they never touch on a 360 px phone
-    const sx = bandStringX(frame)
+    const lx = legendX(frame)
+    const bx = bracketNameX(frame)
+    /** a solver-placed pill: anchored at its bottom-left corner, NE with no gap, so the placer puts it exactly there */
+    const at0 = (b: { x: number; y: number; h: number }) => pt(an.pxm.wx(b.x), an.pxm.wy(b.y + b.h), 0.08)
     const out: LabelSpec[] = [
       {
         id: 'pw-ax-y',
@@ -321,7 +630,7 @@ function useStoryLabels(frame: ChartFrame, layout: Layout, ua: UnderAxis) {
         cue: (T) => at(T, P.three, 0.16 + 0.025 * j, 0.3 + 0.025 * j),
       })
     })
-    // the duration strings (ENERGY_SYSTEMS[].duration): each lands with its engine
+    // the duration strings (ENERGY_SYSTEMS[].duration): a key row, each landing with its engine
     AXIS_ORDER.forEach((key, k) => {
       const sys = ENERGY_SYSTEMS.find((s) => s.key === key)
       if (!sys) return
@@ -330,12 +639,25 @@ function useStoryLabels(frame: ChartFrame, layout: Layout, ua: UnderAxis) {
         text: sys.duration,
         tone: 'name',
         color: sys.color,
-        anchor: [sx[k], yRow, 0],
+        anchor: [lx[k], yRow, 0],
         prefer: 'S',
         only: ['S'],
         gapPx: ROW.band,
         priority: 74,
-        cue: (T) => stripOn(T, k) * Math.max(0.55, focus(T, FLOOD_BEAT[BAND_OF_AXIS[k]])),
+        cue: (T) => stripOn(T, k) * Math.max(0.55, focus(T, FLOOD_BEAT[BAND_OF_AXIS[k]])) * (1 - legendOut(T)),
+      })
+      // P6: the engine names under their lead brackets replace the key
+      out.push({
+        id: `pw-brk-${k}`,
+        text: NAME[key],
+        tone: 'name',
+        color: AXIS_COLOR[k],
+        anchor: [bx[k], yRow, 0],
+        prefer: 'S',
+        only: ['S'],
+        gapPx: ROW.band,
+        priority: 75,
+        cue: bracketNames,
       })
     })
     // P1 to P3: the cursor callout, one per engine colour (the colour IS the dominant engine)
@@ -347,41 +669,38 @@ function useStoryLabels(frame: ChartFrame, layout: Layout, ua: UnderAxis) {
         tone: 'callout',
         color: COLOR[key],
         minChars: 24,
-        anchor: (T) => {
-          const u = cursorU(T)
-          return pt(x(u), y(envV(u)), 0.08)
-        },
+        anchor: () => at0(an.cur),
         prefer: 'NE',
-        gapPx: 14,
+        only: ['NE'],
+        gapPx: 0,
         leader: true,
-        priority: 92,
+        required: true,
+        priority: 96,
         cue: (T) => (dominantAtT(cursorT(T)) === key ? curCallout(T) : 0),
       })
     })
-    // P3 on: the Marathon edge chip at the river's end, where the axis runs
-    // out (F.7: never plotted on it); it steps aside while the lanes are open
+    // P3 on: the Marathon edge chip over its chevron (F.7: never plotted on the axis)
     if (MARATHON)
       out.push({
         id: 'pw-mara',
-        text: MARATHON.name,
+        text: MARA_TEXT,
         tone: 'callout',
         color: COLOR[MARATHON.dominant],
-        anchor: [x(1), y(envV(1)), 0],
-        prefer: 'NW',
-        only: ['NW', 'N'],
-        gapPx: 14,
-        priority: 70,
+        anchor: () => at0(an.mara),
+        prefer: 'NE',
+        only: ['NE'],
+        gapPx: 0,
         leader: true,
-        cue: (T) => at(T, P.oxi, 0.88, 0.96) * Math.max(0.55, focus(T, P.oxi)) * (1 - lanesM(T)),
+        priority: 88,
+        cue: maraOn,
       })
     // P4: each lane named on its own lane (one shared power scale); the
     // phosphagen name sits on its falling spike, clear of the top-left corner
     for (let b = 0; b < 3; b++) {
-      const key = (['oxidative', 'glycolytic', 'phosphagen'] as const)[b]
       const u = LANE_NAME_U[b]
       out.push({
         id: `pw-lane-${b}`,
-        text: NAME[key],
+        text: NAME[BAND_KEY[b]],
         tone: 'callout',
         color: BAND_COLORS[b],
         required: true,
@@ -420,66 +739,81 @@ function useStoryLabels(frame: ChartFrame, layout: Layout, ua: UnderAxis) {
         cue: orderClaim,
       },
     )
-    // P5: the benchmark pins' names (the result chip replaces the name it describes)
+    // P5: the benchmark pins' names (the chip replaces the name it describes);
+    // the cluster names are laid out as a group (annot.ts), the rest by the placer
     PINS.forEach((p, k) => {
-      const u = uOf(p.seconds)
-      const stop = STOP_PIN.indexOf(k)
-      out.push({
-        id: `pw-pin-${k}`,
-        text: p.name,
-        tone: 'name',
-        color: COLOR[p.dominant],
-        dot: false,
-        anchor: [x(u), y(envV(u)), 0.06],
-        prefer: u > 0.75 ? 'NW' : u < 0.1 ? 'NE' : 'N',
-        gapPx: 9,
-        leader: true,
-        priority: 64 - k * 0.1,
-        cue: (T) => {
-          const a = at(T, P.workouts, 0.34 + 0.012 * k, 0.44 + 0.012 * k)
-          const chip = stop >= 0 ? resultOn(T, stop) : 0
-          const fran = k === FRAN_PIN ? franChip(T) : 0
-          return a * Math.max(0.6, focus(T, P.workouts)) * (1 - chip) * (1 - fran)
-        },
-      })
+      const u = PIN_U[k]
+      const j = CLUSTER.indexOf(k)
+      if (j >= 0)
+        out.push({
+          id: `pw-pin-${k}`,
+          text: p.name,
+          tone: 'name',
+          color: COLOR[p.dominant],
+          dot: false,
+          anchor: () => {
+            const r = an.clu.r[j]
+            return pt(an.pxm.wx(r.x), an.pxm.wy(r.y + r.h), 0.06)
+          },
+          prefer: 'NE',
+          only: ['NE'],
+          gapPx: 0,
+          leader: true,
+          priority: 93 - j * 0.1,
+          cue: (T) => pinName(T, k),
+        })
+      else
+        out.push({
+          id: `pw-pin-${k}`,
+          text: p.name,
+          tone: 'name',
+          color: COLOR[p.dominant],
+          dot: false,
+          anchor: [x(u), y(envV(u)), 0.06],
+          prefer: u > 0.75 ? 'N' : u < 0.1 ? 'NE' : 'NE',
+          gapPx: 9,
+          leader: true,
+          priority: 64 - k * 0.1,
+          cue: (T) => pinName(T, k),
+        })
     })
-    // P5 result chips: name, duration and the dominant engine, in its colour
+    // P5 result chips and the P6 Fran chip: the cursor's chip (annot.ts)
     STOP_PIN.forEach((k, s) => {
       if (k < 0) return
       const p = PINS[k]
-      const u = uOf(p.seconds)
       out.push({
         id: `pw-res-${s}`,
-        text: `${p.name} - ${fmtDuration(p.seconds)} - ${NAME[p.dominant]}`,
+        text: RES_TEXT[s],
         tone: 'callout',
         color: COLOR[p.dominant],
-        anchor: [x(u), y(envV(u)), 0.08],
-        prefer: u > 0.6 ? 'NW' : 'NE',
-        gapPx: 16,
+        anchor: () => at0(an.cur),
+        prefer: 'NE',
+        only: ['NE'],
+        gapPx: 0,
         leader: true,
-        priority: 94,
+        required: true,
+        priority: 96,
         cue: (T) => resultOn(T, s),
       })
     })
-    if (FRAN_PIN >= 0) {
-      const p = PINS[FRAN_PIN]
-      const u = uOf(p.seconds)
+    if (FRAN_PIN >= 0)
       out.push({
         id: 'pw-res-fran',
-        text: `${p.name} - ${fmtDuration(p.seconds)}`,
+        text: FRAN_TEXT,
         tone: 'callout',
         color: PAL.chalk,
         swatches: DOM_COLORS,
-        anchor: [x(u), y(envV(u)), 0.08],
+        anchor: () => at0(an.cur),
         prefer: 'NE',
-        gapPx: 16,
+        only: ['NE'],
+        gapPx: 0,
         leader: true,
-        priority: 94,
+        required: true,
+        priority: 96,
         cue: franChip,
       })
-    }
     return out
-  }, [frame, narrow, ua])
+  }, [frame, narrow, ua, an])
   useLabels(specs)
 
   // the cursor callout text: fmtDuration + dominant name + share (D.4), computed
@@ -504,8 +838,8 @@ function useStoryLabels(frame: ChartFrame, layout: Layout, ua: UnderAxis) {
   }, [])
 }
 
-/** Data marks the labels must not cover: the envelope (or the lane tops), the pins, the cursor node, the power axis. */
-function useDataObstacles(frame: ChartFrame) {
+/** Data marks the labels must not cover: the envelope (or the lane tops), the pins, the cursor node, the power axis, and the leaders. */
+function useDataObstacles(frame: ChartFrame, an: StoryAnnot) {
   const S = 36
   const curves = useMemo<WorldObstacle>(
     () => ({
@@ -544,9 +878,8 @@ function useDataObstacles(frame: ChartFrame) {
         let n = 0
         if (T >= P.workouts + 0.3 && lanesM(T) < 0.5)
           for (let k = 0; k < PINS.length; k++) {
-            const u = uOf(PINS[k].seconds)
-            out[n * 3] = frame.x(u)
-            out[n * 3 + 1] = frame.y(envV(u))
+            out[n * 3] = frame.x(PIN_U[k])
+            out[n * 3 + 1] = frame.y(envV(PIN_U[k]))
             out[n * 3 + 2] = 0
             n++
           }
@@ -577,9 +910,40 @@ function useDataObstacles(frame: ChartFrame) {
     }),
     [frame],
   )
+  // the leaders (the cursor's pole, the Marathon's, the cluster's): names keep off them, short of the pill each one ends on
+  const links = useMemo<WorldObstacle>(() => {
+    const seg = (out: Float32Array, n: number, x0: number, y0: number, x1: number, y1: number): number => {
+      const len = Math.hypot(x1 - x0, y1 - y0)
+      if (len < 14) return n
+      const steps = Math.min(16, Math.floor((len - 12) / 8))
+      for (let i = 0; i <= steps && n < 60; i++) {
+        const t = (6 + ((len - 16) * i) / Math.max(1, steps)) / len
+        out[n * 3] = an.pxm.wx(x0 + (x1 - x0) * t)
+        out[n * 3 + 1] = an.pxm.wy(y0 + (y1 - y0) * t)
+        out[n * 3 + 2] = 0
+        n++
+      }
+      return n
+    }
+    return {
+      points: (_T, out) => {
+        let n = 0
+        const f = an.cur
+        if (an.curCue > 0.01) n = seg(out, n, f.nx, f.ny, f.cx, f.cy)
+        const m = an.mara
+        if (an.maraCue > 0.01) n = seg(out, n, m.nx, m.ny, m.cx, m.cy)
+        const c = an.clu
+        if (an.cluCue > 0.01) for (let j = 0; j < 3; j++) if (c.r[j].on) n = seg(out, n, c.px[j], c.py[j], c.ex[j], c.ey[j])
+        return n
+      },
+      maxPoints: 60,
+      radiusPx: 3,
+    }
+  }, [an])
   useWorldObstacle('pw-curves', curves)
   useWorldObstacle('pw-marks', marks)
   useWorldObstacle('pw-yaxis', axis)
+  useWorldObstacle('pw-links', links)
 }
 
 /* ------------------------------- story ---------------------------------- */
@@ -589,21 +953,29 @@ const constructionVis: ConstructionVis = {
   ticks: { progress: ticksDraw, dim: (T) => 0.6 * focus(T, P.three) },
 }
 
+/** P0's dim engines: level of light relative to a flooded band, and the width (u) of their wipe's soft edge. */
+const GHOST = 0.3
+const GHOST_SOFT = 0.012
+
 function StoryScene({ frame, tier }: { frame: ChartFrame; tier: Tier }) {
   const { layout } = useBeat()
   const ppu = pxPerUnit(frame)
   const ua0 = underAxis(frame)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const ua = useMemo(() => ua0, [ua0.tick, ua0.strip])
-  useStoryLabels(frame, layout, ua)
-  useDataObstacles(frame)
+  const an = useStoryAnnot(frame)
+  useStoryLabels(frame, layout, ua, an)
+  useDataObstacles(frame, an)
   const envArc = useMemo(() => envelopeArc(frame), [frame])
-  // the P0 fill rises behind the pen head and is complete when the stroke is
-  const reveal = (T: number) => {
-    const p = envDraw(T)
-    return uAtArc(envArc, p) + FLOOD_W * p
-  }
-  const flow = useMemo(() => makeFlowState(), [])
+  // P0: the dim engines are wiped on under the envelope's pen head (a clean vertical edge that travels with it)
+  const ghostSrc = useMemo<BandSource>(() => {
+    const reveal = (T: number) => {
+      const p = envDraw(T)
+      return p >= 1 ? 2 : uAtArc(envArc, p) + GHOST_SOFT
+    }
+    return { m: lanesM, s: () => 0, front: (T) => reveal(T) }
+  }, [envArc])
+  const flow = useMemo(() => makeFlowState(POWER_MAX), [])
   const low = tier === 'low'
 
   /**
@@ -621,27 +993,38 @@ function StoryScene({ frame, tier }: { frame: ChartFrame; tier: Tier }) {
   return (
     <>
       <Construction frame={frame} vis={constructionVis} uOfS={uOf} ua={ua} />
-      <NeutralFill frame={frame} reveal={reveal} src={SRC} opacity={(T) => neutralOn(T) * focus(T, P.three)} />
+      {[0, 1, 2].map((b) => (
+        <BandFill
+          key={`g${b}`}
+          frame={frame}
+          b={b}
+          src={ghostSrc}
+          tier={tier}
+          level={GHOST}
+          soft={GHOST_SOFT}
+          opacity={(T) => ghostOn(T, b)}
+          rim={() => (low ? 0.3 : 0)}
+          renderOrder={9}
+        />
+      ))}
       {[0, 1, 2].map((b) => (
         <BandFill key={b} frame={frame} b={b} src={SRC} tier={tier} opacity={(T) => bandOpacity(T, b)} rim={(T) => bandRim(T, b)} />
       ))}
-      {!low && (
-        <River
-          frame={frame}
-          tier={tier}
-          uniforms={(T, A) => {
-            const u = flow.u
-            u.flow = 0.035 * A
-            u.bandOn[0] = moteOn(T, 0) * focus(T, P.oxi)
-            u.bandOn[1] = moteOn(T, 1) * focus(T, P.gly)
-            u.bandOn[2] = moteOn(T, 2) * focus(T, P.phos)
-            u.opacity = T < P.phos ? 0 : 1
-            u.hot = 0.15 * impactK(T)
-            setFlowMorph(flow, lanesM(T))
-            return u
-          }}
-        />
-      )}
+      <River
+        frame={frame}
+        tier={tier}
+        uniforms={(T, A) => {
+          const u = flow.u
+          u.flow = 0.035 * A
+          u.bandOn[0] = moteOn(T, 0) * focus(T, P.oxi)
+          u.bandOn[1] = moteOn(T, 1) * focus(T, P.gly)
+          u.bandOn[2] = moteOn(T, 2) * focus(T, P.phos)
+          u.opacity = T < P.phos ? 0 : 1
+          u.hot = 0.25 * impactK(T)
+          setFlowMorph(flow, lanesM(T))
+          return u
+        }}
+      />
       <DurationStrips
         frame={frame}
         ua={ua}
@@ -670,8 +1053,9 @@ function StoryScene({ frame, tier }: { frame: ChartFrame; tier: Tier }) {
         opacity={() => 1}
       />
       <MarathonChevron frame={frame} progress={(T) => at(T, P.oxi, 0.86, 0.94)} dim={(T) => 0.9 * Math.max(0.55, focus(T, P.oxi))} />
-      <Pins frame={frame} ppu={ppu} />
-      <Cursor frame={frame} ppu={ppu} />
+      <MaraLink an={an} />
+      <Pins frame={frame} ppu={ppu} an={an} />
+      <Cursor frame={frame} ppu={ppu} an={an} />
     </>
   )
 }

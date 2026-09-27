@@ -13,13 +13,21 @@ import { clamp, fmtDuration, lerp, logU, uToT } from '../../lessonMath'
    Pathways math (DESIGN.md D.4, G). T_MIN, T_MAX, interpAtU, rawContribAtT,
    contribAtT, envelopeAtT, powerHeightFrac, dominantOf, HEIGHT_NORM,
    PEAK_ORDER_TEXT, sliderToT and tToSlider are moved VERBATIM from the
-   retired modules/PathwaysModule.tsx, so every share and every ribbon
-   height is unchanged from the live site (Gastin 2001 crossover table x
-   the relative power envelope, both from fitnessData.ts).
+   retired modules/PathwaysModule.tsx, so every share READOUT (the HUD, the
+   callouts, the explore panel, the dominant engine, the pins) is unchanged
+   from the live site (Gastin 2001 crossover table x the relative power
+   envelope, both from fitnessData.ts).
 
-   Below the verbatim block: the chart-space view of the same numbers. Time
-   is the log axis u = logU(t, 3, 3600) (L11: time runs left to right). A
-   band's THICKNESS in v units is powerHeightFrac / 1.2, stacked bottom to
+   The DRAWN geometry (bands, pens, the river) passes through exactly the
+   same table rows but joins them with a monotone cubic (Fritsch-Carlson,
+   PCHIP) instead of the verbatim smoothstep. The smoothstep has zero slope
+   at every one of the 17 rows, which printed a terrace at each row on a
+   front-on phone chart (review r1). PCHIP keeps every row value and the
+   monotonicity inside each bracket, so no drawn value leaves the data
+   (proposed D.4 amendment in the chapter report).
+
+   Time is the log axis u = logU(t, 3, 3600) (L11: time runs left to right).
+   A band's THICKNESS in v units is its power height / 1.2, stacked bottom to
    top as oxidative, glycolytic, phosphagen, so the top of the stack is the
    power envelope (D.4 "Stacked mode").
    ========================================================================= */
@@ -131,6 +139,7 @@ const PEAK_ORDER: EnergyKey[] = (['phosphagen', 'glycolytic', 'oxidative'] as En
 )
 export const PEAK_ORDER_TEXT = PEAK_ORDER.map((k) => NAME[k]).join(' > ')
 
+
 /* ----------------------- chart space (derived) ------------------------ */
 
 /** u (0..1 on the log time axis) of a duration in seconds. */
@@ -138,18 +147,83 @@ export const uOf = (t: number): number => logU(clamp(t, T_MIN, T_MAX), T_MIN, T_
 /** duration in seconds at u. */
 export const tOf = (u: number): number => (u >= 1 ? T_MAX : u <= 0 ? T_MIN : uToT(u, T_MIN, T_MAX))
 
-/** Band order bottom to top (the LightField FLOW bands A, B, C). */
+/* ------------------- drawn curves (monotone cubic) --------------------- */
+
+/** Fritsch-Carlson (PCHIP) node slopes for ys over X_NODES: a C1 curve through every row, monotone inside each bracket. */
+function pchipSlopes(ys: readonly number[]): Float64Array {
+  const n = X_NODES.length
+  const m = new Float64Array(n)
+  const h = (i: number) => X_NODES[i + 1] - X_NODES[i]
+  const d = (i: number) => (ys[i + 1] - ys[i]) / Math.max(1e-9, h(i))
+  m[0] = d(0)
+  m[n - 1] = d(n - 2)
+  for (let i = 1; i < n - 1; i++) {
+    const d0 = d(i - 1)
+    const d1 = d(i)
+    if (d0 * d1 <= 0) m[i] = 0
+    else {
+      const w1 = 2 * h(i) + h(i - 1)
+      const w2 = h(i) + 2 * h(i - 1)
+      m[i] = (w1 + w2) / (w1 / d0 + w2 / d1)
+    }
+  }
+  return m
+}
+const SLOPES = {
+  phos: pchipSlopes(PHOS_NODES),
+  gly: pchipSlopes(GLY_NODES),
+  oxi: pchipSlopes(OXI_NODES),
+  env: pchipSlopes(ENV_NODES),
+}
+/** Monotone cubic through the table rows at u (the drawing twin of interpAtU). */
+function pchipAt(u: number, ys: readonly number[], ms: Float64Array): number {
+  const x = clamp(u, 0, 1)
+  const n = X_NODES.length
+  if (x <= X_NODES[0]) return ys[0]
+  if (x >= X_NODES[n - 1]) return ys[n - 1]
+  let i = 0
+  while (i < n - 1 && X_NODES[i + 1] < x) i++
+  const hh = X_NODES[i + 1] - X_NODES[i]
+  const t = hh > 1e-9 ? (x - X_NODES[i]) / hh : 0
+  const t2 = t * t
+  const t3 = t2 * t
+  return (2 * t3 - 3 * t2 + 1) * ys[i] + (t3 - 2 * t2 + t) * hh * ms[i] + (-2 * t3 + 3 * t2) * ys[i + 1] + (t3 - t2) * hh * ms[i + 1]
+}
+
+/** Band order bottom to top (the river's bands A, B, C). */
 export const BANDS: readonly EnergyKey[] = ['oxidative', 'glycolytic', 'phosphagen']
 export const BAND_COLORS: readonly [string, string, string] = [PAL.oxidative, PAL.glycolytic, PAL.phosphagen]
 
-/** Stacked mode: a band's thickness in v units is powerHeightFrac / 1.2 (D.4). */
+/** Stacked mode: a band's thickness in v units is its power height / 1.2 (D.4). */
 export const STACK_DIV = 1.2
 /** Lanes mode (D.4): each lane's baseline in v units, bottom to top (oxidative, glycolytic, phosphagen). */
 export const LANE_BASE: readonly [number, number, number] = [0, 0.35, 0.7]
-/** Lanes mode: lane height = powerHeightFrac x 0.30 FH, one shared scale, i.e. the stacked thickness x 0.36. */
+/** Lanes mode: lane height = power height x 0.30 FH, one shared scale, i.e. the stacked thickness x 0.36. */
 export const LANE_THICK = 0.3 * STACK_DIV
 /** Share mode (explore): the stack top is normalised to this height in v units. */
 export const SHARE_TOP = 0.8
+
+/**
+ * The drawn share (0..1) of band b at u: the three monotone cubics,
+ * normalised so the stack top is exactly the drawn envelope. At every table
+ * row it equals the row's percentage / 100.
+ */
+function drawnShare(b: number, u: number): number {
+  const p = pchipAt(u, PHOS_NODES, SLOPES.phos)
+  const g = pchipAt(u, GLY_NODES, SLOPES.gly)
+  const o = pchipAt(u, OXI_NODES, SLOPES.oxi)
+  const sum = p + g + o || 1
+  return (b === 0 ? o : b === 1 ? g : p) / sum
+}
+/** The drawn relative power envelope (0..1) at u. */
+const drawnEnv = (u: number): number => pchipAt(u, ENV_NODES, SLOPES.env)
+
+/** Power thickness of band b at u, v units (the drawn twin of powerHeightFrac / 1.2). */
+export const thickAt = (b: number, u: number): number => clamp((drawnShare(b, u) * drawnEnv(u)) / HEIGHT_NORM, 0, 1.05) / STACK_DIV
+/** Share thickness of band b at u, v units (explore "Share"). */
+export const shareThickAt = (b: number, u: number): number => drawnShare(b, u) * SHARE_TOP
+/** Top of the stacked power envelope at u, v units. */
+export const envAt = (u: number): number => thickAt(0, u) + thickAt(1, u) + thickAt(2, u)
 
 /** Samples along u for the bands, the pens and the light (150 x-segments, D.4). */
 export const N_U = 151
@@ -157,7 +231,7 @@ export const N_U = 151
 export interface BandTable {
   /** power thickness per band (bottom to top) at each sample, v units */
   power: Float32Array[]
-  /** share thickness per band at each sample (share / 100 x SHARE_TOP), v units */
+  /** share thickness per band at each sample (share x SHARE_TOP), v units */
   share: Float32Array[]
 }
 
@@ -166,12 +240,11 @@ export const TABLE: BandTable = (() => {
   const power = BANDS.map(() => new Float32Array(N_U))
   const share = BANDS.map(() => new Float32Array(N_U))
   for (let i = 0; i < N_U; i++) {
-    const t = tOf(i / (N_U - 1))
-    const c = contribAtT(t)
-    BANDS.forEach((k, b) => {
-      power[b][i] = powerHeightFrac(k, t) / STACK_DIV
-      share[b][i] = (c[k] / 100) * SHARE_TOP
-    })
+    const u = i / (N_U - 1)
+    for (let b = 0; b < 3; b++) {
+      power[b][i] = thickAt(b, u)
+      share[b][i] = shareThickAt(b, u)
+    }
   }
   return { power, share }
 })()
@@ -183,13 +256,11 @@ export function sampleAt(a: Float32Array, u: number): number {
   return a[i] + (a[i + 1] - a[i]) * (f - i)
 }
 
-/** Power thickness of band b at u (exact, not sampled). */
-export const thickAt = (b: number, u: number): number => powerHeightFrac(BANDS[b], tOf(u)) / STACK_DIV
-/** Top of the stacked power envelope at u, v units (= envelope / HEIGHT_NORM / 1.2). */
-export const envAt = (u: number): number => thickAt(0, u) + thickAt(1, u) + thickAt(2, u)
-
-/** The largest band thickness (the FLOW motes' height range, hMax). */
-export const H_MAX = Math.max(...TABLE.power.map((a) => Math.max(...a)), SHARE_TOP) * 1.001
+const maxOf = (a: Float32Array) => a.reduce((m, v) => Math.max(m, v), 0) * 1.001
+/** The largest power thickness of each band, v units (the river's per-band height range). */
+export const POWER_MAX: readonly [number, number, number] = [maxOf(TABLE.power[0]), maxOf(TABLE.power[1]), maxOf(TABLE.power[2])]
+/** The largest share thickness of each band, v units (explore "Share"). */
+export const SHARE_MAX: readonly [number, number, number] = [maxOf(TABLE.share[0]), maxOf(TABLE.share[1]), maxOf(TABLE.share[2])]
 
 /** contribAtT without an allocation (per-frame readers): the same numbers, written into `out`. */
 export interface Shares {
@@ -229,6 +300,38 @@ export function calloutText(t: number): string {
   return `${fmtDuration(t)} - ${NAME[d]} ${Math.round(c[d])}%`
 }
 
+/* ------------------------ where each engine leads ----------------------- */
+
+/**
+ * u where the lead passes from one engine to the next, found on the
+ * verbatim readouts, so the duration strips, the P6 brackets and the explore
+ * slider track colour each stretch of the axis by the engine the callouts
+ * and the pins name there (review r1: strips cut at the 10 s and 2 min
+ * strings contradicted the callouts). No number is printed.
+ */
+function leadEnd(from: EnergyKey, start: number): number {
+  const N = 400
+  let lo = start
+  let hi = 1
+  for (let i = 1; i <= N; i++) {
+    const u = start + ((1 - start) * i) / N
+    if (dominantAtT(tOf(u)) !== from) {
+      lo = start + ((1 - start) * (i - 1)) / N
+      hi = u
+      break
+    }
+  }
+  for (let k = 0; k < 40; k++) {
+    const mid = (lo + hi) / 2
+    if (dominantAtT(tOf(mid)) === from) lo = mid
+    else hi = mid
+  }
+  return (lo + hi) / 2
+}
+const FLIP1 = leadEnd('phosphagen', 0)
+/** Axis-order extents (phosphagen, glycolytic, oxidative) of each engine's lead: [0, flip 1, flip 2, 1]. */
+export const LEAD_U: readonly number[] = [0, FLIP1, leadEnd('glycolytic', FLIP1 + 1e-6), 1]
+
 /* ----------------------------- benchmarks ----------------------------- */
 
 /** The benchmarks inside the axis (studs); Marathon (12600 s) is never plotted on it (F.7). */
@@ -236,24 +339,22 @@ export const PINS = ENERGY_BENCHMARKS.filter((b) => b.seconds <= T_MAX)
 export const OFF_AXIS = ENERGY_BENCHMARKS.filter((b) => b.seconds > T_MAX)
 export const MARATHON = OFF_AXIS[0] ?? null
 export const pinIndex = (name: string): number => PINS.findIndex((b) => b.name === name)
-
-/** The duration-band boundaries (s): 10 s and 120 s, read from ENERGY_SYSTEMS[].duration. */
-function parseSeconds(s: string): number {
-  const m = s.match(/(\d+(?:\.\d+)?)\s*(sec|min|hr)/)
-  if (!m) return NaN
-  const v = parseFloat(m[1])
-  return m[2] === 'min' ? v * 60 : m[2] === 'hr' ? v * 3600 : v
-}
-/** "0 to 10 sec" ends at 10 s; "10 sec to 2 min" ends at 120 s. */
-const B1 = parseSeconds(SYS[0].duration.split(' to ')[1] ?? '10 sec')
-const B2 = parseSeconds(SYS[1].duration.split(' to ')[1] ?? '2 min')
-/** u of the bracket boundaries in axis order (phosphagen, glycolytic, oxidative): [0, u(10 s), u(120 s), 1]. */
-export const BRACKET_U: readonly number[] = [0, uOf(Number.isFinite(B1) ? B1 : 10), uOf(Number.isFinite(B2) ? B2 : 120), 1]
+/** Axis slot (0 phosphagen, 1 glycolytic, 2 oxidative) whose lead range holds pin k. */
+export const PIN_SLOT: readonly number[] = PINS.map((p) => {
+  const u = uOf(p.seconds)
+  return u < LEAD_U[1] ? 0 : u < LEAD_U[2] ? 1 : 2
+})
 
 if (import.meta.env.DEV) {
-  // the stack top is the envelope and never exceeds the plotted range
+  // the drawn curves pass through every table row
+  ENERGY_CROSSOVER.forEach((row, i) => {
+    const want = (powerHeightFrac('phosphagen', row.seconds) + powerHeightFrac('glycolytic', row.seconds) + powerHeightFrac('oxidative', row.seconds)) / STACK_DIV
+    if (Math.abs(envAt(X_NODES[i]) - want) > 1e-6) console.warn(`[pathways] drawn envelope leaves the ${row.seconds} s row`)
+  })
   const top = Math.max(...Array.from({ length: N_U }, (_, i) => TABLE.power[0][i] + TABLE.power[1][i] + TABLE.power[2][i]))
   if (top > 1) console.warn(`[pathways] stack top ${top.toFixed(3)} exceeds v = 1`)
-  if (Math.abs(BRACKET_U[1] - uOf(10)) > 1e-6 || Math.abs(BRACKET_U[2] - uOf(120)) > 1e-6)
-    console.warn('[pathways] duration strings no longer parse to 10 s and 120 s')
+  // every pin's `dominant` agrees with the lead range it sits in
+  PINS.forEach((p, k) => {
+    if ((['phosphagen', 'glycolytic', 'oxidative'] as const)[PIN_SLOT[k]] !== p.dominant) console.warn(`[pathways] ${p.name} sits outside its engine's lead range`)
+  })
 }

@@ -1,10 +1,11 @@
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { ENERGY_BENCHMARKS, ENERGY_SYSTEMS } from '../../fitnessData'
 import { fmtDuration } from '../../lessonMath'
 import { Readout } from '../../ui'
 import { ChipRadio } from '../../story/ui/ChipRadio'
+import { useStoryStore } from '../../story/store'
 import { usePwExplore } from './exploreStore'
-import { BRACKET_U, COLOR, NAME, PEAK_ORDER_TEXT, SLIDER_MAX, SLIDER_MIN, T_MAX, contribAtT, dominantOf, sliderToT, tToSlider } from './pathwaysMath'
+import { COLOR, LEAD_U, NAME, PEAK_ORDER_TEXT, SLIDER_MAX, SLIDER_MIN, T_MAX, contribAtT, dominantOf, sliderToT, tToSlider } from './pathwaysMath'
 
 /* =========================================================================
    Pathways explore controls (DESIGN.md D.4 "Explore"). Peek (whole rows
@@ -17,8 +18,8 @@ import { BRACKET_U, COLOR, NAME, PEAK_ORDER_TEXT, SLIDER_MAX, SLIDER_MIN, T_MAX,
 
 const KEYS = ['phosphagen', 'glycolytic', 'oxidative'] as const
 const P = (u: number) => `${(u * 100).toFixed(1)}%`
-/** The slider track: the three duration bands in their engine colours. */
-const TRACK = `linear-gradient(90deg, ${COLOR.phosphagen} 0 ${P(BRACKET_U[1])}, ${COLOR.glycolytic} ${P(BRACKET_U[1])} ${P(BRACKET_U[2])}, ${COLOR.oxidative} ${P(BRACKET_U[2])} 100%)`
+/** The slider track: each engine's colour over the durations it leads (the same ranges as the strips under the axis). */
+const TRACK = `linear-gradient(90deg, ${COLOR.phosphagen} 0 ${P(LEAD_U[1])}, ${COLOR.glycolytic} ${P(LEAD_U[1])} ${P(LEAD_U[2])}, ${COLOR.oxidative} ${P(LEAD_U[2])} 100%)`
 
 /* A 44 px range input (B.4: sliders get 44 px hit areas); local until the
    kit restyles ui.tsx Slider (engine request in the chapter report). */
@@ -84,6 +85,10 @@ function BenchChips({ value, onChange }: { value: string | null; onChange: (v: s
 }
 
 export default function PathwaysExplore() {
+  // a front-on chart is read by scrubbing: explore opens in Scrub, not Orbit (review r1)
+  useEffect(() => {
+    useStoryStore.setState({ scrub: true })
+  }, [])
   const t = usePwExplore((s) => s.t)
   const bench = usePwExplore((s) => s.bench)
   const lanes = usePwExplore((s) => s.lanes)
@@ -151,8 +156,8 @@ export default function PathwaysExplore() {
         }
       />
 
-      <div className="wf-readout" style={{ marginBottom: 12 }}>
-        <div className="lbl">Share of energy supply</div>
+      <div className="wf-readout" style={{ marginBottom: 12, opacity: beyond ? 0.5 : 1 }}>
+        <div className="lbl">{beyond ? 'Share of energy supply at 1 hr' : 'Share of energy supply'}</div>
         <div className="wf-pct-row">
           {KEYS.map((k) => (
             <div key={k} className="wf-pct" style={{ borderColor: `${COLOR[k]}66` }}>
@@ -179,7 +184,7 @@ export default function PathwaysExplore() {
       </div>
 
       <p className="st-ex-note">
-        Ribbon height is power output. Peak power order: <b>{PEAK_ORDER_TEXT}</b>. Oxidative outlasts the others, it is not more powerful.
+        Height is power output. Peak power order: <b>{PEAK_ORDER_TEXT}</b>. Oxidative outlasts the others, it is not more powerful.
       </p>
     </div>
   )

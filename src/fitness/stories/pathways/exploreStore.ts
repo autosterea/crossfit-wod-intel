@@ -23,16 +23,22 @@ export interface PwExploreState {
   setShare(v: boolean): void
 }
 
+/** Clamp to the axis, and settle float noise at its ends: exp(log(3600)) is 3599.99..., which fmtDuration shows as "60 min". */
+const onAxis = (t: number): number => {
+  const c = clamp(t, T_MIN, T_MAX)
+  return c > T_MAX * (1 - 1e-9) ? T_MAX : c < T_MIN * (1 + 1e-9) ? T_MIN : c
+}
+
 export const usePwExplore = create<PwExploreState>((set) => ({
   t: 240,
   bench: null,
   lanes: false,
   share: false,
-  setT: (t) => set({ t: clamp(t, T_MIN, T_MAX), bench: null }),
+  setT: (t) => set({ t: onAxis(t), bench: null }),
   setBench: (name) => {
     const b = ENERGY_BENCHMARKS.find((x) => x.name === name)
     if (!b) return set({ bench: null })
-    set({ bench: b.name, t: clamp(b.seconds, T_MIN, T_MAX) })
+    set({ bench: b.name, t: onAxis(b.seconds) })
   },
   setLanes: (v) => set({ lanes: v }),
   setShare: (v) => set({ share: v }),
@@ -41,7 +47,7 @@ export const usePwExplore = create<PwExploreState>((set) => ({
 /** Explore seeds per beat (the end state of that beat): cursor duration and benchmark. */
 export const EXPLORE_SEED: readonly { t: number; bench: string | null; lanes: boolean }[] = [
   { t: 240, bench: null, lanes: false },
-  { t: 15, bench: null, lanes: false },
+  { t: 10, bench: null, lanes: false },
   { t: 30, bench: null, lanes: false },
   { t: T_MAX, bench: null, lanes: false },
   { t: T_MAX, bench: null, lanes: true },

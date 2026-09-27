@@ -1,7 +1,7 @@
 import type { ChartFrame, ChartFrameOpts } from '../../story/kit/chartFrame'
 import type { Box, Layout } from '../../story/types'
 import { focusRect } from '../../story/camera/focusRect'
-import { BRACKET_U, uOf } from './pathwaysMath'
+import { LEAD_U, uOf } from './pathwaysMath'
 
 /* =========================================================================
    Pathways layout (DESIGN.md D.4, B.13). The chart is authored in chart
@@ -86,27 +86,54 @@ export const ROW = {
 } as const
 
 /** u where each lane is named (bottom to top): the oxidative plateau, the glycolytic hump, the phosphagen slope (clear of the top-left corner). */
-export const LANE_NAME_U: readonly number[] = [uOf(300), uOf(15), uOf(7)]
+export const LANE_NAME_U: readonly number[] = [uOf(300), uOf(15), uOf(12)]
 
 /**
- * World x of the three duration strings under the axis (axis order). Each
- * wants to sit centred under its band, but the phosphagen band is only about
- * 55 px wide on a phone, so the row is packed left to right with a 10 px gap
- * (widths are the strings' measured phone widths plus a margin) and pulled
- * back from the right end if it runs out. On a desktop nothing moves.
+ * The duration strings (ENERGY_SYSTEMS[].duration) are a KEY, not a scale:
+ * the axis strips mark where each engine leads in the crossover data, which
+ * is not where the textbook ranges end (review r1), so the three strings sit
+ * as one centred legend row under the tick labels, 14 px apart. Returns the
+ * world x of each string's centre. Widths are the strings' measured phone
+ * widths plus a margin (desktop type is about 8% larger).
  */
 const STRING_W = [72, 92, 106] as const
-export function bandStringX(f: ChartFrame): number[] {
+export function legendX(f: ChartFrame): number[] {
   const ppu = pxPerUnit(f)
+  const k = focusRect.shell === 'desktop' ? 1.08 : 1
+  const w = STRING_W.map((v) => v * k)
+  const gap = 14
+  const total = w[0] + w[1] + w[2] + 2 * gap
+  const W = f.FW * ppu
+  let l = W / 2 - total / 2
+  l = Math.max(-12, Math.min(W + 12 - total, l))
+  const out: number[] = []
+  for (let i = 0; i < 3; i++) {
+    out.push(f.x(0) + (l + w[i] / 2) / ppu)
+    l += w[i] + gap
+  }
+  return out
+}
+
+/**
+ * P6: world x of the three engine names under their lead brackets (axis
+ * order). Each wants its bracket's centre; the phosphagen bracket is only
+ * about 65 px wide on a phone, so the row is packed left to right with a
+ * 10 px gap and pulled back from the right end if it runs out.
+ */
+const NAME_W = [84, 84, 78] as const
+export function bracketNameX(f: ChartFrame): number[] {
+  const ppu = pxPerUnit(f)
+  const k = focusRect.shell === 'desktop' ? 1.08 : 1
+  const w = NAME_W.map((v) => v * k)
   const W = f.FW * ppu
   const gap = 10
-  const l = [0, 1, 2].map((k) => ((BRACKET_U[k] + BRACKET_U[k + 1]) / 2) * W - STRING_W[k] / 2)
-  for (let k = 1; k < 3; k++) l[k] = Math.max(l[k], l[k - 1] + STRING_W[k - 1] + gap)
-  const over = l[2] + STRING_W[2] - (W + 14)
+  const l = [0, 1, 2].map((i) => ((LEAD_U[i] + LEAD_U[i + 1]) / 2) * W - w[i] / 2)
+  for (let i = 1; i < 3; i++) l[i] = Math.max(l[i], l[i - 1] + w[i - 1] + gap)
+  const over = l[2] + w[2] - (W + 14)
   if (over > 0) {
     l[2] -= over
-    for (let k = 1; k >= 0; k--) l[k] = Math.min(l[k], l[k + 1] - gap - STRING_W[k])
+    for (let i = 1; i >= 0; i--) l[i] = Math.min(l[i], l[i + 1] - gap - w[i])
   }
   l[0] = Math.max(l[0], -12)
-  return l.map((v, k) => f.x(0) + (v + STRING_W[k] / 2) / ppu)
+  return l.map((v, i) => f.x(0) + (v + w[i] / 2) / ppu)
 }

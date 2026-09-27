@@ -25,9 +25,9 @@ import { LANE_BASE, LANE_THICK, N_U, TABLE } from './pathwaysMath'
 
 export const FLOOD_W = 0.12
 
-/** 0..1 smoothstep of the flood at u for a front position (front runs 0 to 1 + FLOOD_W). */
-export function floodAt(front: number, u: number): number {
-  const x = (front - u) / FLOOD_W
+/** 0..1 smoothstep of the flood at u for a front position (front runs 0 to 1 + FLOOD_W); w is the soft zone. */
+export function floodAt(front: number, u: number, w = FLOOD_W): number {
+  const x = (front - u) / w
   if (x <= 0) return 0
   if (x >= 1) return 1
   return x * x * (3 - 2 * x)

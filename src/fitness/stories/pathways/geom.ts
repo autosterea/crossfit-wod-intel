@@ -1,5 +1,5 @@
 import { PAL, type EnergyKey } from '../../fitnessData'
-import { sampleCurve, type LightFieldUniforms } from '../../story/kit/LightField'
+import { sampleCurve } from '../../story/kit/LightField'
 import type { ChartFrame } from '../../story/kit/chartFrame'
 import { LANE_BASE, LANE_THICK, N_U, thickAt } from './pathwaysMath'
 import { arcTable, stackTop } from './bands'
@@ -12,7 +12,7 @@ import { arcTable, stackTop } from './bands'
 
 export type Fn = (T: number) => number
 
-/** Axis order of the duration bands: phosphagen (3 to 10 s), glycolytic (10 s to 2 min), oxidative (2 min on). */
+/** Axis order of the engines: phosphagen (leads first), glycolytic, oxidative (leads last). */
 export const AXIS_ORDER: readonly EnergyKey[] = ['phosphagen', 'glycolytic', 'oxidative']
 export const AXIS_COLOR: readonly string[] = [PAL.phosphagen, PAL.glycolytic, PAL.oxidative]
 /** Band index (bottom to top: oxidative 0, glycolytic 1, phosphagen 2) of axis slot k. */
@@ -46,7 +46,6 @@ export function segLine(a: readonly [number, number, number], b: readonly [numbe
   return out
 }
 
-
 export type BandFn = (T: number, b: number) => number
 
 /** Warm white of a hot pen tip (the kit's head colour family). */
@@ -61,8 +60,7 @@ export interface BandSource {
   front: BandFn
 }
 
-
-/** Arc table of the envelope (P0 neutral fill follows the pen head). */
+/** Arc table of the envelope (P0: the dim engines rise behind the pen head). */
 export function envelopeArc(frame: ChartFrame): Float32Array {
   const a = new Float32Array(N_U * 3)
   for (let i = 0; i < N_U; i++) {
@@ -72,24 +70,30 @@ export function envelopeArc(frame: ChartFrame): Float32Array {
   return arcTable(a)
 }
 
-
-/** Per-band power thickness curves for the light (v units, 128 samples), oxidative at the bottom. */
+/** Per-band power thickness curves for the river (v units, 128 samples), oxidative at the bottom. */
 export const FLOW_CURVES: readonly [Float32Array, Float32Array, Float32Array] = [
   sampleCurve((u) => thickAt(0, u)),
   sampleCurve((u) => thickAt(1, u)),
   sampleCurve((u) => thickAt(2, u)),
 ]
 
-/** Mutable FLOW uniforms (no allocation per frame). */
+/** Mutable river uniforms (no allocation per frame). */
 export interface FlowState {
-  u: LightFieldUniforms & { bandOn: [number, number, number]; lane: [number, number, number] }
-}
-export function makeFlowState(): FlowState {
-  return {
-    u: { mode: 2, mix: 0, level: 0, hot: 0, opacity: 1, flow: 0, bandOn: [0, 0, 0], lane: [0, 0, 0], stack: 1, thick: 1 },
+  u: {
+    flow: number
+    bandOn: [number, number, number]
+    lane: [number, number, number]
+    stack: number
+    thick: number
+    hMax: [number, number, number]
+    hot: number
+    opacity: number
   }
 }
-/** Write the lanes morph into the FLOW uniforms (same formula as bandRange). */
+export function makeFlowState(hMax: readonly [number, number, number]): FlowState {
+  return { u: { flow: 0, bandOn: [0, 0, 0], lane: [0, 0, 0], stack: 1, thick: 1, hMax: [hMax[0], hMax[1], hMax[2]], hot: 0, opacity: 1 } }
+}
+/** Write the lanes morph into the river uniforms (same formula as bandRange). */
 export function setFlowMorph(st: FlowState, m: number): void {
   st.u.lane[0] = m * LANE_BASE[0]
   st.u.lane[1] = m * LANE_BASE[1]
@@ -97,4 +101,3 @@ export function setFlowMorph(st: FlowState, m: number): void {
   st.u.stack = 1 - m
   st.u.thick = 1 - (1 - LANE_THICK) * m
 }
-
