@@ -17,10 +17,15 @@ const NewsApp = lazyReload(() => import('./news/NewsApp.tsx'))
 // /games, /fitness and /news are standalone pages served by the same SPA
 // bundle — Caddy's `try_files {path} /index.html` routes them here. Each is
 // lazy so a visitor only downloads the chunk for the route they land on.
-const path = window.location.pathname.replace(/\/+$/, '')
-const isGames = path === '/games' || window.location.pathname.startsWith('/games/')
-const isFitness = path === '/fitness' || window.location.pathname.startsWith('/fitness/')
-const isNews = path === '/news' || window.location.pathname.startsWith('/news/')
+// The deploy base ('/' in production, '/preview/' for the owner's review
+// build) is stripped before matching, so /preview/fitness routes like /fitness.
+const BASE = import.meta.env.BASE_URL.replace(/\/$/, '')
+const rawPath = window.location.pathname
+const basePath = BASE && (rawPath === BASE || rawPath.startsWith(BASE + '/')) ? rawPath.slice(BASE.length) || '/' : rawPath
+const path = basePath.replace(/\/+$/, '')
+const isGames = path === '/games' || basePath.startsWith('/games/')
+const isFitness = path === '/fitness' || basePath.startsWith('/fitness/')
+const isNews = path === '/news' || basePath.startsWith('/news/')
 
 class RootErrorBoundary extends Component<{ children: ReactNode }, { error: Error | null }> {
   state = { error: null as Error | null }

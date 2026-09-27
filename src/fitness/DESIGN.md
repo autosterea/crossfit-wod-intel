@@ -2012,3 +2012,20 @@ Every commit is on `fitness-v2` only, ends with the two attribution lines, and p
 ## H. Amendments
 
 (Builders append dated entries here: what changed, why, and which acceptance item it serves.)
+
+### 2026-09-26, foundation lead (engine + Definition exemplar)
+
+- **H.1 Tone mapping is Khronos Neutral without its toe** (B.10, decision 3). Neutral's toe subtracts up to 0.04 in linear from dark channels and moves #91C640 to (136, 193, 35), which fails the B.10 swatch test by 30 units in blue. The engine uses the same curve minus the toe: colours below 0.76 pass through untouched, HDR highlights compress exactly as Neutral. Still never ACES. Serves E.16.
+- **H.2 LOW mounts no EffectComposer.** The composer forces `NoToneMapping` on the renderer while mounted, even with `enabled={false}`. LOW renders directly with `THREE.CustomToneMapping` set to the H.1 curve. Serves E.16 and E.17.
+- **H.3 Principal point = centre of the focus rect minus the pose padding** (C.8). With asymmetric label pads (Definition: l 48, b 56) the raw focus-rect centre wasted the difference on the opposite side. `fitDistance` is solved in closed form (each box corner gives a lower bound per screen edge), which is exactly what the specified bisection converges to. `CamPose.target` may be a function (the Definition lineup uses its box centre). Serves E.2.
+- **H.4 Label hysteresis order** (C.9 step 4): preferred side first, then the side used last frame, then the rest. "Previous side first" stuck labels on a fallback side after any camera move. Two LabelSpec options were added: `only` (restrict sides; ticks use `['S']` so they stay registered under their vertex) and `dot` (name tone without the dot, used where the anchor is already a data dot). Serves E.1 and the D.5 registration check.
+- **H.5 Definition chart padding** is `{ l: 48, r: 28, t: 22, b: 56 }` for both the frame margins and the camera fit. The right pad lets the "1 hr" tick centre under its vertex; the bottom pad fits the "Effort duration" title under the tick row at desktop type sizes. Serves the D.5 registration check and E.1.
+- **H.6 Definition D2 fan pose** fits the plotted band (v 0 to 0.95, z +/-2.6) around its own centre, with right padding for the domain names. The az/el values are as specified.
+- **H.7 Definition D3 meniscus.** The pour adds a hot pen at the rising level, from the power axis to the curve. On a phone, 2 px particles barely bloom, so the surface line is what reads as light pouring in. It is part of the pour (the one speaking element, L4), fades before the claim lands, and has no copy. The level rises linearly.
+- **H.8 Definition D4 layout.** "TIME: THE PATHWAYS" is anchored at u 0.76 so the three callouts never stack. The depth tick comb is 1.1 tall at hero width so its five colours are visible at az -6.
+- **H.9 Definition D6 lineup constants.** P: minis 10.8 x 1.25, row pitch 2.6. L: minis 8 x 1.75, pitch 3.25, two columns. Each row's name and its "94 Broad" readout share one line above the mini.
+- **H.10 Autoplay waits for readiness.** The clock does not build while `data-story-ready` is 0, so nothing plays behind the slate. A safety valve marks the shaders compiled after 300 frames.
+- **H.11 Energy bands** are 0.34-tall strips directly under the time axis. The three duration labels sit above the axis at their band centres (`only: N, NE, NW`), and the tick labels stay below it.
+- **H.12 Explore header on phones.** Reset view is a 44 px icon button (aria-label "Reset view") at phone widths, so Back to story, Reset and Scrub | Orbit fit in one row at 360 px.
+- **H.13 Unmigrated chapters.** Views that are not yet in `stories/index.ts` still render their legacy LessonStage module, inside the new shell (top bar, chapter chip and sheet, progress hairline). The intro is still legacy until its story lands.
+- **H.14 Gates.** The C.15 grep gate and caption audit live in `scripts/fitness-gate.mjs`. It is committed and needs no Playwright. `window.__story` also has `project(x, y, z)`, which returns stage px for registration checks.

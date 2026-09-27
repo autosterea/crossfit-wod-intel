@@ -1,0 +1,171 @@
+import { createContext, useContext, useLayoutEffect, type ReactNode } from 'react'
+import type { StoryDef } from './types'
+import { clock, resetClock, setA } from './clock'
+import { useStoryStore, type StoryState } from './store'
+import { parseQuery } from './url'
+import { pb, holdFor } from './playback'
+import { readStats } from './quality/stats'
+import { labelsSnapshot } from './labels/LabelLayer'
+import { focus } from './camera/focusRect'
+import { initialTier, tierDpr } from './quality/tiers'
+import { setTierCeiling } from './quality/Quality'
+import { markSeek, resetReady } from './ready'
+import { gestureBus } from './gestures'
+import * as THREE from 'three'
+
+/* =========================================================================
+   StoryProvider (DESIGN.md C.4b): resets the clock and store for a chapter,
+   applies the URL query once (?beat ?t ?explore ?tier ?motion ?detent),
+   registers window.__story for QA, and publishes the StoryDef.
+   ========================================================================= */
+
+const Ctx = createContext<StoryDef | null>(null)
+
+export function useStory(): StoryDef {
+  const d = useContext(Ctx) ?? useStoryStore.getState().def
+  if (!d) throw new Error('useStory outside a StoryProvider')
+  return d
+}
+
+export function useStoryStoreSel<S>(sel: (s: StoryState) => S): S {
+  return useStoryStore(sel)
+}
+
+/* --------------------------- reduced motion --------------------------- */
+
+function computeReduced(): boolean {
+  const q = parseQuery()
+  if (q.motion === 'reduce') return true
+  if (q.motion === 'full') return false
+  try {
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  } catch {
+    return false
+  }
+}
+
+/** Install tier, DPR and reduced-motion state once per page. */
+let booted = false
+export function bootStory(): void {
+  if (booted) return
+  booted = true
+  const { tier, pinned } = initialTier()
+  setTierCeiling(tier)
+  useStoryStore.setState({ tier, tierPinned: pinned, dpr: tierDpr(tier, 1), reduced: computeReduced() })
+  try {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
+    mq.addEventListener('change', () => {
+      if (parseQuery().motion) return
+      useStoryStore.setState({ reduced: mq.matches })
+    })
+  } catch {
+    /* ignore */
+  }
+}
+
+/* ------------------------------ provider ------------------------------ */
+
+export function StoryProvider({ def, children }: { def: StoryDef; children: ReactNode }) {
+  // Reset synchronously before children render so the first frame is right.
+  useLayoutEffect(() => {
+    bootStory()
+    const st = useStoryStore.getState()
+    resetClock(def.beats.length)
+    resetReady()
+    pb.glide = null
+    pb.delay = st.reduced ? 0 : 0.35
+    pb.holdElapsed = 0
+    pb.holdFor = holdFor(def.beats[0])
+    const q = parseQuery()
+    useStoryStore.setState({
+      def,
+      view: def.key,
+      index: 0,
+      phase: 'build',
+      mode: 'story',
+      playing: !st.reduced,
+      ready: false,
+      showBuild: false,
+      scrub: false,
+      detent: q.detent ?? st.detent,
+    })
+    if (st.reduced) {
+      // Reduced motion: every beat renders at its end state; no autoplay.
+      clock.index = 0
+      clock.t = 1
+      clock.T = 1
+      clock.version++
+      useStoryStore.setState({ phase: def.beats.length > 1 ? 'hold' : 'done' })
+    }
+    if (q.beat !== null) {
+      useStoryStore.getState().seek(q.beat, q.t ?? 1, { hold: true })
+    }
+    if (q.explore) {
+      if (q.beat === null) useStoryStore.getState().seek(def.beats.length - 1, 1, { hold: true })
+      useStoryStore.getState().setMode('explore')
+    }
+    setA(clock.T * 2.5)
+    registerQA(def)
+    return () => {
+      const w = window as unknown as { __story?: unknown }
+      if (w.__story && (w.__story as { view?: string }).view === def.key) delete w.__story
+      useStoryStore.setState({ def: null, playing: false, mode: 'story' })
+    }
+  }, [def])
+
+  return <Ctx.Provider value={def}>{children}</Ctx.Provider>
+}
+
+/* ------------------------------- QA ----------------------------------- */
+
+function registerQA(def: StoryDef): void {
+  const api = {
+    view: def.key,
+    beats: def.beats.map((b) => ({ id: b.id, title: b.title, build: b.build })),
+    seek(n: number, t: number) {
+      useStoryStore.getState().seek(n, t, { hold: true })
+      markSeek()
+    },
+    play: () => useStoryStore.getState().play(),
+    pause: () => useStoryStore.getState().pause(),
+    next: () => useStoryStore.getState().next(false),
+    prev: () => useStoryStore.getState().prev(false),
+    explore(on = true) {
+      useStoryStore.getState().setMode(on ? 'explore' : 'story')
+    },
+    state() {
+      const s = useStoryStore.getState()
+      return {
+        index: clock.index,
+        t: clock.t,
+        T: clock.T,
+        playing: s.playing,
+        held: clock.held,
+        mode: s.mode,
+        tier: s.tier,
+        dpr: readStats(s.tier).dpr,
+        reduced: s.reduced,
+        detent: s.detent,
+        layout: focus.layout,
+        phase: s.phase,
+        focus: { x: focus.x, y: focus.y, w: focus.w, h: focus.h, W: focus.W, H: focus.H },
+      }
+    },
+    stats() {
+      return readStats(useStoryStore.getState().tier)
+    },
+    labels: () => labelsSnapshot(),
+    /** QA: world point -> stage CSS px with the current camera (registration checks) */
+    project(x: number, y: number, z: number) {
+      const cam = gestureBus.camera
+      if (!cam) return null
+      cam.updateMatrixWorld()
+      const v = new THREE.Vector3(x, y, z).project(cam)
+      return { x: ((v.x + 1) / 2) * focus.W, y: ((1 - v.y) / 2) * focus.H, camera: cam.position.toArray().map((n) => Math.round(n * 1000) / 1000) }
+    },
+    get ready() {
+      return useStoryStore.getState().ready
+    },
+  }
+  ;(window as unknown as { __story: typeof api }).__story = api
+}

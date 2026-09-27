@@ -1,0 +1,272 @@
+import { useEffect, useMemo } from 'react'
+import { useFrame } from '@react-three/fiber'
+import * as THREE from 'three'
+import { clock } from '../clock'
+import { hash2 } from '../rng'
+import { engineUniforms, lin } from './materials'
+import type { ChartFrame } from './chartFrame'
+import { PAL } from '../../fitnessData'
+
+/* =========================================================================
+   <LightField/> (DESIGN.md B.9, L9): constant-density light. One THREE.Points
+   on a jittered stratified grid over the chart box, so the amount of light
+   IS the amount of area. Curves enter as uniforms (128 samples in 32 vec4s,
+   linearly interpolated in the shader; no float textures, iOS-safe).
+     mode 0 POUR: a particle falls into its slot as the level reaches it.
+     mode 1 SPILL / CONDENSE: inside A but not B falls, reddens and fades;
+       inside B but not A condenses in amber; inside both turns chalk.
+   Every visible property is a function of the uniforms, which are a pure
+   function of T (or of the explore state).
+   ========================================================================= */
+
+export const CURVE_SAMPLES = 128
+
+/** Sample f(u) at 128 points for the curve uniforms. */
+export function sampleCurve(f: (u: number) => number, out = new Float32Array(CURVE_SAMPLES)): Float32Array {
+  for (let i = 0; i < CURVE_SAMPLES; i++) out[i] = f(i / (CURVE_SAMPLES - 1))
+  return out
+}
+
+export interface LightFieldUniforms {
+  mix: number
+  level: number
+  mode: 0 | 1
+  hot: number
+  opacity: number
+}
+
+export interface LightFieldProps {
+  frame: ChartFrame
+  count: number
+  curveA: Float32Array
+  curveB?: Float32Array
+  uniforms: (T: number) => LightFieldUniforms
+  /** base colour of the lit area */
+  color?: string
+  z?: number
+  renderOrder?: number
+  sizePx?: number
+  /** explore only: return live curves to repack this frame (null = unchanged) */
+  liveCurves?: () => { a: Float32Array; b: Float32Array } | null
+}
+
+const VERT = /* glsl */ `
+  uniform vec4 uA[32];
+  uniform vec4 uB[32];
+  uniform float uLevel;
+  uniform float uMix;
+  uniform float uMode;
+  uniform float uHot;
+  uniform float uX0;
+  uniform float uW;
+  uniform float uY0;
+  uniform float uH;
+  uniform float uZ;
+  uniform float uSize;
+  uniform float uDpr;
+  uniform vec3 uColA;
+  uniform vec3 uColSpill;
+  uniform vec3 uColCond;
+  uniform vec3 uColChalk;
+  attribute vec2 aSlot;
+  attribute vec4 aSeed;
+  varying vec3 vCol;
+  varying float vAlpha;
+
+  float pickA( int i ) { vec4 v = uA[ i / 4 ]; int c = i - ( i / 4 ) * 4; return c == 0 ? v.x : c == 1 ? v.y : c == 2 ? v.z : v.w; }
+  float pickB( int i ) { vec4 v = uB[ i / 4 ]; int c = i - ( i / 4 ) * 4; return c == 0 ? v.x : c == 1 ? v.y : c == 2 ? v.z : v.w; }
+  float curveA( float u ) {
+    float x = clamp( u, 0.0, 1.0 ) * 127.0;
+    int i0 = int( floor( x ) ); int i1 = min( i0 + 1, 127 );
+    return mix( pickA( i0 ), pickA( i1 ), x - float( i0 ) );
+  }
+  float curveB( float u ) {
+    float x = clamp( u, 0.0, 1.0 ) * 127.0;
+    int i0 = int( floor( x ) ); int i1 = min( i0 + 1, 127 );
+    return mix( pickB( i0 ), pickB( i1 ), x - float( i0 ) );
+  }
+
+  void main() {
+    float u = aSlot.x;
+    float v = aSlot.y;
+    float y = v;
+    float alpha = 0.0;
+    vec3 col = uColA;
+    float a = curveA( u );
+    if ( uMode < 0.5 ) {
+      // POUR
+      if ( v < a ) {
+        float lead = 0.12 * ( 0.55 + 0.9 * aSeed.x );
+        float k = clamp( ( uLevel - v + lead ) / lead, 0.0, 1.0 );
+        float e = 1.0 - pow( 1.0 - k, 3.0 );
+        y = v + ( 1.0 - e ) * ( 0.35 + 0.25 * aSeed.y );
+        alpha = smoothstep( 0.0, 0.25, k );
+        col = uColA * ( 1.0 + uHot * ( 0.55 + 1.6 * ( 1.0 - k ) ) );
+      }
+    } else {
+      float b = curveB( u );
+      bool inA = v < a;
+      bool inB = v < b;
+      float m = clamp( ( uMix - aSeed.y * 0.35 ) / 0.65, 0.0, 1.0 );
+      if ( inA && inB ) {
+        col = mix( uColA, uColChalk, m );
+        alpha = mix( 1.0, 0.6, m );
+      } else if ( inA ) {
+        float fall = m * m * m;
+        y = v - fall * ( 0.35 + 0.45 * aSeed.z );
+        col = mix( uColA, uColSpill, smoothstep( 0.0, 0.3, m ) );
+        alpha = 1.0 - smoothstep( 0.35, 1.0, m );
+      } else if ( inB ) {
+        float e = 1.0 - pow( 1.0 - m, 3.0 );
+        y = v + ( 1.0 - e ) * 0.1;
+        col = uColCond * 2.1;
+        alpha = e;
+      }
+    }
+    vCol = col;
+    vAlpha = alpha;
+    vec3 p = vec3( uX0 + u * uW, uY0 + y * uH, uZ );
+    gl_Position = projectionMatrix * modelViewMatrix * vec4( p, 1.0 );
+    gl_PointSize = alpha > 0.002 ? uSize * uDpr * ( 0.85 + 0.3 * aSeed.w ) : 0.0;
+  }
+`
+
+const FRAG = /* glsl */ `
+  uniform float uOpacity;
+  varying vec3 vCol;
+  varying float vAlpha;
+  void main() {
+    if ( vAlpha < 0.002 ) discard;
+    vec2 d = gl_PointCoord * 2.0 - 1.0;
+    float r = dot( d, d );
+    if ( r > 1.0 ) discard;
+    float k = exp( - r * 3.2 );
+    gl_FragColor = vec4( vCol * k, k * vAlpha * uOpacity );
+    #include <tonemapping_fragment>
+    #include <colorspace_fragment>
+  }
+`
+
+function packCurve(src: Float32Array, dst: THREE.Vector4[]): void {
+  for (let i = 0; i < 32; i++) dst[i].set(src[i * 4] ?? 0, src[i * 4 + 1] ?? 0, src[i * 4 + 2] ?? 0, src[i * 4 + 3] ?? 0)
+}
+
+export function LightField({
+  frame,
+  count,
+  curveA,
+  curveB,
+  uniforms,
+  color = PAL.yellowGreen,
+  z = 0.02,
+  renderOrder = 40,
+  sizePx = 2.2,
+  liveCurves,
+}: LightFieldProps) {
+  const geometry = useMemo(() => {
+    const n = Math.max(1, Math.floor(count))
+    const worldAspect = frame.FW / (frame.FH * frame.vMax)
+    const cols = Math.max(1, Math.round(Math.sqrt(n * worldAspect)))
+    const rows = Math.max(1, Math.ceil(n / cols))
+    const slot = new Float32Array(cols * rows * 2)
+    const seed = new Float32Array(cols * rows * 4)
+    const pos = new Float32Array(cols * rows * 3)
+    let k = 0
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        slot[k * 2] = (c + hash2(c, r * 7 + 1)) / cols
+        slot[k * 2 + 1] = ((r + hash2(c * 3 + 5, r)) / rows) * frame.vMax
+        seed[k * 4] = hash2(k, 11)
+        seed[k * 4 + 1] = hash2(k, 23)
+        seed[k * 4 + 2] = hash2(k, 37)
+        seed[k * 4 + 3] = hash2(k, 51)
+        k++
+      }
+    }
+    const g = new THREE.BufferGeometry()
+    g.setAttribute('position', new THREE.BufferAttribute(pos, 3))
+    g.setAttribute('aSlot', new THREE.BufferAttribute(slot, 2))
+    g.setAttribute('aSeed', new THREE.BufferAttribute(seed, 4))
+    return g
+  }, [count, frame])
+
+  const material = useMemo(
+    () =>
+      new THREE.ShaderMaterial({
+        uniforms: {
+          uA: { value: Array.from({ length: 32 }, () => new THREE.Vector4()) },
+          uB: { value: Array.from({ length: 32 }, () => new THREE.Vector4()) },
+          uLevel: { value: 0 },
+          uMix: { value: 0 },
+          uMode: { value: 0 },
+          uHot: { value: 0 },
+          uOpacity: { value: 1 },
+          uX0: { value: 0 },
+          uW: { value: 1 },
+          uY0: { value: 0 },
+          uH: { value: 1 },
+          uZ: { value: 0 },
+          uSize: { value: sizePx },
+          uDpr: engineUniforms.uDpr,
+          uColA: { value: lin(color) },
+          uColSpill: { value: lin(PAL.sick) },
+          uColCond: { value: lin(PAL.both) },
+          uColChalk: { value: lin(PAL.chalk).multiplyScalar(0.85) },
+        },
+        vertexShader: VERT,
+        fragmentShader: FRAG,
+        transparent: true,
+        depthWrite: false,
+        depthTest: false,
+        blending: THREE.AdditiveBlending,
+      }),
+    [color, sizePx],
+  )
+  const points = useMemo(() => {
+    const p = new THREE.Points(geometry, material)
+    p.frustumCulled = false
+    p.renderOrder = renderOrder
+    return p
+  }, [geometry, material, renderOrder])
+
+  useEffect(() => () => geometry.dispose(), [geometry])
+  useEffect(() => () => material.dispose(), [material])
+
+  // curves and frame -> uniforms (not per frame)
+  useEffect(() => {
+    const u = material.uniforms
+    packCurve(curveA, u.uA.value as THREE.Vector4[])
+    packCurve(curveB ?? curveA, u.uB.value as THREE.Vector4[])
+    u.uX0.value = frame.x0
+    u.uW.value = frame.FW
+    u.uY0.value = frame.y0
+    u.uH.value = frame.FH
+    u.uZ.value = z
+  }, [material, curveA, curveB, frame, z])
+
+  useFrame(() => {
+    const s = uniforms(clock.T)
+    points.visible = s.opacity > 0.002
+    if (!points.visible) return
+    const u = material.uniforms
+    const lc = liveCurves?.()
+    if (lc) {
+      packCurve(lc.a, u.uA.value as THREE.Vector4[])
+      packCurve(lc.b, u.uB.value as THREE.Vector4[])
+    }
+    u.uLevel.value = s.level
+    u.uMix.value = s.mix
+    u.uMode.value = s.mode
+    u.uHot.value = s.hot
+    u.uOpacity.value = s.opacity
+  })
+
+  return <primitive object={points} />
+}
+
+/** Mark the curve uniforms dirty after mutating curveA / curveB in place. */
+export function repackCurves(points: THREE.Points, a: Float32Array, b?: Float32Array): void {
+  const m = points.material as THREE.ShaderMaterial
+  packCurve(a, m.uniforms.uA.value as THREE.Vector4[])
+  if (b) packCurve(b, m.uniforms.uB.value as THREE.Vector4[])
+}
