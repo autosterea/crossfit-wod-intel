@@ -23,6 +23,12 @@ export const readyState = {
   frames: 0,
   /** frames rendered since the latest seek (QA settle) */
   settled: 0,
+  /**
+   * The route already moved to this chapter while its chunk loads; the old
+   * StoryDef is still mounted (held under the slate). '' when not pending.
+   * QA is never "settled" while pending, and steps / gestures are ignored.
+   */
+  pendingView: '' as string,
 }
 
 /** The stage root, for the data-story-ready attribute (set by the Stage). */
@@ -38,7 +44,15 @@ if (typeof document !== 'undefined' && document.fonts) {
 /** QA settle: loaded, and two frames rendered after the latest seek. */
 export function isSettled(): boolean {
   const st = useStoryStore.getState()
+  if (readyState.pendingView) return false
   return st.loaded && (readyState.settled >= 2 || !st.webgl)
+}
+
+/** A chapter change is pending (the new chunk is loading under the slate). */
+export function setPending(view: string): void {
+  if (readyState.pendingView === view) return
+  readyState.pendingView = view
+  writeAttr()
 }
 
 function writeAttr(): void {

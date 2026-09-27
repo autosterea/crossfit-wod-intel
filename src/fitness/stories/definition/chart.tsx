@@ -67,7 +67,8 @@ export function curveTop(frame: ChartFrame, f: (u: number) => number, n = 72): F
 
 export interface ChartVis {
   grid: { progress: Fn; opacity: Fn }
-  axes: { progress: Fn; opacity: Fn }
+  /** head: the axes are drawn by a hot pen (one continuous L stroke) */
+  axes: { progress: Fn; opacity: Fn; head?: boolean }
   ticks: { progress: Fn; opacity: Fn }
 }
 
@@ -79,9 +80,11 @@ export function ChartConstruction({ frame, vis }: { frame: ChartFrame; vis: Char
   }, [frame])
   const axes = useMemo(() => {
     const s: number[] = []
-    // time axis left to right, then the power axis bottom to top (L11)
+    // ONE continuous L stroke, the way a coach draws axes on a whiteboard:
+    // down the power axis to the origin, then along the time axis, left to
+    // right (L11). Continuous, so the pen head travels without a jump.
+    lineSegs(s, [frame.x(0), frame.y(frame.vMax), 0], [frame.x(0), frame.y(0), 0], 22)
     lineSegs(s, [frame.x(0), frame.y(0), 0], [frame.x(1), frame.y(0), 0], 28)
-    lineSegs(s, [frame.x(0), frame.y(0), 0], [frame.x(0), frame.y(frame.vMax), 0], 22)
     return new Float32Array(s)
   }, [frame])
   const ticks = useMemo(() => {
@@ -96,7 +99,7 @@ export function ChartConstruction({ frame, vis }: { frame: ChartFrame; vis: Char
   return (
     <>
       <PenBatch segments={grid} color={PAL.chalk} width={PEN.grid} progress={vis.grid.progress} opacity={vis.grid.opacity} renderOrder={29} />
-      <PenBatch segments={axes} color={PAL.chalk} width={PEN.axis} progress={vis.axes.progress} opacity={vis.axes.opacity} byArc />
+      <PenBatch segments={axes} color={PAL.chalk} width={PEN.axis} progress={vis.axes.progress} opacity={vis.axes.opacity} byArc head={vis.axes.head} hot={vis.axes.head} />
       <PenBatch segments={ticks} color={PAL.chalk} width={PEN.axis} progress={vis.ticks.progress} opacity={vis.ticks.opacity} />
     </>
   )

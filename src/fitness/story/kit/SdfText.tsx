@@ -3,6 +3,7 @@ import { useFrame } from '@react-three/fiber'
 import { Text } from '@react-three/drei'
 import type * as THREE from 'three'
 import { clock } from '../clock'
+import { reportOnce } from '../safe'
 import { asset } from '../url'
 
 /* =========================================================================
@@ -23,6 +24,32 @@ export type SdfFont = keyof typeof SDF_FONTS
 
 /** Characters preloaded per font (drei suspends until the glyphs exist). */
 const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 =?.,:+%/'
+
+/*
+ * Network rule (E.14): troika fetches a FALLBACK font from a CDN for any
+ * glyph the self-hosted TTF lacks, and a custom unicodeFontsURL does not
+ * help (on failure it retries the CDN). So SdfText only ever passes glyphs
+ * from this whitelist, which the three TTFs cover; anything else is replaced
+ * by a space, with a warning in development.
+ */
+const SAFE = new Set(CHARS.split(''))
+const warned = new Set<string>()
+export function sdfSafe(text: string): string {
+  let out = ''
+  let bad = ''
+  for (const ch of text) {
+    if (SAFE.has(ch) || ch === String.fromCharCode(10)) out += ch
+    else {
+      out += ' '
+      bad += ch
+    }
+  }
+  if (bad && import.meta.env.DEV && !warned.has(text)) {
+    warned.add(text)
+    console.warn('[SdfText] "' + text + '" has glyphs outside the self-hosted font whitelist (' + bad + '); they were replaced, never fetched')
+  }
+  return out
+}
 
 export interface SdfTextProps {
   font: SdfFont
@@ -62,12 +89,17 @@ export function SdfText({
 }: SdfTextProps) {
   const ref = useRef<THREE.Mesh & { fillOpacity: number; outlineOpacity: number }>(null)
   useFrame(() => {
-    const m = ref.current
-    if (!m) return
-    const o = opacity ? opacity(clock.T) : 1
-    m.visible = o > 0.002
-    m.fillOpacity = o
-    if (outline) m.outlineOpacity = o * 0.8
+    try {
+      const m = ref.current
+      if (!m) return
+      const o = opacity ? opacity(clock.T) : 1
+      m.visible = o > 0.002
+      m.fillOpacity = o
+      if (outline) m.outlineOpacity = o * 0.8
+    } catch (err) {
+      if (ref.current) ref.current.visible = false
+      reportOnce('<SdfText> callback', err)
+    }
   })
   return (
     <Text
@@ -89,7 +121,7 @@ export function SdfText({
       depthOffset={-1}
       onSync={onSync as never}
     >
-      {text}
+      {sdfSafe(text)}
     </Text>
   )
 }

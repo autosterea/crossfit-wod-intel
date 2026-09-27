@@ -2,6 +2,7 @@ import { useEffect, useMemo } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { clock } from '../clock'
+import { reportOnce } from '../safe'
 import { hash2 } from '../rng'
 import { engineUniforms, lin } from './materials'
 import type { ChartFrame } from './chartFrame'
@@ -267,21 +268,26 @@ export function LightField({
   }, [material, curveA, curveB, frame, z])
 
   useFrame(() => {
-    const s = uniforms(clock.T)
-    points.visible = s.opacity > 0.002
-    if (!points.visible) return
-    const u = material.uniforms
-    const lc = liveCurves?.()
-    if (lc) {
-      packCurve(lc.a, u.uA.value as THREE.Vector4[])
-      packCurve(lc.b, u.uB.value as THREE.Vector4[])
+    try {
+      const s = uniforms(clock.T)
+      points.visible = s.opacity > 0.002
+      if (!points.visible) return
+      const u = material.uniforms
+      const lc = liveCurves?.()
+      if (lc) {
+        packCurve(lc.a, u.uA.value as THREE.Vector4[])
+        packCurve(lc.b, u.uB.value as THREE.Vector4[])
+      }
+      u.uLevel.value = s.level
+      u.uMix.value = s.mix
+      u.uMode.value = s.mode
+      u.uHot.value = s.hot
+      u.uRest.value = s.rest ?? 0
+      u.uOpacity.value = s.opacity
+    } catch (err) {
+      points.visible = false
+      reportOnce('<LightField> callback', err)
     }
-    u.uLevel.value = s.level
-    u.uMix.value = s.mix
-    u.uMode.value = s.mode
-    u.uHot.value = s.hot
-    u.uRest.value = s.rest ?? 0
-    u.uOpacity.value = s.opacity
   })
 
   return <primitive object={points} />

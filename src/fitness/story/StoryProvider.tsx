@@ -7,11 +7,12 @@ import { pb, holdFor } from './playback'
 import { readStats } from './quality/stats'
 import { labelCounts, labelsSnapshot } from './labels/LabelLayer'
 import { focusRect } from './camera/focusRect'
-import { initialTier, tierDpr } from './quality/tiers'
+import { initialTier } from './quality/tiers'
 import { setStoryFrameOpts } from './kit/chartFrame'
-import { setTierCeiling } from './quality/Quality'
-import { isSettled, markSeek, resetReady } from './ready'
+import { initQuality, quality } from './quality/Quality'
+import { isSettled, markSeek, readyState, resetReady } from './ready'
 import { gestureBus } from './gestures'
+import { hotspotsSnapshot } from './hotspots'
 import * as THREE from 'three'
 
 /* =========================================================================
@@ -51,8 +52,8 @@ export function bootStory(): void {
   if (booted) return
   booted = true
   const { tier, pinned } = initialTier()
-  setTierCeiling(tier)
-  useStoryStore.setState({ tier, tierPinned: pinned, dpr: tierDpr(tier, 1), reduced: computeReduced() })
+  const step = initQuality(tier)
+  useStoryStore.setState({ tier, tierPinned: pinned, dpr: step.dpr, reduced: computeReduced() })
   try {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
     mq.addEventListener('change', () => {
@@ -74,7 +75,9 @@ export function StoryProvider({ def, children }: { def: StoryDef; children: Reac
     resetClock(def.beats.length)
     resetReady()
     pb.glide = null
-    pb.delay = st.reduced ? 0 : 0.2
+    // no pre-roll on a chapter's first beat: its build starts as the slate
+    // fades (the caption is already in place under the slate)
+    pb.delay = 0
     setStoryFrameOpts(def.frame ?? null)
     pb.holdElapsed = 0
     pb.holdFor = holdFor(def.beats[0])
@@ -110,7 +113,7 @@ export function StoryProvider({ def, children }: { def: StoryDef; children: Reac
     registerQA(def)
     return () => {
       const w = window as unknown as { __story?: unknown }
-      if (w.__story && (w.__story as { view?: string }).view === def.key) delete w.__story
+      if (w.__story && (w.__story as { chapter?: string }).chapter === def.key) delete w.__story
       useStoryStore.setState({ def: null, playing: false, mode: 'story' })
     }
   }, [def])
@@ -122,7 +125,16 @@ export function StoryProvider({ def, children }: { def: StoryDef; children: Reac
 
 function registerQA(def: StoryDef): void {
   const api = {
-    view: def.key,
+    /** the chapter the URL shows (the pending one while its chunk loads) */
+    get view() {
+      return readyState.pendingView || def.key
+    },
+    /** true while the next chapter's chunk loads and the old one is held under the slate */
+    get pending() {
+      return !!readyState.pendingView
+    },
+    /** the chapter whose StoryDef is mounted */
+    chapter: def.key,
     beats: def.beats.map((b) => ({ id: b.id, title: b.title, build: b.build })),
     seek(n: number, t: number) {
       useStoryStore.getState().seek(n, t, { hold: true })
@@ -157,6 +169,10 @@ function registerQA(def: StoryDef): void {
       return readStats(useStoryStore.getState().tier)
     },
     labels: () => labelsSnapshot(),
+    /** QA: stage hotspots (real buttons over projected 3D boxes) */
+    hotspots: () => hotspotsSnapshot(),
+    /** QA: adaptive-quality changes (tier, dpr, reason, frame-time seconds) since the page booted */
+    qualityLog: () => quality.log.map((e) => ({ ...e })),
     /** label counts against the caps (C.9): registered, live, cap */
     labelCounts: () => labelCounts(),
     /** QA: world point -> stage CSS px with the current camera (registration checks) */

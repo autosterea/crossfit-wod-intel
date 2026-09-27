@@ -54,7 +54,6 @@ export default function ExploreScene({ frame, tier }: { frame: ChartFrame; tier:
   const replay = useDefExplore((s) => s.replay)
   const showDomains = useDefExplore((s) => s.showDomains)
   const ghostOn = useDefExplore((s) => s.ghost)
-  const probe = useDefExplore((s) => s.probe)
   const target = CURVE_BY_KEY[athlete]?.samples ?? GENERALIST.samples
   const isG = athlete === GENERALIST.name
   const lowTier = tier === 'low'
@@ -155,9 +154,13 @@ export default function ExploreScene({ frame, tier }: { frame: ChartFrame; tier:
     return true
   }
 
-  // probe line
-  const probeRef = useRef<number | null>(null)
-  probeRef.current = probe
+  // Probe line. The probe moves on every scrub pointermove, so it is read
+  // TRANSIENTLY (getState inside the frame loop and the label functions),
+  // never through a React subscription: no re-render per drag event.
+  const probeRef = useRef<number | null>(useDefExplore.getState().probe)
+  useFrame(() => {
+    probeRef.current = useDefExplore.getState().probe
+  }, -11)
   const probePts = useMemo(() => new Float32Array(6), [])
   const lastProbe = useRef<number | null>(-1)
   const writeProbe = (_T: number, pts: Float32Array): boolean => {
@@ -179,7 +182,7 @@ export default function ExploreScene({ frame, tier }: { frame: ChartFrame; tier:
     const y0 = y(0)
     const out: LabelSpec[] = [
       { id: 'ex-ax-y', text: 'Power output', tone: 'tick', anchor: [x(0), y(frame.vMax), 0], prefer: 'E', only: ['E', 'NE', 'SE'], gapPx: 8, priority: 78 },
-      { id: 'ex-ax-x', text: 'Effort duration', tone: 'tick', anchor: [x(0.5), y0 - TICK_LEN, 0], prefer: 'S', only: ['S'], gapPx: 25, priority: 78 },
+      { id: 'ex-ax-x', text: 'Effort duration', tone: 'tick', anchor: [x(0.5), y0 - TICK_LEN, 0], prefer: 'S', only: ['S'], gapPx: layout === 'P' ? 30 : 34, priority: 78 },
       { id: 'ex-yr-05', text: '0.5', tone: 'tick', anchor: [x(0) - TICK_LEN, y(0.5), 0], prefer: 'W', only: ['W'], gapPx: 5 },
       { id: 'ex-yr-10', text: '1.0', tone: 'tick', anchor: [x(0) - TICK_LEN, y(1), 0], prefer: 'W', only: ['W'], gapPx: 5 },
       {
@@ -237,7 +240,7 @@ export default function ExploreScene({ frame, tier }: { frame: ChartFrame; tier:
         cue: () => (probeRef.current === null || isG ? 0 : 1),
       },
     ]
-    const tickIdx = layout === 'P' ? [0, 1, 3, 4, 6, 7] : [0, 1, 2, 3, 4, 5, 6, 7]
+    const tickIdx = layout === 'P' ? [0, 1, 3, 5, 7] : [0, 1, 2, 3, 4, 5, 6, 7]
     tickIdx.forEach((i) => {
       out.push({ id: `ex-tk-${i}`, text: POWER_DURATION_LABELS[i], tone: 'tick', anchor: [x(i / 7), y0 - TICK_LEN, 0], prefer: 'S', only: ['S'], gapPx: 5, priority: 80 })
     })

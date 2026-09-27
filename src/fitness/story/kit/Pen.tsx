@@ -4,6 +4,7 @@ import * as THREE from 'three'
 import { LineSegments2 } from 'three/examples/jsm/lines/LineSegments2.js'
 import { LineSegmentsGeometry } from 'three/examples/jsm/lines/LineSegmentsGeometry.js'
 import { clock } from '../clock'
+import { reportOnce } from '../safe'
 import { useStoryStore } from '../store'
 import { makeGlowMaterial, makePenMaterial } from './materials'
 import type { V3 } from '../types'
@@ -205,19 +206,60 @@ export function writePolyline(pts: Float32Array, segs: Float32Array): void {
   for (let i = 0; i < n - 1; i++) segs.set(pts.subarray(i * 3, i * 3 + 6), i * 6)
 }
 
-function makeHead(hot: boolean) {
+/*
+ * The pen head (B.9, L4): the luminous tip that says "this is being drawn
+ * now". Two additive points in one draw call: a hot white core (HDR, it
+ * blooms) and a wide soft halo tinted by the stroke colour, so the head reads
+ * as light even where bloom is weak (the MEDIUM tier blooms at half
+ * resolution and eats small cores; LOW has no bloom at all). Sizes are CSS px.
+ */
+const HEAD = {
+  core: { hot: 15, cool: 10 },
+  halo: { hot: 46, cool: 26 },
+  /** core colour gain: HDR on hot heads */
+  gain: { hot: 3.2, cool: 1.3 },
+  haloGain: { hot: 1.5, cool: 0.55 },
+}
+
+function makeHead(hot: boolean, tint: string) {
   const g = new THREE.BufferGeometry()
-  g.setAttribute('position', new THREE.BufferAttribute(new Float32Array(3), 3))
-  const c = HEAD_COLOR.clone().multiplyScalar(hot ? 2.2 : 1.1)
-  g.setAttribute('aColor', new THREE.BufferAttribute(new Float32Array([c.r, c.g, c.b]), 3))
-  g.setAttribute('aSize', new THREE.BufferAttribute(new Float32Array([hot ? 14 : 10]), 1))
-  g.setAttribute('aAlpha', new THREE.BufferAttribute(new Float32Array([1]), 1))
+  g.setAttribute('position', new THREE.BufferAttribute(new Float32Array(6), 3))
+  const c = HEAD_COLOR.clone().multiplyScalar(hot ? HEAD.gain.hot : HEAD.gain.cool)
+  const t = new THREE.Color(tint).lerp(HEAD_COLOR, 0.35).multiplyScalar(hot ? HEAD.haloGain.hot : HEAD.haloGain.cool)
+  g.setAttribute('aColor', new THREE.BufferAttribute(new Float32Array([c.r, c.g, c.b, t.r, t.g, t.b]), 3))
+  g.setAttribute('aSize', new THREE.BufferAttribute(new Float32Array([hot ? HEAD.core.hot : HEAD.core.cool, hot ? HEAD.halo.hot : HEAD.halo.cool]), 1))
+  g.setAttribute('aAlpha', new THREE.BufferAttribute(new Float32Array([1, 1]), 1))
   const m = makeGlowMaterial()
   const pts = new THREE.Points(g, m)
   pts.frustumCulled = false
   pts.renderOrder = 50
   return pts
 }
+
+/** Move the head to pos with alpha k; LOW gets a bigger core (no bloom there). */
+function placeHead(headObj: THREE.Points, pos: THREE.Vector3, k: number, hot: boolean, low: boolean): void {
+  const pa = headObj.geometry.attributes.position as THREE.BufferAttribute
+  pa.setXYZ(0, pos.x, pos.y, pos.z)
+  pa.setXYZ(1, pos.x, pos.y, pos.z)
+  pa.needsUpdate = true
+  const aa = headObj.geometry.attributes.aAlpha as THREE.BufferAttribute
+  aa.setX(0, k)
+  aa.setX(1, k * 0.9)
+  aa.needsUpdate = true
+  const sa = headObj.geometry.attributes.aSize as THREE.BufferAttribute
+  sa.setX(0, (hot ? HEAD.core.hot : HEAD.core.cool) * (low && hot ? 1.8 : 1))
+  sa.setX(1, (hot ? HEAD.halo.hot : HEAD.halo.cool) * (low && hot ? 1.3 : 1))
+  sa.needsUpdate = true
+  headObj.visible = true
+}
+
+/**
+ * Head alpha along a stroke: fades in over the first 3% and out over the last
+ * 3%. It follows the stroke's opacity x 2 (capped at 1), so a construction
+ * line drawn at 55% still has a full-brightness pen tip: the pen is always
+ * the brightest thing while it draws (L4).
+ */
+const headK = (p: number) => Math.max(0, Math.min(1, p / 0.03, (1 - p) / 0.03))
 
 export interface PenProps {
   /** polyline, xyz */
@@ -274,7 +316,7 @@ export function Pen({
     c.line.renderOrder = renderOrder
     return c
   }, [pts, pointColors, color, width, dashed, dashSize, gapSize, renderOrder])
-  const headObj = useMemo(() => (head ? makeHead(hot) : null), [head, hot])
+  const headObj = useMemo(() => (head ? makeHead(hot, color) : null), [head, hot, color])
 
   useEffect(
     () => () => {
@@ -294,38 +336,31 @@ export function Pen({
   )
 
   useFrame(() => {
-    const T = clock.T
-    if (update && update(T, pts)) {
-      writePolyline(pts, core.src)
-      core.refresh()
-    }
-    const op = opacity ? opacity(T) : 1
-    const p = progress ? progress(T) : 1
-    const mat = core.line.material as THREE.ShaderMaterial & { opacity: number }
-    const visible = op > 0.002 && p > 0.0005
-    core.line.visible = visible
-    if (headObj) headObj.visible = false
-    if (!visible) return
-    mat.opacity = op
-    const headArc = core.draw(p)
-    const u = mat.uniforms
-    u.uHead.value = headArc
-    const live = p < 1 ? 1 : 0
-    u.uGlowAmt.value = (hot ? 0.9 : 0.55) * live
-    u.uGain.value = gain ? gain(T) : 1
-    if (headObj && p < 1) {
-      const pa = headObj.geometry.attributes.position as THREE.BufferAttribute
-      pa.setXYZ(0, core.headPos.x, core.headPos.y, core.headPos.z)
-      pa.needsUpdate = true
-      const aa = headObj.geometry.attributes.aAlpha as THREE.BufferAttribute
-      // fade in over the first 3% and out over the last 3% of the stroke
-      const k = Math.min(1, p / 0.03, (1 - p) / 0.03)
-      aa.setX(0, k * op)
-      aa.needsUpdate = true
-      const sa = headObj.geometry.attributes.aSize as THREE.BufferAttribute
-      sa.setX(0, (hot ? 14 : 10) * (tierLow && hot ? 2.6 : 1))
-      sa.needsUpdate = true
-      headObj.visible = true
+    try {
+      const T = clock.T
+      if (update && update(T, pts)) {
+        writePolyline(pts, core.src)
+        core.refresh()
+      }
+      const op = opacity ? opacity(T) : 1
+      const p = progress ? progress(T) : 1
+      const mat = core.line.material as THREE.ShaderMaterial & { opacity: number }
+      const visible = op > 0.002 && p > 0.0005
+      core.line.visible = visible
+      if (headObj) headObj.visible = false
+      if (!visible) return
+      mat.opacity = op
+      const headArc = core.draw(p)
+      const u = mat.uniforms
+      u.uHead.value = headArc
+      const live = p < 1 ? 1 : 0
+      u.uGlowAmt.value = (hot ? 0.9 : 0.55) * live
+      u.uGain.value = gain ? gain(T) : 1
+      if (headObj && p < 1) placeHead(headObj, core.headPos, headK(p) * Math.min(1, op * 2), hot, tierLow)
+    } catch (err) {
+      core.line.visible = false
+      if (headObj) headObj.visible = false
+      reportOnce('<Pen> callback', err)
     }
   })
 
@@ -353,9 +388,17 @@ export interface PenBatchProps {
   /** draw-on by segment index (default) or by arc length */
   byArc?: boolean
   update?: (T: number, segs: Float32Array) => boolean
+  /**
+   * A luminous head at the drawing tip, plus the tail glow behind it. Use it
+   * with `byArc` on a CONTINUOUS path (for example axes drawn as one L
+   * stroke), so the head travels instead of jumping between segments.
+   */
+  head?: boolean
+  hot?: boolean
+  gain?: (T: number) => number
 }
 
-/** Many segments in one draw call (grids, axes, ticks, merged outlines). */
+/** Many segments in one draw call (grids, axes, ticks, bars, merged outlines). */
 export function PenBatch({
   segments,
   colors,
@@ -369,13 +412,18 @@ export function PenBatch({
   renderOrder = 30,
   byArc = false,
   update,
+  head = false,
+  hot = false,
+  gain,
 }: PenBatchProps) {
+  const tierLow = useStoryStore((s) => s.tier === 'low')
   const core = useMemo(() => {
     const mat = makePenMaterial({ color: colors ? '#ffffff' : color, width, dashed, dashSize, gapSize, vertexColors: !!colors })
     const c = new PenCore(segments.slice(), colors ?? null, mat, dashed)
     c.line.renderOrder = renderOrder
     return c
   }, [segments, colors, color, width, dashed, dashSize, gapSize, renderOrder])
+  const headObj = useMemo(() => (head ? makeHead(hot, color) : null), [head, hot, color])
   useEffect(
     () => () => {
       core.dispose()
@@ -383,16 +431,44 @@ export function PenBatch({
     },
     [core],
   )
+  useEffect(
+    () => () => {
+      if (headObj) {
+        headObj.geometry.dispose()
+        ;(headObj.material as THREE.Material).dispose()
+      }
+    },
+    [headObj],
+  )
   useFrame(() => {
-    const T = clock.T
-    if (update && update(T, core.src)) core.refresh()
-    const op = opacity ? opacity(T) : 1
-    const p = progress ? progress(T) : 1
-    const visible = op > 0.002 && p > 0.0005
-    core.line.visible = visible
-    if (!visible) return
-    ;(core.line.material as THREE.ShaderMaterial & { opacity: number }).opacity = op
-    core.draw(p, !byArc)
+    try {
+      const T = clock.T
+      if (update && update(T, core.src)) core.refresh()
+      const op = opacity ? opacity(T) : 1
+      const p = progress ? progress(T) : 1
+      const visible = op > 0.002 && p > 0.0005
+      core.line.visible = visible
+      if (headObj) headObj.visible = false
+      if (!visible) return
+      const mat = core.line.material as THREE.ShaderMaterial & { opacity: number }
+      mat.opacity = op
+      const headArc = core.draw(p, !byArc)
+      if (head) {
+        mat.uniforms.uHead.value = headArc
+        mat.uniforms.uGlowAmt.value = (hot ? 0.9 : 0.55) * (p < 1 ? 1 : 0)
+      }
+      if (gain) mat.uniforms.uGain.value = gain(T)
+      if (headObj && p < 1) placeHead(headObj, core.headPos, headK(p) * Math.min(1, op * 2), hot, tierLow)
+    } catch (err) {
+      core.line.visible = false
+      if (headObj) headObj.visible = false
+      reportOnce('<PenBatch> callback', err)
+    }
   })
-  return <primitive object={core.line} />
+  return (
+    <>
+      <primitive object={core.line} />
+      {headObj && <primitive object={headObj} />}
+    </>
+  )
 }

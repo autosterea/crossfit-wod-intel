@@ -27,10 +27,21 @@ const CHART: CamPose = { target: T0, az: 0, el: 0, fov: 22, fit: chartBox, padPx
 /** Reveal the domain depth (D2 keys): fit the fanned VOLUME, not the flat chart. */
 const FAN_L: CamPose = { target: (_l, f) => fanCenter(f), az: -30, el: 18, fov: 24, fit: (_l, f) => fanBox(f), padPx: { l: 40, r: 120, t: 24, b: 40 } }
 const FAN_P: CamPose = { target: (_l, f) => fanCenter(f), az: -32, el: 22, fov: 24, fit: (_l, f) => fanBox(f), padPx: { l: 14, r: 14, t: 12, b: 26 } }
-/** The ranked lineup column (D6): front-on with slight relief on the slabs (L12 allows el <= 8). */
+/**
+ * The ranked lineup (D6): exactly front-on (L12). The minis are light-filled
+ * areas on glass plates, not slabs, so there is no relief to show (H.29).
+ * The pose fits the lineup the scene builds for this layout and frame.
+ */
 const boxCenter = (b: Box): V3 => [(b[0][0] + b[1][0]) / 2, (b[0][1] + b[1][1]) / 2, (b[0][2] + b[1][2]) / 2]
-const COL_P: CamPose = { target: () => boxCenter(lineup('P').box), az: 0, el: 6, fov: 22, fit: () => lineup('P').box, padPx: { l: 12, r: 12, t: 12, b: 12 } }
-const COL_L: CamPose = { target: () => boxCenter(lineup('L').box), az: 0, el: 6, fov: 22, fit: () => lineup('L').box, padPx: { l: 16, r: 16, t: 16, b: 16 } }
+const COL_P: CamPose = {
+  target: (l, f) => boxCenter(lineup(l, f).box),
+  az: 0,
+  el: 0,
+  fov: 22,
+  fit: (l, f) => lineup(l, f).box,
+  padPx: { l: 6, r: 6, t: 8, b: 6 },
+}
+const COL_L: CamPose = { ...COL_P, padPx: { l: 16, r: 16, t: 16, b: 16 } }
 
 const plane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0)
 const hit = new THREE.Vector3()
@@ -43,7 +54,7 @@ export const definitionStory: StoryDef = {
       title: 'Power is measurable',
       body: 'Power is force times distance over time. How much weight, how far, how long: that is a valid measure of fitness.',
       source: 'MODULE_COPY.definition.keyPoints[0] + DEFINITION_TEXT s4',
-      build: 3.0,
+      build: 3.4,
       cam: { L: CHART },
     },
     {
@@ -51,7 +62,7 @@ export const definitionStory: StoryDef = {
       title: 'Power falls with duration',
       body: 'At each effort duration there is a highest average power you can hold, and as duration grows that power falls.',
       source: 'POWER_CONCEPT s2',
-      build: 5.0,
+      build: 4.6,
       cam: { L: CHART },
     },
     {

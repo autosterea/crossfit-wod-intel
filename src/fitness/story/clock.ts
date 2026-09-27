@@ -76,5 +76,13 @@ export function onFrame(fn: FrameListener): () => void {
 }
 
 export function emitFrame(dt: number): void {
-  for (const fn of listeners) fn(dt)
+  for (const fn of listeners) {
+    try {
+      fn(dt)
+    } catch (err) {
+      // a throwing listener (a chapter HUD, a counter) is dropped, never the loop
+      listeners.delete(fn)
+      console.warn('[story] a frame listener threw and was removed: ' + (err instanceof Error ? err.message : String(err)))
+    }
+  }
 }

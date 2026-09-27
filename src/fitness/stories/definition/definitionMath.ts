@@ -45,6 +45,17 @@ export function scoreColor(s: number): string {
   return s >= 85 ? PAL.fit : s >= 45 ? PAL.both : PAL.sick
 }
 
+/**
+ * The on-screen hue for a score (styling only; scoreColor above is the
+ * verbatim module mapping). A Broad score is drawn in #91C640, the colour
+ * that already means fitness and the generalist in this chapter (L8), so
+ * the HUD number, its word and the lime area never show two different
+ * greens for one meaning. Narrow and Low keep scoreColor.
+ */
+export function scoreHue(s: number): string {
+  return s >= 85 ? PAL.yellowGreen : scoreColor(s)
+}
+
 /* ---------------------------- derived data ---------------------------- */
 
 export const AXIS = intervalAxis(POWER_DURATIONS)

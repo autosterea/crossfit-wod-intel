@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import type { Layout, Rect } from '../types'
 
 /* =========================================================================
@@ -130,4 +130,30 @@ export function useFocusInset(ref: { current: HTMLElement | null }, side: 'top' 
 /** Snapshot of the focus rect (a ref-like object plus its version). */
 export function useFocusRect(): FocusState {
   return focusRect
+}
+
+/**
+ * A callback ref for the caption card / explore panel: whichever element is
+ * mounted is observed, and every size change re-fits (the card element is
+ * replaced when the mode or the chapter changes, and it may not exist yet
+ * when the stage first lays out, so observing it once from the stage left
+ * the focus rect stale).
+ */
+export function useObservedCard(cardRef: { current: HTMLDivElement | null }): (el: HTMLDivElement | null) => void {
+  const ro = useRef<ResizeObserver | null>(null)
+  useEffect(() => () => ro.current?.disconnect(), [])
+  return useCallback(
+    (el: HTMLDivElement | null) => {
+      cardRef.current = el
+      ro.current?.disconnect()
+      ro.current = null
+      if (el && typeof ResizeObserver !== 'undefined') {
+        const o = new ResizeObserver(() => recomputeFocus())
+        o.observe(el)
+        ro.current = o
+      }
+      recomputeFocus()
+    },
+    [cardRef],
+  )
 }

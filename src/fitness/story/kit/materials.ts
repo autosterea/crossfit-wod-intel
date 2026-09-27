@@ -180,6 +180,8 @@ export interface FillMatOpts {
   vertexColors?: boolean
   /** additive blending: the fill reads as light on the slate (Capacity pour) */
   additive?: boolean
+  /** per-vertex rim multiplier `aRimK` (AreaStrips: a different rim per strip) */
+  rimScale?: boolean
 }
 
 /**
@@ -207,7 +209,7 @@ export function makeFillMaterial(color: string, mode: FillMode = 'gradient', o: 
       uRimA: { value: 0.55 },
       uPow: { value: 1 },
     },
-    defines: o.vertexColors ? { USE_ACOLOR: '' } : {},
+    defines: { ...(o.vertexColors ? { USE_ACOLOR: '' } : {}), ...(o.rimScale ? { USE_ARIM: '' } : {}) },
     vertexShader: /* glsl */ `
       attribute float aT;
       attribute float aU;
@@ -215,6 +217,10 @@ export function makeFillMaterial(color: string, mode: FillMode = 'gradient', o: 
       #ifdef USE_ACOLOR
       attribute vec3 aColor;
       varying vec3 vColor;
+      #endif
+      #ifdef USE_ARIM
+      attribute float aRimK;
+      varying float vRimK;
       #endif
       varying float vT;
       varying float vU;
@@ -224,6 +230,9 @@ export function makeFillMaterial(color: string, mode: FillMode = 'gradient', o: 
         vT = aT; vU = aU; vY = position.y; vH = aH;
         #ifdef USE_ACOLOR
         vColor = aColor;
+        #endif
+        #ifdef USE_ARIM
+        vRimK = aRimK;
         #endif
         gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
       }
@@ -244,6 +253,9 @@ export function makeFillMaterial(color: string, mode: FillMode = 'gradient', o: 
       #ifdef USE_ACOLOR
       varying vec3 vColor;
       #endif
+      #ifdef USE_ARIM
+      varying float vRimK;
+      #endif
       varying float vT;
       varying float vU;
       varying float vY;
@@ -262,10 +274,14 @@ export function makeFillMaterial(color: string, mode: FillMode = 'gradient', o: 
         } else if ( uMode > 1.5 ) {
           a = uHi;
         }
-        if ( uRim > 0.0 ) {
+        float rimAmt = uRim;
+        #ifdef USE_ARIM
+        rimAmt *= vRimK;
+        #endif
+        if ( rimAmt > 0.0 ) {
           float depth = ( 1.0 - vT ) * vH;
           float band = exp( - depth / max( uRimW, 1e-4 ) );
-          col *= 1.0 + uRim * band;
+          col *= 1.0 + rimAmt * band;
           // the hottest light whitens a little, like a real emitter
           col = mix( col, vec3( max( col.r, max( col.g, col.b ) ) ), 0.3 * band );
           a = max( a, uRimA * band );
@@ -318,6 +334,111 @@ export function makeGlowMaterial(): THREE.ShaderMaterial {
     depthWrite: false,
     depthTest: false,
     blending: THREE.AdditiveBlending,
+  })
+}
+
+/* ------------------------------- ripple ------------------------------- */
+
+/**
+ * An expanding ring (the "snap" accent when a measured dot lands, B.11):
+ * one point sprite whose fragment draws a ring of radius aK in point space,
+ * fading as it grows. HDR at the start so it blooms briefly. Size in CSS px.
+ */
+export function makeRingMaterial(): THREE.ShaderMaterial {
+  return new THREE.ShaderMaterial({
+    uniforms: { uDpr: engineUniforms.uDpr },
+    vertexShader: /* glsl */ `
+      attribute vec3 aColor;
+      attribute float aSize;
+      attribute float aK;
+      uniform float uDpr;
+      varying vec3 vColor;
+      varying float vK;
+      void main() {
+        vColor = aColor; vK = aK;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+        gl_PointSize = aSize * uDpr;
+      }
+    `,
+    fragmentShader: /* glsl */ `
+      varying vec3 vColor;
+      varying float vK;
+      void main() {
+        vec2 d = gl_PointCoord * 2.0 - 1.0;
+        float r = length( d );
+        if ( r > 1.0 || vK <= 0.0 || vK >= 1.0 ) discard;
+        float rad = mix( 0.18, 0.96, vK );
+        float w = mix( 0.16, 0.05, vK );
+        float ring = exp( - pow( ( r - rad ) / w, 2.0 ) );
+        float fade = pow( 1.0 - vK, 1.6 );
+        float heat = mix( 2.4, 1.0, vK );
+        float a = ring * fade;
+        gl_FragColor = vec4( vColor * heat * a, a );
+        #include <tonemapping_fragment>
+        #include <colorspace_fragment>
+      }
+    `,
+    transparent: true,
+    depthWrite: false,
+    depthTest: false,
+    blending: THREE.AdditiveBlending,
+  })
+}
+
+/* ------------------------------- plates ------------------------------- */
+
+/**
+ * Glass row plates (a lineup, a leaderboard): rounded rectangles drawn from
+ * a signed distance in one draw call. Per plate: fill and border colour +
+ * alpha (vertex attributes), and a visibility factor from uniform uVis[i]
+ * (max 16 plates), so plates appear one by one from T with no rebuild.
+ */
+export const PLATE_MAX = 16
+export function makePlateMaterial(): THREE.ShaderMaterial {
+  return new THREE.ShaderMaterial({
+    uniforms: { uVis: { value: new Array(PLATE_MAX).fill(0) }, uDpr: engineUniforms.uDpr, uOpacity: { value: 1 } },
+    vertexShader: /* glsl */ `
+      attribute vec2 aLocal;
+      attribute vec3 aHalf;
+      attribute vec4 aFill;
+      attribute vec4 aLine;
+      attribute float aIdx;
+      uniform float uVis[${PLATE_MAX}];
+      varying vec2 vLocal;
+      varying vec3 vHalf;
+      varying vec4 vFill;
+      varying vec4 vLine;
+      varying float vVis;
+      void main() {
+        vLocal = aLocal; vHalf = aHalf; vFill = aFill; vLine = aLine;
+        vVis = uVis[ int( aIdx + 0.5 ) ];
+        gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+      }
+    `,
+    fragmentShader: /* glsl */ `
+      uniform float uOpacity;
+      varying vec2 vLocal;
+      varying vec3 vHalf;
+      varying vec4 vFill;
+      varying vec4 vLine;
+      varying float vVis;
+      void main() {
+        if ( vVis <= 0.001 ) discard;
+        // rounded-rect signed distance (world units); vHalf.z is the corner radius
+        vec2 q = abs( vLocal ) - vHalf.xy + vHalf.z;
+        float d = length( max( q, 0.0 ) ) + min( max( q.x, q.y ), 0.0 ) - vHalf.z;
+        float px = max( fwidth( d ), 1e-5 );
+        float inside = 1.0 - smoothstep( -px, px, d );
+        float edge = 1.0 - smoothstep( 0.0, px * 1.25, abs( d + px * 0.5 ) );
+        vec3 col = mix( vFill.rgb, vLine.rgb, edge );
+        float a = max( vFill.a * inside, vLine.a * edge );
+        gl_FragColor = vec4( col, a * vVis * uOpacity );
+        #include <tonemapping_fragment>
+        #include <colorspace_fragment>
+      }
+    `,
+    transparent: true,
+    depthWrite: false,
   })
 }
 

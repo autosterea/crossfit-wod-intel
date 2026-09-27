@@ -6,6 +6,7 @@ import { focusRect } from './camera/focusRect'
 import { cameraBus } from './camera/CameraDirector'
 import { pb, startBeat } from './playback'
 import { dropQueryKeys } from './url'
+import { readyState } from './ready'
 import type { V3 } from './types'
 
 /* =========================================================================
@@ -184,14 +185,23 @@ export function useStageGestures(stageRef: { current: HTMLElement | null }): voi
       if (st.mode === 'explore') lowerDpr(false)
     }
 
-    // Story mode (bubble phase).
+    // Story mode (bubble phase). The press is captured, so a mouse released
+    // outside the stage (over the top bar, outside the window) still ends it.
     const onDown = (e: PointerEvent) => {
       const st = useStoryStore.getState()
-      if (st.mode !== 'story' || isUi(e.target)) return
+      if (st.mode !== 'story' || isUi(e.target) || readyState.pendingView) return
       if (e.pointerType === 'mouse' && e.button !== 0) return
       start = { x: e.clientX, y: e.clientY, t: e.timeStamp, id: e.pointerId }
       release?.()
       release = st.beginInteraction()
+      // touch keeps the browser's vertical pan (pan-y); mouse and pen capture
+      if (e.pointerType !== 'touch') {
+        try {
+          el.setPointerCapture(e.pointerId)
+        } catch {
+          /* ignore */
+        }
+      }
     }
     const end = (e: PointerEvent, cancelled: boolean) => {
       if (!start || e.pointerId !== start.id) return
@@ -218,6 +228,16 @@ export function useStageGestures(stageRef: { current: HTMLElement | null }): voi
     }
     const onUp = (e: PointerEvent) => end(e, false)
     const onCancel = (e: PointerEvent) => end(e, true)
+    // belt and braces: a press that ends anywhere in the window (or the window
+    // losing focus) always releases the hold
+    const onWinUp = (e: PointerEvent) => {
+      if (start && e.pointerId === start.id) end(e, !el.contains(e.target as Node))
+    }
+    const onBlur = () => {
+      start = null
+      release?.()
+      release = null
+    }
 
     const onWheel = (e: WheelEvent) => {
       const st = useStoryStore.getState()
@@ -234,7 +254,13 @@ export function useStageGestures(stageRef: { current: HTMLElement | null }): voi
     el.addEventListener('pointerup', onUp)
     el.addEventListener('pointercancel', onCancel)
     el.addEventListener('wheel', onWheel, { passive: false })
+    window.addEventListener('pointerup', onWinUp)
+    window.addEventListener('pointercancel', onWinUp)
+    window.addEventListener('blur', onBlur)
     return () => {
+      window.removeEventListener('pointerup', onWinUp)
+      window.removeEventListener('pointercancel', onWinUp)
+      window.removeEventListener('blur', onBlur)
       el.removeEventListener('pointerdown', onDownCapture, true)
       el.removeEventListener('pointermove', onMoveCapture, true)
       el.removeEventListener('pointerup', onUpCapture, true)
@@ -263,6 +289,8 @@ export function useStoryKeys(): void {
       if (e.metaKey || e.ctrlKey || e.altKey) return
       const st = useStoryStore.getState()
       if (!st.def || !pb.visible) return
+      // the next chapter is loading under the slate: the old one is not steerable
+      if (readyState.pendingView && e.key !== 'Escape') return
       // Stepping keys never act while exploring, while the chapter sheet is
       // open, or when focus sits in a control that uses arrows itself.
       if (STEP_KEYS.has(e.key) && (st.mode === 'explore' || st.sheet || (t instanceof Element && t.closest(OWNS_ARROWS)))) return

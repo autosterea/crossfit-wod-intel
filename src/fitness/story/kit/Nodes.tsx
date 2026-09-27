@@ -2,6 +2,7 @@ import { useEffect, useMemo } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { clock } from '../clock'
+import { reportOnce } from '../safe'
 import { makeRimStandard } from './materials'
 import type { V3 } from '../types'
 
@@ -56,22 +57,27 @@ export function Nodes({ count, radius, color, colors, place, opacity, rimStrengt
 
   const tmp = useMemo<[number, number, number]>(() => [0, 0, 0], [])
   useFrame(() => {
-    const T = clock.T
-    const op = opacity ? opacity(T) : 1
-    mesh.visible = op > 0.002
-    if (!mesh.visible) return
-    material.opacity = op
-    let any = false
-    for (let i = 0; i < count; i++) {
-      const s = Math.max(0, place(T, i, tmp))
-      if (s > 0) any = true
-      _p.set(tmp[0], tmp[1], tmp[2])
-      _s.setScalar(s || 1e-5)
-      _m.compose(_p, _q, _s)
-      mesh.setMatrixAt(i, _m)
+    try {
+      const T = clock.T
+      const op = opacity ? opacity(T) : 1
+      mesh.visible = op > 0.002
+      if (!mesh.visible) return
+      material.opacity = op
+      let any = false
+      for (let i = 0; i < count; i++) {
+        const s = Math.max(0, place(T, i, tmp))
+        if (s > 0) any = true
+        _p.set(tmp[0], tmp[1], tmp[2])
+        _s.setScalar(s || 1e-5)
+        _m.compose(_p, _q, _s)
+        mesh.setMatrixAt(i, _m)
+      }
+      mesh.instanceMatrix.needsUpdate = true
+      mesh.visible = any
+    } catch (err) {
+      mesh.visible = false
+      reportOnce('<Nodes> callback', err)
     }
-    mesh.instanceMatrix.needsUpdate = true
-    mesh.visible = any
   })
   return <primitive object={mesh} />
 }

@@ -35,6 +35,8 @@ export interface PlaceInput {
   pinOrder: number
   /** restrict candidate directions */
   only: readonly Dir[] | undefined
+  /** horizontal clearance kept on each side (ticks: 6, so two ticks keep >= 12 px apart) */
+  sep: number
 }
 
 export interface PlaceOutput {
@@ -190,9 +192,20 @@ export class Placer {
     this.nPlaced++
   }
 
+  private t: Rect = { x: 0, y: 0, w: 0, h: 0 }
+  private sep = 0
+  /** placed[0 .. nObs) are obstacles: the label clearance (sep) never applies to them */
+  private nObs = 0
+
   private free(r: Rect, bounds: Rect): boolean {
     if (!inside(r, bounds)) return false
-    for (let i = 0; i < this.nPlaced; i++) if (overlaps(r, this.placed[i])) return false
+    for (let i = 0; i < this.nObs; i++) if (overlaps(r, this.placed[i])) return false
+    const t = this.t
+    t.x = r.x - this.sep
+    t.y = r.y
+    t.w = r.w + 2 * this.sep
+    t.h = r.h
+    for (let i = this.nObs; i < this.nPlaced; i++) if (overlaps(t, this.placed[i])) return false
     return true
   }
 
@@ -206,6 +219,7 @@ export class Placer {
       const o = obstacles[i]
       this.push(o.x, o.y, o.w, o.h)
     }
+    this.nObs = this.nPlaced
     while (this.out.length < count) this.out.push(newOut())
     const order = this.order
     order.length = count
@@ -228,6 +242,7 @@ export class Placer {
       o.id = L.id
       o.hasLeader = false
       o.short = false
+      this.sep = 0
       if (L.pin) {
         const x = L.pin === 'top-left' ? bounds.x : bounds.x + bounds.w - L.w
         const y = this.pinY[L.pin]
@@ -249,9 +264,10 @@ export class Placer {
         if (k === 0) this.dirs[k++] = L.only[0]
         nd = k
       }
+      this.sep = L.sep
       const ok = this.tryWidth(L, L.w, false, nd, bounds, o) || (L.shortW > 0 && this.tryWidth(L, L.shortW, true, nd, bounds, o))
       if (ok) {
-        this.push(o.x, o.y, o.w, o.h)
+        this.push(o.x - L.sep, o.y, o.w + 2 * L.sep, o.h)
         o.visible = true
       } else {
         rectInto(this.r, this.dirs[0], L.ax, L.ay, L.w, L.h, L.gap)

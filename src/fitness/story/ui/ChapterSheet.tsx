@@ -130,7 +130,7 @@ export function ChapterSheet({ open, onClose }: { open: boolean; onClose: () => 
                       }}
                     >
                       <span className="st-sheet-glyph" style={{ color: r.accent }}>
-                        <ChapterGlyph view={r.view === 'intro' ? 'definition' : r.view} size={40} />
+                        <ChapterGlyph view={r.view} size={40} />
                       </span>
                       <span className="st-sheet-num" style={{ color: r.accent }}>
                         {r.num}

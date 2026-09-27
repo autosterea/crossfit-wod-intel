@@ -3,7 +3,7 @@ import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { MODAL_DOMAINS, PAL, POWER_DURATION_LABELS, POWER_TASKS, ENERGY_SYSTEMS } from '../../fitnessData'
 import { clock } from '../../story/clock'
-import { at, focus, stagger } from '../../story/cue'
+import { at, cue, focus, pulse, stagger } from '../../story/cue'
 import { ease } from '../../story/ease'
 import { useStoryStore } from '../../story/store'
 import { useBeat } from '../../story/useBeat'
@@ -13,26 +13,35 @@ import { AreaFill, AreaStrips } from '../../story/kit/Fill'
 import { LightField, sampleCurve } from '../../story/kit/LightField'
 import { Nodes } from '../../story/kit/Nodes'
 import { SdfText } from '../../story/kit/SdfText'
-import { Halo } from '../../story/kit/Halo'
-import { lin, makeRimStandard } from '../../story/kit/materials'
+import { Glows, Halo } from '../../story/kit/Halo'
+import { Ripple } from '../../story/kit/Ripple'
+import { Plates, type PlateSpec } from '../../story/kit/Plates'
+import { lin } from '../../story/kit/materials'
 import { TIERS } from '../../story/quality/tiers'
 import { impactK } from '../../story/kit/impact'
 import { bumpObstacles, useLabels, useWorldObstacle, type WorldObstacle } from '../../story/labels/useLabel'
 import type { Box, Layout, LabelSpec, Tier, V3 } from '../../story/types'
-import { FAN_Z, lineup } from './layout'
-import { GENERALIST, POWERLIFTER, RANKED, domainScale, scoreOf, scoreWord, valAt } from './definitionMath'
+import { FAN_Z, lineup, type Lineup } from './layout'
+import { GENERALIST, POWERLIFTER, RANKED, domainScale, scoreHue, scoreOf, scoreWord, valAt } from './definitionMath'
 import { BAND_U, ChartConstruction, EnergyBands, TASK_400, TASK_LABELED, TASK_U, TICK_LEN, curvePolyline, curveTop, gv, type ChartVis } from './chart'
 import ExploreScene from './ExploreScene'
 
 /* =========================================================================
-   04 CAPACITY, "The integral" (DESIGN.md D.5). Seven beats, every property a
-   pure function of story time T:
-     D0 a measured point, D1 the falling curve, D2 the five modal domains as
-     translucent slices in depth, D3 light pours into the area and settles
-     into a glowing area with a bright rim (signature), D4 the three earlier
-     models light up the axes of this picture, D5 the Powerlifter spills the
-     area it cannot hold (a red hatch marks what is lost; an amber sliver is
-     what it wins), D6 the ranked lineup with a shared-scale area bar per row.
+   04 CAPACITY, "The integral" (DESIGN.md D.5, amendments H.21 to H.29).
+   Seven beats, every property a pure function of story time T:
+     D0 a hot pen draws the axes in one stroke, one measured point lands with
+        a ring of light, its dimension lines are drawn, then the other nine
+        measured points snap in;
+     D1 the pen draws the falling curve THROUGH the points, each one flaring
+        as the pen passes it; the energy bands appear under the time axis;
+     D2 the curve fans out in depth into five translucent domain slices, then
+        converges to the averaged curve, leaving the five as faint ghosts;
+     D3 light pours into the area and settles into a glowing area (signature);
+     D4 the three earlier models light up the axes of this picture;
+     D5 the Powerlifter spills the area it cannot hold (red hatch = lost,
+        amber sliver = the zone it wins);
+     D6 the ranked lineup: seven rows of light on glass plates, each standing
+        on its score bar, so the ranking is a staircase.
 
    Prewarm (README): everything, the D6 lineup and the explore layer
    included, is mounted at load and hidden by T or mode, so no shader links
@@ -44,6 +53,8 @@ const pv = (u: number) => valAt(POWERLIFTER.samples, u)
 const G_SCORE = scoreOf(GENERALIST.samples)
 const P_SCORE = scoreOf(POWERLIFTER.samples)
 const DOMAIN_COLORS = MODAL_DOMAINS.map((d) => d.color)
+/** the warm white of a hot pen tip (the kit's head colour family) */
+const LIGHT = '#e9ffc4'
 
 /** u where the Powerlifter's curve drops below the generalist's: the zone it wins is u < U_X. */
 const U_X = (() => {
@@ -59,10 +70,36 @@ const U_X = (() => {
 
 /* ------------------------------ timing -------------------------------- */
 
+// D0: the axes (one hot L stroke), the measured point, its dimension lines,
+// then the other nine measured points (H.29: the opening moves from frame 1).
+const axesDraw = (T: number) => at(T, D.measured, 0, 0.26, ease.draw)
+const d0Dot = (T: number) => at(T, D.measured, 0.3, 0.4, ease.snap)
+const d0Ripple = (T: number) => at(T, D.measured, 0.3, 0.5)
+const dimsDraw = (T: number) => at(T, D.measured, 0.4, 0.6, ease.draw)
+const dimsOut = (T: number) => 1 - at(T, D.curve, 0, 0.12)
+// D1: the pen draws the curve through the points
+const CURVE_A = 0
+const CURVE_B = 0.52
+const curveDraw = (T: number) => at(T, D.curve, CURVE_A, CURVE_B, ease.draw)
+
 /** Chart content fades out as the chart folds into the lineup (D6). */
 const chartFade = (T: number) => 1 - at(T, D.lineup, 0.12, 0.3)
-/** D2 fan: 0 flat, 1 fully fanned in depth. */
-export const fan = (T: number) => at(T, D.domains, 0, 0.35, ease.morph) - at(T, D.domains, 0.5, 0.9, ease.morph)
+/** D2: the slices' spread in depth (z); converges back to 0 by t = 0.85. */
+export const fan = (T: number) => at(T, D.domains, 0, 0.35, ease.morph) - at(T, D.domains, 0.5, 0.85, ease.morph)
+/** D2: the domain curves take their own heights and KEEP them to the end of D2 (ghosts). */
+const tilt = (T: number) => at(T, D.domains, 0, 0.35, ease.morph)
+/** D2: the five domain pens are on from the fan until early in D3 ... */
+const domainPens = (T: number) => (T < D.domains ? 0 : Math.min(1, tilt(T) * 3) * (1 - at(T, D.area, 0, 0.12)))
+/**
+ * ... and dim to ghosts once converged through their COLOUR (gain), not
+ * their opacity: a translucent LineSegments2 shows its overlapping segment
+ * caps as beads, an opaque dim line stays clean.
+ */
+const domainGhost = (T: number) => 1 - 0.7 * at(T, D.domains, 0.55, 0.85)
+/** D2: the measured points step aside while the slices fan, and return on the averaged curve. */
+const dotsVis = (T: number) => 1 - at(T, D.domains, 0.02, 0.12) + at(T, D.domains, 0.6, 0.76)
+/** D2: the averaged curve absorbs the five and flares once as it lands. */
+const averageFlare = (T: number) => pulse(T, D.domains + 0.66, D.domains + 0.98)
 /** D3 pour level in v units. It starts just below the axis so no particle is in flight at D3 t = 0 (continuity). */
 const POUR_LEAD = 0.2
 const pourLevel = (T: number) => -POUR_LEAD + (1.08 + POUR_LEAD) * at(T, D.area, 0.05, 0.78)
@@ -81,12 +118,12 @@ const axisTitles = (T: number) => 1 - at(T, D.synthesis, 0.02, 0.12) + at(T, D.s
 /** D6 flip into row 1 */
 const flip = (T: number) => at(T, D.lineup, 0, 0.3, ease.morph)
 /** The generalist curve is drawn (D1) and still part of the chart. */
-const curveOn = (T: number) => (T >= D.curve + 0.16 && T < D.lineup + 0.3 ? 1 : 0)
+const curveOn = (T: number) => (T >= D.curve + CURVE_A && T < D.lineup + 0.3 ? 1 : 0)
 
 const constructionVis: ChartVis = {
-  grid: { progress: (T) => at(T, D.measured, 0.04, 0.28, ease.draw), opacity: (T) => 0.12 * chartFade(T) },
-  axes: { progress: (T) => at(T, D.measured, 0, 0.28, ease.draw), opacity: (T) => 0.55 * focus(T, D.measured) * chartFade(T) },
-  ticks: { progress: (T) => at(T, D.measured, 0.12, 0.3), opacity: (T) => 0.6 * focus(T, D.measured) * chartFade(T) },
+  grid: { progress: (T) => at(T, D.measured, 0.1, 0.34, ease.draw), opacity: (T) => 0.12 * chartFade(T) * (1 - fan(T)) },
+  axes: { progress: axesDraw, opacity: (T) => 0.55 * focus(T, D.measured) * chartFade(T), head: true },
+  ticks: { progress: (T) => at(T, D.measured, 0.16, 0.34), opacity: (T) => 0.6 * focus(T, D.measured) * chartFade(T) },
 }
 
 /** Score shown in the HUD for story time T (computed, never written into prose). */
@@ -151,33 +188,96 @@ function segLine(a: V3, b: V3, k: number): Float32Array {
   return out
 }
 
-/** Task dot i: its appear factor at T (0 hidden). */
+/** Task dot i: its appear factor at T (0 hidden). The 400m run lands first; the other nine follow in D0. */
 function taskAppear(T: number, i: number): number {
-  if (i === TASK_400) return at(T, D.measured, 0.34, 0.48, ease.snap)
+  if (i === TASK_400) return d0Dot(T)
   const j = i < TASK_400 ? i : i - 1
-  return stagger(T, D.curve, D.curve + 0.3, j, POWER_TASKS.length - 1, 0.35, ease.snap)
+  return stagger(T, D.measured + 0.62, D.measured + 0.92, j, POWER_TASKS.length - 1, 0.5, ease.snap)
 }
+
+/**
+ * The story time at which the D1 pen head passes each task dot: the dot's
+ * arc-length fraction along the drawn curve, pushed back through the draw
+ * ease. Depends on the frame (arc length in world units), not on T.
+ */
+function crossings(frame: ChartFrame): number[] {
+  const n = 72
+  const cum = new Float64Array(n)
+  let px = frame.x(0)
+  let py = frame.y(gv(0))
+  for (let i = 1; i < n; i++) {
+    const u = i / (n - 1)
+    const x = frame.x(u)
+    const y = frame.y(gv(u))
+    cum[i] = cum[i - 1] + Math.hypot(x - px, y - py)
+    px = x
+    py = y
+  }
+  const total = cum[n - 1] || 1
+  const arcAt = (u: number) => {
+    const f = u * (n - 1)
+    const i = Math.min(n - 2, Math.floor(f))
+    return (cum[i] + (cum[i + 1] - cum[i]) * (f - i)) / total
+  }
+  return TASK_U.map((u) => {
+    const a = arcAt(u)
+    let lo = 0
+    let hi = 1
+    for (let k = 0; k < 30; k++) {
+      const m = (lo + hi) / 2
+      if (ease.draw(m) < a) lo = m
+      else hi = m
+    }
+    return D.curve + CURVE_A + (CURVE_B - CURVE_A) * ((lo + hi) / 2)
+  })
+}
+
+/** The flare of dot i as the D1 pen passes it. */
+const flareAt = (T: number, tc: number) => pulse(T, tc - 0.01, tc + 0.055)
 
 /* ------------------------------ elements ------------------------------ */
 
-function TaskDots({ frame }: { frame: ChartFrame }) {
+function TaskDots({ frame, cross }: { frame: ChartFrame; cross: number[] }) {
   const place = (T: number, i: number, out: [number, number, number]) => {
     const u = TASK_U[i]
     out[0] = frame.x(u)
     out[1] = frame.y(gv(u))
     out[2] = 0.02
-    return taskAppear(T, i)
+    return taskAppear(T, i) * (1 + 0.45 * flareAt(T, cross[i]))
   }
   return (
-    <Nodes
-      count={POWER_TASKS.length}
-      radius={0.15}
-      color={PAL.chalk}
-      place={place}
-      opacity={(T) => focus(T, D.curve) * ghost(T) * chartFade(T)}
-      rimStrength={0.5}
-      emissiveIntensity={0.55}
-    />
+    <>
+      <Nodes
+        count={POWER_TASKS.length}
+        radius={0.15}
+        color={PAL.chalk}
+        place={place}
+        opacity={(T) => focus(T, D.curve) * ghost(T) * chartFade(T) * Math.max(0, Math.min(1, dotsVis(T)))}
+        rimStrength={0.5}
+        emissiveIntensity={0.55}
+      />
+      {/* each point lights up as the pen passes it (D1) */}
+      <Glows
+        count={POWER_TASKS.length}
+        sizePx={26}
+        colors={[LIGHT]}
+        gain={1.8}
+        place={(T, i, out) => {
+          const u = TASK_U[i]
+          out[0] = frame.x(u)
+          out[1] = frame.y(gv(u))
+          out[2] = 0.06
+          return flareAt(T, cross[i])
+        }}
+      />
+      {/* the measured point lands with one ring of light (D0) */}
+      <Ripple
+        position={[frame.x(TASK_U[TASK_400]), frame.y(gv(TASK_U[TASK_400])), 0.06]}
+        color={LIGHT}
+        sizePx={72}
+        k={d0Ripple}
+      />
+    </>
   )
 }
 
@@ -185,19 +285,25 @@ function DimensionLines({ frame }: { frame: ChartFrame }) {
   const u = TASK_U[TASK_400]
   const x = frame.x(u)
   const y = frame.y(gv(u))
-  const h = useMemo(() => new Float32Array([x, y, 0.01, frame.x(0), y, 0.01]), [x, y, frame])
-  const v = useMemo(() => new Float32Array([x, y, 0.01, x, frame.y(0), 0.01]), [x, y, frame])
-  const progress = (T: number) => at(T, D.measured, 0.5, 0.8, ease.draw)
-  const opacity = (T: number) => 0.7 * (1 - at(T, D.curve, 0.3, 0.5))
+  // drawn FROM the measured point out to each axis: its duration and its power
+  const h = useMemo(() => segLine([x, y, 0.01], [frame.x(0), y, 0.01], 16), [x, y, frame])
+  const v = useMemo(() => segLine([x, y, 0.01], [x, frame.y(0), 0.01], 16), [x, y, frame])
+  const opacity = (T: number) => 0.75 * dimsOut(T)
   return (
     <>
-      <Pen points={h} color={PAL.chalk} width={PEN.axis} dashed dashSize={0.22} gapSize={0.16} progress={progress} opacity={opacity} />
-      <Pen points={v} color={PAL.chalk} width={PEN.axis} dashed dashSize={0.22} gapSize={0.16} progress={progress} opacity={opacity} />
+      <Pen points={h} color={PAL.chalk} width={PEN.axis} dashed dashSize={0.22} gapSize={0.16} progress={dimsDraw} opacity={opacity} head />
+      <Pen points={v} color={PAL.chalk} width={PEN.axis} dashed dashSize={0.22} gapSize={0.16} progress={dimsDraw} opacity={opacity} head />
     </>
   )
 }
 
-/** D2: five domain curves fanned in depth, each with a translucent curtain down to its own baseline. */
+/**
+ * D2: five domain curves fanned in depth, each over a translucent slice down
+ * to its own baseline (H.29): NORMAL blending, drawn back to front, alpha
+ * only near its own curve plus a bright top edge, so the slices stay
+ * distinct instead of adding up to a milky wash. On convergence the slices
+ * go and the five curves stay behind as faint ghosts around the average.
+ */
 function DomainFan({ frame }: { frame: ChartFrame }) {
   const N = 72
   const NC = 48
@@ -212,14 +318,16 @@ function DomainFan({ frame }: { frame: ChartFrame }) {
     })
     return { segments: segs, colors: cols }
   }, [])
-  const last = useRef(-1)
+  const last = useRef('')
   const write = (T: number, s: Float32Array): boolean => {
     const f = fan(T)
-    if (f === last.current) return false
-    last.current = f
+    const tl = tilt(T)
+    const key = f + '|' + tl
+    if (key === last.current) return false
+    last.current = key
     MODAL_DOMAINS.forEach((_, k) => {
       const z = zOf(k, f)
-      const m = 1 + (scales[k] - 1) * f
+      const m = 1 + (scales[k] - 1) * tl
       for (let i = 0; i < N - 1; i++) {
         const u0 = i / (N - 1)
         const u1 = (i + 1) / (N - 1)
@@ -234,15 +342,19 @@ function DomainFan({ frame }: { frame: ChartFrame }) {
     })
     return true
   }
-  const lastC = useRef(-1)
+  const lastC = useRef('')
   const writeCurtains = (T: number, top: Float32Array, bottom: Float32Array): boolean => {
     const f = fan(T)
-    if (f === lastC.current) return false
-    lastC.current = f
+    const tl = tilt(T)
+    const key = f + '|' + tl
+    if (key === lastC.current) return false
+    lastC.current = key
     const y0 = frame.y(0)
+    // strip order = draw order: k = 0 is the deepest slice (z = -FAN_Z), so
+    // the strips paint back to front for the D2 camera (it looks from +z)
     for (let k = 0; k < MODAL_DOMAINS.length; k++) {
       const z = zOf(k, f) - 0.01
-      const m = 1 + (scales[k] - 1) * f
+      const m = 1 + (scales[k] - 1) * tl
       for (let i = 0; i < NC; i++) {
         const u = i / (NC - 1)
         const o = k * NC + i
@@ -255,8 +367,8 @@ function DomainFan({ frame }: { frame: ChartFrame }) {
     return true
   }
   useEffect(() => {
-    last.current = -1
-    lastC.current = -1
+    last.current = ''
+    lastC.current = ''
   }, [frame])
   return (
     <>
@@ -268,11 +380,13 @@ function DomainFan({ frame }: { frame: ChartFrame }) {
         opacity={(T) => Math.min(1, fan(T) * 1.6)}
         lo={0}
         hi={0.13}
-        gamma={1.6}
-        additive
+        gamma={7}
+        rim={() => 0.8}
+        rimWidth={0.12}
+        rimAlpha={0.34}
         renderOrder={11}
       />
-      <PenBatch segments={segments} colors={colors} width={PEN.data} update={write} opacity={(T) => Math.min(1, fan(T) * 3)} renderOrder={31} />
+      <PenBatch segments={segments} colors={colors} width={PEN.data} update={write} opacity={domainPens} gain={domainGhost} renderOrder={31} />
     </>
   )
 }
@@ -295,7 +409,7 @@ function SynthesisStrokes({ frame, gCurve }: { frame: ChartFrame; gCurve: Float3
       />
       <Pen
         points={gCurve}
-        color="#e9ffc4"
+        color={LIGHT}
         width={PEN.data}
         head
         hot
@@ -351,7 +465,10 @@ function ClaimPlate({ frame }: { frame: ChartFrame }) {
   const cx = frame.x(0.46)
   const cy = frame.y(0.22)
   const appear = (T: number) => at(T, D.area, 0.8, 1.0, ease.settle) * (1 - at(T, D.specialist, 0, 0.2))
-  const op = (T: number) => appear(T) * focus(T, D.area) * chartFade(T)
+  // The claim stays legible under a later beat's focus pull: it dims to 75%
+  // at most (a translucent lime plate over the luminous area turns olive at
+  // 35%, which read as broken, H.29).
+  const op = (T: number) => appear(T) * Math.max(0.75, focus(T, D.area)) * chartFade(T)
   // size the plate to the laid-out text (troika block bounds), with padding
   const onSync = (m: THREE.Mesh) => {
     const info = (m as unknown as { textRenderInfo?: { blockBounds: number[] } }).textRenderInfo
@@ -381,7 +498,9 @@ function ClaimPlate({ frame }: { frame: ChartFrame }) {
       group.current.scale.set(s, s, 1)
     }
     mat.opacity = o
-    inkMat.opacity = 0.85 * o
+    // the keyline is fully opaque whenever the plate is up, so the plate
+    // always has its ink edge (never a soft olive blob)
+    inkMat.opacity = Math.min(1, o * 1.4)
     mat.color.copy(base).multiplyScalar(1 + 0.9 * impactK(T))
   })
   // The plate is an obstacle for the label placer while it is up (D3 end, D4).
@@ -412,7 +531,7 @@ function ClaimPlate({ frame }: { frame: ChartFrame }) {
         text="AREA = FITNESS"
         size={size}
         color={PAL.ink}
-        opacity={op}
+        opacity={(T) => Math.min(1, op(T) * 1.25)}
         position={[0, 0, 0.01]}
         letterSpacing={0.04}
         renderOrder={47}
@@ -461,7 +580,7 @@ function Meniscus({ frame }: { frame: ChartFrame }) {
     last.current = -1
   }, [frame])
   const live = (T: number) => at(T, D.area, 0.05, 0.1) * (1 - at(T, D.area, 0.7, 0.78))
-  return <Pen points={pts} color="#e9ffc4" width={PEN.axis} update={write} opacity={live} gain={() => 2.6} renderOrder={44} />
+  return <Pen points={pts} color={LIGHT} width={PEN.axis} update={write} opacity={live} gain={() => 2.6} renderOrder={44} />
 }
 
 /** D5: the zone the specialist wins (amber, solid, crisp edge) and the area it loses (red hatch). */
@@ -484,7 +603,7 @@ function SpecialistRegions({ frame }: { frame: ChartFrame }) {
 }
 
 /** The chart that folds into row 1 of the lineup at D6 (FLIP). */
-function StoryChart({ frame, tier }: { frame: ChartFrame; tier: Tier }) {
+function StoryChart({ frame, tier, cross }: { frame: ChartFrame; tier: Tier; cross: number[] }) {
   const group = useRef<THREE.Group>(null)
   const { layout } = useBeat()
   const gCurve = useMemo(() => curvePolyline(frame, gv, 0.03), [frame])
@@ -494,12 +613,12 @@ function StoryChart({ frame, tier }: { frame: ChartFrame; tier: Tier }) {
   const curveA = useMemo(() => sampleCurve(gv), [])
   const curveB = useMemo(() => sampleCurve(pv), [])
   const count = Math.round(9000 * TIERS[tier].particleScale)
+  const L = lineup(layout, frame)
 
   useFrame(() => {
     const g = group.current
     if (!g) return
     const k = flip(clock.T)
-    const L = lineup(layout)
     const [mx0, my0] = L.origin(0)
     const sx = L.MW / frame.FW
     const sy = L.MH / frame.FH
@@ -518,7 +637,9 @@ function StoryChart({ frame, tier }: { frame: ChartFrame; tier: Tier }) {
       <EnergyBands
         frame={frame}
         opacity={(T) =>
-          (0.12 * at(T, D.curve, 0.66, 0.9) + 0.3 * (at(T, D.synthesis, 0.64, 0.9) - at(T, D.specialist, 0, 0.2))) * chartFade(T)
+          (0.12 * at(T, D.curve, 0.6, 0.84) + 0.3 * (at(T, D.synthesis, 0.64, 0.9) - at(T, D.specialist, 0, 0.2))) *
+          chartFade(T) *
+          (1 - 0.6 * fan(T))
         }
       />
       <DimensionLines frame={frame} />
@@ -580,16 +701,18 @@ function StoryChart({ frame, tier }: { frame: ChartFrame; tier: Tier }) {
         />
       )}
       {!lowTier && <Meniscus frame={frame} />}
-      <TaskDots frame={frame} />
+      <TaskDots frame={frame} cross={cross} />
       <DomainFan frame={frame} />
       <SynthesisStrokes frame={frame} gCurve={gCurve} />
-      {/* the claim edge: crisp pen on top of fill and particles (L10) */}
+      {/* the claim edge: crisp pen on top of fill and particles (L10); it
+          flares once as it absorbs the five domain curves (D2) */}
       <Pen
         points={gCurve}
         color={PAL.yellowGreen}
         width={PEN.data}
-        progress={(T) => at(T, D.curve, 0.16, 0.62, ease.draw)}
+        progress={curveDraw}
         opacity={gPenOpacity}
+        gain={(T) => 1 + 1.3 * averageFlare(T)}
         head
         hot
         renderOrder={45}
@@ -614,146 +737,216 @@ function StoryChart({ frame, tier }: { frame: ChartFrame; tier: Tier }) {
 
 /* ------------------------------ lineup (D6) ---------------------------- */
 
-const rowAppear = (T: number, rank: number) =>
-  rank === 0 ? at(T, D.lineup, 0.2, 0.32, ease.settle) : stagger(T, D.lineup + 0.25, D.lineup + 0.85, rank - 1, RANKED.length - 1, 0.45, ease.settle)
-
-function Mini({ rank, layout }: { rank: number; layout: Layout }) {
-  const r = RANKED[rank]
-  const isG = r.name === GENERALIST.name
-  const L = useMemo(() => lineup(layout), [layout])
-  const group = useRef<THREE.Group>(null)
-  const { geo, top } = useMemo(() => {
-    const f = (u: number) => valAt(r.samples, u)
-    const s = new THREE.Shape()
-    const M = 48
-    s.moveTo(0, 0)
-    for (let i = 0; i <= M; i++) {
-      const u = i / M
-      s.lineTo(u * L.MW, f(u) * L.MH)
-    }
-    s.lineTo(L.MW, 0)
-    s.lineTo(0, 0)
-    const g = new THREE.ExtrudeGeometry(s, { depth: 0.12, bevelEnabled: false, curveSegments: 1 })
-    const pts = new Float32Array((M + 1) * 3)
-    for (let i = 0; i <= M; i++) {
-      const u = i / M
-      pts[i * 3] = u * L.MW
-      pts[i * 3 + 1] = f(u) * L.MH
-      pts[i * 3 + 2] = 0.125
-    }
-    return { geo: g, top: pts }
-  }, [L, r.samples])
-  const mat = useMemo(
-    () =>
-      makeRimStandard({
-        color: isG ? PAL.yellowGreen : '#4a585f',
-        rim: isG ? PAL.yellowGreen : PAL.chalk,
-        rimStrength: isG ? 0.5 : 0.4,
-        emissive: isG ? PAL.yellowGreen : '#8ea0a8',
-        emissiveIntensity: isG ? 0.32 : 0.1,
-        metalness: isG ? 0.15 : 0.35,
-        roughness: isG ? 0.42 : 0.38,
-        transparent: true,
-      }),
-    [isG],
-  )
-  useEffect(() => () => geo.dispose(), [geo])
-  useEffect(() => () => mat.dispose(), [mat])
-  useFrame(() => {
-    const g = group.current
-    if (!g) return
-    const a = rowAppear(clock.T, rank)
-    g.visible = a > 0.002
-    if (!g.visible) return
-    const [x, y] = L.origin(rank)
-    g.position.set(x, y - (rank === 0 ? 0 : 1.6 * (1 - a)), 0)
-    mat.opacity = a
-  })
-  return (
-    <group ref={group}>
-      <mesh geometry={geo} material={mat} renderOrder={20} />
-      <Pen points={top} color={isG ? PAL.yellowGreen : PAL.chalk} width={PEN.data} opacity={(T) => rowAppear(T, rank)} renderOrder={32} />
-    </group>
-  )
-}
+const N_ROWS = RANKED.length
+const MINI_N = 48
+/** Row r lands (row 0 is the folded chart itself, the rest fly in with an 80 ms stagger). */
+const rowAppear = (T: number, r: number) =>
+  r === 0 ? at(T, D.lineup, 0.2, 0.3, ease.settle) : stagger(T, D.lineup + 0.28, D.lineup + 0.8, r - 1, N_ROWS - 1, 0.45, ease.settle)
+/** Row r's light pours up into its mini as it lands (row 0 is already full: it IS the chart). */
+const rowPour = (T: number, r: number) => (r === 0 ? (rowAppear(T, 0) > 0.001 ? 1 : 0) : rowAppear(T, r))
+/** Row r's score bar grows just after the row lands. */
+const barGrow = (T: number, r: number) => stagger(T, D.lineup + 0.36, D.lineup + 0.98, r, N_ROWS, 0.5, ease.settle)
+const isG = (r: number) => RANKED[r].name === GENERALIST.name
+/** far outside every view: where a not-yet-visible pen segment waits (never a stray dot) */
+const AWAY = 1e5
 
 /**
- * The shared-scale area bars (H.22): one stroke per row whose length is its
- * score out of 100, over a faint full-length track. The ranking reads as a
- * staircase without reading a number. One draw call each.
+ * The ranked lineup (D6, H.29): seven rows of light. Each row is one unit on
+ * a faint glass plate: a luminous mini area (the D3 treatment, lime for the
+ * generalist and dimmer chalk for the specialists) standing on its score bar
+ * (6 to 8 px, shared 0 to 100 scale), so the ranking reads as a staircase
+ * of light at a glance. Six draw calls for the whole lineup.
  */
-function ScoreBars({ layout }: { layout: Layout }) {
-  const L = useMemo(() => lineup(layout), [layout])
-  const n = RANKED.length
-  const track = useMemo(() => {
-    const s = new Float32Array(n * 6)
-    RANKED.forEach((_, i) => {
-      const [x, y] = L.origin(i)
-      const yb = y + L.barY
-      s.set([x, yb, 0.06, x + L.MW, yb, 0.06], i * 6)
+function LineupRows({ frame }: { frame: ChartFrame }) {
+  const { layout } = useBeat()
+  const L: Lineup = lineup(layout, frame)
+  // Blending happens in LINEAR light, where small alphas read strong: the
+  // specialists are a dim chalk so their areas read as faint light under a
+  // bright edge, not as grey slabs. The generalist's rim is HDR (it blooms:
+  // the one lit row); the specialists' edge stays under 1.
+  const colors = useMemo(() => RANKED.map((_, r) => (isG(r) ? PAL.yellowGreen : '#5d676b')), [])
+  const rimScale = useMemo(() => RANKED.map((_, r) => (isG(r) ? 1 : 1.2)), [])
+
+  // minis: one AreaStrips (fills) + one PenBatch (the crisp tops)
+  const lastF = useRef(-1)
+  const writeFills = (T: number, top: Float32Array, bottom: Float32Array): boolean => {
+    if (T === lastF.current) return false
+    lastF.current = T
+    for (let r = 0; r < N_ROWS; r++) {
+      const [x0, yb] = L.origin(r)
+      const a = rowPour(T, r)
+      for (let i = 0; i < MINI_N; i++) {
+        const u = i / (MINI_N - 1)
+        const o = r * MINI_N + i
+        top[o * 3] = x0 + u * L.MW
+        top[o * 3 + 1] = yb + valAt(RANKED[r].samples, u) * L.MH * a
+        top[o * 3 + 2] = 0
+        bottom[o] = yb
+      }
+    }
+    return true
+  }
+  const penCols = useMemo(() => {
+    const c = new Float32Array(N_ROWS * (MINI_N - 1) * 6)
+    RANKED.forEach((_, r) => {
+      const col = lin(isG(r) ? PAL.yellowGreen : PAL.chalk)
+      if (!isG(r)) col.multiplyScalar(0.85)
+      for (let i = 0; i < MINI_N - 1; i++) c.set([col.r, col.g, col.b, col.r, col.g, col.b], (r * (MINI_N - 1) + i) * 6)
     })
-    return s
-  }, [L, n])
-  const { segs, cols } = useMemo(() => {
-    const cols = new Float32Array(n * 6)
-    RANKED.forEach((r, i) => {
-      const c = lin(r.name === GENERALIST.name ? PAL.yellowGreen : PAL.chalk)
-      if (r.name !== GENERALIST.name) c.multiplyScalar(0.8)
-      cols.set([c.r, c.g, c.b, c.r, c.g, c.b], i * 6)
+    return c
+  }, [])
+  const penSegs = useMemo(() => new Float32Array(N_ROWS * (MINI_N - 1) * 6).fill(AWAY), [])
+  const lastP = useRef(-1)
+  const writePens = (T: number, s: Float32Array): boolean => {
+    if (T === lastP.current) return false
+    lastP.current = T
+    for (let r = 0; r < N_ROWS; r++) {
+      const [x0, yb] = L.origin(r)
+      const a = rowPour(T, r)
+      for (let i = 0; i < MINI_N - 1; i++) {
+        const o = (r * (MINI_N - 1) + i) * 6
+        if (a <= 0.001) {
+          s.fill(AWAY, o, o + 6)
+          continue
+        }
+        const u0 = i / (MINI_N - 1)
+        const u1 = (i + 1) / (MINI_N - 1)
+        s[o] = x0 + u0 * L.MW
+        s[o + 1] = yb + valAt(RANKED[r].samples, u0) * L.MH * a
+        s[o + 2] = 0.02
+        s[o + 3] = x0 + u1 * L.MW
+        s[o + 4] = yb + valAt(RANKED[r].samples, u1) * L.MH * a
+        s[o + 5] = 0.02
+      }
+    }
+    return true
+  }
+
+  // score bars on one shared 0 to 100 scale, along each mini's baseline, over
+  // a faint full-length track that appears with its row
+  const track = useMemo(() => new Float32Array(N_ROWS * 6).fill(AWAY), [])
+  const lastT = useRef(-1)
+  const writeTrack = (T: number, s: Float32Array): boolean => {
+    if (T === lastT.current) return false
+    lastT.current = T
+    for (let r = 0; r < N_ROWS; r++) {
+      const o = r * 6
+      if (rowAppear(T, r) <= 0.001) {
+        s.fill(AWAY, o, o + 6)
+        continue
+      }
+      const [x0, yb] = L.origin(r)
+      s[o] = x0
+      s[o + 1] = yb
+      s[o + 2] = 0.03
+      s[o + 3] = x0 + L.MW
+      s[o + 4] = yb
+      s[o + 5] = 0.03
+    }
+    return true
+  }
+  const barCols = useMemo(() => {
+    const c = new Float32Array(N_ROWS * 6)
+    RANKED.forEach((_, r) => {
+      const col = lin(isG(r) ? PAL.yellowGreen : PAL.chalk)
+      if (!isG(r)) col.multiplyScalar(0.78)
+      c.set([col.r, col.g, col.b, col.r, col.g, col.b], r * 6)
     })
-    return { segs: new Float32Array(n * 6), cols }
-  }, [n])
-  const last = useRef(-1)
-  const write = (T: number, s: Float32Array): boolean => {
-    if (T === last.current) return false
-    last.current = T
-    RANKED.forEach((r, i) => {
-      const [x, y] = L.origin(i)
-      const yb = y + L.barY
-      // each bar measures its row's area just after the row lands
-      const g = stagger(T, D.lineup + 0.3, D.lineup + 0.98, i, n, 0.5, ease.settle)
-      const len = L.MW * (r.score / 100) * Math.max(0.0001, g)
-      s[i * 6] = x
-      s[i * 6 + 1] = yb
-      s[i * 6 + 2] = 0.07
-      s[i * 6 + 3] = x + len
-      s[i * 6 + 4] = yb
-      s[i * 6 + 5] = 0.07
-    })
+    return c
+  }, [])
+  const barSegs = useMemo(() => new Float32Array(N_ROWS * 6).fill(AWAY), [])
+  const lastB = useRef(-1)
+  const writeBars = (T: number, s: Float32Array): boolean => {
+    if (T === lastB.current) return false
+    lastB.current = T
+    for (let r = 0; r < N_ROWS; r++) {
+      const g = barGrow(T, r)
+      const o = r * 6
+      if (g <= 0.001) {
+        s.fill(AWAY, o, o + 6)
+        continue
+      }
+      const [x0, yb] = L.origin(r)
+      s[o] = x0
+      s[o + 1] = yb
+      s[o + 2] = 0.04
+      s[o + 3] = x0 + L.MW * (RANKED[r].score / 100) * g
+      s[o + 4] = yb
+      s[o + 5] = 0.04
+    }
     return true
   }
   useEffect(() => {
-    last.current = -1
+    lastF.current = -1
+    lastP.current = -1
+    lastB.current = -1
+    lastT.current = -1
   }, [L])
-  const trackOp = (T: number) => 0.14 * at(T, D.lineup, 0.25, 0.5)
-  return (
-    <>
-      <PenBatch segments={track} color={PAL.chalk} width={PEN.grid} opacity={trackOp} renderOrder={31} />
-      <PenBatch segments={segs} colors={cols} width={4} update={write} opacity={(T) => at(T, D.lineup, 0.25, 0.4)} renderOrder={33} />
-    </>
-  )
-}
 
-function Lineup() {
-  const { layout } = useBeat()
+  const plates = useMemo<PlateSpec[]>(
+    () =>
+      RANKED.map((_, r) => ({
+        rect: L.plate(r),
+        // linear-light alphas: about +6 sRGB levels of fill, a hairline border
+        fill: isG(r) ? PAL.yellowGreen : PAL.chalk,
+        fillAlpha: isG(r) ? 0.018 : 0.007,
+        line: isG(r) ? PAL.yellowGreen : PAL.chalk,
+        lineAlpha: isG(r) ? 0.3 : 0.05,
+      })),
+    [L],
+  )
+  const lineupOn = (T: number) => (T >= D.lineup + 0.18 ? 1 : 0)
+
   return (
     <>
-      {RANKED.map((r, i) => (
-        <Mini key={r.name + layout} rank={i} layout={layout} />
-      ))}
-      <ScoreBars layout={layout} />
+      <Plates plates={plates} radius={0.22} z={-0.06} vis={(T, i) => rowAppear(T, i)} opacity={lineupOn} renderOrder={4} />
+      <AreaStrips
+        strips={N_ROWS}
+        points={MINI_N}
+        colors={colors}
+        write={writeFills}
+        opacity={lineupOn}
+        lo={0}
+        hi={0.42}
+        gamma={2}
+        additive
+        rim={() => 2.4}
+        rimWidth={0.1}
+        rimAlpha={0.55}
+        rimScale={rimScale}
+        renderOrder={14}
+      />
+      <PenBatch segments={penSegs} colors={penCols} width={PEN.data} update={writePens} opacity={lineupOn} renderOrder={32} />
+      <PenBatch segments={track} color={PAL.chalk} width={PEN.grid} update={writeTrack} opacity={(T) => 0.18 * lineupOn(T)} renderOrder={33} />
+      <PenBatch segments={barSegs} colors={barCols} width={7} update={writeBars} opacity={lineupOn} renderOrder={34} />
+      {/* each bar's growing end carries a light (the generalist's keeps a soft one) */}
+      <Glows
+        count={N_ROWS}
+        sizePx={26}
+        colors={RANKED.map((_, r) => (isG(r) ? LIGHT : PAL.chalk))}
+        gain={1.6}
+        place={(T, r, out) => {
+          const g = barGrow(T, r)
+          const [x0, yb] = L.origin(r)
+          out[0] = x0 + L.MW * (RANKED[r].score / 100) * g
+          out[1] = yb
+          out[2] = 0.08
+          if (g <= 0.001) return 0
+          return 1.2 * g * (1 - g) + (isG(r) ? 0.28 * g : 0)
+        }}
+      />
     </>
   )
 }
 
 /* ------------------------------- labels -------------------------------- */
 
-function useStoryLabels(frame: ChartFrame, layout: Layout) {
+function useStoryLabels(frame: ChartFrame, layout: Layout, cross: number[]) {
   const specs = useMemo<LabelSpec[]>(() => {
     const x = frame.x
     const y = frame.y
     const y0 = y(0)
-    const construct = (T: number) => at(T, D.measured, 0.2, 0.36) * focus(T, D.measured) * chartFade(T)
+    const construct = (T: number) => at(T, D.measured, 0.24, 0.4) * focus(T, D.measured) * chartFade(T)
     const out: LabelSpec[] = [
       {
         id: 'ax-y',
@@ -773,14 +966,17 @@ function useStoryLabels(frame: ChartFrame, layout: Layout) {
         anchor: [x(0.5), y0 - TICK_LEN, 0],
         prefer: 'S',
         only: ['S'],
-        gapPx: 25,
+        // a clear 10 px under the tick row, so the title never reads as a third tick
+        gapPx: layout === 'P' ? 30 : 34,
         priority: 78,
         cue: (T) => construct(T) * Math.min(1, axisTitles(T)),
       },
       { id: 'yr-05', text: '0.5', tone: 'tick', anchor: [x(0) - TICK_LEN, y(0.5), 0], prefer: 'W', only: ['W'], gapPx: 5, cue: construct },
       { id: 'yr-10', text: '1.0', tone: 'tick', anchor: [x(0) - TICK_LEN, y(1), 0], prefer: 'W', only: ['W'], gapPx: 5, cue: construct },
     ]
-    const tickIdx = layout === 'P' ? [0, 1, 3, 4, 6, 7] : [0, 1, 2, 3, 4, 5, 6, 7]
+    // Phone: 1 s, 10 s, 1 min, 15 min, 1 hr (5 min and 30 min would sit a few
+    // px from their neighbours). Every tick mark is still drawn.
+    const tickIdx = layout === 'P' ? [0, 1, 3, 5, 7] : [0, 1, 2, 3, 4, 5, 6, 7]
     tickIdx.forEach((i, j) => {
       out.push({
         id: `tk-${i}`,
@@ -791,14 +987,14 @@ function useStoryLabels(frame: ChartFrame, layout: Layout) {
         only: ['S'],
         gapPx: 5,
         priority: 80,
-        cue: (T) => stagger(T, D.measured + 0.14, D.measured + 0.34, j, tickIdx.length, 0.5) * focus(T, D.measured) * chartFade(T),
+        cue: (T) => stagger(T, D.measured + 0.18, D.measured + 0.38, j, tickIdx.length, 0.5) * focus(T, D.measured) * chartFade(T),
       })
     })
-    // task names: the four D.5 names (D0: the 400m run; D1: the rest), gone once the domains fan out
+    // task names: the four D.5 names. The 400m run is named as its dimension
+    // lines land (D0); the others as the D1 pen passes them. Gone once the domains fan out.
     POWER_TASKS.forEach((t, i) => {
       if (!TASK_LABELED[i]) return
       const u = TASK_U[i]
-      const j = i < TASK_400 ? i : i - 1
       out.push({
         id: `task-${i}`,
         text: t.name,
@@ -810,13 +1006,18 @@ function useStoryLabels(frame: ChartFrame, layout: Layout) {
         gapPx: 10,
         leader: true,
         priority: i === TASK_400 ? 72 : 70,
-        cue: (T) =>
-          (i === TASK_400 ? at(T, D.measured, 0.44, 0.56) : stagger(T, D.curve + 0.1, D.curve + 0.4, j, POWER_TASKS.length - 1, 0.35)) *
-          (1 - at(T, D.domains, 0, 0.12)),
+        cue: (T) => (i === TASK_400 ? at(T, D.measured, 0.52, 0.62) : cue(T, cross[i] + 0.005, cross[i] + 0.06)) * (1 - at(T, D.domains, 0, 0.12)),
       })
     })
-    // energy-band ticks with the three duration strings (callback to chapter 03), kept inside the chart
+    // Energy-band duration strings (a callback to chapter 03). Landscape:
+    // over each band. Phone: a pinned key top-right (the bands are 40 to 150
+    // px wide there, too narrow for their strings), matched by colour.
+    const bandCue = (T: number) => at(T, D.curve, 0.66, 0.86) * (1 - at(T, D.domains, 0, 0.1))
     ENERGY_SYSTEMS.forEach((s, k) => {
+      if (layout === 'P') {
+        out.push({ id: `band-${k}`, text: s.duration, tone: 'legend', color: s.color, anchor: [0, 0, 0], pin: 'top-right', pinOrder: k, cue: bandCue })
+        return
+      }
       const only: LabelSpec['only'] = k === 0 ? ['NE', 'N'] : k === ENERGY_SYSTEMS.length - 1 ? ['NW', 'N'] : ['N', 'NE', 'NW']
       out.push({
         id: `band-${k}`,
@@ -829,15 +1030,30 @@ function useStoryLabels(frame: ChartFrame, layout: Layout) {
         gapPx: 8,
         leader: true,
         priority: 45,
-        cue: (T) => at(T, D.curve, 0.7, 0.92) * (1 - at(T, D.domains, 0, 0.1)),
+        cue: bandCue,
       })
     })
     // D2: all five modal domain names are required. Portrait: a stacked
-    // legend pinned top-right (the right ends crowd on a phone). Landscape:
-    // direct labels at the right ends.
+    // legend pinned top-right (the right ends crowd on a phone), kept through
+    // the converged end state so the five ghosts stay named. Landscape:
+    // direct labels at the right ends while the slices are apart, then the
+    // same pinned key once they converge (the right ends meet there).
     const scales = domainScale(GENERALIST.name)
-    const domCue = (T: number) => at(T, D.domains, 0.16, 0.3) * (1 - at(T, D.domains, 0.5, 0.62))
+    const keyOut = (T: number) => 1 - at(T, D.area, 0, 0.04)
     MODAL_DOMAINS.forEach((d, k) => {
+      if (layout !== 'P') {
+        out.push({
+          id: `dom-key-${k}`,
+          text: d.name,
+          tone: 'legend',
+          color: d.color,
+          anchor: [0, 0, 0],
+          pin: 'top-right',
+          pinOrder: k,
+          required: true,
+          cue: (T) => at(T, D.domains, 0.6, 0.72) * keyOut(T),
+        })
+      }
       if (layout === 'P') {
         out.push({
           id: `dom-${k}`,
@@ -848,7 +1064,7 @@ function useStoryLabels(frame: ChartFrame, layout: Layout) {
           pin: 'top-right',
           pinOrder: k,
           required: true,
-          cue: domCue,
+          cue: (T) => at(T, D.domains, 0.16, 0.3) * keyOut(T),
         })
       } else {
         out.push({
@@ -857,16 +1073,15 @@ function useStoryLabels(frame: ChartFrame, layout: Layout) {
           tone: 'name',
           color: d.color,
           anchor: (T) => {
-            const f = fan(T)
-            const z = (-FAN_Z + (2 * FAN_Z * k) / (MODAL_DOMAINS.length - 1)) * f
-            return [x(1), y(gv(1) * (1 + (scales[k] - 1) * f)), z]
+            const z = (-FAN_Z + (2 * FAN_Z * k) / (MODAL_DOMAINS.length - 1)) * fan(T)
+            return [x(1), y(gv(1) * (1 + (scales[k] - 1) * tilt(T))), z]
           },
           prefer: 'E',
           gapPx: 8,
           leader: true,
           required: true,
           priority: 65,
-          cue: domCue,
+          cue: (T) => at(T, D.domains, 0.16, 0.3) * (1 - at(T, D.domains, 0.5, 0.62)),
         })
       }
     })
@@ -897,6 +1112,7 @@ function useStoryLabels(frame: ChartFrame, layout: Layout) {
         cue: (T) => at(T, D.synthesis, 0.48, 0.6) * d4out(T),
       },
       {
+        // on the axis-title line, BELOW the tick row (the title yields to it), never over the ticks
         id: 'c-time',
         text: 'TIME: THE PATHWAYS',
         tone: 'callout',
@@ -904,7 +1120,8 @@ function useStoryLabels(frame: ChartFrame, layout: Layout) {
         anchor: [x(0.5), y0 - TICK_LEN, 0],
         prefer: 'S',
         only: ['S'],
-        gapPx: 22,
+        gapPx: layout === 'P' ? 24 : 27,
+        priority: 76,
         cue: (T) => at(T, D.synthesis, 0.78, 0.9) * d4out(T),
       },
     )
@@ -919,7 +1136,8 @@ function useStoryLabels(frame: ChartFrame, layout: Layout) {
         anchor: [x(0.56), y(gv(0.56)), 0],
         prefer: 'NE',
         only: ['NE', 'N', 'NW', 'E'],
-        gapPx: 10,
+        gapPx: 12,
+        leader: true,
         priority: 62,
         cue: (T) => at(T, D.specialist, 0.05, 0.2) * d5out(T),
       },
@@ -928,7 +1146,7 @@ function useStoryLabels(frame: ChartFrame, layout: Layout) {
         text: String(G_SCORE),
         tone: 'readout',
         size: 'sm',
-        color: PAL.yellowGreen,
+        color: scoreHue(G_SCORE),
         minChars: 2,
         anchor: [x(1), y(gv(1)), 0],
         prefer: 'N',
@@ -973,7 +1191,7 @@ function useStoryLabels(frame: ChartFrame, layout: Layout) {
         text: String(P_SCORE),
         tone: 'readout',
         size: 'sm',
-        color: PAL.sick,
+        color: scoreHue(P_SCORE),
         minChars: 2,
         anchor: [x(1), y(pv(1)), 0],
         prefer: 'N',
@@ -981,59 +1199,61 @@ function useStoryLabels(frame: ChartFrame, layout: Layout) {
         cue: (T) => at(T, D.specialist, 0.86, 0.96) * d5out(T),
       },
     )
-    // D6: ranked lineup, name + score per row
-    const L = lineup(layout)
+    // D6: the ranked lineup. Per row: a rank badge and name (left) and the
+    // score pill (right), tight above the mini. The pill shows the score word
+    // on EVERY row, or (two-column landscape) on none: never a mix.
+    const L = lineup(layout, frame)
     RANKED.forEach((r, i) => {
       const [ox, oy] = L.origin(i)
-      const isG = r.name === GENERALIST.name
-      const appear = (T: number) =>
-        i === 0 ? at(T, D.lineup, 0.24, 0.36) : stagger(T, D.lineup + 0.32, D.lineup + 0.92, i - 1, RANKED.length - 1, 0.45)
+      const g = r.name === GENERALIST.name
+      const appear = (T: number) => at(T, D.lineup, 0.02, 0.1) * rowAppear(T, i)
       out.push(
         {
           id: `ln-n-${i}`,
           text: r.name,
           tone: 'name',
-          color: isG ? PAL.yellowGreen : PAL.chalk,
-          anchor: [ox, oy + L.MH * 1.02 + 0.05, 0.12],
+          color: g ? PAL.yellowGreen : PAL.chalk,
+          dot: false,
+          badge: `P${i + 1}`,
+          anchor: [ox, oy + L.labelY, 0],
           prefer: 'NE',
           only: ['NE'],
-          gapPx: 2,
+          gapPx: 3,
           priority: 86,
           required: true,
           cue: appear,
         },
         {
           id: `ln-s-${i}`,
-          text: `${r.score} ${scoreWord(r.score)}`,
-          short: String(r.score),
+          text: L.words ? `${r.score} ${scoreWord(r.score)}` : String(r.score),
           tone: 'readout',
           size: 'sm',
-          color: isG ? PAL.yellowGreen : PAL.chalk,
-          anchor: [ox + L.MW, oy + L.MH * 1.02 + 0.05, 0.12],
+          color: g ? PAL.yellowGreen : PAL.chalk,
+          anchor: [ox + L.MW, oy + L.labelY, 0],
           prefer: 'NW',
           only: ['NW'],
-          gapPx: 2,
-          priority: 80,
+          gapPx: 3,
+          priority: 88,
           required: true,
           cue: appear,
         },
       )
     })
     return out
-  }, [frame, layout])
+  }, [frame, layout, cross])
   useLabels(specs)
 }
 
 /**
- * Data marks the labels must not cover (the reviewer's "labels vs data"):
- * the task dots, samples along the generalist and Powerlifter curves while
- * they are drawn, and the power axis.
+ * Data marks the labels must not cover: the task dots, dense samples along
+ * the generalist (and its D5 ghost) and the Powerlifter curves, and the
+ * power axis.
  */
 function useDataObstacles(frame: ChartFrame) {
   const dots = useMemo<WorldObstacle>(
     () => ({
       points: (T, out) => {
-        if (T >= D.lineup + 0.2) return 0
+        if (T >= D.lineup + 0.2 || dotsVis(T) < 0.05) return 0
         let n = 0
         for (let i = 0; i < POWER_TASKS.length; i++) {
           if (taskAppear(T, i) <= 0.01) continue
@@ -1050,11 +1270,11 @@ function useDataObstacles(frame: ChartFrame) {
     }),
     [frame],
   )
+  const S = 40
   const curves = useMemo<WorldObstacle>(
     () => ({
       points: (T, out) => {
         let n = 0
-        const S = 26
         if (curveOn(T) && fan(T) < 0.05) {
           for (let i = 0; i < S; i++) {
             const u = i / (S - 1)
@@ -1075,8 +1295,8 @@ function useDataObstacles(frame: ChartFrame) {
         }
         return n
       },
-      maxPoints: 56,
-      radiusPx: 4,
+      maxPoints: 2 * S,
+      radiusPx: 5,
     }),
     [frame],
   )
@@ -1102,12 +1322,13 @@ function useDataObstacles(frame: ChartFrame) {
 
 function StoryScene({ frame, tier }: { frame: ChartFrame; tier: Tier }) {
   const { layout } = useBeat()
-  useStoryLabels(frame, layout)
+  const cross = useMemo(() => crossings(frame), [frame])
+  useStoryLabels(frame, layout, cross)
   useDataObstacles(frame)
   return (
     <>
-      <StoryChart frame={frame} tier={tier} />
-      <Lineup />
+      <StoryChart frame={frame} tier={tier} cross={cross} />
+      <LineupRows frame={frame} />
     </>
   )
 }

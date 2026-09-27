@@ -38,13 +38,16 @@ const words = (s: string) => s.split(/\s+/).filter(Boolean).length
 
 /**
  * Hold time scales with the number of words (L14). Reading starts at the
- * caption swap (t = 0), so part of the build already counts as reading time
- * (amendment H.16): hold = clamp(1.5 + 0.24 x words - 0.6 x build, 2, 7).
+ * caption swap (t = 0), so the whole build counts as reading time
+ * (amendment H.29): a beat stays on screen for its reading time,
+ * 0.4 s + 0.23 s per word (about 250 words per minute, a phone reader's
+ * pace), and never holds less than 2 s after its build:
+ * hold = clamp(0.4 + 0.23 x words - build, 2, 7).
  */
 export function holdFor(beat: Beat | undefined): number {
   if (!beat) return 3
   const w = words(beat.title) + words(beat.body)
-  return Math.max(2, Math.min(7, 1.5 + 0.24 * w - 0.6 * beat.build))
+  return Math.max(2, Math.min(7, 0.4 + 0.23 * w - beat.build))
 }
 
 /** Start beat n at t = 0 in the build phase. */

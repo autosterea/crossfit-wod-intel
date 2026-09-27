@@ -4,6 +4,7 @@ import { OrbitControls } from '@react-three/drei'
 import * as THREE from 'three'
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib'
 import { clock } from '../clock'
+import { reportOnce } from '../safe'
 import { useStoryStore } from '../store'
 import { focusRect } from './focusRect'
 import {
@@ -179,9 +180,15 @@ export function CameraDirector() {
     const n = clock.index
     const beat = beats[n]
     if (!beat) return
-    if (n > 0) resolvePose(poseFor(beats[n - 1].cam, layout), layout, rect, H, s.start)
-    else resolvePose(poseFor(beat.cam, layout), layout, rect, H, s.start)
-    evalSpec(beat.cam, s.start, clock.t, layout, rect, H, s.scratchA, s.pose)
+    try {
+      if (n > 0) resolvePose(poseFor(beats[n - 1].cam, layout), layout, rect, H, s.start)
+      else resolvePose(poseFor(beat.cam, layout), layout, rect, H, s.start)
+      evalSpec(beat.cam, s.start, clock.t, layout, rect, H, s.scratchA, s.pose)
+    } catch (err) {
+      // a throwing pose function keeps the last good camera
+      reportOnce('camera pose of beat ' + n, err)
+      return
+    }
 
     // Parallax: desktop, story mode, not held, not reduced.
     const st2 = useStoryStore.getState()

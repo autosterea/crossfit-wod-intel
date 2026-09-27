@@ -9,7 +9,7 @@ import { useFitnessStore } from '../../fitnessStore'
 import type { Beat, StoryDef } from '../types'
 import type { FitnessView, ModuleKey } from '../../lessonTypes'
 import { IconChevron } from './icons'
-import { hasStory } from '../../stories'
+import { useObservedCard } from '../camera/focusRect'
 
 /* =========================================================================
    Caption card (DESIGN.md B.2, C.7). Phone: a glass card over the bottom of
@@ -72,12 +72,11 @@ function NextChapterCta({ view }: { view: FitnessView }) {
   const navigate = useFitnessStore((s) => s.navigate)
   if (!next || next === 'intro') return null
   const m = moduleByKey(next as ModuleKey)
-  // Until a chapter lands on the story engine it opens its classic page; say so.
-  const classic = !hasStory(next)
   return (
     <button type="button" className="st-btn st-btn--solid" onClick={() => navigate({ view: next })}>
-      Next: {m.num} {m.mobileLabel ?? m.label}
-      {classic && <span className="st-btn-tag">Classic</span>}
+      <span className="st-btn-l">
+        Next: {m.num} {m.mobileLabel ?? m.label}
+      </span>
     </button>
   )
 }
@@ -99,7 +98,16 @@ export function CaptionCard({ cardRef, shell }: { cardRef: React.RefObject<HTMLD
     const down = (e: PointerEvent) => {
       const target = e.target as Element
       if (target.closest('button, a, input, [data-no-gesture], .st-more')) return
+      drag.current?.release()
       drag.current = { x: e.clientX, y: e.clientY, t: e.timeStamp, id: e.pointerId, release: useStoryStore.getState().beginInteraction() }
+      // a mouse released outside the card still ends the drag (and the hold)
+      if (e.pointerType !== 'touch') {
+        try {
+          el.setPointerCapture(e.pointerId)
+        } catch {
+          /* ignore */
+        }
+      }
     }
     const up = (e: PointerEvent) => {
       const d = drag.current
@@ -122,16 +130,26 @@ export function CaptionCard({ cardRef, shell }: { cardRef: React.RefObject<HTMLD
       drag.current?.release()
       drag.current = null
     }
+    const winUp = (e: PointerEvent) => {
+      const d = drag.current
+      if (d && d.id === e.pointerId && !el.contains(e.target as Node)) cancel()
+    }
     el.addEventListener('pointerdown', down)
     el.addEventListener('pointerup', up)
     el.addEventListener('pointercancel', cancel)
+    window.addEventListener('pointerup', winUp)
+    window.addEventListener('blur', cancel)
     return () => {
+      window.removeEventListener('pointerup', winUp)
+      window.removeEventListener('blur', cancel)
       el.removeEventListener('pointerdown', down)
       el.removeEventListener('pointerup', up)
       el.removeEventListener('pointercancel', cancel)
     }
-  }, [cardRef, phone])
+    // re-attach when the card element appears (it does not exist while the chapter has no def)
+  }, [cardRef, phone, def])
 
+  const observe = useObservedCard(cardRef)
   if (!def) return null
   const beat = def.beats[index]
   if (!beat) return null
@@ -146,7 +164,7 @@ export function CaptionCard({ cardRef, shell }: { cardRef: React.RefObject<HTMLD
 
   return (
     <div
-      ref={cardRef}
+      ref={observe}
       className={`st-card st-card--${phone ? detent : 'default'}`}
       data-detent={phone ? detent : 'default'}
       style={{ ['--acc' as string]: accent }}

@@ -155,6 +155,10 @@ export interface LabelSpec {
   pinOrder?: number
   /** callout tone: small data-colour swatches before the text (for example the five domains) */
   swatches?: readonly string[]
+  /** a small mono badge before the text, in the label colour (for example a computed rank "P1") */
+  badge?: string
+  /** horizontal clearance kept on each side, px (default: tick 6, so two ticks stay >= 12 px apart; others 0) */
+  sepPx?: number
 }
 
 export interface Rect {

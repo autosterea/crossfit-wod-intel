@@ -4,7 +4,7 @@ import { useStoryStore } from '../../story/store'
 import { useHudOpacity } from '../../story/ui/Hud'
 import { hudOpacity, hudScore, hudWordOn } from './Scene'
 import { useDefExplore } from './exploreStore'
-import { CURVE_BY_KEY, GENERALIST, scoreColor, scoreOf, scoreWord } from './definitionMath'
+import { CURVE_BY_KEY, GENERALIST, scoreHue, scoreOf, scoreWord } from './definitionMath'
 
 /* Definition HUD chip (DESIGN.md D.5): "AREA" plus the counting score, with
    the score word in the sub-line once the claim lands. Story: computed from
@@ -35,14 +35,20 @@ export default function DefinitionHud() {
         }
         const s = String(v)
         if (n.textContent !== s) n.textContent = s
-        // While counting the number is chalk; once the word lands, number and
-        // word take the score colour (L8: yellow-green is never a specialist's low score).
-        const c = wordOn > 0.5 ? scoreColor(v) : 'var(--st-chalk)'
-        if (n.style.color !== c) n.style.color = c
+        // While counting the number is chalk; once the word lands, number AND
+        // word take one score hue (L8: one colour per meaning; yellow-green is
+        // never a specialist's low score).
+        const hue = scoreHue(v)
+        const c = wordOn > 0.5 ? hue : 'var(--st-chalk)'
+        if (n.dataset.c !== c) {
+          n.dataset.c = c
+          n.style.color = c
+        }
         const ws = wordOn > 0 ? scoreWord(v) : ''
-        if (w.textContent !== ws) {
-          w.textContent = ws
-          w.style.color = scoreColor(v)
+        if (w.textContent !== ws) w.textContent = ws
+        if (w.dataset.c !== hue) {
+          w.dataset.c = hue
+          w.style.color = hue
         }
         const o = String(Math.round(wordOn * 100) / 100)
         if (w.style.opacity !== o) w.style.opacity = o

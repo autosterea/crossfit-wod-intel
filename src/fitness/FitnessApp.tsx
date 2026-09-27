@@ -216,10 +216,32 @@ export default function FitnessApp() {
 
   useEffect(() => {
     bootStory()
-    const onPop = () => syncFromLocation()
+    // An app-like lesson: Back / Forward to another chapter lands on its stage,
+    // not on the scroll position of the Notes where the Next card was tapped
+    // (the stage would be off-screen, paused and never loaded). Same-chapter
+    // entries keep the browser's behaviour.
+    const h = window.history
+    const prevRestore = h.scrollRestoration
+    try {
+      h.scrollRestoration = 'manual'
+    } catch {
+      /* ignore */
+    }
+    const onPop = () => {
+      const before = useFitnessStore.getState().route.view
+      syncFromLocation()
+      if (useFitnessStore.getState().route.view !== before) window.scrollTo({ top: 0 })
+    }
     window.addEventListener('popstate', onPop)
     syncFromLocation()
-    return () => window.removeEventListener('popstate', onPop)
+    return () => {
+      window.removeEventListener('popstate', onPop)
+      try {
+        h.scrollRestoration = prevRestore
+      } catch {
+        /* ignore */
+      }
+    }
   }, [syncFromLocation])
 
   // Safe areas: add viewport-fit=cover while the lesson is mounted only.

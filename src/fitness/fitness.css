@@ -712,8 +712,10 @@
 .st-brand {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   min-height: 44px;
+  min-width: 44px;
   flex: none;
 }
 .st-brand-mark {
@@ -793,6 +795,29 @@
   height: 44px;
   display: grid;
   place-items: center;
+}
+/* the shared ThemeToggle draws a 32 px box; its hit box here is the full 44 px */
+.st-theme > button {
+  position: relative;
+  width: 44px !important;
+  height: 44px !important;
+  min-height: 44px;
+  border-color: transparent !important;
+  background: transparent !important;
+  isolation: isolate;
+}
+.st-theme > button::before {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  z-index: -1;
+  border-radius: 8px;
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  transition: border-color 160ms;
+}
+.st-theme > button:hover::before {
+  border-color: rgba(145, 198, 64, 0.4);
 }
 .st-progress {
   display: flex;
@@ -1003,6 +1028,19 @@
   flex: none;
   box-shadow: 0 0 0 1.5px rgba(7, 10, 14, 0.7);
 }
+/* a small mono badge before a name (a computed rank, "P1") */
+.st-lbl-badge {
+  flex: none;
+  font-family: var(--st-mono);
+  font-weight: 600;
+  font-size: 11px;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  padding: 3px 5px 2px;
+  border-radius: 4px;
+  color: #070a0e;
+  background: var(--c);
+}
 .st-lbl--tick .st-lbl-t {
   font-family: var(--st-mono);
   font-weight: 500;
@@ -1158,32 +1196,56 @@
   min-height: 0;
   overflow: auto;
 }
+/* Phone: the grab handle has its OWN row at the top of the card, and the
+   beat scrubber's 44 px hit band starts below it, so the two never overlap
+   (the scrubber band overlaps only the non-interactive eyebrow row). The
+   handle's 44 px hit area extends 24 px above the card edge. */
 .st-grab {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 96px;
-  height: 18px;
+  position: relative;
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  padding-top: 6px;
+  width: 128px;
+  height: 20px;
+  min-height: 0 !important;
+  margin: 0 auto;
+  padding-top: 8px;
+}
+.st-grab::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -24px;
+  bottom: 0;
 }
 .st-grab span {
-  width: 28px;
+  width: 32px;
   height: 4px;
   border-radius: 999px;
-  background: rgba(238, 243, 246, 0.28);
+  background: rgba(238, 243, 246, 0.3);
+}
+.st-shell--phone .st-card,
+.st-shell--tablet .st-card {
+  padding-top: 0;
 }
 .st-segs {
+  position: relative;
+  z-index: 2;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 4px;
-  height: 24px;
-  margin-top: -2px;
+  height: 44px;
+  padding-top: 9px;
+  margin: 0 0 -28px;
   cursor: pointer;
   touch-action: none;
+}
+.st-shell--desktop .st-segs,
+.st-shell--landscape .st-segs {
+  height: 32px;
+  padding-top: 11px;
+  margin: -8px 0 -18px;
 }
 .st-seg {
   position: relative;
@@ -1429,13 +1491,15 @@
 }
 .st-cta-row {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   margin-top: 10px;
 }
 .st-btn {
-  flex: 1;
+  flex: 1 1 132px;
+  min-width: 0;
   min-height: 44px;
-  padding: 0 12px;
+  padding: 0 10px;
   border-radius: 999px;
   font-family: var(--st-cond);
   font-weight: 600;
@@ -1443,6 +1507,20 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.st-btn-l {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+@media (max-width: 379px) {
+  .st-btn {
+    font-size: 12.5px;
+    letter-spacing: 0.05em;
+    padding: 0 8px;
+  }
 }
 .st-btn--solid {
   background: #019644;
@@ -1632,8 +1710,19 @@
   border-radius: 999px;
   overflow: hidden;
 }
+@media (max-width: 379px) {
+  .st-explore-head {
+    flex-wrap: wrap;
+    overflow: visible;
+    row-gap: 8px;
+  }
+  .st-seg-toggle button {
+    padding: 0 12px;
+  }
+}
 .st-seg-toggle button {
-  height: 42px;
+  height: 44px;
+  min-height: 44px;
   padding: 0 14px;
   font-family: var(--st-cond);
   font-weight: 600;
@@ -2165,15 +2254,25 @@
   font-size: 11px;
 }
 
-/* "Next: 05 Continuum" when that chapter is still the classic page */
-.st-btn-tag {
-  margin-left: 8px;
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-size: 10.5px;
-  letter-spacing: 0.1em;
-  background: rgba(255, 255, 255, 0.18);
-  vertical-align: 1px;
+/* stage hotspots (story/hotspots.tsx): real buttons over projected 3D boxes */
+.st-hots {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+}
+.st-hot {
+  position: absolute;
+  left: 0;
+  top: 0;
+  pointer-events: auto;
+  border-radius: 14px;
+  background: transparent;
+  -webkit-tap-highlight-color: transparent;
+}
+.st-hot:focus-visible {
+  outline: 2px solid #91c640;
+  outline-offset: 2px;
 }
 
 /* light theme: the yellow-green accent is ~2:1 on white; use sea-green on light chrome */

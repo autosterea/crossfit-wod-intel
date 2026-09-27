@@ -34,11 +34,9 @@ export function initialTier(): { tier: Tier; pinned: boolean } {
 }
 
 export const tierDown = (t: Tier): Tier => (t === 'high' ? 'medium' : 'low')
-export const tierUp = (t: Tier, ceiling: Tier): Tier => {
-  const rank = { low: 0, medium: 1, high: 2 } as const
-  const next: Tier = t === 'low' ? 'medium' : 'high'
-  return rank[next] <= rank[ceiling] ? next : t
-}
+
+const RANK: Record<Tier, number> = { low: 0, medium: 1, high: 2 }
+export const tierRank = (t: Tier): number => RANK[t]
 
 /** Clamp a DPR to the tier range and the device ratio. */
 export function tierDpr(t: Tier, factor = 1): number {
@@ -47,4 +45,54 @@ export function tierDpr(t: Tier, factor = 1): number {
   const hi = Math.min(b, Math.max(1, dev))
   const v = a + (hi - a) * Math.max(0, Math.min(1, factor))
   return Math.round(v * 4) / 4
+}
+
+/* ------------------------------------------------------------------------
+   The quality ladder (amendment H.29). Adaptive quality moves one STEP at a
+   time along an ordered list of (tier, dpr) pairs, best first. A step down
+   inside a tier is only a DPR change (a buffer resize, no shader compile); a
+   step across a tier boundary remounts the composer, so it happens only on a
+   real, sustained decline.
+
+   HIGH:   min(dpr, 2), 1.75, 1.5
+   MEDIUM: "medium+" min(dpr, 2) and 1.75 (reachable only by sustained
+           headroom on a 2x / 3x phone), then 1.5 (the phone start), 1.25, 1
+   LOW:    1
+   ------------------------------------------------------------------------ */
+
+export interface QualityStep {
+  tier: Tier
+  dpr: number
+}
+
+export function qualityLadder(dev = typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1): QualityStep[] {
+  const d = Math.max(1, Math.min(2, dev))
+  const out: QualityStep[] = []
+  const push = (tier: Tier, dpr: number) => {
+    const v = Math.round(Math.max(1, Math.min(d, dpr)) * 4) / 4
+    if (!out.some((s) => s.tier === tier && s.dpr === v)) out.push({ tier, dpr: v })
+  }
+  for (const v of [2, 1.75, 1.5]) push('high', v)
+  for (const v of [2, 1.75, 1.5, 1.25, 1]) push('medium', v)
+  push('low', 1)
+  return out
+}
+
+/** Index of the starting step for a tier: HIGH at its top DPR, MEDIUM at 1.5, LOW. */
+export function startStep(ladder: QualityStep[], tier: Tier): number {
+  if (tier === 'medium') {
+    const want = Math.min(1.5, ladder.find((s) => s.tier === 'medium')?.dpr ?? 1)
+    const i = ladder.findIndex((s) => s.tier === 'medium' && s.dpr <= want)
+    return i >= 0 ? i : ladder.findIndex((s) => s.tier === 'medium')
+  }
+  return ladder.findIndex((s) => s.tier === tier)
+}
+
+/** The best step adaptation may ever climb to for a starting tier (the ceiling). */
+export function ceilingStep(ladder: QualityStep[], tier: Tier): number {
+  // phones (MEDIUM start) may climb to "medium+" (DPR up to 2) with sustained headroom;
+  // HIGH starts at its own top step; LOW never climbs above MEDIUM's start.
+  if (tier === 'high') return 0
+  const i = ladder.findIndex((s) => s.tier === 'medium')
+  return i >= 0 ? i : 0
 }

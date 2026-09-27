@@ -2,7 +2,7 @@ import { MODAL_DOMAINS, POWER_CURVES } from '../../fitnessData'
 import { Legend, Readout } from '../../ui'
 import { useDefExplore } from './exploreStore'
 import { ChipRadio } from '../../story/ui/ChipRadio'
-import { CURVE_BY_KEY, GENERALIST, scoreColor, scoreOf, scoreWord } from './definitionMath'
+import { CURVE_BY_KEY, GENERALIST, scoreHue, scoreOf, scoreWord } from './definitionMath'
 
 /* Definition explore controls (DESIGN.md D.5 "Explore"). Peek (whole rows
    only): the seven athlete chips, marked .st-ex-peek; the HUD chip carries
@@ -35,7 +35,7 @@ export default function DefinitionExplore() {
           <>
             {score}
             <span style={{ fontSize: 15, color: 'var(--st-muted)' }}>/100</span>{' '}
-            <span style={{ fontSize: 15, color: scoreColor(score) }}>{scoreWord(score)}</span>
+            <span style={{ fontSize: 15, color: scoreHue(score) }}>{scoreWord(score)}</span>
           </>
         }
         sub="Power averaged across all modal domains."

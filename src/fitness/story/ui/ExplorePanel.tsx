@@ -3,6 +3,7 @@ import { useStoryStore } from '../store'
 import { cameraBus } from '../camera/CameraDirector'
 import { IconBack, IconReset } from './icons'
 import { accentFor } from './CaptionCard'
+import { useObservedCard } from '../camera/focusRect'
 
 /* Explore panel (DESIGN.md B.4): the caption card morphs in place into the
    controls sheet (phone: peek / expanded; desktop: the left column). It
@@ -14,12 +15,13 @@ export function ExplorePanel({ cardRef, shell }: { cardRef: React.RefObject<HTML
   const scrub = useStoryStore((s) => s.scrub)
   const [open, setOpen] = useState(false)
   const phone = shell === 'phone' || shell === 'tablet'
+  const observe = useObservedCard(cardRef)
   if (!def) return null
   const Explore = def.Explore
   const accent = accentFor(def.key)
   return (
     <div
-      ref={cardRef}
+      ref={observe}
       className={`st-card st-explore${phone ? (open ? ' is-open' : ' is-peek') : ''}`}
       style={{ ['--acc' as string]: accent }}
       data-no-gesture

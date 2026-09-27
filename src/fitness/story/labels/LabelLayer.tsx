@@ -17,6 +17,7 @@ import {
 } from './registry'
 import { Placer, type PlaceInput } from './place'
 import type { Dir, LabelSpec, Rect } from '../types'
+import { reportOnce } from '../safe'
 
 /* =========================================================================
    The DOM label layer (DESIGN.md C.9, B.8). One absolutely positioned div
@@ -67,6 +68,7 @@ function LabelNode({ e }: { e: LabelEntry }) {
       style={style}
       aria-hidden="true"
     >
+      {spec.badge && <b className="st-lbl-badge">{spec.badge}</b>}
       {(spec.tone === 'name' || spec.tone === 'legend') && spec.dot !== false && <i className="st-lbl-dot" />}
       {spec.swatches && (
         <span className="st-lbl-sw">
@@ -164,6 +166,7 @@ const newInput = (): PlaceInput => ({
   pin: null,
   pinOrder: 0,
   only: undefined,
+  sep: 0,
 })
 
 /** Project a world point to stage px into _v (x, y) and report whether it is in front. */
@@ -244,7 +247,12 @@ export function LabelPlacer() {
     for (const e of registry.values()) {
       if (!e.el) continue
       const modeOk = e.mode === 'both' || e.mode === mode
-      const vis = modeOk ? (e.spec.cue ? e.spec.cue(T) : 1) : 0
+      let vis = 0
+      try {
+        vis = modeOk ? (e.spec.cue ? e.spec.cue(T) : 1) : 0
+      } catch (err) {
+        reportOnce('label "' + e.spec.id + '" cue', err)
+      }
       e.live = vis > 0.01
       if (!e.live) {
         if (e.opacity !== 0) {
@@ -260,7 +268,14 @@ export function LabelPlacer() {
       let ax = 0
       let ay = 0
       if (!e.spec.pin) {
-        const a = typeof e.spec.anchor === 'function' ? e.spec.anchor(T, layout) : e.spec.anchor
+        let a: readonly [number, number, number]
+        try {
+          a = typeof e.spec.anchor === 'function' ? e.spec.anchor(T, layout) : e.spec.anchor
+        } catch (err) {
+          reportOnce('label "' + e.spec.id + '" anchor', err)
+          e.visible = false
+          continue
+        }
         if (!projectPx(camera, a[0], a[1], a[2])) {
           e.visible = false
           continue
@@ -298,6 +313,7 @@ export function LabelPlacer() {
       inp.pin = e.spec.pin ?? null
       inp.pinOrder = e.spec.pinOrder ?? n
       inp.only = e.spec.only
+      inp.sep = e.spec.sepPx ?? (e.spec.tone === 'tick' ? 6 : 0)
       s.live[n] = e
       s.cues[n] = vis
       n++
@@ -321,10 +337,16 @@ export function LabelPlacer() {
       o.w = r.w
       o.h = r.h
     }
-    for (const { spec, buf } of worldObstacles.values()) {
+    for (const [oid, { spec, buf }] of worldObstacles) {
       const m = spec.mode ?? 'story'
       if (m !== 'both' && m !== mode) continue
-      const box = spec.box?.(T)
+      let box: ReturnType<NonNullable<typeof spec.box>> | undefined
+      try {
+        box = spec.box?.(T)
+      } catch (err) {
+        reportOnce('world obstacle "' + oid + '" box', err)
+        box = null
+      }
       if (box) {
         let x0 = Infinity
         let y0 = Infinity
@@ -350,7 +372,16 @@ export function LabelPlacer() {
         }
       }
       if (spec.points) {
-        const cnt = Math.min(buf.length / 3, spec.points(T, buf))
+        // buf holds exactly maxPoints points (default 64). Writing more (for
+        // example out.set() with a longer curve) throws a RangeError: it is
+        // caught here, reported once with the fix, and the obstacle is skipped.
+        let cnt = 0
+        try {
+          cnt = Math.min(buf.length / 3, spec.points(T, buf))
+        } catch (err) {
+          reportOnce('world obstacle "' + oid + '" points (maxPoints is ' + buf.length / 3 + '; raise it if the chapter writes more)', err)
+          cnt = 0
+        }
         const rad = spec.radiusPx ?? 6
         for (let k = 0; k < cnt; k++) {
           if (!projectPx(camera, buf[k * 3], buf[k * 3 + 1], buf[k * 3 + 2])) continue

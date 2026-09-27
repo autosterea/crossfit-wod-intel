@@ -2,6 +2,7 @@ import { Component, Suspense, useEffect, useLayoutEffect, useMemo, useRef, useSt
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { Environment, Lightformer } from '@react-three/drei'
 import * as THREE from 'three'
+import './threeConsole'
 import type { StoryDef } from './types'
 import type { FitnessView } from '../lessonTypes'
 import { TIERS } from './quality/tiers'
@@ -11,6 +12,7 @@ import { tick, pb } from './playback'
 import { CameraDirector } from './camera/CameraDirector'
 import { computeFocus, focusRect, setFocusRecompute, type ShellLayout } from './camera/focusRect'
 import { LabelLayer, LabelPlacer } from './labels/LabelLayer'
+import { HotspotLayer, HotspotPlacer } from './hotspots'
 import { Quality } from './quality/Quality'
 import { Post } from './quality/Post'
 import { StatsProbe } from './quality/stats'
@@ -19,7 +21,7 @@ import { Backdrop } from './kit/Backdrop'
 import { engineUniforms } from './kit/materials'
 import { useChapterFog } from './kit/fog'
 import { gestureBus, useStageGestures, useStoryKeys } from './gestures'
-import { readyDom, readyState, readyTick } from './ready'
+import { readyDom, readyState, readyTick, setPending } from './ready'
 import { CaptionCard } from './ui/CaptionCard'
 import { ExplorePanel } from './ui/ExplorePanel'
 import { HudSlot } from './ui/Hud'
@@ -161,6 +163,7 @@ function Engine({ def }: { def: StoryDef }) {
       <ClockDriver />
       <CameraDirector />
       <LabelPlacer />
+      <HotspotPlacer />
       <UiPump />
       <Quality />
       <Env />
@@ -275,10 +278,13 @@ export function StoryStage({ def, view }: { def: StoryDef; view: FitnessView }) 
     }
   }, [])
 
-  // While the next chapter loads behind the slate, the old one holds still.
-  useEffect(() => {
+  // While the next chapter loads behind the slate, the old one holds still,
+  // QA reads "not settled" and the target view, and input is ignored.
+  useLayoutEffect(() => {
+    setPending(pending ? view : '')
     if (pending) useStoryStore.setState({ playing: false })
-  }, [pending])
+  }, [pending, view])
+  useEffect(() => () => setPending(''), [])
 
   // Focus rect: stage + caption card, recomputed on any resize.
   useLayoutEffect(() => {
@@ -297,9 +303,9 @@ export function StoryStage({ def, view }: { def: StoryDef; view: FitnessView }) 
     }
     setFocusRecompute(recompute)
     recompute()
+    // the card observes itself (useObservedCard): its element changes with the mode and chapter
     const ro = new ResizeObserver(recompute)
     ro.observe(stage)
-    if (cardRef.current) ro.observe(cardRef.current)
     window.addEventListener('orientationchange', recompute)
     return () => {
       ro.disconnect()
@@ -338,7 +344,8 @@ export function StoryStage({ def, view }: { def: StoryDef; view: FitnessView }) 
       ref={stageRef}
       className={`st-stage st-shell--${shell}${mode === 'explore' ? ' is-explore' : ''}`}
       data-story-ready="0"
-      data-view={def.key}
+      data-view={view}
+      data-pending={pending ? '1' : undefined}
     >
       {webgl && (
         <Canvas
@@ -381,6 +388,7 @@ export function StoryStage({ def, view }: { def: StoryDef; view: FitnessView }) 
       <div className="st-vignette" aria-hidden="true" />
       {shell === 'desktop' && <div className="st-scrim" aria-hidden="true" />}
       <LabelLayer />
+      <HotspotLayer />
       <HudSlot stageRef={stageRef} />
       {mode === 'story' ? <CaptionCard cardRef={cardRef} shell={shell} /> : <ExplorePanel cardRef={cardRef} shell={shell} />}
       {shell === 'desktop' && mode === 'story' && <div className="st-keyhint">Left / Right to step - Space to play - E to explore</div>}

@@ -17,6 +17,10 @@
 //       keys      pause during a glide wins; arrows in explore / sheet never step;
 //                 leaving explore or stepping drops ?beat ?t ?explore
 //       reduced   reduced motion: no autoplay, t = 1 shown, last beat ends 'done'
+//       shell     last beat at 360 / 390 / 430 / landscape: card buttons inside the
+//                 card and viewport, no sideways scroll, 44 px targets
+//       hitbands  the scrubber's 44 px band never hits the grab handle
+//       tiers     unpinned, 3x, virtual 60 fps: no tier or DPR demotion
 //   node scripts/story-qa.mjs shots <baseUrl> <outDir> <viewport> <query> [query...]
 //       viewport: phone | p360 | p430 | phone3x | desktop | land
 //       query: e.g. "definition?beat=3&t=1" (tier is added: medium on phones, high on desktop)
@@ -52,7 +56,11 @@ const VPS = {
   land: { viewport: { width: 844, height: 390 }, deviceScaleFactor: 1, isMobile: true, hasTouch: true, tier: 'medium' },
 }
 const ARGS = ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist']
-const IGNORE = /THREE\.Clock|KHR_parallel|GPU stall|GL Driver|ReadPixels|clarity|googletagmanager|analytics/i
+// THREE.Clock: one deprecation warning is emitted by module-level code of the
+// app's shared vendor chunk (the force-graph libraries that share the three
+// chunk) BEFORE the lesson loads; R3F's own is filtered by story/threeConsole.ts.
+const IGNORE = /KHR_parallel|GPU stall|GL Driver|ReadPixels|clarity|googletagmanager|analytics|ERR_FAILED|net::|THREE\.THREE\.Clock: This module has been deprecated/i
+const ANALYTICS = /googletagmanager|google-analytics|analytics\.google|doubleclick|facebook|clarity\.ms|bing\.com|google\.com\/(g|ccm|rmkt|pagead)/
 
 const [mode, base, ...rest] = process.argv.slice(2)
 if (!mode || !base) {
@@ -64,6 +72,8 @@ const B = base.replace(/\/$/, '')
 async function open(browser, vpName, extra = {}) {
   const vp = VPS[vpName]
   const ctx = await browser.newContext({ viewport: vp.viewport, deviceScaleFactor: vp.deviceScaleFactor, isMobile: vp.isMobile, hasTouch: vp.hasTouch, ...extra })
+  // QA never sends page views, remarketing hits or sessions to the production analytics
+  await ctx.route(ANALYTICS, (r) => r.abort())
   const page = await ctx.newPage()
   const errs = []
   page.on('pageerror', (e) => errs.push('pageerror ' + e.message))
@@ -353,6 +363,132 @@ for (const vpName of ['p360', 'phone', 'p430']) {
   const s1 = await page.evaluate(() => ({ st: window.__story.state(), cta: document.querySelectorAll('.st-cta-row button').length }))
   if (s1.st.phase !== 'done' || !s1.cta) fail(`reduced: last beat not done: ${JSON.stringify({ phase: s1.st.phase, cta: s1.cta })}`)
   else ok('reduced: last beat reaches done with the CTA row')
+  await ctx.close()
+}
+
+// 9. shell: on the finished last beat every card button sits inside the card
+//    and the viewport (360 / 390 / 430 portrait and a landscape phone), the
+//    stage never scrolls sideways, and first-screen controls are 44 px targets.
+for (const vpName of ['p360', 'phone', 'p430', 'land']) {
+  const { ctx, page } = await open(browser, vpName)
+  await page.goto(url(`${view}?beat=${beats.length - 1}&t=1`, 'medium'), { waitUntil: 'load', timeout: 90000 })
+  await waitReady(page)
+  await page.waitForTimeout(600)
+  const r = await page.evaluate(() => {
+    const vw = window.innerWidth
+    const card = document.querySelector('.st-card').getBoundingClientRect()
+    const out = []
+    for (const b of document.querySelectorAll('.st-card button')) {
+      const q = b.getBoundingClientRect()
+      if (!q.width) continue
+      const name = (b.getAttribute('aria-label') || b.textContent || b.className).trim().slice(0, 28)
+      if (q.left < card.left - 1 || q.right > card.right + 1 || q.left < -1 || q.right > vw + 1) out.push(`${name} x ${Math.round(q.left)}..${Math.round(q.right)} (card ${Math.round(card.left)}..${Math.round(card.right)}, vw ${vw})`)
+      if (b.scrollWidth > b.clientWidth + 1 && !b.querySelector('.st-btn-l')) out.push(`${name} text overflows ${b.scrollWidth}/${b.clientWidth}`)
+    }
+    const st = document.querySelector('.st-stage')
+    if (st.scrollWidth > st.clientWidth + 1) out.push(`stage scrolls sideways ${st.scrollWidth}/${st.clientWidth}`)
+    const small = []
+    const check = (sel, label) => {
+      const el = document.querySelector(sel)
+      if (!el) return
+      const q = el.getBoundingClientRect()
+      if (q.width && (q.width < 43.5 || q.height < 43.5)) small.push(`${label} ${Math.round(q.width)}x${Math.round(q.height)}`)
+    }
+    check('.st-theme > button', 'theme toggle')
+    check('.st-brand', 'brand')
+    check('.st-chapchip', 'chapter chip')
+    for (const b of document.querySelectorAll('.st-transport button')) {
+      const q = b.getBoundingClientRect()
+      if (q.width && (q.width < 43.5 || q.height < 43.5)) small.push(`transport ${b.getAttribute('aria-label')} ${Math.round(q.width)}x${Math.round(q.height)}`)
+    }
+    for (const b of document.querySelectorAll('.st-cta-row button')) {
+      const q = b.getBoundingClientRect()
+      if (q.height < 43.5) small.push(`cta ${Math.round(q.height)}`)
+    }
+    return { out, small }
+  })
+  const bad = [...r.out, ...r.small]
+  if (bad.length) fail(`${vpName} shell: ${bad.join('; ')}`)
+  else ok(`${vpName} shell: card buttons inside the card and viewport, no sideways scroll, targets >= 44 px`)
+  await ctx.close()
+}
+
+// 10. phone hit bands: the scrubber band always hits the scrubber, never the
+//     grab handle; the grab handle's own band (above the card edge) hits it.
+for (const vpName of ['p360', 'phone']) {
+  const { ctx, page } = await open(browser, vpName)
+  await page.goto(url(`${view}?beat=1&t=1`, 'medium'), { waitUntil: 'load', timeout: 90000 })
+  await waitReady(page)
+  await page.waitForTimeout(400)
+  const r = await page.evaluate(() => {
+    const s = document.querySelector('.st-segs').getBoundingClientRect()
+    const g = document.querySelector('.st-grab').getBoundingClientRect()
+    const miss = []
+    for (const fx of [0.05, 0.3, 0.5, 0.7, 0.95]) {
+      for (let y = Math.ceil(s.top) + 1; y < s.bottom - 1; y += 2) {
+        const e = document.elementFromPoint(s.left + s.width * fx, y)
+        if (!e?.closest('.st-segs')) miss.push(`${Math.round(fx * 100)}%,${y}:${e?.className || e?.tagName}`)
+      }
+    }
+    const gx = g.left + g.width / 2
+    const grabHits = [g.top - 20, g.top - 4, g.top + 8].map((y) => !!document.elementFromPoint(gx, y)?.closest('.st-grab'))
+    return { band: Math.round(s.height), miss: miss.slice(0, 6), missCount: miss.length, grabHits }
+  })
+  if (r.missCount || r.band < 43.5) fail(`${vpName} scrubber band ${r.band}px, ${r.missCount} samples miss it: ${r.miss.join(' ')}`)
+  else ok(`${vpName} scrubber: a ${r.band} px band that always hits the scrubber`)
+  if (r.grabHits.includes(false)) fail(`${vpName} grab handle band: ${JSON.stringify(r.grabHits)}`)
+  else ok(`${vpName} grab handle: its own 44 px band above the scrubber`)
+  await ctx.close()
+}
+
+// 11. adaptive quality on a healthy phone: UNPINNED (no ?tier) at 3x with a
+//     virtual 60 fps clock (every rAF advances 16.67 ms of performance.now),
+//     so drei's monitor always sees a perfect phone. Over 24 virtual seconds
+//     the tier must never drop and the DPR must never go down (it may climb
+//     to the "medium+" step after sustained headroom).
+{
+  const { ctx, page } = await open(browser, 'phone3x')
+  await ctx.addInitScript(() => {
+    const realRAF = window.requestAnimationFrame.bind(window)
+    const realNow = performance.now.bind(performance)
+    let frame = 0
+    const base = realNow()
+    window.__vframe = () => frame
+    // one virtual 16.67 ms step per REAL animation frame (several rAF
+    // callers in one frame must not advance the clock twice)
+    let lastReal = -1
+    window.requestAnimationFrame = (cb) =>
+      realRAF((ts) => {
+        if (ts !== lastReal) {
+          lastReal = ts
+          frame++
+        }
+        cb(base + frame * 16.667)
+      })
+    performance.now = () => base + frame * 16.667
+  })
+  await page.goto(`${B}/fitness/${view}`, { waitUntil: 'load', timeout: 90000 })
+  try {
+    await waitReady(page, 180000)
+  } catch {
+    /* reported below */
+  }
+  const target = 60 * 24
+  const t0 = Date.now()
+  let v = 0
+  while (Date.now() - t0 < 420000) {
+    await page.waitForTimeout(5000)
+    v = await page.evaluate(() => window.__vframe())
+    if (v >= target) break
+  }
+  const r = await page.evaluate(() => ({ log: window.__story.qualityLog(), s: window.__story.state() }))
+  const start = r.log[0]
+  const worse = r.log.filter((e) => e.why === 'decline')
+  const lower = r.log.filter((e, i) => i > 0 && e.dpr < r.log[i - 1].dpr)
+  const summary = r.log.map((e) => `${e.at}s ${e.tier}@${e.dpr} ${e.why}`).join(', ')
+  if (v < target) fail(`tiers: only ${Math.round(v / 60)} virtual s ran (${summary})`)
+  else if (worse.length || lower.length || r.s.tier !== start.tier) fail(`tiers: a healthy phone was demoted: ${summary}`)
+  else ok(`tiers: ${Math.round(v / 60)} virtual s at 60 fps, no demotion (${summary}; now ${r.s.tier}@${r.s.dpr})`)
   await ctx.close()
 }
 
