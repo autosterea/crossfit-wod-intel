@@ -4,6 +4,7 @@ import { useHudOpacity } from '../../story/ui/Hud'
 import { useStoryStore } from '../../story/store'
 import { boardAt, hudOn } from './timeline'
 import { srcAt } from './exploreStore'
+import { exAnim } from './ExploreScene'
 import { WORLD } from './layout'
 import { focusRect } from '../../story/camera/focusRect'
 
@@ -14,20 +15,19 @@ import { focusRect } from '../../story/camera/focusRect'
 export default function HopperHud() {
   const root = useRef<HTMLDivElement>(null)
   const num = useRef<HTMLSpanElement>(null)
-  useHudOpacity(root, (T) => (useStoryStore.getState().mode === 'explore' ? 1 : hudOn(T)))
-  useEffect(
-    () =>
-      onFrame(() => {
-        const n = num.current
-        if (!n) return
-        const { s, X, story } = srcAt(clock.T)
-        const b = boardAt(s, X, WORLD[focusRect.layout].rails.len)
-        const v = story ? Math.max(1, b.face) : b.face
-        const txt = String(v)
-        if (n.textContent !== txt) n.textContent = txt
-      }),
-    [],
-  )
+  // explore: the chip steps aside for the Every run chart (it covers the first 40 draws, the chip counts the run)
+  useHudOpacity(root, (T) => (useStoryStore.getState().mode === 'explore' ? 1 - exAnim.chart : hudOn(T)))
+  useEffect(() => {
+    let last = NaN
+    return onFrame(() => {
+      const n = num.current
+      if (!n) return
+      const { s, X, story } = srcAt(clock.T)
+      const b = boardAt(s, X, WORLD[focusRect.layout].rails.len)
+      const v = story ? Math.max(1, b.face) : b.face
+      if (v !== last) n.textContent = String((last = v))
+    })
+  }, [])
   return (
     <div ref={root} className="st-hud-in">
       <div className="st-hud-eyebrow">DRAW</div>

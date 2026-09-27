@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { HOPPER_DOMAINS, HOPPER_ROSTER, PAL } from '../../fitnessData'
+import { Legend } from '../../ui'
 import { onFrame } from '../../story/clock'
 import { focusRect } from '../../story/camera/focusRect'
 import { ChipRadio } from '../../story/ui/ChipRadio'
@@ -10,12 +11,14 @@ import { ex, useHopExplore, type HopView } from './exploreStore'
 
 /* =========================================================================
    Hopper explore controls (DESIGN.md D.3 "Explore"). Peek (whole rows
-   only): Draw (solid, 52 px), x10, x40; plus the tapped athlete's five
-   domain scores as mini bars. Expanded: New run (a fresh seed, shown as
-   "run 51837"), Reset (seed 78331 at draw 40), Rails | Every run, and the
-   Generalist, Top specialist and Leader readouts, written through refs as
-   the totals count. Every string here already exists in the module, the
-   label lexicon or fitnessData.
+   only): Draw (solid, 52 px), x10, x40; the Rails | Every run toggle; and,
+   once a rail is tapped, that athlete's five domain scores as mini bars
+   (keyed by the stage legend in the peek, by an in-panel key when the sheet
+   is expanded and the stage legend steps aside). Expanded: New run (a fresh
+   seed, shown as "run 51837"), Reset (seed 78331 at draw 40), and the
+   Generalist, Top specialist and Leader readouts, written through refs only
+   when a rounded total changes. Every string here already exists in the
+   module, the label lexicon or fitnessData.
    ========================================================================= */
 
 const VIEWS: readonly { value: HopView; label: string }[] = [
@@ -51,7 +54,7 @@ function Profile({ a }: { a: number }) {
           {HOPPER_DOMAINS.map((d) => {
             const v = r.domain[d.key]
             return (
-              <div key={d.key} title={d.label} aria-label={`${d.label} ${v}`} style={{ width: 30, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+              <div key={d.key} aria-label={`${d.label} ${v}`} style={{ width: 30, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
                 <div style={{ width: 10, height: 26, display: 'flex', alignItems: 'flex-end', background: 'rgba(238,243,246,0.07)', borderRadius: 3 }}>
                   <div style={{ width: '100%', height: `${v}%`, background: d.color, borderRadius: 3 }} />
                 </div>
@@ -73,30 +76,31 @@ export default function HopperExplore() {
   const st = useHopExplore.getState
   const full = n >= EXPLORE_CAP
 
-  // live readouts: the counted totals of the explore run
+  // live readouts: the counted totals of the explore run, written only when a rounded value changes
   const gen = useRef<HTMLDivElement>(null)
   const spec = useRef<HTMLDivElement>(null)
   const specName = useRef<HTMLDivElement>(null)
   const leader = useRef<HTMLDivElement>(null)
-  useEffect(
-    () =>
-      onFrame(() => {
-        const b = boardAt(ex.sched, ex.X, WORLD[focusRect.layout].rails.len)
-        let best = -1
-        for (let a = 0; a < N_ATH; a++) if (a !== GEN && (best < 0 || b.totals[a] > b.totals[best])) best = a
-        const set = (el: HTMLDivElement | null, s: string) => {
-          if (el && el.textContent !== s) el.textContent = s
-        }
-        set(gen.current, String(Math.round(b.totals[GEN])))
-        set(spec.current, String(Math.round(b.totals[best])))
-        set(specName.current, NAMES[best])
-        let lead = 0
-        for (let a = 1; a < N_ATH; a++) if (b.totals[a] > b.totals[lead]) lead = a
-        set(leader.current, NAMES[lead])
-        if (leader.current) leader.current.style.color = lead === GEN ? PAL.yellowGreen : 'var(--st-chalk)'
-      }),
-    [],
-  )
+  useEffect(() => {
+    const last = new Float64Array(4).fill(NaN)
+    return onFrame(() => {
+      const b = boardAt(ex.sched, ex.X, WORLD[focusRect.layout].rails.len)
+      let best = -1
+      for (let a = 0; a < N_ATH; a++) if (a !== GEN && (best < 0 || b.totals[a] > b.totals[best])) best = a
+      let lead = 0
+      for (let a = 1; a < N_ATH; a++) if (b.totals[a] > b.totals[lead]) lead = a
+      const g = Math.round(b.totals[GEN])
+      const sp = Math.round(b.totals[best])
+      if (g !== last[0] && gen.current) gen.current.textContent = String((last[0] = g))
+      if (sp !== last[1] && spec.current) spec.current.textContent = String((last[1] = sp))
+      if (best !== last[2] && specName.current) specName.current.textContent = NAMES[(last[2] = best)]
+      if (lead !== last[3] && leader.current) {
+        last[3] = lead
+        leader.current.textContent = NAMES[lead]
+        leader.current.style.color = lead === GEN ? PAL.yellowGreen : 'var(--st-chalk)'
+      }
+    })
+  }, [])
 
   const cell: React.CSSProperties = {
     flex: 1,
@@ -141,7 +145,10 @@ export default function HopperExplore() {
           x40
         </button>
       </div>
+      <ChipRadio label="View" className="st-ex-peek" options={VIEWS} value={view} onChange={(v) => st().setView(v)} />
       {selected !== null && <Profile a={selected} />}
+      {/* the mini bars' key while the sheet is expanded (the stage legend steps aside then) */}
+      {selected !== null && <Legend items={HOPPER_DOMAINS.map((d) => ({ label: d.label, color: d.color }))} />}
 
       <div className="st-ex-row" style={{ alignItems: 'center' }}>
         <button type="button" className="st-chip" onClick={() => st().newRun()}>
@@ -153,8 +160,7 @@ export default function HopperExplore() {
         <span style={{ ...mono, fontSize: 12, color: 'var(--st-muted)', marginLeft: 4 }}>run {seed}</span>
       </div>
 
-      <ChipRadio label="View" options={VIEWS} value={view} onChange={(v) => st().setView(v)} />
-
+      {/* (wrapped: an inline display on a direct child would defeat the peek's row filter) */}
       <div>
       <div style={{ display: 'flex', gap: 8, marginBottom: 10 }}>
         <div style={cell}>

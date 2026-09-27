@@ -1,7 +1,8 @@
 import { create } from 'zustand'
 import { useStoryStore } from '../../story/store'
 import { EXPLORE_CAP, N_ATH, SEED, STORY_DRAWS, makeRun, type Run } from './hopperMath'
-import { STORY_SCHED, emptySched, type Sched } from './timeline'
+import { STORY_SCHED, emptySched, setSort, type Sched } from './timeline'
+import { cameraBus } from '../../story/camera/CameraDirector'
 
 /* =========================================================================
    Hopper explore (DESIGN.md D.3 "Explore", C.12). It starts from the
@@ -19,6 +20,8 @@ import { STORY_SCHED, emptySched, type Sched } from './timeline'
    ========================================================================= */
 
 export type HopView = 'rails' | 'runs'
+/** the explore board's elevation (the story's board pose, el 8) */
+export const EXPLORE_EL = 8
 
 export const ex = {
   run: makeRun(SEED, EXPLORE_CAP) as Run,
@@ -41,8 +44,7 @@ function scheduleDone(run: Run, done: number): Sched {
       s.fly0[i] = s.str0[i] = s.cnt0[i] = -2
       s.fly1[i] = s.str1[i] = s.cnt1[i] = -1.9
     }
-    s.sort0[d] = -2
-    s.sort1[d] = -1.9
+    setSort(s, d, -2, -1.9)
   }
   s.n = done
   s.version++
@@ -87,8 +89,7 @@ function queue(k: number): number {
         s.cnt0[i] = t0 + 0.8
         s.cnt1[i] = t0 + 1.12
       }
-      s.sort0[d] = t0 + 1.12
-      s.sort1[d] = t0 + 1.42
+      setSort(s, d, t0 + 1.12, t0 + 1.42)
     } else {
       s.kind[d] = 1
       s.ball0[d] = NaN
@@ -108,8 +109,7 @@ function queue(k: number): number {
         s.cnt1[i] = s.str1[i]
         last = s.str1[i]
       }
-      s.sort0[d] = last
-      s.sort1[d] = last + 0.22
+      setSort(s, d, last, last + 0.22)
     }
     s.n++
     added++
@@ -152,6 +152,8 @@ export const useHopExplore = create<HopExploreState>((set, get) => ({
   selected: null,
   n: STORY_DRAWS,
   draw: (k) => {
+    // a draw lands on the rails: from the chart, the rails come back first
+    if (get().view === 'runs') get().setView('rails')
     queue(k)
     set({ n: ex.sched.n })
   },
@@ -165,7 +167,11 @@ export const useHopExplore = create<HopExploreState>((set, get) => ({
     resetRuntime(makeRun(SEED, EXPLORE_CAP), STORY_DRAWS)
     set({ seed: SEED, runId: get().runId + 1, n: STORY_DRAWS })
   },
-  setView: (v) => set({ view: v }),
+  setView: (v) => {
+    set({ view: v })
+    // the chart is read exactly front-on (L12, H.21); the rails keep the board's slight lift
+    cameraBus.orbitTo(0, v === 'runs' ? 0 : EXPLORE_EL)
+  },
   select: (a) => set({ selected: a }),
 }))
 

@@ -1,10 +1,10 @@
-import { useMemo, useRef } from 'react'
+import { useMemo } from 'react'
 import { PAL } from '../../fitnessData'
 import { frameId, type ChartFrame } from '../../story/kit/chartFrame'
 import { Pen, PenBatch, PEN } from '../../story/kit/Pen'
 import { AreaFill } from '../../story/kit/Fill'
 import { THREADS, STORY_DRAWS, type Run } from './hopperMath'
-import { leadV } from './layout'
+import { leadV, leadVc } from './layout'
 
 /* =========================================================================
    H6 "Again and again" (DESIGN.md D.3): the proof. x = draws 0 to 40,
@@ -22,6 +22,8 @@ const SEGS = STORY_DRAWS
 /** x, y of draw d of run r in the chart (local to the chart group). */
 const px = (f: ChartFrame, d: number) => f.x(d / STORY_DRAWS)
 const py = (f: ChartFrame, r: Run, d: number) => f.y(leadV(r.lead[Math.min(d, r.n)]))
+/** the highlighted run: clamped, as a fresh explore seed can run past the story's range */
+const pyc = (f: ChartFrame, r: Run, d: number) => f.y(leadVc(r.lead[Math.min(d, r.n)]))
 
 export interface ThreadsProps {
   frame: ChartFrame
@@ -49,12 +51,13 @@ export function Threads({ frame, construct, opacity, bundle, mine }: ThreadsProp
   // the 64 threads: one PenBatch, drawn left to right together (the partial
   // segment is interpolated, so the front is smooth)
   const segs = useMemo(() => new Float32Array(THREADS.length * SEGS * 6).fill(AWAY), [])
-  const last = useRef('')
+  const last = useMemo(() => new Float64Array(2).fill(NaN), [])
   const writeBundle = (T: number, s: Float32Array): boolean => {
     const p = bundle(T)
-    const key = frameId(f) + '|' + p
-    if (key === last.current) return false
-    last.current = key
+    const id = frameId(f)
+    if (last[0] === id && last[1] === p) return false
+    last[0] = id
+    last[1] = p
     const upto = p * SEGS
     THREADS.forEach((r, t) => {
       for (let d = 0; d < SEGS; d++) {
@@ -81,17 +84,19 @@ export function Threads({ frame, construct, opacity, bundle, mine }: ThreadsProp
 
   // the highlighted run (the story's seed 78331, or the explore run)
   const minePts = useMemo(() => new Float32Array((SEGS + 1) * 3), [])
-  const lastM = useRef('')
+  const lastM = useMemo(() => new Float64Array(3).fill(NaN), [])
   const writeMine = (_T: number, p: Float32Array): boolean => {
     const r = mine.run()
     const n = Math.max(1, Math.min(SEGS, mine.upto()))
-    const key = frameId(f) + '|' + r.seed + '|' + n
-    if (key === lastM.current) return false
-    lastM.current = key
+    const id = frameId(f)
+    if (lastM[0] === id && lastM[1] === r.seed && lastM[2] === n) return false
+    lastM[0] = id
+    lastM[1] = r.seed
+    lastM[2] = n
     for (let d = 0; d <= SEGS; d++) {
       const dd = Math.min(d, n)
       p[d * 3] = px(f, dd)
-      p[d * 3 + 1] = py(f, r, dd)
+      p[d * 3 + 1] = pyc(f, r, dd)
       p[d * 3 + 2] = 0.02
     }
     return true

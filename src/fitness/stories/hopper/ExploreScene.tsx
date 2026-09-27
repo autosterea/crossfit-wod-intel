@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from 'react'
 import * as THREE from 'three'
 import { PAL } from '../../fitnessData'
+import { focusRect } from '../../story/camera/focusRect'
 import { useStoryStore } from '../../story/store'
 import { useSafeFrame } from '../../story/useSafeFrame'
 import { useStageHotspot } from '../../story/hotspots'
@@ -24,7 +25,15 @@ import { railY } from './Board'
    ========================================================================= */
 
 /** Damped explore values shared with the scene's visibility functions. */
-export const exAnim = { chart: 0, shrink: 1 }
+export const exAnim = { chart: 0, shrink: 1, compact: 0 }
+
+/**
+ * Explore with the phone's sheet expanded (a short focus rect; it reads as
+ * L): the rails alone, as shapes; the legend, the ticket, the drum and the
+ * rails' words step aside, since the expanded sheet carries the numbers
+ * (Generalist, Top specialist, Leader). The same threshold hides the legend.
+ */
+export const compactTarget = () => (focusRect.shell === 'phone' && focusRect.h <= 420 ? 1 : 0)
 
 const damp = THREE.MathUtils.damp
 
@@ -58,20 +67,28 @@ export default function ExploreLayer({ w }: { w: World }) {
     exAnim.chart = useHopExplore.getState().view === 'runs' ? 1 : 0
     const b = boardAt(ex.sched, ex.X, w.rails.len)
     exAnim.shrink = b.face > 0 ? ex.sched.kind[b.face - 1] : 1
+    exAnim.compact = compactTarget()
   }, [mode, w])
 
+  // the explore clock runs right after the story clock (-100) and before the
+  // camera (-90), the labels (-80) and the DOM readouts (-70), so every
+  // consumer in a frame reads the same explore time
   useSafeFrame(
     'hopper explore clock',
     (_T, _A, dtRaw) => {
-      if (useStoryStore.getState().mode !== 'explore') return
+      const st = useStoryStore.getState()
+      if (st.mode !== 'explore') return
       const dt = Math.min(0.05, dtRaw)
       ex.X += dt
-      exAnim.chart = damp(exAnim.chart, useHopExplore.getState().view === 'runs' ? 1 : 0, 6, dt)
+      const to = useHopExplore.getState().view === 'runs' ? 1 : 0
+      // reduced motion: the view switch is a cut
+      exAnim.chart = st.reduced ? to : damp(exAnim.chart, to, 6, dt)
       const b = boardAt(ex.sched, ex.X, w.rails.len)
       const kind = b.face > 0 ? ex.sched.kind[b.face - 1] : 1
-      exAnim.shrink = damp(exAnim.shrink, kind, 9, dt)
+      exAnim.shrink = st.reduced ? kind : damp(exAnim.shrink, kind, 9, dt)
+      exAnim.compact = st.reduced ? compactTarget() : damp(exAnim.compact, compactTarget(), 7, dt)
     },
-    { priority: -20 },
+    { priority: -95 },
   )
 
   // the tapped athlete's rail: a faint glass plate on its rank slot
