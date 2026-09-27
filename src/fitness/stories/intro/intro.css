@@ -1,0 +1,166 @@
+/* =========================================================================
+   Intro chapter styles (DESIGN.md B.6 hub, B.4 explore). The hub is page
+   chrome: theme-aware tokens (--text-*, --panel-*). The explore panel sits
+   on the always-dark stage glass: --st-* tokens.
+   ========================================================================= */
+
+.in-accent {
+  color: #91c640;
+}
+:root[data-theme='light'] .in-notes .in-accent {
+  color: #019644;
+}
+
+.in-cards {
+  margin-top: 28px;
+  display: grid;
+  gap: 14px;
+}
+@media (min-width: 900px) {
+  .in-cards {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.in-card {
+  padding: 18px;
+}
+.in-card .st-notes-h {
+  margin-bottom: 8px;
+}
+.in-card-p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--text-secondary);
+}
+.in-card-p.is-small {
+  font-size: 14px;
+  color: var(--text-tertiary);
+}
+
+.in-models {
+  display: grid;
+  gap: 10px;
+}
+@media (min-width: 640px) {
+  .in-models {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.in-model {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 14px 16px;
+  min-height: 64px;
+  text-align: left;
+  border-left: 2px solid var(--acc);
+}
+.in-model-glyph {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  margin-top: 2px;
+}
+:root[data-theme='light'] .in-model-glyph,
+:root[data-theme='light'] .in-model-num {
+  filter: brightness(0.68) saturate(1.25);
+}
+.in-model-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.in-model-h {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.in-model-num {
+  font-family: var(--st-disp);
+  font-size: 20px;
+  line-height: 1;
+}
+.in-model-label {
+  font-family: var(--st-cond);
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+}
+.in-model-blurb {
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--text-tertiary);
+}
+
+.in-sources {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+.in-sources a {
+  display: inline-block;
+  padding: 4px 0;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--text-secondary);
+  transition: color 160ms;
+}
+.in-sources a:hover {
+  color: #91c640;
+}
+.in-ext {
+  color: var(--text-muted);
+}
+
+/* explore: the picked model, on the stage glass */
+.st-ex-model {
+  margin: 2px 0 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--acc) 38%, transparent);
+  background: color-mix(in srgb, var(--acc) 7%, transparent);
+}
+.st-ex-model-h {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.st-ex-model-num {
+  font-family: var(--st-disp);
+  font-size: 20px;
+  line-height: 1;
+}
+.st-ex-model-t {
+  font-family: var(--st-cond);
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--st-chalk);
+}
+.st-ex-model .st-ex-note {
+  margin-top: 6px;
+  color: var(--st-body);
+}
+
+/* the map's tile buttons (stage hotspots over the six tiles): hover adds
+   emphasis only, a press answers at once (B.12) */
+.st-stage[data-view='intro'] .st-hot {
+  border-radius: 12px;
+  /* the engine positions the button with transform: never transition it */
+  transition: background-color 120ms;
+}
+@media (hover: hover) {
+  .st-stage[data-view='intro'] .st-hot:hover {
+    background: rgba(238, 243, 246, 0.035);
+  }
+}
+.st-stage[data-view='intro'] .st-hot:active {
+  background: rgba(238, 243, 246, 0.07);
+}

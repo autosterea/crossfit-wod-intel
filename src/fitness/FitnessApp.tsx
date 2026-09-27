@@ -24,6 +24,8 @@ const HopperModule = lazy(() => import('./modules/HopperModule'))
 const PathwaysModule = lazy(() => import('./modules/PathwaysModule'))
 const ContinuumModule = lazy(() => import('./modules/ContinuumModule'))
 const HealthModule = lazy(() => import('./modules/HealthModule'))
+// The intro's Notes are the lesson hub (DESIGN.md B.6), owned by its story chapter.
+const IntroNotes = lazy(() => import('./stories/intro/Notes'))
 
 class ViewErrorBoundary extends Component<{ children: ReactNode; name: string }, { error: Error | null }> {
   state = { error: null as Error | null }
@@ -187,6 +189,11 @@ function StoryView({ view }: { view: FitnessView }) {
         )}
       </div>
       {view !== 'intro' && <Notes moduleKey={view as ModuleKey} stageRef={stageRef} />}
+      {view === 'intro' && (
+        <Suspense fallback={null}>
+          <IntroNotes stageRef={stageRef} />
+        </Suspense>
+      )}
       <LessonNav />
     </main>
   )
