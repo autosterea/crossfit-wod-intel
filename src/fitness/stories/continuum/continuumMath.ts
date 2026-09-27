@@ -92,6 +92,37 @@ export const STOP_FIT = STOPS[2]
 
 /** The four state words the SDF layer can show, from the same banding (never typed by hand). */
 export const STATES: StateWord[] = STOPS.map((p) => stateWord(p))
+/** The same four colours as THREE colours (sRGB hex), for per-frame blending without parsing. */
+export const STATE_COLORS: THREE.Color[] = STATES.map((s) => new THREE.Color(s.css))
+
+/**
+ * The lower edge of each band after the first, found once by bisection on
+ * stateWord itself (no threshold is typed here), so a frame loop can read
+ * the band index with plain comparisons and no allocation.
+ */
+const BAND_EDGES: number[] = STATES.slice(1).map((st) => {
+  let lo = 0
+  let hi = 1
+  for (let k = 0; k < 40; k++) {
+    const m = (lo + hi) / 2
+    if (STATES.findIndex((s) => s.word === stateWord(m).word) < STATES.indexOf(st)) lo = m
+    else hi = m
+  }
+  return hi
+})
+/**
+ * Index into STATES of stateWord(avg), allocation-free. Right at an edge
+ * (the CrossFit athlete's mean is 0.8799999999999999, a hair under FIT's
+ * upper edge) it asks stateWord itself, so it can never disagree with it.
+ */
+export function stateIndex(avg: number): number {
+  let k = 0
+  for (let e = 0; e < BAND_EDGES.length; e++) {
+    if (Math.abs(avg - BAND_EDGES[e]) < 1e-9) return STATES.findIndex((s) => s.word === stateWord(avg).word)
+    if (avg >= BAND_EDGES[e]) k = e + 1
+  }
+  return k
+}
 
 const num = (i: number, stop: number): string => String(Math.round(markerValueAt(BIOMARKERS[i], STOPS[stop]) * 1000) / 1000)
 const withUnit = (i: number, v: string): string => (BIOMARKERS[i].unit === '%' ? v + '%' : v + ' ' + BIOMARKERS[i].unit)
@@ -157,5 +188,13 @@ export function spectrumHex(t: number): string {
 /** Better direction callout text, from betterDirection. */
 export const betterText = (i: number): string => (BIOMARKERS[i].betterDirection === 'lower' ? 'LOWER IS BETTER' : 'HIGHER IS BETTER')
 
-/** The live value of marker i at position p, formatted as the module formats it. */
-export const valueText = (i: number, p: number): string => fmtMarker(markerValueAt(BIOMARKERS[i], p), BIOMARKERS[i].unit)
+/**
+ * The live value of marker i at position p, formatted as the module formats
+ * it (fmtMarker, verbatim), with a percentage written the way the ticks and
+ * the worked examples write it ("20%", not "20 %"), so the chapter prints
+ * one unit one way.
+ */
+export const valueText = (i: number, p: number): string => {
+  const s = fmtMarker(markerValueAt(BIOMARKERS[i], p), BIOMARKERS[i].unit)
+  return BIOMARKERS[i].unit === '%' ? s.replace(' %', '%') : s
+}

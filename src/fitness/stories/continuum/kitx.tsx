@@ -18,6 +18,14 @@ import { useSafeFrame } from '../../story/useSafeFrame'
                 tint is written here, allocation-free.
    ========================================================================= */
 
+/** Write one world-obstacle point into out, return the new count (allocation-free; both layers' obstacle writers use it). */
+export function put(out: Float32Array, n: number, x: number, y: number, z: number): number {
+  out[n * 3] = x
+  out[n * 3 + 1] = y
+  out[n * 3 + 2] = z
+  return n + 1
+}
+
 const _m = new THREE.Matrix4()
 const _q = new THREE.Quaternion()
 const _p = new THREE.Vector3()

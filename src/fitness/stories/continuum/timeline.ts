@@ -8,18 +8,22 @@ import { Y_PAIR, rowY } from './layout'
    the labels, the HUD chip and the portrait key all read these, so a deep
    link, a scrub and autoplay land on the same frame.
 
-     C0 one-line  a hot pen draws one line in the spectrum; three columns of
-                  light rise from its stations: SICKNESS, WELLNESS, FITNESS
+     C0 one-line  a hot pen draws one line in the spectrum; columns of light
+                  rise from its stations to the edges of the stage: SICKNESS,
+                  WELLNESS, FITNESS head them
      C1 bp        the line becomes systolic blood pressure; a bead reads the
                   three worked examples and leaves a footprint at each
      C2 bodyfat   a second marker under the same columns, LOWER IS BETTER
      C3 dial      eight more rows cascade in, each named at its fitness end;
-                  the table holds, then all ten swing into a full circle with
-                  their names riding their tips (signature)
-     C4 well      the camera tilts: the centre is a pit. The average profile
-                  climbs out of it and lands on the WELL circle
+                  the table holds (about two seconds of readable values),
+                  then all ten swing into a full circle with their names
+                  riding their tips (signature)
+     C4 well      the camera tilts: the centre is a pit of SICKNESS, and the
+                  key lists every marker at its sick value. The average
+                  profile climbs out of the pit and lands on the WELL circle
      C5 super     the same markers climb to the CrossFit athlete; the word
-                  changes the moment the score crosses into FIT
+                  changes (and the impact accent fires) the moment the score
+                  crosses into FIT
      C6 hedge     the margin between WELL and the athlete lights
    ========================================================================= */
 
@@ -50,17 +54,30 @@ export const LINE_CROSS = [0, 0.5, 1].map((u) => crossAt(B.line, LINE_A, LINE_B,
 /** A station flares as the head passes it. */
 export const stationFlare = (T: number, k: number) => pulse(T, LINE_CROSS[k] - (k === 0 ? 0 : 0.012), LINE_CROSS[k] + 0.07)
 
+/* ----------------------- C0 to C3: columns of light ------------------ */
+
+/** The table holds for about two seconds of readable values, then row i swings into its spoke. */
+export const MORPH_A = 0.62
+export const MORPH_B = 0.93
+
 /**
- * The station columns (sick, well, fit, elite): faint light that rises and
- * falls from the line as the pen passes each station, over the height the
- * table will fill. The fit column (0.82) joins with the blood pressure scale.
- * They hand over to the table's own columns before the morph.
+ * The station columns (sick, well, fit, elite): light that rises and falls
+ * from the line as the pen passes each station, out to the edges of the
+ * stage. The fit column (0.82, the one without a header) joins with the
+ * blood pressure scale, as a dim tick guide. They hand over to the table's
+ * own columns (thin connectors that the morph bends into rings).
  */
 const GUIDE_AT = [LINE_CROSS[0], LINE_CROSS[1], -1, LINE_CROSS[2]]
 export function guideGrow(T: number, s: number): number {
   const g = s === 2 ? at(T, B.bp, 0.04, 0.3) : clamp01((T - GUIDE_AT[s]) / 0.3)
-  return ease.settle(g) * (1 - at(T, B.dial, 0.36, 0.5))
+  return ease.settle(g)
 }
+/** The light columns fade as the morph begins (the connectors carry it into rings). */
+export const columnsOut = (T: number) => 1 - at(T, B.dial, MORPH_A - 0.06, MORPH_A + 0.02)
+/** Their crisp core hands over to the table's connectors as the cascade draws them. */
+export const columnCore = (T: number) => 1 - at(T, B.dial, 0.1, 0.3)
+/** Their bright plateau spans the drawn rows: the one line, the pair, then the whole table. */
+export const tableSpan = (T: number) => at(T, B.dial, 0.08, 0.3, ease.settle)
 /** The three C0 claims land at the column tops, in order, and head the columns until the table arrives. */
 export const c0Callout = (T: number, k: number) => at(T, B.line, 0.62 + 0.08 * k, 0.72 + 0.08 * k, ease.settle) * (1 - at(T, B.dial, 0, 0.1))
 
@@ -69,14 +86,14 @@ export const c0Callout = (T: number, k: number) => at(T, B.line, 0.62 + 0.08 * k
 /** Row 2 (body fat) draws with its own pen. */
 export const fatDraw = (T: number) => at(T, B.fat, 0.16, 0.4, ease.draw)
 /** The featured rows are drawn heavier (the hero pen) until the other rows arrive. */
-export const heroOut = (T: number) => 1 - at(T, B.dial, 0.0, 0.14)
+export const heroOut = (T: number) => 1 - at(T, B.dial, 0.0, 0.12)
 
 /** The featured rows' scales (tick values): blood pressure stays through C2, so every column pairs a BP value with a body fat value. */
-export const bpScale = (T: number) => at(T, B.bp, 0.04, 0.2) * (1 - at(T, B.dial, 0, 0.1))
-export const fatScale = (T: number) => at(T, B.fat, 0.3, 0.44) * (1 - at(T, B.dial, 0, 0.1))
+export const bpScale = (T: number) => at(T, B.bp, 0.04, 0.2) * (1 - at(T, B.dial, 0, 0.08))
+export const fatScale = (T: number) => at(T, B.fat, 0.3, 0.44) * (1 - at(T, B.dial, 0, 0.08))
 /** Names of the featured rows (at their start, as headers) until the table names every row at its fitness end. */
-export const bpName = (T: number) => at(T, B.bp, 0.06, 0.2) * (1 - at(T, B.dial, 0, 0.08))
-export const fatName = (T: number) => at(T, B.fat, 0.3, 0.44) * (1 - at(T, B.dial, 0, 0.08))
+export const bpName = (T: number) => at(T, B.bp, 0.06, 0.2) * (1 - at(T, B.dial, 0, 0.07))
+export const fatName = (T: number) => at(T, B.fat, 0.3, 0.44) * (1 - at(T, B.dial, 0, 0.07))
 
 interface BeadPlan {
   n: number
@@ -94,7 +111,7 @@ function beadU(T: number, p: BeadPlan): number {
   return u
 }
 /** Everything the beads leave behind exits as the table arrives. */
-const beadsOut = (T: number) => 1 - at(T, B.dial, 0, 0.12)
+const beadsOut = (T: number) => 1 - at(T, B.dial, 0, 0.1)
 /** The bead's scale (it snaps onto the line). */
 function beadAppear(T: number, p: BeadPlan): number {
   return at(T, p.n, p.appear[0], p.appear[1], ease.snap) * beadsOut(T)
@@ -107,8 +124,9 @@ function beadCallout(T: number, p: BeadPlan, k: number): number {
 }
 /**
  * A footprint: when the bead leaves station k, a small ghost dot and the
- * reading stay behind at 40%, so the finished frame shows all three worked
- * examples on the line. The last station keeps the bead itself.
+ * reading stay behind (the reading dimmed on its opaque plate), so the
+ * finished frame shows all three worked examples on the line. The last
+ * station keeps the bead itself.
  */
 function beadPrint(T: number, p: BeadPlan, k: number): number {
   if (k >= p.moves.length) return 0
@@ -117,7 +135,7 @@ function beadPrint(T: number, p: BeadPlan, k: number): number {
 /** A bead glows (the speaking element) while it slides. */
 function beadHot(T: number, p: BeadPlan): number {
   let h = pulse(T, p.n + p.appear[0], p.n + p.appear[1] + 0.06)
-  for (const [a, b] of p.moves) h = Math.max(h, pulse(T, p.n + a - 0.02, p.n + b + 0.03))
+  for (let k = 0; k < p.moves.length; k++) h = Math.max(h, pulse(T, p.n + p.moves[k][0] - 0.02, p.n + p.moves[k][1] + 0.03))
   return h
 }
 
@@ -143,7 +161,7 @@ export const betterCallout = (T: number) => at(T, B.fat, 0.88, 0.98, ease.settle
  */
 export function rowYAt(T: number, i: number): number {
   const slot = rowY(i)
-  const settle = at(T, B.dial, 0.0, 0.12, ease.morph)
+  const settle = at(T, B.dial, 0.0, 0.1, ease.morph)
   if (i === BP) {
     const y = Y_PAIR * at(T, B.fat, 0, 0.25, ease.morph)
     return y + (slot - y) * settle
@@ -157,8 +175,8 @@ export function rowYAt(T: number, i: number): number {
 /** The eight rows that cascade in at C3, top to bottom. */
 export const CASCADE = Array.from({ length: N }, (_, i) => i).filter((i) => i !== BP && i !== BODY_FAT)
 const CASCADE_SLOT = Array.from({ length: N }, (_, i) => CASCADE.indexOf(i))
-const CASCADE_A = 0.1
-const CASCADE_B = 0.36
+const CASCADE_A = 0.08
+const CASCADE_B = 0.3
 
 /** Draw-on progress of row i. */
 export function rowDraw(T: number, i: number): number {
@@ -176,31 +194,46 @@ export function newestDrawing(T: number): number {
   return best
 }
 
-/** The table holds for about a second, then row i swings into its spoke (a small stagger along the index). */
-export const MORPH_A = 0.52
-export const MORPH_B = 0.88
-export const morphK = (T: number, i: number) => stagger(T, B.dial + MORPH_A, B.dial + MORPH_B, i, N, 0.22, ease.morph)
+/**
+ * The rows move together, as one instrument unfolding, with a slight lead
+ * in the order of each tip's sweep: the two rows whose tips turn
+ * counter-clockwise (Resting HR, Systolic BP) lead top first, the eight
+ * that turn clockwise bottom first (Flexibility sweeps furthest). A tip that
+ * travels further always starts earlier, so no tip ever catches the one
+ * ahead of it: the names ride tips that never meet.
+ */
+const MORPH_SLOT = Array.from({ length: N }, (_, i) => (i < 2 ? i : N - 1 - i))
+const MORPH_SLOTS = Math.max(...MORPH_SLOT) + 1
+export const morphK = (T: number, i: number) => stagger(T, B.dial + MORPH_A, B.dial + MORPH_B, MORPH_SLOT[i], MORPH_SLOTS, 0.12, ease.draw)
+/** The table's left edge gathers into the hub as one (layout.ts rowXf `g`). */
+export const gatherK = (T: number) => at(T, B.dial, MORPH_A, MORPH_B, ease.draw)
 /** Each row's name rides its fitness end from the moment the pen reaches it. */
 export function nameOn(T: number, i: number): number {
-  if (i === BP) return at(T, B.dial, 0.06, 0.16)
-  if (i === BODY_FAT) return at(T, B.dial, 0.08, 0.18)
+  if (i === BP) return at(T, B.dial, 0.05, 0.13)
+  if (i === BODY_FAT) return at(T, B.dial, 0.07, 0.15)
   return clamp01((rowDraw(T, i) - 0.82) / 0.18)
 }
-/** The table's reading: the sick and elite values of the rows the caption names, and HDL's direction. */
-export const tableValues = (T: number) => at(T, B.dial, 0.3, 0.4) * (1 - at(T, B.dial, MORPH_A - 0.04, MORPH_A + 0.03))
+/** The table's reading: the sick and elite values of the rows the caption names, and HDL's direction (about two seconds at full). */
+export const tableValues = (T: number) => at(T, B.dial, 0.27, 0.33) * (1 - at(T, B.dial, MORPH_A - 0.03, MORPH_A + 0.02))
 /** The zone disc (spectrum, faint) fades in under the finished dial. */
-export const discIn = (T: number) => at(T, B.dial, 0.76, 1.0, ease.settle)
-/** The portrait key arrives with the values it shows (C4, as the profile starts to climb). */
-export const keyIn = (T: number) => at(T, B.well, 0.36, 0.46)
+export const discIn = (T: number) => at(T, B.dial, 0.8, 1.0, ease.settle)
+/** The portrait key arrives WITH the tilt (C4), listing every marker at its sick value: the pit. The values then climb with the dots. */
+export const keyIn = (T: number) => at(T, B.well, 0.12, 0.3)
 /** ... and folds to its header row as the last beat begins (the claim takes the room under the dial). */
 export const keyFold = (T: number) => at(T, B.hedge, 0.0, 0.2, ease.settle)
-/** SICKNESS names the centre and FITNESS the rim when the dial lands, until the camera tilts. */
-export const centreCallout = (T: number) => at(T, B.dial, 0.9, 1.0) * (1 - at(T, B.well, 0.0, 0.1))
-export const rimCallout = (T: number) => at(T, B.dial, 0.93, 1.0) * (1 - at(T, B.well, 0.0, 0.1))
-/** The WELL and FIT circles are named in the finished dial (from C4 the SDF word names the level). */
-export const ringNames = (T: number) => at(T, B.dial, 0.92, 1.0) * (1 - at(T, B.well, 0.0, 0.1))
+/**
+ * SICKNESS names the centre when the dial lands and stays through the tilt
+ * that reveals it as a pit; it leaves as the dots climb out of it.
+ */
+export const centreCallout = (T: number) => at(T, B.dial, 0.92, 1.0) * (1 - at(T, B.well, 0.4, 0.48))
+/** FITNESS names the rim in the finished dial, until the camera tilts. */
+export const rimCallout = (T: number) => at(T, B.dial, 0.94, 1.0) * (1 - at(T, B.well, 0.0, 0.1))
+/** WELL names its circle until the person's own outline draws on it (the SDF word then names the level). */
+export const wellName = (T: number) => at(T, B.dial, 0.93, 1.0) * (1 - at(T, B.well, 0.66, 0.74))
+/** FIT names its circle in the finished dial only (the word FIT belongs to the score band from C5). */
+export const fitName = (T: number) => at(T, B.dial, 0.93, 1.0) * (1 - at(T, B.well, 0.0, 0.1))
 /** The rings close at the end of the morph. */
-export const ringsClose = (T: number) => at(T, B.dial, 0.84, 0.96, ease.draw)
+export const ringsClose = (T: number) => at(T, B.dial, 0.87, 0.97, ease.draw)
 
 /* ------------------------------- C4 to C6 ----------------------------- */
 
@@ -210,6 +243,13 @@ export const spokeRest = (T: number) => 1 - 0.42 * at(T, B.well, 0.05, 0.35)
 export const pitShade = (T: number) => at(T, B.well, 0.05, 0.32, ease.settle) * (1 - 0.35 * at(T, B.sup, 0.0, 0.3))
 /** The WELL circle steps back once the person's own outline (then the dashed ghost) marks that level. */
 export const wellRingRest = (T: number) => 1 - 0.78 * at(T, B.well, 0.68, 0.8)
+/**
+ * The depth contours: a topographic reading of the pit, so they read only
+ * while the camera looks INTO it (the C4 tilt). Front-on they would read as
+ * the gridlines of a scale that is not there, so they are faint in C3 and
+ * leave as the camera returns toward front-on for the comparison.
+ */
+export const isoOf = (T: number) => 0.05 + 0.36 * at(T, B.well, 0.05, 0.32) * (1 - 0.9 * at(T, B.sup, 0, 0.3))
 
 const CLIMB_A = 0.42
 const CLIMB_B = 0.74
@@ -257,7 +297,8 @@ export const WORD_ATHLETE = idxOf(ATH_MEAN)
  * The story time in C5 at which the live score leaves the WELL band
  * (bisection on stateWord(personMean(T)); no threshold is typed here). The
  * word and the orb change exactly there, so every paused, scrubbed or
- * deep-linked frame shows stateWord of the score it displays.
+ * deep-linked frame shows stateWord of the score it displays. The C5 impact
+ * accent (story.ts) fires from this moment too.
  */
 export const T_SWAP = (() => {
   let lo = B.sup + 0.15
@@ -291,5 +332,7 @@ export const bandOn = (T: number) => at(T, B.hedge, 0.1, 0.7, ease.settle)
 export const pitDark = (T: number) => at(T, B.hedge, 0.7, 1.0, ease.settle)
 export const preventiveCallout = (T: number) => at(T, B.hedge, 0.56, 0.7, ease.settle)
 
-/** HUD chip (L) and key header: the score shows from the C4 climb. */
-export const scoreOn = (T: number) => at(T, B.well, 0.4, 0.5)
+/** HUD chip (L) and key header: the score shows with the pit (0 / 100) and climbs with the dots. */
+export const scoreOn = (T: number) => at(T, B.well, 0.12, 0.3)
+/** The spoke names are tappable (they highlight their spoke) once the key lists the values. */
+export const spokesTappable = (T: number) => T >= B.well + 0.12

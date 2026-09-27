@@ -1,6 +1,7 @@
 import type { ChartFrame, ChartFrameOpts } from '../../story/kit/chartFrame'
 import { frameFor } from '../../story/kit/chartFrame'
 import { focusRect } from '../../story/camera/focusRect'
+import { ease } from '../../story/ease'
 import type { Box, CamPose, Layout, V3 } from '../../story/types'
 import { N } from './continuumMath'
 
@@ -19,7 +20,11 @@ import { N } from './continuumMath'
    front-on and revealed by the C4 tilt.
 
    ONE per-row transform (origin, angle, length) morphs a row into its
-   spoke; the line, its ticks and its name all ride it.
+   spoke; the line, its ticks and its name all ride it. The sickness end
+   slides straight to the hub while the fitness end travels ROUND the dial
+   centre (its angle from the table's to the spoke's, its radius to R
+   early), so the fan never sweeps outside the dial and the tips keep their
+   order: each name rides a tip that never crosses another.
 
    PHONE: the dial is the subject. Its pads are the room its spoke names
    need and no more: the four side names sit on two lines, so the dial is
@@ -44,14 +49,14 @@ export const bowl = (r: number): number => {
   const q = 1 - Math.min(Math.max(r, 0), R) / R
   return -DEPTH * q * q
 }
-/** Spoke angle in radians, LITERAL (unwrapped): 90, 54, 18, ... -234 degrees. The morph turns each row by k times this, so the rows open like a fan without crossing. */
+/** Spoke angle in radians, LITERAL (unwrapped): 90, 54, 18, ... -234 degrees. The morph turns each tip by k times its sweep, so the rows open like a fan without crossing. */
 export const spokeAngle = (i: number): number => (90 - 36 * i) * DEG
 
 export const ROWS_FRAME: ChartFrameOpts = { FH: 11, minAspect: 0.9, maxAspect: 1.6, marginPx: { l: 24, r: 24, t: 30, b: 28 } }
 export const ROW_GAP = 1.1
 /** World y of row i (the rows chart is centred on the dial centre). */
 export const rowY = (i: number): number => ROWS_FRAME.FH / 2 - ROW_GAP * (i + 0.5)
-/** The station columns span the table the rows will fill (a little beyond the first and last rows). */
+/** The station columns' headers sit a little above the first row of the table to come. */
 export const COL_TOP = rowY(0) + 0.6
 export const COL_BOT = rowY(N - 1) - 0.6
 
@@ -86,18 +91,39 @@ export interface RowXf {
 export const newXf = (): RowXf => ({ ox: 0, oy: 0, c: 1, s: 0, len: 1, k: 0 })
 
 /**
- * Row i (at height y in the parallel phase) at morph k: its left end slides
- * to the hub, it turns to its spoke angle, its length becomes R - HUB.
+ * Row i (at height y in the parallel phase) at morph k. The sickness end
+ * slides to the hub (in the first half, so the table's left edge gathers
+ * into the centre); the fitness end travels round the dial centre, from the
+ * table's tip (its angle and radius as seen from the centre) to the spoke
+ * tip at R. The angle turns by k (literal spoke angles, so the rows open
+ * like a fan and the tips never cross); the radius reaches R in the first
+ * half of the morph (a wide table never swings outside the rim). The row is
+ * the segment between its two ends, so every station u on it (ticks,
+ * columns) lands on its ring at k = 1. The column connectors also call it
+ * with a fractional i. `g` is the gathering of the sickness ends: ONE
+ * progress for every row (the fan's sweep may lead row by row, the table's
+ * left edge gathers as one).
  */
-export function rowXf(i: number, k: number, f: ChartFrame, y: number, out: RowXf): RowXf {
+export function rowXf(i: number, k: number, f: ChartFrame, y: number, out: RowXf, g = k): RowXf {
   const phi = spokeAngle(i)
   out.k = k
-  out.ox = f.x(0) + (HUB * Math.cos(phi) - f.x(0)) * k
-  out.oy = y + (HUB * Math.sin(phi) - y) * k
-  const th = phi * k
-  out.c = Math.cos(th)
-  out.s = Math.sin(th)
-  out.len = f.FW + (R - HUB - f.FW) * k
+  // the sickness ends gather at the hub first, so the rows then open round it like a fan
+  const ko = ease.settle(Math.min(1, g / 0.45))
+  const ox = f.x(0) + (HUB * Math.cos(phi) - f.x(0)) * ko
+  const oy = y + (HUB * Math.sin(phi) - y) * ko
+  const tx = f.x(1)
+  const a0 = Math.atan2(y, tx)
+  const r0 = Math.hypot(tx, y)
+  const a = a0 + (phi - a0) * k
+  const r = r0 + (R - r0) * ease.settle(Math.min(1, 2 * k))
+  const dx = r * Math.cos(a) - ox
+  const dy = r * Math.sin(a) - oy
+  const len = Math.hypot(dx, dy)
+  out.ox = ox
+  out.oy = oy
+  out.len = len
+  out.c = len > 1e-9 ? dx / len : 1
+  out.s = len > 1e-9 ? dy / len : 0
   return out
 }
 
@@ -121,22 +147,27 @@ export function dialPoint(i: number, p: number, out: Float32Array | number[], o 
 
 /**
  * The portrait key (D.6 "Portrait key"): a compact DOM panel under the dial
- * on a portrait phone or tablet. Its measured height is reserved at the
- * bottom of the C4 to C6 and explore poses (the fit excludes it), and it is a
- * label obstacle. `h` is measured by the key; `hs` follows it smoothly (the
- * camera glides when the key collapses to its header on the last beat);
- * `hidden` is set while the caption card or the explore sheet is expanded.
+ * on a portrait phone or tablet, a label obstacle. The poses reserve room
+ * for it by BEAT, not by its live height: C4, C5 and explore reserve the
+ * whole key (`full`, measured by the key); C6 reserves its header row
+ * (`folded`: the key folds to it as C6 begins) plus `cta`, the room the
+ * caption card's CTA row is about to take (Scene keeps it in step with the
+ * director's eased focus rect). So the C6 camera makes ONE move from the C5
+ * frame to the finished frame: no bob as the key folds, no jump when the
+ * CTA row appears. `hidden` is set while the caption card or the explore
+ * sheet is expanded.
  */
-export const keyState = { h: 136, hs: 136, hidden: false, gap: 28 }
+export const keyState = { full: 136, folded: 26, hidden: false, gap: 28, cta: 0 }
 
 /** True where the key replaces the spoke-tip values: portrait phone or tablet. */
 export const keyMode = (): boolean => focusRect.layout === 'P' && (focusRect.shell === 'phone' || focusRect.shell === 'tablet')
 
-const keyReserve = (): number => (keyMode() && !keyState.hidden ? keyState.hs + keyState.gap : 0)
+const reserveFull = (): number => (keyMode() && !keyState.hidden ? keyState.full + keyState.gap : 0)
+const reserveFolded = (): number => (keyMode() ? (keyState.hidden ? 0 : keyState.folded + keyState.gap) + keyState.cta : 0)
 
 type Pads = { l: number; r: number; t: number; b: number }
-/** A pad object read by the director every frame: the base pads plus the key reserve at the bottom. */
-function padWithKey(base: Pads) {
+/** A pad object read by the director every frame: the base pads plus a reserve at the bottom. */
+function padWith(base: Pads, reserve: () => number) {
   return {
     get l() {
       return base.l
@@ -148,7 +179,7 @@ function padWithKey(base: Pads) {
       return base.t
     },
     get b() {
-      return base.b + keyReserve()
+      return base.b + reserve()
     },
   }
 }
@@ -181,6 +212,21 @@ export const rowsBox = (_l: Layout, _f: ChartFrame): Box => {
   return [
     [f.x(0), rowY(N - 1) - 0.3, 0],
     [f.x(1), rowY(0) + 0.4, 0],
+  ]
+}
+/**
+ * C3 morph: the swept fan. The sickness ends travel inside the table and the
+ * fitness ends round the centre at a radius that falls from the table's
+ * corner to R in the first half of the morph, so every in-between frame
+ * lies inside the table's box joined with the rim's (plus a margin for the
+ * corner radius of a wide landscape table).
+ */
+export const fanBox = (l: Layout, f: ChartFrame): Box => {
+  const r = rowsBox(l, f)
+  const m = 0.5
+  return [
+    [Math.min(r[0][0], -R - m), Math.min(r[0][1], -R - m), 0],
+    [Math.max(r[1][0], R + m), Math.max(r[1][1], R + m), 0],
   ]
 }
 const center = (b: Box): V3 => [(b[0][0] + b[1][0]) / 2, (b[0][1] + b[1][1]) / 2, (b[0][2] + b[1][2]) / 2]
@@ -217,12 +263,16 @@ function landscapePad(tall: Pads, short: Pads) {
   }
 }
 
-/** C0 to C2 (both layouts): symmetric, so the line sits on the centre of the stage. */
-const LINE_PAD = { l: 30, r: 30, t: 44, b: 14 }
+/** C0 to C2 (both layouts): symmetric, so the line sits on the centre of the stage; inset so the end pills centre on their columns. */
+const LINE_PAD = { l: 50, r: 50, t: 44, b: 14 }
 export const LINE: CamPose = { target: (l, f) => center(lineBox(l, f)), az: 0, el: 0, fov: 28, fit: lineBox, padPx: LINE_PAD }
-/** C3 table: the names ride the fitness ends (right); two-line side names on a phone. */
-export const ROWS_L: CamPose = { target: (l, f) => center(rowsBox(l, f)), az: 0, el: 0, fov: 28, fit: rowsBox, padPx: { l: 18, r: 106, t: 18, b: 22 } }
-export const ROWS_P: CamPose = { ...ROWS_L, padPx: { l: 14, r: 64, t: 16, b: 20 } }
+/**
+ * C3 table: every name sits on its own row, right of its fitness end, so the
+ * pad on the right holds the widest one-line name (REL. STRENGTH on
+ * desktop; FLEXIBILITY on a phone, where the side names are two lines).
+ */
+export const ROWS_L: CamPose = { target: (l, f) => center(rowsBox(l, f)), az: 0, el: 0, fov: 28, fit: rowsBox, padPx: { l: 18, r: 122, t: 18, b: 22 } }
+export const ROWS_P: CamPose = { ...ROWS_L, padPx: { l: 12, r: 78, t: 16, b: 20 } }
 
 /**
  * Landscape dial pads: room for the one-line spoke names (the widest sit
@@ -248,24 +298,32 @@ const HEDGE_PAD_P: Pads = { ...DIAL_PAD_P, b: 76 }
 export const DIAL_L: CamPose = { target: T0, az: 0, el: 0, fov: 28, fit: FLAT_BOX, padPx: DIAL_PAD_L }
 /** C3 on a phone: the dial lands alone (the key arrives with its values in C4). */
 export const DIAL_P: CamPose = { target: T0, az: 0, el: 0, fov: 28, fit: FLAT_BOX, padPx: DIAL_PAD_P }
+/** C3 mid-morph: the swept fan (the table joined with the rim), with the dial's name room. */
+export const FAN_L: CamPose = { target: T0, az: 0, el: 0, fov: 28, fit: fanBox, padPx: DIAL_PAD_L }
+export const FAN_P: CamPose = { target: T0, az: 0, el: 0, fov: 28, fit: fanBox, padPx: DIAL_PAD_P }
 
 /**
  * C4: the tilt that reveals the pit (az 0, el 24). The fit is the RIM: seen
  * from above, the pit's floor projects inside the rim's ellipse, so fitting
- * the bowl's whole depth box only shrank the dial.
+ * the bowl's whole depth box only shrank the dial. On a phone the key
+ * (with the pit's values) arrives with the tilt and fills the room under it.
  */
 export const TILT_L: CamPose = { target: [0, 0, -0.4], az: 0, el: 24, fov: 28, fit: FLAT_BOX, padPx: CHIP_PAD_L }
-export const TILT_P: CamPose = { target: [0, 0, -0.4], az: 0, el: 24, fov: 28, fit: FLAT_BOX, padPx: padWithKey(DIAL_PAD_P) }
+export const TILT_P: CamPose = { target: [0, 0, -0.4], az: 0, el: 24, fov: 28, fit: FLAT_BOX, padPx: padWith(DIAL_PAD_P, reserveFull) }
 
 /** C5: back toward front-on for the comparison (el 8); the pit still reads faintly. */
 export const NEAR_L: CamPose = { target: [0, 0, -0.2], az: 0, el: 8, fov: 28, fit: FLAT_BOX, padPx: CHIP_PAD_L }
-export const NEAR_P: CamPose = { target: [0, 0, -0.2], az: 0, el: 8, fov: 28, fit: FLAT_BOX, padPx: padWithKey(DIAL_PAD_P) }
-/** C6: the same view, with room for the claim (under the dial on a phone, right of it on landscape). */
+export const NEAR_P: CamPose = { target: [0, 0, -0.2], az: 0, el: 8, fov: 28, fit: FLAT_BOX, padPx: padWith(DIAL_PAD_P, reserveFull) }
+/**
+ * C6: the same view, with room for the claim (under the dial on a phone,
+ * right of it on landscape). On a phone it is fitted to the FINISHED frame
+ * from the first frame of the beat: the folded key and the card's CTA row.
+ */
 export const HEDGE_L: CamPose = { ...NEAR_L, padPx: HEDGE_PAD_L }
-export const HEDGE_P: CamPose = { ...NEAR_P, padPx: padWithKey(HEDGE_PAD_P) }
+export const HEDGE_P: CamPose = { ...NEAR_P, padPx: padWith(HEDGE_PAD_P, reserveFolded) }
 
 /** Explore: slightly above, so the bowl reads while the dots are dragged; the pads hold the spoke names (and, on landscape, the HUD chip). */
 const EX_PAD_L = landscapePad({ l: 100, r: 104, t: 40, b: 36 }, { l: 80, r: 176, t: 30, b: 28 })
 const EX_PAD_P: Pads = { l: 56, r: 30, t: 28, b: 20 }
 export const EXPLORE_L: CamPose = { target: [0, 0, -0.4], az: 0, el: 12, fov: 28, fit: (_l, f) => f.box, padPx: EX_PAD_L }
-export const EXPLORE_P: CamPose = { target: [0, 0, -0.4], az: 0, el: 12, fov: 28, fit: (_l, f) => f.box, padPx: padWithKey(EX_PAD_P) }
+export const EXPLORE_P: CamPose = { target: [0, 0, -0.4], az: 0, el: 12, fov: 28, fit: (_l, f) => f.box, padPx: padWith(EX_PAD_P, reserveFull) }

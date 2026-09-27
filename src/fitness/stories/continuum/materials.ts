@@ -27,6 +27,11 @@ import { DEPTH, HUB, R, bowl, radiusOf, spokeAngle } from './layout'
    Person: the radar polygon as a luminous membrane in spectrum(mean): faint
    at the centre, light gathered toward its edge (the area reads as an
    amount of light, as in Definition), riding the bowl surface.
+
+   Light bands (C0 to C3): the station columns as soft additive bands of
+   light with a crisp core, reaching the edges of the focus rect, opening a
+   clean gap wherever a row's tick labels sit; and a spectrum glow under the
+   hero lines. All sizes are in screen px (through the live camera scale).
    ========================================================================= */
 
 /* ------------------------------- disc --------------------------------- */
@@ -313,9 +318,13 @@ export function makePersonMaterial(): THREE.ShaderMaterial {
       void main() {
         float a = uLo + ( uHi - uLo ) * pow( vF, uGamma );
         float rim = smoothstep( 0.86, 1.0, vF ) * uRim;
-        // C6: inside the WELL circle the membrane steps aside, so the margin stays lit
+        // C6: inside the WELL circle the membrane steps aside (the pit darkens
+        // alone); in the lit band beyond it the body of the fill thins, so
+        // the band reads as the disc's own clean light, not green over amber.
+        // The rim (the claim's crisp edge) keeps its light.
         float aa = max( fwidth( vR ), 1e-4 );
-        a *= 1.0 - uCut * ( 1.0 - smoothstep( uCutR - aa, uCutR + aa, vR ) );
+        float inside = 1.0 - smoothstep( uCutR - aa, uCutR + aa, vR );
+        a *= 1.0 - uCut * ( inside + 0.72 * ( 1.0 - inside ) );
         vec3 c = uColor * ( 1.0 + rim );
         gl_FragColor = vec4( c, ( a + 0.18 * rim ) * uOpacity );
         #include <tonemapping_fragment>
@@ -406,5 +415,189 @@ export function makeBackingMaterial(): THREE.ShaderMaterial {
     transparent: true,
     depthWrite: false,
     depthTest: false,
+  })
+}
+
+/* ---------------------------- light bands ------------------------------ */
+
+/** Four station columns (kinds 0..3) and two hero-row glows (kinds 4, 5): one quad each, one draw call. */
+export const BAND_QUADS = 6
+
+export function makeLightBandsGeometry(): THREE.BufferGeometry {
+  const pos = new Float32Array(BAND_QUADS * 4 * 3)
+  const uv = new Float32Array(BAND_QUADS * 4 * 2)
+  const kind = new Float32Array(BAND_QUADS * 4)
+  const idx: number[] = []
+  const corners = [-1, -1, 1, -1, 1, 1, -1, 1]
+  for (let q = 0; q < BAND_QUADS; q++) {
+    for (let c = 0; c < 4; c++) {
+      const v = q * 4 + c
+      uv[v * 2] = corners[c * 2]
+      uv[v * 2 + 1] = corners[c * 2 + 1]
+      kind[v] = q
+    }
+    const b = q * 4
+    idx.push(b, b + 1, b + 2, b, b + 2, b + 3)
+  }
+  const g = new THREE.BufferGeometry()
+  g.setAttribute('position', new THREE.BufferAttribute(pos, 3))
+  g.setAttribute('aUV', new THREE.BufferAttribute(uv, 2))
+  g.setAttribute('aK', new THREE.BufferAttribute(kind, 1))
+  g.setIndex(idx)
+  return g
+}
+
+export function makeLightBandsMaterial(): THREE.ShaderMaterial {
+  const uniforms = {
+    // column x (world), per station
+    uColX: { value: new THREE.Vector4() },
+    // column half width, world and px
+    uHalfW: { value: 0.3 },
+    uHalfPx: { value: 10 },
+    // world y of the focus rect's bottom and top edges
+    uBot: { value: -8 },
+    uTop: { value: 8 },
+    // the bright plateau between the drawn rows (world y)
+    uLo: { value: 0 },
+    uHi: { value: 0 },
+    // per column: reach 0..1 (grows from the line out to the edges) and brightness
+    uGrow: { value: new THREE.Vector4() },
+    uAmp: { value: new THREE.Vector4() },
+    // strength of the crisp core
+    uCore: { value: 1 },
+    // px per world unit (vertical), for the label gaps
+    uPPU: { value: 30 },
+    // the two featured rows (world y) and their tick labels (strength)
+    uGapY: { value: new THREE.Vector2() },
+    uGapS: { value: new THREE.Vector2() },
+    // a gap below a row, px: its start, and its end per column (the elite tick is two lines on a phone)
+    uGap0: { value: 7 },
+    uGap1: { value: new THREE.Vector4(28, 28, 28, 28) },
+    // hero-row glows: x0, x1, y, half height (world)
+    uRowA: { value: new THREE.Vector4() },
+    uRowB: { value: new THREE.Vector4() },
+    // the rows' sickness and fitness ends (world x), for the spectrum
+    uRowU: { value: new THREE.Vector2(-5, 5) },
+    // hero-row glows: pen progress and brightness
+    uRowP: { value: new THREE.Vector2() },
+    uRowAmp: { value: new THREE.Vector2() },
+    uSick: { value: srgb(PAL.sick) },
+    uWell: { value: srgb(PAL.well) },
+    uFit: { value: srgb(PAL.fit) },
+  }
+  return new THREE.ShaderMaterial({
+    uniforms,
+    vertexShader: /* glsl */ `
+      attribute vec2 aUV;
+      attribute float aK;
+      uniform vec4 uColX;
+      uniform float uHalfW;
+      uniform float uBot;
+      uniform float uTop;
+      uniform vec4 uRowA;
+      uniform vec4 uRowB;
+      varying vec2 vUV;
+      varying float vK;
+      varying vec2 vW;
+      void main() {
+        vUV = aUV;
+        vK = aK;
+        vec3 p;
+        if ( aK < 3.5 ) {
+          float xc = aK < 0.5 ? uColX.x : ( aK < 1.5 ? uColX.y : ( aK < 2.5 ? uColX.z : uColX.w ) );
+          p = vec3( xc + aUV.x * uHalfW, mix( uBot, uTop, aUV.y * 0.5 + 0.5 ), -0.03 );
+        } else {
+          vec4 r = aK < 4.5 ? uRowA : uRowB;
+          p = vec3( mix( r.x, r.y, aUV.x * 0.5 + 0.5 ), r.z + aUV.y * r.w, -0.035 );
+        }
+        vW = p.xy;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4( p, 1.0 );
+      }
+    `,
+    fragmentShader: /* glsl */ `
+      uniform float uHalfPx;
+      uniform float uBot;
+      uniform float uTop;
+      uniform float uLo;
+      uniform float uHi;
+      uniform vec4 uGrow;
+      uniform vec4 uAmp;
+      uniform float uCore;
+      uniform float uPPU;
+      uniform vec2 uGapY;
+      uniform vec2 uGapS;
+      uniform float uGap0;
+      uniform vec4 uGap1;
+      uniform vec2 uRowU;
+      uniform vec2 uRowP;
+      uniform vec2 uRowAmp;
+      uniform vec3 uSick;
+      uniform vec3 uWell;
+      uniform vec3 uFit;
+      varying vec2 vUV;
+      varying float vK;
+      varying vec2 vW;
+
+      vec3 toLinear( vec3 c ) {
+        return mix( c / 12.92, pow( ( c + 0.055 ) / 1.055, vec3( 2.4 ) ), step( 0.04045, c ) );
+      }
+      vec3 spectrumAt( float t ) {
+        t = clamp( t, 0.0, 1.0 );
+        return toLinear( t < 0.5 ? mix( uSick, uWell, t / 0.5 ) : mix( uWell, uFit, ( t - 0.5 ) / 0.5 ) );
+      }
+      // a clean gap in a column below a row, where its tick label sits (px below the row)
+      float gapAt( float rowY, float strength, float g1 ) {
+        float d = ( rowY - vW.y ) * uPPU;
+        float g = smoothstep( uGap0 - 2.0, uGap0, d ) * ( 1.0 - smoothstep( g1, g1 + 2.0, d ) );
+        return 1.0 - strength * g;
+      }
+
+      void main() {
+        vec3 col;
+        float a;
+        if ( vK < 3.5 ) {
+          float grow = vK < 0.5 ? uGrow.x : ( vK < 1.5 ? uGrow.y : ( vK < 2.5 ? uGrow.z : uGrow.w ) );
+          float amp = vK < 0.5 ? uAmp.x : ( vK < 1.5 ? uAmp.y : ( vK < 2.5 ? uAmp.z : uAmp.w ) );
+          float g1 = vK < 0.5 ? uGap1.x : ( vK < 1.5 ? uGap1.y : ( vK < 2.5 ? uGap1.z : uGap1.w ) );
+          col = vK < 0.5 ? toLinear( uSick ) : ( vK < 1.5 ? toLinear( uWell ) : toLinear( uFit ) );
+          if ( grow <= 0.001 || amp <= 0.001 ) discard;
+          // across: a soft band of light and a crisp core about 1.5 px wide
+          float ax = abs( vUV.x );
+          float px = ax * uHalfPx;
+          float glow = exp( -ax * ax * 3.2 ) * ( 1.0 - ax );
+          float core = 1.0 - smoothstep( 0.35, 1.25, px );
+          // along: full over the drawn rows, falling to nothing at the edges of the stage; it reaches out as it grows
+          float s = 0.0;
+          if ( vW.y > uHi ) s = ( vW.y - uHi ) / max( 0.001, uTop - uHi );
+          else if ( vW.y < uLo ) s = ( uLo - vW.y ) / max( 0.001, uLo - uBot );
+          s = clamp( s, 0.0, 1.0 );
+          float reach = 1.0 - smoothstep( grow - 0.08, grow, s );
+          float fall = pow( 1.0 - s, 1.35 );
+          float v = fall * reach * gapAt( uGapY.x, uGapS.x, g1 ) * gapAt( uGapY.y, uGapS.y, g1 );
+          a = amp * v * ( 0.2 * glow + 0.78 * core * uCore );
+        } else {
+          bool first = vK < 4.5;
+          float prog = first ? uRowP.x : uRowP.y;
+          float amp = first ? uRowAmp.x : uRowAmp.y;
+          if ( amp <= 0.001 || prog <= 0.001 ) discard;
+          float u = ( vW.x - uRowU.x ) / max( 0.001, uRowU.y - uRowU.x );
+          col = spectrumAt( u );
+          float ay = abs( vUV.y );
+          float glow = exp( -ay * ay * 4.0 ) * ( 1.0 - ay );
+          // revealed behind the pen head, with soft ends
+          float head = 1.0 - smoothstep( prog - 0.015, prog + 0.02, u );
+          float ends = smoothstep( -0.05, 0.0, u ) * ( 1.0 - smoothstep( 1.0, 1.05, u ) );
+          a = amp * glow * head * ends * 0.26;
+        }
+        if ( a <= 0.0005 ) discard;
+        gl_FragColor = vec4( col, a );
+        #include <tonemapping_fragment>
+        #include <colorspace_fragment>
+      }
+    `,
+    transparent: true,
+    depthWrite: false,
+    depthTest: false,
+    blending: THREE.AdditiveBlending,
   })
 }

@@ -5,6 +5,8 @@ import { Pen, PEN } from '../../story/kit/Pen'
 import { Halo } from '../../story/kit/Halo'
 import { SdfText } from '../../story/kit/SdfText'
 import { makeRimStandard } from '../../story/kit/materials'
+import { focusRect } from '../../story/camera/focusRect'
+import { useStoryStore } from '../../story/store'
 import { useSafeFrame } from '../../story/useSafeFrame'
 import type { Layout, V3 } from '../../story/types'
 import { N, STATES, STOP_FIT, STOP_WELL, spectrumLinear } from './continuumMath'
@@ -34,17 +36,24 @@ export const LIGHT = '#e9ffc4'
 
 /**
  * World sizes by layout: a phone dial is about 20 px per unit, desktop about
- * 37. The state word rises out of the pit to sit just BELOW the orb on
- * screen (wordY < 0): seen from the C4 tilt the pit's floor, and so the orb,
- * projects above the rim's centre, and a word placed above the orb in the
- * world lands right on it. It sits inside the polygon, on a soft slate
- * backing, and scales with the dial.
+ * 37. The state word rises out of the pit to sit BELOW the orb on screen,
+ * centred in the room between the orb and the polygon's lower edge, so the
+ * claim's crisp edge stays whole (L10): seen from the C4 tilt the pit's
+ * floor (and so the orb) projects above the rim's centre while the risen
+ * word projects below its own height, so the tilted word sits higher in the
+ * world (wordTilt) than the front-on one (wordFront).
  */
 export function sizesFor(layout: Layout) {
   return layout === 'P'
-    ? { dot: 0.36, orb: 0.46, word: 1.75, wordY: -1.85, bead: 0.3, print: 0.2 }
-    : { dot: 0.26, orb: 0.42, word: 1.2, wordY: -1.55, bead: 0.2, print: 0.13 }
+    ? { dot: 0.36, orb: 0.46, word: 1.5, wordTilt: -0.62, wordFront: -1.32, bead: 0.3, print: 0.2 }
+    : { dot: 0.26, orb: 0.42, word: 1.2, wordTilt: -0.62, wordFront: -1.18, bead: 0.2, print: 0.13 }
 }
+export type Sizes = ReturnType<typeof sizesFor>
+
+/** The smallest the state word may render (its cap height in px): a short landscape stage scales it up to this. */
+const WORD_MIN_PX = 17
+/** Anton's cap height as a share of its font size. */
+const CAP = 0.72
 
 /* ------------------------------- disc --------------------------------- */
 
@@ -163,7 +172,7 @@ export const RIM_COLOR = '#7fe3bd'
 
 const HL_SEGS = 24
 
-/** The spoke of the tapped key row or dot, drawn bright over the dimmed instrument. */
+/** The spoke of the tapped spoke name or dot, drawn bright over the dimmed instrument. */
 export function SpokeHighlight({ vis }: { vis: (T: number) => number }) {
   const pts = useMemo(() => new Float32Array((HL_SEGS + 1) * 3), [])
   const colors = useMemo(() => {
@@ -228,14 +237,16 @@ export interface PersonSrc {
   word: (T: number, k: number) => number
   /** word k: 0 (in the pit) .. 1 (risen in front of the dial) */
   wordLift: (T: number, k: number) => number
+  /** 0 (the tilted C4 view) .. 1 (front-on): where the risen word sits between the orb and the polygon's lower edge */
+  front: (T: number) => number
   /** WELL ghost outline (dashed), opacity */
   ghost?: (T: number) => number
   ghostPositions?: readonly number[]
-  /** whole-person visibility */
+  /** whole-person visibility (0 while its layer is hidden: the frame early-outs) */
   vis: (T: number) => number
   /** 0..1: the membrane inside the WELL circle steps aside (C6: the margin beyond wellness stays lit) */
   cut?: (T: number) => number
-  /** spoke index to highlight (explore / key tap), or -1 */
+  /** spoke index to highlight (explore / spoke tap), or -1 */
   highlight?: () => number
   /** 0..1: a marker is selected, so the word and the fill step back and its readout leads */
   quiet?: () => number
@@ -282,17 +293,7 @@ export function Person({ src, layout, site }: { src: PersonSrc; layout: Layout; 
   useEffect(() => () => orbMat.dispose(), [orbMat])
   const orb = useRef<THREE.Mesh>(null)
   const orbZ = bowl(0) + S.orb * 0.9
-
-  /* words and their backing */
-  const words = useRef<(THREE.Group | null)[]>([])
   const group = useRef<THREE.Group>(null)
-  const backGeo = useMemo(() => new THREE.PlaneGeometry(1, 1), [])
-  const backMat = useMemo(() => makeBackingMaterial(), [])
-  useEffect(() => () => backGeo.dispose(), [backGeo])
-  useEffect(() => () => backMat.dispose(), [backMat])
-  const back = useRef<THREE.Mesh>(null)
-  const wordY = (lift: number) => S.wordY * lift
-  const wordZ = (lift: number) => bowl(0) + (0.6 - bowl(0)) * lift
 
   useSafeFrame(
     site,
@@ -330,29 +331,6 @@ export function Person({ src, layout, site }: { src: PersonSrc; layout: Layout; 
         orbMat.emissive.copy(_col)
         orbMat.emissiveIntensity = 0.12 + 0.3 * on + 0.75 * hot
       }
-      // state words rise out of the pit (each on its own lift) onto a slate backing
-      let bk = 0
-      let bl = 0
-      for (let w = 0; w < STATES.length; w++) {
-        const wg = words.current[w]
-        const lift = src.wordLift(T, w)
-        const wo = src.word(T, w)
-        if (wo > bk) {
-          bk = wo
-          bl = lift
-        }
-        if (!wg) continue
-        wg.position.set(0, wordY(lift), wordZ(lift))
-        const sc = 0.8 + 0.2 * lift
-        wg.scale.set(sc, sc, 1)
-      }
-      const b = back.current
-      if (b) {
-        b.visible = bk > 0.01
-        b.position.set(0, wordY(bl) - S.word * 0.04, wordZ(bl) - 0.05)
-        b.scale.set(S.word * 3.1, S.word * 1.35, 1)
-        backMat.uniforms.uOpacity.value = 0.62 * bk * (1 - 0.6 * quiet)
-      }
     },
     { hide: group },
   )
@@ -364,7 +342,7 @@ export function Person({ src, layout, site }: { src: PersonSrc; layout: Layout; 
     out[1] = _pt[1]
     out[2] = _pt[2]
     const h = src.highlight ? src.highlight() : -1
-    return src.dotScale(T, i) * src.vis(T) * (h === i ? 1.4 : 1)
+    return src.dotScale(T, i) * (h === i ? 1.4 : 1)
   }
   const dotTint = (T: number, i: number, out: THREE.Color) => {
     spectrumLinear(src.pos(T, i), out)
@@ -407,7 +385,7 @@ export function Person({ src, layout, site }: { src: PersonSrc; layout: Layout; 
           spectrumLinear(src.mean(T), out)
         }}
       />
-      <TintDots site={site + ' dots'} count={N} radius={S.dot} place={dotPlace} tint={dotTint} rimStrength={0.55} emissiveIntensity={0.5} renderOrder={47} />
+      <TintDots site={site + ' dots'} count={N} radius={S.dot} place={dotPlace} tint={dotTint} opacity={src.vis} rimStrength={0.55} emissiveIntensity={0.5} renderOrder={47} />
       <mesh ref={orb} geometry={orbGeo} material={orbMat} renderOrder={20} />
       <Halo
         position={[0, 0, orbZ + 0.2] as V3}
@@ -415,6 +393,92 @@ export function Person({ src, layout, site }: { src: PersonSrc; layout: Layout; 
         color={PAL.chalk}
         intensity={(T) => 0.08 * src.orb(T) * src.vis(T) + 0.3 * Math.min(HOT_CAP, src.hot(T))}
       />
+    </group>
+  )
+}
+
+/* ------------------------------ state word ---------------------------- */
+
+const _wa = new THREE.Vector3()
+const _wb = new THREE.Vector3()
+
+/**
+ * Screen px per world unit at the word's depth (the live camera), for the
+ * word's minimum size. Allocation-free.
+ */
+function pxPerUnit(camera: THREE.Camera, z: number): number {
+  _wa.set(0, 0, z).project(camera)
+  _wb.set(0, 1, z).project(camera)
+  return Math.abs(((_wa.y - _wb.y) / 2) * focusRect.H)
+}
+
+/** The state word's shared placement, read by the SDF words and by the word obstacles of both layers. */
+export const wordPlace = { scale: 1 }
+
+/** World y of the risen word's centre for a camera phase f (0 tilted, 1 front-on). */
+export const wordYAt = (S: Sizes, f: number, lift: number): number => (S.wordTilt + (S.wordFront - S.wordTilt) * f) * lift
+export const wordZAt = (lift: number): number => bowl(0) + (0.6 - bowl(0)) * lift
+
+/**
+ * The SDF state words (Anton), ONE set for both layers: the story person and
+ * the explore person each drive them while their mode is on, so a load syncs
+ * four words, not eight. Each word rises out of the pit onto a soft slate
+ * backing; a stage too small to read it (a phone on its side) scales it up
+ * to a legible cap height.
+ */
+export function StateWords({ story, explore, layout }: { story: PersonSrc; explore: PersonSrc; layout: Layout }) {
+  const S = sizesFor(layout)
+  const active = (): PersonSrc => (useStoryStore.getState().mode === 'explore' ? explore : story)
+  const words = useRef<(THREE.Group | null)[]>([])
+  const group = useRef<THREE.Group>(null)
+  const backGeo = useMemo(() => new THREE.PlaneGeometry(1, 1), [])
+  const backMat = useMemo(() => makeBackingMaterial(), [])
+  useEffect(() => () => backGeo.dispose(), [backGeo])
+  useEffect(() => () => backMat.dispose(), [backMat])
+  const back = useRef<THREE.Mesh>(null)
+
+  useSafeFrame(
+    'continuum state words',
+    (T, _A, _dt, state) => {
+      const src = active()
+      const v = src.vis(T)
+      const g = group.current
+      if (g) g.visible = v > 0.002
+      if (v <= 0.002) return
+      const quiet = src.quiet ? src.quiet() : 0
+      const f = src.front(T)
+      // never below a legible cap height (a phone on its side shows a small dial)
+      const ppu = pxPerUnit(state.camera, 0.6)
+      const sc = ppu > 0 ? Math.max(1, WORD_MIN_PX / (S.word * CAP * ppu)) : 1
+      wordPlace.scale = sc
+      let bk = 0
+      let bl = 0
+      for (let w = 0; w < STATES.length; w++) {
+        const wg = words.current[w]
+        const lift = src.wordLift(T, w)
+        const wo = src.word(T, w)
+        if (wo > bk) {
+          bk = wo
+          bl = lift
+        }
+        if (!wg) continue
+        wg.position.set(0, wordYAt(S, f, lift), wordZAt(lift))
+        const s = (0.8 + 0.2 * lift) * sc
+        wg.scale.set(s, s, 1)
+      }
+      const b = back.current
+      if (b) {
+        b.visible = bk > 0.01
+        b.position.set(0, wordYAt(S, f, bl) - S.word * sc * 0.04, wordZAt(bl) - 0.05)
+        b.scale.set(S.word * sc * 3.1, S.word * sc * 1.35, 1)
+        backMat.uniforms.uOpacity.value = 0.62 * bk * v * (1 - 0.6 * quiet)
+      }
+    },
+    { hide: group },
+  )
+
+  return (
+    <group ref={group}>
       <mesh ref={back} geometry={backGeo} material={backMat} renderOrder={45} frustumCulled={false} />
       {STATES.map((st, w) => (
         <group key={st.word} ref={(el) => void (words.current[w] = el)}>
@@ -425,7 +489,10 @@ export function Person({ src, layout, site }: { src: PersonSrc; layout: Layout; 
             color={st.css}
             outline
             letterSpacing={0.02}
-            opacity={(T) => src.word(T, w) * src.vis(T) * (1 - 0.7 * (src.quiet ? src.quiet() : 0))}
+            opacity={(T) => {
+              const src = active()
+              return src.word(T, w) * src.vis(T) * (1 - 0.7 * (src.quiet ? src.quiet() : 0))
+            }}
             renderOrder={46}
           />
         </group>

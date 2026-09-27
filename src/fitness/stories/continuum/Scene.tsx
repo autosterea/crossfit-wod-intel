@@ -1,12 +1,15 @@
 import { useEffect, useMemo, useRef, useSyncExternalStore } from 'react'
 import * as THREE from 'three'
-import { PAL } from '../../fitnessData'
+import { BIOMARKERS, PAL } from '../../fitnessData'
 import { at, focus, pulse } from '../../story/cue'
+import { ease } from '../../story/ease'
+import { clock } from '../../story/clock'
 import { useStoryStore } from '../../story/store'
 import { gestureBus } from '../../story/gestures'
 import { focusRect, subscribeFocus } from '../../story/camera/focusRect'
 import { useBeat } from '../../story/useBeat'
 import { useSafeFrame } from '../../story/useSafeFrame'
+import { useStageHotspot, type HotspotSpec } from '../../story/hotspots'
 import { frameId, useChartFrame, type ChartFrame } from '../../story/kit/chartFrame'
 import { Pen, PenBatch, PEN } from '../../story/kit/Pen'
 import { Glows } from '../../story/kit/Halo'
@@ -24,6 +27,7 @@ import {
   FAT_STATIONS,
   HDL,
   N,
+  SIDE_SPOKE,
   STATES,
   STOPS,
   STOP_FIT,
@@ -37,10 +41,11 @@ import {
   tickText,
   valueText,
 } from './continuumMath'
-import { COL_TOP, R, ROWS_FRAME, bowl, compactStage, dialPoint, keyMode, newXf, radiusOf, rowPoint, rowXf, shortStage, spokeAngle } from './layout'
+import { COL_TOP, R, ROWS_FRAME, bowl, compactStage, dialPoint, keyMode, keyState, newXf, radiusOf, rowPoint, rowXf, rowY, shortStage, spokeAngle } from './layout'
 import {
   B,
   CASCADE,
+  MORPH_A,
   MORPH_B,
   WORD_ATHLETE,
   WORD_WELL,
@@ -51,15 +56,21 @@ import {
   bpScale,
   c0Callout,
   centreCallout,
+  columnCore,
+  columnsOut,
   discIn,
   dotAppear,
   fatBead,
+  fatDraw,
   fatName,
   fatScale,
   fillIn,
+  fitName,
+  gatherK,
   ghostIn,
   guideGrow,
   heroOut,
+  isoOf,
   morphK,
   nameOn,
   newestDrawing,
@@ -73,23 +84,25 @@ import {
   pitShade,
   preventiveCallout,
   rimCallout,
-  ringNames,
   ringsClose,
   rowDraw,
   rowYAt,
   spokeRest,
+  spokesTappable,
   stationFlare,
+  tableSpan,
   tableValues,
+  wellName,
   wellRingRest,
   wordLift,
   wordSwap,
   wordVis,
 } from './timeline'
-import { Disc, LIGHT, Person, PitShadow, RIM_COLOR, SpokeHighlight, sizesFor, type PersonSrc } from './dial'
-import { clearSpoke, keySel } from './keySel'
-import { TintDots } from './kitx'
-import { OUTLINE_T } from './materials'
-import ExploreScene from './ExploreScene'
+import { Disc, LIGHT, Person, PitShadow, RIM_COLOR, SpokeHighlight, StateWords, sizesFor, wordPlace, wordYAt, wordZAt, type PersonSrc } from './dial'
+import { clearSpoke, keySel, selectSpoke } from './keySel'
+import { TintDots, put } from './kitx'
+import { OUTLINE_T, makeLightBandsGeometry, makeLightBandsMaterial } from './materials'
+import ExploreScene, { EX_PERSON } from './ExploreScene'
 import './continuum.css'
 
 /* =========================================================================
@@ -99,8 +112,8 @@ import './continuum.css'
    the line, its ticks, its columns and its NAME all ride it, so the viewer
    can follow the HDL row into the HDL spoke.
 
-   Prewarm (README): the rows, the dial, the person, the four state words and
-   the explore layer are all mounted at load; T and the mode drive visibility.
+   Prewarm (README): the rows, the dial, the person, the state words and the
+   explore layer are all mounted at load; T and the mode drive visibility.
    ========================================================================= */
 
 const ROW_SEGS = 24
@@ -112,14 +125,17 @@ const TICK_H = 0.17
 const NL = String.fromCharCode(10)
 
 const STATION_COLORS = [PAL.sick, PAL.well, PAL.fit]
+/** The three named stations along a row: sickness, wellness, fitness. */
+const STATION_U = [0, STOP_WELL, 1] as const
 const xfA = newXf()
 const xfB = newXf()
+const xfN = newXf()
 const _v: number[] = [0, 0, 0]
 const _f3 = new Float32Array(3)
 
 /** Rows, ticks and columns stop moving once the morph has landed: their writers key on this, not on T. */
 const rowsKey = (T: number) => Math.min(T, B.dial + MORPH_B + 0.02)
-const ringsKey = (T: number) => Math.min(T, B.dial + 0.97)
+const ringsKey = (T: number) => Math.min(T, B.dial + 0.98)
 
 /** Per-point spectrum colours along a row (linear), sick at the left end. */
 function rowPointColors(): Float32Array {
@@ -139,7 +155,7 @@ const bornFocus = (T: number, i: number) => (i === BP ? focus(T, B.bp) : i === B
 const rowDim = (T: number, i: number) => Math.max(0.3, bornFocus(T, i) * spokeRest(T))
 
 /** Row i's transform at T (rows phase through the morph). */
-const xfAt = (T: number, i: number, f: ChartFrame, out = xfA) => rowXf(i, morphK(T, i), f, rowYAt(T, i), out)
+const xfAt = (T: number, i: number, f: ChartFrame, out = xfA) => rowXf(i, morphK(T, i), f, rowYAt(T, i), out, gatherK(T))
 
 /** Anchor factory: point u along row i at T (labels ride the row transform). */
 const rowAnchor = (f: ChartFrame, i: number, u: number | ((T: number) => number), lift = 0) => (T: number): V3 => {
@@ -148,68 +164,85 @@ const rowAnchor = (f: ChartFrame, i: number, u: number | ((T: number) => number)
   return [_v[0], _v[1], _v[2]]
 }
 
-/* ------------------------------ C0 guides ------------------------------ */
+/* --------------------------- columns of light -------------------------- */
 
-const GUIDE_SEGS = 14
-const GUIDE_STOPS = [0, STOP_WELL, STOP_FIT, 1]
-const GUIDE_COLORS = [PAL.sick, PAL.well, PAL.fit, PAL.fit]
+const COLUMN_U = [0, STOP_WELL, STOP_FIT, 1] as const
+const _pa = new THREE.Vector3()
+const _pb = new THREE.Vector3()
 
 /**
- * The station columns of light (C0 to C3): each rises and falls from the
- * line where the pen passes its station, brightest at the line and fading
- * toward the ends, over the height the table will fill. One draw call.
+ * The station columns as bands of light (C0 to C3): each rises and falls
+ * from the line where the pen passes its station, out to the edges of the
+ * stage, a soft glow with a crisp core. The fit column (0.82, no header) is
+ * a dim tick guide. A column opens a clean gap wherever a featured row's
+ * tick label sits, so no line ever runs through a number. Under the hero
+ * lines, a soft glow in the spectrum follows the pen. One draw call; sizes
+ * are screen px through the live camera.
  */
-function Guides({ frame }: { frame: ChartFrame }) {
-  const { segs, cols } = useMemo(() => {
-    const segs = new Float32Array(GUIDE_STOPS.length * 2 * GUIDE_SEGS * 6).fill(AWAY)
-    const cols = new Float32Array(segs.length)
-    const c = new THREE.Color()
-    const slate = new THREE.Color(PAL.ink)
-    for (let s = 0; s < GUIDE_STOPS.length; s++) {
-      for (let h = 0; h < 2; h++) {
-        for (let j = 0; j < GUIDE_SEGS; j++) {
-          const o = ((s * 2 + h) * GUIDE_SEGS + j) * 6
-          for (let e = 0; e < 2; e++) {
-            const f = (j + e) / GUIDE_SEGS
-            // brightest at the line, a long fade to the slate at the ends
-            c.set(GUIDE_COLORS[s]).lerp(slate, 1 - 0.55 * Math.pow(1 - f, 1.6))
-            cols[o + e * 3] = c.r
-            cols[o + e * 3 + 1] = c.g
-            cols[o + e * 3 + 2] = c.b
-          }
-        }
-      }
-    }
-    return { segs, cols }
-  }, [])
-  const last = useRef('')
-  const write = (T: number, s: Float32Array): boolean => {
-    const key = frameId(frame) + '|' + (T < B.dial + 0.5 ? T : -1)
-    if (key === last.current) return false
-    last.current = key
-    for (let st = 0; st < GUIDE_STOPS.length; st++) {
-      const g = guideGrow(T, st)
-      const x = frame.x(GUIDE_STOPS[st])
-      for (let h = 0; h < 2; h++) {
-        const end = h === 0 ? COL_TOP : -COL_TOP
-        for (let j = 0; j < GUIDE_SEGS; j++) {
-          const o = ((st * 2 + h) * GUIDE_SEGS + j) * 6
-          if (g <= 0.001) {
-            s.fill(AWAY, o, o + 6)
-            continue
-          }
-          s[o] = x
-          s[o + 1] = (end * g * j) / GUIDE_SEGS
-          s[o + 2] = -0.02
-          s[o + 3] = x
-          s[o + 4] = (end * g * (j + 1)) / GUIDE_SEGS
-          s[o + 5] = -0.02
-        }
-      }
-    }
-    return true
-  }
-  return <PenBatch segments={segs} colors={cols} width={PEN.grid} update={write} opacity={(T) => (T < B.dial + 0.5 ? 1 : 0)} renderOrder={29} />
+function LightBands({ frame, layout }: { frame: ChartFrame; layout: Layout }) {
+  const geo = useMemo(() => makeLightBandsGeometry(), [])
+  const mat = useMemo(() => makeLightBandsMaterial(), [])
+  useEffect(() => () => geo.dispose(), [geo])
+  useEffect(() => () => mat.dispose(), [mat])
+  const mesh = useRef<THREE.Mesh>(null)
+  useSafeFrame(
+    'continuum light bands',
+    (T, _A, _dt, state) => {
+      const m = mesh.current
+      if (!m) return
+      const out = columnsOut(T)
+      const hero = heroOut(T)
+      m.visible = out > 0.002 || hero > 0.002
+      if (!m.visible) return
+      const u = mat.uniforms
+      // the camera's scale at z = 0 (front-on through C3) and the focus rect's edges in world y
+      const cam = state.camera
+      _pa.set(0, 0, 0).project(cam)
+      _pb.set(0, 1, 0).project(cam)
+      const sy0 = ((1 - _pa.y) / 2) * focusRect.H
+      const ppu = (Math.abs(_pa.y - _pb.y) / 2) * focusRect.H
+      if (ppu < 1e-3) return
+      const phone = layout === 'P'
+      const halfPx = phone ? 11 : 13
+      u.uPPU.value = ppu
+      u.uTop.value = (sy0 - focusRect.y) / ppu
+      u.uBot.value = (sy0 - (focusRect.y + focusRect.h)) / ppu
+      u.uHalfPx.value = halfPx
+      u.uHalfW.value = halfPx / ppu
+      ;(u.uColX.value as THREE.Vector4).set(frame.x(COLUMN_U[0]), frame.x(COLUMN_U[1]), frame.x(COLUMN_U[2]), frame.x(COLUMN_U[3]))
+      ;(u.uGrow.value as THREE.Vector4).set(guideGrow(T, 0), guideGrow(T, 1), guideGrow(T, 2), guideGrow(T, 3))
+      // the fit column carries no header: a dim tick guide beside the three stations
+      ;(u.uAmp.value as THREE.Vector4).set(out, out, 0.3 * out, out)
+      u.uCore.value = columnCore(T)
+      // the bright plateau spans the drawn rows: the line, the pair, then the table
+      const yb = rowYAt(T, BP)
+      const yf = rowYAt(T, BODY_FAT)
+      const fd = fatDraw(T)
+      let lo = yb + (Math.min(yb, yf) - yb) * fd
+      let hi = yb + (Math.max(yb, yf) - yb) * fd
+      const span = tableSpan(T)
+      lo += (rowY(N - 1) - lo) * span
+      hi += (rowY(0) - hi) * span
+      u.uLo.value = lo
+      u.uHi.value = hi
+      // gaps below the featured rows, where their tick labels sit (the elite tick is two lines on a phone)
+      ;(u.uGapY.value as THREE.Vector2).set(yb, yf)
+      ;(u.uGapS.value as THREE.Vector2).set(bpScale(T), fatScale(T))
+      const tick = phone ? 17 : 16
+      const elite = compactStage() ? 33 : tick
+      u.uGap0.value = 6
+      ;(u.uGap1.value as THREE.Vector4).set(12 + tick, 12 + tick, 12 + tick, 12 + elite)
+      // the hero rows' glow follows their pens
+      const hw = (phone ? 13 : 16) / ppu
+      ;(u.uRowA.value as THREE.Vector4).set(frame.x(0) - 0.5, frame.x(1) + 0.5, yb, hw)
+      ;(u.uRowB.value as THREE.Vector4).set(frame.x(0) - 0.5, frame.x(1) + 0.5, yf, hw)
+      ;(u.uRowU.value as THREE.Vector2).set(frame.x(0), frame.x(1))
+      ;(u.uRowP.value as THREE.Vector2).set(rowDraw(T, BP), rowDraw(T, BODY_FAT))
+      ;(u.uRowAmp.value as THREE.Vector2).set(hero, hero)
+    },
+    { hide: mesh },
+  )
+  return <mesh ref={mesh} geometry={geo} material={mat} renderOrder={28} frustumCulled={false} />
 }
 
 /* ------------------------------- rows --------------------------------- */
@@ -219,10 +252,11 @@ function useRowWriter(f: ChartFrame, i: number) {
   return (T: number, pts: Float32Array): boolean => {
     const k = morphK(T, i)
     const y = rowYAt(T, i)
-    const key = frameId(f) + '|' + k + '|' + y
+    const g = gatherK(T)
+    const key = frameId(f) + '|' + k + '|' + y + '|' + g
     if (key === last.current) return false
     last.current = key
-    rowXf(i, k, f, y, xfA)
+    rowXf(i, k, f, y, xfA, g)
     for (let j = 0; j < ROW_PTS; j++) rowPoint(xfA, j / ROW_SEGS, pts, j * 3)
     return true
   }
@@ -368,20 +402,20 @@ function Ticks({ frame }: { frame: ChartFrame }) {
 }
 
 /**
- * The table's COLUMNS (sick, well, fit, elite): lines that join the same
- * station on neighbouring rows. They first join blood pressure and body fat
- * (C2), run through every row in C3, and, because each connector is built
- * from the SAME interpolated row transform, the morph bends them into rings:
- * the hub ring (sick), the WELL circle, the FIT circle and the rim (the
- * fitness end of every spoke). A short closing arc completes each ring where
- * the fan meets itself. The WELL ring is its own batch: it steps back once
- * the person's outline (then the dashed ghost) marks that level, so the two
+ * The table's COLUMNS (sick, well, fit, elite): thin lines that join the
+ * same station on neighbouring rows. They draw with the table in C3 (the
+ * columns of light carry C0 to C2), and because each connector is built from
+ * the SAME interpolated row transform, the morph bends them into rings: the
+ * hub ring (sick), the WELL circle, the FIT circle and the rim (the fitness
+ * end of every spoke). A short closing arc completes each ring where the fan
+ * meets itself. The WELL ring is its own batch: it steps back once the
+ * person's outline (then the dashed ghost) marks that level, so the two
  * amber contours never double.
  */
 const COL_SUB = 6
 const CLOSE_SUB = 10
-/** C2: the two rows' columns appear once body fat is drawn, one station after another. */
-const pairGate = (T: number, s: number) => at(T, B.fat, 0.42 + 0.05 * s, 0.56 + 0.05 * s)
+/** C3: the pair's connectors draw once the featured scales have left, one station after another. */
+const pairGate = (T: number, s: number) => at(T, B.dial, 0.07 + 0.03 * s, 0.17 + 0.03 * s)
 
 function useColumnBatch(frame: ChartFrame, stations: readonly number[], colors: readonly string[]) {
   const nPair = (N - 1) * COL_SUB
@@ -402,24 +436,28 @@ function useColumnBatch(frame: ChartFrame, stations: readonly number[], colors: 
     return { segs, cols }
   }, [stations, colors, perStation])
   const last = useRef('')
-  const pt = (fi: number, k: number, y: number, u: number, out: Float32Array, o: number) => {
-    rowXf(fi, k, frame, y, xfB)
+  const pt = (fi: number, k: number, y: number, u: number, out: Float32Array, o: number, g = 1) => {
+    rowXf(fi, k, frame, y, xfB, g)
     rowPoint(xfB, u, out, o, 0.008)
   }
   const write = (T: number, s: Float32Array): boolean => {
     const key = frameId(frame) + '|' + ringsKey(T)
     if (key === last.current) return false
     last.current = key
+    const g = gatherK(T)
     for (let si = 0; si < stations.length; si++) {
       const u = stations[si]
       const st = STOPS.indexOf(u as (typeof STOPS)[number])
       const base = si * perStation
       for (let i = 0; i < N - 1; i++) {
         const d = Math.min(rowDraw(T, i), rowDraw(T, i + 1))
-        const gate = i === BP ? pairGate(T, st) : 1
-        const frac = Math.max(0, Math.min(1, (d - u) / 0.06 + (d >= 0.9999 ? 1 : 0))) * gate
+        const gate = i === BP ? pairGate(T, st) : T < B.dial ? 0 : 1
         const ka = morphK(T, i)
         const kb = morphK(T, i + 1)
+        // the sickness column steps back while the rows' ends gather at the hub (it would be a tangle of
+        // short red chords there) and closes again as the hub ring when both spokes have landed
+        const hub = st === 0 ? Math.max(1 - Math.min(1, Math.max(ka, kb) / 0.1), Math.min(1, Math.max(0, (Math.min(ka, kb) - 0.9) / 0.1))) : 1
+        const frac = Math.max(0, Math.min(1, (d - u) / 0.06 + (d >= 0.9999 ? 1 : 0))) * gate * hub
         const ya = rowYAt(T, i)
         const yb = rowYAt(T, i + 1)
         for (let j = 0; j < COL_SUB; j++) {
@@ -430,8 +468,8 @@ function useColumnBatch(frame: ChartFrame, stations: readonly number[], colors: 
             continue
           }
           const f1 = Math.min((j + 1) / COL_SUB, frac)
-          pt(i + f0, ka + (kb - ka) * f0, ya + (yb - ya) * f0, u, s, o)
-          pt(i + f1, ka + (kb - ka) * f1, ya + (yb - ya) * f1, u, s, o + 3)
+          pt(i + f0, ka + (kb - ka) * f0, ya + (yb - ya) * f0, u, s, o, g)
+          pt(i + f1, ka + (kb - ka) * f1, ya + (yb - ya) * f1, u, s, o + 3, g)
         }
       }
       // the closing arc, from the last spoke round to the first
@@ -457,29 +495,29 @@ const RING_STOPS = [0, STOP_FIT, 1] as const
 const RING_COLORS = [PAL.sick, PAL.fit, RIM_COLOR]
 const WELL_STOPS = [STOP_WELL] as const
 const WELL_COLORS = [PAL.well]
+const CLOSE_GLOW = [PAL.sick, PAL.well, PAL.fit, LIGHT]
+const CLOSE_STOPS = [0, STOP_WELL, STOP_FIT, 1] as const
 
 function Columns({ frame }: { frame: ChartFrame }) {
   const rings = useColumnBatch(frame, RING_STOPS, RING_COLORS)
   const well = useColumnBatch(frame, WELL_STOPS, WELL_COLORS)
   // faint while they are guides between rows, full as rings; the rim and the FIT ring rest a little lower than WELL's first landing
-  const dim = (T: number) => (0.42 + 0.58 * at(T, B.dial, 0.6, 0.9)) * Math.max(0.6, spokeRest(T))
-  const vis = (T: number) => (T < B.fat ? 0 : 0.95)
-  const closeGlow = [PAL.sick, PAL.well, PAL.fit, LIGHT]
-  const closeStops = [0, STOP_WELL, STOP_FIT, 1]
+  const dim = (T: number) => (0.42 + 0.58 * at(T, B.dial, MORPH_A, MORPH_B)) * Math.max(0.6, spokeRest(T))
+  const vis = (T: number) => (T < B.dial ? 0 : 0.95)
   return (
     <>
       <PenBatch segments={rings.segs} colors={rings.cols} width={PEN.axis} update={rings.write} dim={dim} opacity={vis} renderOrder={31} />
       <PenBatch segments={well.segs} colors={well.cols} width={PEN.axis} update={well.write} dim={(T) => dim(T) * wellRingRest(T)} opacity={vis} renderOrder={31} />
       {/* the pen tips closing each ring */}
       <Glows
-        count={closeStops.length}
+        count={CLOSE_STOPS.length}
         sizePx={26}
-        colors={closeGlow}
+        colors={CLOSE_GLOW}
         gain={1.4}
         place={(T, s, out) => {
           const cp = ringsClose(T)
           if (cp <= 0 || cp >= 1) return 0
-          rings.pt(N - 1 + cp, 1, 0, closeStops[s], _f3, 0)
+          rings.pt(N - 1 + cp, 1, 0, CLOSE_STOPS[s], _f3, 0)
           out[0] = _f3[0]
           out[1] = _f3[1]
           out[2] = _f3[2] + 0.04
@@ -514,7 +552,8 @@ function Beads({ frame, layout }: { frame: ChartFrame; layout: Layout }) {
       out[2] = _v[2]
       return b.appear(T) * (1 + 0.25 * b.hot(T))
     }
-    const [bi, k] = PRINTS[j - 2]
+    const bi = PRINTS[j - 2][0]
+    const k = PRINTS[j - 2][1]
     const b = BEADS[bi]
     xfAt(T, b.row, frame)
     rowPoint(xfA, b.stations[k], _v, 0, 0.04)
@@ -528,12 +567,11 @@ function Beads({ frame, layout }: { frame: ChartFrame; layout: Layout }) {
       spectrumLinear(BEADS[j].u(T), c)
       return
     }
-    const [bi, k] = PRINTS[j - 2]
-    spectrumLinear(BEADS[bi].stations[k], c).multiplyScalar(0.6)
+    spectrumLinear(BEADS[PRINTS[j - 2][0]].stations[PRINTS[j - 2][1]], c).multiplyScalar(0.6)
   }
   return (
     <>
-      <TintDots site="continuum beads" count={2 + PRINTS.length} radius={S.bead} place={place} tint={tint} emissiveIntensity={0.55} />
+      <TintDots site="continuum beads" count={2 + PRINTS.length} radius={S.bead} place={place} tint={tint} emissiveIntensity={0.55} opacity={(T) => (T < B.dial + 0.12 ? 1 : 0)} />
       <Glows
         count={2}
         sizePx={layout === 'P' ? 44 : 52}
@@ -560,7 +598,7 @@ function StationFlares({ frame }: { frame: ChartFrame }) {
       gain={1.6}
       place={(T, k, out) => {
         xfAt(T, BP, frame)
-        rowPoint(xfA, [0, 0.5, 1][k], _v, 0, 0.04)
+        rowPoint(xfA, STATION_U[k], _v, 0, 0.04)
         out[0] = _v[0]
         out[1] = _v[1]
         out[2] = _v[2]
@@ -574,8 +612,9 @@ function StationFlares({ frame }: { frame: ChartFrame }) {
 
 const COL_WELL = new THREE.Color(STATES[WORD_WELL].css)
 const COL_ATH = new THREE.Color(STATES[WORD_ATHLETE].css)
-/** The claim lands in C4 (the orb lights, the word rises), and the C5 impact accent. */
+/** The claim lands in C4 (the orb lights, the word rises), and the C5 impact accent (as the score crosses into FIT). */
 const claimHot = (T: number) => 0.7 * pulse(T, B.well + 0.86, B.well + 1.0) + impactK(T)
+const storyMode = () => useStoryStore.getState().mode === 'story'
 
 const STORY_PERSON: PersonSrc = {
   pos: personPos,
@@ -592,9 +631,12 @@ const STORY_PERSON: PersonSrc = {
   },
   word: wordVis,
   wordLift,
+  // the C4 tilt, then front-on from C5 (the camera's own window)
+  front: (T) => at(T, B.sup, 0, 0.3, ease.morph),
   ghost: ghostIn,
   ghostPositions: AVERAGE.positions,
-  vis: personOn,
+  // hidden (and idle) while exploring
+  vis: (T) => (storyMode() ? personOn(T) : 0),
   cut: bandOn,
   highlight: () => keySel.i,
 }
@@ -630,8 +672,6 @@ function bandRadius(a: number): number {
   const poly = Math.abs(den) > 1e-6 ? (p0x * ey - p0y * ex) / den : r0
   return (radiusOf(STOP_WELL) + poly) / 2
 }
-const _pa = new THREE.Vector3()
-const _pb = new THREE.Vector3()
 /** Screen distance in px between two world points with the live camera (the claim's gap to clear the rim). */
 function pxBetween(ax: number, ay: number, az: number, bx: number, by: number, bz: number): number {
   const cam = gestureBus.camera
@@ -640,9 +680,57 @@ function pxBetween(ax: number, ay: number, az: number, bx: number, by: number, b
   _pb.set(bx, by, bz).project(cam)
   return Math.hypot(((_pa.x - _pb.x) / 2) * focusRect.W, ((_pa.y - _pb.y) / 2) * focusRect.H)
 }
-/** The FITNESS callout rides the rim between Resting HR and Systolic BP; the WELL and FIT circle names sit between Resting HR and Flexibility. */
-const RIM_ANGLE = 72 * (Math.PI / 180)
+/**
+ * The FITNESS callout rides a quiet stretch of the rim (4 o'clock, between
+ * VO2 max and HDL); the WELL and FIT circle names sit between Resting HR and
+ * Flexibility, on the other side of the dial.
+ */
+const RIM_ANGLE = -36 * (Math.PI / 180)
 const RING_ANGLE = 108 * (Math.PI / 180)
+
+const ALL_DIRS: readonly Dir[] = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW']
+/** For each compass side, every other side: a name may go anywhere but back over its own row. */
+const NOT_INWARD: readonly (readonly Dir[])[] = ALL_DIRS.map((d) => ALL_DIRS.filter((x) => x !== d))
+/** The compass side (index in ALL_DIRS) nearest an angle in radians (math convention, y up). */
+function sideOf(a: number): number {
+  const deg = (((a * 180) / Math.PI) % 360 + 360) % 360
+  // N is 90 degrees; ALL_DIRS runs clockwise from N in 45 degree steps
+  return ((Math.round((90 - deg) / 45) % 8) + 8) % 8
+}
+
+/**
+ * Where a spoke name looks from: back along its row from the tip. The
+ * placer sets a 'radial' label on the side facing away from `center`, so the
+ * name continues its own row: straight right of the fitness end while the
+ * rows are parallel (on its row), then round with the row into its spoke
+ * tip (outward from the dial centre). The side back over the row is never
+ * offered (a name never sits on the fan); if its sides are all taken it
+ * steps aside with a leader instead of blinking out. Cached per T.
+ */
+function nameGeom(rf: ChartFrame, i: number) {
+  const g = { T: NaN, c: [0, 0, 0] as [number, number, number], only: ALL_DIRS }
+  const upd = () => {
+    const T = clock.T
+    if (T === g.T) return
+    g.T = T
+    xfAt(T, i, rf, xfN)
+    rowPoint(xfN, 1, _v, 0)
+    g.c[0] = _v[0] - xfN.c * R
+    g.c[1] = _v[1] - xfN.s * R
+    g.c[2] = _v[2]
+    g.only = NOT_INWARD[sideOf(Math.atan2(xfN.s, xfN.c) + Math.PI)]
+  }
+  return {
+    center: (): V3 => {
+      upd()
+      return g.c
+    },
+    only: (): readonly Dir[] => {
+      upd()
+      return g.only
+    },
+  }
+}
 
 function useStoryLabels(rf: ChartFrame, layout: Layout) {
   // re-render only when one of these decisions flips (not on every focus-rect change)
@@ -657,7 +745,7 @@ function useStoryLabels(rf: ChartFrame, layout: Layout) {
     const out: LabelSpec[] = []
     // C0: the three stations head their columns of light
     ;['SICKNESS', 'WELLNESS', 'FITNESS'].forEach((text, k) => {
-      const u = [0, 0.5, 1][k]
+      const u = STATION_U[k]
       const s = [0, 1, 3][k]
       const only: Dir[] = k === 0 ? ['N', 'NE'] : k === 1 ? ['N'] : ['N', 'NW']
       out.push({
@@ -673,7 +761,7 @@ function useStoryLabels(rf: ChartFrame, layout: Layout) {
         cue: (T) => c0Callout(T, k),
       })
     })
-    // C1 / C2: each featured row's scale, below the line (sick, well, fit, elite); the end ticks keep inside the rect
+    // C1 / C2: each featured row's scale, below the line (sick, well, fit, elite); the columns open a gap for each
     const scale = (row: number, cue: (T: number) => number, tag: string) =>
       STOPS.forEach((u, s) =>
         out.push({
@@ -690,7 +778,7 @@ function useStoryLabels(rf: ChartFrame, layout: Layout) {
       )
     scale(BP, bpScale, 'bp')
     scale(BODY_FAT, fatScale, 'bf')
-    // the bead reads the worked examples as it passes the stations, and leaves each reading behind at 40%
+    // the bead reads the worked examples as it passes the stations, and leaves each reading behind (dimmed on an opaque plate)
     const readings = (b: typeof bpBead, texts: string[], colors: string[], tag: string) =>
       texts.forEach((text, k) => {
         out.push({
@@ -718,7 +806,7 @@ function useStoryLabels(rf: ChartFrame, layout: Layout) {
             gapPx: 26,
             leader: 'always',
             priority: 70,
-            cue: (T) => 0.42 * b.print(T, k),
+            cue: (T) => b.print(T, k),
           })
       })
     readings(bpBead, BP_READINGS, STATION_COLORS, 'bp')
@@ -733,38 +821,47 @@ function useStoryLabels(rf: ChartFrame, layout: Layout) {
     // the featured rows' names head their rows in C1 and C2
     out.push({ id: 'cn-rn-bp', text: shortName(BP), tone: 'name', dot: false, anchor: rowAnchor(rf, BP, 0), prefer: 'NE', only: ['NE', 'SE'], gapPx: 15, priority: 84, cue: bpName })
     out.push({ id: 'cn-rn-bf', text: shortName(BODY_FAT), tone: 'name', dot: false, anchor: rowAnchor(rf, BODY_FAT, 0), prefer: 'NE', only: ['NE', 'SE'], gapPx: 15, priority: 84, cue: fatName })
-    // every row's name rides its FITNESS end: named in the table, carried by the morph to its spoke tip
+    // every row's name rides its FITNESS end: on its row in the table, carried by the morph to its spoke tip.
+    // While the fan closes a name may step aside (with a leader) rather than blink out.
     for (let i = 0; i < N; i++) {
+      const geom = nameGeom(rf, i)
       out.push({
         id: `cn-name-${i}`,
-        text: compact ? shortName2(i) : shortName(i),
+        // a phone on its side starts the table with one-line names (its rows are too close for two); see below
+        text: compact && phone ? shortName2(i) : shortName(i),
         tone: 'name',
         color: PAL.chalk,
         dot: false,
         anchor: rowAnchor(rf, i, 1),
         prefer: 'radial',
-        center: [0, 0, 0],
+        get center() {
+          return geom.center()
+        },
+        get only() {
+          return geom.only()
+        },
         gapPx: compact ? 6 : 9,
+        leader: true,
         required: true,
         priority: 100,
         cue: (T) => nameOn(T, i),
       })
     }
-    // the table reads the rows the caption names: their sick and elite values, and HDL's direction
+    // the table reads the rows the caption names: their sick and elite values, and HDL's direction (on opaque chips)
     for (const row of TABLE_ROWS) {
       out.push({ id: `cn-tv-${row}-0`, text: tickText(row, 0), tone: 'tick', anchor: rowAnchor(rf, row, 0), prefer: 'S', only: ['S', 'SE'], gapPx: 6, priority: 78, cue: tableValues })
       out.push({ id: `cn-tv-${row}-3`, text: tickText(row, 3), tone: 'tick', anchor: rowAnchor(rf, row, 1), prefer: 'SW', only: ['SW', 'S'], gapPx: 6, priority: 78, cue: tableValues })
     }
     out.push({ id: 'cn-higher', text: betterText(HDL), tone: 'name', color: PAL.yellowGreen, dot: false, anchor: rowAnchor(rf, HDL, 0.36), prefer: 'S', only: ['S'], gapPx: 5, priority: 76, cue: tableValues })
-    // the finished dial: SICKNESS names the centre, FITNESS the rim, WELL and FIT their circles
+    // the finished dial: SICKNESS names the centre (through the tilt that shows it is a pit), FITNESS the rim, WELL and FIT their circles
     out.push({ id: 'cn-centre', text: 'SICKNESS', tone: 'callout', color: PAL.sick, anchor: [0, 0, bowl(0)], prefer: 'C', priority: 91, cue: centreCallout })
     out.push({ id: 'cn-rim', text: 'FITNESS', tone: 'callout', color: PAL.fit, anchor: [R * Math.cos(RIM_ANGLE), R * Math.sin(RIM_ANGLE), 0], prefer: 'C', priority: 90, cue: rimCallout })
-    const circ = (id: string, text: string, color: string, p: number) => {
+    const circ = (id: string, text: string, color: string, p: number, cue: (T: number) => number) => {
       const r = radiusOf(p)
-      out.push({ id, text, tone: 'name', color, anchor: [r * Math.cos(RING_ANGLE), r * Math.sin(RING_ANGLE), bowl(r)], prefer: 'C', gapPx: 0, priority: 64, cue: ringNames })
+      out.push({ id, text, tone: 'name', color, anchor: [r * Math.cos(RING_ANGLE), r * Math.sin(RING_ANGLE), bowl(r)], prefer: 'C', gapPx: 0, priority: 64, cue })
     }
-    circ('cn-well', STATES[1].word, PAL.well, STOP_WELL)
-    circ('cn-fit', STATES[2].word, PAL.fit, STOP_FIT)
+    circ('cn-well', STATES[1].word, PAL.well, STOP_WELL, wellName)
+    circ('cn-fit', STATES[2].word, PAL.fit, STOP_FIT, fitName)
     // landscape: each marker's live value beside its dot, outward along its spoke (portrait: the key)
     if (dotValues) {
       for (let i = 0; i < N; i++) {
@@ -819,6 +916,28 @@ function useStoryLabels(rf: ChartFrame, layout: Layout) {
   }, [rf, key, dotValues, phone, compact])
   useLabels(specs)
 
+  // A short landscape stage (a phone on its side) reads the table with one-line names (its rows are
+  // about 21 px apart), and each side name breaks onto two lines as its row leaves the table, so the
+  // dial keeps its width. The text is a function of T, set before the labels place.
+  const lines = useRef<boolean[]>([])
+  useEffect(() => {
+    lines.current = []
+  }, [specs])
+  useSafeFrame(
+    'continuum name lines',
+    (T) => {
+      if (!compact || phone) return
+      for (let i = 0; i < N; i++) {
+        if (!SIDE_SPOKE(i)) continue
+        const two = morphK(T, i) > 0.02
+        if (lines.current[i] === two) continue
+        lines.current[i] = two
+        setLabelText(`cn-name-${i}`, two ? shortName2(i) : shortName(i))
+      }
+    },
+    { priority: -86 },
+  )
+
   // landscape values count with the dots (text from T, set before the labels place)
   const lastTxt = useRef<string[]>([])
   const lastK = useRef(-2)
@@ -840,21 +959,13 @@ function useStoryLabels(rf: ChartFrame, layout: Layout) {
   )
 }
 
-/** Write one obstacle point, return the new count (allocation-free). */
-function put(out: Float32Array, n: number, x: number, y: number, z: number): number {
-  out[n * 3] = x
-  out[n * 3 + 1] = y
-  out[n * 3 + 2] = z
-  return n + 1
-}
-
 /**
  * The rim as an obstacle: three points in each gap between two spokes (the
  * tips stay free for the names, which sit just outside them). The gap where
  * the FITNESS callout rides the rim is left open while it shows.
  */
 const RIM_OBS = N * 3
-const rimAngle = (j: number) => ((90 - 18 - 36 * Math.floor(j / 3) + (j % 3 - 1) * 7) * Math.PI) / 180
+const rimAngle = (j: number) => ((90 - 18 - 36 * Math.floor(j / 3) + ((j % 3) - 1) * 7) * Math.PI) / 180
 const rimFree = (a: number) => Math.abs(Math.atan2(Math.sin(a - RIM_ANGLE), Math.cos(a - RIM_ANGLE))) < 0.3
 
 /** Data marks labels never cover: beads, footprints, the rim, the dots, the outline (sampled along every edge), the orb and the state word. */
@@ -879,7 +990,7 @@ function useStoryObstacles(rf: ChartFrame, layout: Layout) {
             n = put(out, n, _v[0], _v[1], _v[2])
           }
         }
-        if (T >= B.dial + 0.8) {
+        if (T >= B.dial + 0.86) {
           // the rim, so a spoke name never sits across it
           for (let j = 0; j < RIM_OBS; j++) {
             const a = rimAngle(j)
@@ -930,26 +1041,107 @@ function useStoryObstacles(rf: ChartFrame, layout: Layout) {
           }
         }
         if (!chars || lift < 0.05) return null
-        const w = chars * S.word * 0.5
-        const y = S.wordY * lift
-        const z = bowl(0) + (0.6 - bowl(0)) * lift
+        const sw = S.word * wordPlace.scale
+        const w = chars * sw * 0.5
+        const y = wordYAt(S, STORY_PERSON.front(T), lift)
+        const z = wordZAt(lift)
         return [
-          [-w / 2, y - S.word * 0.5, z],
-          [w / 2, y + S.word * 0.5, z],
+          [-w / 2, y - sw * 0.5, z],
+          [w / 2, y + sw * 0.5, z],
         ]
       },
     }),
-    [S.word, S.wordY],
+    [S],
   )
   useWorldObstacle('cont-word', word)
+}
+
+/* ---------------------------- spoke hotspots --------------------------- */
+
+/**
+ * Tapping a spoke (its name at the tip) highlights it (D.6: the key's
+ * "tap a row" moved onto the dial, amendment): a real 44 px button over the
+ * outer end of the spoke and its name, from the moment the key lists the
+ * values. The key itself is a readout.
+ */
+const SPOKE_BOX: Box[] = Array.from({ length: N }, (_, i) => {
+  const a = spokeAngle(i)
+  const c = Math.cos(a)
+  const s = Math.sin(a)
+  const r0 = 0.9 * R
+  const r1 = 1.26 * R
+  const w = 0.55
+  const xs = [r0 * c - w * s, r0 * c + w * s, r1 * c - w * s, r1 * c + w * s]
+  const ys = [r0 * s + w * c, r0 * s - w * c, r1 * s + w * c, r1 * s - w * c]
+  return [
+    [Math.min(...xs), Math.min(...ys), 0],
+    [Math.max(...xs), Math.max(...ys), 0],
+  ]
+})
+
+function SpokeHotspot({ i }: { i: number }) {
+  const spec = useMemo<HotspotSpec>(
+    () => ({
+      box: (T) => (spokesTappable(T) ? SPOKE_BOX[i] : null),
+      onActivate: () => selectSpoke(i),
+      ariaLabel: BIOMARKERS[i].name,
+      modes: 'story',
+    }),
+    [i],
+  )
+  useStageHotspot(`cont-spoke-${i}`, spec)
+  return null
+}
+const SPOKES = Array.from({ length: N }, (_, i) => i)
+
+/* ------------------------- C6: one camera move -------------------------- */
+
+/** The CTA row's height (px): learnt from the first time it appears, 54 until then (a 44 px button row and its margin). */
+const cta = { h: 54 }
+
+/**
+ * On a phone the C6 pose is fitted to the FINISHED frame from its first
+ * frame, including the CTA row the caption card grows when the chapter ends
+ * (layout.ts keyState.cta). The director eases its focus rect toward the
+ * card (k = 1 - exp(-10 dt), cut when held or reduced); this hook eases a
+ * copy of the rect the same way, in the same frame, before the director
+ * reads the pose, and reserves exactly what the eased rect has not yet
+ * given up. So the dial never moves when the CTA row arrives.
+ */
+function useCtaReserve() {
+  const s = useRef({ h: 0, init: false, pre: 0, shown: false })
+  useSafeFrame(
+    'continuum cta reserve',
+    (_T, _A, dtRaw) => {
+      const r = s.current
+      const st = useStoryStore.getState()
+      const snap = !r.init || clock.held || st.reduced
+      const k = snap ? 1 : 1 - Math.exp(-Math.min(0.1, dtRaw) * 10)
+      r.h += (focusRect.h - r.h) * k
+      r.init = true
+      if (st.mode !== 'story' || clock.index !== B.hedge || !keyMode()) {
+        keyState.cta = 0
+        r.shown = false
+        return
+      }
+      const shown = document.querySelector('.st-card .st-cta-row') !== null
+      if (shown && !r.shown && r.pre > 0) {
+        const d = r.pre - focusRect.h
+        if (d > 24 && d < 160) cta.h = d
+      }
+      if (!shown) r.pre = focusRect.h
+      r.shown = shown
+      const hFinal = shown ? focusRect.h : focusRect.h - cta.h
+      keyState.cta = Math.max(0, r.h - hFinal)
+    },
+    { priority: -95 },
+  )
 }
 
 /* ------------------------------- scene --------------------------------- */
 
 /** The athlete polygon's radius on each spoke (for the C6 band in the disc shader). */
 const ATHLETE_R = ATHLETE.positions.map((p) => radiusOf(p))
-/** The depth contours are faint front-on and read once the camera tilts. */
-const isoOf = (T: number) => 0.12 + 0.34 * at(T, B.well, 0.05, 0.32) - 0.12 * at(T, B.sup, 0, 0.3)
 
 function StoryScene({ tier: _tier }: { tier: Tier }) {
   const { layout } = useBeat()
@@ -960,7 +1152,7 @@ function StoryScene({ tier: _tier }: { tier: Tier }) {
   return (
     <>
       <Disc vis={discVis} />
-      <Guides frame={rf} />
+      <LightBands frame={rf} layout={layout} />
       <Rows frame={rf} />
       <Ticks frame={rf} />
       <Columns frame={rf} />
@@ -969,6 +1161,9 @@ function StoryScene({ tier: _tier }: { tier: Tier }) {
       <PitShadow k={pitShade} />
       <SpokeHighlight vis={(T) => at(T, B.dial, 0.95, 1)} />
       <Person src={STORY_PERSON} layout={layout} site="continuum person" />
+      {SPOKES.map((i) => (
+        <SpokeHotspot key={i} i={i} />
+      ))}
     </>
   )
 }
@@ -976,9 +1171,17 @@ function StoryScene({ tier: _tier }: { tier: Tier }) {
 export default function ContinuumScene() {
   const mode = useStoryStore((s) => s.mode)
   const tier = useStoryStore((s) => s.tier)
+  const { layout } = useBeat()
+  useCtaReserve()
   // a highlighted spoke is the viewer's own choice: it never outlives the chapter
   useEffect(() => () => clearSpoke(), [])
-  // Both layers stay mounted (prewarm); the mode only toggles visibility.
+  useEffect(
+    () => () => {
+      keyState.cta = 0
+    },
+    [],
+  )
+  // Both layers stay mounted (prewarm); the mode only toggles visibility. The state words are one set, shared.
   return (
     <>
       <group visible={mode === 'story'}>
@@ -987,6 +1190,7 @@ export default function ContinuumScene() {
       <group visible={mode === 'explore'}>
         <ExploreScene />
       </group>
+      <StateWords story={STORY_PERSON} explore={EX_PERSON} layout={layout} />
     </>
   )
 }

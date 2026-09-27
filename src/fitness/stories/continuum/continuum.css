@@ -4,8 +4,41 @@
    reaches another chapter. The label type scale is the engine's; these only
    (1) break the four side spoke names onto two lines on a phone, (2) take
    the C0 to C2 scale and claims one step up on a phone (the line is the
-   subject there), and (3) put the values beside the dots on a glass chip.
+   subject there), (3) put the values beside the dots on a glass chip, and
+   (4) keep every reading that sits on a column of light on an OPAQUE
+   plate, so no line ever runs through a number: the bead readings, their
+   footprints (dimmed by colour, never by opacity, so the plate stays whole)
+   and the table's values.
    ========================================================================= */
+
+/* the bead's readings and their footprints sit on their columns: an opaque plate */
+.st-lbl[data-label^='cn-bpb-'],
+.st-lbl[data-label^='cn-bfb-'],
+.st-lbl[data-label^='cn-bpp-'],
+.st-lbl[data-label^='cn-bfp-'] {
+  background: rgba(9, 12, 15, 0.97);
+}
+/* a footprint is the reading left behind: text and border step back, the plate does not */
+.st-lbl[data-label^='cn-bpp-'],
+.st-lbl[data-label^='cn-bfp-'] {
+  border-color: color-mix(in srgb, var(--c) 26%, transparent);
+}
+.st-lbl[data-label^='cn-bpp-'] .st-lbl-t,
+.st-lbl[data-label^='cn-bfp-'] .st-lbl-t {
+  color: color-mix(in srgb, var(--c) 52%, #0b0f12);
+}
+/* the table's values and HDL's direction: a slate knockout chip, so the table's columns pass behind them */
+.st-lbl[data-label^='cn-tv-'],
+.st-lbl[data-label='cn-higher'] {
+  background: rgba(9, 12, 15, 0.94);
+  border-radius: 4px;
+  padding: 0 3px;
+  box-shadow: 0 0 0 2px rgba(9, 12, 15, 0.6);
+}
+.st-lbl[data-label^='cn-tv-'] .st-lbl-t {
+  color: var(--st-body);
+  text-shadow: none;
+}
 
 .st-lbl[data-label^='cn-name-'] .st-lbl-t,
 .st-lbl[data-label^='cnx-tip-'] .st-lbl-t {
@@ -100,23 +133,17 @@
   column-gap: 10px;
   margin-top: 1px;
 }
+/* a readout row (the spoke names on the dial are the tap targets) */
 .cont-key-cell {
   position: relative;
   display: flex;
   align-items: center;
   gap: 5px;
   height: 22px;
-  min-height: 0;
   min-width: 0;
-  margin: 0;
   padding: 0 3px 3px;
-  border: 0;
   border-radius: 6px;
-  background: transparent;
-  color: inherit;
-  text-align: left;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
+  transition: background 160ms;
 }
 .cont-key-cell[data-on='1'] {
   background: rgba(238, 243, 246, 0.09);

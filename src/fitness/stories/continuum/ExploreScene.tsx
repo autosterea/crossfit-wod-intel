@@ -9,12 +9,24 @@ import { focusRect, subscribeFocus } from '../../story/camera/focusRect'
 import { PenBatch, PEN } from '../../story/kit/Pen'
 import { setLabelText, useLabels, useWorldObstacle, type WorldObstacle } from '../../story/labels/useLabel'
 import type { LabelSpec, V3 } from '../../story/types'
-import { N, STATES, STOP_FIT, STOP_WELL, betterText, shortName, shortName2, spectrumHex as spectrumHexOf, spectrumLinear, stateWord, stopText, tickText, valueText } from './continuumMath'
+import { N, STATES, STATE_COLORS, STOP_FIT, STOP_WELL, betterText, shortName, shortName2, spectrumHex as spectrumHexOf, spectrumLinear, stateIndex, stopText, tickText, valueText } from './continuumMath'
 import { HUB, R, bowl, compactStage, dialPoint, keyMode, radiusOf, shortStage, spokeAngle } from './layout'
-import { Circles, Disc, Person, PitShadow, SpokeHighlight, sizesFor, type PersonSrc } from './dial'
+import { Circles, Disc, Person, PitShadow, SpokeHighlight, sizesFor, wordPlace, wordYAt, type PersonSrc } from './dial'
 import { live, snapLive, useContExplore } from './exploreStore'
 import { keySel, selectSpoke, spokeVersion, subscribeSpoke } from './keySel'
 import { OUTLINE_T } from './materials'
+import { put } from './kitx'
+
+/**
+ * A pinned chip's colour follows its value (the selected marker's live value
+ * chip): the chip's data colour is its `--c`, written straight to its node
+ * only when the value's text changes, like setLabelText writes the text
+ * (proposed for promotion as setLabelColor, engine_requests).
+ */
+function setLabelColor(id: string, css: string): void {
+  const el = document.querySelector<HTMLElement>('.st-lbl[data-label="' + id + '"]')
+  if (el) el.style.setProperty('--c', css)
+}
 
 /* =========================================================================
    Continuum explore (DESIGN.md D.6 "Explore", C.12). Not driven by T: the
@@ -37,7 +49,9 @@ const exOrb = new THREE.Color(PAL.well)
 const _target = new THREE.Color()
 const exQuiet = { v: 0 }
 
-const EX_PERSON: PersonSrc = {
+const exploring = () => useStoryStore.getState().mode === 'explore'
+
+export const EX_PERSON: PersonSrc = {
   pos: (_T, i) => live.pos[i],
   key: () => live.version,
   mean: () => live.mean,
@@ -50,10 +64,14 @@ const EX_PERSON: PersonSrc = {
   orbColor: (_T, out) => void out.copy(exOrb),
   word: (_T, k) => exWord[k],
   wordLift: () => 1,
-  vis: () => 1,
+  // the explore pose looks from el 12: between the tilted and the front-on word placement
+  front: () => 0.75,
+  // hidden (and idle) during the story: the layer stays mounted for prewarm only
+  vis: () => (exploring() ? 1 : 0),
   highlight: () => keySel.i,
   quiet: () => exQuiet.v,
 }
+const EX_FRONT = 0.75
 
 /** The ten finished spokes on the bowl, in the spectrum (one draw call), plus the WELL, FIT and tip ticks. */
 function StaticDial() {
@@ -208,9 +226,9 @@ export default function ExploreScene() {
   useEffect(() => {
     if (mode !== 'explore') return
     snapLive()
-    const k = STATES.findIndex((s) => s.word === stateWord(live.mean).word)
+    const k = stateIndex(live.mean)
     for (let w = 0; w < STATES.length; w++) exWord[w] = w === k ? 1 : 0
-    exOrb.set(stateWord(live.mean).css)
+    exOrb.copy(STATE_COLORS[k])
     exQuiet.v = keySel.i >= 0 ? 1 : 0
   }, [mode])
 
@@ -233,10 +251,9 @@ export default function ExploreScene() {
         live.mean = sum / N
         live.version++
       }
-      const sw = stateWord(live.mean)
-      const k = STATES.findIndex((s) => s.word === sw.word)
+      const k = stateIndex(live.mean)
       for (let w = 0; w < STATES.length; w++) exWord[w] = reduced ? (w === k ? 1 : 0) : damp(exWord[w], w === k ? 1 : 0, 8, dt)
-      _target.set(sw.css)
+      _target.copy(STATE_COLORS[k])
       if (reduced) exOrb.copy(_target)
       else exOrb.lerp(_target, 1 - Math.exp(-8 * dt))
       const q = keySel.i >= 0 ? 1 : 0
@@ -325,7 +342,10 @@ export default function ExploreScene() {
         if (lastTxt.current[i] !== t) {
           lastTxt.current[i] = t
           setLabelText(`cnx-val-${i}`, t)
-          if (i === keySel.i) setLabelText('cnx-live', t)
+          if (i === keySel.i) {
+            setLabelText('cnx-live', t)
+            setLabelColor('cnx-live', spectrumHexOf(live.pos[i]))
+          }
         }
       }
     },
@@ -339,15 +359,9 @@ export default function ExploreScene() {
       radiusPx: 7,
       points: (_T, out) => {
         let n = 0
-        const put = (x: number, y: number, z: number) => {
-          out[n * 3] = x
-          out[n * 3 + 1] = y
-          out[n * 3 + 2] = z
-          n++
-        }
         for (let i = 0; i < N; i++) {
           dialPoint(i, live.pos[i], _v, 0, 0.06)
-          put(_v[0], _v[1], _v[2])
+          n = put(out, n, _v[0], _v[1], _v[2])
           const j = (i + 1) % N
           const ra = radiusOf(live.pos[i])
           const rb = radiusOf(live.pos[j])
@@ -358,15 +372,15 @@ export default function ExploreScene() {
           for (let e = 0; e < 3; e++) {
             const x = ax + (bx - ax) * OUTLINE_T[e]
             const y = ay + (by - ay) * OUTLINE_T[e]
-            put(x, y, bowl(Math.hypot(x, y)))
+            n = put(out, n, x, y, bowl(Math.hypot(x, y)))
           }
         }
         // the rim between the spokes (the tips stay free for the names)
         for (let j = 0; j < N * 3; j++) {
           const a = ((72 - 36 * Math.floor(j / 3) + ((j % 3) - 1) * 7) * Math.PI) / 180
-          put(R * Math.cos(a), R * Math.sin(a), 0)
+          n = put(out, n, R * Math.cos(a), R * Math.sin(a), 0)
         }
-        put(0, 0, bowl(0) + S.orb)
+        n = put(out, n, 0, 0, bowl(0) + S.orb)
         return n
       },
     }),
@@ -381,14 +395,16 @@ export default function ExploreScene() {
         let chars = 0
         for (let k = 0; k < STATES.length; k++) if (exWord[k] > 0.3) chars = Math.max(chars, STATES[k].word.length)
         if (!chars || exQuiet.v > 0.5) return null
-        const w = chars * S.word * 0.5
+        const sw = S.word * wordPlace.scale
+        const w = chars * sw * 0.5
+        const y = wordYAt(S, EX_FRONT, 1)
         return [
-          [-w / 2, S.wordY - S.word * 0.5, 0.6],
-          [w / 2, S.wordY + S.word * 0.5, 0.6],
+          [-w / 2, y - sw * 0.5, 0.6],
+          [w / 2, y + sw * 0.5, 0.6],
         ]
       },
     }),
-    [S.word, S.wordY],
+    [S],
   )
   useWorldObstacle('cont-ex-word', word)
 
