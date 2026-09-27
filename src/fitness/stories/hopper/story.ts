@@ -1,0 +1,254 @@
+import type { Box, CamPose, Layout, StoryDef } from '../../story/types'
+import HopperScene from './Scene'
+import HopperExplore from './Explore'
+import HopperHud from './Hud'
+import { CHART_PAD, LEGEND_COL, LEGEND_PX, WORLD, boardBox, chartBox, drawBox, drumBox, hopKey, lerpBox, newBox, railsBox, type HopKey, type MBox, type World } from './layout'
+import { compactNow, exCam } from './ExploreScene'
+import { EXPLORE_EL, useHopExplore } from './exploreStore'
+import { focusRect } from '../../story/camera/focusRect'
+
+/* =========================================================================
+   02 THE HOPPER: "The Tally" (DESIGN.md D.3). Seven beats: the hopper, a
+   random draw, six athletes scored relative to each other, the specialists
+   trading the lead while their domains come up, the unknown handing the
+   lead to the generalist (the signature), the rain of 35 more draws, and
+   the proof across 64 other hoppers. Beat copy lives here so a reviewer can
+   check every `source` against fitnessData.ts and the module-file string
+   table (D.3). Titles <= 30 characters, bodies <= 140, no new facts.
+
+   Camera: the board is compared front-on (az 0, el 8, fov 32: L12 holds at
+   el 8); the thread chart is read exactly front-on (H.21). The pinned domain
+   legend owns the top-left corner: the phone poses start under it, the
+   landscape ones (L, and S: a short landscape rect) beside it. Every pose
+   writes into scratch boxes (nothing is allocated per frame).
+   ========================================================================= */
+
+type PadBox = { l: number; r: number; t: number; b: number }
+const V: [number, number, number] = [0, 0, 0]
+const centerOf = (b: Box): [number, number, number] => {
+  V[0] = (b[0][0] + b[1][0]) / 2
+  V[1] = (b[0][1] + b[1][1]) / 2
+  V[2] = (b[0][2] + b[1][2]) / 2
+  return V
+}
+
+/** px reserved for the pinned five-chip domain legend (top-left) over the phone's drum poses */
+const LEGEND_BAND = 132
+/** the compact board's top padding: the P1 rail's name clears the HUD chip */
+const COMPACT_T = 92
+
+/**
+ * A pose per world key: `fit` writes the world's box into one scratch box,
+ * and the padding comes from the key (the engine hands over 'P' or 'L';
+ * a short landscape focus rect is the S world). On a short phone rect (the
+ * caption expanded) the legend steps aside and a board pose glides to the
+ * rails alone, under the HUD chip (compactNow).
+ */
+const pose = (fit: (w: World, key: HopKey, o: MBox) => MBox, pads: Record<HopKey, PadBox>, board = false, el = 8, fov = 32): CamPose => {
+  const box = newBox()
+  const rails = newBox()
+  const pad: PadBox = { l: 0, r: 0, t: 0, b: 0 }
+  const f = (l: Layout) => {
+    const key = hopKey(l)
+    const w = WORLD[key]
+    fit(w, key, box)
+    const c = compactNow()
+    return board && c > 0 ? lerpBox(box, railsBox(w, key, rails), c, box) : box
+  }
+  return {
+    target: (l: Layout) => centerOf(f(l)),
+    az: 0,
+    el,
+    fov,
+    fit: f,
+    // the engine reads the padding at the layout it resolves; the key is the same frame's
+    get padPx() {
+      const p = pads[hopKey(currentLayout())]
+      const c = compactNow()
+      if (c <= 0) return p
+      pad.l = p.l
+      pad.r = p.r
+      pad.b = p.b
+      pad.t = p.t + ((board ? COMPACT_T : 16) - p.t) * c
+      return pad
+    },
+  }
+}
+/** the engine's layout for the pose being resolved (the director resolves at the focus rect's) */
+const currentLayout = (): Layout => focusRect.layout
+
+const DRUM = pose((w, _k, o) => drumBox(w, o), {
+  P: { l: 18, r: 18, t: LEGEND_BAND, b: 16 },
+  L: { l: LEGEND_COL.L, r: 40, t: 28, b: 28 },
+  S: { l: LEGEND_COL.S, r: 16, t: 16, b: 16 },
+})
+// H1: the D.3 centred stack, the drum over its ticket
+const DRAW = pose((w, _k, o) => drawBox(w, o), {
+  P: { l: 12, r: 12, t: LEGEND_BAND, b: 12 },
+  L: { l: LEGEND_COL.L, r: 40, t: 28, b: 28 },
+  S: { l: LEGEND_COL.S, r: 12, t: 12, b: 12 },
+})
+// the board: badges left of the rails; on a phone it starts under the legend
+// (the drum sits beside the ticket in that band, under the HUD chip)
+const BOARD_PADS: Record<HopKey, PadBox> = {
+  P: { l: 30, r: 8, t: LEGEND_PX, b: 10 },
+  L: { l: LEGEND_COL.L, r: 30, t: 28, b: 18 },
+  // S: the ticket's gap over P1 (layout.ts) keeps the P1 rail's name under the HUD chip
+  S: { l: LEGEND_COL.S + 24, r: 8, t: 16, b: 8 },
+}
+const BOARD = pose(boardBox, BOARD_PADS, true)
+// H6: the chart, exactly front-on
+const chartScratch = newBox()
+const CHART: CamPose = {
+  target: (l: Layout) => centerOf(chartBox(WORLD[hopKey(l)], chartScratch)),
+  az: 0,
+  el: 0,
+  fov: 22,
+  fit: (l: Layout) => chartBox(WORLD[hopKey(l)], chartScratch),
+  padPx: CHART_PAD,
+}
+
+/**
+ * Explore: the board, or the thread chart while "Every run" is on, fitted
+ * like the story's H6 (the chart itself plus its label room), re-fitted
+ * every frame. The fit glides from the board to the chart only once the
+ * rails have faded (exCam: from 0.35 of the switch), so the rails are never
+ * seen magnified behind the threads. Switching the view orbits to el 0 (the
+ * chart) or back to the board's el 8 (exploreStore). The fov stays 32 for
+ * both: the chart is flat and seen exactly front-on, so its projection
+ * does not depend on it. With the phone's sheet expanded the board glides
+ * to the rails alone (compactNow).
+ */
+const exA = newBox()
+const exB = newBox()
+const exC = newBox()
+const exOut = newBox()
+const exPad: PadBox = { l: 0, r: 0, t: 0, b: 0 }
+function exploreBox(l: Layout): MBox {
+  const key = hopKey(l)
+  const w = WORLD[key]
+  lerpBox(boardBox(w, key, exA), railsBox(w, key, exB), compactNow(), exOut)
+  return lerpBox(exOut, chartBox(w, exC), exCam(), exOut)
+}
+const EXPLORE: CamPose = {
+  target: (l: Layout) => centerOf(exploreBox(l)),
+  az: 0,
+  get el() {
+    return useHopExplore.getState().view === 'runs' ? 0 : EXPLORE_EL
+  },
+  fov: 32,
+  fit: exploreBox,
+  get padPx() {
+    const b = BOARD_PADS[hopKey(currentLayout())]
+    const c = compactNow()
+    const k = exCam()
+    // compact: the P1 rail's name and total pass under the HUD chip, the only thing left over the rails
+    const t = b.t + (COMPACT_T - b.t) * c
+    exPad.l = b.l + (CHART_PAD.l - b.l) * k
+    exPad.r = b.r + (CHART_PAD.r - b.r) * k
+    exPad.t = t + (CHART_PAD.t - t) * k
+    exPad.b = b.b + (CHART_PAD.b - b.b) * k
+    return exPad
+  },
+}
+
+export const hopperStory: StoryDef = {
+  key: 'hopper',
+  beats: [
+    {
+      id: 'hopper',
+      title: 'The hopper',
+      body: 'Picture a hopper loaded with an infinite number of physical challenges, with no selective mechanism.',
+      source: 'MODULE_COPY.hopper.body s2',
+      build: 4.5,
+      cam: { L: DRUM, P: DRUM },
+    },
+    {
+      id: 'draw',
+      title: 'Drawn at random',
+      body: 'Imagine an infinite hopper of challenges drawn at random, with no say in what you get.',
+      source: 'MODULE_COPY.hopper.keyPoints[0]',
+      build: 4.5,
+      // the ticket: DRAW 1, the domain and the task
+      sceneWords: 6,
+      cam: { L: DRAW, P: DRAW },
+    },
+    {
+      id: 'score',
+      title: 'Relative to others',
+      body: 'Your fitness is your capacity at those tasks relative to others. Every competitor scores; totals accumulate.',
+      source: 'MODULE_COPY.hopper.body s3 + HopperModule.readoutSub',
+      build: 5.0,
+      // six names and totals, and LEAD
+      sceneWords: 9,
+      cam: { L: BOARD, P: BOARD, window: [0, 0.3] },
+    },
+    {
+      id: 'specialists',
+      title: 'Keep drawing',
+      body: 'Keep drawing. A specialist only leads while its own domain keeps coming up.',
+      source: 'HopperModule.leadMsg[2]',
+      build: 5.5,
+      sceneWords: 4,
+      cam: { L: BOARD, P: BOARD },
+    },
+    {
+      // the body is keyPoints[2] with its subject from keyPoints[1] ("Fitness"):
+      // after H3's specialist, a bare "It" would read as the specialist (L13 paraphrase)
+      id: 'unknown',
+      title: 'The unknown',
+      body: 'Fitness demands performing well even at unfamiliar tasks combined in endless ways.',
+      terms: { unfamiliar: 'unknown' },
+      source: 'MODULE_COPY.hopper.keyPoints[1] + MODULE_COPY.hopper.keyPoints[2]',
+      build: 5.5,
+      // the signature (A.3): on an Unknown draw the Generalist rail climbs to P1
+      signature: true,
+      sceneWords: 5,
+      cam: { L: BOARD, P: BOARD },
+      // the accent lands as the Generalist's rail arrives at P1 (timeline H4_SORT)
+      impact: [0.64, 0.76],
+    },
+    {
+      id: 'many',
+      title: 'Across random draws',
+      body: 'Across random draws, the generalist accumulates the most points. This is why CrossFit prizes the generalist.',
+      source: 'HopperModule.leadMsg[1] + MODULE_COPY.hopper.body s4',
+      build: 6.0,
+      // six final totals and the order they finish in
+      sceneWords: 8,
+      cam: { L: BOARD, P: BOARD },
+    },
+    {
+      id: 'every-run',
+      title: 'Again and again',
+      body: 'Each line is its own random hopper. Nature serves unforeseeable challenges, so the training stimulus must stay broad and varied.',
+      source: 'H6 chart legend (the L13 chart-reading note) + MODULE_COPY.hopper.keyPoints[3]',
+      build: 6.0,
+      // the chart's own words: THIS RUN, GENERALIST AHEAD, A SPECIALIST AHEAD, DRAWS
+      sceneWords: 9,
+      // the board holds while the bracket measures the lead, then the camera turns to the chart
+      cam: { L: CHART, P: CHART, window: [0.2, 0.42] },
+    },
+  ],
+  Scene: HopperScene,
+  Explore: HopperExplore,
+  Hud: HopperHud,
+  // D.3 names FogExp2('#070a0e', 0.018); the fitted camera sits 25 to 50
+  // units from this 16-unit world, where 0.018 dims every solid by 20 to 56%
+  // and turns the domain colours muddy. 0.006 keeps the depth cue (known issues).
+  fog: { color: '#070a0e', density: 0.006 },
+  explore: {
+    cam: { L: EXPLORE, P: EXPLORE },
+    limits: { az: [-40, 40], el: [0, 35], zoom: [0.6, 1.6] },
+    initFromBeat() {
+      // explore always opens on the rails, where Draw, x10 and x40 show at
+      // once; the chart is one tap away (Rails | Every run, in the peek)
+      const s = useHopExplore.getState()
+      s.reset()
+      s.setView('rails')
+      s.select(null)
+    },
+  },
+}
+
+export default hopperStory
