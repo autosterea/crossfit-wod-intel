@@ -1,4 +1,4 @@
-import { useMemo, useRef } from 'react'
+import { useMemo, useRef, type ReactNode } from 'react'
 import * as THREE from 'three'
 import { PAL, agingCapacity } from '../../fitnessData'
 import { useSafeFrame } from '../../story/useSafeFrame'
@@ -11,9 +11,9 @@ import { focus } from '../../story/cue'
 import { useStoryStore } from '../../story/store'
 import { useWorldObstacle, type WorldObstacle } from '../../story/labels/useLabel'
 import { AGE_MIN, LIFELONG, ND, sampleGrid } from './healthMath'
-import { AGE_TICK, FLOOR_TEXT_Z, HANDLE_U, POST_CAP, Z0, Z1, Z30, claimSize, xOf, zOfAge, type World } from './layout'
+import { AGE_TICK, FLOOR_TEXT_Z, HANDLE_U, POST_CAP, Z0, Z1, Z30, claimRot, claimSize, xOf, zOfAge, type World } from './layout'
 import { HS } from './state'
-import { B, FLY, SLICE_AGES, ageSliceRun, ageTicks, areaSweep, axesDraw, axesZ, claimIn, curveDraw, frameDraw, fuse, l0Out, postCap, sliceP } from './timeline'
+import { B, FLY, SLICE_AGES, ageSliceRun, ageTicks, areaSweep, axesDraw, axesZ, chartSX, claimIn, curveDraw, frameDraw, fuse, l0Out, sliceP } from './timeline'
 
 /* =========================================================================
    Story-built elements of 06 HEALTH (DESIGN.md D.7):
@@ -56,6 +56,25 @@ const lifeAt = (u: number, age: number) => agingCapacity(u, age, LIFELONG)
 
 /* ------------------------------- L0 chart ------------------------------- */
 
+/**
+ * The L0 chart's x stretch (chartSX): on a portrait stage the age-30 chart
+ * is drawn a little wider than the world, and relaxes to it while the axes
+ * slide forward in L1. A group scale, so every pen and fill under it (and
+ * its pen head) follows without rewriting a buffer.
+ */
+export function ChartStretch({ W, children }: { W: World; children: ReactNode }) {
+  const g = useRef<THREE.Group>(null)
+  useSafeFrame(
+    'health chart stretch',
+    (T) => {
+      const o = g.current
+      if (o) o.scale.x = isExplore() ? 1 : chartSX(T, W.key === 'narrow')
+    },
+    { hide: g },
+  )
+  return <group ref={g}>{children}</group>
+}
+
 /** the capacity post is one segment: a straight stroke needs no subdivision (the pen clips by arc length), and
     a translucent stroke would show its joins as beads */
 const POST_K = 1
@@ -67,7 +86,7 @@ const POST_K = 1
  * head runs down the post and straight on along the baseline. In L1 both
  * slide forward to the front edge (age 20): the post becomes the capacity
  * axis of the solid, standing on its front-left corner, and the baseline its
- * front edge. The post spans the data shown (postCap).
+ * front edge.
  */
 export function Axes({ W }: { W: World }) {
   const postLen = POST_CAP * W.YS
@@ -96,7 +115,7 @@ export function Axes({ W }: { W: World }) {
   const lastP = useRef({ buf: null as Float32Array | null, z: NaN, h: NaN })
   const updatePost = (T: number, s: Float32Array): boolean => {
     const z = zNow(T)
-    const h = (isExplore() ? POST_CAP : postCap(T)) * W.YS
+    const h = POST_CAP * W.YS
     const l = lastP.current
     if (z === l.z && h === l.h && s === l.buf) return false
     l.z = z
@@ -303,23 +322,33 @@ export function Slices({ W }: { W: World }) {
 
 /* ------------------------------- L2 claim ------------------------------- */
 
-/** SDF "VOLUME = HEALTH" laid on the floor in front (Anton, chalk 22%); a label obstacle while up. */
+/**
+ * SDF "VOLUME = HEALTH" laid on the floor in front (Anton, chalk 22%),
+ * turned about y by the L2 camera's azimuth so it lies square to the viewer
+ * (at the pose's angle it read as a skewed drop shadow); a label obstacle
+ * while up.
+ */
 export function FloorClaim({ W }: { W: World }) {
   const size = claimSize(W)
   const z = Z0 + FLOOR_TEXT_Z
+  const r = claimRot(W)
   const on = (T: number) => (isExplore() ? 0 : claimIn(T))
   // two rows of points along the word (not its screen box: seen obliquely the word runs on a
   // diagonal, and its bounding rect would cover the duration labels under the front edge)
-  const obstacle = useMemo<WorldObstacle>(
-    () => ({
+  const obstacle = useMemo<WorldObstacle>(() => {
+    const c = Math.cos(r)
+    const s = Math.sin(r)
+    return {
       points: (T: number, o: Float32Array): number => {
         if (on(T) < 0.05) return 0
         let n = 0
-        for (const dz of [-0.28 * size, 0.28 * size]) {
+        for (let row = 0; row < 2; row++) {
+          const dz = (row ? 0.28 : -0.28) * size
           for (let i = 0; i < 16; i++) {
-            o[n * 3] = -W.XW * 0.9 + (1.8 * W.XW * i) / 15
+            const x = -W.XW * 0.9 + (1.8 * W.XW * i) / 15
+            o[n * 3] = x * c + dz * s
             o[n * 3 + 1] = 0.02
-            o[n * 3 + 2] = z + dz
+            o[n * 3 + 2] = z - x * s + dz * c
             n++
           }
         }
@@ -327,13 +356,14 @@ export function FloorClaim({ W }: { W: World }) {
       },
       maxPoints: 32,
       radiusPx: 9,
-    }),
-    [W, size, z],
-  )
+    }
+  }, [W, size, z, r])
   useWorldObstacle('health-claim', obstacle)
   return (
-    <group position={[0, 0.02, z]} rotation={[-Math.PI / 2, 0, 0]}>
-      <SdfText font="anton" text="VOLUME = HEALTH" size={size} color={PAL.chalk} opacity={(T) => 0.24 * on(T)} letterSpacing={0.03} renderOrder={44} />
+    <group position={[0, 0.02, z]} rotation={[0, r, 0]}>
+      <group rotation={[-Math.PI / 2, 0, 0]}>
+        <SdfText font="anton" text="VOLUME = HEALTH" size={size} color={PAL.chalk} opacity={(T) => 0.24 * on(T)} letterSpacing={0.03} renderOrder={44} />
+      </group>
     </group>
   )
 }
@@ -429,12 +459,36 @@ const SLICE_FILL = [PAL.well]
 /**
  * The amber age slice: the fitness curve at one age as a pen on the
  * landscape, plus its cross-section down to the floor (inside the solid:
- * seen through the lit walls, and when explore orbits low). In explore a
- * lit amber knob on it marks the drag handle.
+ * seen through the lit walls, and when explore orbits low). Its right end
+ * stands on the 1 hr wall down to the floor and marks the age axis with an
+ * amber tick, so the slice reads as a slice of the solid (and names its age
+ * on the axis) even at 85, where it is the landscape's back edge. In
+ * explore a lit amber knob on it marks the drag handle.
  */
 export function AgeSlice({ W }: { W: World }) {
   const group = useRef<THREE.Group>(null)
   const line = useMemo(() => new Float32Array(ND * 3), [])
+  const marks = useMemo(() => new Float32Array(2 * 6), [])
+  const lastM = useRef({ buf: null as Float32Array | null, w: -1, ver: -1, a: NaN })
+  const updateMarks = (_T: number, s: Float32Array): boolean => {
+    const l = lastM.current
+    if (l.buf === s && l.w === W.id && l.ver === HS.gridVer && l.a === HS.sliceAge) return false
+    l.buf = s
+    l.w = W.id
+    l.ver = HS.gridVer
+    l.a = HS.sliceAge
+    // the right end, down the 1 hr wall to the floor
+    s[0] = s[3] = W.XW
+    s[1] = surfY(1, HS.sliceAge, W.YS) + 0.05
+    s[4] = 0
+    s[2] = s[5] = 0
+    // the tick on the age axis
+    s[6] = W.XW
+    s[7] = s[10] = 0.01
+    s[9] = W.XW + AGE_TICK + 0.12
+    s[8] = s[11] = 0
+    return true
+  }
   const lastL = useRef({ w: -1, ver: -1, a: NaN })
   const updateLine = (_T: number, p: Float32Array): boolean => {
     const l = lastL.current
@@ -494,6 +548,7 @@ export function AgeSlice({ W }: { W: World }) {
           renderOrder={24}
         />
         <Pen points={line} update={updateLine} color={PAL.well} width={PEN.data + 0.5} opacity={() => HS.sliceOp} gain={(T) => (isExplore() ? 1.6 : 1.4 + 0.9 * ageSliceRun(T))} renderOrder={46} />
+        <PenBatch segments={marks} update={updateMarks} color={PAL.well} width={PEN.axis + 0.5} opacity={() => HS.sliceOp} gain={() => 1.3} renderOrder={46} />
       </group>
       <Nodes
         count={1}

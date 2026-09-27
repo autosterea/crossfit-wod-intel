@@ -1,5 +1,5 @@
 import { useSyncExternalStore } from 'react'
-import { INDEPENDENCE_LINE } from '../../fitnessData'
+import { INDEPENDENCE_LINE, PAL } from '../../fitnessData'
 import { map } from '../../lessonMath'
 import { focusRect, subscribeFocus } from '../../story/camera/focusRect'
 import type { Box } from '../../story/types'
@@ -48,8 +48,14 @@ export function useWorld(): World {
 /** age 20 (front) and age 85 (back) */
 export const Z0 = 9
 export const Z1 = -9
-/** how far the independence plane reaches past the footprint at the sides and the back */
+/** how far the independence plane reaches past the footprint at the left side and the back */
 export const PLANE_M = 0.5
+/**
+ * ...and at the right side (+x): a hair only. The age ticks and their
+ * labels run along the right floor edge, and a wider overhang ran its red
+ * edge through the tick column and under AGE at every phone width.
+ */
+export const PLANE_MR = 0.04
 /** its front edge lies just in front of the volume's front face */
 export const PLANE_FRONT = 0.03
 /**
@@ -58,12 +64,10 @@ export const PLANE_FRONT = 0.03
  * from the front-RIGHT (the side the landscape faces: it falls from the power
  * ridge toward long durations), so the post stands against the slate and
  * CAPACITY sits over it, while the age ticks run up the right floor edge.
- * It reaches capacity 0.95 over the lifelong landscapes; over the lifted
- * "Starts at 50" landscape (L5, peak 0.38) the axis spans the data shown,
- * 0.52, so the frame holds the landscape rather than an empty axis.
+ * It reaches capacity 0.95 in every beat, so the axis never shortens while
+ * the data on it grows (L5).
  */
 export const POST_CAP = 0.95
-export const POST_CAP_LOW = 0.52
 /** length of the age tick marks, outward from the right floor edge */
 export const AGE_TICK = 0.42
 /** top of the fitted slice box in L0 */
@@ -74,6 +78,10 @@ export const zOfAge = (age: number) => map(age, AGE_MIN, AGE_MAX, Z0, Z1)
 export const ageOfZ = (z: number) => map(z, Z0, Z1, AGE_MIN, AGE_MAX)
 export const xOf = (u: number, XW: number) => -XW + 2 * XW * u
 export const uOfX = (x: number, XW: number) => (x + XW) / (2 * XW)
+
+/** "power ridge" in the L4 caption and the pen that rides it (a caption term colour, B.11) */
+export const RIDGE_TERM = 'both' as const
+export const RIDGE_COLOR = PAL[RIDGE_TERM]
 
 /** where the explore drag handle (and its knob) sits along the amber slice (duration u) */
 export const HANDLE_U = 0.3
@@ -94,3 +102,11 @@ export const sliceBox = (): Box => {
 export const FLOOR_TEXT_Z = 4.3
 /** The claim's world size (Anton cap height): it spans 92% of the duration axis. */
 export const claimSize = (W: World) => Math.min(1.9, (2 * W.XW * 0.92) / 7.2)
+/** L2's camera azimuth per world (the portrait pose on the narrow world, the landscape one on the wide) */
+export const CLAIM_AZ = { narrow: 18, wide: 34 } as const
+/**
+ * The claim turns about y by that azimuth, so it lies square to the viewer
+ * (it read as a skewed drop shadow at the pose's angle). Rotating (x, z)
+ * about the claim's centre by this angle maps the word's baseline direction.
+ */
+export const claimRot = (W: World) => (CLAIM_AZ[W.key] * Math.PI) / 180

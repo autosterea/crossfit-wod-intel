@@ -6,8 +6,8 @@ import { HS, useHealthState } from './state'
 import { pickAge } from './pick'
 import { useHealthExplore } from './exploreStore'
 import { useHealthExploreLabels, useHealthLabels } from './labels'
-import { BelowLine, Contour, FloorGlow, GhostOutline, IndependencePlane, IsoGhost, Sheet, SolidOutline, Surface, Walls } from './landscape'
-import { AgeSlice, AgeThirty, Axes, FloorClaim, FloorFrame, Scanner, Slices } from './elements'
+import { BeforeSurface, BelowLine, FloorGlow, GhostOutline, IndependencePlane, IsoGhost, ReclaimWalls, RidgePen, Sheet, Skirt, SolidOutline, Surface, Walls } from './landscape'
+import { AgeSlice, AgeThirty, Axes, ChartStretch, FloorClaim, FloorFrame, Scanner, Slices } from './elements'
 
 /* =========================================================================
    06 HEALTH, "Stack every age" (DESIGN.md D.7). Seven beats, every property
@@ -21,11 +21,13 @@ import { AgeSlice, AgeThirty, Axes, FloorClaim, FloorFrame, Scanner, Slices } fr
                   moment); the HUD counts the running integral;
      L3 line      the independence plane rises into place, its crisp edge;
      L4 sink      stop training: the landscape sinks toward the line, the
-                  power ridge first, under the dashed box of what was lost;
-                  a crisp red contour outlines the part under the line;
+                  power ridge first (a hot pen rides it), under the dashed
+                  box of what was lost;
      L5 any-age   the scanner enters at the front, runs to 45, then sweeps
                   to 85, and the landscape lifts behind it like a wave (the
-                  signature beat); only the curtain changes the surface;
+                  signature beat); only the curtain changes the surface.
+                  The Sedentary outline stays as an x-ray under it, and the
+                  capacity reclaimed between the two is light;
      L6 hold      back to the lifelong landscape over the dashed Sedentary
                   outline, the amber age slice riding from 20 to 85.
    One scene serves story and explore: state.ts writes the chapter state
@@ -62,19 +64,24 @@ export default function HealthScene() {
   return (
     <>
       <FloorGlow W={W} />
-      <Axes W={W} />
+      <ChartStretch W={W}>
+        <Axes W={W} />
+        <AgeThirty W={W} />
+      </ChartStretch>
       <FloorFrame W={W} />
-      <AgeThirty W={W} />
       <Slices W={W} />
+      <Skirt W={W} />
+      <BeforeSurface W={W} />
       <Walls W={W} />
       <BelowLine W={W} />
+      <ReclaimWalls W={W} />
       <Sheet W={W} />
       <Surface W={W} />
       <IsoGhost W={W} />
       <GhostOutline W={W} />
       <SolidOutline W={W} />
       <IndependencePlane W={W} />
-      <Contour W={W} />
+      <RidgePen W={W} />
       <Scanner W={W} />
       <AgeSlice W={W} />
       <FloorClaim W={W} />

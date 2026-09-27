@@ -27,9 +27,16 @@ import {
   lostOutline,
   beforeOutline,
   planeFrame,
+  planeFill,
   OUTLINE_SWITCH,
   curtainOn,
-  contourOn,
+  hatchK,
+  reclaimWalls,
+  ridgePen,
+  xrayOn,
+  fuseWalls,
+  glassK,
+  GLASS_OP,
   meanAt,
   MEANS,
   solidEdge,
@@ -38,7 +45,7 @@ import {
   writeBlend,
   type Blend,
 } from './timeline'
-import { focus } from '../../story/cue'
+import { at, focus } from '../../story/cue'
 
 /* =========================================================================
    The chapter's per-frame state (one writer, many readers). In story mode
@@ -62,11 +69,17 @@ export const HS = {
   ghostOp: 0,
   /** the dashed chalk outline of the ghost (comparisons, L8) */
   outlineOp: 0,
+  /** its hidden edges show through the solid at this share (L5 on, explore) */
+  xray: 0,
   /** the solid's crisp chalk edges */
   edgeOp: 0,
   /** solid surface opacity and its focus-pull dim */
   surfOp: 0,
   surfDim: 1,
+  /** L5: the lid is glass (0..1); the Sedentary before lies under it as a dim solid */
+  glass: 0,
+  /** the isoline mesh shows the displayed grid (the glass lid, L5) instead of the ghost (the L2 pour) */
+  isoOfGrid: false,
   /** pour level in capacity units (walls and sheet) */
   level: -0.05,
   wallsOp: 0,
@@ -79,17 +92,25 @@ export const HS = {
   /** the independence plane's height in capacity units */
   planeCap: 0,
   planeOp: 0,
+  /** the plane's red fill alpha */
+  planeFill: 0.065,
   /** the plane's frame (edges) steps back after L3 */
   planeFrame: 1,
   edge: 0,
   /** capacity under which the surface takes the sick tint (-1e9 = none) */
   indepCap: -1e9,
+  /** the hatch under the line (x the material's base alpha) */
+  hatch: 1,
+  /** the walls' reclaimed band (L5) */
+  reclaimWalls: 0,
+  /** the hot pen on the power ridge while it leads the sink (L4) */
+  ridge: 0,
+  /** the faint skirt that makes the fused landscape a solid (end of L1) */
+  skirt: 0,
   scanOp: 0,
   /** the curtain of light above the scanner line (it fades once the sweep lands) */
   curtainOp: 0,
   scanAge: 17,
-  /** the red pen where the landscape meets the independence plane */
-  contourOp: 0,
   /** volume shown relative to the Lifelong trainer's (the floor glow under the solid) */
   volK: 1,
   sliceOp: 0,
@@ -135,35 +156,45 @@ function storyState(T: number): void {
   const gi = ghostIn(T)
   // the isoline ghost is the pour's see-through surface (L2) only: the Sedentary ghost of L6
   // has a single isoline (its peak is 0.18), so the dashed outline carries that comparison
-  HS.ghostOp = T < B.line ? pg : 0
-  HS.outlineOp = T < OUTLINE_SWITCH ? lostOutline(T) : beforeOutline(T) * (T >= B.hold ? 0.55 + 0.45 * gi : 1)
+  const gk = T >= B.anyAge ? glassK(T) : 0
+  HS.glass = gk
+  // the isolines are the pour's see-through surface (L2), and the glass lid's (L5)
+  HS.ghostOp = T < B.line ? pg : 0.9 * gk
+  HS.isoOfGrid = T >= B.anyAge
+  HS.outlineOp = T < OUTLINE_SWITCH ? lostOutline(T) : beforeOutline(T) * (T >= B.hold ? 0.6 + 0.4 * gi : 1)
+  HS.xray = xrayOn(T)
   HS.planeFrame = planeFrame(T)
-  HS.surfOp = T < B.volume ? fuse(T) : 1 - pg
+  HS.surfOp = T < B.volume ? fuse(T) : (1 - pg) * (1 - (1 - GLASS_OP) * gk)
   HS.edgeOp = solidEdge(T) * (T >= B.line && T < B.sink ? focus(T, B.volume) : 1)
   // the landscape dims while the independence plane builds (L3), and only then:
   // from L4 on the landscape itself is the new data
   HS.surfDim = T >= B.line && T < B.sink ? 0.6 + (0.4 * (focus(T, B.volume) - 0.35)) / 0.65 : 1
   HS.level = T < B.line ? pourLevel(T) : 1.2
-  HS.wallsOp = wallsOn(T) * (T >= B.line && T < B.sink ? focus(T, B.volume) : 1)
+  // the base walls step back under the reclaimed band (L5), so the light the lift added stands out
+  HS.wallsOp = wallsOn(T) * (T >= B.line && T < B.sink ? focus(T, B.volume) : 1) * (1 - 0.5 * reclaimWalls(T))
   HS.wallRim = wallRim(T)
   if (T < B.line) {
     HS.sheetMode = 0
     HS.sheetOp = sheetOn(T)
   } else {
     HS.sheetMode = 1
-    HS.sheetOp = T >= B.anyAge ? scanOn(T) : 0
+    HS.sheetOp = T >= B.anyAge ? Math.max(scanOn(T), reclaimWalls(T)) : 0
     HS.waveS = scanAge(T)
   }
   HS.planeCap = planeCap(T)
   HS.planeOp = planeOn(T)
+  HS.planeFill = planeFill(T)
   HS.edge = edgeDraw(T)
   HS.indepCap = T >= B.line ? HS.planeCap - 0.0003 : -1e9
+  HS.hatch = hatchK(T)
+  HS.reclaimWalls = reclaimWalls(T)
+  HS.ridge = ridgePen(T)
+  HS.skirt = T < B.volume ? fuseWalls(T) : 1 - at(T, B.volume, 0.55, 0.75)
   HS.scanOp = scanOn(T)
   HS.curtainOp = curtainOn(T)
   HS.scanAge = scanAge(T)
   HS.sliceOp = ageSliceOn(T)
   HS.sliceAge = ageSliceAge(T)
-  HS.contourOp = contourOn(T)
   HS.volK = T < B.volume ? 1 : meanAt(T) / MEANS[GL]
 }
 
@@ -193,8 +224,11 @@ function exploreState(dtRaw: number): void {
     HS.ghostVer++
   }
   const cmp = st.compare && st.profile !== LIFELONG.name ? 1 : 0
+  HS.glass = damp(HS.glass, 0, 8, dt)
+  HS.isoOfGrid = false
   HS.ghostOp = damp(HS.ghostOp, 0.85 * cmp, 8, dt)
   HS.outlineOp = damp(HS.outlineOp, cmp, 8, dt)
+  HS.xray = damp(HS.xray, cmp, 8, dt)
   HS.surfOp = damp(HS.surfOp, 1, 8, dt)
   HS.edgeOp = damp(HS.edgeOp, 1, 8, dt)
   HS.surfDim = 1
@@ -204,14 +238,18 @@ function exploreState(dtRaw: number): void {
   HS.sheetOp = damp(HS.sheetOp, 0, 10, dt)
   HS.planeCap = damp(HS.planeCap, INDEPENDENCE_LINE, 8, dt)
   HS.planeOp = damp(HS.planeOp, st.showLine ? 1 : 0, 8, dt)
+  HS.planeFill = damp(HS.planeFill, 0.035, 8, dt)
   HS.planeFrame = 0.6
   HS.edge = 1
   HS.indepCap = st.showLine ? INDEPENDENCE_LINE - 0.0003 : -1e9
+  HS.hatch = damp(HS.hatch, 1, 8, dt)
+  HS.reclaimWalls = damp(HS.reclaimWalls, 0, 8, dt)
+  HS.ridge = damp(HS.ridge, 0, 10, dt)
+  HS.skirt = damp(HS.skirt, 0, 8, dt)
   HS.scanOp = damp(HS.scanOp, 0, 10, dt)
   HS.curtainOp = damp(HS.curtainOp, 0, 10, dt)
   HS.sliceOp = damp(HS.sliceOp, 1, 8, dt)
   HS.sliceAge = damp(HS.sliceAge, st.age, 10, dt)
-  HS.contourOp = damp(HS.contourOp, st.showLine ? 1 : 0, 8, dt)
   HS.volK = HS.score / MEANS[GL]
 }
 

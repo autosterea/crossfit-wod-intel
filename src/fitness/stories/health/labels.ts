@@ -6,17 +6,21 @@ import { clock, onFrame } from '../../story/clock'
 import { setLabelText, useLabels, useWorldObstacle, type WorldObstacle } from '../../story/labels/useLabel'
 import type { LabelSpec, V3 } from '../../story/types'
 import { LIFELONG, SEDENTARY, STARTS_50, fitnessAt, healthScore, sampleGrid } from './healthMath'
-import { AGE_TICK, HANDLE_U, INDEPENDENCE_LINE, POST_CAP, Z0, Z1, Z30, xOf, zOfAge, type World } from './layout'
+import { AGE_TICK, HANDLE_U, INDEPENDENCE_LINE, PLANE_FRONT, PLANE_M, PLANE_MR, POST_CAP, Z0, Z1, Z30, xOf, zOfAge, type World } from './layout'
 import { HS } from './state'
 import {
   B,
+  G,
+  GL,
+  GS,
   ageSliceAge,
   ageTicks,
   age30,
   axesZ,
   axisTicks,
   capAt,
-  postCap,
+  chartSX,
+  lostOutline,
   indep70,
   indep85,
   indep90,
@@ -25,6 +29,7 @@ import {
   sedName,
   volReadouts,
   ageSliceOn,
+  sedTag6,
 } from './timeline'
 
 /* =========================================================================
@@ -69,6 +74,8 @@ export function useHealthLabels(W: World): void {
   const axes = useMemo<LabelSpec[]>(() => {
     const { XW, YS } = W
     const zAxis = (T: number) => (explore() ? Z0 : axesZ(T))
+    // the L0 chart's x stretch on a portrait stage (chartSX), 1 from L1 on
+    const sx = (T: number) => (explore() ? 1 : chartSX(T, W.key === 'narrow'))
     const tickCue = (T: number) => (explore() ? 1 : axisTicks(T) * focus(T, B.slice))
     const ageCue = (T: number) => (explore() ? 1 : ageTicks(T) * focus(T, B.stack))
     const p1s = pt()
@@ -76,15 +83,15 @@ export function useHealthLabels(W: World): void {
     const pDur = pt()
     const pCap = pt()
     const out: LabelSpec[] = [
-      { id: 'h-1s', text: '1 s', tone: 'tick', anchor: (T) => p1s(-XW, 0, zAxis(T)), prefer: 'S', only: ['S', 'SW', 'SE'], gapPx: 6, priority: 82, cue: tickCue },
-      { id: 'h-1hr', text: '1 hr', tone: 'tick', anchor: (T) => p1hr(XW, 0, zAxis(T)), prefer: 'S', only: ['S', 'SE', 'SW'], gapPx: 6, priority: 82, cue: tickCue },
+      { id: 'h-1s', text: '1 s', tone: 'tick', anchor: (T) => p1s(-XW * sx(T), 0, zAxis(T)), prefer: 'S', only: ['S', 'SW', 'SE', 'W'], gapPx: 6, priority: 82, cue: tickCue },
+      { id: 'h-1hr', text: '1 hr', tone: 'tick', anchor: (T) => p1hr(XW * sx(T), 0, zAxis(T)), prefer: 'S', only: ['S', 'SE', 'SW'], gapPx: 6, priority: 82, cue: tickCue },
       { id: 'h-dur', text: 'DURATION', tone: 'tick', anchor: (T) => pDur(0, 0, zAxis(T)), prefer: 'S', only: ['S'], gapPx: 8, priority: 81, cue: tickCue },
       // the capacity axis title over the post (the chart's y axis in L0, the solid's front-left edge from L1)
       {
         id: 'h-cap',
         text: 'CAPACITY',
         tone: 'tick',
-        anchor: (T) => pCap(-XW, (explore() ? POST_CAP : postCap(T)) * YS, zAxis(T)),
+        anchor: (T) => pCap(-XW * sx(T), POST_CAP * YS, zAxis(T)),
         prefer: 'N',
         only: ['N', 'NE', 'NW', 'W'],
         gapPx: 8,
@@ -109,11 +116,14 @@ export function useHealthLabels(W: World): void {
       id: 'h-age',
       text: 'AGE',
       tone: 'tick',
-      // the axis title sits past the far end of the age axis, where it points
-      anchor: [XW + AGE_TICK, 0, Z1 - 0.8],
-      prefer: 'N',
-      only: ['N', 'NE', 'NW', 'E'],
-      gapPx: 6,
+      // the axis title stands in the tick column between 60 and 80, left-aligned with the ticks:
+      // clear of the back-right corner (its post, the plane's corner and the skyline's end, which
+      // struck through it when it was centred over the corner), and the phone has no room east of
+      // the column
+      anchor: [XW + AGE_TICK, 0, zOfAge(70)],
+      prefer: 'E',
+      only: ['E'],
+      gapPx: 5,
       priority: 79,
       cue: ageCue,
     })
@@ -125,6 +135,7 @@ export function useHealthLabels(W: World): void {
     const { XW, YS } = W
     const LINE_Y = INDEPENDENCE_LINE * YS
     const pSed = pt()
+    const pSed6 = pt()
     const pS50 = pt()
     const pFit = pt()
     const out: LabelSpec[] = []
@@ -142,17 +153,19 @@ export function useHealthLabels(W: World): void {
       required: true,
       cue: age30,
     })
-    // L3: the independence line, named on the red line it names
+    // L3: the independence line, named just under the red edge it names, in the zone below the line
+    // (the front wall), where it stays put from L3 to L6 and never lands on the lid
     out.push({
       id: 'h-line',
       text: 'INDEPENDENCE LINE',
       tone: 'callout',
       color: PAL.sick,
-      anchor: [xOf(0.46, XW), LINE_Y, Z0],
-      prefer: 'N',
-      only: ['N', 'NE', 'NW'],
-      gapPx: 26,
-      leader: 'always',
+      anchor: [xOf(0.5, XW), LINE_Y, Z0 + PLANE_FRONT],
+      prefer: 'S',
+      // a short focus rect (the expanded caption) makes the pill as wide as the front; it then hangs to a side
+      only: ['S', 'SE', 'SW'],
+      gapPx: 4,
+      leader: true,
       required: true,
       cue: (T) => (explore() ? 0 : lineCallout(T) * (1 - 0.5 * (1 - focus(T, B.line)))),
     })
@@ -171,15 +184,16 @@ export function useHealthLabels(W: World): void {
         required: true,
         cue: sedName,
       },
+      // each "Independent through X" row carries its profile's dot (Sedentary: chalk, like its name
+      // and its dashed outline; the lifted and lifelong landscapes: yellow-green)
       {
         id: 'h-i70',
         text: `Independent through ${SEDENTARY.independentThrough}`,
         tone: 'legend',
-        color: PAL.sick,
-        dot: false,
+        color: PAL.chalk,
         anchor: [0, 0, 0],
         pin: 'top-left',
-        pinOrder: 0,
+        pinOrder: 1,
         required: true,
         cue: indep70,
       },
@@ -190,8 +204,9 @@ export function useHealthLabels(W: World): void {
         id: 'h-s50',
         text: STARTS_50.name,
         tone: 'name',
-        color: PAL.chalk,
-        anchor: (T) => onLand(pS50, T, 0.24, 66, W, 0.1),
+        color: PAL.yellowGreen,
+        // on the lifted plateau just behind the step, mid-lid: clear of the corners the key and the HUD hold
+        anchor: (T) => onLand(pS50, T, 0.42, 60, W, 0.1),
         prefer: 'N',
         gapPx: 12,
         leader: true,
@@ -204,7 +219,6 @@ export function useHealthLabels(W: World): void {
         text: `Independent through ${STARTS_50.independentThrough}`,
         tone: 'legend',
         color: PAL.yellowGreen,
-        dot: false,
         anchor: [0, 0, 0],
         pin: 'top-left',
         pinOrder: 0,
@@ -230,7 +244,6 @@ export function useHealthLabels(W: World): void {
         text: `Independent through ${LIFELONG.independentThrough}`,
         tone: 'legend',
         color: PAL.yellowGreen,
-        dot: false,
         anchor: [0, 0, 0],
         pin: 'top-left',
         pinOrder: 1,
@@ -248,6 +261,22 @@ export function useHealthLabels(W: World): void {
         required: true,
         cue: volReadouts,
       },
+      // the dashed Sedentary outline under the lifelong solid is named again, so "Sedentary: 12" has a referent
+      {
+        id: 'h-sed6',
+        text: SEDENTARY.name,
+        tone: 'name',
+        color: PAL.chalk,
+        // on the 1 hr wall, just over the dashed edge it names (the front belongs to the axis and the
+        // independence callout)
+        anchor: () => pSed6(XW, sampleGrid(G[GS], 1, 32) * YS + 0.02, zOfAge(32)),
+        prefer: 'NW',
+        only: ['NW', 'W', 'N'],
+        gapPx: 6,
+        leader: true,
+        priority: 70,
+        cue: sedTag6,
+      },
       {
         id: 'h-fit',
         text: fitText(20),
@@ -257,11 +286,16 @@ export function useHealthLabels(W: World): void {
         minChars: 22,
         anchor: (T) => {
           const a = ageSliceAge(T)
-          return pFit(xOf(0.36, XW), capAt(T, 0.36, a) * YS + 0.06, zOfAge(a))
+          return pFit(xOf(0.5, XW), capAt(T, 0.5, a) * YS + 0.06, zOfAge(a))
         },
-        prefer: 'N',
-        only: ['N', 'NE', 'NW'],
-        gapPx: 10,
+        // it hangs under the slice line it names, to the side the line rises toward (above it, the
+        // pill crossed the line where the slice climbs to the power ridge, and at 85 the key and the
+        // HUD fill the space above)
+        // the diagonal pair clears a line that falls to the right: down-left where it fits, else up-right
+        // (slid inside the focus rect on a narrow phone, with its leader); S and SE are fallbacks
+        prefer: 'NE',
+        only: ['NE', 'SW', 'S', 'SE'],
+        gapPx: 12,
         leader: true,
         cue: (T) => (T >= B.hold ? ageSliceOn(T) : 0),
       },
@@ -270,7 +304,10 @@ export function useHealthLabels(W: World): void {
   }, [W])
   useLabels(specs)
 
-  // "Fitness at age N: V" follows the slice: a pure function of T, written only when N changes
+  // "Fitness at age N: V" follows the slice: a pure function of T, written only when N changes. The
+  // writer belongs to THIS registration of the specs: a world change (a rotation across the portrait
+  // threshold) registers them again with their initial text, so the writer restarts with them and
+  // writes the current value on its first frame (it used to keep the old age and never rewrote it).
   useEffect(() => {
     let lastAge = -1
     return onFrame(() => {
@@ -282,10 +319,11 @@ export function useHealthLabels(W: World): void {
       lastAge = a
       setLabelText('h-fit', fitText(a))
     })
-  }, [])
+  }, [specs])
 
   // labels never sit on the landscape's front edge, its power ridge (the left
-  // edge), the capacity post or the red line
+  // edge), the capacity post, the back-right corner (its post, the plane's
+  // corner, the skyline's end) or the lost Lifelong box's posts (L4)
   const marks = useMemo<WorldObstacle>(
     () => ({
       points: (T, o) => {
@@ -293,18 +331,24 @@ export function useHealthLabels(W: World): void {
         let n = 0
         if (T < B.stack && !ex) {
           // L0: only the capacity axis (labels keep off the chart's y axis)
+          const x = -W.XW * chartSX(T, W.key === 'narrow')
           for (let k = 1; k <= 8; k++) {
-            o[n * 3] = -W.XW
+            o[n * 3] = x
             o[n * 3 + 1] = (POST_CAP * W.YS * k) / 8
             o[n * 3 + 2] = Z30
             n++
           }
           return n
         }
+        // the front edge; from L3 not where it dips to the red line (the independence callout hangs
+        // under the line there, on the front wall, and names the line, not the lid)
+        const edgeFloor = ex || T >= B.line ? (INDEPENDENCE_LINE + 0.035) * W.YS : -1
         for (let i = 0; i <= 12; i++) {
           const u = i / 12
+          const y = (ex ? sampleGrid(HS.grid, u, 20) : capAt(T, u, 20)) * W.YS
+          if (y < edgeFloor) continue
           o[n * 3] = xOf(u, W.XW)
-          o[n * 3 + 1] = (ex ? sampleGrid(HS.grid, u, 20) : capAt(T, u, 20)) * W.YS
+          o[n * 3 + 1] = y
           o[n * 3 + 2] = Z0
           n++
         }
@@ -315,7 +359,7 @@ export function useHealthLabels(W: World): void {
           o[n * 3 + 2] = zOfAge(age)
           n++
         }
-        const h = (ex ? POST_CAP : postCap(T)) * W.YS
+        const h = POST_CAP * W.YS
         const z = ex ? Z0 : axesZ(T)
         for (let k = 1; k <= 8; k++) {
           o[n * 3] = -W.XW
@@ -323,9 +367,40 @@ export function useHealthLabels(W: World): void {
           o[n * 3 + 2] = z
           n++
         }
+        // the back-right corner: its post up to the skyline, and the plane's corner
+        if (ex || T >= B.stack + 0.3) {
+          const top = (ex ? sampleGrid(HS.grid, 1, 85) : capAt(T, 1, 85)) * W.YS
+          for (let k = 0; k <= 5; k++) {
+            o[n * 3] = W.XW
+            o[n * 3 + 1] = (top * k) / 5
+            o[n * 3 + 2] = Z1
+            n++
+          }
+          if (ex || T >= B.line) {
+            o[n * 3] = W.XW + PLANE_MR
+            o[n * 3 + 1] = INDEPENDENCE_LINE * W.YS
+            o[n * 3 + 2] = Z1 - PLANE_M
+            n++
+          }
+        }
+        // L4: the lost Lifelong box's corner posts (from its rim down to the sinking surface)
+        if (!ex && lostOutline(T) > 0.3) {
+          for (let c = 0; c < 4; c++) {
+            const u = c === 0 || c === 3 ? 0 : 1
+            const age = c < 2 ? 20 : 85
+            const top = sampleGrid(G[GL], u, age) * W.YS
+            const bot = capAt(T, u, age) * W.YS
+            for (let k = 0; k <= 3; k++) {
+              o[n * 3] = xOf(u, W.XW)
+              o[n * 3 + 1] = bot + ((top - bot) * k) / 3
+              o[n * 3 + 2] = zOfAge(age)
+              n++
+            }
+          }
+        }
         return n
       },
-      maxPoints: 31,
+      maxPoints: 64,
       radiusPx: 5,
       mode: 'both',
     }),
@@ -361,16 +436,17 @@ export function useHealthExploreLabels(W: World): void {
         text: 'INDEPENDENCE LINE',
         tone: 'callout',
         color: PAL.sick,
-        anchor: [xOf(0.5, XW), LINE_Y, Z0],
-        prefer: 'N',
-        only: ['N', 'NE', 'NW'],
-        gapPx: 10,
-        leader: 'always',
+        // as in the story: just under the red edge it names, on the front wall
+        anchor: [xOf(0.4, XW), LINE_Y, Z0 + PLANE_FRONT],
+        prefer: 'S',
+        only: ['S', 'SW', 'SE'],
+        gapPx: 4,
         cue: () => (HS.planeOp > 0.5 ? HS.planeOp : 0),
       },
     ]
   }, [W])
   useLabels(specs, { mode: 'explore' })
+  // restarts with each registration of the specs (see the story writer above)
   useEffect(() => {
     let lastAge = -1
     return onFrame(() => {
@@ -380,6 +456,6 @@ export function useHealthExploreLabels(W: World): void {
       lastAge = a
       setLabelText('hx-age', `AGE ${a}`)
     })
-  }, [])
+  }, [specs])
 }
 

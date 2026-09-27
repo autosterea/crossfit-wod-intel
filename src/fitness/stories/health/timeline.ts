@@ -14,7 +14,7 @@ import {
   sampleGrid,
   scoreOfMean,
 } from './healthMath'
-import { INDEPENDENCE_LINE, POST_CAP, POST_CAP_LOW, Z0, Z30 } from './layout'
+import { INDEPENDENCE_LINE, Z0, Z30 } from './layout'
 
 /* =========================================================================
    06 HEALTH timeline (DESIGN.md D.7): every cue of the seven beats as a pure
@@ -45,13 +45,18 @@ export const age30 = (T: number) => at(T, B.slice, 0.84, 0.96) * (1 - at(T, B.st
 /** the L0 axes slide forward to the front edge (age 20) as the camera rises */
 export const axesSlide = (T: number) => at(T, B.stack, 0, 0.32, ease.morph)
 export const axesZ = (T: number) => lerp(Z30, Z0, axesSlide(T))
+/**
+ * L0 on a portrait stage: the chart is height-limited there, so it is drawn
+ * this much wider than the world (the duration axis carries no numbers; its
+ * width is a presentation choice) and relaxes to the world width while the
+ * axes slide forward in L1, before the age-30 slice takes over from it.
+ */
+export const L0_SX = 1.17
+export const chartSX = (T: number, narrow: boolean) => (narrow ? lerp(L0_SX, 1, axesSlide(T)) : 1)
 /** the floor frame: the age axis first (front-right to back-right), then back and left */
 export const frameDraw = (T: number) => at(T, B.stack, 0.1, 0.42, ease.draw)
 /** age ticks 20, 40, 60, 80 and AGE */
 export const ageTicks = (T: number) => at(T, B.stack, 0.26, 0.42)
-/** the capacity axis spans the data shown: 0.95 over the lifelong landscapes, 0.52 over the lifted one (L5) */
-export const postCap = (T: number) =>
-  POST_CAP + (POST_CAP_LOW - POST_CAP) * (at(T, B.anyAge, 0, 0.18, ease.morph) - at(T, B.hold, 0, 0.35, ease.morph))
 
 /** The 14 slices at ages 20, 25, ... 85. */
 export const SLICE_AGES = Array.from({ length: 14 }, (_, k) => 20 + 5 * k)
@@ -78,6 +83,8 @@ const stag = (T: number, j: number) => {
 export const l0Out = (T: number) => 1 - at(T, B.stack, 0.24, 0.42)
 /** the fuse: slices out, surface in */
 export const fuse = (T: number) => at(T, B.stack, 0.76, 0.95)
+/** the solid's walls glow faintly from the fuse on, so the solid the caption names exists at the end of L1 (L2 fills and lights it) */
+export const fuseWalls = (T: number) => at(T, B.stack, 0.8, 0.98)
 /** the solid's edges land as the slices fuse */
 export const solidEdge = (T: number) => (T < B.stack ? 0 : at(T, B.stack, 0.8, 0.98))
 
@@ -106,14 +113,21 @@ export const planeOn = (T: number) => at(T, B.line, 0.1, 0.22)
 /** the crisp red edge (L10), hot while it draws */
 export const edgeDraw = (T: number) => at(T, B.line, 0.55, 0.85, ease.draw)
 export const lineCallout = (T: number) => at(T, B.line, 0.84, 0.96)
-/** the red pen where the landscape meets the plane lands once the plane is in place */
-export const contourOn = (T: number) => at(T, B.line, 0.6, 0.8)
+/**
+ * The plane's red fill: 6.5% while it is the new idea (L3), then 2.5% (L4
+ * on), where a sunken landscape lies under it and the fill, the below-line
+ * tint and the hatch stacked three reds over the lid and hid its shape. The
+ * crisp edges keep the plane.
+ */
+export const planeFill = (T: number) => 0.065 - 0.04 * at(T, B.sink, 0, 0.2)
 
 /* ---------------------------- L4 stop training ---------------------------- */
 
 /** 0..1 across the sink; the power ridge (short durations) leads (B.11 stagger along the index) */
 export const sinkK = (T: number) => at(T, B.sink, 0.05, 0.8)
 export const sinkW = (u: number, k: number) => ease.morph(clamp((k - 0.3 * u) / 0.7, 0, 1))
+/** "The power ridge collapses first": a hot pen rides the power ridge (the 1 s edge) while it leads the sink */
+export const ridgePen = (T: number) => at(T, B.sink, 0.04, 0.12) * (1 - at(T, B.sink, 0.5, 0.66))
 /** L4: the Lifelong landscape stays behind as a dashed outline while the surface sinks away from it */
 export const lostOutline = (T: number) => at(T, B.sink, 0.05, 0.2) * (1 - at(T, B.anyAge, 0, 0.08))
 /** where the dashed outline switches from the Lifelong landscape (lost, L4) to the Sedentary one (the before, L5 on) */
@@ -123,7 +137,8 @@ export const beforeOutline = (T: number) => at(T, B.anyAge, 0.08, 0.2)
 /** the independence plane's frame steps back once it is established (L4 on); its front edge keeps more */
 export const planeFrame = (T: number) => 1 - 0.5 * at(T, B.sink, 0, 0.2)
 export const sedName = (T: number) => at(T, B.sink, 0.8, 0.9) * (1 - at(T, B.anyAge, 0, 0.12))
-export const indep70 = (T: number) => at(T, B.sink, 0.86, 0.96) * (1 - at(T, B.anyAge, 0, 0.12))
+/** Sedentary's independence stays in the key through L5 (dimmed once the lift lands), so the before and after share the end frame */
+export const indep70 = (T: number) => at(T, B.sink, 0.86, 0.96) * (1 - 0.45 * at(T, B.anyAge, 0.86, 0.96)) * (1 - at(T, B.hold, 0, 0.12))
 
 /* ---------------------------- L5 start at any age ---------------------------- */
 
@@ -165,6 +180,32 @@ export const curtainOn = (T: number) => scanOn(T) * (1 - at(T, B.anyAge, 0.86, 0
 export const waveW = (age: number, s: number) => smoothstep(age - 3, age, s)
 export const s50Name = (T: number) => at(T, B.anyAge, 0.8, 0.9) * (1 - at(T, B.hold, 0, 0.12))
 export const indep85 = (T: number) => at(T, B.anyAge, 0.86, 0.96) * (1 - at(T, B.hold, 0, 0.12))
+/**
+ * L5, the signature (A.3), in L2's language (the volume is light): the lid
+ * turns to glass (isolines, its rim and a faint tint of its spectrum colour)
+ * while the camera moves, the Sedentary landscape stays under it as a dim
+ * solid (the before), and the slab between the two, the capacity the lift
+ * reclaims, fills with light behind the scanner, as the volume poured in
+ * L2. In L6 the lid turns solid again as it morphs to the lifelong one.
+ */
+export const glassK = (T: number) => at(T, B.anyAge, 0.03, 0.16, ease.morph) * (1 - at(T, B.hold, 0.05, 0.42, ease.morph))
+/** the lid's opacity as glass */
+export const GLASS_OP = 0.1
+/**
+ * The reclaimed slab's light (Starts at 50 minus Sedentary): on from the
+ * approach, it fills behind the scanner in proportion to the capacity
+ * reclaimed at each point, hot in the scanner's wake, and rests over
+ * everything the lift gave back until L6 morphs away.
+ */
+export const reclaimWalls = (T: number) => at(T, B.anyAge, 0.02, 0.12) * (1 - at(T, B.hold, 0, 0.2))
+/** the hatch under the line fades as the lift lands (the tint stays); a stripe on the small low corner read as an artifact */
+export const hatchK = (T: number) => 1 - at(T, B.anyAge, 0.72, 0.94) * (1 - at(T, B.hold, 0.5, 0.6))
+/**
+ * The Sedentary outline is an x-ray once the lifelong solid covers it again
+ * (L6): its hidden edges (the power ridge and age 85) show through the
+ * solid, dimmer than its visible ones, so it reads as the ghost underneath.
+ */
+export const xrayOn = (T: number) => at(T, B.hold, 0.15, 0.4)
 
 /* ---------------------------- L6 hold it ---------------------------- */
 
@@ -176,6 +217,8 @@ export const ageSliceAge = (T: number) => 20 + 65 * at(T, B.hold, 0.42, 0.9)
 /** the slice is the speaking element (HDR) while it rides, and stays lit at 85 */
 export const ageSliceRun = (T: number) => at(T, B.hold, 0.4, 0.46)
 export const volReadouts = (T: number) => at(T, B.hold, 0.3, 0.42)
+/** L6: the dashed Sedentary outline is named again, so "Sedentary: 12" has a referent */
+export const sedTag6 = (T: number) => at(T, B.hold, 0.32, 0.44)
 export const indep90 = (T: number) => at(T, B.hold, 0.9, 0.98)
 
 /* ------------------------------ story surfaces ------------------------------ */
@@ -326,7 +369,13 @@ if (import.meta.env.DEV) {
     indep85,
     claimIn,
     fuse,
-    postCap,
+    fuseWalls,
+    planeFill,
+    ridgePen,
+    reclaimWalls,
+    hatchK,
+    xrayOn,
+    (T) => chartSX(T, true),
   ]
   for (let n = 1; n < 7; n++) {
     probes.forEach((f, i) => {

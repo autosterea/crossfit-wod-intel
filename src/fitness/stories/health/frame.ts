@@ -4,7 +4,7 @@ import { dirOf, padOf } from '../../story/camera/fit'
 import { hudBox } from '../../story/ui/Hud'
 import type { Box, CamPose, Pad, V3 } from '../../story/types'
 import { NA, ND } from './healthMath'
-import { FLOOR_TEXT_Z, INDEPENDENCE_LINE, PLANE_FRONT, PLANE_M, Z0, Z1, claimSize, worldNow, xOf, type World } from './layout'
+import { AGE_TICK, FLOOR_TEXT_Z, INDEPENDENCE_LINE, PLANE_FRONT, PLANE_M, PLANE_MR, Z0, Z1, claimRot, claimSize, worldNow, xOf, zOfAge, type World } from './layout'
 import { G } from './timeline'
 
 /* =========================================================================
@@ -15,11 +15,14 @@ import { G } from './timeline'
    phone's focus rect in height). Here each pose is solved against the
    SILHOUETTE the beat ends on (the rim of the surface, a coarse interior
    grid, the floor corners, and whatever else that beat shows: the capacity
-   post, the independence plane, the floor claim), with the engine's closed
-   form: every point bounds the distance per screen edge. Two DOM corners
-   are kept clear the same way, per point: the HUD chip (top-right) and the
-   pinned key (top-left), and the post keeps headroom for its CAPACITY
-   title. The target moves until the margins balance, and the director gets
+   post, the independence plane, the floor claim, room for the age tick
+   labels), with the engine's closed form: every point bounds the distance
+   per screen edge. Two DOM corners are kept clear the same way, per point:
+   the HUD chip (top-right) and the pinned key (top-left), while they leave
+   the subject most of the height (on a short focus rect they are dropped),
+   and the post keeps headroom for its CAPACITY title. The poses are picked
+   by world in story.ts (a detent never changes their angles on a phone).
+   The target moves until the margins balance, and the director gets
    a synthetic point on the binding axis as a degenerate box, so its
    fitDistance returns exactly the solved distance. Proposed engine request:
    CamPose.fit accepting a point set with keep-clear rects.
@@ -48,6 +51,8 @@ interface Sil {
 }
 
 const cache = new Map<string, Sil>()
+/** world width reserved for a two-digit age tick label (its gap and text at the phone scale) */
+const TICK_LBL = 1.05
 
 /** Silhouette points (xyz) of a spec in a world. Cached; built once per world. */
 export function silhouette(spec: SilSpec, W: World): Sil {
@@ -75,6 +80,11 @@ export function silhouette(spec: SilSpec, W: World): Sil {
   }
   // the floor footprint
   for (const x of [-W.XW, W.XW]) for (const z of [Z0, Z1]) out.push(x, 0, z)
+  // room for the age tick labels (and AGE between 60 and 80) east of the right floor edge: at the
+  // phone poses the back-right corner is the rightmost point, and a fit to the landscape alone left
+  // "80" and AGE nowhere to go
+  for (let k = 0; k < 4; k++) out.push(W.XW + AGE_TICK + TICK_LBL, 0, zOfAge(20 + 20 * k))
+  out.push(W.XW + AGE_TICK + TICK_LBL * 1.3, 0, zOfAge(70))
   let postIdx = -1
   if (spec.post) {
     postIdx = out.length / 3
@@ -82,12 +92,16 @@ export function silhouette(spec: SilSpec, W: World): Sil {
   }
   if (spec.plane) {
     const y = INDEPENDENCE_LINE * W.YS
-    for (const x of [-W.XW - PLANE_M, W.XW + PLANE_M]) for (const z of [Z0 + PLANE_FRONT, Z1 - PLANE_M]) out.push(x, y, z)
+    for (const x of [-W.XW - PLANE_M, W.XW + PLANE_MR]) for (const z of [Z0 + PLANE_FRONT, Z1 - PLANE_M]) out.push(x, y, z)
   }
   if (spec.claim) {
+    // the word's corners, turned square to the viewer about its centre (claimRot)
     const s = claimSize(W)
     const z = Z0 + FLOOR_TEXT_Z
-    for (const x of [-W.XW * 0.95, W.XW * 0.95]) for (const dz of [-0.55 * s, 0.55 * s]) out.push(x, 0, z + dz)
+    const r = claimRot(W)
+    const c = Math.cos(r)
+    const sn = Math.sin(r)
+    for (const x of [-W.XW * 0.95, W.XW * 0.95]) for (const dz of [-0.55 * s, 0.55 * s]) out.push(x * c + dz * sn, 0, z - x * sn + dz * c)
   }
   const sil = { pts: Float32Array.from(out), postIdx }
   cache.set(key, sil)
@@ -105,6 +119,8 @@ const KEY_ROW = 27
 const POST_HEAD = 30
 /** clearance kept under a DOM corner */
 const CLEAR = 6
+/** a corner is kept clear only while its limit leaves at least this share of the half-height */
+const KEEP = 0.35
 
 const _d = new THREE.Vector3()
 const _fwd = new THREE.Vector3()
@@ -144,10 +160,20 @@ function solve(sil: Sil, spec: SilSpec, az: number, el: number, fov: number, pad
   const cy = focusRect.y + p.t + hh
   const hudW = hudBox.w > 0 ? hudBox.w : HUD_W
   const hudH = hudBox.h > 0 ? hudBox.h : HUD_H
-  const hudL = spec.hud ? focusRect.x + focusRect.w - 8 - hudW - CLEAR - cx : Infinity
-  const hudT = spec.hud ? cy - (focusRect.y + 8 + hudH + CLEAR) : hh
-  const keyR = spec.key ? focusRect.x + 8 + KEY_W + CLEAR - cx : -Infinity
-  const keyT = spec.key ? cy - (focusRect.y + 8 + spec.key * KEY_ROW + CLEAR) : hh
+  // A corner is kept clear point by point only while it leaves the subject
+  // most of the height (its limit at least KEEP of the half-height). On a
+  // short focus rect (the expanded caption, the expanded explore sheet) the
+  // two corners took nearly all of it and the solve backed the camera off
+  // to a thumbnail; there the corners are dropped and the label placer and
+  // the pinned-key obstacle resolve what is left.
+  const hudT0 = cy - (focusRect.y + 8 + hudH + CLEAR)
+  const keyT0 = spec.key ? cy - (focusRect.y + 8 + spec.key * KEY_ROW + CLEAR) : hh
+  const useHud = !!spec.hud && hudT0 >= KEEP * hh
+  const useKey = !!spec.key && keyT0 >= KEEP * hh
+  const hudL = useHud ? focusRect.x + focusRect.w - 8 - hudW - CLEAR - cx : Infinity
+  const hudT = useHud ? hudT0 : hh
+  const keyR = useKey ? focusRect.x + 8 + KEY_W + CLEAR - cx : -Infinity
+  const keyT = useKey ? keyT0 : hh
   const n = pts.length / 3
   // start from the centre of the points' bounding box
   let x0 = Infinity
