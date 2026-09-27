@@ -145,8 +145,9 @@ export default function ExampleScene() {
 }
 ```
 
-Register the chapter in `../stories/index.ts` (one line) and delete its legacy
-`modules/*Module.tsx` once the story has landed.
+The chapter registers itself: `stories/index.ts` discovers every `stories/<view>/story.ts` at build
+time (import.meta.glob), so never edit that file. Leave the legacy
+`modules/*Module.tsx` in place; integration deletes it once the story has landed.
 
 ## Reading time
 

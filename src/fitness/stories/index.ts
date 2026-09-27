@@ -8,13 +8,21 @@ import type { StoryDef } from '../story/types'
    modules/*Module.tsx page (LessonStage) until its story lands.
 
    To migrate a chapter: create stories/<view>/story.ts exporting a default
-   StoryDef (see story/README.md), add one line below, then delete the
-   legacy module file.
+   StoryDef (see story/README.md). It is discovered automatically; the legacy
+   module file is deleted at integration.
    ========================================================================= */
 
-export const STORIES: Partial<Record<FitnessView, () => Promise<{ default: StoryDef }>>> = {
-  definition: () => import('./definition/story'),
-}
+type StoryLoader = () => Promise<{ default: StoryDef }>
+
+// Chapters register themselves: any stories/<view>/story.ts with a default
+// StoryDef export is picked up here at build time, so chapter builders working
+// in parallel never edit this file (and never conflict on it). Each match stays
+// its own lazy chunk. _qa/ has no story.ts, so it is never matched.
+const FOUND = import.meta.glob<{ default: StoryDef }>('./*/story.ts')
+
+export const STORIES: Partial<Record<FitnessView, StoryLoader>> = Object.fromEntries(
+  Object.entries(FOUND).map(([path, load]) => [path.split('/')[1], load]),
+) as Partial<Record<FitnessView, StoryLoader>>
 
 /*
  * QA only: `?qa=stub` (read once per page load, kept for in-app navigation)
