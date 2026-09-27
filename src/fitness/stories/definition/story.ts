@@ -2,40 +2,37 @@ import type { Box, CamPose, StoryDef, V3 } from '../../story/types'
 import DefinitionScene from './Scene'
 import DefinitionExplore from './Explore'
 import DefinitionHud from './Hud'
-import { CHART_PAD, chartBox, fanBox, lineup } from './layout'
+import { CHART_PAD, FRAME_OPTS, chartBox, fanBox, fanCenter, lineup } from './layout'
 import { useDefExplore } from './exploreStore'
 import { GENERALIST, POWERLIFTER } from './definitionMath'
-import { focus } from '../../story/camera/focusRect'
-import { gestureBus } from '../../story/gestures'
-import { live } from './layout'
+import { storyFrame } from '../../story/kit/chartFrame'
 import * as THREE from 'three'
 
 /* =========================================================================
    04 CAPACITY: "The integral" (DESIGN.md D.5). Beat copy lives here so a
    reviewer can check every `source` against fitnessData.ts. Titles <= 30
    characters, bodies <= 140, no new facts, numbers or quotes.
+
+   Camera (amendment H.21): every beat that is READ as a 2D chart (D0, D1,
+   D3, D4, D5 and explore) is exactly front-on with a telephoto fov of 22, so
+   there is no keystone and no stair-stepping on the axes (L12). Oblique
+   poses are kept only where depth is the point and are decisive: the D2
+   domain fan (L az -30 el 18, P az -32 el 22).
    ========================================================================= */
 
-const T0: [number, number, number] = [0, 0, 0]
-/** Centre of the fan box (v 0 .. 0.95): y(0.475) with FH 10 and vMax 1.1. */
-const FAN_T: [number, number, number] = [0, -0.75, 0]
+const T0: V3 = [0, 0, 0]
 
-/** Front-on chart pose (D0, D1). Fit the chart box inside the label margins. */
-const CHART: CamPose = { target: T0, az: 0, el: 4, fov: 26, fit: () => chartBox(), padPx: CHART_PAD }
-/** Slightly turned, so the chart plane reads as a surface (D2 end, D3, D4). */
-const CHART_M6: CamPose = { ...CHART, az: -6 }
-/** Comparison pose (L12): exactly front-on (D5). */
-const FRONT: CamPose = { ...CHART, az: 0, el: 0 }
-/** Reveal the domain depth (D2 key). Extra right padding for the domain names. */
-const FAN_L: CamPose = { target: FAN_T, az: -30, el: 18, fov: 26, fit: () => fanBox(), padPx: { l: 40, r: 120, t: 24, b: 44 } }
-const FAN_P: CamPose = { target: FAN_T, az: -22, el: 20, fov: 26, fit: () => fanBox(), padPx: { l: 16, r: 104, t: 16, b: 40 } }
-/** The ranked lineup column (D6). */
+/** Front-on chart pose (D0, D1, D3, D4, D5, explore). Fit the chart box inside the label margins. */
+const CHART: CamPose = { target: T0, az: 0, el: 0, fov: 22, fit: chartBox, padPx: CHART_PAD }
+/** Reveal the domain depth (D2 keys): fit the fanned VOLUME, not the flat chart. */
+const FAN_L: CamPose = { target: (_l, f) => fanCenter(f), az: -30, el: 18, fov: 24, fit: (_l, f) => fanBox(f), padPx: { l: 40, r: 120, t: 24, b: 40 } }
+const FAN_P: CamPose = { target: (_l, f) => fanCenter(f), az: -32, el: 22, fov: 24, fit: (_l, f) => fanBox(f), padPx: { l: 14, r: 14, t: 12, b: 26 } }
+/** The ranked lineup column (D6): front-on with slight relief on the slabs (L12 allows el <= 8). */
 const boxCenter = (b: Box): V3 => [(b[0][0] + b[1][0]) / 2, (b[0][1] + b[1][1]) / 2, (b[0][2] + b[1][2]) / 2]
-const COL_P: CamPose = { target: () => boxCenter(lineup('P').box), az: 0, el: 6, fov: 26, fit: () => lineup('P').box, padPx: { l: 12, r: 12, t: 12, b: 12 } }
-const COL_L: CamPose = { target: () => boxCenter(lineup('L').box), az: 0, el: 6, fov: 26, fit: () => lineup('L').box, padPx: { l: 16, r: 16, t: 16, b: 16 } }
+const COL_P: CamPose = { target: () => boxCenter(lineup('P').box), az: 0, el: 6, fov: 22, fit: () => lineup('P').box, padPx: { l: 12, r: 12, t: 12, b: 12 } }
+const COL_L: CamPose = { target: () => boxCenter(lineup('L').box), az: 0, el: 6, fov: 22, fit: () => lineup('L').box, padPx: { l: 16, r: 16, t: 16, b: 16 } }
 
 const plane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0)
-const ray = new THREE.Raycaster()
 const hit = new THREE.Vector3()
 
 export const definitionStory: StoryDef = {
@@ -46,7 +43,7 @@ export const definitionStory: StoryDef = {
       title: 'Power is measurable',
       body: 'Power is force times distance over time. How much weight, how far, how long: that is a valid measure of fitness.',
       source: 'MODULE_COPY.definition.keyPoints[0] + DEFINITION_TEXT s4',
-      build: 4.0,
+      build: 3.0,
       cam: { L: CHART },
     },
     {
@@ -54,7 +51,7 @@ export const definitionStory: StoryDef = {
       title: 'Power falls with duration',
       body: 'At each effort duration there is a highest average power you can hold, and as duration grows that power falls.',
       source: 'POWER_CONCEPT s2',
-      build: 5.5,
+      build: 5.0,
       cam: { L: CHART },
     },
     {
@@ -64,7 +61,7 @@ export const definitionStory: StoryDef = {
       source: 'POWER_CONCEPT s4 + MODULE_COPY.definition.body s3',
       build: 5.5,
       cam: {
-        L: CHART_M6,
+        L: CHART,
         window: [0, 0.9],
         keys: [
           { t: 0.35, L: FAN_L, P: FAN_P },
@@ -78,7 +75,7 @@ export const definitionStory: StoryDef = {
       body: 'Fitness is the area under that averaged curve. It is measurable, it is observable, and it leaves no room for opinion.',
       source: 'MODULE_COPY.definition.keyPoints[2] + DEFINITION_TEXT s3',
       build: 5.0,
-      cam: { L: CHART_M6 },
+      cam: { L: CHART },
       impact: [0.8, 0.92],
     },
     {
@@ -87,7 +84,7 @@ export const definitionStory: StoryDef = {
       body: 'The ten skills set its height, the hopper supplies the domains, the pathways are the time axis.',
       source: 'MODULE_COPY.definition.body s3',
       build: 4.5,
-      cam: { L: CHART_M6 },
+      cam: { L: CHART },
     },
     {
       id: 'specialist',
@@ -95,7 +92,7 @@ export const definitionStory: StoryDef = {
       body: 'A specialist wins one point on the axis. The generalist wins the integral.',
       source: 'POWER_CONCEPT s6 to s7',
       build: 5.5,
-      cam: { L: FRONT },
+      cam: { L: CHART },
     },
     {
       id: 'lineup',
@@ -109,8 +106,9 @@ export const definitionStory: StoryDef = {
   Scene: DefinitionScene,
   Explore: DefinitionExplore,
   Hud: DefinitionHud,
+  frame: FRAME_OPTS,
   explore: {
-    cam: { L: CHART_M6 },
+    cam: { L: CHART },
     limits: { az: [-55, 55], el: [0, 45], zoom: [0.6, 1.6] },
     scrubToggle: true,
     initFromBeat(i) {
@@ -120,18 +118,11 @@ export const definitionStory: StoryDef = {
       s.setGhost(true)
       s.setProbe(null)
     },
-    onScrub(nx, ny, phase) {
-      const s = useDefExplore.getState()
+    onScrub(ray, _ndc, phase) {
       if (phase === 'end') return
-      const cam = gestureBus.camera
-      if (!cam) return
-      const px = focus.x + nx * focus.w
-      const py = focus.y + ny * focus.h
-      ray.setFromCamera(new THREE.Vector2((px / focus.W) * 2 - 1, 1 - (py / focus.H) * 2), cam)
-      if (!ray.ray.intersectPlane(plane, hit)) return
-      const f = live.frame
-      const u = Math.max(0, Math.min(1, (hit.x - f.x0) / f.FW))
-      s.setProbe(u)
+      if (!ray.intersectPlane(plane, hit)) return
+      const f = storyFrame()
+      useDefExplore.getState().setProbe(Math.max(0, Math.min(1, (hit.x - f.x0) / f.FW)))
     },
   },
 }

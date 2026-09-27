@@ -1,10 +1,12 @@
 import { MODAL_DOMAINS, POWER_CURVES } from '../../fitnessData'
 import { Legend, Readout } from '../../ui'
 import { useDefExplore } from './exploreStore'
+import { ChipRadio } from '../../story/ui/ChipRadio'
 import { CURVE_BY_KEY, GENERALIST, scoreColor, scoreOf, scoreWord } from './definitionMath'
 
-/* Definition explore controls (DESIGN.md D.5 "Explore"). Peek: the seven
-   athlete chips. Expanded: the domains toggle, the generalist ghost, the
+/* Definition explore controls (DESIGN.md D.5 "Explore"). Peek (whole rows
+   only): the seven athlete chips, marked .st-ex-peek; the HUD chip carries
+   the score. Expanded: the domains toggle, the generalist ghost, the
    area readout and the model notes. Every string here already exists in
    the module or in fitnessData. */
 
@@ -19,20 +21,13 @@ export default function DefinitionExplore() {
 
   return (
     <div className="st-ex">
-      <div className="st-chiprow" role="radiogroup" aria-label="Athlete">
-        {POWER_CURVES.map((c) => (
-          <button
-            key={c.name}
-            type="button"
-            role="radio"
-            aria-checked={c.name === athlete}
-            className={`st-chip st-chip--pick${c.name === athlete ? ' is-on' : ''}`}
-            onClick={() => set().setAthlete(c.name)}
-          >
-            {c.name}
-          </button>
-        ))}
-      </div>
+      <ChipRadio
+        label="Athlete"
+        className="st-ex-peek"
+        options={POWER_CURVES.map((c) => ({ value: c.name, label: c.name }))}
+        value={athlete}
+        onChange={(v) => set().setAthlete(v)}
+      />
 
       <Readout
         label="Fitness, area under the curve"

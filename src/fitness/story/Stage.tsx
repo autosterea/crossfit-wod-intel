@@ -1,13 +1,15 @@
-import { Component, Suspense, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
+import { Component, Suspense, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { Environment, Lightformer } from '@react-three/drei'
 import * as THREE from 'three'
 import type { StoryDef } from './types'
+import type { FitnessView } from '../lessonTypes'
+import { TIERS } from './quality/tiers'
 import { useStoryStore } from './store'
 import { clock, emitFrame } from './clock'
 import { tick, pb } from './playback'
 import { CameraDirector } from './camera/CameraDirector'
-import { computeFocus, focus, setFocusRecompute, type ShellLayout } from './camera/focusRect'
+import { computeFocus, focusRect, setFocusRecompute, type ShellLayout } from './camera/focusRect'
 import { LabelLayer, LabelPlacer } from './labels/LabelLayer'
 import { Quality } from './quality/Quality'
 import { Post } from './quality/Post'
@@ -17,7 +19,7 @@ import { Backdrop } from './kit/Backdrop'
 import { engineUniforms } from './kit/materials'
 import { useChapterFog } from './kit/fog'
 import { gestureBus, useStageGestures, useStoryKeys } from './gestures'
-import { readyState, readyTick } from './ready'
+import { readyDom, readyState, readyTick } from './ready'
 import { CaptionCard } from './ui/CaptionCard'
 import { ExplorePanel } from './ui/ExplorePanel'
 import { HudSlot } from './ui/Hud'
@@ -55,35 +57,53 @@ function UiPump() {
   return null
 }
 
+/**
+ * Compiles every material in the scene once the chapter's Scene has mounted,
+ * INCLUDING hidden ones (three's compile traverses invisible objects). This is
+ * the prewarm: a chapter that mounts its late beats and its explore layer at
+ * load (hidden) never links a shader mid-story (README "Prewarm"). On composer
+ * tiers the scene renders into a half-float target, so the compile runs with a
+ * render target bound to produce that program variant, not the screen one.
+ */
 function ReadyProbe() {
   const gl = useThree((s) => s.gl)
   const scene = useThree((s) => s.scene)
   const camera = useThree((s) => s.camera)
-  const compiling = useRef(false)
+  const compiling = useRef('')
+  const rt = useMemo(() => new THREE.WebGLRenderTarget(4, 4, { type: THREE.HalfFloatType, depthBuffer: false }), [])
+  useEffect(() => () => rt.dispose(), [rt])
   useFrame(() => {
-    if (readyState.scene && !readyState.compiled && !compiling.current) {
-      compiling.current = true
-      gl.compileAsync(scene, camera)
-        .catch(() => undefined)
-        .then(() => {
-          readyState.compiled = true
-          compiling.current = false
-        })
+    const st = useStoryStore.getState()
+    const key = st.def?.key ?? ''
+    if (key && readyState.sceneKey === key && readyState.compiledKey !== key && compiling.current !== key) {
+      compiling.current = key
+      const prev = gl.getRenderTarget()
+      if (TIERS[st.tier].composer) gl.setRenderTarget(rt)
+      let p: Promise<unknown>
+      try {
+        p = gl.compileAsync(scene, camera)
+      } catch {
+        p = Promise.resolve()
+      }
+      gl.setRenderTarget(prev)
+      p.catch(() => undefined).then(() => {
+        if (compiling.current === key) readyState.compiledKey = key
+        compiling.current = ''
+      })
     }
-    if (!readyState.scene) compiling.current = false
     readyTick()
   }, -60)
   return null
 }
 
-function SceneReady() {
+function SceneReady({ view }: { view: FitnessView }) {
   useEffect(() => {
-    readyState.scene = true
+    readyState.sceneKey = view
     return () => {
-      readyState.scene = false
-      readyState.compiled = false
+      if (readyState.sceneKey === view) readyState.sceneKey = ''
+      if (readyState.compiledKey === view) readyState.compiledKey = ''
     }
-  }, [])
+  }, [view])
   return null
 }
 
@@ -149,7 +169,7 @@ function Engine({ def }: { def: StoryDef }) {
       <SceneBoundary key={def.key}>
         <Suspense fallback={null}>
           <Scene />
-          <SceneReady />
+          <SceneReady view={def.key} />
         </Suspense>
       </SceneBoundary>
       <Post />
@@ -160,13 +180,19 @@ function Engine({ def }: { def: StoryDef }) {
 
 /* ----------------------------- DOM side ------------------------------ */
 
-function hasWebGL2(): boolean {
+let webgl2: boolean | null = null
+/** WebGL2 support, probed once per page; the probe context is released at once. */
+export function hasWebGL2(): boolean {
+  if (webgl2 !== null) return webgl2
   try {
     const c = document.createElement('canvas')
-    return !!c.getContext('webgl2')
+    const g = c.getContext('webgl2')
+    webgl2 = !!g
+    g?.getExtension('WEBGL_lose_context')?.loseContext()
   } catch {
-    return false
+    webgl2 = false
   }
+  return webgl2
 }
 
 /** Plain rAF clock when there is no canvas loop (no WebGL, still mode). */
@@ -217,7 +243,7 @@ function TapFlash() {
   )
 }
 
-export function StoryStage({ def }: { def: StoryDef }) {
+export function StoryStage({ def, view }: { def: StoryDef; view: FitnessView }) {
   const stageRef = useRef<HTMLDivElement>(null)
   const cardRef = useRef<HTMLDivElement>(null)
   const mode = useStoryStore((s) => s.mode)
@@ -226,16 +252,33 @@ export function StoryStage({ def }: { def: StoryDef }) {
   const visible = useStoryStore((s) => s.visible)
   const webgl = useStoryStore((s) => s.webgl)
   const still = useStoryStore((s) => s.still)
-  const ready = useStoryStore((s) => s.ready)
   const phase = useStoryStore((s) => s.phase)
   const index = useStoryStore((s) => s.index)
-  const [shell, setShell] = useState<ShellLayout>(focus.shell)
+  const [shell, setShell] = useState<ShellLayout>(focusRect.shell)
+  /** the route already moved to another chapter whose story is still loading */
+  const pending = view !== def.key
+  const alive = useRef(true)
+  const ctxCleanup = useRef<(() => void) | null>(null)
 
-  // WebGL availability (once).
+  // WebGL availability: re-derived on every mount from the cached probe, so a
+  // context lost in an earlier visit never disables the 3D for the session.
   useLayoutEffect(() => {
-    if (!hasWebGL2()) useStoryStore.setState({ webgl: false })
+    alive.current = true
+    useStoryStore.setState({ webgl: hasWebGL2() })
     installCustomToneMapping()
+    readyDom.stage = stageRef.current
+    return () => {
+      alive.current = false
+      ctxCleanup.current?.()
+      ctxCleanup.current = null
+      if (readyDom.stage === stageRef.current) readyDom.stage = null
+    }
   }, [])
+
+  // While the next chapter loads behind the slate, the old one holds still.
+  useEffect(() => {
+    if (pending) useStoryStore.setState({ playing: false })
+  }, [pending])
 
   // Focus rect: stage + caption card, recomputed on any resize.
   useLayoutEffect(() => {
@@ -244,13 +287,13 @@ export function StoryStage({ def }: { def: StoryDef }) {
     const recompute = () => {
       const card = cardRef.current
       computeFocus(stage, card)
-      stage.style.setProperty('--fx', `${focus.x}px`)
-      stage.style.setProperty('--fy', `${focus.y}px`)
-      stage.style.setProperty('--fw', `${focus.w}px`)
-      stage.style.setProperty('--fh', `${focus.h}px`)
-      stage.style.setProperty('--fr', `${focus.W - focus.x - focus.w}px`)
-      setShell(focus.shell)
-      if (useStoryStore.getState().layout !== focus.layout) useStoryStore.setState({ layout: focus.layout })
+      stage.style.setProperty('--fx', `${focusRect.x}px`)
+      stage.style.setProperty('--fy', `${focusRect.y}px`)
+      stage.style.setProperty('--fw', `${focusRect.w}px`)
+      stage.style.setProperty('--fh', `${focusRect.h}px`)
+      stage.style.setProperty('--fr', `${focusRect.W - focusRect.x - focusRect.w}px`)
+      setShell(focusRect.shell)
+      if (useStoryStore.getState().layout !== focusRect.layout) useStoryStore.setState({ layout: focusRect.layout })
     }
     setFocusRecompute(recompute)
     recompute()
@@ -294,7 +337,7 @@ export function StoryStage({ def }: { def: StoryDef }) {
     <div
       ref={stageRef}
       className={`st-stage st-shell--${shell}${mode === 'explore' ? ' is-explore' : ''}`}
-      data-story-ready={ready ? '1' : '0'}
+      data-story-ready="0"
       data-view={def.key}
     >
       {webgl && (
@@ -307,12 +350,29 @@ export function StoryStage({ def }: { def: StoryDef }) {
           onCreated={({ gl }) => {
             gl.setClearColor('#070a0e', 1)
             gl.toneMapping = THREE.CustomToneMapping
-            gl.domElement.addEventListener('webglcontextlost', (e) => {
+            // Context loss is fatal only for THIS mounted canvas, and only when
+            // it is not restored within 2.5 s. R3F force-loses the context of a
+            // canvas it unmounts; that event is ignored (listener removed,
+            // alive / isConnected checks).
+            const el = gl.domElement
+            let timer = 0
+            const onLost = (e: Event) => {
+              if (!alive.current || !el.isConnected) return
               e.preventDefault()
-              window.setTimeout(() => {
-                if (gl.getContext().isContextLost()) useStoryStore.setState({ webgl: false })
+              window.clearTimeout(timer)
+              timer = window.setTimeout(() => {
+                if (alive.current && el.isConnected && gl.getContext().isContextLost()) useStoryStore.setState({ webgl: false })
               }, 2500)
-            })
+            }
+            const onRestored = () => window.clearTimeout(timer)
+            el.addEventListener('webglcontextlost', onLost)
+            el.addEventListener('webglcontextrestored', onRestored)
+            ctxCleanup.current?.()
+            ctxCleanup.current = () => {
+              window.clearTimeout(timer)
+              el.removeEventListener('webglcontextlost', onLost)
+              el.removeEventListener('webglcontextrestored', onRestored)
+            }
           }}
         >
           <Engine def={def} />
@@ -325,7 +385,7 @@ export function StoryStage({ def }: { def: StoryDef }) {
       {mode === 'story' ? <CaptionCard cardRef={cardRef} shell={shell} /> : <ExplorePanel cardRef={cardRef} shell={shell} />}
       {shell === 'desktop' && mode === 'story' && <div className="st-keyhint">Left / Right to step - Space to play - E to explore</div>}
       <TapFlash />
-      <Slate view={def.key} />
+      <Slate view={view} pending={pending} />
     </div>
   )
 }

@@ -1,15 +1,16 @@
 import { createContext, useContext, useLayoutEffect, type ReactNode } from 'react'
 import type { StoryDef } from './types'
 import { clock, resetClock, setA } from './clock'
-import { useStoryStore, type StoryState } from './store'
+import { phaseAt, useStoryStore, type StoryState } from './store'
 import { parseQuery } from './url'
 import { pb, holdFor } from './playback'
 import { readStats } from './quality/stats'
-import { labelsSnapshot } from './labels/LabelLayer'
-import { focus } from './camera/focusRect'
+import { labelCounts, labelsSnapshot } from './labels/LabelLayer'
+import { focusRect } from './camera/focusRect'
 import { initialTier, tierDpr } from './quality/tiers'
+import { setStoryFrameOpts } from './kit/chartFrame'
 import { setTierCeiling } from './quality/Quality'
-import { markSeek, resetReady } from './ready'
+import { isSettled, markSeek, resetReady } from './ready'
 import { gestureBus } from './gestures'
 import * as THREE from 'three'
 
@@ -73,7 +74,8 @@ export function StoryProvider({ def, children }: { def: StoryDef; children: Reac
     resetClock(def.beats.length)
     resetReady()
     pb.glide = null
-    pb.delay = st.reduced ? 0 : 0.35
+    pb.delay = st.reduced ? 0 : 0.2
+    setStoryFrameOpts(def.frame ?? null)
     pb.holdElapsed = 0
     pb.holdFor = holdFor(def.beats[0])
     const q = parseQuery()
@@ -84,7 +86,7 @@ export function StoryProvider({ def, children }: { def: StoryDef; children: Reac
       phase: 'build',
       mode: 'story',
       playing: !st.reduced,
-      ready: false,
+      loaded: false,
       showBuild: false,
       scrub: false,
       detent: q.detent ?? st.detent,
@@ -95,7 +97,7 @@ export function StoryProvider({ def, children }: { def: StoryDef; children: Reac
       clock.t = 1
       clock.T = 1
       clock.version++
-      useStoryStore.setState({ phase: def.beats.length > 1 ? 'hold' : 'done' })
+      useStoryStore.setState({ phase: phaseAt(0, 1, def.beats.length) })
     }
     if (q.beat !== null) {
       useStoryStore.getState().seek(q.beat, q.t ?? 1, { hold: true })
@@ -146,25 +148,28 @@ function registerQA(def: StoryDef): void {
         dpr: readStats(s.tier).dpr,
         reduced: s.reduced,
         detent: s.detent,
-        layout: focus.layout,
+        layout: focusRect.layout,
         phase: s.phase,
-        focus: { x: focus.x, y: focus.y, w: focus.w, h: focus.h, W: focus.W, H: focus.H },
+        focus: { x: focusRect.x, y: focusRect.y, w: focusRect.w, h: focusRect.h, W: focusRect.W, H: focusRect.H },
       }
     },
     stats() {
       return readStats(useStoryStore.getState().tier)
     },
     labels: () => labelsSnapshot(),
+    /** label counts against the caps (C.9): registered, live, cap */
+    labelCounts: () => labelCounts(),
     /** QA: world point -> stage CSS px with the current camera (registration checks) */
     project(x: number, y: number, z: number) {
       const cam = gestureBus.camera
       if (!cam) return null
       cam.updateMatrixWorld()
       const v = new THREE.Vector3(x, y, z).project(cam)
-      return { x: ((v.x + 1) / 2) * focus.W, y: ((1 - v.y) / 2) * focus.H, camera: cam.position.toArray().map((n) => Math.round(n * 1000) / 1000) }
+      return { x: ((v.x + 1) / 2) * focusRect.W, y: ((1 - v.y) / 2) * focusRect.H, camera: cam.position.toArray().map((n) => Math.round(n * 1000) / 1000) }
     },
+    /** QA settle: loaded and two frames rendered after the latest seek (H.15) */
     get ready() {
-      return useStoryStore.getState().ready
+      return isSettled()
     },
   }
   ;(window as unknown as { __story: typeof api }).__story = api

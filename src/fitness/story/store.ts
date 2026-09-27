@@ -26,7 +26,8 @@ export interface StoryState {
   tierPinned: boolean
   dpr: number
   reduced: boolean
-  ready: boolean
+  /** the chapter is loaded (one-way per chapter; drives the slate and autoplay, H.15) */
+  loaded: boolean
   /** count of active holds (pointer down, scrub, detent drag, sheet open) */
   interacting: number
   layout: Layout
@@ -59,6 +60,15 @@ export interface StoryState {
 
 const isLast = () => clock.index >= clock.beats - 1
 
+/** One rule everywhere: t = 1 on the last beat is 'done', t = 1 elsewhere is 'hold'. */
+export function phaseAt(i: number, t: number, beats: number): Phase {
+  if (t < 1) return 'build'
+  return i >= beats - 1 ? 'done' : 'hold'
+}
+
+/** A user moved the story: the deep-link query no longer describes the screen (URL drift). */
+const dropSeekQuery = () => dropQueryKeys(['beat', 't'])
+
 export const useStoryStore = create<StoryState>((set, get) => ({
   def: null,
   view: 'intro',
@@ -71,7 +81,7 @@ export const useStoryStore = create<StoryState>((set, get) => ({
   tierPinned: false,
   dpr: 1,
   reduced: false,
-  ready: false,
+  loaded: false,
   interacting: 0,
   layout: 'P',
   visible: true,
@@ -85,11 +95,9 @@ export const useStoryStore = create<StoryState>((set, get) => ({
   play() {
     const s = get()
     if (!s.def) return
-    if (clock.held) {
-      clock.held = false
-      dropQueryKeys(['beat', 't'])
-    }
-    if (s.mode === 'explore') set({ mode: 'story' })
+    if (clock.held) clock.held = false
+    dropSeekQuery()
+    if (s.mode === 'explore') get().setMode('story')
     if (s.reduced) {
       // "Show build": replay the current beat's build once, then hold.
       startBeat(clock.index)
@@ -110,6 +118,8 @@ export const useStoryStore = create<StoryState>((set, get) => ({
   },
 
   pause() {
+    // a pause during a next / prev glide wins over the glide's resume (intent)
+    if (pb.glide) pb.glide.paused = true
     set({ playing: false })
   },
 
@@ -121,24 +131,28 @@ export const useStoryStore = create<StoryState>((set, get) => ({
   next(user = true) {
     const s = get()
     if (!s.def) return
-    if (user) haptic()
+    if (user) {
+      haptic()
+      dropSeekQuery()
+    }
     if (isLast()) {
       navigateChapter(1)
       return
     }
     const n = clock.index + 1
+    const beats = s.def.beats.length
     if (s.reduced || clock.held) {
       pb.glide = null
       setIT(n, 1)
       setA(clock.T * 2.5)
-      set({ index: n, phase: 'hold', playing: false })
+      set({ index: n, phase: phaseAt(n, 1, beats), playing: false })
       return
     }
-    if (s.mode === 'explore') set({ mode: 'story' })
+    if (s.mode === 'explore') get().setMode('story')
     if (s.phase === 'build' && clock.t < 1 && s.playing) {
-      glideTo(n, 350, 'settle', () => {
+      glideTo(n, 350, 'settle', (paused) => {
         startBeat(n)
-        set({ playing: true })
+        set({ playing: !paused })
       })
       return
     }
@@ -149,24 +163,28 @@ export const useStoryStore = create<StoryState>((set, get) => ({
   prev(user = true) {
     const s = get()
     if (!s.def) return
-    if (user) haptic()
+    if (user) {
+      haptic()
+      dropSeekQuery()
+    }
     if (clock.index === 0 && (clock.t < 0.15 || s.reduced || clock.held)) {
       navigateChapter(-1)
       return
     }
     const n = clock.index === 0 ? 0 : clock.index - 1
+    const beats = s.def.beats.length
     if (s.reduced || clock.held) {
       pb.glide = null
       setIT(n, 1)
       setA(clock.T * 2.5)
-      set({ index: n, phase: 'hold', playing: false })
+      set({ index: n, phase: phaseAt(n, 1, beats), playing: false })
       return
     }
-    if (s.mode === 'explore') set({ mode: 'story' })
+    if (s.mode === 'explore') get().setMode('story')
     const wasPlaying = s.playing || s.phase === 'done'
-    glideTo(n, 450, 'settle', () => {
+    glideTo(n, 450, 'settle', (paused) => {
       startBeat(n)
-      set({ playing: wasPlaying })
+      set({ playing: wasPlaying && !paused })
     })
   },
 
@@ -183,9 +201,8 @@ export const useStoryStore = create<StoryState>((set, get) => ({
     pb.delay = 0
     pb.holdElapsed = 0
     pb.holdFor = holdFor(s.def.beats[i])
-    const phase: Phase = tt >= 1 ? (i >= s.def.beats.length - 1 ? 'done' : 'hold') : 'build'
     markSeek()
-    set({ index: i, phase, playing: hold ? false : s.playing, ready: false })
+    set({ index: i, phase: phaseAt(i, tt, s.def.beats.length), playing: hold ? false : s.playing })
   },
 
   setMode(m) {
@@ -200,6 +217,7 @@ export const useStoryStore = create<StoryState>((set, get) => ({
       }
       set({ mode: 'explore', playing: false, scrub: false })
     } else {
+      dropQueryKeys(['explore'])
       set({ mode: 'story', scrub: false })
     }
   },

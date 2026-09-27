@@ -5,7 +5,7 @@ import * as THREE from 'three'
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib'
 import { clock } from '../clock'
 import { useStoryStore } from '../store'
-import { focus } from './focusRect'
+import { focusRect } from './focusRect'
 import {
   DEG,
   applyLensShift,
@@ -92,10 +92,10 @@ export function CameraDirector() {
     const c = controlsRef.current
     cameraBus.controls = mode === 'explore' ? c : null
     if (mode !== 'explore' || !c || !def) return
-    const layout = focus.layout
+    const layout = focusRect.layout
     const ex = def.explore
     const pose = poseFor(ex.cam, layout)
-    const r = resolvePose(pose, layout, focus, focus.H)
+    const r = resolvePose(pose, layout, focusRect, focusRect.H)
     cameraBus.baseDist = r.dist
     c.target.copy(r.target)
     c.minAzimuthAngle = (pose.az + ex.limits.az[0]) * DEG
@@ -131,17 +131,17 @@ export function CameraDirector() {
     const dt = Math.min(0.1, dtRaw)
     const d = useStoryStore.getState().def
     if (!d) return
-    const W = focus.W
-    const H = focus.H
+    const W = focusRect.W
+    const H = focusRect.H
     // Smoothed focus rect: snaps when held, on the first frame, or under reduced motion.
     const snap = !s.rectInit || clock.held || reduced
     const k = snap ? 1 : 1 - Math.exp(-dt * 10)
-    s.rect.x += (focus.x - s.rect.x) * k
-    s.rect.y += (focus.y - s.rect.y) * k
-    s.rect.w += (focus.w - s.rect.w) * k
-    s.rect.h += (focus.h - s.rect.h) * k
+    s.rect.x += (focusRect.x - s.rect.x) * k
+    s.rect.y += (focusRect.y - s.rect.y) * k
+    s.rect.w += (focusRect.w - s.rect.w) * k
+    s.rect.h += (focusRect.h - s.rect.h) * k
     s.rectInit = true
-    const layout = focus.layout
+    const layout = focusRect.layout
     const rect = s.rect
 
     if (cameraBus.tweenExplore > 0 && useStoryStore.getState().mode === 'explore') {
@@ -185,7 +185,7 @@ export function CameraDirector() {
 
     // Parallax: desktop, story mode, not held, not reduced.
     const st2 = useStoryStore.getState()
-    const allow = focus.shell === 'desktop' && !clock.held && !reduced && st2.playing
+    const allow = focusRect.shell === 'desktop' && !clock.held && !reduced && st2.playing
     const kp = 1 - Math.exp(-dt * 4)
     s.par.x += ((allow ? s.par.tx : 0) - s.par.x) * kp
     s.par.y += ((allow ? s.par.ty : 0) - s.par.y) * kp

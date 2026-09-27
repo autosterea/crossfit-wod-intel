@@ -2,9 +2,10 @@ import { useEffect, useRef } from 'react'
 import * as THREE from 'three'
 import { useStoryStore } from './store'
 import { clock } from './clock'
-import { focus } from './camera/focusRect'
+import { focusRect } from './camera/focusRect'
 import { cameraBus } from './camera/CameraDirector'
 import { pb, startBeat } from './playback'
+import { dropQueryKeys } from './url'
 import type { V3 } from './types'
 
 /* =========================================================================
@@ -60,7 +61,7 @@ export function handleScreenPositions(): { id: string; x: number; y: number }[] 
   return [...handles.values()].map((h) => {
     const a = h.anchor()
     v.set(a[0], a[1], a[2]).project(cam)
-    return { id: h.id, x: ((v.x + 1) / 2) * focus.W, y: ((1 - v.y) / 2) * focus.H }
+    return { id: h.id, x: ((v.x + 1) / 2) * focusRect.W, y: ((1 - v.y) / 2) * focusRect.H }
   })
 }
 
@@ -79,13 +80,14 @@ export function useStageGestures(stageRef: { current: HTMLElement | null }): voi
     let pinch0 = 0
     let handle: DragHandle | null = null
     let scrubbing = false
+    let lastScrub = { x: 0, y: 0 }
     let dprTimer = 0
 
     const localXY = (e: PointerEvent) => {
       const r = el.getBoundingClientRect()
       return { x: e.clientX - r.left, y: e.clientY - r.top }
     }
-    const ndcOf = (x: number, y: number): [number, number] => [(x / focus.W) * 2 - 1, 1 - (y / focus.H) * 2]
+    const ndcOf = (x: number, y: number): [number, number] => [(x / focusRect.W) * 2 - 1, 1 - (y / focusRect.H) * 2]
     const rayAt = (x: number, y: number) => {
       const cam = gestureBus.camera
       const ray = new THREE.Ray()
@@ -119,7 +121,8 @@ export function useStageGestures(stageRef: { current: HTMLElement | null }): voi
         scrubbing = true
         e.stopPropagation()
         el.setPointerCapture?.(e.pointerId)
-        st.def.explore.onScrub((x - focus.x) / focus.w, (y - focus.y) / focus.h, 'start')
+        lastScrub = { x, y }
+        st.def.explore.onScrub(rayAt(x, y), ndcOf(x, y), 'start')
         lowerDpr(true)
         return
       }
@@ -155,7 +158,8 @@ export function useStageGestures(stageRef: { current: HTMLElement | null }): voi
         return
       }
       if (scrubbing && st.def?.explore.onScrub) {
-        st.def.explore.onScrub((x - focus.x) / focus.w, (y - focus.y) / focus.h, 'move')
+        lastScrub = { x, y }
+        st.def.explore.onScrub(rayAt(x, y), ndcOf(x, y), 'move')
         e.stopPropagation()
         return
       }
@@ -171,7 +175,7 @@ export function useStageGestures(stageRef: { current: HTMLElement | null }): voi
       const st = useStoryStore.getState()
       if (scrubbing) {
         scrubbing = false
-        st.def?.explore.onScrub?.(0, 0, 'end')
+        st.def?.explore.onScrub?.(rayAt(lastScrub.x, lastScrub.y), ndcOf(lastScrub.x, lastScrub.y), 'end')
       }
       if (handle) {
         handle.onEnd?.()
@@ -247,6 +251,10 @@ export function useStageGestures(stageRef: { current: HTMLElement | null }): voi
 
 /* ----------------------------- keyboard ------------------------------- */
 
+/** Keys that step the story are left alone inside these (they own their arrows). */
+const OWNS_ARROWS = '.st-explore, .st-sheet, [role="radiogroup"], [role="slider"], [role="tablist"], [role="listbox"]'
+const STEP_KEYS = new Set(['ArrowRight', 'ArrowLeft', 'Home', 'End'])
+
 export function useStoryKeys(): void {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -255,6 +263,10 @@ export function useStoryKeys(): void {
       if (e.metaKey || e.ctrlKey || e.altKey) return
       const st = useStoryStore.getState()
       if (!st.def || !pb.visible) return
+      // Stepping keys never act while exploring, while the chapter sheet is
+      // open, or when focus sits in a control that uses arrows itself.
+      if (STEP_KEYS.has(e.key) && (st.mode === 'explore' || st.sheet || (t instanceof Element && t.closest(OWNS_ARROWS)))) return
+      if (st.sheet && e.key !== 'Escape') return
       switch (e.key) {
         case 'ArrowRight':
           e.preventDefault()
@@ -274,6 +286,7 @@ export function useStoryKeys(): void {
           break
         case 'Home':
           e.preventDefault()
+          dropQueryKeys(['beat', 't'])
           if (st.reduced) st.seek(0, 1, { hold: false })
           else {
             startBeat(0)
@@ -283,6 +296,7 @@ export function useStoryKeys(): void {
           break
         case 'End':
           e.preventDefault()
+          dropQueryKeys(['beat', 't'])
           st.seek(st.def.beats.length - 1, 1, { hold: false })
           break
         case 'e':

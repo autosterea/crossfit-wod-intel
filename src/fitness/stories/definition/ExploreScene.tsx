@@ -9,8 +9,9 @@ import { LightField, sampleCurve } from '../../story/kit/LightField'
 import { Nodes } from '../../story/kit/Nodes'
 import { lin } from '../../story/kit/materials'
 import { TIERS } from '../../story/quality/tiers'
-import { useLabels, setLabelText } from '../../story/labels/useLabel'
+import { useLabels, setLabelText, useWorldObstacle, type WorldObstacle } from '../../story/labels/useLabel'
 import { useBeat } from '../../story/useBeat'
+import { useStoryStore } from '../../story/store'
 import type { LabelSpec, V3 } from '../../story/types'
 import { FAN_Z } from './layout'
 import { CURVE_BY_KEY, GENERALIST, domainScale, valAt } from './definitionMath'
@@ -44,6 +45,8 @@ const shown = {
 const damp = THREE.MathUtils.damp
 
 const activeV = (u: number) => valAt(shown.samples, u)
+
+const NO_LABELS: LabelSpec[] = []
 
 export default function ExploreScene({ frame, tier }: { frame: ChartFrame; tier: 'high' | 'medium' | 'low' }) {
   const { layout } = useBeat()
@@ -177,8 +180,8 @@ export default function ExploreScene({ frame, tier }: { frame: ChartFrame; tier:
     const out: LabelSpec[] = [
       { id: 'ex-ax-y', text: 'Power output', tone: 'tick', anchor: [x(0), y(frame.vMax), 0], prefer: 'E', only: ['E', 'NE', 'SE'], gapPx: 8, priority: 78 },
       { id: 'ex-ax-x', text: 'Effort duration', tone: 'tick', anchor: [x(0.5), y0 - TICK_LEN, 0], prefer: 'S', only: ['S'], gapPx: 25, priority: 78 },
-      { id: 'ex-yr-05', text: '0.5', tone: 'tick', anchor: [x(0) - TICK_LEN, y(0.5), 0], prefer: 'W', gapPx: 5 },
-      { id: 'ex-yr-10', text: '1.0', tone: 'tick', anchor: [x(0) - TICK_LEN, y(1), 0], prefer: 'W', gapPx: 5 },
+      { id: 'ex-yr-05', text: '0.5', tone: 'tick', anchor: [x(0) - TICK_LEN, y(0.5), 0], prefer: 'W', only: ['W'], gapPx: 5 },
+      { id: 'ex-yr-10', text: '1.0', tone: 'tick', anchor: [x(0) - TICK_LEN, y(1), 0], prefer: 'W', only: ['W'], gapPx: 5 },
       {
         id: 'ex-athlete',
         text: athlete,
@@ -256,7 +259,47 @@ export default function ExploreScene({ frame, tier }: { frame: ChartFrame; tier:
     })
     return out
   }, [frame, layout, athlete, isG, scales])
-  useLabels(specs)
+  // Explore labels exist only while exploring (the layer itself stays mounted for prewarm).
+  const mode = useStoryStore((s) => s.mode)
+  useLabels(mode === 'explore' ? specs : NO_LABELS, { mode: 'explore' })
+
+  // explore labels avoid the live curve, the ghost and the task dots
+  const obstacle = useMemo<WorldObstacle>(
+    () => ({
+      mode: 'explore',
+      maxPoints: 72,
+      radiusPx: 5,
+      points: (_T, out) => {
+        let n = 0
+        const S = 28
+        for (let i = 0; i < S; i++) {
+          const u = i / (S - 1)
+          out[n * 3] = frame.x(u)
+          out[n * 3 + 1] = frame.y(activeV(u))
+          out[n * 3 + 2] = 0
+          n++
+        }
+        if (shown.ghost > 0.3) {
+          for (let i = 0; i < S; i += 2) {
+            const u = i / (S - 1)
+            out[n * 3] = frame.x(u)
+            out[n * 3 + 1] = frame.y(gv(u))
+            out[n * 3 + 2] = 0
+            n++
+          }
+        }
+        for (let i = 0; i < TASK_U.length; i++) {
+          out[n * 3] = frame.x(TASK_U[i])
+          out[n * 3 + 1] = frame.y(activeV(TASK_U[i]))
+          out[n * 3 + 2] = 0
+          n++
+        }
+        return n
+      },
+    }),
+    [frame],
+  )
+  useWorldObstacle('def-ex-data', obstacle)
 
   // probe readouts (computed valAt), written imperatively
   useFrame(() => {
@@ -278,7 +321,18 @@ export default function ExploreScene({ frame, tier }: { frame: ChartFrame; tier:
     <>
       <ChartConstruction frame={frame} vis={STATIC} />
       <EnergyBands frame={frame} opacity={() => 0.12} />
-      <AreaFill top={aTop} baseline={frame.y(0)} color={isG ? PAL.yellowGreen : PAL.chalk} opacity={() => (lowTier ? 0.9 : 0.3)} update={writeTop} hi={lowTier ? 0.5 : 0.36} />
+      <AreaFill
+        top={aTop}
+        baseline={frame.y(0)}
+        color={isG ? PAL.yellowGreen : PAL.chalk}
+        opacity={() => (lowTier ? 0.9 : isG ? 0.8 : 0.35)}
+        update={writeTop}
+        lo={0.05}
+        hi={lowTier ? 0.5 : 0.45}
+        additive={!lowTier}
+        rim={() => (isG ? (lowTier ? 0.6 : 1.8) : 0)}
+        rimWidth={0.2}
+      />
       {!lowTier && count > 0 && (
         <LightField
           frame={frame}

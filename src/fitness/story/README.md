@@ -1,27 +1,33 @@
 # Story engine: module author's guide
 
 This folder is the engine behind every chapter of the "What Is Fitness?" lesson
-(`/fitness`). The binding spec is `../DESIGN.md` (CHALKLINE). This guide is the
-practical version: how to build a chapter on the engine, the rules, and the
-checklist to run before you commit. The Definition chapter
-(`../stories/definition/`) is the reference implementation: copy its patterns.
+(`/fitness`). The binding spec is `../DESIGN.md` (CHALKLINE, with the amendments
+in its section H). This guide is the practical version: how to build a chapter
+on the engine, the rules, and the checklist to run before you commit. The
+Definition chapter (`../stories/definition/`) is the reference implementation:
+copy its patterns.
 
 ## What the engine gives you for free
 
-- One persistent full-bleed stage: Canvas, lights, a procedural environment
+- One PERSISTENT full-bleed stage: Canvas, lights, a procedural environment
   (drei `<Environment>` + `<Lightformer>`, no CDN), the slate backdrop, and the
-  post pipeline (bloom, neutral tone mapping, SMAA or MSAA, grain on HIGH).
-- Quality tiers (HIGH / MEDIUM / LOW) driven by drei `PerformanceMonitor`; the
-  engine owns DPR. `?tier=` pins a tier.
+  post pipeline (bloom, neutral tone mapping, SMAA or MSAA, grain on HIGH). A
+  chapter change swaps only your Scene, labels and captions; the WebGL context
+  survives (H.25). While the next chunk loads, the previous chapter holds still
+  under the slate.
+- Quality tiers (HIGH / MEDIUM / LOW) driven by drei `PerformanceMonitor`, which
+  only starts measuring once your chapter is loaded plus 1.5 s (H.18). The engine
+  owns DPR. `?tier=` pins a tier.
 - A story clock, autoplay (build, hold, advance), transport, beat segments with
-  scrubbing, swipe / tap / press-and-hold, keyboard (Left / Right / Space /
-  Home / End / E / Esc), reduced motion, deep links (`?beat=N&t=X`,
-  `?explore=1`), and `window.__story` for QA.
+  scrubbing (also a focusable slider), swipe / tap / press-and-hold, keyboard
+  (Left / Right / Space / Home / End / E / Esc), reduced motion, deep links
+  (`?beat=N&t=X`, `?explore=1`), and `window.__story` for QA.
 - A camera director that fits each beat's subject inside the focus rect (the
   part of the stage not under the caption card), with portrait and landscape
   poses and eased transitions.
 - A screen-space label system (DOM, fixed type scale, collision-aware, clamped
-  inside the focus rect).
+  inside the focus rect, avoiding registered obstacles such as data marks).
+- An engine-owned adaptive chart frame (declare `frame` on your StoryDef).
 - The caption card (phone detents, desktop column), the explore panel shell,
   the HUD chip slot, the chapter sheet, the Notes (with a tappable story
   transcript) and the loading slate.
@@ -40,13 +46,14 @@ story backwards, and makes reduced motion trivial (it just shows `t = 1`).
 
 Continuity: the scene at `(N, t = 1)` must equal the scene at `(N + 1, t = 0)`.
 You get this automatically when every property is built from `at()` / `cue()`
-windows, because a window that has finished stays at 1.
+windows, because a window that has finished stays at 1. `story-qa.mjs` diffs the
+pixels at every boundary.
 
 ## Minimal worked example
 
 ```
 src/fitness/stories/example/
-  story.ts     the StoryDef (beats + copy + camera)
+  story.ts     the StoryDef (beats + copy + camera + frame)
   Scene.tsx    the 3D (reads T through the clock)
   Explore.tsx  explore controls (DOM)
 ```
@@ -55,23 +62,26 @@ src/fitness/stories/example/
 
 ```ts
 import type { CamPose, StoryDef } from '../../story/types'
+import type { ChartFrameOpts } from '../../story/kit/chartFrame'
 import ExampleScene from './Scene'
 import ExampleExplore from './Explore'
 
-const FRONT: CamPose = {
-  target: [0, 0, 0],
-  az: 0, el: 4, fov: 26,
-  fit: [[-5, -4, 0], [5, 4, 0]],          // must land inside the focus rect
-  padPx: { l: 48, r: 24, t: 20, b: 50 },  // room for your labels
-}
+const PAD = { l: 48, r: 24, t: 20, b: 50 }                        // room for your labels
+export const FRAME: ChartFrameOpts = { FH: 10, minAspect: 0.8, maxAspect: 1.5, marginPx: PAD }
+
+// A chart you READ is exactly front-on with a telephoto fov (L12, H.21).
+const FRONT: CamPose = { target: [0, 0, 0], az: 0, el: 0, fov: 22, fit: (_layout, frame) => frame.box, padPx: PAD }
+// Depth is the point: go oblique decisively (15 degrees or more), P and L separately.
+const DEPTH: CamPose = { ...FRONT, az: -30, el: 18 }
 
 export default {
   key: 'skills',
+  frame: FRAME,
   beats: [
     { id: 'axes', title: 'Ten physical skills', body: '...', source: 'MODULE_COPY.skills.body s1',
       build: 4.0, cam: { L: FRONT } },
-    { id: 'curve', title: '...', body: '...', source: '...', build: 5.0,
-      cam: { L: { ...FRONT, az: -20, el: 14 }, P: { ...FRONT, az: -14, el: 16 } } },
+    { id: 'depth', title: '...', body: '...', source: '...', build: 5.0,
+      cam: { L: DEPTH, P: { ...DEPTH, az: -32, el: 22 } } },
   ],
   Scene: ExampleScene,
   Explore: ExampleExplore,
@@ -89,18 +99,28 @@ export default {
 import { useMemo } from 'react'
 import { at, focus } from '../../story/cue'
 import { ease } from '../../story/ease'
+import { useStoryFrame } from '../../story/kit/chartFrame'
 import { Pen, PenBatch, PEN } from '../../story/kit/Pen'
-import { useLabels } from '../../story/labels/useLabel'
+import { useLabels, useWorldObstacle, type WorldObstacle } from '../../story/labels/useLabel'
 import type { LabelSpec } from '../../story/types'
 
 export default function ExampleScene() {
-  const axes = useMemo(() => new Float32Array([-5, -4, 0, 5, -4, 0, -5, -4, 0, -5, 4, 0]), [])
-  const curve = useMemo(() => /* xyz polyline */ new Float32Array([-5, 2, 0, 0, 0, 0, 5, -2, 0]), [])
+  const f = useStoryFrame()                          // the same frame the camera fits
+  const axes = useMemo(() => new Float32Array([f.x(0), f.y(0), 0, f.x(1), f.y(0), 0, f.x(0), f.y(0), 0, f.x(0), f.y(1), 0]), [f])
+  const curve = useMemo(() => new Float32Array([f.x(0), f.y(0.8), 0, f.x(0.5), f.y(0.6), 0, f.x(1), f.y(0.4), 0]), [f])
   const labels = useMemo<LabelSpec[]>(() => [
-    { id: 'x', text: 'Effort duration', tone: 'tick', anchor: [0, -4, 0], prefer: 'S', only: ['S'],
+    { id: 'ex-x', text: 'Effort duration', tone: 'tick', anchor: [f.x(0.5), f.y(0), 0], prefer: 'S', only: ['S'],
       cue: (T) => at(T, 0, 0.3, 0.45) },
-  ], [])
+    { id: 'ex-curve', text: 'Generalist', tone: 'name', color: '#91c640', required: true,
+      anchor: [f.x(0.5), f.y(0.6), 0], prefer: 'NE', leader: true, cue: (T) => at(T, 1, 0.7, 0.85) },
+  ], [f])
   useLabels(labels)
+  // labels never cover the curve
+  const marks = useMemo<WorldObstacle>(() => ({
+    points: (T, out) => { if (T < 1.2) return 0; out.set(curve); return 3 },
+    radiusPx: 5,
+  }), [curve])
+  useWorldObstacle('ex-curve', marks)
   return (
     <>
       {/* beat 0: construction, drawn with the pen, dims (focus pull) in later beats */}
@@ -128,30 +148,37 @@ Register the chapter in `../stories/index.ts` (one line) and delete its legacy
 - `pulse(T, a, b)`: 0, 1, 0 across a window.
 - `useBeat()` returns `{ clock, cue, at, focus, layout }`; `layout` ('P' or 'L')
   comes from the FOCUS RECT aspect, not the viewport, and is the only thing that
-  re-renders your scene.
+  re-renders your scene. (The focus rect object itself is `focusRect` in
+  `camera/focusRect.ts`; `focus` in `cue.ts` is the focus pull.)
 - Easing tokens (`story/ease.ts`): `draw` (line draw-on), `settle` (arrivals),
   `snap` (dots, bricks), `morph` (topology and camera), `count` (numbers),
   `exit`, `linear`.
+- Pacing: hold = `clamp(1.5 + 0.24 x words - 0.6 x build, 2, 7)` seconds (H.16).
+  Reading starts at the caption swap, so get the first moving thing on screen
+  early in the build; an empty or static opening is the owner's first 10 s.
 
 ## The kit (never write your own versions)
 
 | Component / helper | Use |
 |---|---|
 | `<Pen points progress opacity head hot dashed update gain/>` | one stroke; draw-on by arc length, exact under seek; `update(T, pts)` mutates the polyline in place |
-| `<PenBatch segments colors progress opacity byArc update/>` | many segments in ONE draw call (grids, axes, ticks, merged outlines) |
+| `<PenBatch segments colors progress opacity byArc update/>` | many segments in ONE draw call (grids, axes, ticks, bars, merged outlines) |
 | `<MorphPen shapes weights stagger/>` | one pen blending 256-point shapes from `kit/shapes.ts` |
-| `<AreaFill top baseline color mode reveal level opacity update/>` | area strips; gradient, hatch or solid; `level` pours, `reveal` sweeps |
-| `<LightField frame count curveA curveB uniforms/>` | constant-density light particles (pour, spill, condense); counts come from `TIERS[tier].particleScale` |
+| `<AreaFill top baseline bottom? color mode reveal level opacity additive rim gamma/>` | area strips; gradient, hatch or solid; `bottom` makes a band between two curves; `additive` + `rim` + `gamma` make a luminous area with an HDR rim that blooms (H.20); `level` pours, `reveal` sweeps |
+| `<AreaStrips strips points colors write/>` | several strips (for example one curtain per series, each at its own depth) in ONE draw call |
+| `<LightField frame count curveA curveB uniforms/>` | constant-density light particles (pour, spill with streaks, condense); counts come from `TIERS[tier].particleScale` |
 | `<Nodes count radius color place/>` | instanced dots, one draw call |
-| `<SdfText font text size color opacity/>` | drei Text with the SELF-HOSTED fonts only (`anton`, `barlowSemi`, `barlowBold`); only for large words that belong to the 3D world |
+| `<SdfText font text size color opacity/>` | drei Text with the SELF-HOSTED fonts only (`anton`, `barlowSemi`, `barlowBold`); only for large words that belong to the 3D world. Register it as a world obstacle so labels avoid it |
 | `<Halo position sizePx color intensity/>` | additive glow point; the LOW-tier stand-in for bloom |
 | `makeRimStandard(opts)`, `steelOpts` | lit solids with a fresnel rim (PBR against the procedural environment) |
-| `useChartFrame(opts)` | adaptive chart frame: tall on phones, wide on desktop |
+| `useStoryFrame()`, `storyFrame()` | the chapter's engine-owned adaptive chart frame (`StoryDef.frame`); poses get it as `fit(layout, frame)` |
+| `useChartFrame(opts)` | a second, explicit frame inside a chapter |
 | `intervalAxis`, `logAxis` | the time axes |
-| `useCounter`, `useDomCounter` | counting readouts written imperatively |
+| `useCounter(labelId, { value, format })`, `useDomCounter(ref, { value, format })` | counting readouts written imperatively; `value` is a pure function of T |
 | `impactK(T)` | the chapter's single impact accent (declare `impact: [a, b]` on the beat) |
 | `useChapterFog` | fog, Hopper and Health only (or set `fog` on the StoryDef) |
-| `useDragHandle` | explore-mode drag handles that win over orbit |
+| `useDragHandle` | explore-mode drag handles that win over orbit; `onDrag(ray, ndc)` |
+| `<ChipRadio label options value onChange/>` | the explore chip row as a real radiogroup (roving tab stop, arrows select) |
 
 Pen widths are screen pixels by role: `PEN.grid` 1.25, `PEN.axis` 2,
 `PEN.data` 3, `PEN.hero` 4.5.
@@ -159,39 +186,61 @@ Pen widths are screen pixels by role: `PEN.grid` 1.25, `PEN.axis` 2,
 ## Labels
 
 All reading text is DOM, on the fixed type scale, never perspective-scaled.
-`useLabels(specs)` with a memoised array (or `useLabel(spec)`):
+`useLabels(specs, { mode? })` with a MEMOISED array (or `useLabel(spec)`):
 
 - `tone`: `tick` (mono, muted), `name` (condensed caps with a data-colour dot;
-  `dot: false` to hide it), `callout` (pill, data-colour border), `readout`
-  (pill with mono digits; `size: 'sm'` for compact rows; reserve width with
-  `minChars`), `legend` (pinned with `pin`).
+  `dot: false` to hide it), `callout` (pill, data-colour border; `swatches` adds
+  small colour dots), `readout` (pill with mono digits; `size: 'sm'` for compact
+  rows; reserve width with `minChars`, which also avoids a layout read per
+  counted number), `legend` (a glass chip pinned with `pin`; several pinned to
+  one corner stack in `pinOrder`).
 - `anchor`: a world point or `(T, layout) => V3`.
-- `prefer`: the side you want; `only` restricts the sides (use `['S']` for tick
-  labels so they stay registered under their tick); `leader: true` allows a
-  displaced label with a leader line; `short` is a fallback text.
+- `prefer`: the side you want; `only` restricts the sides (use `['S']` for
+  x-axis ticks and `['W']` for y-axis ticks so they stay registered);
+  `leader: true` allows a displaced label with a leader line; `short` is a
+  fallback text.
 - `priority`: higher places first (defaults: callout 90, readout 85, name 60,
   tick 30). Give the labels that must never move (ticks, axis titles) a high
   priority and `only`, and let annotations yield.
+- `required: true`: the beat does not make sense without it (all five domain
+  names, every lineup row). It places first, and QA fails if it is hidden.
 - `cue(T)`: visibility 0..1. Labels at 0 cost nothing and reserve no space.
+- `mode`: labels are 'story' by default and hide in explore; pass
+  `{ mode: 'explore' }` for explore labels (register them only while exploring).
 - `setLabelText(id, text)` updates text without React (counters).
-- The HUD chip is a registered obstacle; register others with `useObstacle`.
+- Ids are ONE namespace per stage: prefix them with your chapter. A duplicate
+  id from a second hook warns; a hook only ever removes its own labels.
+- Caps: at most 36 labels live (cue above zero) at any T, 96 registered per view.
+
+**Obstacles.** The placer never puts a label on an obstacle. The HUD chip is
+one. Register data marks and SDF plates with `useWorldObstacle(id, { box?,
+points?, radiusPx?, padPx?, mode? })`: a box is projected to its screen
+bounding rect, each point becomes a small square, with the live camera, every
+time labels are placed. A DOM obstacle that changes without T changing must
+call `bumpObstacles()` (the placer skips frames when nothing moved).
 
 The placer tries the preferred side first, then the side used last frame
 (hysteresis), then the other compass sides, a slide, three 18 px stagger tiers
-with a leader, the short text, and finally hides the label. `window.__story.labels()`
-reports placed rects, overlaps and clipping.
+with a leader (both directions), the short text, and finally hides the label.
+`window.__story.labels()` reports placed rects, overlaps, clipping and
+`requiredHidden`; `window.__story.labelCounts()` reports the caps.
 
 ## Camera poses
 
 Each beat has `cam: { L, P?, window?, keys? }`. A pose is
 `{ target, az, el, fov, fit, padPx }`:
 
-- `fit` is the world box that must land inside the focus rect minus `padPx`
-  (a function lets adaptive frames supply it). Put label room in `padPx`.
-- `target` should be the centre of `fit` (a function is allowed). The principal
-  point is moved to the centre of the padded focus rect with `setViewOffset`, so
-  the subject is centred in the visible part of the stage and never under the
-  caption card. The fitted distance is solved in closed form.
+- `fit` is the world box that must land inside the focus rect minus `padPx`.
+  A function gets `(layout, frame)`, the chapter's live chart frame, so boxes
+  that depend on the focus rect need no globals. Put label room in `padPx`.
+- `target` should be the centre of `fit` (a function gets the same arguments).
+  The principal point is moved to the centre of the padded focus rect with
+  `setViewOffset`, so the subject is centred in the visible part of the stage
+  and never under the caption card. The fitted distance is solved in closed form.
+- Reading a chart: az 0, el 0, fov about 22 (no keystone, no stair-stepped
+  axes). Depth is the point: az / el of 15 degrees or more, and fit the volume
+  that is actually on screen at that moment (the fanned slices, not the flat
+  chart). A few degrees of tilt reads as a mistake.
 - `P` is the portrait pose (phones). Keep comparisons front-on (L12).
 - The move happens inside `window` (default the first 35% of the beat), eased
   with `morph`; `keys` add mid-beat keyframes (see the Definition D2 fan).
@@ -202,10 +251,27 @@ Each beat has `cam: { L, P?, window?, keys? }`. A pose is
 
 `explore.initFromBeat(i)` seeds a per-chapter zustand slice from the beat the
 viewer left; the `Explore` DOM component edits that slice; the Scene renders its
-explore layer from it (read `useStoryStore((s) => s.mode)`). Explore may use
-damped motion (`THREE.MathUtils.damp`); determinism is only required in story
-mode. Every control is at least 44 px; nothing is hover-only.
-`scrubToggle` + `onScrub(nx, ny, phase)` route drags to your chapter.
+explore layer from it. Explore may use damped motion (`THREE.MathUtils.damp`);
+determinism is only required in story mode. Every control is at least 44 px;
+nothing is hover-only. Mark the one row that belongs in the phone peek with
+`className="st-ex-peek"` (the peek shows whole rows only; the rest appears on
+expand). `scrubToggle` + `onScrub(ray, ndc, phase)` route drags to your chapter:
+intersect the ray with your chart plane, exactly like a drag handle.
+
+## Prewarm: mount everything at load
+
+Shader linking and buffer uploads on a phone stall the frame they happen in.
+The engine compiles every material in the scene once your Scene mounts (hidden
+objects included, and the composer's render-target variant), so:
+
+- Mount every element of every beat at load, including the last beats' objects
+  and your whole explore layer, and drive visibility from T (`opacity(T)`,
+  `group.visible`) and from the mode.
+- Keep the story scene mounted under explore: wrap the two layers in
+  `<group visible={mode === 'story'}>` and `<group visible={mode === 'explore'}>`
+  (Definition `Scene.tsx`). Story labels hide themselves in explore.
+- Never mount by beat index (`index >= 5 && <Lineup/>`): that links shaders
+  mid-story.
 
 ## Reduced motion
 
@@ -217,13 +283,14 @@ in story mode.
 ## Quality tiers and budgets
 
 - `TIERS[tier]`: HIGH (DPR up to 2, MSAA 4, 7-level bloom, grain), MEDIUM (phone
-  default, DPR up to 1.5, half-res 5-level bloom, SMAA), LOW (no composer,
-  renderer tone mapping, halos instead of bloom, fills instead of particles).
-- Scale particle counts with `particleScale`; on LOW render the `AreaFill`
-  version of anything drawn with light.
+  default, DPR up to 1.5, half-res 5-level bloom, SMAA, particles x0.8), LOW (no
+  composer, renderer tone mapping, halos instead of bloom, fills instead of
+  particles).
+- On LOW render the `AreaFill` version of anything drawn with light.
 - Mobile budget per frame (MEDIUM, including post): at most 120 draw calls and
   250k triangles; aim for 30 scene calls and 30k triangles. Measure with
-  `window.__story.stats()` (Definition: about 20 to 30 calls, 3.5k triangles).
+  `window.__story.stats()` (Definition: 20 to 30 calls, under 4k triangles, 7.2k
+  points at DPR 1.5).
 - Never add a `useFrame` with a positive priority (it would take over rendering
   on LOW and the stage would go black). Never add post effects in a chapter.
 
@@ -238,26 +305,33 @@ cleanup. Kit components dispose their own. After navigating away and back,
 Beat titles <= 30 characters, bodies <= 140, restating copy that already exists
 in `fitnessData.ts` or the module files; name it in `source`. No new facts,
 numbers or quotes. Computed values (scores, totals) go in labels and the HUD,
-never in caption prose. No em or en dashes anywhere.
+never in caption prose. Colour is meaning (L8): #91C640 is fitness, the
+generalist or the claim, never a specialist's low score. No em or en dashes.
 
 ## QA contract
 
 - `?beat=N&t=X` renders beat N at progress X and holds; `?explore=1` opens
-  explore; `?tier=high|medium|low`; `?motion=reduce|full`; `?detent=`.
-- The stage root carries `data-story-ready="1"` once fonts, SDF fonts, shader
-  compile and two frames after the last seek are done.
+  explore; `?tier=high|medium|low`; `?motion=reduce|full`; `?detent=`;
+  `?qa=stub` puts a 3-beat stub story on chapters without one (QA only).
+- The stage root carries `data-story-ready="1"` once the chapter is LOADED and
+  two frames rendered after the last seek. Loaded never goes back to false on a
+  seek, so the slate never covers a scrub (H.15).
 - `window.__story`: `seek(n, t)`, `play()`, `pause()`, `next()`, `prev()`,
-  `explore(on)`, `state()`, `stats()`, `labels()`, `project(x, y, z)`, `ready`.
+  `explore(on)`, `state()`, `stats()`, `labels()`, `labelCounts()`,
+  `project(x, y, z)`, `ready`.
 
 ## Checklist before you commit
 
 1. `node scripts/fitness-gate.mjs` passes (grep gate + caption audit).
 2. `node C:/Users/ravik/fitness-v2/tools/dashcheck.mjs C:/Users/ravik/fitness-v2/base/src/fitness` prints no dashes.
 3. `tools/build.sh` passes for the dev and the preview build.
-4. Every beat at `t = 1` on 360, 390 and 430 px phones: subject fills the focus
-   rect, labels readable, `__story.labels()` shows no overlaps or clipping.
-5. At least one mid-beat frame (`t = 0.5`) per beat looks intentional.
-6. `?explore=1` on phone and desktop; the controls are reachable with a thumb.
-7. Reduced motion: nothing autoplays, each beat shows its end state.
-8. `stats()` on `?tier=medium`: under 120 calls and 250k triangles.
-9. `fitnessData.ts` unchanged (`git diff --stat`).
+4. Serve the build and run `node scripts/story-qa.mjs check http://127.0.0.1:<port> <view>`:
+   labels at 360 / 390 / 430 (no overlaps, clipping or hidden required labels),
+   budget, continuity, scrub without slate, nav away and back, persistent canvas,
+   keyboard and URL drift, reduced motion. All must pass.
+5. `node scripts/story-qa.mjs shots <url> <dir> phone "<view>?beat=N&t=1" ...`
+   for every beat on `phone`, `p360`, `p430`, `phone3x` and `desktop`, plus a
+   mid-beat frame per beat and `?explore=1`. Look at every one, phone first:
+   the subject fills the focus rect, the idea of the beat is SHOWN, nothing
+   reads as noise at 3x.
+6. `fitnessData.ts` unchanged (`git diff --stat`).

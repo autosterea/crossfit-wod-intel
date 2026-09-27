@@ -9,6 +9,7 @@ import { useFitnessStore } from '../../fitnessStore'
 import type { Beat, StoryDef } from '../types'
 import type { FitnessView, ModuleKey } from '../../lessonTypes'
 import { IconChevron } from './icons'
+import { hasStory } from '../../stories'
 
 /* =========================================================================
    Caption card (DESIGN.md B.2, C.7). Phone: a glass card over the bottom of
@@ -71,9 +72,12 @@ function NextChapterCta({ view }: { view: FitnessView }) {
   const navigate = useFitnessStore((s) => s.navigate)
   if (!next || next === 'intro') return null
   const m = moduleByKey(next as ModuleKey)
+  // Until a chapter lands on the story engine it opens its classic page; say so.
+  const classic = !hasStory(next)
   return (
     <button type="button" className="st-btn st-btn--solid" onClick={() => navigate({ view: next })}>
       Next: {m.num} {m.mobileLabel ?? m.label}
+      {classic && <span className="st-btn-tag">Classic</span>}
     </button>
   )
 }

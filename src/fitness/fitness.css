@@ -2125,3 +2125,62 @@
     animation: none;
   }
 }
+
+/* ---------------------- fix round 1 (see DESIGN.md H) ---------------------- */
+
+/* D4 callout swatches: the five domain colours inside the pill */
+.st-lbl-sw {
+  display: inline-flex;
+  gap: 3px;
+  margin-right: 2px;
+}
+.st-lbl-sw i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(7, 10, 14, 0.8);
+}
+/* legend tone: a small glass chip, pinned and stacked in a corner */
+.st-lbl--legend {
+  background: rgba(7, 10, 14, 0.62);
+  border: 1px solid rgba(238, 243, 246, 0.1);
+  border-radius: 999px;
+  padding: 2px 9px 2px 7px;
+}
+.st-lbl--legend .st-lbl-t {
+  text-shadow: none;
+}
+
+/* the explore sheet peek shows whole rows only: header + the .st-ex-peek row */
+.st-explore.is-peek {
+  max-height: none;
+}
+.st-explore.is-peek .st-ex > :not(.st-ex-peek) {
+  display: none;
+}
+.st-explore.is-peek .st-explore-body {
+  overflow: hidden;
+}
+.st-ex .wf-readout .lbl {
+  font-size: 11px;
+}
+
+/* "Next: 05 Continuum" when that chapter is still the classic page */
+.st-btn-tag {
+  margin-left: 8px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  background: rgba(255, 255, 255, 0.18);
+  vertical-align: 1px;
+}
+
+/* light theme: the yellow-green accent is ~2:1 on white; use sea-green on light chrome */
+:root[data-theme='light'] .st-wordmark em {
+  color: #019644;
+}
+:root[data-theme='light'] .st-sheet-num,
+:root[data-theme='light'] .st-sheet-glyph {
+  filter: brightness(0.68) saturate(1.25);
+}

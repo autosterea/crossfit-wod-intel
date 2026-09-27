@@ -16,15 +16,36 @@ export const STORIES: Partial<Record<FitnessView, () => Promise<{ default: Story
   definition: () => import('./definition/story'),
 }
 
+/*
+ * QA only: `?qa=stub` (read once per page load, kept for in-app navigation)
+ * puts a tiny 3-beat stub story on every chapter that has no story yet, so the
+ * persistent-stage contract (same canvas across a chapter change) can be
+ * tested before a second chapter lands. Never linked from the UI.
+ */
+const QA_STUB = (() => {
+  try {
+    return new URLSearchParams(window.location.search).get('qa') === 'stub'
+  } catch {
+    return false
+  }
+})()
+
+const loaderFor = (v: FitnessView): (() => Promise<{ default: StoryDef }>) | undefined => {
+  const real = STORIES[v]
+  if (real) return real
+  if (QA_STUB && v !== 'intro') return () => import('./_qa/qaStory').then((m) => ({ default: m.stubStory(v) }))
+  return undefined
+}
+
 const cache = new Map<FitnessView, StoryDef>()
 
-export const hasStory = (v: FitnessView): boolean => !!STORIES[v]
+export const hasStory = (v: FitnessView): boolean => !!loaderFor(v)
 export const cachedStory = (v: FitnessView): StoryDef | undefined => cache.get(v)
 
 export async function loadStory(v: FitnessView): Promise<StoryDef | null> {
   const hit = cache.get(v)
   if (hit) return hit
-  const loader = STORIES[v]
+  const loader = loaderFor(v)
   if (!loader) return null
   const mod = await loader()
   cache.set(v, mod.default)
@@ -33,7 +54,7 @@ export async function loadStory(v: FitnessView): Promise<StoryDef | null> {
 
 /** Warm the next chapter's chunk when the browser is idle. */
 export function prefetchStory(v: FitnessView): void {
-  if (!STORIES[v] || cache.has(v)) return
+  if (!loaderFor(v) || cache.has(v)) return
   const run = () => void loadStory(v).catch(() => undefined)
   const w = window as unknown as { requestIdleCallback?: (cb: () => void) => number }
   if (w.requestIdleCallback) w.requestIdleCallback(run)

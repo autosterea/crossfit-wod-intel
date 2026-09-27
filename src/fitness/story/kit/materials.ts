@@ -175,8 +175,23 @@ export function makePenMaterial(o: PenMatOpts): LineMaterial {
 export type FillMode = 'gradient' | 'hatch' | 'solid'
 const FILL_MODE: Record<FillMode, number> = { gradient: 0, hatch: 1, solid: 2 }
 
-/** Chalk-dust gradient fill for area strips: alpha mix(0.06, 0.50, aT) x uOpacity. */
-export function makeFillMaterial(color: string, mode: FillMode = 'gradient'): THREE.ShaderMaterial {
+export interface FillMatOpts {
+  /** per-vertex colour attribute `aColor` (several strips in one draw call) */
+  vertexColors?: boolean
+  /** additive blending: the fill reads as light on the slate (Capacity pour) */
+  additive?: boolean
+}
+
+/**
+ * Area strips (B.9 "Fill"). alpha = mix(uLo, uHi, aT) x uOpacity, where aT is
+ * 0 at the baseline and 1 at the data edge. Hatch mode draws 45 degree screen
+ * stripes at uHi. uPow shapes the gradient (above 1: light gathers toward
+ * the edge). The RIM (amendment H.20) is a thin HDR band of constant
+ * world width uRimW just under the data edge: colour x (1 + uRim) there, so
+ * bloom lifts the top edge of a luminous area into a glowing rim under the
+ * crisp pen (L10). aH is the column height (top - bottom) per vertex.
+ */
+export function makeFillMaterial(color: string, mode: FillMode = 'gradient', o: FillMatOpts = {}): THREE.ShaderMaterial {
   return new THREE.ShaderMaterial({
     uniforms: {
       uColor: { value: lin(color) },
@@ -187,15 +202,29 @@ export function makeFillMaterial(color: string, mode: FillMode = 'gradient'): TH
       uDpr: engineUniforms.uDpr,
       uLo: { value: 0.06 },
       uHi: { value: 0.5 },
+      uRim: { value: 0 },
+      uRimW: { value: 0.12 },
+      uRimA: { value: 0.55 },
+      uPow: { value: 1 },
     },
+    defines: o.vertexColors ? { USE_ACOLOR: '' } : {},
     vertexShader: /* glsl */ `
       attribute float aT;
       attribute float aU;
+      attribute float aH;
+      #ifdef USE_ACOLOR
+      attribute vec3 aColor;
+      varying vec3 vColor;
+      #endif
       varying float vT;
       varying float vU;
       varying float vY;
+      varying float vH;
       void main() {
-        vT = aT; vU = aU; vY = position.y;
+        vT = aT; vU = aU; vY = position.y; vH = aH;
+        #ifdef USE_ACOLOR
+        vColor = aColor;
+        #endif
         gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
       }
     `,
@@ -208,18 +237,38 @@ export function makeFillMaterial(color: string, mode: FillMode = 'gradient'): TH
       uniform float uDpr;
       uniform float uLo;
       uniform float uHi;
+      uniform float uRim;
+      uniform float uRimW;
+      uniform float uRimA;
+      uniform float uPow;
+      #ifdef USE_ACOLOR
+      varying vec3 vColor;
+      #endif
       varying float vT;
       varying float vU;
       varying float vY;
+      varying float vH;
       void main() {
         if ( vU > uReveal || vY > uLevel ) discard;
-        float a = mix( uLo, uHi, vT );
+        #ifdef USE_ACOLOR
+        vec3 col = vColor;
+        #else
         vec3 col = uColor;
+        #endif
+        float a = mix( uLo, uHi, pow( vT, uPow ) );
         if ( uMode > 0.5 && uMode < 1.5 ) {
           float h = step( 0.5, fract( ( gl_FragCoord.x + gl_FragCoord.y ) / ( 7.0 * uDpr ) ) );
-          a = 0.25 * h;
+          a = uHi * h;
         } else if ( uMode > 1.5 ) {
           a = uHi;
+        }
+        if ( uRim > 0.0 ) {
+          float depth = ( 1.0 - vT ) * vH;
+          float band = exp( - depth / max( uRimW, 1e-4 ) );
+          col *= 1.0 + uRim * band;
+          // the hottest light whitens a little, like a real emitter
+          col = mix( col, vec3( max( col.r, max( col.g, col.b ) ) ), 0.3 * band );
+          a = max( a, uRimA * band );
         }
         gl_FragColor = vec4( col, a * uOpacity );
         #include <tonemapping_fragment>
@@ -229,6 +278,7 @@ export function makeFillMaterial(color: string, mode: FillMode = 'gradient'): TH
     transparent: true,
     depthWrite: false,
     side: THREE.DoubleSide,
+    blending: o.additive ? THREE.AdditiveBlending : THREE.NormalBlending,
   })
 }
 

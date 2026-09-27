@@ -1,12 +1,19 @@
-import { useMemo, useSyncExternalStore } from 'react'
-import { focus, subscribeFocus, focusVersion } from '../camera/focusRect'
+import { useSyncExternalStore } from 'react'
+import { focusRect, subscribeFocus, focusVersion } from '../camera/focusRect'
 import type { Box } from '../types'
 
 /* =========================================================================
    Adaptive chart frame (DESIGN.md B.13). 2D charts are authored in chart
    space (u 0..1 along x, v 0..vMax along y) and mapped to world so the chart
-   fills any focus rect: tall on a phone, wide on desktop. Recomputed only on
-   resize, orientation or detent change, never per frame.
+   fills any focus rect: tall on a phone, wide on desktop.
+
+   The frame is ENGINE-OWNED (amendment H.17): a chapter declares
+   `StoryDef.frame` and the engine computes the frame from the focus rect.
+   Scenes read it with useStoryFrame(); camera poses receive the same object
+   as `fit(layout, frame)` / `target(layout, frame)`. One cache, keyed by the
+   options and the focus-rect aspect (quantised so tiny rect jitter never
+   rebuilds geometry), so the camera and the geometry always agree and there
+   is no module global written during render.
    ========================================================================= */
 
 export interface ChartFrame {
@@ -35,10 +42,11 @@ export interface ChartFrameOpts {
   zRange?: readonly [number, number]
 }
 
-export function computeChartFrame(o: ChartFrameOpts): ChartFrame {
+/** Pure: the frame for given options and a focus-rect size. */
+export function computeChartFrame(o: ChartFrameOpts, fw = focusRect.w, fh = focusRect.h): ChartFrame {
   const vMax = o.vMax ?? 1
-  const w = Math.max(40, focus.w - o.marginPx.l - o.marginPx.r)
-  const h = Math.max(40, focus.h - o.marginPx.t - o.marginPx.b)
+  const w = Math.max(40, fw - o.marginPx.l - o.marginPx.r)
+  const h = Math.max(40, fh - o.marginPx.t - o.marginPx.b)
   // aspect of the plotted box (v from 0 to vMax) against the available rect
   const aspect = (w / h) * vMax
   const FW = o.FH * Math.max(o.minAspect, Math.min(o.maxAspect, aspect))
@@ -62,12 +70,49 @@ export function computeChartFrame(o: ChartFrameOpts): ChartFrame {
   }
 }
 
-/** React hook: the frame, recomputed when the focus rect changes. */
+const optsKey = (o: ChartFrameOpts) =>
+  `${o.FH}|${o.minAspect}|${o.maxAspect}|${o.marginPx.l},${o.marginPx.r},${o.marginPx.t},${o.marginPx.b}|${o.vMax ?? 1}|${o.zRange?.join(',') ?? ''}`
+
+/** Quantised aspect of the available rect: 1/50 steps. */
+const aspectKey = (o: ChartFrameOpts) =>
+  Math.round(((focusRect.w - o.marginPx.l - o.marginPx.r) / Math.max(1, focusRect.h - o.marginPx.t - o.marginPx.b)) * 50)
+
+const cache = new Map<string, { q: number; frame: ChartFrame }>()
+
+/** The frame for these options at the current focus rect (cached, stable identity). */
+export function frameFor(o: ChartFrameOpts): ChartFrame {
+  const k = optsKey(o)
+  const q = aspectKey(o)
+  const hit = cache.get(k)
+  if (hit && hit.q === q) return hit.frame
+  const frame = computeChartFrame(o)
+  cache.set(k, { q, frame })
+  return frame
+}
+
+/* ------------------------ the chapter's frame ------------------------ */
+
+const DEFAULT_OPTS: ChartFrameOpts = { FH: 10, minAspect: 1, maxAspect: 1, marginPx: { l: 0, r: 0, t: 0, b: 0 } }
+let storyOpts: ChartFrameOpts = DEFAULT_OPTS
+
+/** Engine: the active chapter's frame options (StoryDef.frame). */
+export function setStoryFrameOpts(o: ChartFrameOpts | null): void {
+  storyOpts = o ?? DEFAULT_OPTS
+}
+
+/** The active chapter's frame, right now (camera poses, gestures, anchors). */
+export function storyFrame(): ChartFrame {
+  return frameFor(storyOpts)
+}
+
+/** React: the active chapter's frame; re-renders only when the frame changes. */
+export function useStoryFrame(): ChartFrame {
+  useSyncExternalStore(subscribeFocus, focusVersion)
+  return storyFrame()
+}
+
+/** React: a frame for explicit options (secondary charts inside a chapter). */
 export function useChartFrame(o: ChartFrameOpts): ChartFrame {
-  const v = useSyncExternalStore(subscribeFocus, focusVersion)
-  const key = `${o.FH}|${o.minAspect}|${o.maxAspect}|${o.marginPx.l},${o.marginPx.r},${o.marginPx.t},${o.marginPx.b}|${o.vMax ?? 1}|${o.zRange?.join(',') ?? ''}`
-  // focus.w / focus.h change with v; round the aspect so tiny rect jitter does not rebuild geometry
-  const q = Math.round(((focus.w - o.marginPx.l - o.marginPx.r) / Math.max(1, focus.h - o.marginPx.t - o.marginPx.b)) * 50)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  return useMemo(() => computeChartFrame(o), [key, q, v > -1])
+  useSyncExternalStore(subscribeFocus, focusVersion)
+  return frameFor(o)
 }

@@ -19,7 +19,7 @@ export interface FocusState extends Rect {
   version: number
 }
 
-export const focus: FocusState = { x: 12, y: 8, w: 366, h: 530, W: 390, H: 796, layout: 'P', shell: 'phone', version: 0 }
+export const focusRect: FocusState = { x: 12, y: 8, w: 366, h: 530, W: 390, H: 796, layout: 'P', shell: 'phone', version: 0 }
 
 const focusSubs = new Set<() => void>()
 /** Subscribe to focus-rect changes (useSyncExternalStore). */
@@ -29,7 +29,7 @@ export function subscribeFocus(fn: () => void): () => void {
     focusSubs.delete(fn)
   }
 }
-export const focusVersion = () => focus.version
+export const focusVersion = () => focusRect.version
 
 /** DOM panels a chapter excludes from the rect (e.g. the Continuum portrait key). */
 const insets = new Map<string, { el: HTMLElement; side: 'top' | 'bottom' }>()
@@ -80,23 +80,23 @@ export function computeFocus(stage: HTMLElement, card: HTMLElement | null): bool
   r.h = Math.max(40, r.h)
   const layout: Layout = r.w / r.h < 0.95 ? 'P' : 'L'
   const changed =
-    Math.abs(r.x - focus.x) > 0.5 ||
-    Math.abs(r.y - focus.y) > 0.5 ||
-    Math.abs(r.w - focus.w) > 0.5 ||
-    Math.abs(r.h - focus.h) > 0.5 ||
-    W !== focus.W ||
-    H !== focus.H ||
-    shell !== focus.shell
+    Math.abs(r.x - focusRect.x) > 0.5 ||
+    Math.abs(r.y - focusRect.y) > 0.5 ||
+    Math.abs(r.w - focusRect.w) > 0.5 ||
+    Math.abs(r.h - focusRect.h) > 0.5 ||
+    W !== focusRect.W ||
+    H !== focusRect.H ||
+    shell !== focusRect.shell
   if (changed) {
-    focus.x = Math.round(r.x)
-    focus.y = Math.round(r.y)
-    focus.w = Math.round(r.w)
-    focus.h = Math.round(r.h)
-    focus.W = W
-    focus.H = H
-    focus.layout = layout
-    focus.shell = shell
-    focus.version++
+    focusRect.x = Math.round(r.x)
+    focusRect.y = Math.round(r.y)
+    focusRect.w = Math.round(r.w)
+    focusRect.h = Math.round(r.h)
+    focusRect.W = W
+    focusRect.H = H
+    focusRect.layout = layout
+    focusRect.shell = shell
+    focusRect.version++
     for (const fn of focusSubs) fn()
   }
   return changed
@@ -129,5 +129,5 @@ export function useFocusInset(ref: { current: HTMLElement | null }, side: 'top' 
 
 /** Snapshot of the focus rect (a ref-like object plus its version). */
 export function useFocusRect(): FocusState {
-  return focus
+  return focusRect
 }

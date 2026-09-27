@@ -147,5 +147,5 @@ export function EnergyBands({ frame, opacity }: { frame: ChartFrame; opacity: Fn
 /** u and v of each POWER_TASKS dot on the generalist curve. */
 export const TASK_U = POWER_TASKS.map((t) => AXIS.u(t.seconds))
 export const TASK_400 = POWER_TASKS.findIndex((t) => t.name === '400m run')
-/** label priority: the four named in D.5 first */
-export const TASK_PRIORITY = POWER_TASKS.map((t) => (['1RM clean', '400m run', 'Mile run', '10k run'].includes(t.name) ? 70 : 40))
+/** The task names D.5 labels (the others are dots only, so the phone chart stays clean). */
+export const TASK_LABELED = POWER_TASKS.map((t) => ['1RM clean', '400m run', 'Mile run', '10k run'].includes(t.name))

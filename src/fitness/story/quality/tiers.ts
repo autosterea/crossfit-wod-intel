@@ -16,7 +16,7 @@ export interface TierSpec {
 
 export const TIERS: Record<Tier, TierSpec> = {
   high: { dpr: [1, 2], composer: true, msaa: 4, smaa: false, bloomLevels: 7, bloomScale: 1, grain: true, particleScale: 1 },
-  medium: { dpr: [1, 1.5], composer: true, msaa: 0, smaa: true, bloomLevels: 5, bloomScale: 0.5, grain: false, particleScale: 0.55 },
+  medium: { dpr: [1, 1.5], composer: true, msaa: 0, smaa: true, bloomLevels: 5, bloomScale: 0.5, grain: false, particleScale: 0.8 },
   low: { dpr: [1, 1], composer: false, msaa: 0, smaa: false, bloomLevels: 0, bloomScale: 0, grain: false, particleScale: 0 },
 }
 

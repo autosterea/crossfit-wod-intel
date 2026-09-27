@@ -33,6 +33,8 @@ export interface LightFieldUniforms {
   mode: 0 | 1
   hot: number
   opacity: number
+  /** 0..1: settled light relaxes to a finer sparkle (default 0) */
+  rest?: number
 }
 
 export interface LightFieldProps {
@@ -68,10 +70,12 @@ const VERT = /* glsl */ `
   uniform vec3 uColSpill;
   uniform vec3 uColCond;
   uniform vec3 uColChalk;
+  uniform float uRest;
   attribute vec2 aSlot;
   attribute vec4 aSeed;
   varying vec3 vCol;
   varying float vAlpha;
+  varying float vTrail;
 
   float pickA( int i ) { vec4 v = uA[ i / 4 ]; int c = i - ( i / 4 ) * 4; return c == 0 ? v.x : c == 1 ? v.y : c == 2 ? v.z : v.w; }
   float pickB( int i ) { vec4 v = uB[ i / 4 ]; int c = i - ( i / 4 ) * 4; return c == 0 ? v.x : c == 1 ? v.y : c == 2 ? v.z : v.w; }
@@ -91,6 +95,7 @@ const VERT = /* glsl */ `
     float v = aSlot.y;
     float y = v;
     float alpha = 0.0;
+    float trail = 0.0;
     vec3 col = uColA;
     float a = curveA( u );
     if ( uMode < 0.5 ) {
@@ -101,7 +106,10 @@ const VERT = /* glsl */ `
         float e = 1.0 - pow( 1.0 - k, 3.0 );
         y = v + ( 1.0 - e ) * ( 0.35 + 0.25 * aSeed.y );
         alpha = smoothstep( 0.0, 0.25, k );
+        // settled light relaxes to a fine sparkle so the fill carries the glow (H.20)
+        alpha *= 1.0 - 0.4 * uRest * ( 0.5 + 0.5 * aSeed.z );
         col = uColA * ( 1.0 + uHot * ( 0.55 + 1.6 * ( 1.0 - k ) ) );
+        trail = 0.5 * uHot * smoothstep( 0.1, 0.6, 1.0 - e );
       }
     } else {
       float b = curveB( u );
@@ -112,10 +120,12 @@ const VERT = /* glsl */ `
         col = mix( uColA, uColChalk, m );
         alpha = mix( 1.0, 0.6, m );
       } else if ( inA ) {
+        // spill: the light the specialist cannot hold falls out, streaking down
         float fall = m * m * m;
-        y = v - fall * ( 0.35 + 0.45 * aSeed.z );
-        col = mix( uColA, uColSpill, smoothstep( 0.0, 0.3, m ) );
-        alpha = 1.0 - smoothstep( 0.35, 1.0, m );
+        y = v - fall * ( 0.45 + 0.55 * aSeed.z );
+        col = mix( uColA, uColSpill * 1.6, smoothstep( 0.0, 0.3, m ) );
+        alpha = 1.0 - smoothstep( 0.45, 1.0, m );
+        trail = smoothstep( 0.08, 0.35, m ) * ( 1.0 - smoothstep( 0.8, 1.0, m ) );
       } else if ( inB ) {
         float e = 1.0 - pow( 1.0 - m, 3.0 );
         y = v + ( 1.0 - e ) * 0.1;
@@ -127,7 +137,8 @@ const VERT = /* glsl */ `
     vAlpha = alpha;
     vec3 p = vec3( uX0 + u * uW, uY0 + y * uH, uZ );
     gl_Position = projectionMatrix * modelViewMatrix * vec4( p, 1.0 );
-    gl_PointSize = alpha > 0.002 ? uSize * uDpr * ( 0.85 + 0.3 * aSeed.w ) : 0.0;
+    vTrail = trail;
+    gl_PointSize = alpha > 0.002 ? uSize * uDpr * ( 0.85 + 0.3 * aSeed.w ) * ( 1.0 + 2.2 * trail ) : 0.0;
   }
 `
 
@@ -135,13 +146,23 @@ const FRAG = /* glsl */ `
   uniform float uOpacity;
   varying vec3 vCol;
   varying float vAlpha;
+  varying float vTrail;
   void main() {
     if ( vAlpha < 0.002 ) discard;
     vec2 d = gl_PointCoord * 2.0 - 1.0;
     float r = dot( d, d );
-    if ( r > 1.0 ) discard;
-    float k = exp( - r * 3.2 );
-    gl_FragColor = vec4( vCol * k, k * vAlpha * uOpacity );
+    if ( r > 1.0 && vTrail < 0.01 ) discard;
+    // a hot core with a soft skirt: reads as a point of light, not dust
+    float k = exp( - r * 9.0 ) + 0.28 * exp( - r * 2.6 );
+    vec3 c = mix( vCol, vec3( 1.0 ) * max( max( vCol.r, vCol.g ), vCol.b ), 0.3 * exp( - r * 16.0 ) );
+    if ( vTrail > 0.01 ) {
+      // a falling streak: the head at the centre, the tail trailing upward
+      float sx = d.x / 0.22;
+      float head = exp( - ( sx * sx + ( d.y * d.y ) / 0.03 ) );
+      float tail = exp( - sx * sx ) * smoothstep( -1.0, 0.0, d.y ) * step( d.y, 0.0 ) * ( 0.55 + 0.45 * ( d.y + 1.0 ) );
+      k = mix( k, head + 0.6 * tail, vTrail );
+    }
+    gl_FragColor = vec4( c * k, k * vAlpha * uOpacity );
     #include <tonemapping_fragment>
     #include <colorspace_fragment>
   }
@@ -160,7 +181,7 @@ export function LightField({
   color = PAL.yellowGreen,
   z = 0.02,
   renderOrder = 40,
-  sizePx = 2.2,
+  sizePx = 3,
   liveCurves,
 }: LightFieldProps) {
   const geometry = useMemo(() => {
@@ -200,6 +221,7 @@ export function LightField({
           uMix: { value: 0 },
           uMode: { value: 0 },
           uHot: { value: 0 },
+          uRest: { value: 0 },
           uOpacity: { value: 1 },
           uX0: { value: 0 },
           uW: { value: 1 },
@@ -258,6 +280,7 @@ export function LightField({
     u.uMix.value = s.mix
     u.uMode.value = s.mode
     u.uHot.value = s.hot
+    u.uRest.value = s.rest ?? 0
     u.uOpacity.value = s.opacity
   })
 

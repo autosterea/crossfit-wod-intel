@@ -552,11 +552,11 @@ export type Mode = 'story' | 'explore'
 export type Detent = 'peek' | 'default' | 'expanded'
 
 export interface CamPose {
-  target: V3
+  target: V3 | ((layout: Layout, frame: ChartFrame) => V3)   // H.17
   az: number        // degrees; 0 = camera on +Z looking at target; + moves the camera toward +X
   el: number        // degrees above the target
   fov?: number      // vertical fov in degrees, default 30
-  fit: Box          // must project entirely inside the focus rect minus padPx
+  fit: Box | ((layout: Layout, frame: ChartFrame) => Box)     // must project entirely inside the focus rect minus padPx (H.17)
   padPx?: number | { l: number; r: number; t: number; b: number }  // default 24 on every side
 }
 export interface CamSpec {
@@ -594,6 +594,7 @@ export interface StoryDef {
   explore: ExploreSpec
   Hud?: ComponentType                  // DOM content of the HUD chip (writes via refs)
   fog?: { color: string; density: number }
+  frame?: ChartFrameOpts               // H.17: engine-owned adaptive chart frame (B.13)
 }
 ```
 
@@ -638,7 +639,7 @@ interface StoryState {
 
 **Playback state machine** (`playback.ts`; runs in the clock `useFrame` at priority -100):
 - **build**: `t += dt / beat.build` (dt clamped to 0.1 s), until t = 1.
-- **hold**: timer `hold = clamp(1.5 + 0.24 * words(title + body), 3, 9)` seconds. Then the next beat starts at t = 0. On the last beat the phase becomes `done`, and there is no auto-advance and no chapter auto-advance.
+- **hold**: timer `hold = clamp(1.5 + 0.24 * words(title + body) - 0.6 * build, 2, 7)` seconds (H.16: reading starts at the caption swap, so part of the build already counts). Then the next beat starts at t = 0. On the last beat the phase becomes `done`, and there is no auto-advance and no chapter auto-advance.
 - The clock does not advance while `interacting > 0`, `mode === 'explore'`, `document.hidden`, or the stage is less than 10% visible. The hold timer resumes where it stopped.
 - The play-ring progress is `(buildElapsed + holdElapsed) / (build + hold)`.
 - **next()** during a build glides T to `index + 1` over 350 ms (`settle`), then continues playing beat index + 1. During a hold it steps immediately. On the last beat it navigates to the next chapter (chapter fade).
@@ -684,6 +685,8 @@ interface StoryQA {
   - two frames have rendered after the latest seek.
 
   Every seek sets it back to "0" until two frames later.
+
+  (H.15) Two separate flags: **loaded** (store, one-way per chapter: chunk, fonts, SDF, compile, first frames) drives the slate and autoplay and is never reset by a seek; **settled** (QA only) is loaded plus two frames after the latest seek, written straight to `data-story-ready` and `__story.ready` with no React state. A seek or a scrub never brings the slate back.
 
 ### C.4b Provider
 
@@ -816,7 +819,12 @@ export function useObstacle(id: string, rect: () => { x: number; y: number; w: n
   4. Keep the previously chosen direction first, for hysteresis.
   5. Reject any candidate that leaves the focus rect inset by 8 px, or overlaps a placed label (2 px tolerance) or a registered obstacle.
   6. Write the positions.
-- There are at most 36 labels per view.
+- (H.19) At most 36 labels are LIVE (cue above zero) at any T, and at most 96 are registered per view (a sanity bound; story and explore labels together). The placer warns when either is exceeded, and `__story.labelCounts()` reports both.
+- (H.19) `required: true` marks a label the beat's meaning depends on: it places first (priority floor 96) and `__story.labels()` reports `requiredHidden` when its cue is up but it could not be placed. QA fails on it.
+- (H.19) Obstacles: DOM rects (`useObstacle`, e.g. the HUD) and world obstacles (`useWorldObstacle`: a box, e.g. an SDF plate, and / or points, e.g. data dots and curve samples), projected with the live camera every placement. Labels never cover data marks.
+- (H.19) `useLabels(specs, { mode })`: labels belong to 'story' (default), 'explore' or 'both' and hide themselves in the other mode. Ids are one namespace per stage; a second owner registering an id warns, and an owner only ever unregisters its own entry.
+- (H.19) Pinned legend labels stack in their corner in `pinOrder`. Callouts may carry `swatches` (small data-colour dots).
+- (C.16) The placer skips a frame when nothing that can move a label changed, and allocates nothing per frame.
 - Labels never use perspective scale, `<Html>`, or CanvasTexture sprites.
 - `__story.labels()` returns the placed rects. QA asserts that at 360, 390 and 430 widths, no two visible labels overlap and no visible label is clipped.
 
@@ -826,7 +834,7 @@ export function useObstacle(id: string, rect: () => { x: number; y: number; w: n
 export const TIERS: Record<Tier, { dpr: [number, number]; composer: boolean; msaa: number; smaa: boolean;
   bloomLevels: number; bloomScale: number; grain: boolean; particleScale: number }> = {
   high:   { dpr: [1, 2],   composer: true,  msaa: 4, smaa: false, bloomLevels: 7, bloomScale: 1,   grain: true,  particleScale: 1 },
-  medium: { dpr: [1, 1.5], composer: true,  msaa: 0, smaa: true,  bloomLevels: 5, bloomScale: 0.5, grain: false, particleScale: 0.55 },
+  medium: { dpr: [1, 1.5], composer: true,  msaa: 0, smaa: true,  bloomLevels: 5, bloomScale: 0.5, grain: false, particleScale: 0.8 },  // H.20
   low:    { dpr: [1, 1],   composer: false, msaa: 0, smaa: false, bloomLevels: 0, bloomScale: 0,   grain: false, particleScale: 0 },
 }
 ```
@@ -868,7 +876,13 @@ export const TIERS: Record<Tier, { dpr: [number, number]; composer: boolean; msa
          color={string} opacity?={(T) => number} anchorX? anchorY? outline?={boolean} />
   // wraps drei Text with font = import.meta.env.BASE_URL + 'fonts/...'; per-frame opacity via
   // ref.current.fillOpacity; the `text` prop never changes per frame
-useCounter(labelId, { from, to, cue: (T) => number, format: (v: number) => string })
+useCounter(labelId, { value: (T) => number, format: (v: number) => string })   // H.17: the value is a pure function of T
+useDomCounter(ref, { value, format })                                           // the same, into a DOM node (HUD chips)
+<AreaFill ... bottom?={Float32Array} additive? rim?={(T) => number} rimWidth? gamma? />   // H.20: band fills, luminous areas
+<AreaStrips strips points colors write={(T, top, bottom) => boolean} ... />             // H.21: several strips, one draw call
+useStoryFrame() / storyFrame()      // H.17: the chapter's engine-owned chart frame (StoryDef.frame)
+useWorldObstacle(id, { box?, points?, radiusPx?, padPx?, mode? })                       // H.19
+<ChipRadio label options value onChange />                                             // explore chip row as a real radiogroup
 tween: mix, mixV3, morphPoints(out, a, b, k, stagger), resample(points, 256), arcLengths(points)
 shapes: underline(w), decagon(r), drumGlyph(r), humps(w, h), dialGlyph(r), curveGlyph(samples, w, h),
         surfaceGlyph(w, h), toSvgPath(points, size)   // closed shapes: start at 12 o'clock, clockwise
@@ -877,6 +891,7 @@ axis:   logAxis(tMin, tMax)                // u = logU(t)
 useChartFrame({ FH, minAspect, maxAspect, marginPx }) -> ChartFrame
 useChapterFog(color, density)
 useDragHandle({ id, anchor: () => V3, radiusPx?: 22, onStart, onDrag(ray: THREE.Ray, ndc: [number, number]), onEnd })
+ExploreSpec.onScrub(ray: THREE.Ray, ndc: [number, number], phase)   // H.17: the same Ray a drag handle gets
 useImpact(beatIndex, [a, b])              // B.10 impact accent
 ```
 
@@ -1519,27 +1534,27 @@ The whole 40-draw story run and all 64 threads are precomputed at module load (p
 
 **HUD chip** from D3: "AREA" (eyebrow) plus the score readout {computed, counting}.
 
-#### D0 `measured`, build 4.0
+#### D0 `measured`, build 3.0 (H.16)
 - **Caption**:
   - Title: **Power is measurable**
   - Body: "Power is force times distance over time. How much weight, how far, how long: that is a valid measure of fitness." [MODULE_COPY.definition.keyPoints[0] + DEFINITION_TEXT s4, para]
 - **Scene**:
-  - 0.00 to 0.35: construction. Axes and ticks.
-  - 0.40 to 0.60: one dot snaps in at "400m run" (55 s), at the Generalist's `valAt` there.
-  - 0.60 to 0.90: dashed chalk dimension lines run from the dot to both axes (a measured point).
-- **Camera**: az 0, el 4, fov 26. Fit the chart box, pad { l: 48, r: 16, t: 20, b: 44 }. D1, D3 and D4 use the same fit.
+  - 0.00 to 0.30: construction. Axes and ticks.
+  - 0.34 to 0.48: one dot snaps in at "400m run" (55 s), at the Generalist's `valAt` there.
+  - 0.50 to 0.80: dashed chalk dimension lines run from the dot to both axes (a measured point).
+- **Camera** (H.21): az 0, el 0, fov 22, exactly front-on. Fit the chart box with the H.5 pad. D1, D3, D4, D5 and explore use the same pose.
 - **Labels**: "Power output", "Effort duration"; name "400m run"; ticks.
 - **Learning outcome**: one effort gives one measured point: its duration and its power.
 
-#### D1 `curve`, build 5.5
+#### D1 `curve`, build 5.0 (H.16)
 - **Caption**:
   - Title: **Power falls with duration**
   - Body: "At each effort duration there is a highest average power you can hold, and as duration grows that power falls." [POWER_CONCEPT s2, para]
 - **Scene**:
-  - 0.05 to 0.40: the other nine `POWER_TASKS` dots snap onto the Generalist curve, 70 ms stagger.
-  - 0.40 to 0.80: the pen draws the Generalist curve through them in #91C640, 3 px (hot).
-  - 0.80 to 1.00: the energy bands fade in under the axis (a callback to chapter 03).
-- **Labels**: task names (priority: 1RM clean, 400m run, Mile run, 10k run first; the others may use tiers or hide); band ticks with the three duration strings.
+  - 0.00 to 0.30: the other nine `POWER_TASKS` dots snap onto the Generalist curve, 70 ms stagger.
+  - 0.16 to 0.62: the pen draws the Generalist curve through them in #91C640, 3 px (hot).
+  - 0.66 to 0.90: the energy bands fade in under the axis (a callback to chapter 03).
+- **Labels**: task names for 1RM clean, 400m run, Mile run and 10k run only (the other six are dots; H.23); band ticks with the three duration strings, kept inside the chart x range.
 - **Learning outcome**: the measured points form one falling curve on the same time axis as the energy chapter.
 
 #### D2 `domains`, build 5.5
@@ -1547,11 +1562,11 @@ The whole 40-draw story run and all 64 threads are precomputed at module load (p
   - Title: **Every modal domain**
   - Body: "CrossFit adds one move: average the curve across every modal domain. The hopper supplies the domains." [POWER_CONCEPT s4 + MODULE_COPY.definition.body s3, para]
 - **Scene**:
-  - 0.00 to 0.35: the curve fans out in depth into five domain curves (`MODAL_DOMAINS` colours).
+  - 0.00 to 0.35: the curve fans out in depth into five domain curves (`MODAL_DOMAINS` colours), each with a translucent additive curtain down to its own baseline, so the layers read as slices in depth (H.21).
   - 0.35 to 0.50: hold.
   - 0.50 to 0.90: they converge back (z to 0, tilt to 1) into the single averaged #91C640 curve.
-- **Camera**, which reveals domain depth and then returns: `keys` at t 0.35 are L az -30, el 18 and P az -22, el 20; the beat ends at az -6, el 4.
-- **Labels**: the `MODAL_DOMAINS[].name` names at the right ends while fanned.
+- **Camera**, which reveals domain depth and then returns: `keys` at t 0.35 and 0.5 are L az -30, el 18 and P az -32, el 22, fitting the fanned VOLUME (baseline to the top of the curves, full depth); the beat ends front-on (H.21).
+- **Labels**: all five `MODAL_DOMAINS[].name` names are `required`. L: direct labels at the right ends. P: a five-row legend pinned top-right (the right ends crowd at 360 to 430 px; H.21).
 - **Learning outcome**: the curve is an average over every kind of task.
 
 #### D3 `area`, build 5.0 (signature beat)
@@ -1559,23 +1574,25 @@ The whole 40-draw story run and all 64 threads are precomputed at module load (p
   - Title: **Area = fitness**
   - Body: "Fitness is the area under that averaged curve. It is measurable, it is observable, and it leaves no room for opinion." [MODULE_COPY.definition.keyPoints[2] + DEFINITION_TEXT s3, para]
 - **Scene**:
-  - 0.05 to 0.80: POUR. The level rises from 0 to 1.08, and particles fall into their slots under the curve (`LightField` mode pour, HOT: it is the speaking element).
+  - 0.05 to 0.78: POUR. The level rises from 0 to 1.08, and particles fall into their slots under the curve (`LightField` mode pour, HOT: it is the speaking element).
+  - (H.20) The area is LUMINOUS at rest: an additive gradient fill that gathers toward the curve (gamma 1.8) plus a thin HDR rim band under the curve that bloom lifts into a glow under the crisp pen; the settled particles relax into a fine sparkle. The claim plate has an ink keyline.
   - The HUD readout counts `round(150 * mean over u of min(level, valAt))`, the same 64 samples `scoreOf` uses, ending at 94.
   - The crisp #91C640 curve pen stays on top (L10).
   - 0.80 to 1.00: the claim. SDF "AREA = FITNESS" (Barlow Bold, ink on a #91C640 plate) settles inside the area. The word "Broad" [scoreWord] appears in the HUD sub-line.
   - Impact accent 0.80 to 0.92.
-- **Camera**: az -6, el 4.
+- **Camera**: front-on (H.21).
 - **Learning outcome**: fitness is one number, the accumulated area.
 
 #### D4 `synthesis`, build 4.5
 - **Caption**:
   - Title: **The models combine**
   - Body: "The ten skills set its height, the hopper supplies the domains, the pathways are the time axis." [MODULE_COPY.definition.body s3, verbatim]
-- **Scene** (annotation only; the area stays):
-  - 0.05 to 0.35: a y-axis callout "HEIGHT: THE 10 SKILLS".
-  - 0.35 to 0.65: a short depth tick row in the five domain colours at the origin, with callout "DOMAINS: THE HOPPER".
-  - 0.65 to 0.95: the energy bands brighten, with callout "TIME: THE PATHWAYS".
-- **Camera**: unchanged.
+- **Scene** (annotation only; the area stays). Three strokes of light, each landing on the part of the picture its model supplies, then its callout (H.22):
+  - 0.04 to 0.30: a hot pen draws up the power axis; callout "HEIGHT: THE 10 SKILLS" sits at the top of that axis (the axis title yields to it).
+  - 0.34 to 0.60: a hot pen retraces the averaged curve; callout "DOMAINS: THE HOPPER" with five domain swatches is leadered to the curve.
+  - 0.64 to 0.90: a hot pen sweeps the time axis and the energy bands brighten; callout "TIME: THE PATHWAYS" sits under the tick row (the axis title yields to it).
+  - The claim plate is a label obstacle, so no callout ever covers it. The depth comb is removed (front-on, it overprinted the axis).
+- **Camera**: unchanged (front-on).
 - **Labels**: those three callouts [paraphrase of MODULE_COPY.definition.body s3].
 - **Learning outcome**: the three earlier models are the axes of this one picture.
 
@@ -1586,12 +1603,15 @@ The whole 40-draw story run and all 64 threads are precomputed at module load (p
 - **Scene**:
   - 0.00 to 0.20: the Generalist curve dims to a ghost (#91C640 at 45%), with name "Generalist, for scale" [DefinitionModule label].
   - 0.15 to 0.50: the pen draws the Powerlifter curve as a dashed chalk line.
-  - 0.45 to 0.90: `uMix` goes from 0 to 1.
+  - 0.45 to 0.90: `uMix` goes from 0 to 1. Spilling particles fall with a visible downward streak (H.22).
+  - 0.50 to 0.90: the lost region between the two curves is marked with a `PAL.sick` hatch (25 to 35%), bounded by the generalist ghost and the dashed Powerlifter edge; it stays at rest.
+  - 0.60 to 0.85: the zone won (u below the crossing) fills solid `PAL.both` with a crisp amber edge; "ZONE WON" is leadered into it.
     - Particles inside the Generalist area but outside the Powerlifter's SPILL: they fall, tint `PAL.sick` and fade.
     - Particles inside the Powerlifter's area but outside the Generalist's CONDENSE in amber: the sliver at u < 0.071, the shortest efforts.
     - The rest turn chalk at 60%.
   - The HUD counts from 94 down to 37.
-- **Camera**: az 0, el 0 (front-on comparison, L12).
+- **Camera**: az 0, el 0, fov 22 (front-on comparison, L12).
+- **HUD**: the number is chalk while counting and takes `scoreColor` when the word lands (L8; H.22).
 - **Labels**: callout "Powerlifter"; callout "ZONE WON" on the amber sliver [para of "A specialist owns one zone"]; callout "AREA LOST" on the spill region [para of "lose the area"]; readouts "37" and "94" {computed scoreOf} with the names.
 - **Learning outcome**: winning at one duration loses the area everywhere else.
 
@@ -1602,8 +1622,9 @@ The whole 40-draw story run and all 64 threads are precomputed at module load (p
 - **Scene**:
   - 0.00 to 0.30: the main chart shrinks, FLIP-style, into row 1 of a ranked column of seven mini area charts (P: 1 column x 7 rows; L: 2 columns, rows ranked top to bottom and left then right). All share one scale.
   - 0.25 to 0.85: the other six fly in, 80 ms stagger. Each mini is a thin extruded slab (`rimStandard`, 0.12 deep) with its area filled and a crisp top pen.
+  - 0.30 to 0.98: under each mini a bar grows to its score on one shared 0 to 100 scale, over a faint full-length track, so the ranking reads as a staircase without reading a number (H.22).
   - Order (by `scoreOf`): Generalist CrossFitter 94, Team-sport Athlete 86, Triathlete 84, Marathoner 77, 100m Sprinter 66, Powerlifter 37, Sedentary Adult 33. The Generalist is #91C640; the others are chalk.
-- **Camera**: az 0, el 6 (front-on with slight relief). Fit the column.
+- **Camera**: az 0, el 6, fov 22 (front-on with slight relief). Fit the column.
 - **Labels**: per row, the name (name tone) plus "94 Broad" style readouts {computed scoreOf and scoreWord}.
 - **Learning outcome**: ranked by area, the generalist beats every specialist.
 
@@ -2029,3 +2050,20 @@ Every commit is on `fitness-v2` only, ends with the two attribution lines, and p
 - **H.12 Explore header on phones.** Reset view is a 44 px icon button (aria-label "Reset view") at phone widths, so Back to story, Reset and Scrub | Orbit fit in one row at 360 px.
 - **H.13 Unmigrated chapters.** Views that are not yet in `stories/index.ts` still render their legacy LessonStage module, inside the new shell (top bar, chapter chip and sheet, progress hairline). The intro is still legacy until its story lands.
 - **H.14 Gates.** The C.15 grep gate and caption audit live in `scripts/fitness-gate.mjs`. It is committed and needs no Playwright. `window.__story` also has `project(x, y, z)`, which returns stage px for registration checks.
+
+### 2026-09-27, foundation lead, fix round 1 (engine review + visual review)
+
+- **H.15 Loaded is not settled** (C.4, B.7). The single `ready` flag meant two things. Every seek turned it off, so scrubbing hid the stage behind an opaque slate and set React state every frame. Now `store.loaded` is one-way per chapter (chunk, fonts, scene incl. SDF, compile, two frames) and drives the slate and autoplay; the QA "settled" state (loaded plus two frames after the latest seek) is written straight to `data-story-ready` and `__story.ready`. Serves E.4, E.6 and the scrubber.
+- **H.16 Pacing** (C.3, L14). Reading starts at the caption swap, so the hold is `clamp(1.5 + 0.24 x words - 0.6 x build, 2, 7)`. Definition D0 builds in 3.0 s and D1 in 5.0 s with the curve pen starting at t 0.16, and the chapter pre-roll is 0.2 s. At 390 px the first curve now draws at about 10 s instead of 16 s, and the chapter runs about 65 s instead of 90 s. The D0 caption is 23 words, so a still faster opening would cut its reading time; not done.
+- **H.17 Engine-owned chart frame and pick ray** (B.13, C.2, C.11). `StoryDef.frame` declares the frame; the engine computes it from the focus rect with one cache keyed by the options and the quantised aspect, so the camera (`fit(layout, frame)`, `target(layout, frame)`), gestures and the scene always see the same object and nothing writes a module global during render. `ExploreSpec.onScrub(ray, ndc, phase)` gets the same `THREE.Ray` a drag handle gets. `useCounter` is `{ value, format }` (the C.11 text was wrong).
+- **H.18 Adaptive quality timing** (C.10). The PerformanceMonitor mounts per chapter only once it is loaded plus a 1.5 s grace, with a 3 s window (250 ms x 12), so the slate, compile and font load never demote a capable phone. Inclining out of LOW clears still mode.
+- **H.19 Labels** (C.9). Caps are 36 LIVE labels (cue above zero) at any T and 96 registered per view: a seven-beat chapter registers each beat's labels once, so the old "36 per view" contradicted the chapter lexicons. Added: `required` (QA fails on `requiredHidden`), DOM and world obstacles (SDF plates, data dots, curve samples), label modes (story / explore / both), per-hook ownership with a duplicate-id warning and a warning when a `useLabels` array keeps changing identity, stacked pins with `pinOrder`, callout `swatches`. The placer is allocation-free and skips frames when nothing moved.
+- **H.20 The luminous area** (B.9, B.10, D.5 D3). The Fill material gains additive blending, a gradient exponent and an HDR rim band of constant world width under the data edge (it whitens slightly at its hottest), so bloom lifts the top edge and the rested area reads as light, not speckle. LightField particles are 3 px with a hot core and relax into a sparkle once poured; MEDIUM `particleScale` is 0.8 (the MEDIUM frame uses about 27 of 120 calls). LOW keeps a solid gradient with a milder rim.
+- **H.21 Front-on reading, decisive depth** (L12, D.5). Every beat read as a 2D chart (D0, D1, D3, D4, D5, explore) is az 0, el 0, fov 22: the az -6 / el 4 keystone looked like a mistake and stair-stepped the axes. D2 keeps a decisive oblique (L az -30 el 18, P az -32 el 22), fits the fanned volume instead of the flat chart, gives each domain a translucent curtain, and names all five domains (`required`) as direct labels on L and a pinned legend on P. Supersedes H.6.
+- **H.22 Teaching clarity** (D.5 D4 to D6). D4 draws one stroke of light per model on the axis it names and anchors each callout there; the claim plate is a label obstacle; the depth comb is gone (supersedes H.8). D5 keeps the lost area visible as a red hatch and the won zone as a solid amber sliver with a crisp edge; spill particles streak downward. The HUD number is chalk while counting and takes `scoreColor` when the word lands (no yellow-green on a specialist's low score). D6 minis are taller on P (10.8 x 1.6, pitch 3.0) and each row has a shared-scale area bar, so the ranking is visible without numbers (supersedes H.9).
+- **H.23 Four task names.** Only the four names D.5 prioritises are labelled (1RM clean, 400m run, Mile run, 10k run); the other six tasks are dots. Labels avoid the dots and the curve (world obstacles).
+- **H.24 Known issue, legacy chapters only.** Navigating away from an unmigrated LessonStage chapter logs one `NotFoundError: removeChild` per navigation: react-dom removes a drei `<Html>` label node twice when that label unmounts inside R3F 9.8's commit (drei 10.7 unmounts its nested root synchronously there). Reproduced with and without an empty-Canvas pre-unmount, so it is not a teardown-order issue; the pages keep working. It disappears as each chapter migrates (no drei `<Html>` in stories). Not fixed by pinning R3F, which the brief does not allow.
+- **H.25 Persistent stage, proven.** StoryView keeps the previous StoryDef mounted until the next resolves, and StoryStage keeps its tree position, so the Canvas, renderer, composer and environment survive a chapter change (decision 15). A context loss on an unmounted canvas is ignored; `webgl` is re-derived from a cached, released probe on every mount. `?qa=stub` puts a 3-beat stub story on chapters without one, so QA can prove the same canvas across a story-to-story change.
+- **H.26 Prewarm rule.** A chapter mounts everything at load, its late beats and its explore layer included, and drives visibility from T and mode; the story scene stays mounted under explore. The engine compiles every material once the Scene mounts (three compiles hidden objects too), with a render target bound on composer tiers so it links the variant the composer uses. Toggling explore or reaching D6 creates no programs.
+- **H.27 Shell and a11y.** On the finished last beat the transport Explore pill hides so the CTA row has one primary action; the next-chapter CTA says "Classic" while that chapter is still a legacy page; Next is labelled "Next chapter" on the last beat. Stepping keys are ignored in explore, with the sheet open, and inside radiogroups or sliders; the explore chip row is a roving radiogroup (`ChipRadio`); the chapter sheet moves focus in, traps Tab and restores focus; the beat scrubber is a focusable slider. Reduced motion, Show build and held steps reach 'done' on the last beat. A pause during a next / prev glide wins, and glides freeze while touching or hidden. User navigation and leaving explore drop `?beat`, `?t` and `?explore`. The explore peek shows whole rows only. In the light theme the wordmark accent is #019644 and the chapter numbers darken.
+- **H.28 QA script.** `scripts/story-qa.mjs check <url> [view]` runs labels at 360 / 390 / 430 (overlaps, clipping, required, live cap), the stats budget, continuity pixels, scrub-without-slate, nav-away-and-back, persistent canvas (`?qa=stub`), keyboard and URL drift, and reduced motion. `shots` mode takes matrix screenshots.

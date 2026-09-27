@@ -1,7 +1,7 @@
 import type { Beat } from './types'
 import { clock, setA, setIT, setT } from './clock'
 import { ease, type EaseName } from './ease'
-import { useStoryStore } from './store'
+import { useStoryStore, phaseAt } from './store'
 import { useFitnessStore } from '../fitnessStore'
 import { MODULES } from '../fitnessData'
 import type { FitnessView } from '../lessonTypes'
@@ -18,7 +18,9 @@ export interface Glide {
   elapsed: number
   dur: number
   ease: EaseName
-  done: () => void
+  /** set by pause() during the glide: the glide finishes but does not resume play */
+  paused: boolean
+  done: (paused: boolean) => void
 }
 
 /** Mutable playback internals (not React state). */
@@ -34,11 +36,15 @@ export const pb = {
 
 const words = (s: string) => s.split(/\s+/).filter(Boolean).length
 
-/** Hold time scales with the number of words (L14). */
+/**
+ * Hold time scales with the number of words (L14). Reading starts at the
+ * caption swap (t = 0), so part of the build already counts as reading time
+ * (amendment H.16): hold = clamp(1.5 + 0.24 x words - 0.6 x build, 2, 7).
+ */
 export function holdFor(beat: Beat | undefined): number {
   if (!beat) return 3
   const w = words(beat.title) + words(beat.body)
-  return Math.max(3, Math.min(9, 1.5 + 0.24 * w))
+  return Math.max(2, Math.min(7, 1.5 + 0.24 * w - 0.6 * beat.build))
 }
 
 /** Start beat n at t = 0 in the build phase. */
@@ -53,8 +59,8 @@ export function startBeat(n: number): void {
 }
 
 /** Fixed-duration ramp of T (linear in T by default). */
-export function glideTo(T: number, ms: number, e: EaseName, done: () => void): void {
-  pb.glide = { from: clock.T, to: T, elapsed: 0, dur: Math.max(0.001, ms / 1000), ease: e, done }
+export function glideTo(T: number, ms: number, e: EaseName, done: (paused: boolean) => void): void {
+  pb.glide = { from: clock.T, to: T, elapsed: 0, dur: Math.max(0.001, ms / 1000), ease: e, paused: false, done }
 }
 
 export function haptic(): void {
@@ -95,16 +101,20 @@ export function tick(dtRaw: number): void {
   const def = st.def
   if (!def) return
 
-  // Glides (next / prev) are fixed-duration ramps of T.
+  const hidden = typeof document !== 'undefined' && document.hidden
+
+  // Glides (next / prev) are fixed-duration ramps of T. They freeze while a
+  // finger is down, a sheet is open, or the tab / stage is hidden.
   const g = pb.glide
   if (g) {
+    if (st.interacting > 0 || hidden || !pb.visible) return
     g.elapsed += dt
     const k = Math.min(1, g.elapsed / g.dur)
     const T = g.from + (g.to - g.from) * ease[g.ease](k)
     if (k >= 1) {
       pb.glide = null
       setT(g.to)
-      g.done()
+      g.done(g.paused)
     } else {
       setT(T)
       if (clock.index !== st.index) useStoryStore.setState({ index: clock.index })
@@ -113,7 +123,6 @@ export function tick(dtRaw: number): void {
     return
   }
 
-  const hidden = typeof document !== 'undefined' && document.hidden
   const paused = !st.playing || st.interacting > 0 || st.mode === 'explore' || hidden || !pb.visible
 
   // Ambient clock A (L5): runs only in unheld autoplay or in explore.
@@ -122,7 +131,7 @@ export function tick(dtRaw: number): void {
 
   if (paused) return
   // nothing builds behind the slate: wait for the first real frames
-  if (!st.ready) return
+  if (!st.loaded) return
   const beat = def.beats[clock.index]
   if (!beat) return
 
@@ -137,7 +146,7 @@ export function tick(dtRaw: number): void {
       pb.holdElapsed = 0
       pb.holdFor = holdFor(beat)
       if (st.showBuild) {
-        useStoryStore.setState({ phase: 'hold', playing: false, showBuild: false })
+        useStoryStore.setState({ phase: phaseAt(clock.index, 1, def.beats.length), playing: false, showBuild: false })
         return
       }
       useStoryStore.setState({ phase: clock.index >= def.beats.length - 1 ? 'done' : 'hold' })

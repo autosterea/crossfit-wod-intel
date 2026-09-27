@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { MODULES, INTRO_TEXT } from '../../fitnessData'
 import { useFitnessStore } from '../../fitnessStore'
@@ -31,19 +31,51 @@ export function ChapterSheet({ open, onClose }: { open: boolean; onClose: () => 
   const navigate = useFitnessStore((s) => s.navigate)
   const done = useDoneList()
 
-  // The story holds still while the sheet is open (L14).
+  const sheetRef = useRef<HTMLDivElement>(null)
+
+  // The story holds still while the sheet is open (L14). It is a modal
+  // dialog: focus moves into it (the current chapter), Tab is trapped inside,
+  // and focus returns to whatever opened it on close.
   useEffect(() => {
     if (!open) return
     const release = useStoryStore.getState().beginInteraction()
     useStoryStore.setState({ sheet: true })
+    const opener = document.activeElement as HTMLElement | null
+    const focusables = () =>
+      [...(sheetRef.current?.querySelectorAll<HTMLElement>('button, a[href], [tabindex]:not([tabindex="-1"])') ?? [])].filter(
+        (el) => !el.hasAttribute('disabled'),
+      )
+    const raf = requestAnimationFrame(() => {
+      const cur = sheetRef.current?.querySelector<HTMLElement>('.st-sheet-row.is-current') ?? focusables()[0]
+      cur?.focus({ preventScroll: true })
+    })
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose()
+      if (e.key === 'Escape') {
+        e.preventDefault()
+        onClose()
+        return
+      }
+      if (e.key !== 'Tab') return
+      const list = focusables()
+      if (!list.length) return
+      const first = list[0]
+      const last = list[list.length - 1]
+      const a = document.activeElement
+      if (e.shiftKey && (a === first || !sheetRef.current?.contains(a))) {
+        e.preventDefault()
+        last.focus()
+      } else if (!e.shiftKey && (a === last || !sheetRef.current?.contains(a))) {
+        e.preventDefault()
+        first.focus()
+      }
     }
     window.addEventListener('keydown', onKey)
     return () => {
+      cancelAnimationFrame(raf)
       release()
       useStoryStore.setState({ sheet: false })
       window.removeEventListener('keydown', onKey)
+      if (opener && opener.isConnected) opener.focus({ preventScroll: true })
     }
   }, [open, onClose])
 
@@ -67,6 +99,7 @@ export function ChapterSheet({ open, onClose }: { open: boolean; onClose: () => 
           />
           <motion.div
             key="sheet"
+            ref={sheetRef}
             className="st-sheet"
             role="dialog"
             aria-modal="true"

@@ -2,7 +2,7 @@ import { useSyncExternalStore } from 'react'
 import { clock, type StoryClock } from './clock'
 import { cue as cueT, at as atT, focus as focusT } from './cue'
 import type { Ease } from './ease'
-import { focus as focusRect, subscribeFocus } from './camera/focusRect'
+import { focusRect, subscribeFocus } from './camera/focusRect'
 import type { Layout } from './types'
 
 /* =========================================================================

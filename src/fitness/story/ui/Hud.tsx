@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react'
 import { clock, onFrame } from '../clock'
 import { useStoryStore } from '../store'
-import { useObstacle } from '../labels/useLabel'
+import { bumpObstacles, useObstacle } from '../labels/useLabel'
 import type { Rect } from '../types'
 
 /* HUD chip (DESIGN.md B.7): at most one, top-right of the focus rect, glass,
@@ -47,7 +47,10 @@ export function useHudOpacity(ref: React.RefObject<HTMLElement | null>, fn: (T: 
         const s = String(o)
         if (el.style.opacity !== s) el.style.opacity = s
         const show = o > 0.01 ? '1' : '0'
-        if (el.dataset.show !== show) el.dataset.show = show
+        if (el.dataset.show !== show) {
+          el.dataset.show = show
+          bumpObstacles()
+        }
       }),
     [ref],
   )

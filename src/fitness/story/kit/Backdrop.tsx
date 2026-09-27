@@ -2,7 +2,7 @@ import { useEffect, useMemo } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { makeBackdropMaterial, srgb } from './materials'
-import { focus } from '../camera/focusRect'
+import { focusRect } from '../camera/focusRect'
 import { useStoryStore } from '../store'
 import { MODULES } from '../../fitnessData'
 
@@ -39,11 +39,11 @@ export function Backdrop() {
   }, [view, material])
   useFrame(() => {
     const u = material.uniforms
-    const cx = ((focus.x + focus.w / 2) / focus.W) * 2 - 1
-    const cy = 1 - ((focus.y + focus.h / 2) / focus.H) * 2
+    const cx = ((focusRect.x + focusRect.w / 2) / focusRect.W) * 2 - 1
+    const cy = 1 - ((focusRect.y + focusRect.h / 2) / focusRect.H) * 2
     ;(u.uCenter.value as THREE.Vector2).set(cx, cy)
-    u.uAspect.value = focus.W / Math.max(1, focus.H)
-    const diag = Math.hypot(focus.w / focus.W, focus.h / focus.H)
+    u.uAspect.value = focusRect.W / Math.max(1, focusRect.H)
+    const diag = Math.hypot(focusRect.w / focusRect.W, focusRect.h / focusRect.H)
     u.uRadius.value = 0.9 * diag * 1.4
     u.uBoost.value = backdropState.boost
   })

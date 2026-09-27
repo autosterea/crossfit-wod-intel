@@ -57,19 +57,17 @@ export function Transport() {
           <span className="st-play-ic">{playing ? <IconPause /> : phase === 'done' ? <IconReplay /> : <IconPlay />}</span>
         </button>
       )}
-      <button type="button" className="st-rb" aria-label="Next beat" onClick={() => st().next()}>
+      <button type="button" className="st-rb" aria-label={index >= total - 1 ? 'Next chapter' : 'Next beat'} onClick={() => st().next()}>
         <IconNext />
       </button>
       <span className="st-sp" />
-      <button
-        type="button"
-        className={`st-explore-pill${lastDone ? ' is-solid' : ''}`}
-        onClick={() => st().setMode('explore')}
-        aria-label="Explore this model"
-      >
-        <IconOrbit />
-        <span>Explore</span>
-      </button>
+      {/* On the finished last beat the CTA row below carries Explore (one primary action per row). */}
+      {!lastDone && (
+        <button type="button" className="st-explore-pill" onClick={() => st().setMode('explore')} aria-label="Explore this model">
+          <IconOrbit />
+          <span>Explore</span>
+        </button>
+      )}
     </div>
   )
 }

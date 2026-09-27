@@ -141,35 +141,46 @@ function ViewLoading() {
   )
 }
 
-/** A chapter on the story engine: stage, then Notes, then chapter cards. */
+/**
+ * A chapter on the story engine: stage, then Notes, then chapter cards.
+ * The stage is PERSISTENT across story chapters (decision 15): StoryView and
+ * StoryStage keep their place in the tree, so the Canvas, renderer, composer,
+ * environment and label layer survive a chapter change and only the Scene,
+ * labels and captions swap. While the next chapter's chunk loads, the previous
+ * StoryDef stays mounted (held still) under the slate.
+ */
 function StoryView({ view }: { view: FitnessView }) {
   const [def, setDef] = useState<StoryDef | null>(() => cachedStory(view) ?? null)
+  const hit = cachedStory(view)
+  const active = hit ?? def
   const stageRef = useRef<HTMLDivElement>(null)
-  const ready = useStoryStore((s) => s.ready)
+  const loaded = useStoryStore((s) => s.loaded)
   useEffect(() => {
+    const cached = cachedStory(view)
+    if (cached) {
+      setDef(cached)
+      return
+    }
     let alive = true
-    if (def?.key === view) return
-    setDef(null)
     loadStory(view).then((d) => {
-      if (alive) setDef(d)
+      if (alive && d) setDef(d)
     })
     return () => {
       alive = false
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [view])
   useEffect(() => {
-    if (!ready) return
+    if (!loaded) return
     const i = ORDER.indexOf(view)
     if (i >= 0 && i < ORDER.length - 1) prefetchStory(ORDER[i + 1])
-  }, [ready, view])
+  }, [loaded, view])
 
   return (
     <main className="st-main">
       <div ref={stageRef} className="st-stage-wrap">
-        {def ? (
-          <StoryProvider def={def}>
-            <StoryStage def={def} />
+        {active ? (
+          <StoryProvider def={active}>
+            <StoryStage def={active} view={view} />
           </StoryProvider>
         ) : (
           <div className="st-stage st-stage--loading" />

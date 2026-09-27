@@ -7,11 +7,15 @@ import { ChapterGlyph } from './ChapterGlyph'
 
 /* Slate (DESIGN.md B.7): the loading layer over the stage while the chunk,
    fonts, SDF fonts and shader compile complete; fades out over 300 ms after
-   the first real frames. Also the no-WebGL fallback panel. */
+   the first real frames. Also the no-WebGL fallback panel.
+   It follows `loaded` only (amendment H.15): a seek or a scrub never brings it
+   back. It returns only for a chapter change (`pending`, or a new chapter
+   that has not finished loading). */
 
-export function Slate({ view }: { view: FitnessView }) {
-  const ready = useStoryStore((s) => s.ready)
+export function Slate({ view, pending }: { view: FitnessView; pending: boolean }) {
+  const loaded = useStoryStore((s) => s.loaded)
   const webgl = useStoryStore((s) => s.webgl)
+  const ready = loaded && !pending
   const [gone, setGone] = useState(false)
   useEffect(() => {
     if (!ready || !webgl) {

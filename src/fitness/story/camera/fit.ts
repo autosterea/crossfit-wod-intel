@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 import type { Box, CamPose, CamSpec, Layout, Pad, Rect, V3 } from '../types'
 import { ease } from '../ease'
+import { storyFrame } from '../kit/chartFrame'
 
 /* =========================================================================
    Camera fitting (DESIGN.md C.8). A pose is target + az/el + fov + a box that
@@ -38,7 +39,7 @@ export function poseFor(spec: CamSpec | { L: CamPose; P?: CamPose }, layout: Lay
 }
 
 export function boxOf(pose: CamPose, layout: Layout): Box {
-  return typeof pose.fit === 'function' ? pose.fit(layout) : pose.fit
+  return typeof pose.fit === 'function' ? pose.fit(layout, storyFrame()) : pose.fit
 }
 
 /** Unit vector from target toward the camera. */
@@ -105,7 +106,7 @@ export function fitDistance(
 }
 
 export function targetOf(pose: CamPose, layout: Layout): V3 {
-  return typeof pose.target === 'function' ? pose.target(layout) : pose.target
+  return typeof pose.target === 'function' ? pose.target(layout, storyFrame()) : pose.target
 }
 
 export function resolvePose(pose: CamPose, layout: Layout, rect: Rect, H: number, out?: Resolved): Resolved {

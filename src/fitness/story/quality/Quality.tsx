@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { PerformanceMonitor } from '@react-three/drei'
 import { useStoryStore } from '../store'
@@ -17,10 +17,14 @@ export function setTierCeiling(t: Tier): void {
   ceiling = t
 }
 
+const RANK: Record<Tier, number> = { low: 0, medium: 1, high: 2 }
+
 function setTier(t: Tier): void {
   const st = useStoryStore.getState()
   if (st.tierPinned || st.tier === t) return
-  useStoryStore.setState({ tier: t, dpr: tierDpr(t, 1) })
+  // inclining out of LOW also leaves still mode (render on demand)
+  const up = RANK[t] > RANK[st.tier]
+  useStoryStore.setState({ tier: t, dpr: tierDpr(t, 1), ...(up ? { still: false } : null) })
 }
 
 /** Still mode: LOW under 24 fps for 3 s renders on demand (clock stays exact). */
@@ -45,13 +49,32 @@ function StillWatch() {
   return null
 }
 
+/**
+ * The monitor measures only once the chapter is LOADED plus a 1.5 s grace
+ * (amendment H.18): the slate, shader compile and SDF font load must never
+ * demote a capable phone before the story starts. It is remounted per chapter.
+ * Its window is 250 ms x 12 iterations (3 s), longer than drei's default, so
+ * one slow burst does not flip the tier.
+ */
 export function Quality() {
   const pinned = useStoryStore((s) => s.tierPinned)
+  const loaded = useStoryStore((s) => s.loaded)
+  const key = useStoryStore((s) => s.def?.key ?? '')
+  const [armed, setArmed] = useState('')
+  useEffect(() => {
+    if (!loaded || pinned) return
+    const id = window.setTimeout(() => setArmed(key), 1500)
+    return () => window.clearTimeout(id)
+  }, [loaded, pinned, key])
+  const measuring = !pinned && loaded && armed === key
   return (
     <>
       <StillWatch />
-      {!pinned && (
+      {measuring && (
         <PerformanceMonitor
+          key={key}
+          ms={250}
+          iterations={12}
           bounds={(r) => (r > 90 ? [50, 90] : [45, 58])}
           flipflops={3}
           onDecline={() => setTier(tierDown(useStoryStore.getState().tier))}

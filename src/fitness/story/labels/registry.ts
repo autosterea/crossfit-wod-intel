@@ -1,14 +1,24 @@
-import type { Dir, LabelSpec, Rect } from '../types'
+import type { Box, Dir, LabelSpec, Mode, Rect } from '../types'
 
 /* =========================================================================
    Label registry: scene components (inside the Canvas) register specs; the
    DOM LabelLayer renders one node per label when the SET changes; the placer
    (useFrame -80) writes positions and opacity through refs. No React state
    per frame, no perspective scale, no <Html>.
+
+   Ownership: every useLabels / useLabel hook registers under its own owner
+   token. A second owner registering the same id is a bug (it would silently
+   replace the first, and either unmount would delete both), so it warns, and
+   an owner can only ever unregister its own entry.
    ========================================================================= */
+
+/** Which story mode a label shows in (default 'story'). */
+export type LabelMode = Mode | 'both'
 
 export interface LabelEntry {
   spec: LabelSpec
+  owner: symbol
+  mode: LabelMode
   text: string
   el: HTMLDivElement | null
   txt: HTMLSpanElement | null
@@ -25,15 +35,23 @@ export interface LabelEntry {
   opacity: number
   alpha: number
   visible: boolean
+  /** cue above zero this frame (counts toward the live cap) */
+  live: boolean
   short: boolean
   clipped: boolean
+  /** required label whose cue is up but which could not be placed */
+  requiredHidden: boolean
   rect: Rect
 }
 
 export const registry = new Map<string, LabelEntry>()
-const obstacles = new Map<string, () => Rect | null>()
 let setVersion = 0
+/** bumps on every imperative text change (placement dirty check) */
+export const labelTextVersion = { v: 0 }
 const subs = new Set<() => void>()
+
+/** Caps (DESIGN.md C.9, amendment H.19): live = cue above zero at one T. */
+export const LABEL_CAP = { live: 36, registered: 96 }
 
 export const labelSetVersion = () => setVersion
 export function subscribeLabels(fn: () => void): () => void {
@@ -47,9 +65,13 @@ const bump = () => {
   for (const fn of subs) fn()
 }
 
-export function registerLabel(spec: LabelSpec): void {
+let warnedCap = false
+export function registerLabel(spec: LabelSpec, owner: symbol, mode: LabelMode = 'story'): void {
   const prev = registry.get(spec.id)
   if (prev) {
+    if (prev.owner !== owner) console.warn('[labels] duplicate label id "' + spec.id + '" registered by two owners; ids share one namespace per stage')
+    prev.owner = owner
+    prev.mode = mode
     prev.spec = spec
     if (prev.text !== spec.text) prev.text = spec.text
     bump()
@@ -57,6 +79,8 @@ export function registerLabel(spec: LabelSpec): void {
   }
   registry.set(spec.id, {
     spec,
+    owner,
+    mode,
     text: spec.text,
     el: null,
     txt: null,
@@ -71,15 +95,25 @@ export function registerLabel(spec: LabelSpec): void {
     opacity: -1,
     alpha: 0,
     visible: false,
+    live: false,
     short: false,
     clipped: false,
+    requiredHidden: false,
     rect: { x: 0, y: 0, w: 0, h: 0 },
   })
+  if (!warnedCap && registry.size > LABEL_CAP.registered) {
+    warnedCap = true
+    console.warn('[labels] ' + registry.size + ' labels registered; the cap is ' + LABEL_CAP.registered + ' per view (C.9)')
+  }
   bump()
 }
 
-export function unregisterLabel(id: string): void {
-  if (registry.delete(id)) bump()
+/** Remove a label, but only if `owner` still owns it. */
+export function unregisterLabel(id: string, owner: symbol): void {
+  const e = registry.get(id)
+  if (!e || e.owner !== owner) return
+  registry.delete(id)
+  bump()
 }
 
 /** Imperative text update (readouts, counters). No React. */
@@ -87,20 +121,64 @@ export function setLabelText(id: string, text: string): void {
   const e = registry.get(id)
   if (!e || e.text === text) return
   e.text = text
+  labelTextVersion.v++
   if (e.txt && !e.short) e.txt.textContent = text
 }
 
-export function registerObstacle(id: string, rect: () => Rect | null): void {
-  obstacles.set(id, rect)
+/* ------------------------------ obstacles ------------------------------ */
+
+/** A DOM obstacle: a rect in stage CSS px, or null when absent. */
+export type RectObstacle = () => Rect | null
+
+/**
+ * A world obstacle, projected by the placer with the live camera every time
+ * it places: a box (its screen bounding rect, e.g. an SDF plate), and / or a
+ * set of points (each a square of 2 x radiusPx, e.g. data dots and curve
+ * samples). Both are pure functions of T.
+ */
+export interface WorldObstacle {
+  box?: (T: number) => Box | null
+  /** write xyz triples into `out`, return how many points were written */
+  points?: (T: number, out: Float32Array) => number
+  /** max points (buffer size), default 64 */
+  maxPoints?: number
+  /** half size of each point's square, default 6 */
+  radiusPx?: number
+  /** padding around the box rect, default 4 */
+  padPx?: number
+  /** which story mode it applies in (default 'story') */
+  mode?: LabelMode
+}
+
+export const rectObstacles = new Map<string, RectObstacle>()
+export const worldObstacles = new Map<string, { spec: WorldObstacle; buf: Float32Array }>()
+let obstacleVersion = 0
+export const obstaclesVersion = () => obstacleVersion
+
+/**
+ * A DOM obstacle changed (shown, hidden, resized) without the camera, story
+ * time or focus rect changing: tell the placer to run again (it skips frames
+ * when nothing moved).
+ */
+export function bumpObstacles(): void {
+  obstacleVersion++
+}
+
+export function registerObstacle(id: string, rect: RectObstacle): void {
+  rectObstacles.set(id, rect)
+  obstacleVersion++
 }
 export function unregisterObstacle(id: string): void {
-  obstacles.delete(id)
+  if (rectObstacles.delete(id)) obstacleVersion++
 }
-export function obstacleRects(): Rect[] {
-  const out: Rect[] = []
-  for (const fn of obstacles.values()) {
-    const r = fn()
-    if (r && r.w > 0 && r.h > 0) out.push(r)
+export function registerWorldObstacle(id: string, spec: WorldObstacle): void {
+  worldObstacles.set(id, { spec, buf: new Float32Array((spec.maxPoints ?? 64) * 3) })
+  obstacleVersion++
+}
+export function unregisterWorldObstacle(id: string, spec: WorldObstacle): void {
+  const e = worldObstacles.get(id)
+  if (e && e.spec === spec) {
+    worldObstacles.delete(id)
+    obstacleVersion++
   }
-  return out
 }

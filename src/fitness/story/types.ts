@@ -1,4 +1,6 @@
 import type { ComponentType } from 'react'
+import type * as THREE from 'three'
+import type { ChartFrame, ChartFrameOpts } from './kit/chartFrame'
 import type { FitnessView } from '../lessonTypes'
 import type { PAL } from '../fitnessData'
 
@@ -20,17 +22,18 @@ export type Detent = 'peek' | 'default' | 'expanded'
 export type Pad = number | { l: number; r: number; t: number; b: number }
 
 export interface CamPose {
-  /** look-at point; a function lets adaptive frames supply it (usually the fit box centre) */
-  target: V3 | ((layout: Layout) => V3)
+  /** look-at point; a function gets the layout and the chapter's engine-owned chart frame */
+  target: V3 | ((layout: Layout, frame: ChartFrame) => V3)
   /** Degrees. 0 = camera on +Z looking at target; + moves the camera toward +X. */
   az: number
   /** Degrees above the target. */
   el: number
   /** Vertical fov in degrees, default 30. */
   fov?: number
-  /** Must project entirely inside the focus rect minus padPx. A function lets
-   *  adaptive chart frames (B.13) supply a box that depends on the focus rect. */
-  fit: Box | ((layout: Layout) => Box)
+  /** Must project entirely inside the focus rect minus padPx. A function gets
+   *  the layout and the chapter's chart frame (StoryDef.frame, B.13), so a box
+   *  that depends on the focus rect never needs a module global. */
+  fit: Box | ((layout: Layout, frame: ChartFrame) => Box)
   /** Default 24 on every side. */
   padPx?: Pad
 }
@@ -80,8 +83,11 @@ export interface ExploreSpec {
   scrubToggle?: boolean
   /** seed explore state from that beat's end state */
   initFromBeat: (beatIndex: number) => void
-  /** Optional scrub handler (u, v in 0..1 of the focus rect) when Scrub is on. */
-  onScrub?: (nx: number, ny: number, phase: 'start' | 'move' | 'end') => void
+  /**
+   * Scrub handler when Scrub is on: the world-space pick ray under the finger
+   * (the same Ray useDragHandle gets) and its NDC. 'end' repeats the last ray.
+   */
+  onScrub?: (ray: THREE.Ray, ndc: readonly [number, number], phase: 'start' | 'move' | 'end') => void
 }
 
 export interface StoryDef {
@@ -95,6 +101,12 @@ export interface StoryDef {
   /** DOM content of the HUD chip (writes via refs) */
   Hud?: ComponentType
   fog?: { color: string; density: number }
+  /**
+   * Engine-owned adaptive chart frame (B.13). When set, the engine computes it
+   * from the focus rect before the camera runs; scenes read it with
+   * useStoryFrame() and camera poses receive it as `fit(layout, frame)`.
+   */
+  frame?: ChartFrameOpts
 }
 
 /* ------------------------------ labels ------------------------------- */
@@ -133,6 +145,16 @@ export interface LabelSpec {
   dot?: boolean
   /** restrict placement to these directions (then slide / tiers / short / hide) */
   only?: readonly Dir[]
+  /**
+   * The beat's meaning depends on this label: it places before everything
+   * else (priority floor 96) and __story.labels() reports it as
+   * requiredHidden when its cue is up but it could not be placed. QA fails on that.
+   */
+  required?: boolean
+  /** legend tone with a pin: stacking order inside that corner (default: registration order) */
+  pinOrder?: number
+  /** callout tone: small data-colour swatches before the text (for example the five domains) */
+  swatches?: readonly string[]
 }
 
 export interface Rect {
