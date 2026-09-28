@@ -129,7 +129,8 @@ export const introStory: StoryDef = {
       signature: true,
       cta: 'begin',
       // front-on early, so the chart and the surface fold into the grid undistorted
-      cam: { L: I4.L, P: I4.P, window: [0, 0.24] },
+      // (0.34: a gentler pull back, so the lifetime solid shrinks into the map instead of collapsing)
+      cam: { L: I4.L, P: I4.P, window: [0, 0.34] },
     },
   ],
   Scene: IntroScene,

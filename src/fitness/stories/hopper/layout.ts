@@ -108,16 +108,46 @@ const S: World = {
   drumOnBoard: false,
 }
 
-/** The hopper's three worlds: P (portrait), L (landscape and desktop), S (a short landscape focus rect). */
-export type HopKey = 'P' | 'L' | 'S'
-export const WORLD: Record<HopKey, World> = { P, L, S }
+/**
+ * Short portrait (fix round 1): a portrait phone whose focus rect is under
+ * SHORT_H tall. That is the iPhone with Safari's toolbars showing (390 x 664
+ * gives a 366 x 358 rect, 430 x 740 a 406 x 434 one), so it is the board the
+ * owner sees. It keeps every word of the 844 board: the six names over their
+ * rails, the ticket with the drawn task, and the domain key, which moves to
+ * a two-row DOM key over the caption card (Hud.tsx), like the Continuum key,
+ * so the rails take the height the five-chip column took. The pitch is 1.55
+ * (the 844 board uses 1.85): at about 25 px per unit a name clears the total
+ * riding the bar above it. The ticket rides 1.47 over the P1 rail at the left,
+ * beside the HUD chip, leaving LEAD and NEW LEADER their room. The drum steps
+ * out for the board, as on S: there is no room for it beside the ticket.
+ */
+const Q_TB = 0.92
+const Q: World = {
+  ...P,
+  ticketBoard: { c: [-5.4 + (P_TICKET.w * Q_TB) / 2, 1.47 + (P_TICKET.h * Q_TB) / 2, 1.2], s: Q_TB },
+  rails: { x0: -5.4, len: 10.8, y0: 0, pitch: 1.55 },
+  drumOnBoard: false,
+}
 
-/** Under this focus-rect height a landscape rect is "short" (a phone on its side). */
+/** The hopper's four worlds: P (portrait), Q (short portrait), L (landscape and desktop), S (a short landscape focus rect). */
+export type HopKey = 'P' | 'Q' | 'L' | 'S'
+export const WORLD: Record<HopKey, World> = { P, Q, L, S }
+
+/** Under this focus-rect height a rect is "short": a phone on its side (L), or a portrait phone with its browser toolbars (P). */
 export const SHORT_H = 440
-/** A phone or tablet rect this short (the caption or the explore sheet expanded) shows the compact board: the rails alone. */
-export const shortPhone = () => (focusRect.shell === 'phone' || focusRect.shell === 'tablet') && focusRect.h < SHORT_H
-/** The world key for an engine layout at the current focus rect (a short phone rect keeps the phone's own world). */
-export const hopKey = (l: Layout): HopKey => (l !== 'L' || focusRect.h >= SHORT_H ? l : shortPhone() ? 'P' : 'S')
+const phoneShell = () => focusRect.shell === 'phone' || focusRect.shell === 'tablet'
+/**
+ * A phone or tablet rect this short AND wide (the caption or the explore
+ * sheet expanded) shows the compact board: the rails alone. A short portrait
+ * rect is the Q world instead, which keeps every word.
+ */
+export const shortPhone = () => phoneShell() && focusRect.h < SHORT_H && focusRect.layout === 'L'
+/** The world key for an engine layout at the current focus rect (a short, wide phone rect keeps the phone's own world). */
+export const hopKey = (l: Layout): HopKey => {
+  if (l === 'P') return phoneShell() && focusRect.h < SHORT_H ? 'Q' : 'P'
+  if (focusRect.h >= SHORT_H) return 'L'
+  return shortPhone() ? 'P' : 'S'
+}
 /** The world on stage now (per-frame readers outside React). */
 export const worldNow = (): World => WORLD[hopKey(focusRect.layout)]
 const keyNow = () => hopKey(focusRect.layout)
@@ -233,7 +263,14 @@ export const LEGEND_PX = 148
 /** px of the focus rect's left the legend takes as a column (L, S): its widest chip plus air */
 export const LEGEND_COL: Record<'L' | 'S', number> = { L: 192, S: 178 }
 /** world units right of the rails reserved for the leader's total (the P1 lane plate covers it) */
-export const READOUT_ROOM: Record<HopKey, number> = { P: 0.95, L: 1.3, S: 2.2 }
+export const READOUT_ROOM: Record<HopKey, number> = { P: 0.95, Q: 0.95, L: 1.3, S: 2.2 }
+
+/**
+ * The Q world's domain key (a DOM panel over the caption card, Hud.tsx): its
+ * measured height in px, which the Q poses reserve at the bottom of the
+ * focus rect. 54 until it is first measured (two rows of chips).
+ */
+export const qKey = { h: 54 }
 
 /**
  * The board. P and S: the ticket (on the board) and the six rails with the

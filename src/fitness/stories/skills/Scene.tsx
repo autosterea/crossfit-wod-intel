@@ -175,6 +175,8 @@ const touchT = (i: number) => S.gen + RING_A + (RING_B - RING_A) * invDraw(i / N
 const weakGOut = (T: number) => 1 - at(T, S.spec, 0.08, 0.22)
 /** S4 claim: the floor collapses from 7 to 2 ... */
 const collapse = (T: number) => at(T, S.spec, 0.66, 0.86, ease.morph)
+/** S4: the Powerlifter key chip takes its floor badge as the collapse lands */
+const PL_BADGE_T = 0.86
 /** ... and catches on Endurance. */
 const catchK = (T: number) => at(T, S.spec, 0.85, 0.92, ease.settle)
 const specOut = (T: number) => 1 - at(T, S.grid, 0, 0.12)
@@ -419,6 +421,8 @@ function useStoryLabels(layout: Layout, kind: GridKind) {
       {
         id: 'sk-c-trained',
         text: CLASS_LABEL.trained,
+        // the label's own first word, where the full pill has no room (a short portrait phone)
+        short: CLASS_LABEL.trained.split(' ')[0],
         tone: 'callout',
         color: PAL.trained,
         anchor: tagAnchor('trained'),
@@ -430,6 +434,7 @@ function useStoryLabels(layout: Layout, kind: GridKind) {
       {
         id: 'sk-c-practiced',
         text: CLASS_LABEL.practiced,
+        short: CLASS_LABEL.practiced.split(' ')[0],
         tone: 'callout',
         color: PAL.practiced,
         anchor: tagAnchor('practiced'),
@@ -485,7 +490,13 @@ function useStoryLabels(layout: Layout, kind: GridKind) {
     // stated at rest, in the badge language the S5 lineup uses
     out.push(
       { id: 'sk-lg-g2', text: 'Generalist', tone: 'legend', color: PAL.yellowGreen, badge: String(G_FLOOR), anchor: [0, 0, 0], pin: 'top-left', pinOrder: 4, cue: (T) => at(T, S.spec, 0.22, 0.34) * specOut(T) },
-      { id: 'sk-lg-pl', text: 'Powerlifter', tone: 'legend', color: PAL.chalk, badge: String(P_FLOOR), anchor: [0, 0, 0], pin: 'top-left', pinOrder: 5, cue: (T) => at(T, S.spec, 0.26, 0.38) * specOut(T) },
+      // the Powerlifter's badge is the claim (L2: the claim lands last): its
+      // chip names the dashed outline as it draws, and takes its "2" at the
+      // moment the floor ring snaps down to 2 (fix round 1: the badge landed
+      // 2.6 s before the collapse it states). A cut between two chips in the
+      // same pin slot, so the key never jumps.
+      { id: 'sk-lg-pl', text: 'Powerlifter', tone: 'legend', color: PAL.chalk, anchor: [0, 0, 0], pin: 'top-left', pinOrder: 5, cue: (T) => at(T, S.spec, 0.26, 0.38) * specOut(T) * (T < S.spec + PL_BADGE_T ? 1 : 0) },
+      { id: 'sk-lg-pl-f', text: 'Powerlifter', tone: 'legend', color: PAL.chalk, badge: String(P_FLOOR), anchor: [0, 0, 0], pin: 'top-left', pinOrder: 5, cue: (T) => (T >= S.spec + PL_BADGE_T ? 1 : 0) * specOut(T) },
       {
         id: 'sk-w-p',
         text: TAG_TEXT.weakP,

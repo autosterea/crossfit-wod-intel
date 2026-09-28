@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef, useSyncExternalStore } from 'react'
 import * as THREE from 'three'
 import { MODAL_DOMAINS, PAL, POWER_DURATION_LABELS, POWER_TASKS, ENERGY_SYSTEMS } from '../../fitnessData'
 import { at, cue, focus, pulse, stagger } from '../../story/cue'
@@ -6,7 +6,7 @@ import { ease } from '../../story/ease'
 import { useStoryStore } from '../../story/store'
 import { useBeat } from '../../story/useBeat'
 import { useSafeFrame } from '../../story/useSafeFrame'
-import { focusRect } from '../../story/camera/focusRect'
+import { focusRect, subscribeFocus } from '../../story/camera/focusRect'
 import { frameId, useChapterChart, type ChartFrame } from '../../story/kit/chartFrame'
 import { Pen, PenBatch, PEN } from '../../story/kit/Pen'
 import { AreaFill, AreaStrips } from '../../story/kit/Fill'
@@ -21,7 +21,7 @@ import { TIERS } from '../../story/quality/tiers'
 import { impactK } from '../../story/kit/impact'
 import { bumpObstacles, useLabels, useWorldObstacle, type WorldObstacle } from '../../story/labels/useLabel'
 import type { Box, Layout, LabelSpec, Tier, V3 } from '../../story/types'
-import { FAN_Z, lineup, type Lineup } from './layout'
+import { FAN_Z, lineup, lineupKind, type Lineup } from './layout'
 import { GENERALIST, POWERLIFTER, RANKED, domainScale, scoreHue, scoreOf, scoreWord, valAt } from './definitionMath'
 import { BAND_U, ChartConstruction, EnergyBands, TASK_400, TASK_LABELED, TASK_U, TICK_LEN, curvePolyline, curveTop, gv, type ChartVis } from './chart'
 import ExploreScene from './ExploreScene'
@@ -993,7 +993,9 @@ function LineupRows({ frame }: { frame: ChartFrame }) {
 
 /* ------------------------------- labels -------------------------------- */
 
-function useStoryLabels(frame: ChartFrame, layout: Layout, cross: number[], shortL: boolean, narrow: boolean) {
+const lineKindNow = () => lineupKind(focusRect.layout)
+
+function useStoryLabels(frame: ChartFrame, layout: Layout, cross: number[], shortL: boolean, narrow: boolean, kind: string) {
   const specs = useMemo<LabelSpec[]>(() => {
     const x = frame.x
     const y = frame.y
@@ -1286,10 +1288,11 @@ function useStoryLabels(frame: ChartFrame, layout: Layout, cross: number[], shor
           tone: 'readout',
           size: 'sm',
           color: g ? PAL.yellowGreen : PAL.chalk,
-          anchor: [ox + L.MW, oy + L.labelY, 0],
-          prefer: 'NW',
-          only: ['NW'],
-          gapPx: 3,
+          // PS: in its own slot beside the mini (never culled by the name); else over the mini's right end
+          anchor: L.pillBeside ? [ox + L.MW, oy + L.MH * 0.5, 0] : [ox + L.MW, oy + L.labelY, 0],
+          prefer: L.pillBeside ? 'E' : 'NW',
+          only: L.pillBeside ? ['E'] : ['NW'],
+          gapPx: L.pillBeside ? 7 : 3,
           priority: 88,
           required: true,
           cue: appear,
@@ -1297,7 +1300,8 @@ function useStoryLabels(frame: ChartFrame, layout: Layout, cross: number[], shor
       )
     })
     return out
-  }, [frame, layout, cross, shortL, narrow])
+    // (kind: the lineup geometry the anchors were read from)
+  }, [frame, layout, cross, shortL, narrow, kind])
   useLabels(specs)
 }
 
@@ -1383,7 +1387,10 @@ function StoryScene({ frame, tier }: { frame: ChartFrame; tier: Tier }) {
   const shortL = layout !== 'P' && focusRect.h < 460
   // a chart narrower than 520 px (a phone on its side) shows the phone tick set
   const narrow = layout === 'P' || focusRect.w < 520
-  useStoryLabels(frame, layout, cross, shortL, narrow)
+  // the lineup's kind follows the focus rect's height too (P or PS, L1 or L2):
+  // re-render (and re-register the lineup labels) when it flips
+  const kind = useSyncExternalStore(subscribeFocus, lineKindNow)
+  useStoryLabels(frame, layout, cross, shortL, narrow, kind)
   useDataObstacles(frame)
   return (
     <>

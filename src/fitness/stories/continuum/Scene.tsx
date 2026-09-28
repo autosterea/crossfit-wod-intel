@@ -858,7 +858,8 @@ function useStoryLabels(rf: ChartFrame, layout: Layout) {
     out.push({ id: 'cn-rim', text: 'FITNESS', tone: 'callout', color: PAL.fit, anchor: [R * Math.cos(RIM_ANGLE), R * Math.sin(RIM_ANGLE), 0], prefer: 'C', priority: 90, cue: rimCallout })
     const circ = (id: string, text: string, color: string, p: number, cue: (T: number) => number) => {
       const r = radiusOf(p)
-      out.push({ id, text, tone: 'name', color, anchor: [r * Math.cos(RING_ANGLE), r * Math.sin(RING_ANGLE), bowl(r)], prefer: 'C', gapPx: 0, priority: 64, cue })
+      // (leader: on a short phone the climbing dots crowd the ring; the name steps off along a leader rather than blink out)
+      out.push({ id, text, tone: 'name', color, anchor: [r * Math.cos(RING_ANGLE), r * Math.sin(RING_ANGLE), bowl(r)], prefer: 'C', gapPx: 0, leader: true, priority: 64, cue })
     }
     circ('cn-well', STATES[1].word, PAL.well, STOP_WELL, wellName)
     circ('cn-fit', STATES[2].word, PAL.fit, STOP_FIT, fitName)

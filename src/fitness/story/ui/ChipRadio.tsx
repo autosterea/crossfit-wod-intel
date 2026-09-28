@@ -58,6 +58,21 @@ function keepInView(row: HTMLElement, chip: HTMLElement, smooth: boolean): boole
     if (!crosses(e) && next) to = Math.min(hi, Math.max(to, next[0] - W + FADE + SHOW))
   }
   to = Math.max(0, Math.min(to, maxS))
+  // The near edge (fix round 1): a chip cut there showed a hard fragment of
+  // its word ("DENTARY", "FTER") beside the sheet's controls, which read as
+  // broken text, not as a scroll affordance. Snap so the left edge falls at
+  // a chip's start (the whole chip shows) or past its end (it hides under
+  // the fade), whichever keeps the checked chip whole.
+  if (to > 0.5) {
+    const e = to + FADE
+    const cut = spans.find(([a, b]) => a < e - 2 && b > e + 2)
+    if (cut) {
+      const show = Math.max(0, cut[0] - FADE)
+      const hide = Math.min(maxS, cut[1] - FADE + 2)
+      if (show >= lo - 0.5) to = show
+      else if (hide <= hi + 0.5) to = hide
+    }
+  }
   if (Math.abs(to - vl) < 1) return false
   row.scrollTo({ left: to, behavior: smooth ? 'smooth' : 'auto' })
   return true

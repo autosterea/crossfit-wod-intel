@@ -93,6 +93,7 @@ export function StoryProvider({ def, children }: { def: StoryDef; children: Reac
       loaded: false,
       showBuild: false,
       scrub: false,
+      idle: false,
       detent: q.detent ?? st.detent,
     })
     if (st.reduced) {
@@ -165,6 +166,8 @@ function registerQA(def: StoryDef): void {
         phase: s.phase,
         /** LOW under 24 fps: the canvas renders on demand (C.10) */
         still: s.still,
+        /** nothing moves: the canvas renders on demand until something changes (fix round 1) */
+        idle: s.idle,
         loaded: s.loaded,
         focus: { x: focusRect.x, y: focusRect.y, w: focusRect.w, h: focusRect.h, W: focusRect.W, H: focusRect.H },
       }

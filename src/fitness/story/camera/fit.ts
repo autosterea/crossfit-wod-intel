@@ -28,9 +28,23 @@ export interface Resolved {
 
 export const DEG = Math.PI / 180
 
-export function padOf(p: Pad | undefined): { l: number; r: number; t: number; b: number } {
-  if (p === undefined) return { l: 24, r: 24, t: 24, b: 24 }
-  if (typeof p === 'number') return { l: p, r: p, t: p, b: p }
+/** the default pose padding (read-only: padOf hands it out without a copy) */
+const PAD24: { readonly l: number; readonly r: number; readonly t: number; readonly b: number } = Object.freeze({ l: 24, r: 24, t: 24, b: 24 })
+/** a small ring of scratch pads for numeric padding (per-frame callers must not allocate, C.16) */
+const PAD_RING = [0, 1, 2, 3].map(() => ({ l: 0, r: 0, t: 0, b: 0 }))
+let padRing = 0
+/**
+ * The padding as four sides. Allocation free (fix round 1): a numeric pad is
+ * written into one of four rotating scratch objects, so a caller may hold up
+ * to four results at once; read them, never keep them past the frame.
+ */
+export function padOf(p: Pad | undefined): { readonly l: number; readonly r: number; readonly t: number; readonly b: number } {
+  if (p === undefined) return PAD24
+  if (typeof p === 'number') {
+    const o = PAD_RING[(padRing = (padRing + 1) & 3)]
+    o.l = o.r = o.t = o.b = p
+    return o
+  }
   return p
 }
 

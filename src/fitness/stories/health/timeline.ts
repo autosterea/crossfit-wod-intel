@@ -1,4 +1,5 @@
 import { at } from '../../story/cue'
+import { focusRect } from '../../story/camera/focusRect'
 import { ease } from '../../story/ease'
 import { clamp, lerp, smoothstep } from '../../lessonMath'
 import {
@@ -99,8 +100,17 @@ export const sheetOn = (T: number) => at(T, B.volume, 0.1, 0.15) * (1 - at(T, B.
 /** the walls' rim is hot (it blooms) while the level rises, then settles */
 export const wallRim = (T: number) => 0.9 + 2.3 * (at(T, B.volume, 0.1, 0.16) - at(T, B.volume, 0.58, 0.75))
 export const wallsOn = (T: number) => at(T, B.volume, 0.1, 0.13)
+/**
+ * A short portrait phone rect (an iPhone with Safari's toolbars: 366 x 302 in
+ * L6 under the CTA row). There L6's three-row key already reads both volumes
+ * ("Lifelong trainer: 100", "Sedentary: 12"), so the HUD chip, which repeats
+ * the first, steps aside as they land and the L6 pose stops keeping its corner
+ * clear (story.ts SIL_HOLD): the lesson's last frame takes that room (fix round 1).
+ */
+export const shortPortrait = (): boolean =>
+  focusRect.layout === 'P' && (focusRect.shell === 'phone' || focusRect.shell === 'tablet') && focusRect.h < 440
 /** the HUD chip from L2 on */
-export const hudOpacity = (T: number) => at(T, B.volume, 0.02, 0.1)
+export const hudOpacity = (T: number) => at(T, B.volume, 0.02, 0.1) * (shortPortrait() ? 1 - at(T, B.hold, 0.28, 0.4) : 1)
 /** SDF "VOLUME = HEALTH" on the floor */
 export const claimIn = (T: number) => at(T, B.volume, 0.8, 0.96, ease.settle) * (1 - at(T, B.line, 0, 0.14))
 
@@ -181,14 +191,16 @@ export const waveW = (age: number, s: number) => smoothstep(age - 3, age, s)
 export const s50Name = (T: number) => at(T, B.anyAge, 0.8, 0.9) * (1 - at(T, B.hold, 0, 0.12))
 export const indep85 = (T: number) => at(T, B.anyAge, 0.86, 0.96) * (1 - at(T, B.hold, 0, 0.12))
 /**
- * L5, the signature (A.3), in L2's language (the volume is light): the lid
- * turns to glass (isolines, its rim and a faint tint of its spectrum colour)
- * while the camera moves, the Sedentary landscape stays under it as a dim
- * solid (the before), and the slab between the two, the capacity the lift
- * reclaims, fills with light behind the scanner, as the volume poured in
- * L2. In L6 the lid turns solid again as it morphs to the lifelong one.
+ * L5, the signature (A.3). Fix round 1: the lid stays an OPAQUE lit surface
+ * in the spectrum colours (as in L2 and L6) and lifts like a wave behind the
+ * scanner (D.7), so the frame reads as recovery. The glass lid over a dim
+ * Sedentary solid (fix round 2 of the chapter) made the red, hatched
+ * "before" the dominant mass on a phone. The before is now only a ghost: the
+ * dashed Sedentary outline and its x-ray edges (xrayOn, from L5 on), and the
+ * capacity the lift reclaims is the green band of light between the two
+ * (ReclaimWalls). The glass machinery stays wired but is never on.
  */
-export const glassK = (T: number) => at(T, B.anyAge, 0.03, 0.16, ease.morph) * (1 - at(T, B.hold, 0.05, 0.42, ease.morph))
+export const glassK = (_T: number) => 0
 /** the lid's opacity as glass */
 export const GLASS_OP = 0.1
 /**
@@ -205,7 +217,7 @@ export const hatchK = (T: number) => 1 - at(T, B.anyAge, 0.72, 0.94) * (1 - at(T
  * (L6): its hidden edges (the power ridge and age 85) show through the
  * solid, dimmer than its visible ones, so it reads as the ghost underneath.
  */
-export const xrayOn = (T: number) => at(T, B.hold, 0.15, 0.4)
+export const xrayOn = (T: number) => Math.max(at(T, B.anyAge, 0.08, 0.2), at(T, B.hold, 0.15, 0.4))
 
 /* ---------------------------- L6 hold it ---------------------------- */
 

@@ -36,8 +36,12 @@ function titleFor(route: FitnessRoute): string {
 
 interface FitnessStore {
   route: FitnessRoute
-  /** Navigation drops the query string (DESIGN.md C.4). */
-  navigate: (route: FitnessRoute, opts?: { replace?: boolean }) => void
+  /**
+   * Navigation drops the query string (DESIGN.md C.4). The one exception is
+   * `query`, a deep link the lesson itself asks for (the finished lesson's
+   * "Back to overview" lands on the intro's six-tile map, held).
+   */
+  navigate: (route: FitnessRoute, opts?: { replace?: boolean; query?: string }) => void
   syncFromLocation: () => void
 }
 
@@ -50,8 +54,9 @@ export const useFitnessStore = create<FitnessStore>((set) => ({
   navigate: (route, opts) => {
     const path = routeToPath(route)
     const samePath = window.location.pathname.replace(/\/+$/, '') === path.replace(/\/+$/, '')
-    if (opts?.replace || samePath) window.history.replaceState(null, '', path)
-    else window.history.pushState(null, '', path)
+    const href = opts?.query ? path + opts.query : path
+    if (opts?.replace || samePath) window.history.replaceState(null, '', href)
+    else window.history.pushState(null, '', href)
     applyTitle(route)
     window.scrollTo({ top: 0 })
     set({ route })

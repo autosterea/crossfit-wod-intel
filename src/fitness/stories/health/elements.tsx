@@ -1,4 +1,4 @@
-import { useMemo, useRef, type ReactNode } from 'react'
+import { useEffect, useMemo, useRef, type ReactNode } from 'react'
 import * as THREE from 'three'
 import { PAL, agingCapacity } from '../../fitnessData'
 import { useSafeFrame } from '../../story/useSafeFrame'
@@ -322,17 +322,70 @@ export function Slices({ W }: { W: World }) {
 
 /* ------------------------------- L2 claim ------------------------------- */
 
+/** a unit rounded rectangle (the claim plate, as chapter 04's AREA = FITNESS) */
+function plateShape(): THREE.ShapeGeometry {
+  const w = 1
+  const h = 1
+  const r = 0.16
+  const s = new THREE.Shape()
+  s.moveTo(-w / 2 + r, -h / 2)
+  s.lineTo(w / 2 - r, -h / 2)
+  s.quadraticCurveTo(w / 2, -h / 2, w / 2, -h / 2 + r)
+  s.lineTo(w / 2, h / 2 - r)
+  s.quadraticCurveTo(w / 2, h / 2, w / 2 - r, h / 2)
+  s.lineTo(-w / 2 + r, h / 2)
+  s.quadraticCurveTo(-w / 2, h / 2, -w / 2, h / 2 - r)
+  s.lineTo(-w / 2, -h / 2 + r)
+  s.quadraticCurveTo(-w / 2, -h / 2, -w / 2 + r, -h / 2)
+  return new THREE.ShapeGeometry(s, 6)
+}
+
 /**
- * SDF "VOLUME = HEALTH" laid on the floor in front (Anton, chalk 22%),
- * turned about y by the L2 camera's azimuth so it lies square to the viewer
- * (at the pose's angle it read as a skewed drop shadow); a label obstacle
- * while up.
+ * SDF "VOLUME = HEALTH" laid on the floor in front, turned about y by the L2
+ * camera's azimuth so it lies square to the viewer (at the pose's angle it
+ * read as a skewed drop shadow); a label obstacle while up. Fix round 1: it
+ * gets the claim treatment chapter 04 gives AREA = FITNESS, ink on a #91C640
+ * plate with an ink keyline, so the lesson's two central equations read as
+ * the same kind of claim (a 24% chalk word read as a watermark).
  */
 export function FloorClaim({ W }: { W: World }) {
   const size = claimSize(W)
   const z = Z0 + FLOOR_TEXT_Z
   const r = claimRot(W)
   const on = (T: number) => (isExplore() ? 0 : claimIn(T))
+  const plate = useRef<THREE.Mesh>(null)
+  const keyline = useRef<THREE.Mesh>(null)
+  const geo = useMemo(plateShape, [])
+  const mat = useMemo(() => new THREE.MeshBasicMaterial({ color: PAL.yellowGreen, transparent: true, depthWrite: false, toneMapped: false, opacity: 0 }), [])
+  const inkMat = useMemo(() => new THREE.MeshBasicMaterial({ color: PAL.ink, transparent: true, depthWrite: false, toneMapped: false, opacity: 0 }), [])
+  useEffect(() => () => geo.dispose(), [geo])
+  useEffect(() => () => mat.dispose(), [mat])
+  useEffect(() => () => inkMat.dispose(), [inkMat])
+  // the plate is sized to the laid-out text (troika block bounds), with padding
+  const onSync = (m: THREE.Mesh) => {
+    const info = (m as unknown as { textRenderInfo?: { blockBounds: number[] } }).textRenderInfo
+    const p = plate.current
+    if (!info || !p) return
+    const [x0, y0, x1, y1] = info.blockBounds
+    const w = x1 - x0 + size * 0.7
+    const h = y1 - y0 + size * 0.4
+    p.scale.set(w, h, 1)
+    p.position.set((x0 + x1) / 2, (y0 + y1) / 2, -0.01)
+    const k = keyline.current
+    if (k) {
+      k.scale.set(w + size * 0.16, h + size * 0.16, 1)
+      k.position.set((x0 + x1) / 2, (y0 + y1) / 2, -0.02)
+    }
+  }
+  useSafeFrame(
+    'health floor claim',
+    (T) => {
+      const o = on(T)
+      mat.opacity = 0.94 * o
+      inkMat.opacity = Math.min(1, o * 1.4)
+    },
+    {},
+  )
   // two rows of points along the word (not its screen box: seen obliquely the word runs on a
   // diagonal, and its bounding rect would cover the duration labels under the front edge)
   const obstacle = useMemo<WorldObstacle>(() => {
@@ -362,7 +415,18 @@ export function FloorClaim({ W }: { W: World }) {
   return (
     <group position={[0, 0.02, z]} rotation={[0, r, 0]}>
       <group rotation={[-Math.PI / 2, 0, 0]}>
-        <SdfText font="anton" text="VOLUME = HEALTH" size={size} color={PAL.chalk} opacity={(T) => 0.24 * on(T)} letterSpacing={0.03} renderOrder={44} />
+        <mesh ref={keyline} geometry={geo} material={inkMat} renderOrder={42} />
+        <mesh ref={plate} geometry={geo} material={mat} renderOrder={43} />
+        <SdfText
+          font="anton"
+          text="VOLUME = HEALTH"
+          size={size}
+          color={PAL.ink}
+          opacity={(T) => Math.min(1, on(T) * 1.25)}
+          letterSpacing={0.03}
+          renderOrder={44}
+          onSync={onSync}
+        />
       </group>
     </group>
   )

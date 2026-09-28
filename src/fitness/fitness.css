@@ -6,7 +6,10 @@
    The .wf-* rules are the shared widgets of ui.tsx (explore controls,
    Notes cards); the legacy LessonStage styles were retired at integration.
    ========================================================================= */
-@import url('https://fonts.googleapis.com/css2?family=Anton&family=Barlow:wght@500;600&family=Barlow+Condensed:wght@400;500;600;700&display=swap');
+/* Barlow and Barlow Condensed (Anton comes with index.html). A direct load of
+   /fitness requests the same URL from index.html with the page, so this is a
+   cache hit there; it loads them when the lesson is reached inside the app. */
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@500;600&family=Barlow+Condensed:wght@400;500;600;700&display=swap');
 
 :root {
   --wf-accent: #91c640; /* PA yellow-green - accent text/borders on dark */
@@ -969,6 +972,14 @@
   background: rgba(238, 243, 246, 0.05);
   border: 1px solid var(--st-line);
 }
+.st-rb:disabled {
+  opacity: 0.32;
+  cursor: default;
+}
+.st-rb:disabled:active {
+  transform: none;
+  filter: none;
+}
 .st-play {
   position: relative;
   width: 48px;
@@ -1050,6 +1061,13 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
   flex: none;
+}
+/* the finished lesson's eyebrow (fix round 1): a check and "Lesson complete" */
+.st-eyebrow--end {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--st-accent);
 }
 .st-cta-row {
   display: flex;

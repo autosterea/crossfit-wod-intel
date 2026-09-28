@@ -2,7 +2,7 @@ import type { Box, CamPose, Layout, StoryDef } from '../../story/types'
 import HopperScene from './Scene'
 import HopperExplore from './Explore'
 import HopperHud from './Hud'
-import { CHART_PAD, LEGEND_COL, LEGEND_PX, WORLD, boardBox, chartBox, drawBox, drumBox, hopKey, lerpBox, newBox, railsBox, type HopKey, type MBox, type World } from './layout'
+import { CHART_PAD, LEGEND_COL, LEGEND_PX, WORLD, boardBox, chartBox, drawBox, drumBox, hopKey, lerpBox, newBox, qKey, railsBox, type HopKey, type MBox, type World } from './layout'
 import { compactNow, exCam } from './ExploreScene'
 import { EXPLORE_EL, useHopExplore } from './exploreStore'
 import { focusRect } from '../../story/camera/focusRect'
@@ -77,14 +77,30 @@ const pose = (fit: (w: World, key: HopKey, o: MBox) => MBox, pads: Record<HopKey
 /** the engine's layout for the pose being resolved (the director resolves at the focus rect's) */
 const currentLayout = (): Layout => focusRect.layout
 
+/**
+ * Q (short portrait, fix round 1): the domain key is a DOM panel over the
+ * caption card, so every Q pose reserves its measured height at the bottom
+ * (qKey.h, read on every resolve) instead of the P legend band at the top.
+ */
+const qPad = (l: number, r: number, t: number, extra: number): PadBox => ({
+  l,
+  r,
+  t,
+  get b() {
+    return qKey.h + extra
+  },
+})
+
 const DRUM = pose((w, _k, o) => drumBox(w, o), {
   P: { l: 18, r: 18, t: LEGEND_BAND, b: 16 },
+  Q: qPad(18, 18, 14, 14),
   L: { l: LEGEND_COL.L, r: 40, t: 28, b: 28 },
   S: { l: LEGEND_COL.S, r: 16, t: 16, b: 16 },
 })
 // H1: the D.3 centred stack, the drum over its ticket
 const DRAW = pose((w, _k, o) => drawBox(w, o), {
   P: { l: 12, r: 12, t: LEGEND_BAND, b: 12 },
+  Q: qPad(12, 12, 12, 12),
   L: { l: LEGEND_COL.L, r: 40, t: 28, b: 28 },
   S: { l: LEGEND_COL.S, r: 12, t: 12, b: 12 },
 })
@@ -92,6 +108,9 @@ const DRAW = pose((w, _k, o) => drawBox(w, o), {
 // (the drum sits beside the ticket in that band, under the HUD chip)
 const BOARD_PADS: Record<HopKey, PadBox> = {
   P: { l: 30, r: 8, t: LEGEND_PX, b: 10 },
+  // Q: the ticket rides at the top left, beside the one-line HUD chip (the P1
+  // name at the rail's far end passes under it); the key sits under P6
+  Q: qPad(30, 8, 12, 2),
   L: { l: LEGEND_COL.L, r: 30, t: 28, b: 18 },
   // S: the ticket's gap over P1 (layout.ts) keeps the P1 rail's name under the HUD chip
   S: { l: LEGEND_COL.S + 24, r: 8, t: 16, b: 8 },

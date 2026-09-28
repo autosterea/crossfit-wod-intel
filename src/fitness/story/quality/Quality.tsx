@@ -94,6 +94,8 @@ function QualityClock() {
   useFrame((_, dt) => {
     quality.time += Math.min(dt, 0.5)
     const st = useStoryStore.getState()
+    // the first frame after an idle stretch (on-demand rendering) carries the whole gap: not a slow frame
+    if (dt > 0.25) return
     if (st.tier !== 'low' || st.still) {
       acc.current.time = 0
       acc.current.frames = 0
@@ -135,7 +137,10 @@ export function Quality() {
     policy.current.ceil = ceilingStep(quality.ladder, quality.startTier)
     policy.current.run = 0
   }, [key])
-  const measuring = !pinned && loaded && armed === key
+  // idle (on-demand rendering, Stage.tsx): the monitor stands down, so the gap
+  // is never read as a slow window; it remounts fresh when the stage wakes
+  const idle = useStoryStore((s) => s.idle)
+  const measuring = !pinned && loaded && armed === key && !idle
 
   const onDecline = () => {
     const p = policy.current

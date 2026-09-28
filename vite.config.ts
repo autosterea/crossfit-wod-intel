@@ -39,17 +39,35 @@ const THREE_VENDOR = pkg(
   'troika-worker-utils',
   '@react-spring',
   '@use-gesture',
-  'zustand',
   'react-reconciler',
   'its-fine',
   'suspend-react',
   'maath',
 )
+// three.js core alone (its build and the examples the lesson and R3F use)
+const THREE_CORE = pkg('three')
 const NOT_FOR_THE_LESSON = new RegExp(
   '[\\\\/]node_modules[\\\\/](?:' +
     'three[\\\\/]build[\\\\/]three\\.(?:webgpu|tsl)' +
     '|three[\\\\/]examples[\\\\/]jsm[\\\\/](?:controls|postprocessing|shaders|renderers)[\\\\/]' +
     '|@react-three[\\\\/]drei[\\\\/]web[\\\\/]Html)',
+)
+
+// Code only the /fitness lesson runs (fix round 1): its post stack (bloom,
+// SMAA, tone mapping), drei's SDF Text (troika and its bidi / SDF helpers), and
+// drei's procedural Environment (its loaders and gain-map decoder come along
+// through useEnvironment). They get their own `lesson3d` chunk, claimed AFTER
+// `three` so three core stays where the WOD force graph finds it, and the WOD
+// routes, which still load `three` for three core, never download them.
+const LESSON_3D = new RegExp(
+  '[\\\\/]node_modules[\\\\/](?:' +
+    'postprocessing[\\\\/]' +
+    '|@react-three[\\\\/]postprocessing[\\\\/]' +
+    '|troika-three-text[\\\\/]|troika-three-utils[\\\\/]|troika-worker-utils[\\\\/]' +
+    '|bidi-js[\\\\/]|webgl-sdf-generator[\\\\/]|@monogrid[\\\\/]gainmap-js[\\\\/]' +
+    '|@react-three[\\\\/]drei[\\\\/](?:core[\\\\/](?:Text|Environment|Lightformer|useEnvironment|PerformanceMonitor)\\.js' +
+    '|helpers[\\\\/]environment-assets\\.js)' +
+    '|three-stdlib[\\\\/](?:loaders[\\\\/](?:RGBELoader|EXRLoader)|objects[\\\\/]GroundProjectedEnv)\\.js)',
 )
 
 export default defineConfig({
@@ -73,9 +91,14 @@ export default defineConfig({
               // landed in the 1.5 MB `forcegraph` chunk, so every route that
               // renders React (the /fitness lesson included) downloaded the
               // whole force-graph stack before it could start.
+              // Babel's runtime helpers are shared by drei and the force graph, so
+              // they sit here too (in `r3f` they made the WOD homepage load it).
+              // zustand (and its React shim) belongs with React (fix round 1):
+              // the WOD app's ThemeToggle and stores import it, and while it sat
+              // in `three` every WOD route downloaded three.js to get it.
               name: 'react',
               priority: 50,
-              test: pkg('react', 'react-dom', 'scheduler'),
+              test: pkg('react', 'react-dom', 'scheduler', 'zustand', 'use-sync-external-store', '@babel[\\\\/]runtime'),
             },
             {
               // react-force-graph-3d and the WebGL force-graph stack it drives,
@@ -114,7 +137,22 @@ export default defineConfig({
               // three.js core (and zustand) into the force-graph chunk.
               name: 'three',
               priority: 45,
-              test: (id: string) => THREE_VENDOR.test(id) && !NOT_FOR_THE_LESSON.test(id),
+              test: (id: string) => THREE_CORE.test(id) && !NOT_FOR_THE_LESSON.test(id),
+            },
+            {
+              // React Three Fiber, drei and three-stdlib (fix round 1): the WOD
+              // homepage's force graph needs three core alone, so the React
+              // renderer rides in its own chunk that only the lesson and the
+              // WOD heatmap load
+              name: 'r3f',
+              priority: 44.5,
+              test: (id: string) => THREE_VENDOR.test(id) && !THREE_CORE.test(id) && !NOT_FOR_THE_LESSON.test(id) && !LESSON_3D.test(id),
+            },
+            {
+              // the lesson-only 3D libraries (LESSON_3D above), after `three`
+              name: 'lesson3d',
+              priority: 44,
+              test: LESSON_3D,
             },
             {
               // recharts and its d3 chart deps (bundled under victory-vendor),

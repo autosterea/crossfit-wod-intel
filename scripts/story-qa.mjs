@@ -4,9 +4,13 @@
 //
 //   node scripts/story-qa.mjs check <baseUrl> [view=definition]
 //       Runs every gate below and exits 1 on any failure:
-//       labels    at 360 / 390 / 430: every beat at t = 1 and at its peak t
-//                 values: no overlaps, no clipping, no required label hidden,
-//                 live labels under the cap
+//       labels    at 360 / 390 / 430 and at the Safari viewports (390 x 664,
+//                 393 x 659, 430 x 740, 375 x 667): every beat at t = 1 and at
+//                 its peak t values: no overlaps, no clipping, no required
+//                 label hidden, live labels under the cap; and at 390 x 664,
+//                 393 x 659 and 430 x 740 no name, callout or readout the
+//                 390 x 844 phone shows on a beat's finished frame (t = 1)
+//                 may be culled (a hidden label is a FAIL, not a pass)
 //       budget    stats() on ?tier=medium at every beat end and in explore:
 //                 calls <= 120, triangles <= 250k
 //       continuity (N, 1) and (N + 1, 0) render the same pixels (< 0.5%)
@@ -26,6 +30,7 @@
 //       refit     explore: expand / collapse the phone sheet and Reset view; the
 //                 chart stays inside the focus rect (and the domain fan registered)
 //       fontfail  every self-hosted TTF aborted: the story still becomes ready
+//       reading   the expanded card (Read more) holds story time; Less resumes it
 //       touch     CDP finger drags: grab handle moves detents, Read more expands,
 //                 a body drag scrolls the page
 //       queue     taps inside a next glide queue; a step from a deep link plays
@@ -64,9 +69,23 @@ const VPS = {
   phone3x: { viewport: { width: 390, height: 844 }, deviceScaleFactor: 3, isMobile: true, hasTouch: true, tier: 'medium' },
   desktop: { viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1, isMobile: false, hasTouch: false, tier: 'high' },
   land: { viewport: { width: 844, height: 390 }, deviceScaleFactor: 1, isMobile: true, hasTouch: true, tier: 'medium' },
-  // an iPhone's real Safari viewport with the toolbars showing (shots only; not a gate yet)
+  // iPhones' real Safari viewports with the toolbars showing (fix round 1: these are
+  // the PRIMARY phone gates; 844 is unreachable in mobile Safari): 12 to 15, 15 Pro,
+  // Pro Max, SE / 8
   safari: { viewport: { width: 390, height: 664 }, deviceScaleFactor: 1, isMobile: true, hasTouch: true, tier: 'medium' },
+  safari393: { viewport: { width: 393, height: 659 }, deviceScaleFactor: 1, isMobile: true, hasTouch: true, tier: 'medium' },
+  safari430: { viewport: { width: 430, height: 740 }, deviceScaleFactor: 1, isMobile: true, hasTouch: true, tier: 'medium' },
+  se: { viewport: { width: 375, height: 667 }, deviceScaleFactor: 1, isMobile: true, hasTouch: true, tier: 'medium' },
 }
+/**
+ * The Safari viewports, gated like the rest (overlaps, clipping, required
+ * labels). On the current iPhones' three (390, 393 and 430 wide) nothing the
+ * 390 x 844 phone shows may be lost either; the 375 px SE is 15 px narrower
+ * than the phone reference, and a dense beat may give a secondary name way
+ * there (its required labels still gate).
+ */
+const SAFARI_VPS = ['safari', 'safari393', 'safari430', 'se']
+const LOST_VPS = ['safari', 'safari393', 'safari430']
 const ARGS = ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist']
 // THREE.Clock: one deprecation warning is emitted by module-level code of the
 // app's shared vendor chunk (the force-graph libraries that share the three
@@ -171,7 +190,9 @@ beats.forEach((_, i) => {
 //        report gives the true maximum)
 const maxStats = { calls: 0, triangles: 0, points: 0, at: '' }
 await gate('labels', async () => {
-if (want('labels')) for (const vpName of ['p360', 'phone', 'p430']) {
+// the visible label ids per sample on the 390 x 844 phone (the lost-label reference)
+const phoneShown = new Map()
+if (want('labels')) for (const vpName of ['phone', 'p360', 'p430', ...SAFARI_VPS]) {
   const { ctx, page, errs } = await open(browser, vpName)
   await page.goto(url(`${view}?beat=0&t=1`, 'medium'), { waitUntil: 'load', timeout: 90000 })
   await waitReady(page)
@@ -185,6 +206,17 @@ if (want('labels')) for (const vpName of ['p360', 'phone', 'p430']) {
     const tag = `${vpName} beat ${n} t ${t}`
     if (bad.length) fail(`${tag} labels: ` + bad.map((l) => l.id + (l.clipped ? ':clipped' : '') + (l.requiredHidden ? ':required-hidden' : '') + (l.overlaps.length ? ':overlaps ' + l.overlaps.join('/') : '')).join(', '))
     else ok(`${tag} labels: ${vis.length} visible, ${r.counts.live} live / ${r.counts.registered} registered`)
+    // lost vs the phone: names, callouts and readouts (the words a beat is read by;
+    // tick labels and pinned legends may legitimately give way or move to a DOM key)
+    const key = `${n}:${t}`
+    const words = (l) => l.visible && l.opacity > 0.5 && (l.tone === 'name' || l.tone === 'callout' || l.tone === 'readout')
+    if (vpName === 'phone') phoneShown.set(key, r.labels.filter(words).map((l) => l.id))
+    // (the finished frame of every beat, t = 1: the frame a viewer reads through the hold)
+    else if (LOST_VPS.includes(vpName) && t === 1) {
+      const here = new Set(r.labels.filter(words).map((l) => l.id))
+      const lost = (phoneShown.get(key) || []).filter((id) => !here.has(id))
+      if (lost.length) fail(`${tag} lost vs 390x844: ${lost.join(', ')}`)
+    }
     if (r.counts.live > r.counts.cap.live) fail(`${tag} ${r.counts.live} live labels > cap ${r.counts.cap.live}`)
     if (vpName === 'phone') {
       if (r.stats.calls > maxStats.calls) Object.assign(maxStats, { calls: r.stats.calls, at: `beat ${n} t ${t}` })
@@ -432,7 +464,7 @@ if (want('reduced')) {
 //    and the viewport (360 / 390 / 430 portrait and a landscape phone), the
 //    stage never scrolls sideways, and first-screen controls are 44 px targets.
 await gate('shell', async () => {
-if (want('shell')) for (const vpName of ['p360', 'phone', 'p430', 'land']) {
+if (want('shell')) for (const vpName of ['p360', 'phone', 'p430', 'land', 'safari', 'se']) {
   const { ctx, page } = await open(browser, vpName)
   await page.goto(url(`${view}?beat=${beats.length - 1}&t=1`, 'medium'), { waitUntil: 'load', timeout: 90000 })
   await waitReady(page)
@@ -668,6 +700,32 @@ if (want('fontfail')) {
   else ok(`fontfail: SDF fonts aborted, the story still became ready and plays (T ${r.st.T.toFixed(2)})`)
   const unexpected = errs.filter((e) => !/not ready after|Failure loading font|fonts\/|ERR_FAILED/.test(e))
   if (unexpected.length) fail(`fontfail console: ${unexpected.slice(0, 3).join(' | ')}`)
+  await ctx.close()
+}
+})
+
+// 13b. reading holds the story (L14, fix round 1): while the phone card is
+//      expanded (Read more) story time does not move; it resumes from the
+//      same T when the card returns to its default detent.
+await gate('reading', async () => {
+if (want('reading')) {
+  const { ctx, page } = await open(browser, 'phone')
+  await page.goto(url(`${view}?beat=0&t=0.2`, 'medium'), { waitUntil: 'load', timeout: 90000 })
+  await waitReady(page)
+  await page.evaluate(() => window.__story.play())
+  await page.waitForTimeout(400)
+  await page.tap('.st-card .st-more-link')
+  await page.waitForTimeout(300)
+  const T0 = await page.evaluate(() => window.__story.state().T)
+  await page.waitForTimeout(2500)
+  const T1 = await page.evaluate(() => window.__story.state().T)
+  const d1 = await page.evaluate(() => document.querySelector('.st-card')?.getAttribute('data-detent'))
+  await page.tap('.st-card .st-more-link')
+  await page.waitForTimeout(1500)
+  const T2 = await page.evaluate(() => window.__story.state().T)
+  const res = { T0: +T0.toFixed(3), T1: +T1.toFixed(3), T2: +T2.toFixed(3), d1 }
+  if (d1 !== 'expanded' || Math.abs(T1 - T0) > 1e-3 || !(T2 > T1 + 0.02)) fail(`reading: ${JSON.stringify(res)}`)
+  else ok(`reading: the expanded card holds story time (${res.T0} -> ${res.T1}), and it resumes on Less (${res.T2})`)
   await ctx.close()
 }
 })

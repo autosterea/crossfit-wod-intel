@@ -87,6 +87,11 @@ export const ROW = {
 
 /** u where each lane is named (bottom to top): the oxidative plateau, the glycolytic hump, the phosphagen slope (clear of the top-left corner). */
 export const LANE_NAME_U: readonly number[] = [uOf(300), uOf(15), uOf(12)]
+/** the phosphagen lane's name on a short portrait rect (fix round 1): further along its falling curve */
+export const LANE_NAME_U_SHORT = uOf(24)
+/** A short portrait phone rect (an iPhone with Safari's toolbars). */
+export const shortPortrait = (): boolean =>
+  focusRect.layout === 'P' && (focusRect.shell === 'phone' || focusRect.shell === 'tablet') && focusRect.h < 440
 
 /**
  * World x of each duration string (ENERGY_SYSTEMS[].duration, axis order).

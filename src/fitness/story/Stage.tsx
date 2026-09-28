@@ -49,6 +49,82 @@ function ClockDriver() {
   return null
 }
 
+/** Seconds of stillness before the Canvas switches to on-demand rendering. */
+const IDLE_AFTER = 1.2
+
+/**
+ * Battery (fix round 1): a held deep link, a paused story and the finished
+ * last beat used to re-render the whole scene and the post chain every vsync
+ * for identical pixels. Once the story is not animating (story mode, not
+ * playing or finished, no glide, no touch, no sheet) and story time, the
+ * focus rect and the store have been still for IDLE_AFTER seconds (every
+ * damped follower, the smoothed focus rect, label fades, the intro tile's
+ * turn, has settled by then), the stage goes idle: frameloop "demand".
+ * useIdleWake returns it to "always" on any change.
+ */
+function IdleWatch() {
+  const q = useRef({ quiet: 0, ver: -1, fv: -1 })
+  useFrame((_, dt) => {
+    const st = useStoryStore.getState()
+    const s = q.current
+    const calm =
+      st.mode === 'story' && st.loaded && !st.still && !st.idle && (!st.playing || st.phase === 'done') && !pb.glide && st.interacting === 0 && !st.sheet
+    if (!calm || clock.version !== s.ver || focusRect.version !== s.fv) {
+      s.quiet = 0
+      s.ver = clock.version
+      s.fv = focusRect.version
+      return
+    }
+    s.quiet += Math.min(dt, 0.1)
+    if (s.quiet >= IDLE_AFTER) {
+      s.quiet = 0
+      useStoryStore.setState({ idle: true })
+    }
+  }, -99)
+  return null
+}
+
+/** While idle: watch for anything that needs frames again, and wake the Canvas. */
+function useIdleWake(idle: boolean): void {
+  useEffect(() => {
+    if (!idle) return
+    const wake = () => {
+      if (useStoryStore.getState().idle) useStoryStore.setState({ idle: false })
+    }
+    const ver = clock.version
+    const fv = focusRect.version
+    let raf = 0
+    const loop = () => {
+      if (clock.version !== ver || focusRect.version !== fv) {
+        wake()
+        return
+      }
+      raf = requestAnimationFrame(loop)
+    }
+    raf = requestAnimationFrame(loop)
+    // any store change but the idle flag itself (play, a tap, a sheet, a detent, a mode, a seek)
+    const unsub = useStoryStore.subscribe((a, b) => {
+      for (const k in a) {
+        if (k === 'idle') continue
+        if ((a as unknown as Record<string, unknown>)[k] !== (b as unknown as Record<string, unknown>)[k]) {
+          wake()
+          return
+        }
+      }
+    })
+    // a late web font changes label widths: the placer needs a frame
+    const fonts = typeof document !== 'undefined' ? document.fonts : undefined
+    fonts?.addEventListener('loadingdone', wake)
+    window.addEventListener('resize', wake)
+    return () => {
+      cancelAnimationFrame(raf)
+      unsub()
+      fonts?.removeEventListener('loadingdone', wake)
+      window.removeEventListener('resize', wake)
+    }
+  }, [idle])
+}
+
 function UiPump() {
   const gl = useThree((s) => s.gl)
   const size = useThree((s) => s.size)
@@ -75,6 +151,9 @@ function UiPump() {
  * ("reading 'isReady'") and the promise never resolves. Here the driver's
  * parallel link finishes during the next two frames, still under the slate.
  */
+/** scratch list for the prewarm render (objects forced visible for one draw) */
+const prewarmHidden: THREE.Object3D[] = []
+
 function ReadyProbe() {
   const gl = useThree((s) => s.gl)
   const scene = useThree((s) => s.scene)
@@ -89,6 +168,26 @@ function ReadyProbe() {
       if (TIERS[st.tier].composer) gl.setRenderTarget(rt)
       try {
         gl.compile(scene, camera)
+        // First DRAW of every object, under the slate (fix round 1): three
+        // defers each program's first-use work, and on iOS (ANGLE on Metal)
+        // the render pipeline is built at the first draw, so hidden late-beat
+        // objects hitched at their beat's start. One render with everything
+        // forced visible (restored at once; the chapters set visibility from
+        // T every frame) makes those first draws happen now.
+        const hidden = prewarmHidden
+        hidden.length = 0
+        scene.traverse((o) => {
+          if (!o.visible) {
+            hidden.push(o)
+            o.visible = true
+          }
+        })
+        try {
+          gl.render(scene, camera)
+        } finally {
+          for (let i = 0; i < hidden.length; i++) hidden[i].visible = false
+          hidden.length = 0
+        }
       } catch (err) {
         reportOnce('shader prewarm', err)
       }
@@ -164,6 +263,7 @@ function Engine({ def }: { def: StoryDef }) {
     <>
       <StatsProbe />
       <ClockDriver />
+      <IdleWatch />
       <CameraDirector />
       <LabelPlacer />
       <HotspotPlacer />
@@ -258,6 +358,7 @@ export function StoryStage({ def, view }: { def: StoryDef; view: FitnessView }) 
   const visible = useStoryStore((s) => s.visible)
   const webgl = useStoryStore((s) => s.webgl)
   const still = useStoryStore((s) => s.still)
+  const idle = useStoryStore((s) => s.idle)
   const phase = useStoryStore((s) => s.phase)
   const index = useStoryStore((s) => s.index)
   const [shell, setShell] = useState<ShellLayout>(focusRect.shell)
@@ -341,6 +442,7 @@ export function StoryStage({ def, view }: { def: StoryDef; view: FitnessView }) 
   useStageGestures(stageRef)
   useStoryKeys()
   useFallbackClock(!webgl || still, still)
+  useIdleWake(idle && webgl && !still)
 
   return (
     <div
@@ -354,12 +456,16 @@ export function StoryStage({ def, view }: { def: StoryDef; view: FitnessView }) 
         <Canvas
           className="st-canvas"
           dpr={Math.max(1, dpr * dprScale)}
-          frameloop={!visible ? 'never' : still ? 'demand' : 'always'}
+          frameloop={!visible ? 'never' : still || idle ? 'demand' : 'always'}
           gl={{ antialias: true, alpha: false, powerPreference: 'high-performance', stencil: false }}
           camera={{ fov: 30, near: 0.1, far: 500, position: [0, 0, 30] }}
           onCreated={({ gl }) => {
             gl.setClearColor('#070a0e', 1)
             gl.toneMapping = THREE.CustomToneMapping
+            // three checks every program with synchronous info-log calls at its
+            // first use (a GPU round trip each, clustered at beat starts); only
+            // in development (fix round 1)
+            gl.debug.checkShaderErrors = import.meta.env.DEV
             // Context loss is fatal only for THIS mounted canvas, and only when
             // it is not restored within 2.5 s. R3F force-loses the context of a
             // canvas it unmounts; that event is ignored (listener removed,

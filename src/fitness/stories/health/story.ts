@@ -5,7 +5,7 @@ import HealthExplore from './Explore'
 import HealthHud from './Hud'
 import { CLAIM_AZ, POST_CAP, RIDGE_TERM, narrowNow, sliceBox } from './layout'
 import { silPose, type SilSpec } from './frame'
-import { G50, GL } from './timeline'
+import { G50, GL, shortPortrait } from './timeline'
 import { useHealthExplore } from './exploreStore'
 import { LIFELONG, SEDENTARY, STARTS_50 } from './healthMath'
 
@@ -60,7 +60,16 @@ const SIL_LINE: SilSpec = { grids: [GL], post: POST_CAP, plane: true, hud: true,
 // L5 ends on "Starts at 50" over the dashed Sedentary outline (inside it); the post keeps its full
 // height (an axis that shortened as the data rose read as the axis shrinking)
 const SIL_WAVE: SilSpec = { grids: [G50], post: POST_CAP, plane: true, hud: true, key: 2 }
-const SIL_HOLD: SilSpec = { grids: [GL], post: POST_CAP, plane: true, hud: true, key: 3 }
+// (the HUD chip steps aside in L6 on a short portrait rect, timeline.ts shortPortrait; the pose then uses its corner)
+const SIL_HOLD: SilSpec = {
+  grids: [GL],
+  post: POST_CAP,
+  plane: true,
+  get hud() {
+    return !shortPortrait()
+  },
+  key: 3,
+}
 const SIL_EXPLORE: SilSpec = { grids: [GL], post: POST_CAP, plane: true, hud: true }
 
 /*

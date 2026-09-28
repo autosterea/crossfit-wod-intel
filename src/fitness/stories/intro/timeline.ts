@@ -193,14 +193,17 @@ export const healthIn = (T: number) => A(T, BEAT.lifetime, 0.75, 1, ease.settle)
  *                 lane (layout healthLane), goes DOWN it once the chart has
  *                 landed, and only then ACROSS into tile 06, so the two never
  *                 share the same part of the screen;
- *   0.16 to 0.52  the pen redraws the four models (hidden since I3) in tiles
+ *   0.12 to 0.48  the pen redraws the four models (hidden since I3) in tiles
  *                 01, 02, 03 and 05, one stroke at a time, each tile clear by
  *                 then: nothing ever flies across the stage;
  *   rings and names light 01, 02, 03, 05 first (the four models landing),
  *   then 04 CAPACITY and 06 HEALTH, so the count visibly grows from 4 to 6.
  */
 const FOLD_START = [0, 0, 0, 0, 0, 0] as const
-const FOLD_LEN = [0.3, 0.3, 0.3, 0.3, 0.3, 0.16] as const
+// the surface (06) shrinks over 0.26 of the beat (was 0.16): with the camera
+// pulling back to the map at the same time, a 0.8 s shrink read as the solid
+// collapsing and left the stage nearly empty (fix round 1, the I4 handover)
+const FOLD_LEN = [0.3, 0.3, 0.3, 0.3, 0.3, 0.26] as const
 /** the chart (04) folds into its tile; for the surface (06) this is its shrink and turn */
 export const fold = (T: number, i: number) => A(T, BEAT.map, FOLD_START[i], FOLD_START[i] + FOLD_LEN[i], ease.settle)
 /** the surface's flight to tile 06: aside into its lane... */
@@ -211,7 +214,8 @@ export const surfDown = (T: number) => A(T, BEAT.map, 0.08, 0.32, ease.morph)
 export const surfAcross = (T: number) => A(T, BEAT.map, 0.24, 0.44, ease.morph)
 
 /* The four glyphs (Line.TILE_OF_COPY: tiles 01, 02, 03, 05) are redrawn in this order, then 04 and 06 are framed. */
-const G0 = 0.16
+// the pen starts redrawing the models at 0.12 (was 0.16), so the map begins filling while the chart and the surface fold
+const G0 = 0.12
 const GS = 0.09
 const GD = 0.09
 /** the end of the pen's redraw of glyph c (0..3, tiles 01, 02, 03, 05) */

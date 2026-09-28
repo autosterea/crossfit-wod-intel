@@ -5,6 +5,7 @@ import { useStoryStore, phaseAt } from './store'
 import { useFitnessStore } from '../fitnessStore'
 import { MODULES } from '../fitnessData'
 import type { FitnessView } from '../lessonTypes'
+import { focusRect } from './camera/focusRect'
 
 /* =========================================================================
    Autoplay state machine (DESIGN.md C.3): build -> hold -> advance. Runs from
@@ -32,6 +33,22 @@ export const pb = {
   glide: null as Glide | null,
   /** stage at least 10% visible */
   visible: true,
+  /** the desktop caption's inline Read more disclosure is open (L14: reading) */
+  reading: false,
+}
+
+/**
+ * L14: nothing advances while the viewer is reading. The phone card's
+ * expanded detent covers about 72% of the stage with the chapter's long copy,
+ * and the desktop card's Read more disclosure opens the same copy inline, so
+ * either one holds the story like a finger on the stage does; the story
+ * resumes from the same T when the card returns to its default detent or the
+ * disclosure closes (fix round 1).
+ */
+export function readingHold(st: { mode: string; detent: string }): boolean {
+  if (st.mode !== 'story') return false
+  if (pb.reading) return true
+  return st.detent === 'expanded' && (focusRect.shell === 'phone' || focusRect.shell === 'tablet')
 }
 
 const words = (s: string) => s.split(/\s+/).filter(Boolean).length
@@ -120,7 +137,7 @@ export function tick(dtRaw: number): void {
   // finger is down, a sheet is open, or the tab / stage is hidden.
   const g = pb.glide
   if (g) {
-    if (st.interacting > 0 || hidden || !pb.visible) return
+    if (st.interacting > 0 || hidden || !pb.visible || readingHold(st)) return
     g.elapsed += dt
     const k = Math.min(1, g.elapsed / g.dur)
     const T = g.from + (g.to - g.from) * ease[g.ease](k)
@@ -136,7 +153,7 @@ export function tick(dtRaw: number): void {
     return
   }
 
-  const paused = !st.playing || st.interacting > 0 || st.mode === 'explore' || hidden || !pb.visible
+  const paused = !st.playing || st.interacting > 0 || st.mode === 'explore' || hidden || !pb.visible || readingHold(st)
 
   // Ambient clock A (L5): runs only in unheld autoplay or in explore.
   if (st.mode === 'explore' || (st.playing && !clock.held && !st.reduced && !paused)) setA(clock.A + dt)

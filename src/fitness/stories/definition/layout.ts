@@ -63,7 +63,7 @@ export const fanCenter = (f: ChartFrame): [number, number, number] => [0, (f.y(0
  *      show the number only (the same on every row).
  */
 export interface Lineup {
-  kind: 'P' | 'L1' | 'L2'
+  kind: 'P' | 'PS' | 'L1' | 'L2'
   /** mini width and the height of v = 1 (world units) */
   MW: number
   MH: number
@@ -75,15 +75,28 @@ export interface Lineup {
   labelY: number
   /** show the score word in the pill (every row, or none) */
   words: boolean
+  /**
+   * PS: the score pill sits BESIDE the mini, in a slot of its own at the
+   * row's right end (never competing with the name for the band above);
+   * elsewhere it sits over the mini's right end
+   */
+  pillBeside: boolean
   box: Box
 }
 
 const cache = new Map<string, Lineup>()
 
-/** Two columns only on a SHORT landscape stage (a phone on its side); desktop keeps one column. */
+/**
+ * Two columns only on a SHORT landscape stage (a phone on its side); desktop
+ * keeps one column. A SHORT portrait stage (an iPhone with Safari's toolbars:
+ * 390 x 664 gives a 366 x 304 rect under the two-row CTA) keeps the one
+ * ranked column as PS: wide, shallow rows whose score pill has its own slot
+ * beside the mini, so no score is ever culled (fix round 1).
+ */
+export const SHORT_LINEUP_H = 460
 export function lineupKind(layout: Layout, _f?: ChartFrame): Lineup['kind'] {
-  if (layout === 'P') return 'P'
-  return focusRect.h < 460 ? 'L2' : 'L1'
+  if (layout === 'P') return focusRect.h < SHORT_LINEUP_H ? 'PS' : 'P'
+  return focusRect.h < SHORT_LINEUP_H ? 'L2' : 'L1'
 }
 
 export function lineup(layout: Layout, f: ChartFrame): Lineup {
@@ -95,17 +108,21 @@ export function lineup(layout: Layout, f: ChartFrame): Lineup {
   // P (H.48): the rows are HEIGHT-limited on a phone (seven rows in about
   // 480 px), so the mini gets the height the pads gave up: 1.35 tall (was
   // 0.95), a label band just tall enough for the 20 px pill, tighter pads.
+  // PS (fix round 1): about 24 px per unit on a 390 x 664 phone, so the
+  // name band is about 17 px, the mini about 19 px and the pill slot (PW)
+  // about 90 px, wide enough for "84 NARROW"; seven rows fit 290 px
   const K = {
-    P: { MW: 10.8, MH: 1.35, LB: 0.78, cols: 1, colGap: 0, lift: 0.05, padT: 0.08, padB: 0.3, gap: 0.14 },
-    L1: { MW: 13, MH: 1.55, LB: 0.52, cols: 1, colGap: 0, lift: 0.08, padT: 0.16, padB: 0.34, gap: 0.22 },
-    L2: { MW: 8, MH: 1.25, LB: 0.78, cols: 2, colGap: 1.3, lift: 0.08, padT: 0.16, padB: 0.34, gap: 0.22 },
+    P: { MW: 10.8, MH: 1.35, LB: 0.78, PW: 0, cols: 1, colGap: 0, lift: 0.05, padT: 0.08, padB: 0.3, gap: 0.14 },
+    PS: { MW: 10, MH: 0.78, LB: 0.7, PW: 3.8, cols: 1, colGap: 0, lift: 0.03, padT: 0.05, padB: 0.12, gap: 0.07 },
+    L1: { MW: 13, MH: 1.55, LB: 0.52, PW: 0, cols: 1, colGap: 0, lift: 0.08, padT: 0.16, padB: 0.34, gap: 0.22 },
+    L2: { MW: 8, MH: 1.25, LB: 0.78, PW: 0, cols: 2, colGap: 1.3, lift: 0.08, padT: 0.16, padB: 0.34, gap: 0.22 },
   }[kind]
-  const { MW, MH, LB, cols, colGap, padT, padB, gap } = K
+  const { MW, MH, LB, PW, cols, colGap, padT, padB, gap } = K
   const labelY = MH + K.lift
   const padX = 0.3
   const RP = labelY + LB + padT + padB + gap
   const rows = Math.ceil(n / cols)
-  const colW = MW + 2 * padX
+  const colW = MW + PW + 2 * padX
   const totalW = cols * colW + (cols - 1) * colGap
   const totalH = rows * RP - gap
   const top = totalH / 2
@@ -119,13 +136,13 @@ export function lineup(layout: Layout, f: ChartFrame): Lineup {
   }
   const plate = (r: number): [number, number, number, number] => {
     const [x, yb] = origin(r)
-    return [x - padX, yb - padB, x + MW + padX, yb + labelY + LB + padT]
+    return [x - padX, yb - padB, x + MW + PW + padX, yb + labelY + LB + padT]
   }
   const box: Box = [
     [-totalW / 2, -totalH / 2, 0],
     [totalW / 2, totalH / 2, 0],
   ]
-  const L: Lineup = { kind, MW, MH, origin, plate, labelY, words: kind !== 'L2', box }
+  const L: Lineup = { kind, MW, MH, origin, plate, labelY, words: kind !== 'L2', pillBeside: PW > 0, box }
   cache.set(kind, L)
   return L
 }

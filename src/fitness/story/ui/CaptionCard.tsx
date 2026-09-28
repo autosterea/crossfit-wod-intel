@@ -10,6 +10,8 @@ import type { Beat, StoryDef } from '../types'
 import type { FitnessView, ModuleKey } from '../../lessonTypes'
 import { IconChevron } from './icons'
 import { useObservedCard } from '../camera/focusRect'
+import { pb } from '../playback'
+import { readDone } from './progress'
 
 /* =========================================================================
    Caption card (DESIGN.md B.2, C.7). Phone: a glass card over the bottom of
@@ -95,6 +97,48 @@ function ReadMoreBody({ view }: { view: FitnessView }) {
     </>
   )
 }
+
+/**
+ * The end of the lesson (fix round 1): the last chapter's finished beat has
+ * no next chapter, so its solid CTA returns to the overview, landing on the
+ * intro's six-tile map (the hub, B.6), held. The eyebrow row carries a
+ * one-line completion state (LessonEndEyebrow; UI copy, no claim).
+ */
+function LessonEndCtas() {
+  const navigate = useFitnessStore((s) => s.navigate)
+  return (
+    <div className="st-cta-row">
+      <button type="button" className="st-btn st-btn--outline" onClick={() => useStoryStore.getState().setMode('explore')}>
+        Explore this model
+      </button>
+      <button type="button" className="st-btn st-btn--solid" onClick={() => navigate({ view: ORDER[0] }, { query: `?beat=${INTRO_MAP_BEAT}&t=1` })}>
+        <span className="st-btn-l">Back to overview</span>
+      </button>
+    </div>
+  )
+}
+
+/**
+ * The finished lesson's eyebrow: "Lesson complete" once this viewer has
+ * finished all six chapters (the per-viewer done store, B.2; the current
+ * chapter counts, it is finished now), otherwise "End of the lesson".
+ */
+function LessonEndEyebrow({ view }: { view: FitnessView }) {
+  const done = new Set<string>(readDone())
+  done.add(view)
+  const all = MODULES.every((m) => done.has(m.key))
+  return (
+    <span className="st-eyebrow st-eyebrow--end">
+      <svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true">
+        <path d="M3 8.5l3.2 3L13 4.5" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+      {all ? 'Lesson complete' : 'End of the lesson'}
+    </span>
+  )
+}
+
+/** The intro's six-tile map (D.1 I4), where "Back to overview" lands. */
+const INTRO_MAP_BEAT = 4
 
 function NextChapterCta({ view }: { view: FitnessView }) {
   const i = ORDER.indexOf(view)
@@ -188,6 +232,15 @@ export function CaptionCard({ cardRef, shell }: { cardRef: React.RefObject<HTMLD
     // re-attach when the card element appears (it does not exist while the chapter has no def)
   }, [cardRef, phone, def])
 
+  // a chapter change (or leaving the lesson) never keeps a reading hold
+  const defKey = def?.key
+  useEffect(() => {
+    pb.reading = false
+    return () => {
+      pb.reading = false
+    }
+  }, [defKey])
+
   const observe = useObservedCard(cardRef)
   if (!def) return null
   const beat = def.beats[index]
@@ -195,6 +248,7 @@ export function CaptionCard({ cardRef, shell }: { cardRef: React.RefObject<HTMLD
   const accent = accentFor(def.key)
   const last = index >= def.beats.length - 1
   const done = last && phase === 'done'
+  const lessonEnd = done && ORDER.indexOf(def.key) === ORDER.length - 1
   const instant = clock.held
   const tIn = reduced ? { duration: 0.12 } : { duration: 0.22, ease: [0.22, 1, 0.36, 1] as const }
   const tOut = reduced ? { duration: 0.12 } : { duration: 0.16, ease: [0.4, 0, 1, 1] as const }
@@ -225,9 +279,13 @@ export function CaptionCard({ cardRef, shell }: { cardRef: React.RefObject<HTMLD
       )}
       <Segments accent={accent} />
       <div className="st-eyebrow-row">
-        <span className="st-eyebrow" style={{ color: accent }}>
-          {eyebrowFor(def, beat)}
-        </span>
+        {lessonEnd ? (
+          <LessonEndEyebrow view={def.key} />
+        ) : (
+          <span className="st-eyebrow" style={{ color: accent }}>
+            {eyebrowFor(def, beat)}
+          </span>
+        )}
         <span className="st-step">
           {index + 1} / {def.beats.length}
         </span>
@@ -270,7 +328,16 @@ export function CaptionCard({ cardRef, shell }: { cardRef: React.RefObject<HTMLD
         </div>
       )}
       {!phone && (
-        <details className="st-more st-more--inline" data-no-gesture>
+        // L14: an open disclosure holds the story (playback readingHold); keyed by
+        // chapter so a new chapter starts closed and playing
+        <details
+          key={def.key}
+          className="st-more st-more--inline"
+          data-no-gesture
+          onToggle={(e) => {
+            pb.reading = (e.currentTarget as HTMLDetailsElement).open
+          }}
+        >
           <summary>
             Read more <IconChevron />
           </summary>
@@ -291,7 +358,7 @@ export function CaptionCard({ cardRef, shell }: { cardRef: React.RefObject<HTMLD
           </button>
         </div>
       )}
-      {done && beat.cta !== 'begin' && (
+      {done && beat.cta !== 'begin' && !lessonEnd && (
         <div className="st-cta-row">
           <button type="button" className="st-btn st-btn--outline" onClick={() => useStoryStore.getState().setMode('explore')}>
             Explore this model
@@ -299,6 +366,7 @@ export function CaptionCard({ cardRef, shell }: { cardRef: React.RefObject<HTMLD
           <NextChapterCta view={def.key} />
         </div>
       )}
+      {lessonEnd && <LessonEndCtas />}
     </div>
   )
 }

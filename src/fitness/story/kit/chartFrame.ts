@@ -70,8 +70,23 @@ export function computeChartFrame(o: ChartFrameOpts, fw = focusRect.w, fh = focu
   }
 }
 
-const optsKey = (o: ChartFrameOpts) =>
+const optsKeyOf = (o: ChartFrameOpts) =>
   `${o.FH}|${o.minAspect}|${o.maxAspect}|${o.marginPx.l},${o.marginPx.r},${o.marginPx.t},${o.marginPx.b}|${o.vMax ?? 1}|${o.zRange?.join(',') ?? ''}`
+/**
+ * The cache key of an options object, built once per object (fix round 1:
+ * frameFor runs every frame from camera poses and anchors, and building the
+ * string each call allocated on every one). Options are module constants or
+ * memoised, so the key of one object never changes.
+ */
+const optsKeys = new WeakMap<ChartFrameOpts, string>()
+const optsKey = (o: ChartFrameOpts) => {
+  let k = optsKeys.get(o)
+  if (k === undefined) {
+    k = optsKeyOf(o)
+    optsKeys.set(o, k)
+  }
+  return k
+}
 
 /** Quantised aspect of the available rect: 1/50 steps. */
 const aspectKey = (o: ChartFrameOpts) =>

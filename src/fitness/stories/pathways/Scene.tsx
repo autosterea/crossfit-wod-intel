@@ -37,7 +37,7 @@ import { Brackets, Construction, HandoverStrip, LaneAxes, MarathonChevron, type 
 import { AXIS_ORDER, BAND_OF_AXIS, LIGHT, envelopeArc, makeFlowState, setFlowMorph, type BandSource } from './geom'
 import { BandFill, BandPen, Envelope } from './elements'
 import { River } from './River'
-import { LANE_NAME_U, ROW, TICKS, narrowChart, pxPerUnit, stringX, underAxis, type UnderAxis } from './layout'
+import { LANE_NAME_U, LANE_NAME_U_SHORT, ROW, TICKS, narrowChart, pxPerUnit, shortPortrait, stringX, underAxis, type UnderAxis } from './layout'
 import {
   PxMap,
   addBlocker,
@@ -233,6 +233,7 @@ function useStoryAnnot(frame: ChartFrame) {
       statCue: [0, 0, 0, 0] as number[],
       sz: { w: 0, h: 0 },
       sz2: { w: 0, h: 0 },
+      szT: { w: 0, h: 0 },
       cx: [0, 0, 0],
       cy: [0, 0, 0],
       cw: [0, 0, 0],
@@ -263,6 +264,20 @@ function useStoryAnnot(frame: ChartFrame) {
       addStatics: () => {
         for (let i = 0; i < N_ST; i++) if (st.statFit[i] && st.statCue[i] > 0.001) blockFlag(st.bl, st.stat[i])
       },
+      /**
+       * The "Power output" axis title keeps its slot at the top of the power
+       * axis through P0 to P3, where the power scale is being read: the chips
+       * lay out around it (fix round 1: on a short portrait phone a chip took
+       * that corner and the title was culled). From P4 the lanes' names (P4)
+       * and the 1RM tag, which names its dominant engine (P5), keep the corner.
+       */
+      addTitle: (T: number, axisX: number) => {
+        // P5 and P6 read the pins: there the 1RM tag (its dominant engine) keeps the corner
+        if (yTitle(T) <= 0.01 || T >= P.power) return
+        sizeInto('pw-ax-y', 'Power output', 'name', st.szT)
+        const ty = st.pxm.py(frame.y(frame.vMax))
+        addBlocker(st.bl, axisX + 6, ty - st.szT.h / 2 - 3, st.szT.w + 6, st.szT.h + 6)
+      },
     }),
     [st, frame],
   )
@@ -271,7 +286,7 @@ function useStoryAnnot(frame: ChartFrame) {
     (T) => {
       if (useStoryStore.getState().mode !== 'story') return
       const { pxm, B, bl } = st
-      const { pinX, pinY, addStatics } = help
+      const { pinX, pinY, addStatics, addTitle } = help
       pxm.update(camera, frame)
       boundsInto(B)
       const pinsOn = T >= P.workouts + 0.3 && lanesM(T) < 0.5
@@ -291,6 +306,7 @@ function useStoryAnnot(frame: ChartFrame) {
       // 1. the stamped readings and the tags
       bl.n = 0
       addHud(bl)
+      addTitle(T, axisX)
       if (pinsOn) for (let k = 0; k < PINS.length; k++) if (!IS_TAG_PIN[k]) addBlocker(bl, pinX(k) - 8, pinY(k) - 8, 16, 16)
       for (let i = 0; i < N_ST; i++) {
         const c = stCue(T, i)
@@ -346,6 +362,7 @@ function useStoryAnnot(frame: ChartFrame) {
       // 2. the cluster names (P5, P6)
       bl.n = 0
       addHud(bl)
+      addTitle(T, axisX)
       if (pinsOn) for (let k = 0; k < PINS.length; k++) if (!IN_CLUSTER[k]) addBlocker(bl, pinX(k) - 6, pinY(k) - 6, 12, 12)
       addStatics()
       st.cluCue = 0
@@ -361,13 +378,23 @@ function useStoryAnnot(frame: ChartFrame) {
           st.cw[j] = st.sz.w
           st.ch[j] = st.sz.h
         }
-        const pole = cue > 0.01 && T >= P.workouts
-        solveCluster(st.clu, st.cx, st.cy, st.cw, st.ch, st.show, floor, bl, B, pole ? nx : null, ny)
+        // The cluster names re-lay for the cursor's pole only while the
+        // cursor RESTS on a cluster pin (its chip then needs that room, as at
+        // Fran in P6), never while it travels past (fix round 1: the LOW / HIGH
+        // layout flipped as the moving pole crossed the cluster, so the names
+        // jumped about 70 px and back within a second of P5). A travelling
+        // pole may pass under a name; the cursor's chip avoids every name and
+        // leader (step 3).
+        let rest = false
+        if (cue > 0.01 && T >= P.workouts)
+          for (let j = 0; j < 3; j++) if (CLUSTER[j] >= 0 && Math.abs(pinX(CLUSTER[j]) - nx) < 3) rest = true
+        solveCluster(st.clu, st.cx, st.cy, st.cw, st.ch, st.show, floor, bl, B, rest ? nx : null, ny)
       } else st.clu.layout = -1
 
       // 3. the cursor chip, over the cluster names, the tags and every pin
       bl.n = 0
       addHud(bl)
+      addTitle(T, axisX)
       if (pinsOn) {
         for (let k = 0; k < PINS.length; k++) {
           const x = pinX(k)
@@ -829,14 +856,20 @@ function useStoryLabels(frame: ChartFrame, layout: Layout, ua: UnderAxis, an: St
     // P4: each lane named on its own lane (one shared power scale); the
     // phosphagen name sits on its falling spike, clear of the top-left corner
     for (let b = 0; b < 3; b++) {
-      const u = LANE_NAME_U[b]
+      const u0 = LANE_NAME_U[b]
+      // the top lane (phosphagen) peaks at the top of the chart: on a short portrait rect
+      // its name is anchored further along the falling curve, where it has headroom (fix round 1)
+      const u1 = b === 2 ? LANE_NAME_U_SHORT : u0
       out.push({
         id: `pw-lane-${b}`,
         text: NAME[BAND_KEY[b]],
         tone: 'callout',
         color: BAND_COLORS[b],
         required: true,
-        anchor: (T) => pt(x(u), y(topV(b, u, lanesM(T))), 0.05),
+        anchor: (T) => {
+          const u = shortPortrait() ? u1 : u0
+          return pt(x(u), y(topV(b, u, lanesM(T))), 0.05)
+        },
         prefer: b === 2 ? 'NE' : 'N',
         gapPx: 10,
         leader: true,

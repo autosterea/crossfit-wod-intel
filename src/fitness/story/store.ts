@@ -45,6 +45,12 @@ export interface StoryState {
   dprScale: number
   /** LOW tier under 24 fps: render on demand */
   still: boolean
+  /**
+   * Nothing on the stage is moving (the story is paused, held or finished,
+   * and every damped follower has settled): the Canvas renders on demand and
+   * any change wakes it (Stage.tsx IdleWatch / useIdleWake; fix round 1)
+   */
+  idle: boolean
 
   play(): void
   pause(): void
@@ -98,6 +104,7 @@ export const useStoryStore = create<StoryState>((set, get) => ({
   sheet: false,
   dprScale: 1,
   still: false,
+  idle: false,
 
   play() {
     const s = get()
@@ -105,6 +112,9 @@ export const useStoryStore = create<StoryState>((set, get) => ({
     if (clock.held) clock.held = false
     dropSeekQuery()
     if (s.mode === 'explore') get().setMode('story')
+    // Play is the viewer's "I am done reading": the expanded card (a reading
+    // hold, L14) returns to its default detent so the story can run.
+    if (s.detent === 'expanded') set({ detent: 'default' })
     if (s.reduced) {
       // "Show build": replay the current beat's build once, then hold.
       startBeat(clock.index)

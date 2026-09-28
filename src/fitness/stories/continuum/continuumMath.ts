@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import { BIOMARKERS, CONTINUUM_EXAMPLES, CONTINUUM_PROFILES, PAL, markerValueAt, spectrum } from '../../fitnessData'
+import { clamp, lerp } from '../../lessonMath'
 
 /* =========================================================================
    05 CONTINUUM math (DESIGN.md D.6 "Math"). `stateWord`, `fmtMarker` and
@@ -173,10 +174,24 @@ export const BP_STATIONS: number[] = [STOPS[0], STOPS[1], STOPS[3]]
 /* ------------------------------ colour -------------------------------- */
 
 const _c = new THREE.Color()
-/** spectrum(t) as LINEAR rgb (what pens, dots and shaders expect), written into out. */
+/**
+ * The spectrum's three stops (sick, well, fit), read once from
+ * fitnessData.spectrum itself: spectrum(0), (0.5) and (1) are exactly its
+ * stop colours. spectrumLinear interpolates them the same way (clamped t, in
+ * display space, sick to well over the first half, well to fit over the
+ * second) WITHOUT the arrays spectrum() allocates per call: the dial writes
+ * a colour per dot per frame (fix round 1, hard rule 3).
+ */
+const SP0 = spectrum(0)
+const SP1 = spectrum(0.5)
+const SP2 = spectrum(1)
+/** spectrum(t) as LINEAR rgb (what pens, dots and shaders expect), written into out. Allocation free. */
 export function spectrumLinear(t: number, out: THREE.Color = _c): THREE.Color {
-  const [r, g, b] = spectrum(t)
-  return out.setRGB(r, g, b, THREE.SRGBColorSpace)
+  const u = clamp(t, 0, 1)
+  const lo = u < 0.5 ? SP0 : SP1
+  const hi = u < 0.5 ? SP1 : SP2
+  const k = u < 0.5 ? u / 0.5 : (u - 0.5) / 0.5
+  return out.setRGB(lerp(lo[0], hi[0], k), lerp(lo[1], hi[1], k), lerp(lo[2], hi[2], k), THREE.SRGBColorSpace)
 }
 
 const _hex = new THREE.Color()

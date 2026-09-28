@@ -154,9 +154,13 @@ export type GridKind = 'P' | 'L' | 'S'
 
 /** The grid kind for a focus layout on this stage (one choice for the camera, the cells, the names and the hotspots). */
 export function gridKind(layout: Layout): GridKind {
-  if (layout === 'P') return 'P'
   const f = focusRect
   const phone = f.shell === 'phone' || f.shell === 'tablet'
+  // a SHORT portrait phone rect (an iPhone with Safari's toolbars: 390 x 664
+  // gives 366 x 304 under the two-row CTA) takes the 2 x 7 list, names beside
+  // the radars: the 3 x 5 grid shrank to 65 px cells there and three middle
+  // names were culled (fix round 1)
+  if (layout === 'P') return phone && f.h < 440 ? 'S' : 'P'
   return phone && (f.w - 28) / 5 < 95 ? 'S' : 'L'
 }
 const kindNow = () => gridKind(focusRect.layout)

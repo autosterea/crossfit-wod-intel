@@ -27,6 +27,17 @@ const isGames = path === '/games' || basePath.startsWith('/games/')
 const isFitness = path === '/fitness' || basePath.startsWith('/fitness/')
 const isNews = path === '/news' || basePath.startsWith('/news/')
 
+// The lesson's current chapter starts downloading with the lesson shell, not
+// after it (the shell must load and run three before it asks for the chapter;
+// fitness-v2 fix round 1). Same module instance as the shell's loader, so the
+// shell finds it cached or in flight.
+if (isFitness) {
+  const slug = path.startsWith('/fitness/') ? path.slice('/fitness/'.length) : 'intro'
+  void import('./fitness/stories')
+    .then((m) => m.loadStory(slug as Parameters<typeof m.loadStory>[0]))
+    .catch(() => undefined)
+}
+
 class RootErrorBoundary extends Component<{ children: ReactNode }, { error: Error | null }> {
   state = { error: null as Error | null }
   static getDerivedStateFromError(error: Error) {

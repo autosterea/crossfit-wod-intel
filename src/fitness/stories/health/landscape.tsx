@@ -196,7 +196,7 @@ export function Surface({ W }: { W: World }) {
   useEffect(() => () => geo.dispose(), [geo])
   useEffect(() => () => mat.dispose(), [mat])
   const mesh = useRef<THREE.Mesh>(null)
-  const seen = useRef({ ver: -1, geo: null as THREE.BufferGeometry | null })
+  const seen = useRef({ ver: -1, geo: null as THREE.BufferGeometry | null, tint: -1, g: -1 })
   useSafeFrame(
     'health surface',
     () => {
@@ -204,10 +204,17 @@ export function Surface({ W }: { W: World }) {
       if (!m) return
       const op = HS.surfOp
       m.visible = op > 0.004
-      if (seen.current.ver !== HS.gridVer || seen.current.geo !== geo) {
-        seen.current.ver = HS.gridVer
-        seen.current.geo = geo
+      // L5: the capacity the lift reclaims is lit #91C640 on the surface itself
+      // (quantised, so a held frame and a ramp frame agree; rewritten only when it changes)
+      const tint = Math.round(HS.reclaimWalls * 40) / 40
+      const sv = seen.current
+      if (sv.ver !== HS.gridVer || sv.geo !== geo || sv.tint !== tint || (tint > 0 && sv.g !== HS.ghostVer)) {
+        sv.ver = HS.gridVer
+        sv.geo = geo
+        sv.tint = tint
+        sv.g = HS.ghostVer
         writeGrid(geo, HS.grid, W)
+        if (tint > 0) tintReclaimed(geo, HS.grid, HS.ghost, tint)
       }
       if (!m.visible) return
       mat.opacity = op
@@ -221,6 +228,37 @@ export function Surface({ W }: { W: World }) {
     { hide: mesh },
   )
   return <mesh ref={mesh} geometry={geo} material={mat} renderOrder={20} frustumCulled={false} />
+}
+
+/** how far the reclaimed capacity leans toward #91C640 at full strength */
+const RECLAIM_TINT = 0.78
+const GREEN_TINT = new THREE.Color(PAL.yellowGreen)
+
+/**
+ * L5 (fix round 1): where the displayed surface stands above the Sedentary
+ * ghost (the capacity the lift gave back), its colour leans toward #91C640,
+ * the colour that means fitness here, in proportion to the lift (full from
+ * 0.12 of capacity), so the recovery is the brightest, greenest part of the
+ * frame and the red of the sedentary years stays only where the surface is
+ * still low. Vertex colours are linear, like GREEN_TINT. Allocation free.
+ */
+function tintReclaimed(g: THREE.BufferGeometry, grid: Float32Array, ghost: Float32Array, k: number): void {
+  const ca = g.attributes.color as THREE.BufferAttribute | undefined
+  if (!ca) return
+  const c = ca.array as Float32Array
+  const gr = GREEN_TINT.r
+  const gg = GREEN_TINT.g
+  const gb = GREEN_TINT.b
+  for (let i = 0; i < N; i++) {
+    const lift = grid[i] - ghost[i]
+    if (lift <= 0.01) continue
+    const u = Math.min(1, (lift - 0.01) / 0.11)
+    const w = u * u * (3 - 2 * u) * k * RECLAIM_TINT
+    c[i * 3] += (gr - c[i * 3]) * w
+    c[i * 3 + 1] += (gg - c[i * 3 + 1]) * w
+    c[i * 3 + 2] += (gb - c[i * 3 + 2]) * w
+  }
+  ca.needsUpdate = true
 }
 
 /* ------------------------------ iso ghost ------------------------------ */

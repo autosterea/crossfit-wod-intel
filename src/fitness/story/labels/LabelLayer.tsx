@@ -365,9 +365,10 @@ export function LabelPlacer() {
       o.w = r.w
       o.h = r.h
     }
-    for (const [oid, { spec, buf }] of worldObstacles) {
+    // (forEach: no [key, value] entry array per obstacle per frame, C.16)
+    worldObstacles.forEach(({ spec, buf }, oid) => {
       const m = spec.mode ?? 'story'
-      if (m !== 'both' && m !== mode) continue
+      if (m !== 'both' && m !== mode) return
       let box: ReturnType<NonNullable<typeof spec.box>> | undefined
       try {
         box = spec.box?.(T)
@@ -420,7 +421,7 @@ export function LabelPlacer() {
           o.h = 2 * rad
         }
       }
-    }
+    })
 
     s.usedMemory = tMoving
     const b = s.bounds
@@ -512,6 +513,7 @@ export function LabelPlacer() {
 export function labelsSnapshot() {
   const list = [...registry.values()].map((e) => ({
     id: e.spec.id,
+    tone: e.spec.tone,
     text: e.short ? e.spec.short ?? e.text : e.text,
     x: Math.round(e.rect.x),
     y: Math.round(e.rect.y),

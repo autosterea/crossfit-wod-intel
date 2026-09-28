@@ -533,7 +533,7 @@ export function useLifetimeLabels(L: IntroLayout) {
     return [
       {
         id: 'intro-age',
-        text: 'AGE',
+        text: 'Age',
         tone: 'tick',
         anchor: [c.x0, c.y0, ageZ],
         prefer: 'W',

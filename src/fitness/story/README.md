@@ -390,6 +390,14 @@ Each beat has `cam: { L, P?, window?, keys? }`. A pose is
   that is actually on screen at that moment (the fanned slices, not the flat
   chart). A few degrees of tilt reads as a mistake.
 - `P` is the portrait pose (phones). Keep comparisons front-on (L12).
+- **The owner's phone is SHORT.** On a phone shell the P pose is used while
+  the focus rect's aspect is under 1.3 (every other shell: under 0.95; H.55),
+  because iPhone Safari with its toolbars gives 390 x 664, 393 x 659,
+  430 x 740 or 375 x 667, and a focus rect of about 366 x 358 (366 x 304 on a
+  last beat with its CTA row). Design every P composition for that rect as
+  well as for 390 x 844: when it cannot keep its words at that height, give it
+  a short-portrait variant keyed on `focusRect.h` (Hopper `Q`, Definition
+  lineup `PS`, Skills grid `S`), never a silent cull.
 - The move happens inside `window` (default the first 35% of the beat), eased
   with `morph`; `keys` add mid-beat keyframes (see the Definition D2 fan).
 - Free orbit exists only in explore mode (drei OrbitControls, limits from
@@ -496,6 +504,13 @@ in a thin rim or a crisp pen, and rest a dimmed line with `dim`, not opacity.
   points at DPR 1.5).
 - Never add a `useFrame` with a positive priority (it would take over rendering
   on LOW and the stage would go black). Never add post effects in a chapter.
+- **Idle rendering** (H.58): once the story is not animating (paused, held or
+  finished, no glide, no touch, no sheet) and story time, the focus rect and
+  the store have been still for 1.2 s, the Canvas renders on demand; any
+  change wakes it (`state().idle`). So anything of yours that moves must move
+  from story time, the ambient clock (which only runs while playing) or a
+  store change, or it settles within 1.2 s (a damped follower). Never animate
+  from wall time in a held frame.
 
 ## Disposal
 
@@ -520,7 +535,7 @@ generalist or the claim, never a specialist's low score. No em or en dashes.
   two frames rendered after the last seek. Loaded never goes back to false on a
   seek, so the slate never covers a scrub (H.15).
 - `window.__story`: `seek(n, t)`, `play()`, `pause()`, `next()`, `prev()`,
-  `explore(on)`, `state()` (includes `still`, `loaded`, `focus`), `stats()`,
+  `explore(on)`, `state()` (includes `still`, `idle`, `loaded`, `focus`), `stats()`,
   `labels()`, `labelCounts()`, `project(x, y, z)`, `chartRect()` (the chart
   frame box projected, stage px), `probe(id)` / `probes()`, `qualityLog()`,
   `ready`.
@@ -535,7 +550,11 @@ generalist or the claim, never a specialist's low score. No em or en dashes.
 2. `node C:/Users/ravik/fitness-v2/tools/dashcheck.mjs C:/Users/ravik/fitness-v2/base/src/fitness` prints no dashes.
 3. `tools/build.sh` passes for the dev and the preview build.
 4. Serve the build and run `node scripts/story-qa.mjs check http://127.0.0.1:<port> <view>`:
-   labels at 360 / 390 / 430 (no overlaps, clipping or hidden required labels),
+   labels at 360 / 390 / 430 and at the Safari viewports 390 x 664, 393 x 659,
+   430 x 740 and 375 x 667 (no overlaps, clipping or hidden required labels;
+   and at 390 x 664, 393 x 659 and 430 x 740 no name, callout or readout the
+   390 x 844 phone shows on a beat's finished frame may be culled, H.55), a
+   Read more that holds story time,
    budget, continuity, scrub without slate, nav away and back, persistent canvas,
    keyboard and URL drift, reduced motion. All must pass.
    It also checks the finished last beat's card (every button inside the card
@@ -549,8 +568,9 @@ generalist or the claim, never a specialist's low score. No em or en dashes.
    A gate that throws (a selector that never appears) is reported as that
    gate's FAIL and the run continues; nav-away-and-back and the persistent
    canvas use the Previous card on the last chapter (Health).
-5. `node scripts/story-qa.mjs shots <url> <dir> phone "<view>?beat=N&t=1" ...`
-   for every beat on `phone`, `p360`, `p430`, `phone3x` and `desktop`, plus a
+5. `node scripts/story-qa.mjs shots <url> <dir> safari "<view>?beat=N&t=1" ...`
+   for every beat on `safari` (390 x 664: look at these FIRST, they are what an
+   iPhone shows), `phone`, `p360`, `p430`, `phone3x` and `desktop`, plus a
    mid-beat frame per beat and `?explore=1`. Look at every one, phone first:
    the subject fills the focus rect, the idea of the beat is SHOWN, nothing
    reads as noise at 3x.

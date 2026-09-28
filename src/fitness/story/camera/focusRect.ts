@@ -78,7 +78,14 @@ export function computeFocus(stage: HTMLElement, card: HTMLElement | null): bool
   }
   r.w = Math.max(40, r.w)
   r.h = Math.max(40, r.h)
-  const layout: Layout = r.w / r.h < 0.95 ? 'P' : 'L'
+  // A portrait phone keeps the P pose on a squarish rect (fix round 1): with
+  // Safari's toolbars showing, a 390x844 iPhone gives a 390x664 viewport and
+  // a focus rect of about 366x358 (aspect 1.02), which the 0.95 rule turned
+  // into the desktop L pose on a portrait phone. The P compositions shrink
+  // into the shorter rect but keep their structure (the two-line title, the
+  // 2x2 glyphs, the key panel, the one-column lineup). The expanded detent
+  // (aspect above 2) and every other shell keep the B.3 rule.
+  const layout: Layout = (shell === 'phone' ? r.w / r.h < 1.3 : r.w / r.h < 0.95) ? 'P' : 'L'
   const changed =
     Math.abs(r.x - focusRect.x) > 0.5 ||
     Math.abs(r.y - focusRect.y) > 0.5 ||

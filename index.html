@@ -39,6 +39,15 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script>
+      // /fitness (the What Is Fitness? lesson): its caption and label faces start loading with the page, not after the lesson's own stylesheet (the same URL as its fitness.css import, so that one is a cache hit)
+      if (location.pathname.indexOf('/fitness') >= 0) {
+        var wfFonts = document.createElement('link');
+        wfFonts.rel = 'stylesheet';
+        wfFonts.href = 'https://fonts.googleapis.com/css2?family=Barlow:wght@500;600&family=Barlow+Condensed:wght@400;500;600;700&display=swap';
+        document.head.appendChild(wfFonts);
+      }
+    </script>
 
     <!-- Analytics: GA4 + Meta Pixel + Microsoft Clarity (same stack + IDs as persistenceathletics.com, so wod flows into the PA dashboards) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-2CZFX3PN8G"></script>

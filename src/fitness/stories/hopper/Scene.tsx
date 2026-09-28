@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef } from 'react'
 import * as THREE from 'three'
 import { useThree } from '@react-three/fiber'
-import { HOPPER_DOMAINS, PAL } from '../../fitnessData'
+import { HOPPER_DOMAINS, MODAL_DOMAINS, PAL } from '../../fitnessData'
 import { at, focus, stagger } from '../../story/cue'
 import { ease } from '../../story/ease'
 import { useStoryStore } from '../../story/store'
@@ -139,6 +139,19 @@ const bracketSwing = (T: number) => (isExplore() ? 0 : at(T, B.every, H6.swing[0
 /** the bracket stands at draw 40 as the lead until THIS RUN takes over */
 const bracketOn = (T: number) => (isExplore() || T < B.every ? 0 : 1 - at(T, B.every, H6.claim[0], H6.claim[0] + 0.06))
 const guideOn = (T: number) => 1 - at(T, B.every, H6.swing[0] - 0.02, H6.swing[0] + 0.06)
+/**
+ * The domain legend's visibility (the pinned chips, or the Q world's DOM key):
+ * it lands at the end of H0 and steps aside for the H6 chart. Explore: gone at
+ * once for Every run (the chart's own legend takes the corner), and while the
+ * phone's sheet is expanded (the compact board).
+ */
+export const legendCue = (T: number) =>
+  isExplore()
+    ? useHopExplore.getState().view === 'runs'
+      ? 0
+      : exRails() * (1 - compactNow())
+    : at(T, B.hopper, 0.74, 0.9) * (1 - at(T, B.every, H6.dimBars[0], H6.dimBars[1] + 0.02)) * (1 - compactNow())
+
 /** a short phone rect (the sheet or the caption expanded): on the board only the Generalist keeps its name */
 const compactName = (T: number, a: number) => (a !== GEN ? 1 - compactNow() * board(T) : 1)
 
@@ -201,6 +214,8 @@ function crowdOf(b: Board, w: World, a: number): number {
  * grows, and back down as the ticks fade (H5).
  */
 const NAME_IDS = Array.from({ length: N_ATH }, (_, a) => 'hop-n-' + a)
+/** px from a total pill's centre to its edge (the small readout pill is about 20 px tall) */
+const PILL_HALF = 11
 function nameGap(w: World, a: number): number {
   const T = clock.T
   if (isExplore() || T < B.specialists || T >= B.many + 0.08 || !(boardPx.unit > 0)) return 5
@@ -217,7 +232,11 @@ function nameGap(w: World, a: number): number {
   }
   if (g <= 0) return 5
   // (a name's glyphs sit a couple of px over its box: the box may just meet the tick's top)
-  const lifted = Math.max(5, (TICK_TOP * boardPx.unit - 1.5) / 0.72)
+  // Never lifted into the total riding the bar above (fix round 1: on a short
+  // portrait board the pitch is about 37 px, and a lifted name met that pill
+  // and was culled); the name then overlaps the tick's top, over its halo.
+  const room = w.rails.pitch * boardPx.unit - PILL_HALF - (BH / 2) * (1 + SWELL) * boardPx.unit - e.h - 2
+  const lifted = Math.max(5, Math.min((TICK_TOP * boardPx.unit - 1.5) / 0.72, room))
   return 5 + (lifted - 5) * g * ticksOn(T)
 }
 
@@ -283,23 +302,23 @@ function useBoardLabels(w: World, fr: { current: ChartFrame }) {
     const passRank = (a: number) => 97 + 0.3 * (N_ATH - board(clock.T).dest[a])
     const out: LabelSpec[] = []
     // the domain legend: what each ball and brick colour means (pinned top-left;
-    // a column beside the board on L and S, a band over it on P)
+    // a column beside the board on L and S, a band over it on P). The names
+    // are the MODAL_DOMAINS set chapter 04 keys the same five colours with
+    // (fix round 1: one domain label set across the lesson; the ticket keeps
+    // the drawn domain's full HOPPER_DOMAINS label). Q (a short portrait
+    // rect) shows the same key as a two-row DOM panel over the caption card
+    // (Hud.tsx) instead, so the pinned chips stand down there.
+    const q = w === WORLD.Q
     HOPPER_DOMAINS.forEach((d, k) => {
       out.push({
         id: `hop-dom-${k}`,
-        text: d.label,
+        text: MODAL_DOMAINS[k].name,
         tone: 'legend',
         color: d.color,
         anchor: [0, 0, 0],
         pin: 'top-left',
         pinOrder: k,
-        // explore: gone at once for Every run (the chart's own legend takes the corner), and while the phone's sheet is expanded
-        cue: (T) =>
-          isExplore()
-            ? useHopExplore.getState().view === 'runs'
-              ? 0
-              : exRails() * (1 - compactNow())
-            : at(T, B.hopper, 0.74, 0.9) * (1 - at(T, B.every, H6.dimBars[0], H6.dimBars[1] + 0.02)) * (1 - compactNow()),
+        cue: q ? () => 0 : legendCue,
       })
     })
     // rank badges: fixed to the slots, each landing as its rail arrives in
@@ -512,7 +531,7 @@ function useChartLabels(w: World, fr: { current: ChartFrame }, key: HopKey) {
     out.push(
       {
         id: 'hop-draws',
-        text: 'DRAWS',
+        text: 'Draws',
         tone: 'tick',
         anchor: pt(0.5, null, -0.22),
         prefer: 'S',
@@ -638,7 +657,13 @@ export default function HopperScene() {
   useChartLabels(w, fr, key)
   // counting totals, written imperatively (never React state per frame)
   useTotals(w)
+  // one material set PER brick set (fix round 1): <Instances> writes its set's
+  // opacity into the material every frame, so sets sharing materials took the
+  // last writer's opacity (H6: the P1 and P2 bars faded with the four behind,
+  // then popped back once those were hidden). Same shader, so no new programs.
   const brickMats = useBrickMaterials()
+  const backMats = useBrickMaterials()
+  const exMats = useBrickMaterials()
   const t = w.ticket
 
   /** where the ticket is at T: its H1 place or its board place, and the flick card's shrink */
@@ -726,8 +751,8 @@ export default function HopperScene() {
       <Ticket w={w} src={srcAt} place={place} board={board} vis={ticketVis} trace={trace} traceOut={traceOut} railLen={w.rails.len} />
       <Rails w={w} draw={railDraw} dim={railDim} opacity={railOn} tips={(T) => (T < B.every ? 1 : 0)} />
       <Bricks w={w} mats={brickMats} src={srcAt} run={STORY} draws={STORY_DRAWS} athletes={FRONT} opacity={frontBricks} launch={launch} />
-      <Bricks w={w} mats={brickMats} src={srcAt} run={STORY} draws={STORY_DRAWS} athletes={BACK} opacity={backBricks} launch={launch} />
-      <Bricks w={w} mats={brickMats} src={srcAt} run={exRun} draws={EXPLORE_CAP} opacity={exploreBricks} launch={launch} />
+      <Bricks w={w} mats={backMats} src={srcAt} run={STORY} draws={STORY_DRAWS} athletes={BACK} opacity={backBricks} launch={launch} />
+      <Bricks w={w} mats={exMats} src={srcAt} run={exRun} draws={EXPLORE_CAP} opacity={exploreBricks} launch={launch} />
       <BrickLights w={w} src={srcAt} launch={launch} />
       <Ticks w={w} src={srcAt} opacity={ticksOn} />
       <GeneralistFlare w={w} src={srcAt} k={flare} />

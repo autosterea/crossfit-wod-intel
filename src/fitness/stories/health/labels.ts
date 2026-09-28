@@ -85,11 +85,11 @@ export function useHealthLabels(W: World): void {
     const out: LabelSpec[] = [
       { id: 'h-1s', text: '1 s', tone: 'tick', anchor: (T) => p1s(-XW * sx(T), 0, zAxis(T)), prefer: 'S', only: ['S', 'SW', 'SE', 'W'], gapPx: 6, priority: 82, cue: tickCue },
       { id: 'h-1hr', text: '1 hr', tone: 'tick', anchor: (T) => p1hr(XW * sx(T), 0, zAxis(T)), prefer: 'S', only: ['S', 'SE', 'SW'], gapPx: 6, priority: 82, cue: tickCue },
-      { id: 'h-dur', text: 'DURATION', tone: 'tick', anchor: (T) => pDur(0, 0, zAxis(T)), prefer: 'S', only: ['S'], gapPx: 8, priority: 81, cue: tickCue },
+      { id: 'h-dur', text: 'Duration', tone: 'tick', anchor: (T) => pDur(0, 0, zAxis(T)), prefer: 'S', only: ['S'], gapPx: 8, priority: 81, cue: tickCue },
       // the capacity axis title over the post (the chart's y axis in L0, the solid's front-left edge from L1)
       {
         id: 'h-cap',
-        text: 'CAPACITY',
+        text: 'Capacity',
         tone: 'tick',
         anchor: (T) => pCap(-XW * sx(T), POST_CAP * YS, zAxis(T)),
         prefer: 'N',
@@ -114,7 +114,7 @@ export function useHealthLabels(W: World): void {
     )
     out.push({
       id: 'h-age',
-      text: 'AGE',
+      text: 'Age',
       tone: 'tick',
       // the axis title stands in the tick column between 60 and 80, left-aligned with the ticks:
       // clear of the back-right corner (its post, the plane's corner and the skyline's end, which

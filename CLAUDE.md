@@ -387,19 +387,24 @@ an explore mode, and a Notes section below the stage.
   rules: analytics stay, brand colours are fixed, 3D stays dark, no dashes,
   no Node runtime, TypeScript strict, per-frame work in refs (never React
   state per frame, never allocations in hot paths).
-- **Payload:** `vite.config.ts` keeps the WOD app's force-graph code
-  (including three's WebGPU build and example controls) and drei `Html` out
-  of the shared `three` chunk, and drops the unused n8ao pass, so a `/fitness`
-  first load pulls only react, three (core, R3F, drei parts, postprocessing,
-  troika), motion, the lesson shell and the current chapter (about 550 KB
-  gzipped JS).
+- **Payload:** `vite.config.ts` splits the 3D vendors into `three` (three.js
+  core only, what the WOD force graph needs), `r3f` (R3F, drei, three-stdlib)
+  and `lesson3d` (postprocessing, troika, drei Text / Environment, the
+  environment loaders: lesson only), keeps the WOD app's force-graph code and
+  drei `Html` out of them, puts zustand and Babel's helpers with React, and
+  drops the unused n8ao pass. The WOD routes never download lesson code, and a
+  `/fitness` first load pulls react, three, r3f, lesson3d, motion, the lesson
+  shell and the current chapter (about 570 KB gzipped JS; DESIGN.md H.60).
 - **Base path:** the app works under `/` and under `/preview/` (the owner's
   review build): `fitnessStore.ts` and `main.tsx` strip `BASE_URL`, and every
   asset (PA logo, SDF fonts) resolves from it.
 - **QA before every lesson commit (from the worktree):**
   `node scripts/fitness-gate.mjs` (scene-code grep gate plus the caption
   audit), `node scripts/story-qa.mjs check <served build> <view>` (labels at
-  360 / 390 / 430, budget, continuity, scrub, nav back, persistent canvas,
+  360 / 390 / 430 and at the iPhone Safari viewports 390 x 664, 393 x 659,
+  430 x 740 and 375 x 667, where no word the 390 x 844 phone shows may be
+  culled: those short viewports are what an iPhone really shows, DESIGN.md
+  H.55; a reading hold, budget, continuity, scrub, nav back, persistent canvas,
   keys, reduced motion, shell, hit bands, tiers, re-fit, font failure,
   touch, tap queue, determinism), the TypeScript build for base `/` and
   `/preview/`, and a dash check over `src/fitness`.
