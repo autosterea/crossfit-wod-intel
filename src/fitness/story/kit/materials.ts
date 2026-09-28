@@ -277,7 +277,9 @@ export function makeFillMaterial(color: string, mode: FillMode = 'gradient', o: 
         #else
         vec3 col = uColor;
         #endif
-        float a = mix( uLo, uHi, pow( vT, uPow ) );
+        // clamp: with MSAA the fill also shades edge samples outside the triangle, where the interpolated vT dips below 0;
+        // pow() of a negative is NaN on ANGLE/D3D11, and bloom spreads that NaN over the whole canvas (black screen, owner report)
+        float a = mix( uLo, uHi, pow( clamp( vT, 0.0, 1.0 ), uPow ) );
         if ( uMode > 0.5 && uMode < 1.5 ) {
           float h = step( 0.5, fract( ( gl_FragCoord.x + gl_FragCoord.y ) / ( 7.0 * uDpr ) ) );
           a = uHi * h;
@@ -379,7 +381,8 @@ export function makeRingMaterial(): THREE.ShaderMaterial {
         if ( r > 1.0 || vK <= 0.0 || vK >= 1.0 ) discard;
         float rad = mix( 0.18, 0.96, vK );
         float w = mix( 0.16, 0.05, vK );
-        float ring = exp( - pow( ( r - rad ) / w, 2.0 ) );
+        float q = ( r - rad ) / w;
+        float ring = exp( - q * q ); // not pow(q, 2.0): q < 0 inside the ring, and pow of a negative is NaN on D3D11
         float fade = pow( 1.0 - vK, 1.6 );
         float heat = mix( 2.4, 1.0, vK );
         float a = ring * fade;

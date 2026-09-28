@@ -316,7 +316,7 @@ export function makePersonMaterial(): THREE.ShaderMaterial {
       varying float vF;
       varying float vR;
       void main() {
-        float a = uLo + ( uHi - uLo ) * pow( vF, uGamma );
+        float a = uLo + ( uHi - uLo ) * pow( clamp( vF, 0.0, 1.0 ), uGamma ); // MSAA edge samples extrapolate vF < 0: NaN on D3D11
         float rim = smoothstep( 0.86, 1.0, vF ) * uRim;
         // C6: inside the WELL circle the membrane steps aside (the pit darkens
         // alone); in the lit band beyond it the body of the fill thins, so

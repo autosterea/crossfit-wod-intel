@@ -195,7 +195,7 @@ const VERT = /* glsl */ `
         alpha = 1.0 - smoothstep( 0.45, 1.0, m );
         trail = smoothstep( 0.08, 0.35, m ) * ( 1.0 - smoothstep( 0.8, 1.0, m ) );
       } else if ( inB ) {
-        float e = 1.0 - pow( 1.0 - m, 3.0 );
+        float e = 1.0 - pow( max( 1.0 - m, 0.0 ), 3.0 ); // pow of a negative is NaN on D3D11
         y = v + ( 1.0 - e ) * 0.1;
         col = uColCond * 2.1;
         alpha = e;
