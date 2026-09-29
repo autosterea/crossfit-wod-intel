@@ -54,8 +54,7 @@ const tryRequire = (from) => {
 }
 const pw =
   (process.env.PLAYWRIGHT_FROM && tryRequire(process.env.PLAYWRIGHT_FROM)) ||
-  tryRequire(join(process.cwd(), 'package.json')) ||
-  tryRequire('C:/Users/ravik/OneDrive/Desktop/Claude/Projects/CrossFit/app/package.json')
+  tryRequire(join(process.cwd(), 'package.json'))
 if (!pw) {
   console.error('playwright not found: set PLAYWRIGHT_FROM to a package.json whose node_modules has playwright')
   process.exit(2)
