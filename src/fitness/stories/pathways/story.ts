@@ -1,0 +1,135 @@
+import * as THREE from 'three'
+import type { CamPose, StoryDef } from '../../story/types'
+import { storyFrame } from '../../story/kit/chartFrame'
+import PathwaysScene from './Scene'
+import PathwaysExplore from './Explore'
+import PathwaysHud from './Hud'
+import { CHART_PAD, FRAME_OPTS, chartBox } from './layout'
+import { EXPLORE_SEED, usePwExplore } from './exploreStore'
+import { tOf } from './pathwaysMath'
+
+/* =========================================================================
+   03 ENERGY SYSTEMS: "Three engines, one river" (DESIGN.md D.4). Beat copy
+   lives here so a reviewer can check every `source` against fitnessData.ts
+   and the module-file string table. Titles <= 30 characters, bodies <= 140,
+   no new facts, numbers or quotes.
+
+   Camera: every beat is READ as a 2D chart, so it is exactly front-on with a
+   telephoto fov (L12, H.21, README "Camera poses": a few degrees of tilt
+   reads as a mistake and stair-steps the axes). The lanes (P4) occupy the
+   same chart box, so the camera holds still through the whole chapter and
+   the river is what moves (L6: no move without a new dimension).
+   ========================================================================= */
+
+/** Front-on chart pose: the chart box inside the label margins (ticks, strings, axis title). */
+const CHART: CamPose = { target: (_l, f) => [0, (f.box[0][1] + f.box[1][1]) / 2, 0], az: 0, el: 0, fov: 22, fit: chartBox, padPx: CHART_PAD }
+
+const plane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0)
+const hit = new THREE.Vector3()
+
+export const pathwaysStory: StoryDef = {
+  key: 'pathways',
+  beats: [
+    {
+      id: 'three',
+      title: 'Three engines',
+      body: 'Three metabolic engines power all human action. Each dominates a different range of power and duration.',
+      source: 'MODULE_COPY.pathways.body s1 to s2',
+      build: 4.5,
+      cam: { L: CHART },
+    },
+    {
+      id: 'phosphagen',
+      title: 'Phosphagen',
+      body: 'Stored ATP and creatine phosphate. Explosive power, but the tiny store is largely spent within 10 to 15 seconds of all-out effort.',
+      terms: { 'Stored ATP and creatine phosphate': 'phosphagen' },
+      source: 'fitnessData.ENERGY_SYSTEMS[0].fuel + description',
+      // the cursor reads 3 s and holds before it sweeps (review r2)
+      build: 5.5,
+      // the stamped 3 s reading, the 10 s callout and the duration string, read at the end of the sweep (H.40)
+      sceneWords: 11,
+      cam: { L: CHART },
+    },
+    {
+      id: 'glycolytic',
+      title: 'Glycolytic',
+      body: 'Muscle glycogen and blood glucose. It takes over as the phosphagens fall and peaks near 15 to 30 seconds.',
+      terms: { 'Muscle glycogen and blood glucose': 'glycolytic' },
+      source: 'fitnessData.ENERGY_SYSTEMS[1].fuel + description',
+      build: 4.5,
+      sceneWords: 8,
+      cam: { L: CHART },
+    },
+    {
+      id: 'oxidative',
+      title: 'Oxidative',
+      body: 'Carbohydrate and fat with oxygen. Slow to ramp, it overtakes the anaerobic systems past about 75 seconds.',
+      terms: { 'Carbohydrate and fat with oxygen': 'oxidative' },
+      source: 'fitnessData.ENERGY_SYSTEMS[2].fuel + description',
+      // the 75 s hold is 0.17 of the beat (review r2; D.4 0.06)
+      build: 6.5,
+      // the stamped 75 s reading, the 1 hr callout, "2 min and beyond" and the Marathon chip (H.40)
+      sceneWords: 13,
+      cam: { L: CHART },
+    },
+    {
+      id: 'power',
+      title: 'Longest, not strongest',
+      body: 'Height is power output. Oxidative outlasts the others, it is not more powerful.',
+      source: 'PathwaysModule.note',
+      build: 5.5,
+      // the signature (A.3): the river separates into three lanes on one power
+      // scale; the three lane names and the peak order are read after it (H.40)
+      signature: true,
+      sceneWords: 10,
+      cam: { L: CHART },
+    },
+    {
+      id: 'workouts',
+      title: 'The dominant engine changes',
+      body: 'Example efforts on the curve. Watch the dominant engine change.',
+      source: 'MODULES[2].blurb s2 + PathwaysModule ControlHead "Example efforts" + MODULE_COPY.definition.body ("the curve")',
+      // four stops 0.19 apart, each chip up about 1.3 s (review r2; D.4 6.5 s)
+      build: 9.0,
+      // the result chip, the two tags and the benchmark names (H.40)
+      sceneWords: 15,
+      cam: { L: CHART },
+    },
+    {
+      id: 'all-three',
+      title: 'Train all three',
+      body: 'Total fitness requires training all three. The two most common faults are favoring one or two, and over-training the oxidative engine.',
+      source: 'MODULE_COPY.pathways.body s3 to s4',
+      build: 5.0,
+      // the three engine names under the brackets and the Fran chip (H.40)
+      sceneWords: 12,
+      cam: { L: CHART },
+      impact: [0.7, 0.82],
+    },
+  ],
+  Scene: PathwaysScene,
+  Explore: PathwaysExplore,
+  Hud: PathwaysHud,
+  frame: FRAME_OPTS,
+  explore: {
+    cam: { L: CHART },
+    limits: { az: [-45, 45], el: [0, 35], zoom: [0.6, 1.6] },
+    scrubToggle: true,
+    initFromBeat(i) {
+      const seed = EXPLORE_SEED[Math.max(0, Math.min(EXPLORE_SEED.length - 1, i))]
+      const s = usePwExplore.getState()
+      if (seed.bench) s.setBench(seed.bench)
+      else s.setT(seed.t)
+      s.setLanes(seed.lanes)
+      s.setShare(false)
+    },
+    onScrub(ray, _ndc, phase) {
+      if (phase === 'end') return
+      if (!ray.intersectPlane(plane, hit)) return
+      const f = storyFrame()
+      usePwExplore.getState().setT(tOf(Math.max(0, Math.min(1, (hit.x - f.x0) / f.FW))))
+    },
+  },
+}
+
+export default pathwaysStory

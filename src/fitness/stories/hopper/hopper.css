@@ -1,0 +1,52 @@
+/* 02 The Hopper: the short-portrait domain key (Hud.tsx DomainKey). The
+   five legend chips (B.8 legend tone: a glass pill, a 7 px dot in the domain
+   colour, the name in label-name type) wrap in rows over the caption card.
+   Only this chapter's .hop-key classes are styled here. */
+.hop-key {
+  position: absolute;
+  z-index: 5;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 5px 6px;
+  pointer-events: none;
+  transition: opacity 220ms;
+}
+.hop-key-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 9px 2px 7px;
+  border-radius: 999px;
+  background: rgba(7, 10, 14, 0.62);
+  border: 1px solid rgba(238, 243, 246, 0.1);
+  font-family: var(--st-cond);
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 1;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--st-chalk);
+  white-space: nowrap;
+}
+.hop-key-chip > i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex: none;
+  box-shadow: 0 0 0 1.5px rgba(7, 10, 14, 0.7);
+}
+.hop-key-chip {
+  padding-top: 5px;
+  padding-bottom: 4px;
+}
+
+/* Q: the HUD chip on one line ("DRAW 40"): the board's top band is short */
+.st-hud-in.hop-hud-inline {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.hop-hud-inline .st-hud-row {
+  margin-top: 0;
+}

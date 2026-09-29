@@ -1,0 +1,226 @@
+import type { CamPose, CamSpec, StoryDef } from '../../story/types'
+import HealthScene from './Scene'
+import { pickAge } from './pick'
+import HealthExplore from './Explore'
+import HealthHud from './Hud'
+import { CLAIM_AZ, POST_CAP, RIDGE_TERM, narrowNow, sliceBox } from './layout'
+import { silPose, type SilSpec } from './frame'
+import { G50, GL, shortPortrait } from './timeline'
+import { useHealthExplore } from './exploreStore'
+import { LIFELONG, SEDENTARY, STARTS_50 } from './healthMath'
+
+/* =========================================================================
+   06 HEALTH: "Stack every age" (DESIGN.md D.7). Beat copy lives here so a
+   reviewer can check every `source` against fitnessData.ts. Titles <= 30
+   characters, bodies <= 140, no new facts, numbers or quotes; computed
+   values (the volumes, fitness at an age) live in labels and the HUD only.
+
+   Camera: L0 is a chart read front-on and level (az 0, el 0, fov 30). From
+   L1 the camera rises to reveal age running into depth (L6: a new
+   dimension) and stays oblique, from the front-RIGHT (see the note over the
+   poses): the health surfaces are inherently 3D, read through colour,
+   isolines and readouts (L12's exception). Every 3D pose is fitted to the
+   silhouette its beat ends on (frame.ts), clear of the HUD chip and the
+   pinned key, so the landscape fills the phone's tall focus rect.
+   ========================================================================= */
+
+/** L0: a chart read front-on, level (el 0), so its verticals project exactly vertical (no stair-stepped axis). */
+const slicePose = (padPx: CamPose['padPx']): CamPose => ({
+  target: () => {
+    const b = sliceBox()
+    return [(b[0][0] + b[1][0]) / 2, (b[0][1] + b[1][1]) / 2, (b[0][2] + b[1][2]) / 2]
+  },
+  az: 0,
+  el: 0,
+  fov: 30,
+  fit: sliceBox,
+  padPx,
+})
+
+/* padding: room for the labels (the duration ticks under the front edge;
+   the age ticks east of the right edge are points of the silhouette itself,
+   frame.ts). The HUD chip, the pinned key and CAPACITY over its post are
+   kept clear point by point (frame.ts), so the top pad stays small and the
+   landscape takes the height. L0 on a portrait stage is drawn wider than
+   the world (chartSX) so the height-limited chart fills the width. */
+const PAD_L0_P = { l: 16, r: 16, t: 28, b: 34 }
+const PAD_L0_L = { l: 40, r: 40, t: 56, b: 64 }
+// l: CAPACITY is centred over the post, which is the leftmost point of the 3D beats
+const PAD_P = { l: 36, r: 6, t: 10, b: 38 }
+const PAD_L = { l: 60, r: 20, t: 20, b: 52 }
+
+/** the 3D beats use a slightly wider lens than the chart (depth reads through perspective) */
+const FOV3 = 34
+
+/* what each pose must hold (frame.ts): the landscape the beat ends on plus its extras */
+const SIL_STACK: SilSpec = { grids: [GL], post: POST_CAP }
+const SIL_CLAIM: SilSpec = { grids: [GL], post: POST_CAP, claim: true, hud: true }
+// L3 and L4 share one frame (the L4 key reserved from L3, so the sink never re-frames)
+const SIL_LINE: SilSpec = { grids: [GL], post: POST_CAP, plane: true, hud: true, key: 1 }
+// L5 ends on "Starts at 50" over the dashed Sedentary outline (inside it); the post keeps its full
+// height (an axis that shortened as the data rose read as the axis shrinking)
+const SIL_WAVE: SilSpec = { grids: [G50], post: POST_CAP, plane: true, hud: true, key: 2 }
+// (the HUD chip steps aside in L6 on a short portrait rect, timeline.ts shortPortrait; the pose then uses its corner)
+const SIL_HOLD: SilSpec = {
+  grids: [GL],
+  post: POST_CAP,
+  plane: true,
+  get hud() {
+    return !shortPortrait()
+  },
+  key: 3,
+}
+const SIL_EXPLORE: SilSpec = { grids: [GL], post: POST_CAP, plane: true, hud: true }
+
+/*
+ * The camera looks from the front-RIGHT: the landscape falls from the power
+ * ridge (1 s) toward long durations (1 hr), so its lid faces +x and the
+ * engine's key light; from there the lid reads in full, the power ridge is
+ * the skyline (the lift at 50 shows in silhouette), the capacity axis stands
+ * against the slate over "1 s", and the age ticks run up the right edge,
+ * nowhere near CAPACITY.
+ */
+const SLICE_L = slicePose(PAD_L0_L)
+const SLICE_P = slicePose(PAD_L0_P)
+const STACK_L = silPose(34, 26, FOV3, PAD_L, SIL_STACK)
+const STACK_P = silPose(18, 28, FOV3, PAD_P, SIL_STACK)
+// the floor claim turns square to exactly these azimuths (CLAIM_AZ)
+const CLAIM_L = silPose(CLAIM_AZ.wide, 26, FOV3, PAD_L, SIL_CLAIM)
+const CLAIM_P = silPose(CLAIM_AZ.narrow, 28, FOV3, PAD_P, SIL_CLAIM)
+// L3 and L4: a slight rise so the plane reads (D.7)
+const LINE_L = silPose(34, 30, FOV3, PAD_L, SIL_LINE)
+const LINE_P = silPose(18, 32, FOV3, PAD_P, SIL_LINE)
+// L5: framed on the lifted landscape; the lift at 48 to 55 faces the camera as a lit ramp and
+// steps the power ridge's skyline up, over the dashed Sedentary outline it rose from
+const WAVE_L = silPose(30, 26, FOV3, PAD_L, SIL_WAVE)
+const WAVE_P = silPose(13, 37, FOV3, PAD_P, SIL_WAVE)
+const HOLD_L = silPose(40, 26, FOV3, PAD_L, SIL_HOLD)
+const HOLD_P = silPose(24, 32, FOV3, PAD_P, SIL_HOLD)
+const EXPLORE_L = silPose(34, 30, FOV3, PAD_L, SIL_EXPLORE)
+const EXPLORE_P = silPose(18, 32, FOV3, PAD_P, SIL_EXPLORE)
+
+/**
+ * The poses are chosen by WORLD, not only by the focus rect's shape. On a
+ * portrait stage (the narrow world) a tall detent (the expanded caption, the
+ * expanded explore sheet) makes the focus rect landscape-shaped, but the
+ * phone and its landscape are unchanged: there the portrait pose serves both
+ * layouts, so a detent flip never changes the angles (in explore the viewer
+ * keeps his orbit angles through a detent flip, and the landscape pose's
+ * wider azimuth pushed the solid off the right edge after Reset view). The
+ * wide world keeps its landscape and portrait poses as they were.
+ */
+function cams(L: CamPose, P: CamPose, extra?: Pick<CamSpec, 'window'>): CamSpec {
+  return {
+    get L() {
+      return narrowNow() ? P : L
+    },
+    P,
+    ...extra,
+  }
+}
+
+export const healthStory: StoryDef = {
+  key: 'health',
+  beats: [
+    {
+      id: 'slice',
+      title: 'A curve for every age',
+      body: 'Add a third axis to the fitness curve: age. Every age of your life has its own power-duration curve.',
+      terms: { 'fitness curve': 'yellowGreen' },
+      source: 'MODULE_COPY.health.body s1 to s2',
+      build: 4.0,
+      cam: cams(SLICE_L, SLICE_P),
+    },
+    {
+      id: 'stack',
+      title: 'Stack them',
+      body: 'Stack them and the three-dimensional solid that results is health.',
+      source: 'MODULE_COPY.health.body s3',
+      build: 6.0,
+      // the age ticks and AGE, read once the slices have fused
+      sceneWords: 5,
+      cam: cams(STACK_L, STACK_P),
+    },
+    {
+      id: 'volume',
+      title: 'Volume = health',
+      body: 'Health is sustained work capacity across a lifetime, the volume under the surface, not merely living a long time.',
+      terms: { 'the volume under the surface': 'yellowGreen' },
+      source: 'MODULE_COPY.health.keyPoints[0] + MODULE_COPY.health.body s4',
+      build: 4.5,
+      // VOLUME = HEALTH on the floor and the HUD's number (H.40)
+      sceneWords: 4,
+      cam: cams(CLAIM_L, CLAIM_P),
+    },
+    {
+      id: 'line',
+      title: 'The independence line',
+      body: 'Below the independence line, daily tasks exceed capacity.',
+      terms: { 'independence line': 'sick' },
+      source: 'MODULE_COPY.health.body s6',
+      build: 4.0,
+      sceneWords: 2,
+      cam: cams(LINE_L, LINE_P),
+    },
+    {
+      id: 'sink',
+      title: 'Stop training',
+      body: 'Stop training and the surface sinks toward the independence line. The power ridge collapses first.',
+      // the power ridge lights on the landscape in the same colour while it leads the sink
+      terms: { 'independence line': 'sick', 'power ridge': RIDGE_TERM },
+      source: 'MODULE_COPY.health.body s6 + fitnessData.AGING_PROFILES[2].trajectory',
+      build: 5.5,
+      // Sedentary, Independent through 70 (H.40)
+      sceneWords: 4,
+      cam: cams(LINE_L, LINE_P),
+    },
+    {
+      id: 'any-age',
+      title: 'Start at any age',
+      body: 'Start at any age and it lifts. Resistance and power training reclaim capacity, even into the 90s.',
+      terms: { 'it lifts': 'yellowGreen' },
+      source: 'MODULE_COPY.health.body s7 + MODULE_COPY.health.keyPoints[3]',
+      build: 6.0,
+      // the signature beat (A.3): the wave's finished frame holds (H.40)
+      signature: true,
+      // Starts at 50, the two Independent through rows
+      sceneWords: 9,
+      impact: [0.3, 0.42],
+      // the move lands before the sweep starts (t 0.15)
+      cam: cams(WAVE_L, WAVE_P, { window: [0, 0.18] }),
+    },
+    {
+      id: 'hold',
+      title: 'Hold it as long as you can',
+      body: 'Maximize the area under the curve and hold it for as long as you can.',
+      source: 'MODULE_COPY.health.body s5',
+      build: 5.5,
+      // Independent through 90+, the two volumes, fitness at age 85, Sedentary (H.40)
+      sceneWords: 13,
+      cam: cams(HOLD_L, HOLD_P),
+    },
+  ],
+  Scene: HealthScene,
+  Explore: HealthExplore,
+  Hud: HealthHud,
+  explore: {
+    cam: cams(EXPLORE_L, EXPLORE_P),
+    limits: { az: [-75, 75], el: [8, 70], zoom: [0.6, 1.6] },
+    scrubToggle: true,
+    initFromBeat(i) {
+      const s = useHealthExplore.getState()
+      s.setProfile(i === 4 ? SEDENTARY.name : i === 5 ? STARTS_50.name : LIFELONG.name)
+      // the slice opens mid-life, where its whole profile shows (it glides there from the story's frame)
+      s.setAge(50)
+      s.setShowLine(true)
+      s.setCompare(true)
+    },
+    onScrub(ray, _ndc, phase) {
+      if (phase === 'end') return
+      const a = pickAge(ray)
+      if (a !== null) useHealthExplore.getState().setAge(a)
+    },
+  },
+}
+
+export default healthStory
