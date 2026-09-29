@@ -547,7 +547,7 @@ generalist or the claim, never a specialist's low score. No em or en dashes.
 ## Checklist before you commit
 
 1. `node scripts/fitness-gate.mjs` passes (grep gate + caption audit).
-2. `node C:/Users/ravik/fitness-v2/tools/dashcheck.mjs C:/Users/ravik/fitness-v2/base/src/fitness` prints no dashes.
+2. a scan of `src/fitness` for U+2013 / U+2014 (em and en dashes) prints no dashes.
 3. `tools/build.sh` passes for the dev and the preview build.
 4. Serve the build and run `node scripts/story-qa.mjs check http://127.0.0.1:<port> <view>`:
    labels at 360 / 390 / 430 and at the Safari viewports 390 x 664, 393 x 659,
