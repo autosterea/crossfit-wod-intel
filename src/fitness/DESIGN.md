@@ -943,7 +943,7 @@ Every element with `hot` automatically gets a `Halo` on LOW.
 
 ### C.15 Gates and dev audits (run before every commit)
 
-1. `node C:/Users/ravik/fitness-v2/tools/dashcheck.mjs C:/Users/ravik/fitness-v2/base/src/fitness` must print no dashes.
+1. a scan of `src/fitness` for U+2013 / U+2014 (em and en dashes) must print no dashes.
 2. The TypeScript strict build must pass (`tools/build.sh`).
 3. A scene-code grep gate (`tools` or a `*.local.mjs` script) over `src/fitness/stories/**` and `src/fitness/story/kit/**` must have zero hits for `Math.random`, `performance.now`, `Date.now`, `<Trail`, `<Float`, `<Html`, `useDetectGPU`, `Environment preset`, `ContactShadows`, `gridHelper`, `castShadow`, and `useFrame(` with a positive priority.
 4. **Caption audit** (`captionAudit.local.mjs`): every beat has a title of 30 characters or fewer, a body of 140 or fewer, a non-empty `source`, and no dashes. At least 70% of the body's content words (4 letters or more) must appear in the cited source string, which is resolved by evaluating the `source` path against the `fitnessData` exports and the module-file string table in section D.
