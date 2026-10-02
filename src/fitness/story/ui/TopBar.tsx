@@ -67,6 +67,7 @@ export function TopBar() {
   const done = useDoneList()
 
   return (
+    <>
     <header className="st-topbar">
       <div className="st-topbar-in">
         <button type="button" onClick={() => navigate({ view: 'intro' })} className="st-brand" aria-label="What Is Fitness home">
@@ -132,7 +133,11 @@ export function TopBar() {
         </div>
       </div>
       <ProgressHairline view={route.view} />
-      <ChapterSheet open={sheet} onClose={close} />
     </header>
+    {/* The sheet is a SIBLING of the header, never inside it: the header's backdrop-filter makes it the
+        containing block for fixed-position descendants in WebKit, so on iPhone Safari a sheet inside it opened
+        within the 60 px bar and was invisible. Chrome does not do this. */}
+    <ChapterSheet open={sheet} onClose={close} />
+    </>
   )
 }
