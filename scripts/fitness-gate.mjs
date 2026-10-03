@@ -7,8 +7,11 @@
 // 2. Caption audit: every beat has a title <= 30 chars, a body <= 140, a non-empty source,
 //    no em or en dashes, and at least 70% of the body's content words (4+ letters) appear
 //    in the cited source text (fitnessData.ts exports + the module-file string table).
+// 3. Narration gate (DESIGN.md I.6.5 e) [audio]: scripts/narration-check.mjs, so captions and narration
+//    clips can never drift; and no Math.random under src/fitness/story/audio/** (renders repeat exactly).
 // Exit code 1 on any failure.
 import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs'
+import { spawnSync } from 'node:child_process'
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -143,5 +146,18 @@ for (const f of walk(storyDir).filter((p) => /story\.ts$/.test(p))) {
   }
 }
 console.log(`caption audit: ${beatsChecked} beats checked`)
+
+/* ---------------------- 3. narration gate [audio] ---------------------- */
+for (const f of walk(join(root, 'story', 'audio'))) {
+  const code = normalize(readFileSync(f, 'utf8')).replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*$/gm, '$1')
+  if (/Math\.random\s*\(/.test(code)) fail(`${f}: Math.random (audio randomness comes from rng.ts seeds, I.6.1)`)
+}
+{
+  const r = spawnSync(process.execPath, [join(dirname(fileURLToPath(import.meta.url)), 'narration-check.mjs')], { encoding: 'utf8' })
+  process.stdout.write(r.stdout || '')
+  if (r.stderr) process.stdout.write(r.stderr)
+  if (r.status !== 0) fail('narration-check.mjs failed')
+}
+
 console.log(failures ? `${failures} failure(s)` : 'all gates passed')
 process.exit(failures ? 1 : 0)

@@ -1,4 +1,4 @@
-import { MODULES } from '../../fitnessData'
+import { MAP_MODULES as MODULES } from './models'
 import { useStoryStore } from '../../story/store'
 import { useIntroExplore } from './exploreStore'
 import { exploreTime } from './timeline'

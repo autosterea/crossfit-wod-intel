@@ -8,6 +8,8 @@ import { clock, onFrame } from '../clock'
 import { useStoryStore } from '../store'
 import { ChapterSheet, useDoneList } from './ChapterSheet'
 import { IconChevron } from './icons'
+import { SoundToggle } from '../audio/SoundToggle' // [audio]
+import { isNarrated } from '../audio/narration' // [audio]
 
 /* =========================================================================
    Lesson top bar (DESIGN.md B.2 / B.3), theme-aware.
@@ -65,10 +67,12 @@ export function TopBar() {
   const close = useCallback(() => setSheet(false), [])
   const mod = MODULES.find((m) => m.key === route.view)
   const done = useDoneList()
+  // [audio] the toggle and the I.5.2 width rules only while a narrated story is mounted (H.72)
+  const narrated = useStoryStore((s) => isNarrated(s.def))
 
   return (
     <>
-    <header className="st-topbar">
+    <header className={narrated ? 'st-topbar has-sound' : 'st-topbar'}>
       <div className="st-topbar-in">
         <button type="button" onClick={() => navigate({ view: 'intro' })} className="st-brand" aria-label="What Is Fitness home">
           <span className="st-brand-mark">
@@ -127,6 +131,7 @@ export function TopBar() {
           <a href="/" className="st-extlink">
             WOD Intel
           </a>
+          {narrated && <SoundToggle />} {/* [audio] I.5.2 */}
           <span className="st-theme">
             <ThemeToggle size="md" />
           </span>
@@ -136,7 +141,7 @@ export function TopBar() {
     </header>
     {/* The sheet is a SIBLING of the header, never inside it: the header's backdrop-filter makes it the
         containing block for fixed-position descendants in WebKit, so on iPhone Safari a sheet inside it opened
-        within the 60 px bar and was invisible. Chrome does not do this. */}
+        within the 60 px bar and was invisible (the owner, 2026-10-02). Chrome does not do this. */}
     <ChapterSheet open={sheet} onClose={close} />
     </>
   )

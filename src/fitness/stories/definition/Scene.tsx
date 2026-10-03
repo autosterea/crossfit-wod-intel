@@ -72,15 +72,15 @@ const U_X = (() => {
 
 // D0: the axes (one hot L stroke), the measured point, its dimension lines,
 // then the other nine measured points (H.29: the opening moves from frame 1).
-const axesDraw = (T: number) => at(T, D.measured, 0, 0.26, ease.draw)
-const d0Dot = (T: number) => at(T, D.measured, 0.3, 0.4, ease.snap)
+export const axesDraw = (T: number) => at(T, D.measured, 0, 0.26, ease.draw)
+export const d0Dot = (T: number) => at(T, D.measured, 0.3, 0.4, ease.snap)
 const d0Ripple = (T: number) => at(T, D.measured, 0.3, 0.5)
-const dimsDraw = (T: number) => at(T, D.measured, 0.4, 0.6, ease.draw)
+export const dimsDraw = (T: number) => at(T, D.measured, 0.4, 0.6, ease.draw)
 const dimsOut = (T: number) => 1 - at(T, D.curve, 0, 0.12)
 // D1: the pen draws the curve through the points
 const CURVE_A = 0
 const CURVE_B = 0.52
-const curveDraw = (T: number) => at(T, D.curve, CURVE_A, CURVE_B, ease.draw)
+export const curveDraw = (T: number) => at(T, D.curve, CURVE_A, CURVE_B, ease.draw)
 
 /** Chart content fades out as the chart folds into the lineup (D6). */
 const chartFade = (T: number) => 1 - at(T, D.lineup, 0.12, 0.3)
@@ -99,7 +99,7 @@ const domainGhost = (T: number) => 1 - 0.7 * at(T, D.domains, 0.55, 0.85)
 /** D2: the measured points step aside while the slices fan, and return on the averaged curve. */
 const dotsVis = (T: number) => 1 - at(T, D.domains, 0.02, 0.12) + at(T, D.domains, 0.6, 0.76)
 /** D2: the averaged curve absorbs the five and flares once as it lands. */
-const averageFlare = (T: number) => pulse(T, D.domains + 0.66, D.domains + 0.98)
+export const averageFlare = (T: number) => pulse(T, D.domains + 0.66, D.domains + 0.98)
 /**
  * D2: the averaged curve BECOMES the five slices, so it steps aside quickly
  * as they fan out and returns as they converge (H.41). It is never left
@@ -108,15 +108,24 @@ const averageFlare = (T: number) => pulse(T, D.domains + 0.66, D.domains + 0.98)
 const averageOn = (T: number) => 1 - Math.min(1, 2.5 * fan(T))
 /** D3 pour level in v units. It starts just below the axis so no particle is in flight at D3 t = 0 (continuity). */
 const POUR_LEAD = 0.2
-const pourLevel = (T: number) => -POUR_LEAD + (1.08 + POUR_LEAD) * at(T, D.area, 0.05, 0.78)
+export const pourLevel = (T: number) => -POUR_LEAD + (1.08 + POUR_LEAD) * at(T, D.area, 0.05, 0.78)
 /** D3 the settled light: the rim band grows as the level reaches the curve and stays. */
 const rimGlow = (T: number) => at(T, D.area, 0.45, 0.85, ease.settle) * (1 - at(T, D.specialist, 0.4, 0.8))
 /** D5 generalist ghost: 1 -> 0.45 */
 const ghost = (T: number) => 1 - 0.55 * at(T, D.specialist, 0, 0.2, ease.settle)
 /** D5 spill / condense mix */
-const spillMix = (T: number) => at(T, D.specialist, 0.45, 0.9)
+export const spillMix = (T: number) => at(T, D.specialist, 0.45, 0.9)
 /** D5 elements fade as the lineup starts */
 const d5out = (T: number) => 1 - at(T, D.lineup, 0, 0.12)
+/** D4: the three strokes of light (the power axis, the curve, the time axis), k = 0, 1, 2 (hoisted for sound.ts). */
+const D4_WINDOWS = [
+  [0.04, 0.24],
+  [0.34, 0.56],
+  [0.64, 0.86],
+] as const
+export const d4Stroke = (T: number, k: number) => at(T, D.synthesis, D4_WINDOWS[k][0], D4_WINDOWS[k][1], ease.draw)
+/** D5: the Powerlifter's dashed curve is drawn (hoisted for sound.ts). */
+export const d5Dash = (T: number) => at(T, D.specialist, 0.15, 0.5, ease.draw)
 /** D4 annotation strokes and callouts fade as D5 starts */
 const d4out = (T: number) => 1 - at(T, D.specialist, 0, 0.15)
 /** The axis titles give way to the D4 callouts that name the same axes, then return. */
@@ -195,7 +204,7 @@ function segLine(a: V3, b: V3, k: number): Float32Array {
 }
 
 /** Task dot i: its appear factor at T (0 hidden). The 400m run lands first; the other nine follow in D0. */
-function taskAppear(T: number, i: number): number {
+export function taskAppear(T: number, i: number): number {
   if (i === TASK_400) return d0Dot(T)
   const j = i < TASK_400 ? i : i - 1
   return stagger(T, D.measured + 0.62, D.measured + 0.92, j, POWER_TASKS.length - 1, 0.5, ease.snap)
@@ -455,7 +464,7 @@ function SynthesisStrokes({ frame, gCurve }: { frame: ChartFrame; gCurve: Float3
         width={PEN.data}
         head
         hot
-        progress={(T) => at(T, D.synthesis, 0.04, 0.24, ease.draw)}
+        progress={(T) => d4Stroke(T, 0)}
         opacity={(T) => 0.95 * d4out(T)}
         renderOrder={46}
       />
@@ -465,7 +474,7 @@ function SynthesisStrokes({ frame, gCurve }: { frame: ChartFrame; gCurve: Float3
         width={PEN.data}
         head
         hot
-        progress={(T) => at(T, D.synthesis, 0.34, 0.56, ease.draw)}
+        progress={(T) => d4Stroke(T, 1)}
         opacity={(T) => 1 - at(T, D.synthesis, 0.58, 0.72)}
         gain={() => 1.4}
         renderOrder={46}
@@ -476,7 +485,7 @@ function SynthesisStrokes({ frame, gCurve }: { frame: ChartFrame; gCurve: Float3
         width={PEN.data}
         head
         hot
-        progress={(T) => at(T, D.synthesis, 0.64, 0.86, ease.draw)}
+        progress={(T) => d4Stroke(T, 2)}
         opacity={(T) => 0.95 * d4out(T)}
         renderOrder={46}
       />
@@ -776,7 +785,7 @@ function StoryChart({ frame, tier, cross }: { frame: ChartFrame; tier: Tier; cro
         dashed
         dashSize={0.3}
         gapSize={0.2}
-        progress={(T) => at(T, D.specialist, 0.15, 0.5, ease.draw)}
+        progress={d5Dash}
         opacity={(T) => 0.95 * (1 - at(T, D.lineup, 0.12, 0.3))}
         head
         hot
@@ -792,12 +801,12 @@ function StoryChart({ frame, tier, cross }: { frame: ChartFrame; tier: Tier; cro
 const N_ROWS = RANKED.length
 const MINI_N = 48
 /** Row r lands (row 0 is the folded chart itself, the rest fly in with an 80 ms stagger). */
-const rowAppear = (T: number, r: number) =>
+export const rowAppear = (T: number, r: number) =>
   r === 0 ? at(T, D.lineup, 0.2, 0.3, ease.settle) : stagger(T, D.lineup + 0.28, D.lineup + 0.8, r - 1, N_ROWS - 1, 0.45, ease.settle)
 /** Row r's light pours up into its mini as it lands (row 0 is already full: it IS the chart). */
 const rowPour = (T: number, r: number) => (r === 0 ? (rowAppear(T, 0) > 0.001 ? 1 : 0) : rowAppear(T, r))
 /** Row r's score bar grows just after the row lands. */
-const barGrow = (T: number, r: number) => stagger(T, D.lineup + 0.36, D.lineup + 0.98, r, N_ROWS, 0.5, ease.settle)
+export const barGrow = (T: number, r: number) => stagger(T, D.lineup + 0.36, D.lineup + 0.98, r, N_ROWS, 0.5, ease.settle)
 const isG = (r: number) => RANKED[r].name === GENERALIST.name
 /** far outside every view: where a not-yet-visible pen segment waits (never a stray dot) */
 const AWAY = 1e5

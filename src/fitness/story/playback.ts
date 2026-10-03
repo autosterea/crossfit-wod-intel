@@ -6,6 +6,7 @@ import { useFitnessStore } from '../fitnessStore'
 import { MODULES } from '../fitnessData'
 import type { FitnessView } from '../lessonTypes'
 import { focusRect } from './camera/focusRect'
+import { audioHooks, narr, narrRing, narrSyncT } from './audio/hooks' // [audio]
 
 /* =========================================================================
    Autoplay state machine (DESIGN.md C.3): build -> hold -> advance. Runs from
@@ -85,12 +86,14 @@ export function startBeat(n: number): void {
   pb.holdElapsed = 0
   pb.holdFor = holdFor(st.def?.beats[n])
   pb.delay = st.reduced ? 0 : 0.15
+  audioHooks.beatStart(clock.index, pb.delay) // [audio] arm this beat's narration (I.6.4)
   useStoryStore.setState({ index: clock.index, phase: 'build' })
 }
 
 /** Fixed-duration ramp of T (linear in T by default). */
 export function glideTo(T: number, ms: number, e: EaseName, done: (paused: boolean) => void): void {
   pb.glide = { from: clock.T, to: T, elapsed: 0, dur: Math.max(0.001, ms / 1000), ease: e, paused: false, done }
+  audioHooks.glideStart() // [audio] Next / Prev cut the voice at once
 }
 
 export function haptic(): void {
@@ -107,7 +110,12 @@ const ORDER: FitnessView[] = ['intro', ...MODULES.map((m) => m.key as FitnessVie
 /** Move to the next (+1) or previous (-1) chapter. The chapter mounts at beat 0. */
 export function navigateChapter(dir: 1 | -1): void {
   const view = useStoryStore.getState().view
-  const i = ORDER.indexOf(view)
+  const i = (ORDER as readonly string[]).indexOf(view)
+  // a lab story (H.65) stands alone: there is no chapter before or after it, only its host's next step (H.77)
+  if (i < 0) {
+    if (dir === 1) useStoryStore.getState().def?.brand?.onNext?.()
+    return
+  }
   const j = i + dir
   if (j < 0 || j >= ORDER.length) return
   useFitnessStore.getState().navigate({ view: ORDER[j] })
@@ -118,6 +126,8 @@ export function ringProgress(): number {
   const st = useStoryStore.getState()
   const beat = st.def?.beats[clock.index]
   if (!beat) return 0
+  const nr = st.phase === 'done' ? null : narrRing() // [audio] the ring spans the narrated beat
+  if (nr !== null) return nr
   const total = beat.build + pb.holdFor
   if (st.phase === 'build') return (clock.t * beat.build) / total
   if (st.phase === 'hold') return Math.min(1, (beat.build + pb.holdElapsed) / total)
@@ -164,19 +174,31 @@ export function tick(dtRaw: number): void {
   if (!st.loaded) return
   const beat = def.beats[clock.index]
   if (!beat) return
+  if (narr.armed && !narr.sounding) narr.elapsed += dt // [audio] lead-in, breath and waiting run on story dt
 
   if (st.phase === 'build') {
     if (pb.delay > 0) {
       pb.delay -= dt
       return
     }
-    const t = clock.t + dt / Math.max(0.1, beat.build)
+    // [audio] a synced narrated beat's build follows its voice (H.74): t is a fixed map of the clip position
+    // (never backward); otherwise, and with sound off, the designed rate
+    const synced = narrSyncT()
+    const t = synced !== null ? Math.max(clock.t, Math.min(1, synced)) : clock.t + dt / Math.max(0.1, beat.build)
+    audioHooks.advance(clock.index, clock.t, Math.min(1, t)) // [audio] the only path that fires story cues
     if (t >= 1) {
       setIT(clock.index, 1)
       pb.holdElapsed = 0
-      pb.holdFor = holdFor(beat)
+      // [audio] a synced beat's hold is the rest of its voice plus the breath (holdClear), not the reading rule
+      pb.holdFor = synced !== null ? 0 : holdFor(beat)
       if (st.showBuild) {
         useStoryStore.setState({ phase: phaseAt(clock.index, 1, def.beats.length), playing: false, showBuild: false })
+        return
+      }
+      // [audio] a narrated last beat waits in 'hold' for its voice, then the hold branch turns it 'done'
+      if (clock.index >= def.beats.length - 1 && audioHooks.holdsLast()) {
+        pb.holdFor = 0
+        useStoryStore.setState({ phase: 'hold' })
         return
       }
       useStoryStore.setState({ phase: clock.index >= def.beats.length - 1 ? 'done' : 'hold' })
@@ -186,7 +208,7 @@ export function tick(dtRaw: number): void {
     }
   } else if (st.phase === 'hold') {
     pb.holdElapsed += dt
-    if (pb.holdElapsed >= pb.holdFor) {
+    if (pb.holdElapsed >= pb.holdFor && audioHooks.holdClear()) { // [audio] and the voice has ended plus a breath
       if (clock.index < def.beats.length - 1) startBeat(clock.index + 1)
       else useStoryStore.setState({ phase: 'done', playing: false })
     }

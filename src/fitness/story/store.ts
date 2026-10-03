@@ -1,10 +1,10 @@
 import { create } from 'zustand'
-import type { FitnessView } from '../lessonTypes'
-import type { Detent, Layout, Mode, StoryDef, Tier } from './types'
+import type { Detent, Layout, Mode, StoryDef, StoryKey, Tier } from './types'
 import { clock, setA, setIT } from './clock'
 import { pb, holdFor, startBeat, glideTo, navigateChapter, haptic } from './playback'
 import { dropQueryKeys } from './url'
 import { markSeek } from './ready'
+import { audioHooks } from './audio/hooks' // [audio]
 
 /* =========================================================================
    Story store (DESIGN.md C.3): discrete state only. Components re-render on
@@ -15,7 +15,7 @@ export type Phase = 'build' | 'hold' | 'done'
 
 export interface StoryState {
   def: StoryDef | null
-  view: FitnessView
+  view: StoryKey
   index: number
   playing: boolean
   phase: Phase
@@ -137,6 +137,7 @@ export const useStoryStore = create<StoryState>((set, get) => ({
   pause() {
     // a pause during a next / prev glide wins over the glide's resume (intent)
     if (pb.glide) pb.glide.paused = true
+    audioHooks.userPause() // [audio] the viewer paused: the voice pauses and resumes where it stopped
     set({ playing: false })
   },
 

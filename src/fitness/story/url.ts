@@ -31,6 +31,8 @@ export interface StoryQuery {
   tier: Tier | null
   motion: 'reduce' | 'full' | null
   detent: Detent | null
+  /** [audio] ?sound=1 behaves as if the viewer turned sound on (QA); ?sound=0 forces it off (I.6.3) */
+  sound: 0 | 1 | null
 }
 
 export function parseQuery(search: string = window.location.search): StoryQuery {
@@ -51,6 +53,7 @@ export function parseQuery(search: string = window.location.search): StoryQuery 
     tier: tier === 'high' || tier === 'medium' || tier === 'low' ? tier : null,
     motion: motion === 'reduce' || motion === 'full' ? motion : null,
     detent: detent === 'peek' || detent === 'default' || detent === 'expanded' ? detent : null,
+    sound: q.get('sound') === '1' ? 1 : q.get('sound') === '0' ? 0 : null, // [audio]
   }
 }
 

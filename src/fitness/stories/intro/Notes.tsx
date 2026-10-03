@@ -1,4 +1,5 @@
-import { DEFINITION_TEXT, HUNDRED_WORDS, INTRO_TEXT, MODULES, SOURCES } from '../../fitnessData'
+import { DEFINITION_TEXT, HUNDRED_WORDS, INTRO_TEXT, SOURCES } from '../../fitnessData'
+import { MAP_MODULES as MODULES } from './models'
 import type { FitnessView } from '../../lessonTypes'
 import { useFitnessStore } from '../../fitnessStore'
 import { useStoryStore } from '../../story/store'

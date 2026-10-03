@@ -211,7 +211,9 @@ integration (H.52).
 | `useDragHandle` | explore-mode drag handles that win over orbit; `onDrag(ray, ndc)` |
 | `useStageHotspot(id, { box, onActivate, ariaLabel, modes })` | a REAL focusable button over a projected 3D box (see Hotspots) |
 | `<ChipRadio label options value onChange/>` | the explore chip row as a real radiogroup (roving tab stop, arrows select). The checked chip is kept in view whenever `value` changes, from a chip or from anywhere else (a drag that turns the profile into Custom, a grid cell): only the row scrolls, only when the chip is not fully visible, and a cut chip stays visible past each fade so the row reads as scrollable (a row that opens while the web fonts load is placed once they are in). Never scroll it yourself (H.53) |
+| `StoryDef.brand` (`StoryBrand`, types.ts) | a host outside the lesson (the MetFix Lab preview, H.65): its eyebrow, accent, Read more, slate, backdrop colours, end CTA and optional in-app next step (`endNext`, H.66); a branded story never navigates to another chapter, but its host may take Next past the last beat (`onNext`, H.77), drop Explore from the end row (`endExplore: false`) and make the end CTA an in-app link (`endCta.go`). Lesson chapters never set it |
 | `setExploreSheetOpen(open)` (ui/ExplorePanel) | open or collapse the phone controls sheet from your Explore (Skills drops an expanded sheet to the peek when its Grid needs the stage); a no-op on desktop. Never click the engine's grab handle (H.53) |
+| `kit/athlete` (`<Athlete rig look/>`, `useAthleteRig(drive)`, H.78) | a side-view athlete for chapters that need a body (Technique T4, T7, T8): a joint-space rig (bones keep length, feet planted, knees over the toes, the centre of mass solved over mid-foot), the medicine-ball clean and its pull cycle (plus the squat family), the rounded back as a 0..1 fault, a dashed ghost (`look="ghost"`, `depthBias` to overlay), `<LumbarHighlight/>` (lime kept, red rounded), `<BallSeams/>`, `<Floor/>`, landmarks as label anchors (`rig.at(T, 'lumbar')`), `tempoPhase()` for reps on story time that speed up without a jump, `athleteBox()` for the camera fit. The API is documented at the top of `kit/athlete/index.ts`; review page `/athlete-lab` (dev and /preview/ only) |
 
 Pen widths are screen pixels by role: `PEN.grid` 1.25, `PEN.axis` 2,
 `PEN.data` 3, `PEN.hero` 4.5.
@@ -538,15 +540,194 @@ generalist or the claim, never a specialist's low score. No em or en dashes.
   `explore(on)`, `state()` (includes `still`, `idle`, `loaded`, `focus`), `stats()`,
   `labels()`, `labelCounts()`, `project(x, y, z)`, `chartRect()` (the chart
   frame box projected, stage px), `probe(id)` / `probes()`, `qualityLog()`,
-  `ready`.
+  `ready`, and the sound hooks `audio()`, `audioTimeline(from, to)`,
+  `renderAudio(from, to, opts)` (see Audio).
+- `?sound=1|0`: sound on for this page (QA) or forced off.
 - `useQAProbe(id, fn)` (story/qa.ts) exposes a read-only snapshot a
   screenshot cannot check, e.g. the end points of a geometry buffer
   (Definition registers `def-fan`, and story-qa proves the domain fan stays
   registered after a sheet detent change).
 
+## Audio
+
+Sound is OFF by default (owner decision; DESIGN.md section I). When the viewer
+turns it on, every beat is narrated by its own clip, the beat holds until the
+clip has ended plus a breath, and a small palette of procedural sounds marks
+what the picture does. Your chapter supplies ONE new file and a few `export`s.
+
+**Only a story that declares narration has sound** (amendment H.72):
+`StoryDef.narration`, the story's generated `narration.gen.ts`. Without it
+there is no Sound on chip, no toggle, no "M for sound", no unlock listener, no
+AudioContext and no ui sounds, and every hold is the C.3 rule. On this branch
+no /fitness chapter declares it (Capacity's clips and cue sheet are kept,
+dormant); MetFix Modules 1 and 2 do (src/metfix-lab/README.md, "Sound").
+
+**What you write: `stories/<view>/sound.ts`** (discovered by glob; never
+registered by hand, never inside `story.ts`):
+
+```ts
+import type { ChapterSound } from '../../story/audio/types'
+import { axesDraw, d0Dot, taskAppear } from './Scene'
+
+const sound: ChapterSound = {
+  cues: {
+    // keyed by Beat.id
+    measured: [
+      { name: 'axes', sound: 'pen', from: { fn: axesDraw }, pan: [-0.25, 0.3] },
+      { name: '400m dot', sound: 'tick.dot', from: { fn: d0Dot }, on: 'land', ring: 'ripple' },
+      { name: 'points', sound: 'tick.dot', from: { each: taskAppear, n: 10, skip: [4] }, on: 'land', gain: -5, max: 4 },
+    ],
+  },
+  // ambient: [{ kind: 'rattle', level: (T) => drumOn(T), rate: (T) => 1 + spinBoost(T) }],
+}
+export default sound
+```
+
+- **A cue names its SOURCE, never a number.** `{ fn }` is one of your Scene's
+  cue functions (export it; hoist an inline lambda to a named export with the
+  same numbers), `{ each, n, skip? }` a staggered set, `{ label }` /
+  `{ labels }` a registered label's `cue`, `{ cam: true }` the beat's camera
+  move, `{ impact: true }` the beat's impact window, `{ times }` / `{ spans }`
+  data-driven instants or windows. `story/audio/cueFrom` samples the source over
+  the beat (601 points) into segments with `a` (2% in), `land` (arrival; an
+  overshooting snap lands at first contact), `half` and `b`, so a retimed
+  animation carries its sound with it. `seg` picks a segment (a pulse has two).
+- **One-shots** fire at `on` (`'start'` default, `'land'`, `'half'`, `'end'`
+  or a fraction). **Continuous** sounds (`pen*`, `pour.*`, `air.*`,
+  `clack.rain`, `ball.cascade`) span the segment and follow its SPEED: a stroke
+  that accelerates and settles sounds like it.
+- `gain` is dB from the palette level (clamped -12 to +3); `pitch` is
+  semitones on the chapter's chord tones (a list gives one per event); `pan`
+  stays within +/-0.35; `max` (2 to 6) caps how many events of a staggered set
+  sound (the first, the last and evenly between): nine dots landing in half a
+  second need 3 or 4 marks, not 6 (the fifth listen).
+- **Check that each mark is heard.** A mark under the voice can be masked:
+  render the stems and measure each cue's band margin over voice + bed (the
+  review tool `exposure.py` in `shots/audio-review-2/tools/`); every cue needs
+  at least 6 dB in some third-octave band. Lift a masked set with `gain`, and
+  check its pitch against the voice at that moment (a pitch in the voice's F2
+  can be worse, not better).
+- **Restraint (I.1.4)**: at most 4 cue entries per beat (a set counts as one);
+  one `resolve` / `resolve.fall` per signature beat and nowhere else; the
+  engine keeps at most 6 audible events in a set (each 0.6 dB softer), 45 ms
+  apart, 16 transients a second, no effect in a beat's first 150 ms, and ducks
+  the earlier of two overlapping continuous sounds 6 dB. What never makes a
+  sound: counters, fades and focus pulls, gridlines and ticks, labels leaving,
+  the slate, camera settles I.7 does not list, scrubbing (apart from its soft
+  boundary tick), anything in explore the viewer did not touch.
+- **The bed** (key, chord, the claim's answer) is engine-owned (`story/audio/bed.ts`):
+  the chapter's first `resolve` fades the chord's third in under the bell.
+  Ambient layers exist only while the picture moves on the ambient clock A.
+- **Continuous sounds never build into a claim.** `pour.fill` and `pour.sweep`
+  carry the amount in their tone and grain density, with a flat noise level, a
+  centre that moves under an octave and a settle from 60% of the window (H.71):
+  a cue that ends right before a `resolve` must be flat or falling in its last
+  second (`sound-qa pour` gates Capacity's D3).
+- **Ducking** is scheduled from the manifest's speech spans (I.3.3) and
+  BRIDGES the gap between two beats when autoplay carries on (the bed does not
+  pop up between sentences); nothing in a chapter controls it.
+- The cue sheet for every chapter is DESIGN.md I.7; Capacity
+  (`stories/definition/sound.ts`) is the worked exemplar.
+- `?tick=round` plays the older round `tick.dot` for the owner's A/B (the
+  default is the contact-led 'glass' tick); do not design around either.
+
+**Explore: `useSfx()`** (`story/audio/useSfx.ts`) in your Explore component:
+`sfx.play('pour.fill', { gain: -6, dur: 1.2 })` for a one-off, or
+`sfx.hold('pen.slide')` for a drag (`set(level, pos)` at most once a frame,
+`release()`). Chips, toggles and buttons inside the stage already tap
+(`ui.tap`) through the director's click listener; do not add your own.
+Explore sounds are never scheduled from T.
+
+**Narration** (H.72). A narrated story's folder holds `narration.json` (`clips`:
+its folder under public/, e.g. `narration/metfix/bayes`; `beats`: id ->
+{ source, text }) and the generated `narration.gen.ts`, which story.ts declares:
+`import narration from './narration.gen'` and `narration,` on the StoryDef. One
+clip per beat in `public/<clips>/<id>-<hash>.mp3`, where `hash` is the first 10
+hex of sha1 of the spoken TEXT (whitespace collapsed). A /fitness chapter speaks
+its caption BODY (section I "Voice"; `scripts/narration-spoken.json` renders
+digits), so editing a caption fails the gate; a MetFix module speaks its own
+explanatory script (each paragraph restates the module source) and its captions
+stay the subtitles. Edit a sentence and the gate fails until its clip is
+regenerated (the voice/ pipeline) and the manifest rebuilt: voice and text never
+drift. Story timing reads durations ONLY from that build-time manifest, never
+from runtime decoding, so `?beat=N&t=X` and QA stay deterministic; with sound
+off every hold is exactly the C.3 rule.
+
+**The picture follows the voice** (H.74). With sound on, a narrated beat armed
+at its build's start does not build at its designed rate: build t is a fixed
+piecewise-linear map of the clip position (the audio clock), through the
+knots of `NarrationClip.sync`, so each reveal lands as its words are spoken;
+after the last knot the designed rate; never backward (armed mid-beat, the
+picture waits until the voice catches up). Its hold is the rest of the voice
+plus the breath. Knots come from narration.json `sync` anchors, `[t, at,
+offset]`: `at` is a sentence index (0 first) or a phrase found once in the
+paragraph, at its first word's onset (narration.align.json, written by
+`python scripts/narration-align.py`: CTC forced alignment of the known text)
+plus offset seconds. No anchors: the build stretches to the last sentence;
+`"sync": []`: the designed rate. Scenes still read T alone, and with sound
+off nothing changes. A warp cannot reorder: what the voice says first must
+build first in the scene.
+
+**Gates** (run before every commit):
+- `node scripts/narration-manifest.mjs` after adding or replacing a clip (it
+  writes every narrated story's narration.gen.ts, with each beat's sync knots,
+  and prints its sound-on runtime); `--check` exits 1 when one is stale. Run
+  `python scripts/narration-align.py` first when a clip is new or replaced.
+- `node scripts/fitness-gate.mjs` runs `scripts/narration-check.mjs`: every
+  beat of a narrated story has its text and the clip of that text's hash, no
+  narrated id is missing from the story, the manifest is current and declared,
+  each clip passes pace (2.0 to 3.7 words a second), no inner gap over 0.8 s
+  (a MetFix story may widen this to at most 1.6 s with a reason, narration.json
+  `gates`), true peak <= -2.0 dBTP and a small clip gain, and every beat's
+  sync anchors resolve (an alignment for its current text, sentence indices
+  in range, phrases found once, t never falling, times increasing, the build
+  ending inside the clip); and
+  `story/audio/**` has no `Math.random` (renders repeat exactly).
+- QA: `?sound=1` behaves as if the viewer turned sound on (headless Chromium
+  needs `--autoplay-policy=no-user-gesture-required`), `?sound=0` forces it
+  off. `__story.audio()` returns `{ enabled, unlocked, contextState, idle,
+  session, playing, clip, position, beatHold, levels, voices, startedFrom }`
+  (`idle`: the director's own suspend after 12 s with nothing audible; sound is
+  still ON, the toggle shows On, and Play resumes the clip where it paused);
+  `__story.audioTimeline(from, to)` the planned beat starts, clip spans, speech
+  spans and cue times; `__story.renderAudio(from, to, { stems, duck })` the
+  REFERENCE MIX as a base64 WAV. Meter it: `ffmpeg -hide_banner -i mix.wav -af
+  ebur128=peak=true -f null -` (targets: DESIGN.md I.3.5). Your chapter's
+  story-qa run with sound off must be unchanged.
+- `node scripts/metfix-sound-qa.mjs http://127.0.0.1:<port> <outDir> [test ...]`:
+  the narrated MetFix modules (gesture with real taps, /fitness without sound,
+  timing with the H.74 sync check: every frame of a sounding clip shows its
+  mapped t within 0.12 s of the audio clock, silent C.3 timing, behaviour, the
+  reference mixes, the chip and toggle shots).
+- DORMANT since H.72 (it exits with a notice unless `SOUND_QA_FORCE=1`):
+  `node scripts/sound-qa.mjs http://127.0.0.1:<port> [test ...]` (about 10
+  minutes for all; each test is caught on its own, so one crash is one FAIL):
+  the gesture rule with real taps, timing on and off (story time plus the
+  audio clock, never wall time), deep links (the same state; pixels only
+  between loads that share a chart frame), pause / next / seek / explore /
+  hidden / chapter / reduced motion, the fix-round-1 regressions `duck` (the
+  bed sits 6 dB down, +/-0.5, inside every speech span, and never comes up for
+  less than 0.8 s between two sentences; set `SOUND_QA_VIEWS=definition,<view>`),
+  `idle`, `done`, `interrupt`, `leave`, and the fix-round-2 ones `hidden2`,
+  `session`, `idleshow`, `keys`, `bridge` and `pour`. Run `duck` for your
+  chapter: the ducks hold through any inner gap up to 0.8 s (`DUCK_MERGE`, the
+  same number as the gap gate), and a clip that fails it has a gap the gate
+  should have caught.
+- The ear (`critic.py`) is a second opinion only, and it hallucinates: always
+  put a silent stretch and a sound that does not exist in the question as
+  controls, discard any run that fails them, and never act on a finding a
+  meter, a stem or the code cannot confirm.
+
+**Engine touchpoints** are marked `// [audio]` (playback, store, ready, url,
+gestures, StoryProvider, CaptionCard, TopBar, Stage, fitness.css). Engine
+files import only `story/audio/hooks.ts` (which imports nothing) and, for the
+narrated check of the UI, `story/audio/narration.ts`. `scripts/sound-qa.mjs`
+drives `/fitness/definition`: it is dormant until a /fitness chapter declares
+narration again (then run it with `SOUND_QA_FORCE=1`).
+
 ## Checklist before you commit
 
-1. `node scripts/fitness-gate.mjs` passes (grep gate + caption audit).
+1. `node scripts/fitness-gate.mjs` passes (grep gate + caption audit + narration gate).
 2. a scan of `src/fitness` for U+2013 / U+2014 (em and en dashes) prints no dashes.
 3. `tools/build.sh` passes for the dev and the preview build.
 4. Serve the build and run `node scripts/story-qa.mjs check http://127.0.0.1:<port> <view>`:

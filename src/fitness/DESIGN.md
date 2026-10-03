@@ -15,6 +15,7 @@ Contents
 - F. Data flags and owner decisions
 - G. Kept, retired, build order
 - H. Amendments
+- I. Sound (narration, effects, bed, mix, UI, engine API, cue sheet)
 
 ---
 
@@ -2167,3 +2168,1187 @@ Every commit is on `fitness-v2` only, ends with the two attribution lines, and p
   - Desktop framing: the Hopper board fills about 70% of its focus rect; Health L2 is fitted a little wider than L1 and L3.
   - Coherence: one home for the energy-zone key (Definition pins it top-right on P, Pathways draws it under the axis); one default for Scrub | Orbit; the segmented control for every two-way explore switch; one score format.
   - The self-hosted TTFs are not subset.
+- **H.65 A branded host: the MetFix Lab preview** (2026-09-30; C.2, C.4b, B.7). The engine now runs one story outside the lesson: `/metfix-lab` (`src/metfix-lab/`, a noindex preview of MetFix Module 7). Append-only, no fitness behaviour changes: `StoryDef.key` widens to `StoryKey` (`FitnessView` or `lab-...`), and an optional `StoryDef.brand` (`StoryBrand`: eyebrow, accent, Read more copy, backdrop slate and glow, slate words, no-WebGL message, end CTA link) replaces the lesson's chapter lookups where it is set: the caption eyebrow, accent and Read more, the slate, the backdrop colours and the environment's accent strip. A branded story stands alone: `navigateChapter` returns when the view is not a lesson chapter, the last beat's next arrow is disabled, its CTA row is Explore plus the brand link, and it never writes the lesson's progress store. `Beat.terms` also takes a hex colour. Every fitness chapter omits `brand`, so each branch keeps today's behaviour.
+- **H.66 The MetFix course shell** (2026-09-30; H.65). `/metfix-lab` becomes a course: an overview of the eight MetFix modules and `/metfix-lab/<slug>` per module story (`src/metfix-lab/README.md`). Append-only engine change: `StoryBrand.endNext` (label, href, optional in-app `go`) adds a solid next-step link after the brand link on the finished last beat, and the brand link turns outline when it is set. Fitness chapters never set `brand`, so nothing changes there.
+
+### 2026-09-30, MetFix Lab integration: the sound amendments (merged from fitness-v2-audio)
+
+The sound branch wrote its amendments as H.52 to H.56 in parallel with the lesson integration above; merged here they are H.67 to H.71 (the same text, renumbered; story/audio/ and section I cite the new numbers).
+
+#### 2026-09-27, sound designer (section I)
+
+- **H.67 Sound** (new section I, binding). Narration, effects and a bed, OFF by default (I, O1). With sound on, the C.3 hold also waits for the beat's narration clip plus a breath (I.6.4); with sound off C.3 is unchanged, and the C.4 seek contract is unchanged either way. B.2's top bar gains the sound toggle before ThemeToggle, which moves the wordmark breakpoints while the toggle is present (I.5.2); the caption card gains the first-visit Sound on chip (I.5.1). Chapter cues live in a new `stories/<view>/sound.ts` per chapter, and C.2 is unchanged (I.6.2, H.68); C.4 gains `?sound`, `__story.audio()`, `__story.renderAudio()` and `__story.audioTimeline()` (I.6.7); C.15 gains the narration gate (I.6.5). The pace note first written here (61 to 97 words per minute, a lesson growing to about 10 minutes) was wrong and is withdrawn: those clips spoke their TTS direction aloud before the caption (H.68). Serves E.4 (thumbs-only story), E.6 (seek contract) and E.14 (network: the site origin only).
+
+#### 2026-09-27, sound designer, revision 1 (audio review)
+
+- **H.68 Section I revised after the audio review** (supersedes the parts of H.67 and of the first section I named here; serves E.4, E.6 and E.14).
+  - **Narration.** The pace diagnosis was wrong. The measured clips spoke their TTS direction aloud ("Read this warmly and clearly, like a coach explaining an idea at a whiteboard"), paused about 1 s, then spoke the caption at a normal pace (proved by transcribing the first speech span of intro/models on its own). All 13 generated clips are discarded; the run was also working from stale captions (6 of 46 hashes). Pace is now a HARD gate in generation, encode and `narration-check` (120 to 175 words per minute of speech, no inner gap over 0.8 s); generation also transcribes the first speech span alone; the preferred method is one continuous take per chapter, split at its paragraph pauses; the tempo-correction path is gone. With clean clips, sound adds about 57 s to the 340 s lesson, not 230 s (I.6.4). Nothing can commit until the Capacity clips exist (I.6.5 e).
+  - **Palette.** `resolve` is an open fifth on inharmonic (1:3.5) FM glass at -14 LU re voice, and the third comes only from the bed; `resolve.fall` falls by register and darkness, never by a bend; `pen.slide` is a rising noise texture whose pitch lives in discrete arrival ticks; the `tick` family leads with the click and rings with a x 2.76 partial; pitch jitter is limited where events sound with the tuned bed; the bed's detuned twin is -9 dB, and it gains 3rd harmonics and a rising octave layer so its evolution is audible on a phone; the Hopper rattle is unpitched, Poisson and slower; P1 introduces the phosphagen pitch.
+  - **Engine.** Cues move to `stories/<view>/sound.ts` and are sampled from the Scene's own exported cue functions and registered labels (`cueFrom`), so the only chapter edits are `export`s and a few hoists, wired one chapter at a time after each merge; `story/types.ts` no longer changes. Engine files call a dependency-free `audio/hooks.ts` (no module cycle). Pauses and seeks are explicit hooks (`store.pause`, `ready.markSeek`), never inferred from `playing`, and the last beat holds for its voice. The voice's accounting follows the audio clock; a hidden page pauses inside its event handler; the unlock listener leaves the sound controls alone and stays until audio runs. Decodes use `bytes.slice(0)` over a [n-1, n+2] window, with fetch validation. Voices have separate envelope and cut gains, and the director's frame work has its own try / catch. Transients come from a per-context bank, within a 16-per-second budget. The voice is encoded to <= -2.0 dBTP and the limiter threshold is -2.0 dBFS. QA levels are computed on demand. The offline render is named the reference mix and starts the bed in its beat-0-derived state.
+  - **Cue sheet corrections** found while re-reading the code: I4 is sourced from the glyph redraws and the tile rings (the six folds start together); D1 names three tasks (the 400m run is named in D0); D2's five names and P4's three lane names land together and get one mark each; in D5 AREA LOST (0.62) lands before ZONE WON (0.74), so the fall comes first.
+
+
+#### 2026-09-27, sound builder (the section I exemplar: engine + Capacity)
+
+- **H.69 Sound built on the engine and the Capacity exemplar** (serves E.4, E.6, E.14 and I.8). `story/audio/` holds the I.6.1 files; `stories/definition/sound.ts` is the I.7 Capacity cue sheet; `public/narration/definition/` holds the 7 clips; `scripts/narration-manifest.mjs`, `scripts/narration-check.mjs` (the third gate of `fitness-gate.mjs`), `scripts/narration-lib.mjs` and `scripts/narration-spoken.json` are the tools. Outside `story/audio/` every change is a line or two marked `// [audio]` in the I.6.8 files; `Scene.tsx` changes only by `export` and the two hoists (`d4Stroke`, `d5Dash`, same numbers); `Explore.tsx` wires the I.7 explore sounds through `useSfx`. Sound off: story-qa on definition is unchanged (96 ok; its one failure, "sheet", fails identically on the untouched baseline). Deviations from section I, each measured:
+  - **Voice level is dual mono** (corrects I.3.2, I.6.5 b and d). A mono clip plays on both channels, where EBU R128 reads it 3.01 dB louder than the mono file, so a -16 LUFS clip would put the voice stem at -13 LUFS (measured: -13.1). The player applies a clip gain of -16 - (clip LUFS + 3.01) dB from the manifest (`clipGainDb`, narration.ts). The clips as delivered measure -17.1 to -17.9 LUFS mono and <= -2.0 dBTP (two-pass linear loudnorm is peak-limited there), so the gains are -1.1 to -1.9 dB, the voice stem renders at -15.9 LUFS, -2.2 dBTP, and the limiter never touches the voice alone, as I.3.4 intends. The level gate is now: true peak <= -2.0 dBTP, a clip gain within +/-3.5 dB (a clip needing more is a bad encode), and <= -2.0 dBTP after that gain.
+  - **Pace ceiling 3.7 words per second** (corrects I.6.5 gate 3). The Capacity clips are cut from the audition the owner chose, whose paragraphs run 2.37 to 3.37 words per second; 2.9 rejected 5 of 7 of them. The floor (2.0, which catches a spoken direction) and the 0.8 s gap gate are unchanged; the negative test (4 s of speech and 1 s of silence prepended to a copy of `lineup`) fails pace, gap and peak.
+  - **One convention for every effect**: each passes an equal-power StereoPanner with the centre's -3.01 dB made up (`CENTER`), so a centred effect plays on both channels at full level, like the voice; the bank's I.2.3 sample peaks hold per channel.
+  - **Two hooks added** (hooks.ts still imports nothing): `toggleKey` (the M key, so gestures.ts imports only hooks.ts) and `glideStart` (one `// [audio]` line in `glideTo`): Next and Prev cut the voice in the same task; the I.6.3 per-frame poll took 165 ms at 14 fps and stays only as a safety net. The director also subscribes to the route store (a chapter change cuts the old voice at the navigation, 1 to 2 ms, not when the next chunk mounts) and starts fetching and decoding a mounting chapter's first clips under the slate; bytes are kept for the current and next chapter and the next chapter's first two clips are prefetched at idle (the manifest is in beat order).
+  - **UI sounds without more touchpoints**: `ui.step` comes from `beatStart` (not an autoplay advance, which `holdClear` marks), the glide hook and reduced-motion index changes; `ui.tap` from `userPause`, a resume within 250 ms of an input, and one capture-phase click listener over buttons, radios and summaries inside `.st-stage` (steps, the play button, the grab handle and the sound controls excluded). Reset view plays `air.reveal` at -8 dB. Segments, Transport and ExplorePanel are untouched.
+  - **Cue sources**: `{ labels }` (a set of registered labels, one event each: the D1 task names, the D4 callouts) and `each.skip` were added. Beat 0 at a chapter's load plans with delay 0; the 150 ms quiet start then moves its first effects to 0.15 s.
+  - **Reduced motion**: turning sound on narrates the current beat once (the viewer asked for sound); a step narrates the landed beat once; Show build narrates and its clip plays on after the build stops; the bed holds 8 s after a clip ends, then fades over 6 s.
+  - **Hidden page** (refines I.3.6): the handler records the position from the audio clock, ramps the voice and the master to 0 over 60 ms, stops the source and cancels cues in the same task, then suspends after the ramp (a 90 ms timer; an immediate suspend cut the fade, a click on every tab switch). If iOS freezes the page first, it is already silent. `pagehide` suspends at once. `levels` read -120 while the context is not running (analysers keep their last buffer).
+  - **Noise and silence detection**: pink noise is 6 s (a 2 s frozen loop is audible as a pulse in the room); the manifest detects silence from 50 ms so the 120 ms head and tail are seen, and only inner silences of 0.35 s or more split a span (I.3.3 holds the duck through shorter ones).
+  - **QA additions**: `audio().startedFrom` (the clip offset the sounding source started from: a resume starts exactly where the pause stopped) and `__story.renderSfx(sound, dur, flat)` (one palette sound alone through the real graph, for calibration). Headless timing checks run `?tier=low` (60 fps under software GL; at 8 to 13 fps the engine's 0.1 s dt clamp slows story time whatever the sound does). The deep-link pixel check (`?beat=3&t=0.9`, `?sound=0` against `?sound=1`) pins `?tier=medium`: 0.000 to 0.002% differ; unpinned, the adaptive-quality monitor may settle on different steps on two loads under software GL (2.2%, all of it in the LightField sparkle), which is not sound.
+  - **Measured** (ffmpeg ebur128 on `renderAudio(0, 6)`, 390 x 844): full mix -15.9 LUFS, -2.3 dBTP, LRA 7.9; voice stem -15.9 LUFS, -2.2 dBTP; bed -32.1 LUFS alone (first beat -31.5, last -31.6), -35.3 ducked; effects stem sample peak -28 dBFS, momentary max -33.4 LUFS; resolve alone -30.0 LUFS momentary max, resolve.fall -31.9; live autoplay `limiterMin` -0.95 dB. Capacity runs 57.2 s with sound on (52.9 s off; I.6.4 estimated about 60 s); over a live autoplay every beat lasted its planned total within 0.12 s, sound on and off. Two renders agree to 1 LSB at 16 bits (-90 dBFS, 0.03% of samples, the bed stem alone included: float rounding inside Chromium's renderer, not the plan or the seeds).
+  - **The ear** (critic.py, with control items that do not exist: all answered correctly). Round 1: every I.7 Capacity event audible, the narration intelligible with nothing masked, no clicks, both bells "calm", no throb, nothing out of tune, the bed "present but unobtrusive", nothing annoying, nothing said beyond the captions. Not acted on, because the meters contradict them: "sub-100 Hz energy in the drone" (the bed is 20 dB down below 100 Hz; the low end in the mix is the voice's own fundamental) and "the bed is louder at the end" (-31.5 vs -31.6 LUFS). Recorded for the review round: the D4 callout ticks read as "near-identical clicks"; physically each carries its own pitch (A6, E6, B6, each 25 to 30 dB above the other two in a 30 ms window), but the `tick.label` recipe leads with its click and its sine decays in 15 ms, so the pitch step is modest. A `tick.close` glint (90 ms) would carry it; I.7 binds the palette per cue, so it is not changed here. (Corrected by H.70: the review round showed the ear also answers yes to sounds that do not exist, so "every event audible" is not evidence.)
+- **H.70 Sound, fix round 1 after the audio review** (serves E.4, E.6, E.14 and I.8; amends I.2.3, I.3.3, I.4, I.5.1, I.5.2 and I.8). Measured on `renderAudio(0, 6)` at 390 x 844 and with real CDP taps WITHOUT the autoplay flag; evidence in `shots/audio-fix1/`.
+  - **Ducks that never came back** (I.3.3). The duck merged speech spans only when their gap was under 0.6 s, but it schedules the release 0.7 s after a span and the next duck-down 0.1 s before the next span, so for any gap from 0.6 to 0.8 s the release landed AFTER the next duck-down and won: the bed and the effects stayed unducked for the rest of the clip. The D0 clip's 0.78 s gap left the bed at 0 dB from 5.0 s to the end of the chapter's first line. Now `DUCK_LEAD` 0.1, `DUCK_RELEASE` 0.7 and `DUCK_MERGE` = their sum (0.8 s, the I.6.5 gap gate) are named constants in `director.ts` and `duckSpans()` merges any gap up to `DUCK_MERGE`, so no release can follow the next duck. The phone and the offline render share the function. Measured: the D0 bed duck holds -6.0 dB from 1.0 to 9.5 s (was 0 dB from 5.0 s); the bed under D0's second half reads -38.6 dBFS RMS (was -32.7); the ducked bed stem is -36.3 LUFS (was -35.3, inflated by the bug; target -35.5 +/- 2). `scripts/sound-qa.mjs duck` renders the bed stem with and without ducking and asserts -6 dB (+/-0.5) in 50 ms windows across every manifest speech span of every clip: 15 spans, 706 windows, worst deviation 0.04 dB; against the pre-fix code it fails at 6.00 dB.
+  - **Idle is not Waiting** (I.3.6, I.4, I.5.1, I.5.2). The director's own idle suspend (12 s with nothing audible while paused, 16 s after 'done') was published as "not running", so the toggle turned to Waiting (a dimmed icon and a dot), its first tap turned sound ON again (ui.on, '1' kept) instead of off, M did the same, the chip slid back onto the card, and the wake re-armed the paused clip from its start (the narrator repeated the sentence). Now `idle` is tracked apart from never-unlocked and interrupted: the UI's `running` is true while idle, so the toggle shows On and a tap or M turns sound off; `enable()` from a context that has run before only WAKES (resumes the context and the master, never re-arms a Run), so Play continues the paused clip at its recorded position through the normal play path; the chip retires for the page once audio has run (with one toggle ring when it was showing); play, a step, a chapter start and an explore touch wake an idle context, and any lesson tap still does (the unlock listener), after which it sleeps again in 12 s if nothing plays. `__story.audio().idle` reports it (`contextState` still reads 'suspended'). Measured: paused 14 s, toggle 'on', no dot, title "Turn sound off (M)", no chip; Play resumed the clip from 1.824 s where it paused at 1.824 s (was: from 0); one toggle tap while idle stored '0' and the context stayed suspended (no ui.on); 18 s after 'done' the toggle reads On and M turns sound off.
+  - **An interruption resumes both** (I.4 "Audio interrupted", and the refused resume on unlocking an iPhone). `enable()` cleared `interrupted` before the context resumed, so onState never resumed the story, and the first-enable path discarded the paused Run. Now a wake leaves `interrupted` set until the context runs; onState then plays the story and the paused Run resumes where it stopped. Measured (the live context suspended from outside the director at 1.501 s): story paused, toggle Waiting; one tap on the caption: story playing, the clip resumed from 1.501 s.
+  - **Leaving the lesson releases the narration** (I.3.6). `setChapter(null)` now also drops the decoded window and the kept bytes when no chapter follows. Measured with WeakRefs and forced GC: 3 live decoded buffers in the lesson, 0 after leaving (was 3).
+  - **Palette** (I.1.3 "no risers", "no tunes"; the owner's phone is the judge). `pour.fill` and `pour.sweep` SETTLE: the centre and the tone follow L only to 85% of the window and then hold, the tone tops out at -26 dB (was -20), and the noise eases down 3 dB over the last 15%, so the D3 pour recedes into the claim instead of peaking on it. Effects stem, last 0.5 s before the D3 bell: the centroid holds 2480 Hz (was rising to 2976), the level falls -47.3 to -50.0 dBFS (was flat at -47.1), the band above 3 kHz falls 3.8 dB (was rising 3.8 dB). Solo `pour.fill` M max -38.4 LUFS (was -37.8; target -38). `ui.on` strikes its two glints TOGETHER as one open dyad (was the bell root then its fifth 80 ms later, the rising two-note figure of a notification chime): peak -26.0 dBFS, M max -37.1 LUFS (was -27.3 and -36.3).
+  - **Not changed, flagged for the owner's phone.** (a) The tick family's timbre. Share of energy in the pure sine partials on solo renders (+/-3% bands): `tick.dot` 90% with nothing above 2.5 kHz, `tick.close` 86%, `tick.claim` 82%, `tick.label` 50% (its click leads). A trial on `tick.dot` (the click at -6 dB, a x 2.76 partial at -16 dB) moved it only to 89% and cost 1 dB of loudness; the review's fuller suggestion (the click at 0 dB, the sine at -10 dB) would, under the bank's peak normalisation, cost the tick several dB of loudness under the voice. That trade is the owner's call by ear, so the I.2.3 recipes stand. (b) Picture-bound cues against the voice (I.1.5): the D3 bell lands 0.14 s into "it is observable", the D5 fall in the 0.25 s gap between "The generalist" and "wins the integral", the D4 TIME callout about 1.5 s before "the time axis" (the build is shorter than the clip). The lever is a story-timing pass, not the mix. (c) Voice headroom (I.3.4): the voice stem peaks at -2.2 dBFS (Chromium), 0.2 dB under the limiter threshold; on the owner's iPhone read `levels.limiterMin` during speech, and if it ever goes below 0 on voice alone, take 0.5 dB more headroom in `clipGainDb`. (d) The chip's copy "SOUND ON" (O1, I.5.1) and its top edge sitting flush on the D6 lineup's bottom panel.
+  - **360 px chip**: at widths under 375 px the chip sits at `right: 4px` (was 8), so its 44 px hit band clears the grab handle's by 7 px (measured 4 px before; 18 px at 390 and 38 px at 430, unchanged).
+  - **QA**: `scripts/sound-qa.mjs` is committed (the build round's local suite plus `duck`, `idle`, `done`, `interrupt` and `leave`; each new check fails on the pre-fix code, `shots/audio-fix1/negative-control.txt`). `audioTimeline()` adds each beat's `speech` spans. The sound-on lead check measures inside the page, from the click event to the first frame the voice plays (on a loaded machine `page.click` took 330 to 480 ms to return, which read as a 230 ms lead; in-page it is 430 to 590 ms). Two renders agree within 1 LSB at 16 bits in 0.03% of samples (Chromium's float rounding), so I.8 says "within 1 LSB". Meters after the fix: full mix -15.9 LUFS, -2.3 dBTP, LRA 7.9; voice stem -15.9 LUFS, -2.2 dBTP; bed -32.1 LUFS unducked, -36.3 ducked; effects sample peak -28.0 dBFS, M max -33.5 LUFS; resolve alone M max -30.0.
+  - **Load, not sound**: late in this round other agents saturated the machine (CPU 100%, about 160 browser and node processes, 12 fps). Under that load the timing check missed by up to 1.1 s with sound on AND 4.4 s with `?sound=0`, which no audio code touches; on the same fixed build at normal load it passed (sound on worst 0.056 s, off 0.053 s). The chapter check's long evaluate across the chapter change occasionally dies with "Execution context was destroyed" with no document navigation; the pre-fix code does the same (1 of 4 runs), so the suite logs it and retries once.
+  - **The ear** (critic.py): the first full-mix run answered "yes" to a bell at 13.50 s and a tick at 5.30 s, both digital silence in the effects stem, so the whole run was discarded (it also said the D0 bed was softer at 5 to 9 s than at 10.5 to 14.5 s; the meter says 1.8 dB louder). A pour A/B with a silent gap and a nonexistent drum as controls passed both controls, then called the old pour "levelled" and the new one "rising", which the band meters contradict (above), so it is recorded, not acted on. H.69's "every I.7 Capacity event audible" is withdrawn as evidence: audibility is recorded as frame exposure (the share of 50 ms frames in which a cue beats voice + bed in some 0.4 to 8 kHz third-octave band: from 17%, the D2 converge air, to 84%, the D5 spill, per the review).
+- **H.71 Sound, fix round 2 after the second audio review** (serves E.4, E.6, E.14 and I.8; amends I.1.7, I.2.3, I.2.5, I.3.3, I.5.1, I.5.2, I.6.2, I.6.7, I.7 and I.8; supersedes the H.70 settle). Measured on `renderAudio(0, 6)` at 390 x 844 and with real CDP taps and keys WITHOUT the autoplay flag; evidence in `shots/audio-fix2/` (`meters.txt`, `exposure.txt`, `sound-qa.txt`, `render/`).
+  - **The D3 pour is not a riser** (I.1.3 "no risers", O5; the review's major). The H.70 settle changed only the last 15% of the window: the first 3 s were still a filtered-noise sweep of 1.7 octaves with a +7 LU crescendo, ending 0.10 s before the claim bell, and its centre finished in the 2 to 3 kHz consonant band. Now `pour.fill` and `pour.sweep` carry the amount WITHOUT a sweep-and-crescendo: the band centre is `800 x 2^(0.75 A)` Hz (800 Hz to 1.35 kHz, under one octave), the noise level is flat after its 250 ms attack (the 0.55 to 1.0 crescendo is gone), and the amount A is carried by the tone (-40 to -26 dB) and the grain density (2 per second up to the recipe's rate, following A, not the speed). A reaches 1 at `POUR_SETTLE` 0.6 of the window and holds, and the noise AND its grains ease down 3 dB over the rest, so the last 1.4 s before the D3 claim is flat or falling. Levels recalibrated alone: `pour.fill` M max -38.5 LUFS (target -38), `pour.sweep` -42.5 (target -42). Measured on the effects stem, unducked, through the D3 window: centroid 1078 to 1699 Hz (0.66 octave; was 770 to 2515, 1.7 octaves), M +0.8 LU after the attack and +2.1 LU counting the window that ends in it (was +7 LU), energy above 1.5 kHz +3.6 dB (was +23 dB), the last second before the bell M -40.2 to -41.7 LUFS with the centroid flat (1607, 1554, 1699, 1617 Hz). At 28.6 s, "it is measurable", the pour now sits 5 dB lower at 2.5 kHz. `sound-qa pour` gates it (centroid < 1 octave, rise < 3 LU, last second flat or falling).
+  - **The duck bridges early sentence changes** (I.3.3). Each clip's duck released 0.7 s after its last span and the next clip ducked again 0.1 s before its first syllable, so between beats the bed popped up 4 to 7 dB for 0.3 to 1.2 s (the ear heard the D4 -> D5 swell as an "air sweep"). And live, the director released the ducks at the clip FILE's end with tau 0.12, 0.58 s earlier and faster than the reference mix. Now: when autoplay carries on into a narrated beat, the release after a clip's last span moves to the next beat's planned first duck-down (known from the plan: this beat's total, the next beat's LEAD and first speech span) plus `BRIDGE_SAFETY` 2.0 s whenever that duck-down follows the release within `DUCK_BRIDGE` 1.5 s; the next clip's schedule replaces it, and if no clip follows (paused in the breath, a missing clip) it still releases. The release's tau is `DUCK_RELEASE_TAU` 0.6 s (was 0.23), so the long gaps rise instead of swelling. The natural end of a clip no longer releases the ducks, and an autoplay beat start keeps them (a user cut, pause, seek, explore or sound off still releases at once, tau 120 ms). The offline render bridges by the same rule. Measured (ducked bed stem): D0 -> D1, D1 -> D2, D2 -> D3 and D4 -> D5 now hold -6 dB through the change; the only un-duck windows are D3 -> D4 (2.05 s) and D5 -> D6 (4.64 s), both rising to full; inside every speech span the bed sits at -6.00 dB (worst -5.93). Live (`sound-qa bridge`): -6 dB throughout the D0 -> D1 gap, back to -0.1 dB in D3 -> D4. `sound-qa duck` adds: no un-duck window between the first and last syllable shorter than 0.8 s. Bed stem ducked -36.6 LUFS (target -35.5 +/- 2).
+  - **A hidden page always pauses everything** (O4, I.3.6; the review's second major). `onShow()` returned before clearing its `hidden` flag when sound was off, and `onHide()` returns while that flag is set, so after sound on, off, hide, show, on, the next hide did nothing: the clip and the bed played on the lock screen (with the 'playback' session, through the silent switch too). Now onShow clears the flag (and its timer) before any other return, and `enable()` resets it from `document.hidden`. `sound-qa hidden2`: on, off, hide, show, on, hide leaves the context suspended, the master at -120 dBFS and the audio clock stopped; shown again, the clip continues.
+  - **The session race** (O2). `disable()` set the session to 'auto' on a 220 ms timer unconditionally, so off then on inside 220 ms (a double tap, M twice) ended with sound on and the session 'auto', which on an iPhone in silent mode mutes Web Audio without a trace. The timer now checks a serial that `enable()` bumps, and `enabled`. `sound-qa session`: off and on 120 ms apart leaves the session 'playback' (log: 'playback' only).
+  - **Back to the tab while idle** (I.3.6). Showing the tab re-claimed 'playback' and resumed an idle context for another 12 s with nothing to play, which on an iPhone pauses the viewer's music every time they return to the lesson. Now, when the context was idle, or the hide paused nothing while the story was not playing and the bed was silent, onShow restores the master for later and leaves the context asleep as idle with the session 'auto'; Play, a step or a tap wakes it through the usual paths. `sound-qa idleshow`: after the show the context stays suspended, idle, session 'auto', toggle On; Play resumes the clip where it paused (1.153 s from 1.153 s) with 'playback' again.
+  - **Keys unlock on desktop** (I.4, returning '1'). The unlock listener required a target inside `.st-root`, but a key pressed with nothing focused targets the body. A keydown on the body or the document element now counts while a chapter is mounted. `sound-qa keys`: ArrowRight, Space and E each unlock (running 1 to 12 ms later).
+  - **The tick family, offered for the owner's A/B** (I.1.3, O5; the fifth-listen risk). `tick.dot` was a bare 880 Hz sine with its click 10 dB down (97% of its energy in the sine partials), against I.1.3's "the contact leads". The default is now the contact-led 'glass' recipe (the click at 0 dB, the dot pitch at -6 dB with tau 25 ms, the x 2.76 partial at -14 dB, sample peak -22 dBFS so its K-weighted energy stays within 0.3 dB of the old one under the voice); `?tick=round` plays the H.69 recipe for the A/B (`tickStyle()` in `prefs.ts`, read once per page because the bank renders once; `TICK_DEFAULT` flips the default). By energy the glass tick is still 87% sine: the change is in the attack and the shorter ring. The D0 "nine points" set sounds 4 of its 9 dots (a new `SfxCue.max`, 2 to 6, default 6: the first, the last and evenly between). OWNER'S CALL on the phone: open the chapter with and without `?tick=round`, tap Sound on, and keep the one that reads as chalk and glass on the fifth listen; record it here.
+  - **Masked marks lifted** (I.1.1 "sound explains"). Frame exposure (50 ms frames, third-octave bands 0.4 to 8 kHz, ducked stems): D6 rows#0 had -0.2 dB of band margin (inaudible), D0 nine points#6 1.1 dB, D1 task names#2 1.9 dB. The D6 rows set is +3 dB (gain -2, was -5) and the D1 names set +5 dB (gain +2, was -3; raising the last name's pitch to D6 instead made it worse, -5.8 dB, because the voice's F2 sat there). Every cue now has at least 7.1 dB of margin in some band (D1 names#2 7.1, D6 rows#3 7.5, rows#5 7.6, rows#0 8.8).
+  - **D5's loss under "the generalist"** (I.1.5). `resolve.fall` lands between "The generalist" and "wins the integral"; the picture is right (AREA LOST lands at 0.62), so the cue stays on its label and is 3 dB softer (gain -3: M max about -35 LUFS, -19 LU re voice), so it marks the specialist's lost area without reading as a verdict on the generalist. NOT done, for the foundation lead and the owner: the story-timing fix (let the D5 build wait for the first sentence with sound on, or split its narration so the first sentence ends as AREA LOST lands).
+  - **The room brightens** (I.2.5). The bed's evolution was barely audible (phone-band centroid +15%, non-monotonic; the bed-only ear heard "it stays the same"): the room dominates the bed's spectrum and its lowpass never moved. Now the room's lowpass follows the beat, 800 Hz on a chapter's first beat to 2 kHz on its last (`roomCutoffFor`), with a trim that keeps its loudness constant (`roomComp`, pink noise through the room's filters measured offline: +1.2 dB over that range), and the octave layer spans -16 to -6 dB (was -14 to -8). Measured (bed stem, unducked, each beat after its 3 s glide, 4th-order highpass at 300 Hz): centroid 374 Hz at D0 to 533 Hz at D6 (+42%), loudness per beat -31.5 to -32.6 LUFS, first vs last 0.2 LU (no swell); whole bed alone -32.0 LUFS.
+  - **Smaller fixes.** The Sound on chip's `::before` reaches 9 px above and 5 px below the pill (was 8 and 8). The pill sits 14 px above and 16 px below the card edge (its `top: -15px` is measured inside the card's 1 px border), so the 44 px hit area now runs from 23 px above the edge to 21 px below it, as I.5.1 says (it reached 24 px and took 3 px of the scrubber's band). Measured with `elementFromPoint` down the chip's centre column at 360, 390, 430 and desktop, on both base paths: the chip from -22.5 to +20.0 px, the scrubber from +20.3 px, no overlap (`shots/audio-fix2/ui/measure.json`). The Waiting dot is #019644 in the light theme, as the icon. The top-bar toggle renders only while a story chapter is mounted (a legacy LessonStage view can never narrate). `Bed.fadeTone` disconnects a faded tone once its oscillators end instead of keeping every faded tone in a list for the page's life. The render header and I.1.7 say "repeatable within 1 LSB" (two renders differ by 1 LSB on 1,582 of 5.68 M samples, 0.03%, Chromium's float rounding), not "sample-identical".
+  - **QA** (`scripts/sound-qa.mjs`). Every test runs inside its own try / catch, so a crash is one FAIL and the suite continues, and a crashed test's contexts are closed. The chapter check's "Execution context was destroyed" is explained and fixed: it is not a navigation, a reload or load. Traced with CDP, the document never reloads (no load event, no lazyReload stamp, no executionContextDestroyed; only `Page.navigatedWithinDocument` from the app's pushState), and the same code through raw CDP `Runtime.evaluate` returns normally; Playwright 1.60 rewrites any protocol error of an evaluate that is pending across that pushState into this message. So no `page.evaluate` spans the chapter change any more: the page records into `window.__chap` / `window.__back` from its own rAF loop and Node polls with short evaluates (the old voice stops 3 ms after the change; the room reads -38.3 dBFS in the next chapter; back on Capacity beat 0 speaks 0.33 s of story time after loaded). `timing` measures each beat in story time (the sum of min(dt, 0.1) per frame) plus the audio clock while its clip sounds, never in wall time, and adds: every clip sounds for its manifest duration on the audio clock, and no beat advances before its clip end plus a breath. `deeplink` compares the story state of `?sound=0` and `?sound=1` exactly and compares pixels only between two loads that share a chart frame (the `def-fan` probe). Correction to H.69 and H.70: the 2.2% deep-link pixel difference was neither load nor the adaptive-quality monitor; it is the chart frame differing between page loads with `?sound=0` on both (review 2: probe x0 -3.5288 or -3.5366), which predates sound. New checks: `hidden2`, `session`, `idleshow`, `keys`, `bridge`, `pour`, and the un-duck window in `duck`.
+  - **Meters after the fix**: full mix -15.9 LUFS, -2.3 dBTP, LRA 8.0; voice stem -15.9 LUFS, -2.2 dBTP; bed -32.0 LUFS unducked, -36.6 ducked; effects stem sample peak -26.1 dBFS, M max -33.3 LUFS (the claim); resolve alone M max -29.9, resolve.fall -31.9 (-34.9 at its D5 gain); the limiter never engages (mix minus the sum of the stems is at most 1 LSB).
+  - **The ear** (critic.py, a second opinion only). Tick A/B reel (glass then round, controls passed): glass "synthetic digital UI bleep", round "organic tap / chalk mark", glass more annoying. The same reel with the ORDER SWAPPED (round then glass, controls passed): round "synthetic digital blip", glass "organic tap / chalk strike", round more annoying. The ear called the first group digital and the second organic both times, so its tick judgement is order bias and is not evidence either way: the tick stays the owner's call on the phone. The D3 effect alone (+18 dB, controls passed): "no riser; it peaks early and fades before the bell", last second "falling", which the meter corroborates (above). Full mix: discarded, it answered "no bell" at 29.12 s and at 45.45 s, where the effects stem holds the two claim bells with 22 and 17 dB of band margin. Gap excerpts (31 to 44 s) of the old and the new mix: discarded, it gave identical answers for both files (no rise in the long D3 -> D4 pause, where the meter shows +6 dB in both; a "swell" and an "air sweep" at 40.9 to 42.1 s in both, where the new mix holds within 1 dB and the old one rises 7 dB: `ear/gap-meter.txt`). Questions and answers are in `shots/audio-fix2/ear/`.
+  - **Negative control**: `shots/audio-fix2/negative-control.txt` runs `pour`, `duck`, `hidden2`, `session`, `idleshow`, `keys` and `bridge` against the pre-fix code: 11 failures, one per reported bug (the pour 1.59 octaves and +5.9 LU; six un-duck windows, the shortest 0.29 s; the bed at 0 dB between D0 and D1; a hide that leaves the context running at -33 dBFS with its clock moving; the session left at 'auto'; 'playback' re-claimed on showing an idle tab; no unlock from ArrowRight, Space or E), while the positive controls pass on both.
+  - **Not changed, recorded**: the chip's top edge touches the D6 lineup's bottom panel at 360 and 390 on a deep link or a jump (the chip retires after 3 beats; adding its overhang to the focus margin would re-frame the first three beats when it retires); the chip's glyph stays speaker-with-waves before the tap (I.5.1, the owner's call); the ear-only notes (the claim bell as "chime", the D4 callout pitches, `pour.drain` "cheesy" in isolation) have no meter or code support.
+
+### 2026-09-30, MetFix Lab: Modules 1 and 2 speak, the phone gauge strip
+
+- **H.72 Narration belongs to the story; MetFix Modules 1 and 2 speak** (serves O1 to O4, O7 and O8; amends I.4, I.5, I.6.3, I.6.5 and section I "Voice"; H.65, H.66). The owner, on Modules 1 and 2: "more of a talking and explaining while showing the animation", in the voice he chose, Charon.
+  - **The narration source is the StoryDef.** `StoryDef.narration` (types.ts `StoryNarration`: beat id -> text, hash, file, dur, speech, words, maxGap, lufs, tp), the story's generated `narration.gen.ts`, is the only place clips come from. A story without it has NO sound: no chip, no toggle (the lesson top bar keeps its class and width rules), no "M for sound" in the keyhint, M does nothing, no unlock listener, no AudioContext, no ui sounds and the C.3 timing; the director is inert (`live` false). On metfix-lab no /fitness chapter declares it: Capacity's clips (`public/narration/definition/`) and cue sheet (`stories/definition/sound.ts`) are kept, dormant, and the global `story/audio/narration.gen.ts` is gone. MetFix Modules 3 to 8 do not declare it either.
+  - **The script lives beside the story**: `narration.json` (`clips`: its folder under public/; `beats`: id -> { source, text }), and the clip hash is sha1 of the spoken TEXT. A /fitness chapter's text must be its caption body (the "Voice" rule, digits rendered by `scripts/narration-spoken.json`), so a caption edit still fails the gate. A MetFix module speaks its own explanatory paragraph per beat (every sentence restates the module source; each beat names its passage) and its captions are unchanged: they stay the subtitles (O7).
+  - **Gates**: `scripts/narration-manifest.mjs` writes every narrated story's narration.gen.ts; `scripts/narration-check.mjs` (fitness-gate step 3) fails on a beat without text, a narrated id that is not a beat, a dash, a missing clip for a text's hash (edit a sentence and it fails until its clip is regenerated), a stale or undeclared manifest, a story.ts that declares narration without a script, and the I.6.5 pace, gap and level gates. A MetFix story may widen gate 4 (no inner gap over 0.8 s) to at most 1.6 s, with its reason, in narration.json `gates`; a /fitness chapter may not.
+  - **Behaviour** is section I's: sound off by default, the chip asks once, the choice persists in `fitness-sound`, nothing sounds and no context exists before a gesture; each clip starts LEAD after its beat starts and the beat holds for the clip plus BREATH (from the build-time durations); pause and resume continue it; next, prev, seek, explore and a module change stop it; a hidden tab pauses it. Added: **reading holds the voice** (L14, H.56): the phone's expanded Read more and the desktop disclosure pause the clip like a finger, and it resumes where it stopped. Leaving a narrated story for one without narration fades the bed and lets the context idle-suspend; coming back restores the master. A lab story's bed plays in the intro key (`keyFor` falls back). The MetFix modules have no cues (no sound.ts): the voice, the bed and the ui sounds.
+  - **MetFix look**: the chip and the toggle take MetFix blue through `--st-sound-on`, `--st-sound-on-rgb` and `--st-sound-on-light` (audio.css falls back to the lesson's lime); the toggle sits in the MetFix top bar before Preview; the chip uses the course's face.
+  - **Measured** (390 x 844; the gesture rule with real CDP taps and keys WITHOUT the autoplay flag, which is used only for timing and the mixdowns; 157 checks): no AudioContext and nothing fetched under /narration/ before a gesture, with the choice undecided or '1'; a tap on the chip, a tap on Next ('1' stored, the toggle Waiting) and M on desktop each start it; /fitness shows no sound UI and creates no context after taps, M and `?sound=1`. The 16 Charon clips run 13.8 to 19.9 s at 2.38 to 3.21 words a second, -17.2 to -19.1 LUFS, true peak -2.0 to -4.4 dBTP; Module 1 runs 133.6 s with sound on (67.9 s off), Module 2 137.1 s (63.2 s off). Autoplayed end to end, every clip plays its whole duration once on the audio clock, in beat order; it starts 0.10 to 0.19 s after its beat starts as sampled (LEAD 0.2 s; a sampled beat start lags by up to a frame); the next beat starts 0.67 to 0.80 s after the clip ends (BREATH 0.65 s plus at most a frame) and every beat lasts its planned total within 0.09 s; consecutive clips are 0.85 to 0.92 s apart, never overlapping. Sound off, every beat lasts the C.3 rule within a frame. Reference mixes (`renderAudio(0, 7)`): Module 1 -15.7 LUFS, -1.9 dBTP, LRA 2.5 (voice stem -15.8, bed alone -32.2); Module 2 -15.6 LUFS, -2.0 dBTP, LRA 2.5 (voice -15.6, bed -32.2). Gate 4 is 1.1 s for both: paragraph narration breathes between sentences (Module 1 logic 1.04 s, between deduction and induction; Module 2 questions 0.84 s, rare 0.81 s), and since the duck merges gaps up to 0.8 s only, the bed lifts briefly in those three breaks.
+- **H.73 MetFix gauges on a portrait phone** (src/metfix-lab/kit/GaugeHud.tsx; Modules 7 and 8; the owner on Module 7 on a phone: "glucose and the graph overlapping on the graphics"). On the 'phone' shell the gauge HUD is a slim full-width strip of its own under the top bar (33 px, two thin bars side by side with their LOW / HIGH words), cut out of the focus rect with `useFocusInset(.., 'top')` while the HUD is mounted, shown or not, so the camera frames the scene below it and the framing never jumps as the gauges fade in; the stories' glass (it reads `hudBox`) fades the glucose and moves the keys clear of it. The focus rect starts at y 41 (was 8). Desktop, tablet and landscape keep the chip: at 1440 x 900 no label sits under it and the loose marks already keep clear.
+- **H.74 The picture follows the voice** (MetFix Modules 1 and 2; serves O3 and O7; amends I.6.4, I.6.5, I.6.7, H.72 and H.73). Review of H.72: with sound on, every beat still built in its designed 5 to 6.6 s and then held an almost still end frame for 8 to 15 s while Charon talked, so each reveal landed 5 to 13 s before its words ("Induction", "Predictive strength", "like this meter", "minds", "flipped", "Just 1.9%", "Each dot here is 100 people"). The owner asked for talking and explaining WHILE the animation shows.
+  - **Sync knots.** `NarrationClip.sync` holds knots [build t, clip seconds]. With sound on, a narrated beat's build t is a fixed piecewise-linear map of the clip position as heard (`syncT`, hooks.ts: from the build's start at the pre-roll through every knot, then the designed rate; the position is read live from the audio clock less the output latency while the clip sounds, `audioHooks.clipPos`), never backward: armed mid-beat (sound turned on, play after a seek), the picture waits at its t until the voice catches up. The map comes from build-time data only, so the timeline is deterministic, and scene properties still depend on T alone, so `?beat=N&t=X` and every deep link are unchanged. A synced beat's hold is the rest of its voice plus BREATH (`pb.holdFor` 0) and its planned total is its span; sound turned off in that hold restores the reading rule. Not under reduced motion or a self-clocked step. Sound off: unchanged (the C.3 build and hold).
+  - **Anchors and alignment.** narration.json `sync`: [t, at, offset], `at` a sentence index (0 first) or a phrase that occurs exactly once in the paragraph; t lands at that word's onset in the clip plus offset seconds. Onsets come from `narration.align.json`, written by `scripts/narration-align.py`: CTC forced alignment of the known text against the clip (torchaudio WAV2VEC2_ASR_BASE_960H, digits read as words), so nothing is recognised and nothing can be misheard. Whisper word times are not used: at sentence starts they miss by up to 0.9 s on these clips (replicate "Science" 11.15 s against 12.05 s, answer "What" 8.93 against 9.59, positives "Only" 5.11 against 5.57; the energy onsets are 11.99, 9.58 and 5.46), CTC by about 0.1 s. Without anchors a beat with an alignment stretches its build to its last sentence; `"sync": []` keeps the designed rate. `narration-manifest.mjs` resolves the anchors into each beat's knots; `narration-check.mjs` fails when a narrated beat's alignment is missing or made for another text or clip, an anchor's sentence index is out of range, a phrase is missing or not unique, t leaves (0, 1] or falls, the anchor times do not increase, or the warped build ends after the clip.
+  - **Choreography.** One monotone warp cannot reorder reveals, and Module 1 is a split screen whose two sides built at the same time while the voice explains the left one, then the right one. So, in both modes and inside each beat's unchanged build and hold (the silent timing is the C.3 rule, measured), a split's right side now follows its left side: certainty, MORE / LESS LIKELY (0.64 to 0.70), the meter (0.72 to 0.98) and the green question mark's calm after the switch's slam; logic, the sun, its tally and EVERY DAY after the deduction (`SUN_A` 0.6, `SUN_DAY` 0.07); predict, the target (0.3 to 0.42) and the four results (`EVT` 0.5 to 0.8, REFUTED 0.86 to 0.96) after the lid and CANNOT CONFIRM; question, P-VALUES (0.78 to 0.86), then WHAT YOU WANT TO KNOW (0.88 to 0.96); probability, the die's six rolls (0.28 to 0.55), then the meter, the head (0.56 to 0.68), IN OUR HEADS (0.64 to 0.72) and the evidence (`EVB` 0.74 to 0.94); fork, SCIENCE THAT WORKS (0.74 to 0.86) after BROKEN SCIENCE; replicate, the right end's bloom and PREDICTS AND REPLICATES (0.74 to 0.84) after the left rail breaks. Module 2: questions, the Bayesian line drops clear (0.34 to 0.5) and BAYESIAN lands (0.44 to 0.52) before its letters swap (0.52 to 0.68; the not-equal 0.7 to 0.86), so it never sits on the frequentist line while the voice asks its question; rare, 1 DOT = 100 PEOPLE (0.76 to 0.84) after 1 IN 1000 HAS IT, and the "= ?" closes the beat (0.86 to 0.96); alarms, FALSE POSITIVES (0.82 to 0.92) after the sweep; positives, 4,995 FALSE POSITIVES (0.84 to 0.94) after 99 HAVE IT; broken, the camera (0.4 to 0.72), then the two formulas (0.72 to 0.94) after 36% FALSE. End states are unchanged.
+  - **The anchors** (narration.json, one note per module in `_sync`): each reveal lands on its words, e.g. the switch slams on "switch" and the meter rises to "meter"; the sun rises on "the sun" after "Induction", tomorrow's dawn on "tomorrow", NOT 100% on "Very likely"; the lid on "confirmed", the target on "Predictive strength", the results on "accurate predictions"; IN OUR HEADS on "minds"; the Bayesian letters swap on "flipped around"; 1 DOT = 100 PEOPLE on "Each dot here"; 99 HAVE IT on "Only 99"; 1.9% on "Just 1.9%"; the formulas on "Confusing these two probabilities". The picture holds still only where the voice is still on the same point (accurate's misreading, the answer's set-up, the last sentence of most beats).
+  - **QA.** `scripts/metfix-sound-qa.mjs` (in the repo; it was tools/metfix-sound.local.mjs): the timing test also checks that every frame of a sounding clip shows the build t its knots map the clip position to (within 0.12 s plus the sample's frame of the audio clock) and that each build ends where planned. `__story.audioTimeline()` adds each beat's speech spans, build span and knots; `__story.audio().beatHold.sync`. `scripts/sound-qa.mjs` (Capacity) is dormant: no /fitness chapter declares narration, so it exits with a notice unless `SOUND_QA_FORCE=1`.
+  - **Module 7** (H.73 follow-up): on tall phones beat 2's push-in put the top of the pancreas prop under the gauge strip (390 x 844, 360 x 780, 430 x 932); the prop steps back under the HUD's glass alone (`hudClear`, glass.ts) and returns with the camera. Desktop and 390 x 664 are unchanged.
+  - **Measured** (dev and preview builds of e7bd716, each made after its commit: 23:39:31 and 23:39:41 against 23:39:07; `scripts/metfix-sound-qa.mjs`, 189 checks on each build, all pass; evidence in `shots/metfix-voice/`). The gesture rule with real taps and keys WITHOUT the autoplay flag: no context and nothing fetched under /narration/ before a gesture; the chip, Next and M each start it; /fitness shows no sound UI and makes no context. Autoplayed end to end with sound on (390 x 844, software GL): every clip plays its whole duration once, in beat order, starting 0.13 to 0.19 s after its beat; every frame of a sounding clip shows the build t its knots map the clip position to, within 0.12 s plus one frame of the audio clock (Module 1: 829 to 1,197 frames a beat; Module 2: 251 to 519, about 20 fps); each build ends where planned, within the frame that shows it; each beat holds until 0.67 to 0.82 s after its clip ends (BREATH 0.65 s plus a frame) and lasts its planned total within 0.16 s; consecutive clips are 0.85 to 0.96 s apart, never overlapping. Sound off: every beat lasts the C.3 rule within a frame. Pause, resume, next, prev, seek, explore, a hidden tab, Read more and a module change behave as in H.72. Reference mixes (`renderAudio(0, 7)`): Module 1 -15.7 LUFS, -1.9 dBTP, LRA 2.5 (voice stem -15.8, bed alone -32.2); Module 2 -15.6 LUFS, -2.0 dBTP, LRA 2.5 (voice -15.6, bed -32.2); 133.6 s and 137.1 s with sound on, 67.9 s and 63.2 s off, as before. Independently, the words were CTC-aligned again INSIDE the rendered voice stems: all 124 anchors put their build t on screen within 0.03 s of the word as heard plus its offset (`<slug>-sync-verify.txt`). The review's words against their reveals (`reveal-vs-word.txt`, a reveal starting at its cue window's first t): the switch slams from 0.1 s before "switch"; the meter rises from 0.48 s before "meter" to 0.35 s after it; the sun comes up 0.29 s before "Induction"; the target 0.3 s before "Predictive"; IN OUR HEADS 0.2 s before "minds"; the Bayesian letters swap across "Same two things, flipped around", complete 0.48 s after "flipped"; 1 DOT = 100 PEOPLE 0.2 s before "Each"; 99 HAVE IT 0.15 s before "Only"; 1.9% 0.09 s after "Just"; the two formulas 0.2 s before "Confusing". Frames at every anchor plus each clip's start, middle and end at 390 x 664: `sync/390x664-final/`. Gauge strip (Modules 7 and 8 at 390 x 664, 390 x 844, 360 x 780 and 430 x 932, every beat at t 0.25 to 1): the strip is on, the focus rect starts below it, nothing labelled sits under it, and Module 7 beat 2 no longer puts the pancreas under it (`strip-final/`). Real-GPU black check (tier high): 0 of 80 frames on each of Modules 1, 2, 7 and 8. fitness-gate, typecheck and the dash check pass.
+- **H.75 Every chapter speaks: MetFix Modules 3 to 8 and the whole /fitness lesson** (serves O1 to O4, O7 and O8; amends section I "Voice", I.6.5 and H.72; extends H.74). The owner, on the Module 1 and 2 preview: "look really great and sounds amazing, can we do it for all the chapter now and also our fitness one needs this too".
+  - **The /fitness lesson speaks its own paragraphs.** Section I "Voice" (a /fitness chapter speaks its caption body) is superseded: like a MetFix module (H.72), every /fitness chapter has a `narration.json` with one explanatory paragraph per beat, written in the order the picture builds, every sentence restating the lesson's own text (fitnessData.ts: INTRO_TEXT, DEFINITION_TEXT, POWER_CONCEPT, MODULE_COPY, SKILLS, ARCHETYPES, HOPPER_DOMAINS, ENERGY_SYSTEMS, ENERGY_BENCHMARKS, CONTINUUM_EXAMPLES) or its captions, with no new facts or numbers; each beat names its passage (`source`). The captions are unchanged and stay the subtitles. narration-check drops the caption-body rule and instead fails a beat with no `source`; a /fitness chapter may widen gate 4 with `gates` as a MetFix module may. Clips live in `public/narration/fitness/<chapter>/` (the dormant caption clips in `public/narration/definition/` are gone) and `public/narration/metfix/<slug>/`. The Sound on chip and the top-bar toggle appear on every chapter because every chapter is narrated (`isNarrated`); the gesture rule (O1) is unchanged.
+  - **The scripts** (voice/narration-round2.json, written in the main loop; voice/round2.mjs writes each story's narration.json and the TTS manifest): 94 paragraphs, 20 to 49 spoken words each, 3,788 words in all. MetFix 3 to 8 restate sources/module-N.md (Module 7: SOURCE-module7.md). Notation is written as it is said: Complex One to Four, cytochrome c, carbon dioxide, oxygen and water for the formulas, "ADP and phosphate", "one hundred sixty over ninety-five", "zero point seven", "PGC-1 alpha".
+  - **Generation** (voice/gen_chapter.py, Charon, `PER_BEAT=1 MAX_PACE=4.3 MAX_INNER=1.6`, the Module 1 and 2 recipe): the transcript gate now compares the words letter for letter with the spaces removed and reads the course's notation as a transcriber may write it (NADH as N A D H, CoQ as co Q, acetyl-CoA as acetyl Co A, FADH with a subscript 2, GLUT4 heard as glute, Akt heard as act, Complex I to IV in Roman numerals, 160/95 and 50/50 as two numbers, 1RM as one rep max); a take tries "the direction was spoken" first (Charon spoke it on every take); a daily quota stops the run instead of waiting it out; the pace FLOOR counts a spelled acronym's letters (A T P takes as long as three words), the ceiling still counts written words. 93 clips on the shared key (100 TTS calls: 93 kept, 7 takes rejected for pace, 4 of them the acronym-dense Module 8 "atp"); the 94th (Module 8 "atp") on the owner's own key after the shared key's daily quota, first take.
+  - **Levels**: encode.sh as for Modules 1 and 2; one clip (Module 3 "turbine") rebuilt from its WAV 0.5 dB lower for its true peak. correct.cjs is not idempotent (a second run measures the corrected MP3 but rebuilds from the WAV), so clips are copied from the first pass.
+  - **Anchors** (H.74, one `_sync` note per story): every beat of the 13 newly narrated stories has 3 to 10 anchors, authored per story from its scene code and the CTC word onsets (four helpers, one per group of stories), so each reveal lands as Charon names it inside the beat's unchanged build; no scene code changed and sound off is unchanged. Examples: intro models' four shapes start on "First,", after "skills.", on "Three" and on "a continuum,"; skills ten's names land with the spoken list; hopper score's LEAD lands on "takes"; pathways workouts' cursor arrives at each pin on "400", "Fran," and "5k"; continuum bp's bead holds on each reading; health any-age's scanner reaches 50 on "fifty,"; Module 3 pump's arrows grow on "One", "Three" and "Four" and NO PUMP lands on "not"; Module 7 deaf's three chips start on their own sentences; Module 8 fix's badges heal one per sentence. A monotone warp cannot reorder reveals, so where a design packs two named things into one window, or builds them in another order than the voice names them, the first lands early (for example Module 4 krebs's FADH2 label about 6.6 s after its word, Module 5 superoxide's semiquinone label gone before its word, intro map's 05 CONTINUUM before 04 CAPACITY, hopper every-run's green run before the 64) and some beats hold a still picture while the voice finishes a point (skills both about 9 s, hopper many about 8 s, health line about 8 s). The helpers' lists of these spots are the input for a choreography pass like Module 1's (H.74), which changes build order in both modes and waits for the owner's review. Two health lines keep their recorded wording (line: "Where any part of the surface dips", which only happens from sink on; sink: "after fifty", which the Sedentary model does not mark): their rewrite waits for the next TTS quota.
+  - **Measured**: preview build of dd63110, `scripts/metfix-sound-qa.mjs` one browser at a time (software GL, 390 x 844): 1,012 checks pass. The gesture rule holds on /fitness too (the chip and the toggle, no AudioContext and nothing fetched under /narration/ before a gesture, a chip tap starts the chapter's voice, M on desktop); behaviour as in H.72; in all 15 stories every clip plays its whole duration once, in beat order, each beat holding until its clip ends plus the breath; sound off, all 110 beats last the C.3 rule; renders: mixes -15.6 to -15.8 LUFS, true peak -1.9 to -2.4 dBTP, voice stems -15.6 to -15.8 LUFS, the bed alone -31.8 to -32 LUFS (before H.76). Seven checks miss, all one kind: in the first 0.4 to 0.67 s of seven /fitness clips (continuum one-line, health line and hold, hopper specialists, unknown, many and every-run) the picture shows the build t of 0.2 to 0.25 s earlier, then follows within the tolerance for the rest of the clip; the engine places the picture at the clip position as heard (less the output latency) while the check reads the raw position, and these scenes' first frame is heavy in software GL. Every MetFix beat passes. Three runs in parallel on one machine failed 83 checks with timing jitter of the same kind (and one first clip that never armed): run the sound QA one browser at a time. A long run can stall in `render`; the same render alone passes in seconds. The live preview serves every clip byte-identical to the build.
+- **H.76 No hum under the voice** (2026-10-01; amends I.2.5 and the H.69 calibration). The owner, on the narrated /fitness lesson: "there is a hum sound behind" and then "the hum is kind of bad ... remove it". The hum was the bed's TONE (the chapter's suspended chord of sines, with its twin, 3rd harmonic and rising octave) sustained under every clip. `BED_LEVEL.note` is 0, so the chord is silent while its graph, the claim bells and every bed state stay as designed, and `BED_LEVEL.room` is 0.0182 (6 dB down), a faint air under the voice. The sound QA's bed check is now "at or below -36 LUFS"; measured -45.9 to -46.9 LUFS for the bed alone (was -32), mixes unchanged at -15.6 to -15.8 LUFS (the voice dominates them). The same change is on the /fitness release branch.
+- **H.77 The MetFix course thread: bridges and the trailer** (2026-10-01; H.65, H.66; `src/metfix-lab/STORYBOARD-bridges.md`). The owner, after hearing every module narrated: the chapters felt disconnected, Module 3 "directly started with the mitochondria. There was no context set". Each module now opens with a one-beat BRIDGE on a shared course map (`src/metfix-lab/kit/CourseMap.tsx`: four part bands, eight stops with their glyphs, one pen path; the last module's stop fills with its TAKEAWAY, the path draws on, the next stop rings with its QUESTION, the camera hands off), and a six-beat course TRAILER plays at `/metfix-lab/trailer`. Append-only engine change, every new field optional with today's behaviour as its default, so no /fitness chapter and no module changes: `StoryBrand.endExplore` (false drops "Explore this model" from the finished last beat's row; with no button left there is no row), `StoryBrand.endCta.go` (an in-app link instead of a new tab, rendered like `endNext`, outline when `endNext` is set), and `StoryBrand.onNext` (the host's next step past the last beat: `navigateChapter(1)` calls it for a branded story, so Next, the Right key and a swipe on the last beat reach it, and the transport's arrow stays enabled there, labelled "Continue"). The shell plays `bridge-<n>` before Module n whenever `/metfix-lab/<slug>` opens without `beat`, `t` or `explore` and swaps to the module in the same stage when the bridge reaches 'done' while playing (never on a held deep link, a seek or under reduced motion) or on Next; `?intro=0` skips it; `/metfix-lab/<slug>/intro` plays it alone and holds its end. Every module's end card names where the course goes: "Next: Module N+1, <its QUESTION>". The trailer ends on [All modules] [Start Module 1]. `scripts/metfix-sound-qa.mjs` maps a narrated `bridge-<n>` to `/metfix-lab/<slug of module n>/intro` and `trailer` to `/metfix-lab/trailer` (views `lab-metfix-bridge-<n>`, `lab-metfix-trailer`), and opens the modules with `?intro=0`.
+- **H.78 The athlete kit** (2026-10-01; `src/fitness/story/kit/athlete/`, C.11; serves the Technique storyboard, `STORYBOARD-technique.md` 7.3). Append-only: a new kit folder, nothing existing changes. A 1.78 m athlete in profile in the lesson's look: a dark ink body (`makeRimStandard`, a faint rim) under a constant-width chalk pen contour drawn as an inverted hull, three draw calls per figure (a depth prepass, the fill at less-equal so a fade or a ghost tint is one layer, the outline); a face in profile and ears, a trunk lofted along a real spine so the lumbar curve is the back's shape. The rig is joint space (`rig.ts`): bones keep their length, the legs are two-bone IK from planted feet, the knees sit exactly over the foot line once flexed, the hips' x is solved so the whole-body centre of mass (the implement included) is over mid-foot, and the medicine ball loads the balance only once it leaves the floor. Movements (`moves.ts`): 'mb-clean' (set-up, pull, extend, under, receive, stand, finish, return; one rep loops) and 'mb-pull' (the threshold beats' cycle), keyed to the Level 1 Training Guide's p. 208 photographs, plus the squat family. The rounded back (`faults.ts`, `PULL_SCALE`): the lumbar curve 40 to -20 and the hips rising ahead of the chest with the chest held at its textbook height (so the ball stays down), full through the set-up and pull, straightening as the hips extend. Story time only: `tempoPhase()` is closed form, so the 1 : 1.2 : 1.4 tempo never makes the phase jump and lands on a chosen position at t = 1. The floor is a band (`<Floor/>`): the camera's eye is above the floor, so a single line at the body's midline would cut the near foot and float the far one. Review page `/athlete-lab` (`src/athlete-lab/`, routed in development and on the /preview/ build only, noindex). Measured: about 28k triangles per figure (three passes), 19 to 26 calls a frame on MEDIUM with post; `?beat=N&t=X` reloads to identical pixels; (N, 1) equals (N + 1, 0) at every lab beat; 0 black frames of 148 on a real D3D11 GPU at tier high. Not built (the chapter does not use them; the rig exposes their inputs): the plumb line, bar-path trace, joint angle arcs and the hip-crease line.
+- **H.79 Chapter 07, What Is CrossFit?** (2026-10-01; `src/fitness/STORYBOARD-crossfit.md`, `src/fitness/stories/crossfit/`; B.2, B.5, C.14, H.57). The owner asked for the July Module 07 page (19f48e5, removed in be4f7d0) to be researched and rebuilt as a story; it is the lesson's seventh chapter at `/fitness/crossfit`, after Health. Registration: `ModuleKey` gains 'crossfit'; `MODULES[6]` (num '07', accent `PAL.gymnastics`, which no other chapter uses), `MODULE_COPY.crossfit`, `CROSS_LINKS.crossfit`, five crossfit sources and a research section of verbatim, page-cited constants in `fitnessData.ts`, so the caption audit resolves every source (section E item 18, a byte-identical `fitnessData.ts`, no longer holds; the additions are append-only except `ALL`, so the three general sources also list under 07); `scripts/seo-routes.mjs`. Everything ordered by `MODULES` follows: the top bar and the chapter sheet list seven chapters (B.5 said six rows), the progress hairline has seven segments (B.2 said six), Health's finished beat offers "Next: 07 CrossFit", and the lesson's end (H.57: the disabled Next, Back to overview, "Lesson complete" once all seven are done) moves to this chapter. The intro is unchanged by decision: its six-tile map, explore chips and hub list read `MAP_MODULES` (`stories/intro/models.ts`, the six models). Engine touches, both append-only: a pyramid glyph case in `ui/ChapterGlyph.tsx`, and a chapter key in `audio/bed.ts` (`KEYS` is a record over every view). Narration is open: H.75 has every /fitness chapter speak, but this one declares none yet (as briefed), so with sound on the voice and bed stop at 07 as for any unnarrated story; its paragraphs would restate the captions and the cited constants. The chapter's C3 and C4 chart uses its own `useChartFrame`, not `StoryDef.frame`, because its explore model is the pyramid and the explore re-fit checks read `StoryDef.frame` as the explore subject. Measured: `story-qa check crossfit` all 169 checks pass on a static build; 0 black of 200 story and 13 explore frames on a real D3D11 GPU at tier high.
+- **H.80 Chapter 08, Technique** (2026-10-02; `src/fitness/STORYBOARD-technique.md`, `src/fitness/stories/technique/`; B.2, B.5, C.14, H.57, H.78, H.79). Greg Glassman's essay "Technique" (L1 Guide pp. 40-44) is the lesson's eighth chapter at `/fitness/technique`, after What Is CrossFit, in ten beats (T0 to T9) as the storyboard sets out, captions verbatim. Registration as H.79: `ModuleKey` gains 'technique'; `MODULES[7]` (num '08', label 'Technique', accent `PAL.weightlifting`, the storyboard's proposal, owner to confirm), `MODULE_COPY.technique`, `CROSS_LINKS.technique`, a "Technique, Part 1" source (and the L1 Guide's entry lists 08), and four verbatim, page-cited article blocks (`TECHNIQUE_SEE`, `TECHNIQUE_TERMS`, `TECHNIQUE_GRAPH`, `TECHNIQUE_SPEED`, storyboard section 8) so the caption audit resolves every source (85 to 100% cited words); `scripts/seo-routes.mjs`. Everything ordered by `MODULES` follows: eight chapters in the top bar and the sheet, eight progress segments, CrossFit's finished beat offers "Next: 08 Technique", and the lesson's end (H.57) moves to 08. The intro keeps its six-tile map (`MAP_MODULES` leaves out 07 and 08). Engine touches, append-only: a Figure 1 glyph case in `ui/ChapterGlyph.tsx`, and a chapter key in `audio/bed.ts` (F, dormant until the chapter declares narration; none yet, as briefed). One engine chart frame for the whole chapter (`StoryDef.frame`, minAspect 0.70: the storyboard's 0.62 start tuned so every tall phone sits on the clamp and a caption or sheet detent never rebuilds it) and one front-on camera for every beat and explore; beats hand off inside the frame (Figure 1 FLIPs into T4's inset, the plane into T7's sub-rect). The athlete (H.78) appears only in T4, T7 and T8, its rep phase a closed-form integral of the path's tempo that lands on the pull at each beat's end (`techniqueMath.ts`, probe `tq-reps`). The kit's rig caches a pose by T, so a new chart frame at a held T would leave the figure and its ball seams where they were, and a new rig per render reused version numbers and drew stale poses; the chapter keeps one rig per figure and re-poses it through a small subclass keyed on T and an epoch (`KeyedRig`, Lifters.tsx; explore bumps the epoch every frame). Measured on a /preview/ build: `story-qa check technique` 201 of 205 checks pass, then the label gates alone 161 of 161 after the one fix (FIX IT AT THAT SPEED, culled at 390 x 664, now sits under the dip it rises from); 0 black of 310 story and explore frames on a real D3D11 GPU at tier high; at most 38 calls and 57k triangles (T4, two figures). Open: T1 and T2's bodies (131 and 133 characters, the storyboard's) take a fourth line at 390 px because Read more wraps (A.5 item 19 asks three), so the card grows 22 px there and the camera re-centres at the T0|T1 and T2|T3 boundaries (story-qa continuity 8.5% and 7.7% at 390 x 844; every other boundary 0.000%); a trim of a few characters in either caption, a storyboard call, removes it.
+
+---
+
+## I. Sound
+
+Status: BINDING. Added 2026-09-27 by the sound designer (amendment H.67) and revised the same day after the audio review (amendment H.68). With sound off, nothing in sections A to H changes. The owner decisions below are not reopened by anyone; everything else here follows the precedence rules at the top of this file.
+
+**Owner decisions (O1 to O9)**
+- **O1** Sound is OFF by default. A first-visit "Sound on" chip lives with the caption card; a compact speaker toggle lives in the top bar. The choice persists in `localStorage['fitness-sound']` (`'1'` on, `'0'` off, absent means undecided). Turning sound on IS the user gesture that unlocks audio: before it, nothing makes a sound and no AudioContext exists.
+- **O2** Web Audio for everything. The AudioContext is created lazily inside that gesture. Where supported, `navigator.audioSession.type = 'playback'` (tradeoff in I.3.6).
+- **O3** Narration drives timing when sound is on (I.6.4). Durations come from a manifest generated at BUILD time, never from runtime decoding. With sound off, timing is exactly today's, and the `?beat=N&t=X` seek contract is unchanged in both cases.
+- **O4** Behaviour: pause and resume continue the clip; prev, next, seek and scrub stop it; explore stops narration; a chapter change cancels it and crossfades the bed; a hidden tab pauses everything; reduced motion never disables sound (I.4).
+- **O5** Sound design is procedural Web Audio: no audio files other than the narration and no new dependencies. A small palette tied to meaning plus a very quiet generative bed per chapter. Chalkline tone: calm, precise, premium; a coach at a whiteboard in a quiet gym at night. Not trailer bombast, not game bleeps. It must not annoy on the fifth listen.
+- **O6** Mix: voice about -16 LUFS integrated and always intelligible; bed around -32 LUFS; effects never louder than the voice; bed and effects duck under the voice; a master limiter; true peak <= -1 dBTP.
+- **O7** Captions stay on screen as the subtitles.
+- **O8** A consistency gate (`scripts/narration-check.mjs`, wired into `scripts/fitness-gate.mjs`) and a build-time duration manifest (`scripts/narration-manifest.mjs`), I.6.5.
+- **O9** QA hooks: `?sound=0|1`, `window.__story.audio()`, `window.__story.renderAudio(fromBeat, toBeat)`, I.6.7.
+- **Voice** (superseded for MetFix by H.72 and for /fitness by H.75: every story now speaks its own explanatory paragraph per beat; the rest of this bullet stands): Charon (Gemini TTS), one clip per beat, speaking the caption BODY and nothing else: no title (the title is read on screen), no direction, no preamble. Clips live in `public/narration/<view>/<beat>-<hash>.mp3`: mono MP3, -16 LUFS integrated, true peak <= -2.0 dBTP, 120 ms of silence at each end, and every clip passes the I.6.5 gates before it is kept.
+
+**Asset status (2026-09-27, 18:13 UTC). Read this before building.** No usable clip exists yet. `voice/narr-mp3` was never produced. On the VPS, `gen_batch.py manifest.json narr Charon 2` is still running: it has written 13 raw WAVs (intro 4, skills 3, hopper 3, pathways 3; none for definition, continuum or health) and nothing since 17:08 (it is sleeping on 429s), from a manifest extracted before the latest caption edits (6 of 46 hashes are stale: hopper/unknown and pathways phosphagen, oxidative, power, workouts and all-three). And every clip it keeps is defective: its prompt begins "Read this warmly and clearly, like a coach explaining an idea at a whiteboard:", and the clips SPEAK that sentence, pause about 1 s, then speak the caption. Measured: in all 3 clips checked (intro/models, intro/map, skills/both) a 0.9 to 1.3 s silence ends 5.8 to 6.1 s in, after a first span of 4.7 to 4.9 s whatever the caption's length; the first span of intro/models transcribes as exactly the direction sentence and the rest as exactly the caption. Its whole-clip transcript check let them through because whole-clip transcription of such a clip is nondeterministic. All 13 are discarded.
+
+Order of work (binding): (1) stop that run; (2) re-run `extract.cjs` against the current chapter heads; (3) generate with the I.6.5 method and gates, definition first; (4) encode and copy the 7 Capacity clips into `public/narration/definition/`; (5) only then can the exemplar commit, because the gate (I.6.5) cannot go green without them and is never bypassed. The other chapters' clips are generated after each chapter's captions freeze, and again after any later caption edit (the gate forces it).
+
+#### I.1 Principles
+
+1. **Sound explains.** Every sound means one thing the viewer can see at that instant: the pen is drawing, a mark has landed, light is filling, a brick has hit, the claim has landed, the view is revealing depth. A sound with no visible cause at that moment does not exist.
+2. **The voice leads.** Everything else sits under it and ducks for it (I.3.3). Nothing is ever louder than the voice. No continuous effect is louder than -22 LU re voice, because the voice lives in the 1 to 4 kHz band those effects would cover.
+3. **A coach at a whiteboard in a quiet gym at night.** Soft, close, dry, precise: chalk, glass and light. The contact leads and any pitch rings like glass: no bare sine blips, no e-piano chimes, no slide whistles. No risers, booms, sub drops, dramatic whooshes, stingers, zaps, coins or tunes. No reverb: the bed is the room. A set of events may change pitch only to show a direction (up for better or more, down for less) or to name one of a few things (the three engines keep one pitch each: phosphagen +7, glycolytic +2, oxidative 0 semitones from the tick pitch, introduced in that order in P1, P2 and P3), within 7 semitones in total and on the chapter's chord tones. The one exception is D4, which names three other chapters by their own tick pitches. Pitch moves only in steps (discrete events on chord tones), never by a continuous glide.
+4. **Restraint budget** (checked per beat in I.7):
+   - at most 4 cue entries per beat (a continuous sound, a repeated mechanic or a staggered set counts as one entry);
+   - one claim sound (`resolve` or `resolve.fall`) per signature beat (A.3) and nowhere else;
+   - at most 6 audible events in any staggered set;
+   - never two continuous effects at full level at once: where windows overlap, the earlier one ducks 6 dB for the overlap;
+   - no effect in the first 150 ms of a beat (the caption swap: say it, then show it);
+   - at most 16 transient events in any second, effects and ambient grains together (I.3.6); above that the ear hears a texture anyway, and a texture is what `clack.rain` becomes (I.2.3);
+   - every event gets seeded gain jitter (+/-1 dB). Pitch jitter only where it cannot beat against the tuned bed: +/-20 cents on noise sources and on transients whose pitched decay has tau <= 25 ms (the `tick.label` sine, `clack`, `ball`, `flip`, the `rattle` clicks, the `pour` grains, `ui.tap`); +/-4 cents on pitched events with longer tails (`tick.dot`, the fifth of `tick.claim`, `tick.close`, `tick.steel`, `tick.meet`, `ui.on`); 0 cents on `resolve`, `resolve.fall`, the `pour` tone, the `pen` head glow and the `pen.scan` tone, which sound with the bed (20 cents against a held F#5 beats at 8.6 Hz);
+   - pitch comes only from the chapter chord (I.2.2); noise textures are unpitched, and the UI sounds are the same fixed pitches in every chapter (they belong to the chrome).
+5. **Sound follows picture.** Ambient sound exists only where the picture has ambient life (B.11: the drum, the river), so a held, paused or reduced-motion picture has no ambient sound. Every cue's timing is sampled from the Scene's own cue function (I.6.2), so a retimed animation carries its sound with it.
+6. **The phone speaker is the reference.** A phone speaker gives almost nothing below 300 Hz, so every sound keeps its identity between 300 Hz and 8 kHz, and anything low is doubled an octave up or carried by its partials. Everything is mono-compatible (no inverted-phase widening); effect pans stay within +/-0.35.
+7. **Deterministic, and honest about it.** Every story sound is scheduled from the beat plan (I.6.4): its time comes from the scene's own cue function, its randomness from `rng.ts` seeds. The offline render of a range of beats repeats within 1 LSB at 16 bits (0.03% of samples differ by 1 LSB: Chromium's float rounding, H.71). It is the REFERENCE MIX, the closest measurable stand-in for the phone, not the phone itself: it runs Chromium's compressor, oversampler and MP3 decoder, not WebKit's; MP3 priming shifts speech spans by about 25 ms; realtime scheduling drifts by a frame. The real-iPhone checks in I.8 are the final judge.
+8. **The fifth listen.** A sound that draws attention to itself on the fifth listen loses 3 dB or is deleted.
+
+**What never makes a sound**: counting numbers (HUD readouts, totals, scores); fades, dims and focus pulls; gridlines, tick marks and axis titles (construction under the hot stroke); labels leaving; the slate and loading; parallax; hover, scroll and page chrome; any camera settle, framing move or return that I.7 does not list; a held deep link; a reduced-motion cut; errors; anything in explore the viewer did not touch; scrubbing, apart from its soft boundary tick (I.4).
+
+#### I.2 The palette
+
+#### I.2.1 Conventions
+
+- **Noise.** Two noise buffers are made once per context from `mulberry32` (`rng.ts`): white (seed 0x5eed01) and pink (seed 0x5eed02, Paul Kellet's filter, normalised to -12 dBFS RMS), 2 s each, mono, looped. Each event starts them at offset `hash1(eventSeed) x 2 s`. Oscillators are sine `OscillatorNode`s unless stated. No AudioWorklet, no files.
+- **The transient bank** (`bank.ts`). Every short recipe (the `tick` family, `clack`, `ball.drop`, `flip`, `tick.card`, the `ui` sounds except `ui.on`, the `rattle` click, the `pour` grains) is rendered ONCE per context into small mono `AudioBuffer`s: 4 seeded variants of each at its base pitch, all rendered by one `OfflineAudioContext` at the context's sample rate right after unlock (about 20 s of audio in total, rendered in the background in well under a second on a phone) and sliced. An event is then one `AudioBufferSourceNode` (its variant chosen by the event seed, its pitch set by `detune`), one `GainNode` and, when panned, one `StereoPannerNode`. A transient due before the bank is ready is skipped, never synthesised live. The offline render builds the same bank inside its own context first, so a render plays what the page plays. The bank keeps every sound procedural and deterministic, and it keeps H5 (16 events per second at most) at about 50 node creations per second instead of about 500.
+- **Continuous sounds** (`pen`, `pour`, `air`, the `clack.rain` patter, the ambient layers, the bed) stay live node graphs; only a handful exist at once.
+- **Two gains per voice.** Every voice ends in `env` (its envelope: the speed curve from `setValueCurveAtTime`, the attack and the release, all scheduled once and NEVER touched again) followed by `cut` (1.0; the ONLY gain that pause, cut and release write, with `cancelScheduledValues(now)` then `setTargetAtTime`). Inserting an event into a gain inside a `setValueCurveAtTime` span throws NotSupportedError, and continuous cues are cut, paused and resumed mid-window all the time (Next, Pause, explore).
+- **Levels.** "LU re voice" is the sound alone, as its momentary loudness maximum (M, 400 ms window, EBU R128) minus -16 LUFS, the voice's integrated level. Transients shorter than 100 ms are specified by sample peak (dBFS) instead. Gains inside a recipe are relative to that recipe's loudest component.
+- **Envelopes.** Times in ms. "tau" is the time constant of `setTargetAtTime` (-60 dB after 6.9 tau). Every live node is stopped 200 ms after its envelope reaches -60 dB and disconnected on `ended`.
+- **Pitch.** Equal temperament, A4 = 440 Hz. "Tick pitch", "bell root", "chord" and "answer" come from the chapter row of I.2.2.
+- **Cue shapes** (`cueFrom`, I.6.2). A cue's timing is sampled from the Scene's own cue function over its beat: 601 samples of beat t. A SEGMENT is a maximal monotonic run in which the value changes (a pulse gives two: its rise and its fall). For each segment: `a` is the first sample past 2% of its change, `land` the first sample within 2% of its final value (for an overshooting ease such as `snap` that is the first contact, where the eye reads arrival), `half` the 50% crossing, `b` the last sample that changes. A continuous sound's level follows the segment's SPEED: the sampled derivative, normalised to 1 at its peak, resampled to 32 points for `setValueCurveAtTime`, so a stroke that accelerates and settles sounds like it. The `[a, b]` numbers in I.7 are what the sampling found on 2026-09-27; the code never contains them.
+
+#### I.2.2 Chapter keys
+
+| Chapter | Key | Chord (bed) | Answer (the third; enters at the claim) | Bell root | Tick pitch |
+|---|---|---|---|---|---|
+| Intro | D | D3 146.83, A3 220.00, E4 329.63 | F#4 369.99 at I4 about 0.66 (tile 06 lands) | D5 587.33 | D6 1174.66 |
+| 01 Skills | A | A3 220.00, E4 329.63, B4 493.88 | C5 523.25 (minor) at S4 0.66, gone at S5 0; C#5 554.37 at S5 0.80 | A4 440.00 | A6 1760.00 |
+| 02 Hopper | E | E3 164.81, B3 246.94, F#4 369.99 | G#4 415.30 at H4 0.62 | E5 659.26 | E6 1318.51 |
+| 03 Energy | B minor | B3 246.94, F#4 369.99, C#5 554.37 | D5 587.33 at P4 0.60 | B4 493.88 | B5 987.77 |
+| 04 Capacity | D | D3 146.83, A3 220.00, E4 329.63 | F#4 369.99 at D3 0.80 | D5 587.33 | D6 1174.66 |
+| 05 Continuum | F# minor | F#3 185.00, C#4 277.18, G#4 415.30 | A4 440.00 at C3 0.90 | F#5 739.99 | F#6 1479.98 |
+| 06 Health | G | G3 196.00, D4 293.66, A4 440.00 | B4 493.88 at L5 0.30 | G4 392.00 | G6 1567.98 |
+
+Each chord is suspended (root, fifth, ninth) until the claim adds its third: the chapter asks a question and the claim answers it. The answer is played ONLY by the bed, fading in under the claim's bell (I.2.5); the bell itself strikes an open fifth and never the third. The "at" times are those of each chapter's claim cue (I.7), and the code takes them from that cue. Capacity shares the intro's key because it is the definition the intro promised. The lesson ends back in D (I.2.5).
+
+#### I.2.3 Sounds
+
+Each entry gives meaning and use, recipe, and level. Variants are separate `SfxId`s (I.6.2).
+
+**`pen`: the pen of light draws.** Variants `pen`, `pen.dash`, `pen.bundle`, `pen.slide`, `pen.scan`.
+- Meaning: a line is being drawn by the pen head right now. Only for strokes with a pen head that are the beat's construction or data, and only when the stroke lasts 250 ms or more. Never for grids, ticks, fades or rests.
+- `pen`: pink noise to a bandpass at 4.8 kHz x (1 + 0.35 v), Q 0.7 (the airy tooth of a felt tip on glass), plus a body: the same noise to a bandpass at 850 Hz, Q 1.4, at -12 dB (so a phone speaker carries it). Grain: the sum's gain is modulated by white noise lowpassed at 30 Hz, depth 25%. Head glow: a sine at the bell root at -24 dB, 0 cents, so the head glows faintly in key. Level curve `0.35 + 0.65 v^0.6`, where v is the segment's speed (I.2.1); attack 25 ms, release 80 ms. Pan: `[from, to]` ramps across the window; `'orbit'` is `0.3 sin(2 pi u)`, clockwise from 12 o'clock.
+- `pen.dash`: `pen` gated at 7 Hz, duty 0.6, 4 ms ramps. A dashed chalk line (the specialist, L8) sounds dashed.
+- `pen.bundle`: two bands (3.2 kHz and 6.5 kHz, Q 0.5), no glow, fixed pan +/-0.3 on two seeds: many lines drawing at once.
+- `pen.slide` (a bead slides along a row toward better): a TEXTURE, not a tone. The `pen` noise is the whole sound: its high band's centre rises from 900 Hz to 1.8 kHz across the window along the eased progress p (`900 x 2^p` Hz, Q 1.2), its body band stays at 850 Hz at -12 dB, and its level follows the speed. Over it, 3 to 5 soft glass grains per window (bank `tick.label` clicks without their sine, at seeded times spread by the speed, -12 dB). No pitched glide and no head glow. Pitch appears only as discrete chord-tone events: the arrival `tick.label` marks the new value (I.7), and a cue may add a departure tick 6 dB under its arrival.
+- `pen.scan`: a steady scanner: noise to a bandpass at 3 kHz, Q 2, plus a sine at the bell root at -18 dB, flat level (a time-true sweep).
+- Level: M max -26 LU re voice (-42 LUFS); sample peak <= -32 dBFS.
+
+**`tick`: a mark lands.** Variants `tick.dot`, `tick.label`, `tick.claim`, `tick.close`, `tick.steel`, `tick.meet`, `tick.card`. All are bank transients.
+- Meaning: a discrete mark has arrived: a dot snaps, a label or callout lands, a shape closes. Annotation, never data.
+- The CLICK (shared): white noise, 5 ms, highpassed at 2.5 kHz and bandpassed at 5 kHz (Q 1), tau 3 ms.
+- `tick.label`: the click at 0 dB (the contact leads); a sine at the tick pitch, attack 1.5 ms, tau 15 ms, at -6 dB; an inharmonic partial at 2.76 x the tick pitch, tau 10 ms, at -14 dB, so it rings like glass instead of bleeping. Peak -30 dBFS.
+- `tick.dot` (H.71, the owner's A/B): by default 'glass', contact-led like every tick: the click at 0 dB, a sine at the bell root x 1.5 at -6 dB (attack 1.5 ms, tau 25 ms), and the x 2.76 partial at -14 dB (tau 12 ms). Peak -22 dBFS (the click sets it; its K-weighted energy matches the old recipe within 0.3 dB). `?tick=round` plays the H.69 recipe: a round, soft "tok", a sine at the bell root x 1.5, tau 40 ms, plus a sine at 2.01 x that pitch at -14 dB, plus the click at -10 dB for contact, peak -28 dBFS. The owner keeps one by ear on the phone. With `ring: 'ripple'` (D0: the dot lands with its Ripple) add three sine grains at the tick pitch x 1, 1.5 and 2, 25 ms apart, at -14 dB; with `ring: 'shimmer'` (D6: a row's light pours in) add 120 ms of `pour` grains at -16 dB.
+- `tick.claim`: `tick.label` plus a sine at its fifth (x 1.4983), tau 60 ms, at -8 dB: a callout that states a claim, still small. Peak -27 dBFS.
+- `tick.close`: a glint: the click at 0 dB; a sine at the tick pitch (or the cue's pitch), attack 4 ms, tau 90 ms, at -6 dB; the x 2.76 partial, tau 45 ms, at -14 dB. Peak -30 dBFS.
+- `tick.steel`: steel rings once: the tick pitch (E6 in the Hopper) with inharmonic partials x 2.76 (-6 dB), x 5.40 (-12 dB) and x 8.93 (-18 dB), tau 180 ms, plus the click at -6 dB. Peak -30 dBFS.
+- `tick.meet`: two `tick.close` voices at once, at the tick pitch and its fifth (x 1.4983): two families meeting.
+- `tick.card`: a card flies in: white noise 40 ms, bandpass sweeping 2.2 to 3.5 kHz (Q 1.5), attack 8 ms, no sine. Peak -34 dBFS.
+- Staggered sets: one event per element at that element's own land (or the cue's `on`); at most 6 audible, or the cue's `max` (2 to 6; H.71) (the first, the last and evenly between); each event 0.6 dB softer than the one before; minimum spacing 45 ms (closer events merge). Pitch: the variant's pitch, or the cue's `pitch` list in semitones.
+
+**`pour`: light fills an amount.** Variants `pour.fill`, `pour.sweep`, `pour.flood`, `pour.drain`, `pour.lift`, `pour.glow`.
+- Meaning: an amount of light is filling or leaving a region. The amount of sound follows the amount of light (L9). Only where a pour, sweep, flood, spill, sink or lift is on screen.
+- `pour.fill` (H.71: the amount without a sweep-and-crescendo): pink noise to a bandpass (Q 1.1) whose centre follows the amount A: `800 x 2^(0.75 A)` Hz (800 Hz to 1.35 kHz, under one octave). A is the fill fraction L normalised to reach 1 at 60% of the window (`POUR_SETTLE`) and held after it. The noise level is FLAT after the attack. Shimmer: bank grains of 30 ms (attack 2 ms, tau 12 ms) at chord tones x 4 and x 8, at a density that follows A (2 per second up to 12), each at -16 dB, seeded pan within +/-0.3. Tone: a sine at the bell root / 2, 0 cents, plus its octave at -6 dB for phone speakers, whose level rises with A from -40 to -26 dB. The amount lives in the tone and the density, never in a rising level or a wide sweep. From 60% of the window everything holds and the noise and its grains ease down 3 dB, so the last part of a pour (1.4 s in D3) is flat or falling and never builds like a riser into the claim that often follows it (`pour.sweep` does the same). Attack 250 ms, release 900 ms, during which the grains thin to 3 per second (the light settling). M max -22 LU re voice; peak <= -26 dBFS.
+- `pour.sweep` (an area sweeps left to right): as `pour.fill`, its grain density 2 up to 6 per second, pan -0.3 to +0.3. M max -26 LU.
+- `pour.flood` (an Energy band floods): a fixed centre per engine, drifting +/-15% across the window: phosphagen 2.4 kHz, glycolytic 1.25 kHz, oxidative 620 Hz plus its octave band at -6 dB. No grains (the river layer takes over). M max -24 LU.
+- `pour.drain` (a spill, a sink): centre `2.75 kHz x 2^(-2.4 L)` through a lowpass at 1.8 kHz; 10 grains per second, each a bank variant that falls 3 semitones. M max -24 LU.
+- `pour.lift` (a surface or a profile lifts): centre `400 x 2^(2 L)` Hz, Q 1.6; 8 grains per second; the tone steps up a fifth at the segment's `half` (a discrete step, never a glide). M max -23 LU.
+- `pour.glow` (a region lights without moving): a fixed centre at 900 Hz, Q 0.7, attack 400 ms, no grains. M max -28 LU.
+
+**`clack`: a brick lands** (Hopper). Variants `clack`, `clack.rain`.
+- `clack` (bank): white noise 4 ms to a bandpass at 1.35 kHz (Q 5), plus a bandpass at 640 Hz (Q 7) at -8 dB; body: a sine at E3 (164.81 Hz) dropping a fourth over 30 ms (tau 22 ms) at -6 dB, plus its octave (E4) at -10 dB so a phone hears it; overall tau 25 ms. The six bricks of one draw form a ripple, each 0.5 semitone lower. Peak -26 dBFS.
+- `clack.rain` (H5: 35 draws, up to about 48 bricks per second on screen): individual bank clacks at -10 dB (a tau 12 ms variant) at `min(rate(t), 10)` per second, pitch jitter +/-3 semitones, seeded pan within +/-0.35. The rate above 10 per second becomes the PATTER: one continuous layer (pink noise to a bandpass at 1.35 kHz, Q 1.2, plus 640 Hz, Q 2, at -6 dB) whose level follows `min(1, (rate(t) - 10) / 26)`: the sound of many, which is what the ear hears above about 12 events per second anyway. M max -30 LU.
+
+**`ball`: a ball drops** (Hopper). Variants `ball.drop`, `ball.cascade`.
+- `ball.drop` (bank): a hollow knock: a sine gliding from E4 (329.63 Hz) down to 262 Hz over 60 ms (baked into the buffer), tau 70 ms, with its octave at -8 dB, plus white noise 6 ms to a bandpass at 950 Hz (Q 4) at -6 dB; one bounce 95 ms later at B3 (246.94 Hz), -9 dB. Peak -26 dBFS. The unknown ball (H4) is its own bank entry, 5 semitones lower, tau 110 ms.
+- `ball.cascade` (H0): 25 knocks at -12 dB, seeded pitches from the chord tones between B3 and F#4, spread by the segment's speed (about 12 per second). M max -30 LU.
+
+**`flip`: the ticket flips** (Hopper, bank).
+- Two white-noise bursts of 14 ms, 45 ms apart, highpassed at 1.8 kHz and bandpassed at 3.2 kHz (Q 0.9), the second at -4 dB; then a `tick.label` at the window's end (the snap flat). Peak -30 dBFS.
+
+**`air`: the view reveals a dimension.** Variants `air.reveal`, `air.swing`, `air.deep`.
+- Meaning: the camera moves to reveal depth, age, lanes or a pit (L6, reason 1). Only where I.7 lists it. Never under reduced motion (the camera cuts).
+- `air.reveal`: pink noise to a bandpass (Q 1.4) whose centre rises exponentially from 350 Hz to 1.4 kHz over the first 60% of the window and falls to 800 Hz over the rest; level `sin^2` across the window; pan 0.2 x the sign of the camera's azimuth change.
+- `air.swing`: the centre makes one slow orbit (700 Hz +/-40%) and the pan orbits +/-0.3 (the Continuum rows swinging into a circle).
+- `air.deep`: `air.reveal` in a band from 200 to 700 Hz (the tilt that shows a pit).
+- Level: M max -30 LU re voice; peak <= -36 dBFS.
+
+**`resolve`: the claim lands.** Variants `resolve` (rise), `resolve.fall`.
+- Meaning: the chapter's signature claim has landed. One per signature beat (A.3), at the cue I.7 gives. Rise for a gain, fall for a loss. It must read as calm confirmation, never as a reward: no third, no arpeggio, no harmonic chime.
+- `resolve`: two FM bells, each a carrier sine at f with a modulator sine at 3.5 f (an inharmonic ratio with partials at 1, 2.5, 4.5 and 6 x f: glass, not the odd-harmonic e-piano a 1:2 ratio gives), index starting at 1.2 and falling to 0.15 (tau 300 ms), amplitude attack 6 ms, tau 1.1 s (a tail of about 4 s). Voices: the bell root (0 dB, pan -0.12), then its fifth (x 1.4983, -4 dB, pan +0.12) 75 ms later: an OPEN FIFTH, neutral and calm. Bloom: pink noise lowpassed at 2.2 kHz, attack 300 ms, tau 900 ms, at -20 dB, the breath of the light under the bell. At the bell's first strike the bed's answer note begins its 4 s fade-in (I.2.5): the claim is answered by the room, not by a chime. 0 cents jitter.
+- `resolve.fall`: the loss, by register and darkness, never by a bend or a clash. The same two bells an octave below the rise's (the bell root / 2 and its fifth: D4 and A4 in Capacity, A3 and E4 in Skills; on a phone speaker the lowest are heard through their 2.5 f and 4.5 f partials, which is part of the darkness), index 1.0 falling to 0.15, 75 ms apart, amplitude tau 0.6 s (a tail of about 2 s), through a lowpass that closes from 1.6 kHz to 700 Hz over max(0.9 s, the source segment's length), at most 1.5 s. No glide (a bend against the held bed reads as a bell going flat, the "sad trombone" in miniature) and no bloom. Any minor colour comes from the bed (Skills), and the Capacity bed dips its F#4 under the D5 fall.
+- Level: rise target M max -14 LU re voice (-30 LUFS), ceiling -12 LU, still the loudest effect in the lesson; fall target -16 LU, ceiling -14 LU; peak <= -18 dBFS.
+
+**`ui`: the viewer's own touch.** `ui.tap`, `ui.step`, `ui.grab`, `ui.on` (bank transients, except `ui.on`, which is synthesised live because it sounds before the bank exists).
+- `ui.tap` (chips, toggles, explore buttons, play and pause): a sine at 1.6 kHz, attack 1 ms, tau 9 ms, plus a 2 ms click highpassed at 4 kHz at -10 dB. Peak -34 dBFS.
+- `ui.step` (next, prev, swipe, segment tap, transcript tap, intro tile): a sine gliding from 740 to 700 Hz, tau 16 ms, plus the click at -12 dB. Peak -32 dBFS.
+- `ui.grab` (an explore drag handle is picked up): `tick.dot` at -6 dB.
+- `ui.on` (sound was just turned on; the first sound the lesson ever makes): two `tick.close` glints, the current chapter's bell root and its fifth, struck together as one open dyad (H.70: a rising two-note figure is a notification chime), tau 140 ms. Peak -26 dBFS.
+- UI sounds fire immediately on the gesture (no lookahead), on their own bus, never ducked and never scheduled from story time.
+
+#### I.2.4 Ambient life (on the bed bus)
+
+These exist only while the picture moves on the ambient clock A (L5, B.11): in unheld autoplay and in explore. Held, paused and reduced-motion pictures have none.
+- **`rattle`** (the Hopper drum): UNPITCHED steel clicks, never a ticking clock. Each grain is a bank click: white noise 3 ms to a bandpass at 2.1, 2.9 or 3.7 kHz (seeded), Q 10; one grain in four (seeded) carries a faint ring (the tick pitch and x 2.76, tau 60 ms) at -24 dB, the rest none. Timing: a seeded Poisson process (exponential gaps, at least 40 ms apart), mean rate 3.5 per second x the layer's `rate(T)` (1 normally; H5 passes `1 + spinBoost`), at most 8 per second and always inside the 16-per-second budget (I.3.6), so H5's spin reads as a real change while the `clack.rain` patter carries the rest of the rush. Gain jitter +/-4 dB, lowpass 5 kHz, pan from the drum's side of the screen (P 0, L -0.3). Alone at the base rate: -44 LUFS, times the layer's `level(T)` (the drum built and visible).
+- **`river`** (Energy): one flow layer per engine: pink noise to a bandpass (phosphagen 2.4 kHz, Q 2.5; glycolytic 1.25 kHz, Q 2.2; oxidative 620 Hz, Q 2, plus 1.24 kHz, Q 3, at -6 dB), with a slow amplitude drift (noise lowpassed at 0.3 Hz, depth 30%) and a centre that drifts +/-5% with A. Each layer alone: -44 LUFS, times its `level(T)` (the band's motes are on).
+
+#### I.2.5 The bed (one per chapter)
+
+- **Room** (shared by every chapter: the gym at night): two decorrelated pink noises panned -0.5 and +0.5, highpassed at 150 Hz, lowpassed (two 12 dB per octave stages) at a cutoff that follows the beat, 800 Hz on a chapter's first beat to 2 kHz on its last (H.71), with a level trim that keeps its loudness constant as it opens, and a slow drift (0.021 Hz, +/-1.5 dB). Alone: -40 LUFS. The room never crossfades on a chapter change: it is the same room, which darkens back to the new chapter's first beat over 3 s.
+- **Tone** (the chapter chord, I.2.2). Each chord note is:
+  - its fundamental, a sine at 0 dB, plus a twin 2 cents sharp at -9 dB: a slow shimmer of about +/-3 dB at 0.2 to 0.6 Hz (0.57 Hz on B4), not a full-depth throb;
+  - its 3rd harmonic at -20 dB, so the lowpass below has something to open (in Capacity: 440, 660 and 989 Hz, all in a phone speaker's range);
+  - its octave, whose level rises across the chapter from -16 dB on the first beat to -6 dB on the last (H.71; was -14 to -8). A phone speaker plays the octaves and the 3rd harmonics and little of the fundamentals, so this is where a phone hears the room brighten;
+  - its own amplitude drift (periods 17, 23 and 29 s; +/-2 dB).
+  Notes are panned -0.25, +0.25 and 0, summed and lowpassed (cutoff below).
+- **Answer**: the chord's third (I.2.2), built like a chord note, fading in over 4 s from the claim bell's first strike and staying to the chapter's end, at -6 dB re one chord note.
+- **Whole bed alone**: -32 LUFS +/- 1.5 over a chapter (ducking off). The octave and 3rd-harmonic layers are in this figure; re-meter after any change to the tone.
+- **Evolution across beats**: at each beat start, over 3 s, the tone's lowpass glides to `600 x 2^(1.2 n / (N - 1))` Hz for beat n of N (600 Hz on the first beat, about 1.38 kHz on the last), the room's lowpass to `800 x 2.5^(n / (N - 1))` Hz, and the octave layer to its level for beat n: the room audibly brightens as the argument builds (Capacity: the bed's phone-band centroid rises 42% from D0 to D6 at a constant loudness, H.71). Chapter specifics:
+  - Skills: the minor third C5 enters with the S4 fall and fades at S5 0 (over 4 s); the major third C#5 arrives at S5 0.80 (only the generalist has no deep gap).
+  - Capacity: the answer dips 6 dB from the D5 fall's first strike (label `lost`, 0.62) and recovers at D6 0 (over 4 s).
+  - Continuum: across C6 [0.70, 1.0] the cutoff closes 25% (the pit darkens) and stays.
+  - Health: across L4 [0.05, 0.80] the cutoff closes 20% (the surface sinks) and reopens across L5 [0, 0.30]. After the last beat is done, the G chord crossfades over 5 s into the intro's D chord with its answer (D3, A3, F#4) before the bed fades: the lesson ends where it began.
+- **Enter and leave**: the bed fades in over 2.5 s when sound turns on or a chapter is loaded. On a chapter change the old tone fades out over 1.2 s and the new tone fades in over 2.5 s from the new chapter's `loaded`. After a chapter's last beat is done, the bed holds 8 s, then fades out over 6 s. Under reduced motion see I.4.
+- **The state is a function of the beat.** The bed's state at the start of beat n (answer entered or not, cutoff, octave level, the Skills thirds, the Capacity dip, the Continuum and Health darkening) is computed as if the chapter had played from beat 0, so a deep link, a jump or an offline render of a mid-chapter range starts in the right room (I.6.7).
+
+#### I.3 Mix
+
+#### I.3.1 Graph
+
+```
+voice clip -> voice cut -> voice bus (0 dB, highpass 80 Hz) -------------------+
+effects    -> env -> cut -> sfx bus (0 dB) -> sfx duck (0 / -3 dB) ------------+
+bed, ambient -> env -> cut -> bed bus (0 dB) -> bed duck (0 / -6 dB) -> bed mode gain --+--> pre-master
+ui         -> ui bus (0 dB, never ducked) --------------------------------------+
+pre-master -> limiter (DynamicsCompressor) -> makeup trim -> ceiling (WaveShaper 4x) -> master fade -> destination
+analysers (QA only, I.6.7): one per bus after its duck, one on the master
+```
+
+- **Bed mode gain**: story playing 0 dB; explore -4 dB; paused, held or hidden: fades to silence over 1.2 s; done: holds 8 s, then fades over 6 s; reduced motion: I.4.
+- **Master fade**: 0 dB while sound is on; turning sound off fades it to silence over 200 ms, then the context suspends. A hidden page ramps it to 0 over 60 ms (I.3.6).
+- The same `buildGraph(ctx)` builds the phone's graph and the offline render's graph, so a render measures the real chain. The analysers are created only with `?sound=1` or in a development build.
+
+#### I.3.2 Gain staging
+
+Every bus sits at 0 dB; levels come from the sources, which are designed to these targets.
+
+| Source | Alone | Under the voice |
+|---|---|---|
+| Voice clip | -16 LUFS integrated, true peak <= -2.0 dBTP (encoded at -2.5, I.6.5) | not ducked |
+| Bed (room, tone, answer) | -32 LUFS integrated | -38 (duck -6) |
+| Ambient layer (the rattle at its base rate, one river band) | -44 LUFS | -50 |
+| `resolve` (the loudest effect) | M max -30 LUFS (-14 LU re voice; ceiling -12 LU) | -33 |
+| `resolve.fall` | M max -32 LUFS (-16 LU; ceiling -14 LU) | -35 |
+| `pour.fill` | M max -38 LUFS (-22 LU) | -41 |
+| `pen`, `pen.slide` | M max -42 LUFS (-26 LU) | -45 |
+| `air` | M max -46 LUFS (-30 LU) | -49 |
+| Transients (`tick`, `clack`, `ball`, `flip`) | peak -26 to -34 dBFS | 3 dB lower |
+| `ui` | peak -26 to -34 dBFS | not ducked |
+
+#### I.3.3 Ducking
+
+- Ducking is SCHEDULED, not detected: each clip's speech spans come from the manifest (`speech`, I.6.5), so the phone and the offline render duck identically and the duck can lead the voice.
+- For each span the ducks start 100 ms BEFORE the first syllable (the voice lands in a clear space) with a 120 ms ramp (`setTargetAtTime`, tau 40 ms), hold through gaps of 0.8 s or less, and release 700 ms after the span ends (tau 600 ms, `DUCK_RELEASE_TAU`; H.71, was 230 ms: over a long gap the room rises back instead of swelling). The merge threshold MUST be at least the release delay plus the lead (0.7 + 0.1 s): for a shorter gap the release would be scheduled after the next duck-down and win, leaving the bed and the effects unducked for the rest of the clip (H.70). 0.8 s is also the I.6.5 gap gate, so a clip that passes the gate never releases mid-line. `DUCK_LEAD`, `DUCK_RELEASE` and `DUCK_MERGE` in `director.ts` hold these numbers.
+- **The bridge across beats** (H.71). When autoplay carries on into a narrated beat, the release after a clip's last span is skipped if the next beat's planned first duck-down (this beat's planned total, the next beat's LEAD and its first speech span, all known from the plan) follows it within `DUCK_BRIDGE` 1.5 s: the release moves to that duck-down plus `BRIDGE_SAFETY` 2.0 s, the next clip's schedule replaces it, and if no clip follows it still releases. So the bed does not pop up for a fraction of a second at every sentence change; between the first and the last syllable of a chapter no un-duck window is shorter than 0.8 s. A clip's natural end never releases the ducks (its schedule does), and neither does an autoplay beat start; the phone and the offline render share `duckSchedule`.
+- Depth: bed -6 dB, effects -3 dB, ui 0 dB.
+- When the voice pauses or is cut, both ducks release at once (tau 120 ms).
+
+#### I.3.4 Limiter and ceiling
+
+- The limiter only catches SUMS: the voice alone never reaches it, because every clip is encoded to true peak <= -2.0 dBTP (I.6.5).
+- `DynamicsCompressorNode`: threshold -2.0 dBFS, knee 0, ratio 20, attack 0.001 s, release 0.12 s.
+- The node applies automatic makeup gain (Web Audio: `(1 / fullRangeGain)^0.6`). A trim right after it cancels it; the director computes the trim from the settings at init, so the chain has unity gain below the threshold whatever the settings.
+- `WaveShaperNode` ceiling, `oversample = '4x'`, a 4097-point curve: linear up to 0.794 (-2.0 dBFS); above it `0.794 + 0.077 tanh((|x| - 0.794) / 0.077)` with the sign kept, a soft ceiling at 0.871 (-1.2 dBFS) that catches the inter-sample overs the compressor lets through.
+- Expected: no gain reduction on voice-only passages and in speech gaps; at most 1.5 dB when a resolve or a pour lands under a voice peak; true peak around -1.8 dBTP, never above -1.0 dBTP.
+
+#### I.3.5 Meter targets
+
+Measured with `ffmpeg -hide_banner -i render.wav -af ebur128=peak=true -f null -` on `__story.renderAudio` output (I.6.7).
+
+| Render | Integrated | True peak | Also |
+|---|---|---|---|
+| Full mix, a whole chapter | -16.0 LUFS +/- 1.0 | <= -1.0 dBTP | LRA <= 8 LU |
+| Voice stem | -16.0 LUFS +/- 0.7 | <= -2.0 dBTP | |
+| Bed stem, ducking on | -35.5 LUFS +/- 2 | | short-term loudness 5 to 7 LU lower inside speech spans than in the gaps |
+| Bed stem, ducking off | -32 LUFS +/- 1.5 | | first and last beat within 3 LU of each other (it brightens, it does not swell) |
+| Effects stem | not meaningful | sample peak <= -18 dBFS | momentary max <= -27 LUFS (a resolve plus anything landing with it; 11 LU or more under the voice); a resolve alone -30 +/- 1 |
+| Any render | | | `levels.limiterMin` never below -1.5 dB; 0 dB across any voice-only stretch |
+
+#### I.3.6 Device
+
+- `new AudioContext({ latencyHint: 'interactive' })` at the device's sample rate. Offline renders use 48 kHz stereo.
+- **Audio session.** When `'audioSession' in navigator` (Safari 16.4 and later), `navigator.audioSession.type = 'playback'` is set immediately before the context is created or resumed inside a gesture. Tradeoff: narration the viewer turned on plays even with the iPhone ring / silent switch on (most iPhones live on silent, and 'ambient' would drop the voice without a trace, which the owner must never hear), but 'playback' does not mix: it pauses the viewer's music or podcast while sound is on. So the type goes back to `'auto'` whenever sound is turned off or the context idle-suspends (12 s with nothing audible), which lets their music resume.
+- **Latency.** Effects are scheduled early by `ctx.outputLatency` (or `baseLatency`), clamped to 0 to 0.25 s, so a tick is heard as its dot is seen, including over Bluetooth. The voice is not advanced (the caption carries it).
+- **Hidden page.** A hidden page may never run another frame or timer (iOS freezes background JavaScript; rAF stops in every browser), and an `AudioBufferSourceNode` keeps advancing until the context is really suspended. So hiding is handled INSIDE the `visibilitychange` (to hidden) and `pagehide` handlers, in the same task: (1) read the voice position from the audio clock (`ctx.currentTime - startCtx + startOffset`) and record it as the resume offset; (2) ramp the voice `cut` and the master to 0 over 60 ms and call `source.stop(ctx.currentTime + 0.07)`; (3) cancel every scheduled cue; (4) call `ctx.suspend()` without awaiting it. Nothing can keep sounding on the lock screen, and nothing is lost if the suspend runs late or never. On `visibilitychange` to visible (or `pageshow`), the context resumes inside the handler, the master fades in over 150 ms and a new source starts at the recorded offset, so at most the 60 ms fade is heard twice and no word is lost. If the device refuses to resume, the story pauses and the toggle shows Waiting (I.5.2).
+- **Narration fetch and decode.** Nothing is fetched before the gesture. Inside `enable()` the current and next beats' clips are fetched at once (the fetches start in the gesture's task); the rest of the chapter and the next chapter's first two clips follow at idle. A response counts only if `res.ok` and its `content-type` starts with `audio/` (the site's SPA fallback answers a missing MP3 with index.html and a 200). The DECODED window is the beats [n-1, n+2] (Prev is common); encoded bytes are kept for the current and next chapter. Every decode is `ctx.decodeAudioData(bytes.slice(0))`, because decodeAudioData detaches the ArrayBuffer it is given (Chrome and WebKit) and a clip that left the window is decoded again from the kept bytes. A fetch or decode failure disarms that beat at once (it runs silent, one console warning); only a clip still in flight waits (`WAIT_MAX`, I.6.4).
+- **Budgets.** At most 24 effect voices at once, ambient grains included (the oldest releases with a 20 ms fade). At most 16 transient events in any second across effects and ambient (a seeded token bucket, 16 per second, burst 4; ambient grains yield first, then the quietest staggered-set members). Each event creates at most three nodes (I.2.1, the bank); the per-frame cue lookahead reuses its arrays and allocates nothing.
+
+#### I.4 Behaviour
+
+Words used below:
+- **Cut**: the voice's `cut` gain ramps to 0 over 80 ms and its source stops; the clip is disarmed and re-arms from its start when narration may play again.
+- **Pause**: record the position from the audio clock at the START of the fade, ramp the voice `cut` to 0 over 60 ms and stop the source. **Resume** starts a new source at the recorded position with a 30 ms fade-in (an `AudioBufferSourceNode` cannot pause: a paused clip is a stopped source plus an offset). At most the 60 ms fade is heard again; no word is lost.
+- **Arm**: the beat's clip will play from its start after the lead-in (I.6.4).
+
+**What pauses the voice, exactly.** Only: (a) `store.pause()` (the play button, a stage tap, Space), through its one-line `// [audio]` hook; (b) a hold that lasts `SHORT_HOLD` 0.4 s (`interacting > 0`: a finger down, a scrub, a detent drag, the sheet open); (c) the stage under 10% visible; (d) a hidden tab or page (I.3.6); (e) an audio interruption. The engine's own `playing: false` at the end of a Show build, on the last beat, in reduced-motion and held steps, and on a held seek is NEVER read as a pause: the director never infers a pause from `playing`. The voice resumes when `play()` runs after (a), or when (b) to (e) clear while `playing` is true.
+
+Rows other than the first-visit and returning-visitor rows apply only while sound is on.
+
+| Event | Voice | Effects | Bed | Timing |
+|---|---|---|---|---|
+| First visit (no stored choice) | none; no AudioContext exists | none | none | today's; the Sound on chip shows 1.2 s after the chapter is loaded |
+| Sound turned on (chip, toggle or M) | `ui.on`, then the current beat's clip from its start `LEAD_TOGGLE` 0.35 s later; its fetch started inside the gesture, and this first arm waits up to `WAIT_FIRST` 5 s for it | cues after the current t fire; a continuous cue already inside its window starts at its current point | fades in over 2.5 s | the hold now also waits for the clip (I.6.4); stores '1' |
+| Sound turned off mid-beat | cut | cut (20 ms) | fades out over 300 ms; the context suspends; session 'auto' | the hold reverts to `holdFor`; if that has already passed, the beat advances 0.6 s later, never at once; stores '0' |
+| Returning visitor, stored '1' | nothing until the first gesture, then the current beat's clip from its start | from the first gesture | fades in at the first gesture | the chip shows until then; any `pointerup`, `touchend`, `click` or `keydown` in the lesson unlocks, EXCEPT on a `[data-sound-control]` element and the M key, which run their own control (I.6.3) |
+| Returning visitor, stored '0' | none | none | none | today's; no chip |
+| Autoplay beat start | arm; plays after `LEAD` 0.20 s (a chapter's beat 0: `LEAD_FIRST` 0.35 s from `loaded`) | cues fire at their plan times | evolves (I.2.5) | the beat lasts max(today, lead + clip + breath) |
+| Pause (a) | pause | in-flight one-shots finish (400 ms at most); continuous ones cut through their `cut` gain; nothing new | fades out over 1.2 s; the context idle-suspends after 12 s (idle: sound stays on, the toggle shows On, Resume continues the clip where it paused; H.70) | frozen, as today |
+| Press and hold, open sheet, detent drag (b) | continues through holds shorter than 0.4 s (its accounting follows the audio clock, I.6.4), then pauses | as Pause after 0.4 s | as Pause after 0.4 s | as today |
+| Resume | a paused clip continues from its recorded position (30 ms fade-in); a cut clip re-arms | continuous cues inside their window restart from the current point | fades in over 0.8 s | as today |
+| Next (button, swipe, key) | cut; the next beat's clip arms when it starts | cut; `ui.step`; no cues during the 350 ms glide | continues | as today |
+| Prev | cut; the landed beat's clip arms (it is inside the decoded window [n-1, n+2]) | cut; `ui.step`; no cues during the 450 ms glide | continues | as today |
+| Segment tap (jump) | cut; the tapped beat's clip arms | `ui.step` | continues | as today |
+| Seek (URL, QA, transcript, the scrubber: every `markSeek()`, even to the same T) | cut; nothing plays while held | none while held | fades out (held is paused) | as today; `play()` arms the clip from its start |
+| Scrub (segment drag) | cut | none, except `tick.label` at -8 dB at each beat-boundary crossing, at least 80 ms apart | fades out (the story is paused on release) | as today |
+| Deep link `?beat=N&t=X` | none until play or a step | none | none | unchanged seek contract |
+| Explore on | cut (200 ms) | in-flight finish; then only `useSfx` (I.6.6) | -4 dB; fades out after 45 s without interaction, back over 1.5 s at the next | as today |
+| Explore off (Back to story) | the story is paused; on play a cut clip re-arms, a finished clip does not replay | `ui.tap` | as Pause | as today |
+| Chapter change | cut (150 ms); the new chapter's beat 0 clip arms at its `loaded` (`LEAD_FIRST`) | cut (60 ms) | old tone out over 1.2 s, new tone in over 2.5 s from `loaded`; the room continues | as today |
+| Tab or page hidden (d) | paused inside the handler: position from the audio clock, 60 ms ramp, source stopped, then suspend (I.3.6) | scheduled cues cancelled; in-flight ones silenced by the master ramp | silenced by the master ramp | the story pauses, as today |
+| Tab visible again | the context resumes in the handler; a new source at the recorded position (150 ms fade-in); if the device refuses (iOS 'interrupted'), the story pauses and the toggle shows Waiting | cues re-plan from the current t | fades in over 0.8 s | as today |
+| Stage under 10% visible (c) | as Pause | as Pause | as Pause | the story pauses, as today |
+| Audio interrupted (a call, Siri, another app) (e) | the director pauses the story and the toggle shows Waiting; the next gesture resumes both | frozen | frozen | paused |
+| Reduced motion | a user step or Show build plays that beat's clip once, to its end (a Show build ends with `playing: false`; that is not a pause); nothing narrates at load (no autoplay) | cues fire only during Show build; never `air` | plays while a clip or a Show build is running, then behaves like 'done' (holds 8 s, fades over 6 s); returns with the next step or Show build | as today; reduced motion never disables sound |
+| Last beat (armed) | plays to its end: the beat stays in 'hold' until the voice has ended plus the breath, and only then turns 'done' | a resolve tails out | holds 8 s after 'done', fades over 6 s (after Health, the cadence to D first) | the ring, Replay and the CTA row wait for the voice; sound off: as today (the last beat turns 'done' at its build end) |
+| Replay chapter | arm beat 0 (`startBeat(0)`: delay 0.15 s, `LEAD`) | normal | fades in | as today |
+| A clip missing or failing | a failed fetch (not ok, not audio) or decode: the beat runs silent at once; still loading at `WAIT_MAX` 2 s after its lead (`WAIT_FIRST` 5 s on the first arm after Sound on): silent from then (one console warning either way) | normal | normal | today's hold for that beat |
+
+#### I.5 UI
+
+Two controls: a chip on the caption card that asks once, and a toggle in the top bar that always holds the state. Both are 44 px targets with the 2 px #91C640 focus ring (offset 2 px), and both carry `data-sound-control` (the unlock listener leaves their events to them, I.6.3).
+
+#### I.5.1 The Sound on chip
+
+- **When it shows**: story mode; `fitness-sound` is not '0'; audio is not running (a first visit, or a returning '1' before its first gesture); the chapter has been loaded for 1.2 s; no sheet is open. It hides in explore, on the finished last beat of a landscape card (the CTA row takes its place), and as soon as sound runs. Once audio has run on the page (after any first gesture, not only the chip) it retires for the page, and the director's idle suspend never brings it back (H.70).
+- **Content**: a 16 px speaker-with-waves icon (stroke 1.8, #91C640), 5 px gap, then "SOUND ON" (the action) in `ui` type at 12 px on phones and 13 px on desktop (Barlow Condensed 600, uppercase, tracking 0.06em, `--st-chalk`).
+- **Pill**: 30 px tall (36 px in landscape), padding 0 11px 0 10px, radius 999, `--st-glass` with the card's `backdrop-filter`, a 1 px border of rgba(145,198,64,0.55), shadow `0 6px 18px rgba(0,0,0,0.35)`. Measured label widths: 48 px at 12 px and 54 px at 13 px, so with the icon, gap, padding and border the pill is 92 px wide on phones and 98 px on desktop. A `::before` extends the hit area to 44 px tall.
+- **Phone portrait (360, 390, 430) and tablet**: `position: absolute` in `.st-card`, `top: -15px; right: 8px`. It straddles the card's top edge like a tab: half on the glass, half over the stage. Its hit area runs from 23 px above the card edge to 21 px below it, where the scrubber band starts (measured: the band begins 21 px below the edge). It clears the centred 128 px grab band by 6 px at 360, 21 px at 390 and 41 px at 430 (from the measured card and grab rects). It covers at most 7 px of the focus rect (which ends 8 px above the card), so the camera never refits for it, and it registers `useObstacle('sound-chip', ...)` so no label is placed under it.
+- **Landscape phone**: the card is a full-height column that starts at the stage top, so the chip is a row inside the card after the Transport: right-aligned, `margin-top: 8px`. The card has room for it (measured: about 74 px free under the transport at 844 x 390).
+- **Desktop (1024 and wider)**: as on the phone, `top: -15px; right: 12px` on the 400 px card, at 13 px type. It sits over the scrim, outside the focus rect (which starts at x 500).
+- **Motion**: enters with opacity 0 to 1 and y +4 px to 0 over 220 ms (`settle`), then one attention ring per page (a box-shadow of rgba(145,198,64,0.35) growing to 6 px and back over 1.6 s). Reduced motion: no slide, no ring.
+- **On tap**: the chip's own click handler calls `enable('chip')` synchronously. The pill fills #91C640 with `--st-ink` text, and the icon's waves draw once (300 ms). It holds 900 ms, then fades out (160 ms, `exit`) while the top-bar toggle rings once (600 ms), showing where the control lives from now on.
+- **Retiring without a tap**: after the viewer has moved on 3 beats with the chip showing, it fades out for the rest of the session and the toggle rings once. It returns next session while the choice is still undecided. Ignoring it is not a choice: nothing is stored.
+- **a11y**: `<button type="button" data-sound-control aria-label="Turn on sound: narration and sound effects">`. On success a visually hidden `role="status"` in the toggle announces "Sound on".
+
+#### I.5.2 The top-bar toggle
+
+- **Placement**: in `.st-topbar-right`, immediately before `.st-theme`, only while a story chapter is mounted (H.71), in the same box as the theme toggle: a 44 x 44 hit area around a 32 x 32 square (inset 6 px, radius 8, `--panel-bg`, 1 px `--panel-border`), with a 16 px icon at stroke 1.8.
+- **Phone widths.** Measured: the bar has 125 px free at 360 px (the wordmark is hidden) but only about 40 px from 375 to 429 px. The CAPACITY chip measures 125 px, so the widest chip ("THE HOPPER") is about 140 px. So, only while the toggle is present:
+  - under 390 px: the wordmark hides (today it hides under 375 px), and the toggle and the theme box sit with no gap between their 44 px boxes (their visible squares stay 12 px apart);
+  - 390 to 411 px: the wordmark drops to Anton 14 px (about 95 px) with the same zero gap: 10 + 131 + 6 + 140 + 6 + 88 + 6 = 387 px of 390;
+  - 412 px and wider: as today (wordmark 16 px, gap 8 px).
+- **Landscape phone** (the 44 px bar): as the phone rules; there is ample room.
+- **Desktop**: between WOD Intel and the theme toggle (gap 12 px, as today). The key hint under the card becomes "Left / Right to step - Space to play - E to explore - M for sound".
+- **States**:
+  - Off: a speaker with a small x, `--text-tertiary`, hover #91C640 (as ThemeToggle); `aria-pressed="false"`; title "Turn sound on (M)".
+  - On: a speaker with two waves, #91C640 in the dark theme and #019644 in the light theme; `aria-pressed="true"`; title "Turn sound off (M)".
+  - Waiting (on, but the browser has not unlocked audio, or the device interrupted it): the on icon at 55% opacity plus a 5 px dot at the square's top-right (#91C640; #019644 in the light theme, as the icon, H.71); `aria-pressed="true"`, described by a hidden "Tap to start sound". A tap here STARTS sound (the toggle's own handler calls `enable('toggle')`; the unlock listener ignores this element, so the tap is never counted twice), and '1' stays stored; the next tap, once sound runs, turns it off. `M` in Waiting also starts sound. The director's own idle suspend (nothing audible for 12 s, I.3.6) is NOT Waiting: the toggle shows On, and a tap or `M` turns sound off (H.70).
+- `aria-label="Sound"` never changes (the pressed state says on or off). The `M` key toggles it on desktop, with the same guards as the other keys (not in inputs, not with the sheet open).
+- Nothing animates in the bar while the voice plays: the chrome stays quiet.
+
+#### I.6 Engine API
+
+#### I.6.1 Files
+
+New engine code lives under `src/fitness/story/audio/`:
+
+```
+story/audio/
+  hooks.ts          narr and audioHooks: the ONLY audio module engine files import; it imports nothing (I.6.3)
+  types.ts          SfxId, UiId, CueSource, CueShape, SfxCue, AmbientLayer, ChapterSound, AudioQA
+  director.ts       the AudioDirector singleton: prefs, unlock, context, voice, cue scheduling, bed, QA; installs audioHooks
+  graph.ts          buildGraph(ctx: BaseAudioContext): buses, ducks, limiter, trim, ceiling, QA analysers (I.3)
+  bank.ts           the transient bank (I.2.1): every short recipe rendered once per context
+  palette.ts        one function per SfxId / UiId: continuous recipes build live nodes (env + cut), transients trigger bank buffers
+  cueFrom.ts        cueFrom(): samples a Scene cue function into segments (I.2.1, I.6.2)
+  bed.ts            BEDS, the chapter table (I.2.2, I.2.5); startBed(), evolveBed(), bedStateAt(beat)
+  ambient.ts        the rattle and river layers (I.2.4)
+  plan.ts           planBeat(), planRange(): the deterministic beat plan the phone and the offline render share (I.6.4)
+  narration.ts      clip lookup, fetch (res.ok + audio content-type), decode window [n-1, n+2] with bytes.slice(0), prefetch
+  narration.gen.ts  GENERATED by scripts/narration-manifest.mjs; never edited by hand
+  noise.ts          the seeded white and pink buffers
+  prefs.ts          localStorage 'fitness-sound' and ?sound (every access in try / catch)
+  render.ts         renderAudio(): OfflineAudioContext, 16-bit WAV encoder, base64
+  useSfx.ts         the explore hook (I.6.6)
+  SoundChip.tsx     I.5.1
+  SoundToggle.tsx   I.5.2
+  icons.tsx         the speaker glyphs
+  audio.css         the chip and toggle styles (imported by those two components)
+src/fitness/stories/<view>/sound.ts   the chapter's cues and ambient layers (I.6.2); one per chapter, discovered, never registered by hand
+public/narration/<view>/<beat>-<hash>.mp3   one clip per beat (I.6.5)
+scripts/narration-manifest.mjs, scripts/narration-check.mjs, scripts/narration-spoken.json
+```
+
+`story/audio/**` and `stories/*/sound.ts` are added to the C.15 grep gate for `Math.random` (noise and jitter come from `rng.ts`, so renders repeat exactly).
+
+#### I.6.2 Types, cue sources and `sound.ts`
+
+Cues live in each chapter's own `stories/<view>/sound.ts`, never in `story.ts`: six chapters are being built in parallel worktrees, and a cue list inside every `story.ts` would conflict on every merge (and its `id:` fields would confuse any caption reader). A cue never contains a window number. It names its SOURCE, the Scene's own cue function or label, and `cueFrom` samples it (I.2.1), so a retimed animation carries its sound with it and the only edit inside a chapter's existing files is adding `export` (plus, where a window is an inline lambda, hoisting it to a named module-level export with the same numbers; I.7 lists each one).
+
+```ts
+// story/audio/types.ts
+import type { Layout } from '../types'
+import type { ChartFrame } from '../kit/chartFrame'
+
+export type SfxId =
+  | 'pen' | 'pen.dash' | 'pen.bundle' | 'pen.slide' | 'pen.scan'
+  | 'tick.dot' | 'tick.label' | 'tick.claim' | 'tick.close' | 'tick.steel' | 'tick.meet' | 'tick.card'
+  | 'pour.fill' | 'pour.sweep' | 'pour.flood' | 'pour.drain' | 'pour.lift' | 'pour.glow'
+  | 'clack' | 'clack.rain' | 'ball.drop' | 'ball.cascade' | 'flip'
+  | 'air.reveal' | 'air.swing' | 'air.deep'
+  | 'resolve' | 'resolve.fall'
+export type UiId = 'ui.tap' | 'ui.step' | 'ui.grab' | 'ui.on'
+
+/** Where a cue's timing comes from. Sampled over the cue's beat by cueFrom (I.2.1). */
+export type CueSource =
+  /** an exported cue function of the chapter's Scene or timeline; sound.ts may compose exported
+   *  functions (a mean, a max, a fixed index) but never retypes a number */
+  | { fn: (T: number) => number; seg?: number | 'all' }
+  /** a staggered set: element i's own cue function, one event (or one span) per element */
+  | { each: (T: number, i: number) => number; n: number; seg?: number | 'all' }
+  /** a label the chapter registers with useLabels: its spec.cue, read from the label registry.
+   *  A list names layout variants; the first id registered in the current layout is used. */
+  | { label: string | readonly string[]; seg?: number | 'all' }
+  /** the beat's camera move: Beat.cam.window (default [0, 0.35]) with the camera's ease */
+  | { cam: true }
+  /** the beat's impact window (Beat.impact) */
+  | { impact: true }
+  /** data-driven instants in beat t (a schedule, a computed crossing), evaluated when the beat is planned */
+  | { times: (layout: Layout, frame: ChartFrame | null) => readonly number[] }
+  /** data-driven windows in beat t (the Hopper's flips, the Continuum beads) */
+  | { spans: (layout: Layout, frame: ChartFrame | null) => readonly (readonly [number, number])[] }
+
+/** One sampled segment, in beat t. */
+export interface CueShape {
+  a: number
+  land: number
+  half: number
+  b: number
+  /** |d value / dt| over [a, b], 32 points, peak 1 */
+  speed: Float32Array
+}
+
+/** One sound cue of a beat. */
+export interface SfxCue {
+  /** names the visual it serves ("axes", "400m dot"); unique in the beat. Not called `id` on purpose. */
+  name: string
+  sound: SfxId
+  from: CueSource
+  /** one-shots: where in each segment they fire (default 'start'). Continuous sounds span the segment. */
+  on?: 'start' | 'land' | 'half' | 'end' | number
+  /** events per second at beat t (clack.rain, ball.cascade) */
+  rate?: (t: number) => number
+  /** dB from the palette level, clamped to [-12, +3] */
+  gain?: number
+  /** -1..1, clamped to +/-0.35; [from, to] ramps across the segment; 'orbit' circles once clockwise from 12 o'clock */
+  pan?: number | readonly [number, number] | 'orbit'
+  /** semitones from the palette pitch; a list gives one per event */
+  pitch?: number | readonly number[]
+  /** tick.dot only: the D0 ripple grains or the D6 pour shimmer (I.2.3) */
+  ring?: 'ripple' | 'shimmer'
+  /** a staggered set: at most this many audible events (2 to 6, default 6; H.71) */
+  max?: number
+}
+
+/** Ambient life tied to the scene's own ambient motion (B.11). */
+export interface AmbientLayer {
+  kind: 'rattle' | 'river.phos' | 'river.gly' | 'river.oxi'
+  /** 0..1, a pure function of T: the moving thing is built and visible */
+  level: (T: number) => number
+  /** speed multiplier of the ambient motion at T (default 1); H5 passes 1 + spinBoost(T) */
+  rate?: (T: number) => number
+  /** stereo position; a function when it depends on the layout (the drum sits left on L) */
+  pan?: number | ((layout: Layout) => number)
+}
+
+/** The default export of stories/<view>/sound.ts. */
+export interface ChapterSound {
+  /** keyed by Beat.id, so a reordered or inserted beat never inherits another beat's cues */
+  cues: Readonly<Record<string, readonly SfxCue[]>>
+  ambient?: readonly AmbientLayer[]
+}
+
+/** what window.__story.audio() returns: the fields listed in I.6.7 */
+export interface AudioQA { /* enabled, unlocked, contextState, session, playing, clip, position, beatHold, levels, voices */ }
+```
+
+```ts
+// story/audio/cueFrom.ts
+/** Sample fn over beat `beat` (601 points of beat t) into its moving segments (I.2.1). Pure; no allocation after the first call per source. */
+export function cueFrom(fn: (T: number) => number, beat: number): readonly CueShape[]
+```
+
+- **Discovery.** `director.ts` finds chapters' sound modules with `import.meta.glob<{ default: ChapterSound }>('../../stories/*/sound.ts')`, the same pattern as the H.38 chapter registry. Each is its own small lazy chunk that shares the chapter's Scene module. The director loads the current chapter's module when sound is enabled (and `renderAudio` loads it on demand). A beat planned before its module arrives narrates without cues.
+- **Sampling.** Shapes are sampled when a beat is planned, IN STORY MODE, because cue functions may read the store (the Hopper's `isExplore()` makes every draw function 1 in explore). They are cached per chapter, layout and chart frame id, and nothing is planned in explore (nothing narrates there). `renderAudio` called in explore before any plan exists rejects with "render from story mode".
+- **Labels.** A `label` source reads the label registry (`labels/registry.ts`, `registry.get(id).spec.cue`). Every chapter mounts all its labels at load (H.26), so they exist before the first plan. An id that is not registered in the current layout falls to the next id in the list; none registered skips the cue with one warning.
+- **A chapter without `sound.ts`** still narrates (when its clips exist) and has its bed; nothing else changes. The bed table is engine-owned (`bed.ts`, keyed by view): chapters never declare keys or chords.
+- `story/types.ts` does NOT change.
+
+#### I.6.3 The director and its hooks
+
+```ts
+// story/audio/hooks.ts: imports NOTHING. Engine files import only this module, so
+// store.ts -> playback.ts -> hooks.ts never reaches the director, and the director
+// (which imports the store) can never hit the TDZ through a module cycle.
+export const narr = {
+  /** this beat's clip will play, or is playing */
+  armed: false,
+  /** seconds since arming: frame dt during the lead-in, the breath and waiting; the AUDIO CLOCK while the clip sounds */
+  elapsed: 0,
+  lead: 0.2,
+  /** lead + clip.dur + BREATH */
+  span: 0,
+  /** beat time (s) at which the clip was armed: 0 at a beat start */
+  armedAt: 0,
+  /** the clip's source is playing now */
+  sounding: false,
+  /** wall seconds spent waiting for an undecoded clip at the lead */
+  waiting: 0,
+}
+
+export const audioHooks = {
+  /** playback.startBeat(n) ran; delay is pb.delay (0.15 s, or 0 under reduced motion) */
+  beatStart(_n: number, _delay: number): void {},
+  /** autoplay advanced beat n from t0 to t1 in its build: the ONLY path that fires story cues */
+  advance(_n: number, _t0: number, _t1: number): void {},
+  /** the hold may end (always true with sound off) */
+  holdClear(): boolean { return true },
+  /** the last beat must wait in 'hold' for its voice (false with sound off) */
+  holdsLast(): boolean { return false },
+  /** store.pause(): the viewer paused */
+  userPause(): void {},
+  /** ready.markSeek(): every seek, the scrubber and deep links included, even to the same T */
+  seek(): void {},
+}
+```
+
+```ts
+// story/audio/director.ts
+export type AudioState = 'none' | 'suspended' | 'running' | 'closed' | 'interrupted'
+
+export interface AudioDirector {
+  /** the viewer's choice, or ?sound=1. Enabled is not audible: see unlocked. */
+  readonly enabled: boolean
+  /** an AudioContext exists and has run after a gesture */
+  readonly unlocked: boolean
+  /**
+   * MUST run synchronously inside a user gesture handler (source 'qa' excepted): sets the audio
+   * session, creates or resumes the context, plays ui.on (synthesised live: the bank does not exist
+   * yet), starts the current and next clips' fetches, starts rendering the bank, starts the bed,
+   * arms the current beat (WAIT_FIRST), stores '1' (not for 'qa').
+   */
+  enable(source: 'chip' | 'toggle' | 'key' | 'gesture' | 'qa'): void
+  /** cuts everything, fades the master, suspends the context, session 'auto', stores '0' */
+  disable(): void
+  /**
+   * StoryProvider's layout effect (def) and its cleanup (null). The FIRST call subscribes to the
+   * store, adds the document listeners, registers the onFrame worker and installs audioHooks.
+   * Nothing in director.ts touches useStoryStore at module scope.
+   */
+  setChapter(def: StoryDef | null): void
+  /** a UI sound now; no-op unless audible */
+  ui(id: UiId): void
+  qa(): AudioQA
+}
+export const audio: AudioDirector
+```
+
+- **Lazy wiring.** Until the first `setChapter()`, `audioHooks` keeps its defaults, which are exactly today's behaviour. The first call subscribes (`useStoryStore.subscribe`) to playing, mode, view, loaded, visible, reduced, index, interacting, showBuild and phase, and adds `visibilitychange`, `pagehide` and `pageshow` listeners.
+- **Cuts are explicit.** `beatStart` (a new beat), `seek` (every `markSeek()`), `mode` becoming explore, a chapter change, a reduced-motion index change, and a glide starting (`pb.glide` non-null; director.ts may import `playback.ts`, which imports only `hooks.ts`). Safety net: a frame in which `clock.T` moved without `advance()`, `beatStart()` or a glide is treated as a seek.
+- **Pauses are explicit** (I.4): `userPause`, a hold lasting `SHORT_HOLD` (wall time of `interacting > 0`, measured in the frame worker), `visible` false, the hidden-page handlers (I.3.6) and interruptions. `playing` going false is never read as a pause; `playing` going true resumes a paused voice or arms a cut one.
+- **Reduced motion.** A step cuts to t = 1 without `startBeat` (C.13); the director sees the index change and plays the landed beat's clip once (it never advances the story). Show build goes through `startBeat` and behaves like autoplay for that one beat; its `playing: false` at the end does not stop the clip.
+- **Beat 0.** StoryProvider's mount never calls `startBeat(0)` (it sets `pb.delay = 0` and phase 'build' directly), so the director arms beat 0 itself when `loaded` turns true, with `LEAD_FIRST` and delay 0, unless the story is held, reduced or in explore. Replay's `startBeat(0)` arms like any beat (delay 0.15 s, `LEAD`).
+- **Unlock.** While `enabled` and the context is not 'running': one capture-phase listener set on the lesson root for `pointerup`, `touchend`, `click` and `keydown`. It IGNORES events whose target is inside `[data-sound-control]` (the chip and the toggle) and `keydown` of m / M: those controls call `enable()` themselves, so the first tap on a Waiting toggle starts sound instead of the unlock turning it on and the toggle's own click then turning it off. Every other qualifying event calls `enable('gesture')`. The listener stays attached until `ctx.state === 'running'` (checked when `resume()` settles), then removes itself; it is never one-shot.
+- **`?sound=1`** enables sound for this page load without storing anything and creates the context at load (QA only; headless Chromium reaches 'running' only with `--autoplay-policy=no-user-gesture-required`). **`?sound=0`** forces sound off for the page, hides the chip and stores nothing.
+- **The frame worker.** The director's per-frame work (the audio-clock write of `narr.elapsed`, the lead-in start, waiting, the hold timer, the cue lookahead) runs from `onFrame` inside its OWN try / catch, which logs at most once per 5 s and carries on: `emitFrame` removes a listener that throws, and one exception must not end cue scheduling for the session.
+- **Scheduling.** Each beat's cues come from `planBeat()`. In the realtime path, `advance()` schedules every cue whose time falls within the next 120 ms plus the output latency, at `ctx.currentTime + (tCue - t1) x build - latency`; a cue already scheduled but not yet started is cancelled if the story stops before it.
+
+#### I.6.4 Narration drives the hold
+
+Constants (`plan.ts`):
+
+| Name | Value | Meaning |
+|---|---|---|
+| `LEAD` | 0.20 s | the clip starts this long after the beat starts (the caption swaps at t = 0; the first syllable follows at about 0.32 s) |
+| `LEAD_FIRST` | 0.35 s | a chapter's beat 0, from `loaded` (after the slate) |
+| `LEAD_TOGGLE` | 0.35 s | after `ui.on`, when sound is turned on mid-beat |
+| `BREATH` | 0.65 s | after the clip file ends; with its 0.12 s tail, about 0.77 s after the last syllable |
+| `WAIT_MAX` | 2.0 s | wall time the lead waits for a clip still in flight, then the beat runs silent |
+| `WAIT_FIRST` | 5.0 s | the same for the first arm after `enable()` (its fetch started cold in the gesture) |
+| `SHORT_HOLD` | 0.4 s | touch holds shorter than this do not pause the voice |
+
+The rules:
+- **Arming.** `startBeat(n)` calls `audioHooks.beatStart(n, pb.delay)`. When sound is enabled and the beat has a clip: `armed = true`, `elapsed = 0`, `armedAt = 0`, `lead = LEAD` (`LEAD_FIRST` for beat 0 at `loaded`, I.6.3), `span = lead + clip.dur + BREATH`. Otherwise `armed = false`.
+- **The clock of `elapsed`.** During the lead-in (including the pre-roll `delay`), during the breath and while waiting, `tick` adds the frame's dt where the story advances (after the `paused` and `loaded` checks, one `// [audio]` line: `if (narr.armed && !narr.sounding) narr.elapsed += dt`). While the clip SOUNDS, the director writes `elapsed = lead + (ctx.currentTime - startCtx) + startOffset` every frame from the AUDIO CLOCK. rAF dt is clamped to 0.1 s and a phone stalls for more than that at beat starts (shader link, label layout, GC), so a dt sum would fall behind the voice and a later resume would repeat words; the audio clock cannot drift from what is heard. It also settles the short hold: `tick` is paused while `interacting > 0`, the voice keeps sounding, and `elapsed` keeps following it.
+- **Start.** The director starts the clip when `elapsed` reaches `lead`, at offset `elapsed - lead`. If it is not decoded then, `elapsed` holds at `lead` while `waiting` accumulates wall time; at `WAIT_MAX` (`WAIT_FIRST` for the first arm after `enable()`) the beat is disarmed and runs silent. A failed fetch or decode disarms at once (I.3.6).
+- **Pause and resume.** A pause records the audio-clock position at the start of its 60 ms fade and stops the source; `sounding` goes false and `elapsed` stays at `lead + position`. Resume starts a new source at that position and the audio-clock writes continue.
+- **Arming mid-beat** (play after a seek or a held deep link, play after explore cut the clip, sound turned on): the same, from that moment: `elapsed = 0`, `armedAt` = the beat time so far, `lead = LEAD` (`LEAD_TOGGLE` after `ui.on`), `span = lead + clip.dur + BREATH`. The build continues from its current t, and the hold waits for the clip.
+- **The build follows the voice** (H.74). When the armed clip has knots (`NarrationClip.sync`, [build t, clip seconds]) and the beat is neither under reduced motion nor a self-clocked step, `narr.sync` holds them, `narr.c0 = delay - lead` (the clip time of the build's start) and the build branch of `tick` sets `t = max(t, syncT(knots, c0, build, elapsed - lead))` instead of adding `dt / build`: linear from (c0, 0) through every knot, then the designed rate. While the clip sounds `elapsed` is the audio clock, so the picture cannot drift from the voice; a lead-in, a wait, a pause or a hold freezes both. Armed mid-beat, the picture holds at its t until the voice catches up. The build then ends inside the clip (narration-check), `pb.holdFor` is 0 and the hold is the rest of the voice plus BREATH; turning sound off in that hold restores `holdFor(beat)`. A disarm mid-build (a failed or late clip) returns the build to its designed rate from its current t. Scene properties still depend on T alone.
+- **The hold.** The build branch of `tick` calls `audioHooks.advance(clock.index, tBefore, tAfter)`. The hold ends when `pb.holdElapsed >= pb.holdFor && audioHooks.holdClear()`. `holdClear()` is `!narr.armed || (!narr.sounding && narr.elapsed >= narr.span)`. With sound off it is always true: timing is exactly today's. After sound is turned off mid-beat, it stays false for 0.6 s (I.4).
+- **The last beat.** Today the last beat turns 'done' (and `playing: false`) the moment its build ends. When `audioHooks.holdsLast()` (the last beat is armed), the build branch sets phase 'hold' with `pb.holdFor = 0` instead, and the existing hold branch turns it 'done' with `playing: false` once `holdClear()`. So the ring, Replay and the CTA row wait for the voice. With sound off: unchanged.
+- **Deterministic length.** A beat's length is known before it plays, from manifest durations only: `total = max(delay + build + holdFor(beat), span)` for a beat before the last and `max(delay + build, span)` for the last, where `delay` is 0 on beat 0 at mount and 0.15 s after `startBeat` (0 under reduced motion); a synced beat (H.74) lasts `armedAt + span`. `beatTiming()` computes exactly this, and the offline render lays beats out with it (a cue at build t sits at `planSec(plan, t)`, the warp's inverse when synced).
+- `ringProgress()` while armed returns the beat time so far over `max(delay + build + holdFor, armedAt + span)`.
+- The seek contract is untouched: `?beat=N&t=X` sets T and holds, and no scene property depends on audio.
+
+**Pacing with narration.** The first draft of this section predicted a 593 s lesson and blamed a slow voice; it measured clips that began by speaking their TTS direction (a 14-word sentence, about 4.5 s, then a pause of about 1 s; see Asset status). The caption itself was spoken at a normal pace (intro/models: 10 words in 3.7 s after the direction, about 160 words per minute). With clean clips narration adds little: 23 of 46 beats are already longer than lead + clip + breath. Estimated from each beat's current caption (spoken words, numbers as words) and timing on its branch head, at the Charon audition's own pace (2.48 words per second: 119 words in 53.8 s less its six paragraph pauses) and at the two limits of the pace gate (I.6.5):
+
+| Chapter | Sound off (to 'done') | Sound on, 2.48 w/s | Sound on, 2.9 / 2.0 w/s |
+|---|---|---|---|
+| Intro | 38 s | 47 s | 43 / 55 s |
+| 01 Skills | 41 s | 49 s | 45 / 58 s |
+| 02 Hopper | 54 s | 58 s | 55 / 64 s |
+| 03 Energy | 55 s | 64 s | 60 / 74 s |
+| 04 Capacity | 53 s | 60 s | 57 / 69 s |
+| 05 Continuum | 49 s | 61 s | 56 / 70 s |
+| 06 Health | 50 s | 57 s | 54 / 64 s |
+| Lesson | 340 s | 397 s | 371 / 453 s |
+
+On average +1.2 s per beat. The largest additions are beats whose caption is long for their build: Continuum C1 `bp` (29 spoken words, about +6 s), Capacity D0 `measured` (+3.8 s), the chapter openers, and every chapter's last beat, which today turns 'done' at its build end and now waits for its line. "Sound off" is counted to each chapter's 'done' as `playback.ts` runs it (the first draft's 363 s also counted a hold on each last beat). These are estimates: `narration-manifest.mjs` prints each chapter's sound-on runtime from the real durations, and the exemplar's review records Capacity's.
+
+#### I.6.5 Narration assets, the manifest and the consistency gate
+
+**(a) Generation** (on the VPS, where the Gemini key lives; the scripts are in `C:/Users/ravik/fitness-v2/voice/`, outside the repo).
+- Input: `extract.cjs` run against the current chapter heads immediately before every generation pass. Pronunciations (`"160/95"` read as "160 over 95") move from `gen_batch.py`'s SPOKEN map into `scripts/narration-spoken.json` in the repo, so generation and the check read one source: same content, never reworded.
+- The prompt contains no speakable text other than the captions. PREFERRED METHOD: one continuous take per chapter, the way the owner's audition was made (`tts.py`): an instruction that ends "Read only the narration text, nothing else", asks for a warm, natural, conversational pace and "a pause of about a second between paragraphs", followed by the chapter's captions, one paragraph per beat. The take is split at its N - 1 longest silences (N beats; in the audition the paragraph pauses measure 0.75 to 1.02 s and the pauses inside paragraphs 0.35 to 0.60 s), each cut in the middle of its silence, and every piece must pass the gates below or the whole take is regenerated. One take gives a chapter one voice, one pace and one level. FALLBACK: one request per beat whose only text is the caption (no direction prefix), accepted only through the same gates.
+- Gates, for every clip (a clip or take that fails is regenerated; retries on 429, 500 and 503 do not use up attempts):
+  1. **Whole transcript**: the transcript of the whole clip equals the spoken text word for word (`norm()` as in `gen_batch.py`).
+  2. **First span**: split the clip at its first silence of 0.5 s or more (silencedetect at -40 dB) and transcribe the part before it on its own; its words must be the START of the spoken text. This catches a spoken direction, which whole-clip transcription can miss.
+  3. **Pace**: with `words` the spoken word count after `norm()` and `speech` the encoded duration minus 0.24 s (the head and tail), `words / 2.9 <= speech <= words / 2.0`: about 120 to 175 words per minute around the audition's 149. Too slow means a spoken direction, a duplicated line or a dragging read; too fast means a dropped line or a rushed one.
+  4. **Gaps**: no silence inside the speech longer than 0.8 s (-40 dB). A longer gap is a spoken direction's pause or a dragging read, and it would release the duck mid-line (I.3.3).
+- There is NO tempo-correction path. A clip that fails pace is regenerated, never time-stretched: a stretch changes the voice the owner chose.
+
+**(b) Encode** (`encode.sh`): trim to 120 ms of silence at each end; `loudnorm=I=-16:TP=-2.5:LRA=11` in two passes (measure, then apply with `linear=true`); mono 44.1 kHz MP3 at 56 kbps. Every MP3 must measure -16 +/- 0.5 LUFS integrated and <= -2.0 dBTP (MP3 encoding adds about 0.2 dB of true peak), so the limiter never touches the voice alone (I.3.4). `encode.sh` re-runs gates 3 and 4 on the MP3s and fails on any clip outside them.
+
+**(c) Manifest** (`scripts/narration-manifest.mjs [--check]`): walks `public/narration/<view>/*.mp3`, parses `<beat>-<hash>.mp3`, reads the duration with `ffprobe -v error -show_entries format=duration -of csv=p=0` and, in ONE ffmpeg pass per clip, the speech spans, the longest inner gap, the integrated loudness and the true peak (`-af silencedetect=noise=-45dB:d=0.35,ebur128=peak=true -f null -`), and writes `narration.gen.ts` sorted by view and beat order, so the output is stable. It prints each chapter's sound-on runtime (I.6.4). It also resolves each beat's narration.json `sync` anchors ([t, at, offset]: `at` a sentence index or a phrase found once in the text) against the word onsets in narration.align.json (`scripts/narration-align.py`: CTC forced alignment of the known text, H.74) into the beat's knots. With `--check` it writes nothing and exits 1 if the file would change. If two files exist for one beat (an old hash), it keeps the one whose hash matches the current caption and warns.
+
+```ts
+// story/audio/narration.gen.ts (GENERATED by scripts/narration-manifest.mjs)
+import type { FitnessView } from '../../lessonTypes'
+export interface NarrationClip {
+  view: FitnessView
+  /** Beat.id */
+  beat: string
+  /** first 10 hex chars of sha1(caption body with whitespace collapsed and trimmed) */
+  hash: string
+  /** relative to import.meta.env.BASE_URL: 'narration/<view>/<beat>-<hash>.mp3' */
+  file: string
+  /** seconds (ffprobe format=duration), 3 decimals */
+  dur: number
+  /** voiced spans in seconds (silencedetect, -45 dB, 0.35 s), for the scheduled ducks (I.3.3) */
+  speech: readonly (readonly [number, number])[]
+  /** spoken words: norm() of the body with scripts/narration-spoken.json applied */
+  words: number
+  /** longest silence inside the speech, seconds */
+  maxGap: number
+  /** integrated LUFS and true peak dBTP of the MP3 */
+  lufs: number
+  tp: number
+}
+/** key: `${view}/${beat}` */
+export const NARRATION: Readonly<Record<string, NarrationClip>>
+```
+
+**(d) Check** (`scripts/narration-check.mjs`): parses every `src/fitness/stories/*/story.ts` with the TypeScript compiler API (`typescript` is already a devDependency) and reads only the `id` and `body` string literals of each element of the default StoryDef's `beats` array. A regex reader keyed on `id:` and `body:` mis-keys a clip whenever another `id:` sits before a body. It hashes each body and FAILS when:
+- `public/narration/<view>/<id>-<hash>.mp3` is missing, or `narration.gen.ts` lacks that key with that hash;
+- a clip is outside gate 3 (pace, with `words` recomputed from the caption and `narration-spoken.json`) or gate 4 (`maxGap` > 0.8 s), or outside -16 +/- 0.5 LUFS, or above -2.0 dBTP;
+- `narration-manifest.mjs --check` reports a change.
+- (H.74) a beat's narration.json `sync` anchors do not resolve: no word onsets for its current text and clip in narration.align.json, a sentence index out of range, a phrase not found exactly once, t outside (0, 1] or falling, anchor times not increasing, or a warped build that ends after the clip.
+Clips with no matching beat are warnings (chapters land later). Exit 1 on any failure.
+
+**(e) The gate.** `scripts/fitness-gate.mjs` runs `narration-check.mjs` as its third gate (spawned with `process.execPath`) and fails when it fails. It covers the chapters present in the worktree (in `wt-audio`, definition only). It has no pending list and is never bypassed: the exemplar cannot commit until the 7 Capacity clips exist, and each chapter's integration commit needs that chapter's clips. A caption edited without a new clip cannot be committed, so captions and audio never drift. Plan one more generation pass after each chapter's captions freeze.
+
+- URLs are `import.meta.env.BASE_URL + clip.file`, so both `/` and `/preview/` work. At runtime a beat without a manifest entry narrates nothing (one warning in development).
+
+#### I.6.6 `useSfx` (explore)
+
+```ts
+// story/audio/useSfx.ts
+export function useSfx(): {
+  /** a one-shot now; no-op unless audible; at most 12 per second per id */
+  play(id: SfxId | UiId, o?: { gain?: number; pan?: number; pitch?: number; dur?: number }): void
+  /**
+   * A held continuous sound for a drag; set() at most once per frame; release() fades 120 ms.
+   * `pos` (0..1) moves the texture's band centre along its range (pen.slide: 900 Hz to 1.8 kHz;
+   * pen.scan and the pours: their I.2.3 ranges). Held sounds never glide in pitch: a drag that
+   * crosses a whole step calls play('tick.label', { pitch }) at the crossing instead.
+   */
+  hold(id: 'pen.slide' | 'pen.scan' | 'pour.fill' | 'pour.drain' | 'rattle'): {
+    set(level: number, pos?: number): void
+    release(): void
+  }
+}
+```
+
+Explore sounds are never scheduled from T (explore does not use T), and at most 8 explore voices sound at once, inside the I.3.6 budgets. Each chapter's explore sounds are listed at the end of its part of I.7 and are wired in its own Explore code. Everywhere: chips, segmented controls and toggles `ui.tap`; Back to story `ui.tap`; Reset view `air.reveal` at -8 dB over the 600 ms tween; a drag handle picked up `ui.grab`; sliders silent while dragging.
+
+#### I.6.7 QA hooks
+
+Added to `window.__story` by `registerQA` (C.4):
+
+```ts
+interface StoryQA {
+  /* existing members */
+  audio(): {
+    enabled: boolean
+    unlocked: boolean
+    contextState: 'none' | 'suspended' | 'running' | 'closed' | 'interrupted'
+    /** navigator.audioSession.type, or null where unsupported */
+    session: string | null
+    /** the voice is sounding */
+    playing: boolean
+    clip: { view: FitnessView; beat: string; file: string; dur: number } | null
+    /** seconds into the clip from the audio clock, or null when not armed */
+    position: number | null
+    beatHold: {
+      index: number; delay: number; build: number; hold: number
+      /** lead + clip + breath, or null when not armed */
+      narr: number | null
+      total: number; elapsed: number; waiting: boolean
+      /** H.74: the build follows the voice (the armed clip has knots, the beat is not a cut or a replay) */
+      sync: boolean
+    }
+    /**
+     * Read when audio() is called (never computed per frame on a phone): dBFS RMS over the last
+     * 50 ms per bus, the ducks in dB, the limiter's current reduction, and limiterMin, the lowest
+     * reduction since the previous call (tracked per frame only under ?sound=1). null unless the
+     * page has ?sound=1 or is a development build (the analysers exist only there).
+     */
+    levels: { voice: number; sfx: number; ui: number; bed: number; master: number
+              duckBed: number; duckSfx: number; limiter: number; limiterMin: number } | null
+    /** effect voices sounding now, ambient grains included */
+    voices: number
+  }
+  /**
+   * Beats [fromBeat, toBeat] of this chapter with sound on, exactly as planned (I.6.4), through the
+   * real graph: the REFERENCE MIX (I.1.7). The bed starts in the state the chapter would have reached
+   * by playing from beat 0 (I.2.5). Rejects in explore when nothing has been planned yet (I.6.2).
+   */
+  renderAudio(fromBeat: number, toBeat: number, opts?: {
+    /** default ['voice', 'sfx', 'bed'] */
+    stems?: readonly ('voice' | 'sfx' | 'bed' | 'ui')[]
+    /** default true; the ducks stay keyed by the voice's spans even when the voice stem is muted */
+    duck?: boolean
+    /** default 48000 */
+    sampleRate?: number
+    /** seconds rendered after the last beat, default 2 */
+    tail?: number
+  }): Promise<string>   // base64 RIFF WAV, 16-bit PCM, stereo, no data: prefix
+  /** The plan a render follows: beat starts, clip spans and every cue time, in seconds from the first beat. */
+  audioTimeline(fromBeat: number, toBeat: number): {
+    beat: number; id: string; start: number; total: number
+    clip: readonly [number, number] | null
+    /** the clip's speech spans, in seconds from the first beat */
+    speech: readonly (readonly [number, number])[]
+    /** H.74: the build's start and end, and a synced beat's knots as [seconds, build t] (null: the designed rate) */
+    build: readonly [number, number]
+    sync: readonly (readonly [number, number])[] | null
+    cues: { name: string; sound: SfxId; at: number; dur: number }[]
+  }[]
+}
+```
+
+- `renderAudio` uses an `OfflineAudioContext` with its own transient bank. It needs no gesture and no realtime context, and never touches the live story. Ambient layers are sampled from their `level(T)` and `rate(T)` along the planned timeline, with A advancing one second per second as in autoplay.
+- Absent any gesture and any `?sound`, `audio().contextState` is `'none'` and no request to `/narration/` has been made.
+- `?tick=round` (H.71) renders the transient bank with the H.69 `tick.dot` recipe for the owner's A/B; the default is 'glass'. It is read once per page load, and `renderAudio` shares the page's bank, so a render plays what the page plays.
+
+#### I.6.8 Engine and chapter touchpoints
+
+Outside `story/audio/`, only these engine files change, each change a line or two marked `// [audio]` so the chapter integrations can merge around it:
+
+| File | Change |
+|---|---|
+| `story/playback.ts` | `startBeat` calls `audioHooks.beatStart(n, pb.delay)`; `tick` adds dt to `narr.elapsed` while armed and not sounding, calls `audioHooks.advance` in the build branch, goes to 'hold' (holdFor 0) instead of 'done' on the last beat when `audioHooks.holdsLast()`, and gates the hold on `audioHooks.holdClear()`; `ringProgress` uses the plan total while armed |
+| `story/store.ts` | `pause()` calls `audioHooks.userPause()` |
+| `story/ready.ts` | `markSeek()` calls `audioHooks.seek()` |
+| `story/StoryProvider.tsx` | `audio.setChapter(def)` in the layout effect and `setChapter(null)` in its cleanup; `registerQA` adds `audio`, `renderAudio`, `audioTimeline` |
+| `story/url.ts` | `StoryQuery.sound: 0 \| 1 \| null` |
+| `story/ui/CaptionCard.tsx` | `<SoundChip shell={shell} />` inside `.st-card` (at the top edge; after the Transport in landscape) |
+| `story/ui/TopBar.tsx` | `<SoundToggle />` before `.st-theme`, and a `has-sound` class on the bar for the width rules |
+| `story/gestures.ts` | `m` / `M` toggles sound (starts it when Waiting), with the existing key guards |
+| `story/Stage.tsx` | the desktop key hint text |
+| `fitness.css` | one appended block, `/* [audio] I.5.2 */`, for the top-bar width rules |
+| `scripts/fitness-gate.mjs` | the narration gate |
+
+`story/types.ts` and `story/clock.ts` do not change. Engine files import only `story/audio/hooks.ts`, apart from StoryProvider (the director) and the two UI components.
+
+Chapter files, one chapter at a time and each in its own commit AFTER that chapter has merged into `fitness-v2`:
+- a new `stories/<view>/sound.ts`;
+- in the chapter's Scene or timeline: `export` added to each cue function that `sound.ts` names, and the few inline windows I.7 lists hoisted to named module-level exports with the same numbers. No behaviour changes; the chapter's story-qa run must be unchanged.
+
+The Capacity exemplar (in `wt-audio`) is the only chapter wired before integration.
+
+#### I.7 Cue sheet (all 46 beats)
+
+Read from each chapter's current `story.ts`, timeline and Scene on its branch head (2026-09-27; intro 49efcdf, skills 72afc88, hopper 13014c6, pathways 2a350bb, definition in this worktree, continuum 48a507b, health 12f4ac2), and re-checked against the code for this revision. Notation: `sound <- source [a, b] on`, then options, then why. The SOURCE is what `sound.ts` names (I.6.2): a function (`fn`, or `each` for a set, `mean` of a set where one sound spans many elements), a `label` id, `cam`, `impact`, `times` or `spans`. `[a, b]` is the segment in beat t as sampled today: documentation only, never typed into code. `on` defaults to start for one-shots; continuous sounds span the segment. Gains are dB from the palette level. The voice is not listed: every beat narrates (I.6.4). Beats with a `resolve` or `resolve.fall` are the signature beats. Cues marked **[EX]** belong to the Capacity exemplar, built first. Each chapter ends with the edits its `sound.ts` needs in the chapter's own files (I.6.8).
+
+#### Intro "The Line" (bed D; no ambient)
+
+**I0 `title`** (build 4.0)
+- `pen` <- `underlineDraw` [0.40, 0.85], pan [-0.3, +0.3]: the first stroke of the lesson. This sound is the pen for the whole lesson.
+
+**I1 `models`** (build 8.0)
+- `pen` <- each `morphK(T, w)`, n 4: [0.12, 0.264], [0.32, 0.464], [0.52, 0.664], [0.72, 0.864], gain -3: the same line re-forms four times.
+- `tick.close` <- each `closeGlint(T, c)`, n 4, on the end of its rise (the glint's peak, where the shape closes), pitch [0, +2, +7, +7]: each model closes and is named, climbing the chord as the models add up.
+
+**I2 `definition`** (build 5.5)
+- `pen` <- `axesDraw` [0.10, 0.35], then `pen` <- `curveDraw` [0.35, 0.70], pan [-0.3, +0.3]: axes, then the curve (one entry).
+- `pour.sweep` <- `sweep` [0.70, 0.95], gain -2: the area sweeps in; the first taste of Capacity's pour.
+- `tick.claim` <- `claimIn` [0.90, 1.0] on land: AREA = FITNESS, stated small (the intro's claim sound is I4).
+
+**I3 `lifetime`** (build 5.0)
+- `air.reveal` <- `cam` [0, 0.35] (to az -32, el -14): the view turns to reveal age.
+- `pour.lift` <- `extrude` [0.10, 0.70], gain -4: the area extrudes back through every age.
+- `tick.label` <- `healthIn` [0.75, 1.0] on land: HEALTH lands on the floor.
+
+**I4 `map`** (build 5.0, signature)
+- `pen` <- each `glyphDraw(T, c)`, n 4: [0.16, 0.25], [0.25, 0.34], [0.34, 0.43], [0.43, 0.52], gain -3: the pen redraws the four models in tiles 01, 02, 03 and 05, one stroke at a time.
+- `tick.dot` <- each `plateIn(T, i)` for tiles 01, 02, 03, 05 and 04 (i 0 to 4), on land, gain -3: each tile's ring lights as its model lands, then CAPACITY; the count grows from 1 to 5.
+- `resolve` <- `plateIn(T, 5)` on land (about 0.66): the sixth ring, HEALTH, completes the map: the whole lesson is on one screen and every tile can be opened. The bed's F#4 enters.
+- (The first draft sourced I4 from `fold(i)` with staggered windows; in the code all six folds start at 0 together, so they are not what lands one by one.)
+
+Explore: a tile tap `ui.step`.
+
+Intro edits: none (every function above is exported from `timeline.ts`).
+
+#### 01 Skills "Ten spokes, one floor" (bed A; no ambient)
+
+**S0 `ten`** (build 5.0)
+- `pen` <- mean of `spokeDraw(T, i)` over the 10 spokes [0.20, 0.75], pan 'orbit': ten spokes drawn clockwise.
+- `tick.label` <- each `nameIn(T, i)`, n 10, gain -4 (6 audible): each name lands as its spoke completes.
+
+**S1 `trained-practiced`** (build 5.0)
+- `pen` <- `trainedProg` [0.05, 0.45], pan [0, +0.3]; then `pen` <- `practicedProg` [0.50, 0.90], pan [+0.3, -0.2]: the trained arc, then the practiced arc.
+- `tick.label` <- label `sk-c-trained` [0.38, 0.46], then label `sk-c-practiced` [0.88, 0.96]: "Trained (organic)", then "Practiced (neural)".
+
+**S2 `both`** (build 3.5; impact [0.55, 0.67])
+- `pen` <- `trainedExt` [0.05, 0.55], pan [-0.3, -0.1]: both arcs grow toward each other (`practicedExt` shares the window; one sound).
+- `tick.meet` <- `bothOn` [0.50, 0.62] on land: the two families meet over Power and Speed; two pitches at once. No resolve (S2 is not the signature).
+
+**S3 `generalist`** (build 4.5)
+- `air.reveal` <- `cam` [0, 0.35] (to az -10, el 16), gain -6: the solid is revealed.
+- `pour.fill` <- mean of `growV(T, i)` [0.10, 0.55], gain -6: the balanced shape fills.
+- `pen` <- `ringDraw` [0.60, 0.84] (hot): the floor ring at 7.
+- `tick.label` <- label `sk-w-g` [0.90, 0.96]: "Weakest skill 7".
+
+**S4 `specialist`** (build 5.0, signature)
+- `pen.dash` <- `specDash` [0.15, 0.50]: the Powerlifter's dashed outline.
+- `resolve.fall` <- `collapse` [0.66, 0.86]: the floor ring falls from 7 to 2; the fall's lowpass closes over the collapse. The bed's minor third enters.
+- `tick.label` <- label `sk-w-p` [0.91, 0.97]: "Weakest skill 2".
+
+**S5 `thirteen`** (build 5.5)
+- `tick.dot` <- each `cellGrow(T, k)` over the 11 cells that are not `carried`, in `growOrder`, on land, gain -5 [0.16, 0.76] (6 audible): the other athletes' wheels land.
+- `tick.label` <- label `sk-lg-sort` [0.80, 0.92]: SORTED BY WEAKEST SKILL. The bed's C#5 arrives with it (I.2.5).
+
+Explore: vertex drag `tick.dot` at each whole-number crossing (at most 12 per second), on the chord tone for the value (0 below 4, +2 from 4, +7 from 7: the floor at 7 sounds highest); athlete chip `pen` 0.6 s at -6 dB (the outline redraws); Wheel | Grid `ui.tap`.
+
+Skills edits (`Scene.tsx`): `export` on `spokeDraw`, `nameIn`, `trainedProg`, `practicedProg`, `trainedExt`, `bothOn`, `growV`, `ringDraw`, `collapse`, `cellGrow`, `carried`, `growOrder`; hoist the Powerlifter outline's inline `progress` window (S4, [0.15, 0.50], draw) into `export const specDash`.
+
+#### 02 Hopper "The Tally" (bed E; ambient `rattle`)
+
+Ambient: `rattle` with `level(T) = pour(T) x (1 - toChart(T))` (the drum is gone once the chart takes over in H6) and `rate(T) = 1 + spinBoost(T)`; unpitched, Poisson, 3.5 per second at rate 1, at most 8 per second (I.2.4).
+
+**H0 `hopper`** (build 4.5)
+- `pen` <- `hoops` [0, 0.30], gain -2: the hoops draw on.
+- `tick.steel` <- `steel` [0.20, 0.40] on half: the drawing becomes steel.
+- `ball.cascade` <- `pour` [0.33, 0.80]: 25 balls pour in; the rattle rises with them.
+
+**H1 `draw`** (build 4.5)
+- `ball.drop` <- `times`: draw 1's ball landing in `STORY_SCHED` (about 0.45): the ball reaches the ticket slot.
+- `flip` <- `spans`: the visible half of draw 1's `[flip0, flip1]` [0.45, 0.70]: the ticket turns in and snaps flat.
+- `pen` <- `trace` [0.70, 0.95] (hot): the pen traces the ticket.
+
+**H2 `score`** (build 5.0)
+- `pen` <- mean of `railDraw(T, k)` over the 6 rails [0, 0.30], gain -4: six rails.
+- `clack` <- `times`: draw 1's `fly1` for the six athletes: six bricks hit six rails (a 175 ms ripple).
+- `tick.claim` <- label `hop-lead` [0.90, 0.98]: LEAD lands on the Weightlifter.
+
+**H3 `specialists`** (build 5.5)
+- `flip` <- `spans`: `[flip0, flip1]` of draws 2, 3 and 4: three tickets.
+- `clack` <- `times`: `fly1` of draws 2, 3 and 4 (three ripples), gain -2.
+- `tick.label` <- `times`: `tick0` of draws 2, 3 and 4, gain -4: each draw's top scorer is marked.
+
+**H4 `unknown`** (build 5.5, signature; impact [0.62, 0.74])
+- `ball.drop` (the unknown ball's bank entry) <- `times`: draw 5's ball landing (about 0.17): a lower, slower knock.
+- `flip` <- `spans`: draw 5's flip [0.15, 0.28]: CLIMB 6 FLIGHTS WITH BAGS.
+- `clack` <- `times`: draw 5's `fly1`; the Generalist's brick lands last (0.43) at +3 dB.
+- `resolve` <- `impact` [0.62] (NEW LEADER): the generalist takes P1 without winning a specialist's draw. The bed's G#4 enters.
+
+**H5 `many`** (build 6.0)
+- `clack.rain` <- `spinBoost` [0.05, 0.78] (`H5_A`, `H5_B`), `rate(t)` = 6 bricks x the draws per second of `h5Index`: 35 draws rain in; single clacks up to 10 per second and the patter above them (I.2.3), while the rattle speeds up with `spinBoost` to its 8 per second. The 16-per-second budget holds throughout.
+
+**H6 `every-run`** (build 6.0)
+- `pen` <- `bracketDraw` [0.04, 0.20], gain -4: the bracket measures the lead.
+- `pen` <- `mineProgress` [0.40, 0.60] (hot): this run's line.
+- `pen.bundle` <- `bundle` [0.58, 0.88], gain -3: 64 other hoppers draw at once.
+- `tick.claim` <- label `hop-this-run` [0.88, 0.98]: THIS RUN.
+
+Explore: Draw `ball.drop`, `flip` and a `clack` ripple at the explore schedule's times; x10 `clack.rain` for 1.2 s; x40 `clack.rain` for 2.4 s (the patter carries the rush) with the rattle at rate 2; New run `tick.claim`; Rails | Every run `ui.tap`; the rattle while the drum spins.
+
+Hopper edits (`Scene.tsx`): `export` on `hoops`, `steel`, `pour`, `trace`, `railDraw`, `bracketDraw`, `mineProgress`, `bundle` (they read `isExplore()`, so they are sampled in story mode only, I.6.2). `STORY_SCHED`, `B`, `H5_A`, `H5_B`, `h5Index`, `spinBoost` and `toChart` are exported from `timeline.ts` already.
+
+#### 03 Energy "Three engines, one river" (bed B minor; ambient `river`)
+
+Ambient: `river.phos`, `river.gly`, `river.oxi`, each with `level(T) = moteOn(T, band)` (a band flows once it has flooded, and keeps flowing when the motes follow it into its lane in P4).
+
+**P0 `three`** (build 4.5)
+- `pen` <- `axesDraw` [0, 0.26]: the axes.
+- `pen` <- `envDraw` [0.35, 0.90], pan [-0.3, +0.3] (hot): the envelope falls left to right (L11).
+
+**P1 `phosphagen`** (build 5.0)
+- `pour.flood` (phosphagen) <- `front(T, phosphagen band)` [0.05, 0.35], pan [-0.3, +0.3]: the rose band floods. Its river layer follows.
+- `tick.label` <- `curCallout` [0.38, 0.46], pitch +7 (the phosphagen pitch): the cursor callout appears. This is the first engine pitch the viewer hears; P2 and P3 add +2 and 0 in that order, so P5 and P6 can use all three.
+
+**P2 `glycolytic`** (build 4.5)
+- `pour.flood` (glycolytic) <- `front(T, glycolytic band)` [0.05, 0.35]: the amber band floods.
+- `tick.claim` <- `times`: the t where `dominantOf(cursorT)` turns glycolytic (about 12 s on the cursor; found by sampling, never typed), pitch +2: the lead changes engine.
+
+**P3 `oxidative`** (build 5.5)
+- `pour.flood` (oxidative) <- `front(T, oxidative band)` [0.05, 0.35]: the blue base swells.
+- `tick.claim` <- `times`: the t where `dominantOf(cursorT)` turns oxidative (about 75 s; computed), pitch 0.
+- `tick.label` <- label `pw-mara` [0.88, 0.96]: the Marathon edge chip.
+
+**P4 `power`** (build 5.5, signature)
+- `air.reveal` <- `lanesM`, segment 0 [0, 0.45]: the stack separates into lanes.
+- `tick.label` <- `laneNames` [0.45, 0.60]: the three lanes are named together (one mark; the names appear at once).
+- `resolve` <- `orderClaim` [0.60, 0.76]: "Peak power order". Oxidative lasts; it does not hit harder. The bed's D5 enters.
+
+**P5 `workouts`** (build 6.5)
+- `tick.dot` <- each `pinDrop(T, k)`, n `PINS.length`, on land, gain -5 [0.25, 0.45] (6 audible): the pins drop.
+- `tick.claim` <- `times`: `STOP_AT` (0.47, 0.60, 0.73, 0.86), each at its stop's `dominantOf` engine pitch (+7, +2 or 0): each result chip sounds its engine.
+
+**P6 `all-three`** (build 5.0; impact [0.70, 0.82])
+- `pen` <- mean of `bracketDraw(T, k)`, k 0 to 2 [0.10, 0.42]: three brackets (one sound).
+- `tick.close` <- each `bracketPulse(T, k)`, n 3, on the end of its rise (the peaks at 0.46, 0.55, 0.64), pitch [+7, +2, 0]: each band pulses in turn, phosphagen to oxidative, each at its engine pitch.
+
+Explore: benchmark chip `tick.claim` at its dominant engine's pitch; Stacked | Lanes `air.reveal` at -8 dB; Power | Share `ui.tap`; the river while the motes flow.
+
+Energy edits: none (every function above is exported from `timeline.ts`; `pw-mara` is a label id).
+
+#### 04 Capacity "The integral" (bed D; no ambient) **[EX]**
+
+The exemplar builds the whole chain on this chapter first: narration timing (I.6.4), the D bed, every `ui` sound, the chip and toggle, the gates and the QA hooks, `cueFrom` with `fn`, `each`, `label` and `impact` sources, the transient bank, and these palette entries: `pen`, `pen.dash`, `tick.dot` (both rings), `tick.label`, `tick.close`, `air.reveal`, `pour.fill`, `pour.drain`, `resolve`, `resolve.fall`.
+
+**D0 `measured`** (build 3.4)
+- **[EX]** `pen` <- `axesDraw` [0, 0.26], pan [-0.25, +0.3]: one hot L stroke, down the power axis, then along time.
+- **[EX]** `tick.dot` <- `d0Dot` [0.30, 0.40] on land, ring 'ripple': one measured point, the 400m run.
+- **[EX]** `pen.dash` <- `dimsDraw` [0.40, 0.60], gain -6: dashed dimension lines from the point to both axes (the 400m run's name lands with them; no extra sound).
+- **[EX]** `tick.dot` <- each `taskAppear(T, i)` over the nine tasks other than `TASK_400`, on land, gain -5, max 4 [0.62, 0.92] (4 audible: the first, the last and two between; H.71, the fifth listen): nine more measured points.
+
+**D1 `curve`** (build 4.6)
+- **[EX]** `pen` <- `curveDraw` [0, 0.52], pan [-0.3, +0.3] (hot): the pen draws the curve through the points.
+- **[EX]** `tick.label` <- labels `task-<i>` of the three tasks named in this beat (1RM clean, Mile run, 10k run; each label's cue already sits at its pen-head crossing, `crossings(frame)`), pitch [+2, 0, -5], gain +2 (H.71, was -3: the last name was masked by the voice): each name lands as the pen head passes its dot, and the pitch falls (E6, D6, A5) as power falls with duration. (The first draft listed four names; the 400m run is named in D0.)
+
+**D2 `domains`** (build 5.5)
+- **[EX]** `air.reveal` <- `fan`, segment 0 [0, 0.35]: the curve fans out in depth.
+- **[EX]** `tick.label` <- label `['dom-0', 'dom-key-0']` [0.16, 0.30], gain -3: the five domains are named together (one mark; the names appear at once).
+- **[EX]** `air.reveal` <- `fan`, segment 1 [0.50, 0.85], gain -3, pan reversed: the slices converge and the camera returns front-on.
+- **[EX]** `tick.close` <- `averageFlare`, segment 0 on end (the flare's peak, about 0.82): the averaged curve absorbs the five.
+
+**D3 `area`** (build 5.0, signature; impact [0.80, 0.92])
+- **[EX]** `pour.fill` <- `pourLevel` [0.05, 0.78]: light pours in under the curve; the sound fills as the light does.
+- **[EX]** `resolve` <- `impact` [0.80]: AREA = FITNESS lands with the claim plate and the impact accent. The bed's F#4 enters.
+
+**D4 `synthesis`** (build 4.5)
+- **[EX]** `pen` <- each `d4Stroke(T, k)`, n 3: [0.04, 0.24], [0.34, 0.56], [0.64, 0.86], gain -3: three strokes of light (the power axis, the curve, the time axis).
+- **[EX]** `tick.label` <- label `c-height` [0.18, 0.30], label `c-domains` [0.48, 0.60], label `c-time` [0.78, 0.90], pitch [+7, +2, +9]: HEIGHT, DOMAINS and TIME land, each at the tick pitch of the chapter it names (Skills A6, Hopper E6, Energy B6, the B an octave up to stay within 7 semitones): the models combine.
+
+**D5 `specialist`** (build 5.5, signature)
+- **[EX]** `pen.dash` <- `d5Dash` [0.15, 0.50]: the Powerlifter's dashed curve.
+- **[EX]** `pour.drain` <- `spillMix` [0.45, 0.90]: the light spills out.
+- **[EX]** `resolve.fall` <- label `lost` [0.62, 0.74], gain -3 (H.71: it lands between "The generalist" and "wins the integral", so it marks the lost area without a verdict on the generalist): AREA LOST, the integral lost; its lowpass closes over 0.9 s. The bed's answer dips 6 dB.
+- **[EX]** `tick.close` <- label `zone` [0.74, 0.86], gain -3: ZONE WON, the amber sliver's small win, after the loss, in the order the picture shows them. (The first draft had these two the other way round; in the code AREA LOST lands at 0.62 and ZONE WON at 0.74.)
+
+**D6 `lineup`** (build 5.5)
+- **[EX]** `tick.dot` <- each `rowAppear(T, r)` for rows 1 to 6 (row 0 is the folded chart), on land, ring 'shimmer', gain -2 [0.28, 0.80] (H.71, was -5: the first row was masked by the voice): each specialist's row lands with its light.
+- **[EX]** `pen` <- mean of `barGrow(T, r)` over the rows [0.36, 0.98], gain -8: the score bars grow into a staircase of light.
+
+Explore **[EX]**: athlete chip `pour.drain` (a specialist) or `pour.fill` (the Generalist) for 1.2 s at -6 dB, the damped replay; "Show the 5 modal domains" `air.reveal` at -8 dB (the orbit to the fan); the scrub probe is silent.
+
+Capacity edits **[EX]** (`stories/definition/Scene.tsx`): `export` on `axesDraw`, `d0Dot`, `dimsDraw`, `taskAppear`, `curveDraw`, `averageFlare`, `pourLevel`, `spillMix`, `rowAppear`, `barGrow` (`fan` is exported already; `TASK_400` and `RANKED` are exported from their modules); hoist two inline windows into named exports with the same numbers and use them in place: `d4Stroke(T, k)` (the three D4 Pen `progress` windows, draw) and `d5Dash` (the Powerlifter's D5 Pen `progress`, draw). Labels used by id with no edit: `task-<i>`, `dom-0`, `dom-key-0`, `c-height`, `c-domains`, `c-time`, `lost`, `zone`.
+
+#### 05 Continuum "From one line to the dial" (bed F# minor; no ambient)
+
+**C0 `one-line`** (build 4.0)
+- `pen` <- `lineDraw` [0.04, 0.58], pan [-0.3, +0.3]: one line in the spectrum.
+- `tick.label` <- each `c0Callout(T, k)`, n 3: [0.62, 0.72], [0.70, 0.80], [0.78, 0.88], on land, pitch [0, +2, +7]: SICKNESS, WELLNESS, FITNESS, rising toward better.
+
+**C1 `bp`** (build 4.5)
+- `tick.dot` <- `spans` `BP_PLAN.appear` [0.26, 0.34] on land: the bead appears at "160/95".
+- `pen.slide` <- `spans` `BP_PLAN.moves` [0.40, 0.58] and [0.68, 0.86]: the bead slides right: a rising texture with glass grains, never a gliding tone.
+- `tick.label` <- the same spans on end, pitch [+2, +7]: "120/70", then "105/55", each value marked by a step up the chord (the pitch lives here, not in the slide).
+
+**C2 `bodyfat`** (build 4.0)
+- `pen` <- `fatDraw` [0.16, 0.40]: the body fat row.
+- `tick.dot` <- `spans` `FAT_PLAN.appear` [0.44, 0.50] on land: the bead appears.
+- `pen.slide` <- `spans` `FAT_PLAN.moves` [0.55, 0.67] and [0.74, 0.88]: 40%, 20%, 10%.
+- `tick.claim` <- `betterCallout` [0.88, 0.98] on land: LOWER IS BETTER.
+
+**C3 `dial`** (build 6.0, signature)
+- `pen` <- mean of `rowDraw(T, i)` over `CASCADE` [0.10, 0.36], gain -4: eight more rows.
+- `air.swing` <- mean of `morphK(T, i)` over the rows [0.52, 0.88]: the rows swing into a full circle.
+- `pen` <- `ringsClose` [0.84, 0.96], gain -2: the WELL and FIT circles close.
+- `resolve` <- `centreCallout` [0.90, 1.0]: the dial lands, sickness at the centre, fitness at the rim. The bed's A4 enters.
+
+**C4 `well`** (build 4.5)
+- `air.deep` <- `cam` [0, 0.35] (the tilt that shows the pit, with `pitShade`): the centre is a pit.
+- `tick.dot` <- each `climbWell(T, i)`, n 10, on land, pitch [0, 0, +3, +3, +7, +7], gain -5 [0.42, 0.74] (6 audible): the average profile climbs out of the pit.
+- `pen` <- `outlineDraw` [0.68, 0.86]: the polygon joins.
+- `tick.claim` <- `wordRise` [0.86, 1.0] on land: WELL rises.
+
+**C5 `super`** (build 5.0; impact [0.78, 0.90])
+- `pour.lift` <- mean of `climbAthlete(T, i)` [0.15, 0.75], gain -3: the profile climbs toward the rim.
+- `tick.claim` <- `times`: [`T_SWAP` - `B.sup`] (computed): the word changes to the athlete's state exactly where the score crosses.
+
+**C6 `hedge`** (build 4.5)
+- `pour.glow` <- `bandOn` [0.10, 0.70], gain -4: the margin beyond wellness lights.
+- `tick.label` <- `preventiveCallout` [0.56, 0.70] on land: Preventive medicine. The bed darkens with the pit (I.2.5).
+
+Explore: dragging a dot `hold('pen.slide')` with `pos` following the dot along its spoke (the texture rises outward), and a `tick.label` at each whole-step crossing (at most 12 per second) on the chord tone for the dot's third of the spoke (0, +2, +7, rising outward); profile chip `pour.lift` (outward) or `pour.drain` (inward) for 0.8 s at -6 dB.
+
+Continuum edits (`timeline.ts`): `export` on `BP_PLAN`, `FAT_PLAN`, `climbWell`, `climbAthlete` (the rest is exported already).
+
+#### 06 Health "Stack every age" (bed G; no ambient)
+
+**L0 `slice`** (build 4.0)
+- `pen` <- `axesDraw` [0, 0.16], then `pen` <- `curveDraw` [0.14, 0.60]: the axes, then the age-30 curve.
+- `pour.sweep` <- `areaSweep` [0.55, 0.85], gain -2: the area sweeps in, a callback to Capacity.
+- `tick.label` <- `age30` [0.84, 0.96]: AGE 30.
+
+**L1 `stack`** (build 6.0)
+- `air.reveal` <- `axesSlide` [0, 0.32] (the camera rises with it): age is revealed.
+- `tick.card` <- each `sliceP(T, k)`, n 13, on land, gain -6 [0.26, 0.72] (6 audible): the slices fly in one after another.
+- `pour.glow` <- `fuse` [0.76, 0.95], gain -4: they fuse into one surface.
+
+**L2 `volume`** (build 4.5)
+- `pour.fill` <- `pourLevel` [0.12, 0.60], pitch -12: the volume fills from the floor, an octave deeper than Capacity's area.
+- `tick.claim` <- `claimIn` [0.80, 0.96] on land: VOLUME = HEALTH.
+
+**L3 `line`** (build 4.0)
+- `pen` <- `edgeDraw` [0.55, 0.85], pitch -5 (hot; its glow a fourth lower: a darker pen): the red edge of the independence line.
+- `tick.label` <- `lineCallout` [0.84, 0.96]: INDEPENDENCE LINE.
+
+**L4 `sink`** (build 5.5)
+- `pour.drain` <- `sinkK` [0.05, 0.80], gain -3: the surface sinks toward the line. The bed darkens with it (I.2.5).
+- `tick.label` <- `indep70` [0.86, 0.96]: "Independent through 70".
+
+**L5 `any-age`** (build 6.0, signature; impact [0.30, 0.42])
+- `pour.lift` <- `scanAge` [0.15, 0.85] (the scanner's time-true sweep): the surface lifts behind the scanner like a wave.
+- `resolve` <- `impact` [0.30]: it lifts. The bed's B4 enters and the bed reopens.
+- `tick.label` <- `indep85` [0.86, 0.96]: "Independent through 85+".
+
+**L6 `hold`** (build 5.5)
+- `pour.lift` <- `backW` [0, 0.45], gain -5: back to the Lifelong trainer.
+- `pen.scan` <- `ageSliceAge` [0.42, 0.90]: the amber slice rides from 20 to 85.
+- `tick.claim` <- `indep90` [0.90, 0.98]: "Independent through 90+". After the beat is done the bed resolves to D (I.2.5).
+
+Explore: dragging the age slice `hold('pen.scan')` with `pos` following the age; profile chip `pour.lift` or `pour.drain` by the sign of the volume change, 1.0 s at -6 dB; the independence toggle `ui.tap`.
+
+Health edits: none (every function above is exported from `timeline.ts`).
+
+**Density check**: no beat has more than 4 entries (S3, H4, H6, D0, D2, D5, C2, C3 and C4 have 4; H5 has 1). Each of the eight signature beats (I4, S4, H4, P4, D3, D5, C3, L5) has exactly one `resolve` or `resolve.fall`, and no other beat has one. No beat's transient events exceed 16 in any second (H5 is the densest, held to the budget by construction).
+
+#### I.8 Acceptance checklist
+
+Run on the Capacity exemplar first, then on each chapter as its cues land. Meters, transcripts and code are the judges; the ear (below) is a second opinion only.
+
+**Gates and assets**
+- [ ] Prerequisite: the 7 Capacity clips exist in `public/narration/definition/`, generated by the I.6.5 method, and the generation log shows gates 1 and 2 passed for each: the first speech span of every clip transcribes as the start of its caption, never as a direction.
+- [ ] `node scripts/fitness-gate.mjs` passes, including `narration-check.mjs`: every beat of every present chapter has its clip and a matching `narration.gen.ts` entry; every clip is inside the pace gate (words / 2.9 to words / 2.0 s of speech), has no inner gap over 0.8 s, measures -16 +/- 0.5 LUFS and <= -2.0 dBTP; `narration-manifest.mjs --check` reports no change.
+- [ ] Editing one caption word makes the gate fail until the clip and the manifest are regenerated (tried once, then reverted).
+- [ ] A spoken preamble fails the gate: prepend 4 s of any speech and a 1 s pause to one local clip copy and rebuild the manifest; `narration-check` fails on pace and on the gap (tried once, then reverted).
+- [ ] `node C:/Users/ravik/fitness-v2/tools/dashcheck.mjs <worktree>/src/fitness` prints no dashes; the TS strict build passes for `/` and `/preview/`.
+- [ ] No new dependency; no audio file other than `public/narration/**`; `story/audio/**` and `stories/*/sound.ts` have no `Math.random`.
+- [ ] Merge hygiene: outside `story/audio/`, the diff touches only the I.6.8 files, each change marked `// [audio]`; in `stories/definition/` the only new file is `sound.ts`, and `Scene.tsx` changes only by `export` and the two hoists (read the diff); story-qa on definition with sound off is unchanged.
+- [ ] `narration-manifest.mjs` prints Capacity's sound-on runtime; the review records it next to the I.6.4 estimate (about 60 s).
+
+**The gesture rule** (Playwright WITHOUT `--autoplay-policy=no-user-gesture-required`)
+- [ ] With no stored choice and no `?sound`: an init script counting `AudioContext` and `webkitAudioContext` constructions reads 0 after a full autoplay of the chapter; `__story.audio().contextState === 'none'`; the request log has nothing under `/narration/`.
+- [ ] A real CDP tap on the chip: `contextState` is 'running' within 300 ms, `playing` is true within 0.7 s, `localStorage['fitness-sound'] === '1'`, and `session` is 'playback' where supported.
+- [ ] Reload with '1' stored: the chip shows, `contextState` stays 'none' until a gesture; the first tap anywhere in the lesson starts sound, and the current beat's clip plays from its start.
+- [ ] Reload with '1' stored, then make the FIRST tap on the top-bar toggle (Waiting): sound starts and '1' stays stored. The same with the chip, and with M on desktop.
+- [ ] The toggle turns sound off: `contextState` becomes 'suspended' within 400 ms, '0' is stored, the chip never shows again, and reloading keeps it off.
+
+**Timing** (with `?sound=1` and the autoplay flag)
+- [ ] Over a full Capacity autoplay, each beat lasts its planned `total` (I.6.4) within 0.15 s, measured in story time (the sum of min(dt, 0.1) per frame) plus the audio clock while the clip sounds, never in wall time (H.71); every clip sounds for its manifest duration on the audio clock; no beat advances before its clip end plus a breath.
+- [ ] With `?sound=0`, each beat lasts exactly today's time in story time (within one frame).
+- [ ] `?beat=N&t=X` lands in the same story state with `?sound=0` and `?sound=1` and renders the same pixels between two loads that share a chart frame (pixel diff under 0.5%; H.71); no clip plays while held.
+- [ ] `audioTimeline(0, 6)` matches the scene: for every Capacity cue, seek to its `at` and confirm its source (function or label cue) has just left 0; for continuous cues, that it is strictly between its start and end values halfway through.
+- [ ] Last beat: on D6 with sound on, `phase` stays 'hold' until the clip has ended plus the breath; `playing` stays true until then; Replay and the CTA row appear only at 'done'.
+
+**Behaviour** (I.4)
+- [ ] Pause mid-clip for 3 s, resume: `position` after resuming is at or up to 70 ms before `position` at the pause (no word lost, at most the fade repeated); the bed fades out and back.
+- [ ] Stalls: during one clip, block the main thread for 300 ms three times (a busy loop in `page.evaluate`), then pause and resume: `position` still equals the audio-clock position within 50 ms, and nothing already heard is repeated beyond 70 ms.
+- [ ] Next during a build: `playing` goes false within 150 ms, no cue fires during the glide, and the next beat's clip starts about 0.2 s after that beat starts.
+- [ ] Prev twice, then Next: every landed beat's clip plays (`playing` true within 0.5 s of each beat start) and the console shows no decode error.
+- [ ] A missing clip: route one MP3 to the SPA fallback (index.html with a 200): that beat runs silent at once (no 2 s wait) with one warning, and the next beat narrates.
+- [ ] Scrub across three beats: the voice stops and only the soft boundary ticks sound.
+- [ ] Explore on stops the voice within 250 ms and the bed drops 4 dB; Back to story then play replays a cut clip from its start and does not replay a finished one.
+- [ ] Hidden page: hide the page mid-clip for 5 s (visibilitychange with `document.visibilityState` 'hidden'), then show it: while hidden `levels.master` reads silence and `contextState` becomes 'suspended'; after showing, `position` is at or up to 70 ms before its value at the hide (no word lost).
+- [ ] Chapter change: the old voice stops within 200 ms; the new chapter's beat 0 clip starts `LEAD_FIRST` after its `loaded`; the room never drops out.
+- [ ] Hidden page after a sound toggle (H.71, `sound-qa hidden2`): on, off, hide, show, on, hide leaves the context suspended, `levels.master` at -120 and the audio clock stopped.
+- [ ] Session (H.71, `sound-qa session`, `idleshow`): sound off and on again 120 ms apart leaves the session 'playback'; showing the tab while the context idles leaves it asleep with the session 'auto', and Play wakes it where it paused.
+- [ ] Desktop, '1' stored (H.71, `sound-qa keys`): the first ArrowRight, Space or E with focus on the body unlocks audio.
+- [ ] Reduced motion (`?motion=reduce`): nothing narrates at load; a step narrates the landed beat once; Show build fires that beat's cues, never an `air`, and its clip plays to its end after the build stops; the bed plays with it, then holds 8 s and fades.
+- [ ] Sound turned on mid-beat: `ui.on`, then the clip from its start 0.35 s later, and the beat waits for it. Turned off mid-beat: silence within 200 ms and no jump in the story.
+- [ ] Hopper, when wired: `audioTimeline(5, 5)` has at most 16 transient events in any one-second window, and during a live H5 at 4x CPU throttle `audio().voices` never exceeds 24.
+
+**Mix** (ffmpeg `ebur128=peak=true` on `renderAudio`; I.3.5)
+- [ ] Full mix of the chapter (`renderAudio(0, last)`): integrated -16.0 LUFS +/- 1.0, true peak <= -1.0 dBTP, LRA <= 8 LU.
+- [ ] Voice stem: -16.0 +/- 0.7 LUFS, <= -2.0 dBTP, and sample-identical to the clips placed at their plan times (the chain adds nothing to the voice: the limiter only catches sums).
+- [ ] Bed stem: -35.5 +/- 2 LUFS with ducking, -32 +/- 1.5 without (`duck: false`); its first and last beats within 3 LU of each other. Effects stem: sample peak <= -18 dBFS, momentary max <= -27 LUFS; the D3 resolve alone -30 +/- 1 LUFS momentary max.
+- [ ] Ducking bridges (H.71, `sound-qa duck` and `bridge`): between a chapter's first and last syllable no un-duck window is shorter than 0.8 s, and live the bed stays at -6 dB across D0 -> D1.
+- [ ] Continuous sounds before a claim are not risers (H.71, `sound-qa pour`): the D3 pour's centroid moves under one octave after its attack, its loudness rises under 3 LU, and its last second before the bell is flat or falling.
+- [ ] Every cue of a chapter has at least 6 dB of band margin over voice + bed in some third-octave band (0.4 to 8 kHz, 50 ms frames, ducked stems; H.71).
+- [ ] Ducking: on the bed stem, short-term loudness inside the voice's speech spans is 5 to 7 LU below the neighbouring gaps, and `scripts/sound-qa.mjs duck` finds the ducked bed 6 dB (+/-0.5) under the unducked render across every speech span of every clip (H.70).
+- [ ] Limiter: in a full live autoplay under `?sound=1`, `levels.limiterMin` never goes below -1.5 dB.
+- [ ] Two renders of the same range agree within 1 LSB at 16 bits (determinism; Chromium's float rounding, H.69, H.70); a render of D4 to D6 alone starts with the bed's F#4 already in (the bed state from beat 0).
+
+**UI** (every chapter, at 360 x 780, 375 x 812, 390 x 844, 412 x 915, 430 x 932, 844 x 390, 768 x 1024, 1024 x 768 and 1440 x 900)
+- [ ] The top bar never overflows or overlaps (element rects), the wordmark follows the I.5.2 bands, and the toggle and the theme box are each 44 x 44.
+- [ ] The chip clears the grab band and the scrubber band, sits over no visible label (`labels()` overlaps against the `sound-chip` obstacle), is at least 44 px tall to touch, and leaves the focus rect and camera fit unchanged.
+- [ ] Landscape: the chip is a row after the transport and yields to the CTA row on the finished last beat.
+- [ ] `aria-pressed`, the constant `aria-label="Sound"`, the chip's label and the "Sound on" status all read correctly; focus rings show; `M` toggles on desktop and is ignored in inputs and with the sheet open; both controls carry `data-sound-control`.
+- [ ] `/preview/` builds fetch `/preview/narration/...`; `/` builds fetch `/narration/...`.
+
+**On the owner's phone** (a real iPhone, by ear; the final judge, I.1.7)
+- [ ] With the ring / silent switch ON, turning sound on plays the narration.
+- [ ] The tick A/B (H.71): Capacity with and without `?tick=round`, Sound on, three plays each; keep the `tick.dot` that reads as chalk and glass on the fifth listen and record the choice in H.
+- [ ] D5 (H.71): the dark loss bell between "The generalist" and "wins the integral" does not read as a verdict against the generalist; if it does, take the story-timing fix.
+- [ ] With music playing in another app, turning sound on pauses it; turning sound off (or 12 s of silence) lets it resume.
+- [ ] Lock the phone mid-sentence, wait, unlock: nothing sounds while locked, and the sentence continues where it stopped without losing a word.
+- [ ] The first chapter with sound feels calm on the fifth listen; the voice is never covered; nothing sounds like a notification or a game.
+
+**The ear** (the Gemini audio critic, `critic.py` on the VPS)
+- Render the range, take the cue list from `audioTimeline`, and put exact timestamps in the question file. Ask closed questions, one per line, for example:
+  1. "At each of these timestamps, is the named sound audible under the voice? Answer yes or no per line: 3.41 s pen stroke; 4.60 s dot tap; ..."
+  2. "Is every word of the narration intelligible? List any timestamp where an effect or the background tone masks a word."
+  3. "List any timestamp with a click, a harsh transient, distortion or a level jump."
+  4. "At 21.30 s a bell sounds. Is it a calm, open, glass-like tone, a notification chime, or a game or achievement reward? Answer one word: calm, chime or reward."
+  5. "Between 0 and 60 s, does the background tone pulse or throb audibly? Is it noticeable at normal phone volume? Does any bell or tick sound out of tune against it?"
+  6. (Hopper) "Between 5 and 40 s, does the background clicking sound like a ticking clock or a metronome? Yes or no."
+  7. "Here are the narration lines in order: ... Does the narrator say anything that is not in these lines? Give each extra phrase with its timestamp."
+- Every question file carries controls: a timestamp that is digital silence in the stem being asked about, and a named sound that does not exist. Discard any run that fails either (H.70). Record audibility as frame exposure measured on the stems, never as the ear's "heard every cue".
+- Pace is read from the manifest (`words`, `dur`), never from the ear.
+- Act on an ear finding only when a meter, a stem render, a transcript of the flagged span or the code corroborates it. (The ear once reported "an accidental duplicate line" in a clip that had passed a whole-clip transcript check; it was most likely hearing the spoken direction, which only a transcript of the first span proved. A finding the ear makes and a transcript confirms is real.) Record the finding, the corroboration and the fix in section H.

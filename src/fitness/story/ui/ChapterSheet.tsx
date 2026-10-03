@@ -9,7 +9,7 @@ import { IconCheck, IconClose } from './icons'
 import { readDone } from './progress'
 
 /* Chapter sheet (DESIGN.md B.5): a theme-aware bottom sheet listing the
-   overview and the six chapters, each with its glyph, number, label, blurb
+   overview and every chapter, each with its glyph, number, label, blurb
    and a check when completed. Opening it pauses the story (interaction). */
 
 export function useDoneList(): FitnessView[] {
@@ -48,6 +48,8 @@ export function ChapterSheet({ open, onClose }: { open: boolean; onClose: () => 
     const raf = requestAnimationFrame(() => {
       const cur = sheetRef.current?.querySelector<HTMLElement>('.st-sheet-row.is-current') ?? focusables()[0]
       cur?.focus({ preventScroll: true })
+      // the current chapter is always in view, even when the list is taller than the screen (08 on a short phone)
+      cur?.scrollIntoView({ block: 'nearest' })
     })
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {

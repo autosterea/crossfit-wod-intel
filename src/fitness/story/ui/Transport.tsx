@@ -23,9 +23,13 @@ export function Transport() {
   const index = useStoryStore((s) => s.index)
   const total = useStoryStore((s) => s.def?.beats.length ?? 1)
   const view = useStoryStore((s) => s.view)
+  const branded = useStoryStore((s) => !!s.def?.brand)
+  const hostNext = useStoryStore((s) => !!s.def?.brand?.onNext)
   // the last beat of the last chapter: nothing comes next (the card's CTA row
-  // carries "Back to overview"), so the arrow is disabled, never a dead button
-  const end = index >= total - 1 && view === LAST_VIEW
+  // carries "Back to overview"), so the arrow is disabled, never a dead button.
+  // A branded lab story (H.65) stands alone, so its last beat is the end too,
+  // unless its host has a next step (H.77: a MetFix bridge goes on to its module).
+  const end = index >= total - 1 && (view === LAST_VIEW || (branded && !hostNext))
   const ring = useRef<SVGCircleElement>(null)
   const lastDone = index >= total - 1 && phase === 'done'
 
@@ -69,7 +73,7 @@ export function Transport() {
         type="button"
         className="st-rb"
         disabled={end}
-        aria-label={end ? 'End of the lesson' : index >= total - 1 ? 'Next chapter' : 'Next beat'}
+        aria-label={end ? (branded ? 'End of the story' : 'End of the lesson') : index >= total - 1 ? (hostNext ? 'Continue' : 'Next chapter') : 'Next beat'}
         onClick={() => st().next()}
       >
         <IconNext />

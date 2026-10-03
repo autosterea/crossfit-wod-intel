@@ -9,6 +9,7 @@ import { dropQueryKeys } from './url'
 import { readyState } from './ready'
 import { suppressHotspotClick } from './hotspots'
 import type { V3 } from './types'
+import { audioHooks } from './audio/hooks' // [audio]
 
 /* =========================================================================
    One gesture model for the whole stage (DESIGN.md C.6), gated by mode.
@@ -344,6 +345,10 @@ export function useStoryKeys(): void {
         case 'e':
         case 'E':
           st.setMode(st.mode === 'explore' ? 'story' : 'explore')
+          break
+        case 'm':
+        case 'M':
+          audioHooks.toggleKey() // [audio] sound on / off (starts it when Waiting), I.5.2
           break
         case 'Escape':
           if (st.sheet) st.setSheet(false)

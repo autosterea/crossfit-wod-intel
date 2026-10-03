@@ -1,0 +1,251 @@
+/* =========================================================================
+   Sound controls (DESIGN.md I.5): the first-visit Sound on chip and the
+   top-bar toggle. The top-bar WIDTH rules live in fitness.css (the
+   "[audio] I.5.2" block), next to the bar they change. A host re-colours
+   them with --st-sound-on, --st-sound-on-rgb and --st-sound-on-light (the
+   MetFix shell sets its blue, H.72); the fallbacks are the lesson's lime.
+   ========================================================================= */
+
+.st-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ------------------------------ the chip (I.5.1) ------------------------------ */
+.st-soundchip {
+  position: absolute;
+  z-index: 3;
+  top: -15px;
+  right: 8px;
+  height: 30px;
+  min-height: 0 !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0 11px 0 10px;
+  border-radius: 999px;
+  background: var(--st-glass);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  border: 1px solid rgba(var(--st-sound-on-rgb, 145, 198, 64), 0.55);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+  color: var(--st-chalk);
+  font-family: var(--st-cond);
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 1;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  touch-action: manipulation;
+  animation: st-soundchip-in 220ms var(--ease-settle) both;
+  transition:
+    background-color 160ms,
+    color 160ms,
+    opacity 160ms var(--ease-exit);
+}
+/* a 44 px tall hit area around the 30 px pill: 9 px above, 5 px below. The pill sits 14 px above and
+   16 px below the card edge (its top: -15px is from inside the card's 1 px border), so the hit area runs
+   from 23 px above the edge to 21 px below it, where the scrubber band starts (I.5.1; fix round 2: 8 px
+   below reached 24 px and overlapped the scrubber by 3 px) */
+.st-soundchip::before {
+  content: '';
+  position: absolute;
+  left: -2px;
+  right: -2px;
+  top: -9px;
+  bottom: -5px;
+}
+.st-soundchip .st-snd-ic {
+  color: var(--st-sound-on, #91c640);
+  flex: none;
+}
+.st-soundchip-l {
+  display: block;
+  padding-top: 1px;
+}
+.st-soundchip:focus-visible {
+  outline: 2px solid var(--st-sound-on, #91c640);
+  outline-offset: 2px;
+}
+.st-soundchip.is-ring {
+  animation:
+    st-soundchip-in 220ms var(--ease-settle) both,
+    st-soundchip-ring 1.6s var(--ease-settle) 260ms 1;
+}
+.st-soundchip.is-on {
+  background: var(--st-sound-on, #91c640);
+  color: var(--st-ink);
+  border-color: var(--st-sound-on, #91c640);
+}
+.st-soundchip.is-on .st-snd-ic {
+  color: var(--st-ink);
+}
+.st-soundchip.is-leaving {
+  opacity: 0;
+}
+.st-snd-ic.is-draw .st-snd-wave {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: st-snd-draw 300ms var(--ease-draw) forwards;
+}
+.st-snd-ic.is-draw .st-snd-wave--2 {
+  animation-delay: 90ms;
+}
+@keyframes st-snd-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes st-soundchip-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes st-soundchip-ring {
+  0%,
+  100% {
+    box-shadow:
+      0 6px 18px rgba(0, 0, 0, 0.35),
+      0 0 0 0 rgba(var(--st-sound-on-rgb, 145, 198, 64), 0.35);
+  }
+  50% {
+    box-shadow:
+      0 6px 18px rgba(0, 0, 0, 0.35),
+      0 0 0 6px rgba(var(--st-sound-on-rgb, 145, 198, 64), 0.35);
+  }
+}
+/* 360 px class phones: 4 px further right, so the chip's 44 px hit band clears the grab handle's band by
+   more than 6 px (measured 4 px at right: 8px; fix round 1) */
+@media (max-width: 374px) {
+  .st-soundchip:not(.st-soundchip--row) {
+    right: 4px;
+  }
+}
+/* desktop: on the 400 px card, 13 px type */
+.st-shell--desktop .st-soundchip {
+  right: 12px;
+  font-size: 13px;
+}
+/* landscape phone: a right-aligned row after the transport */
+.st-soundchip--row {
+  position: relative;
+  top: auto;
+  right: auto;
+  display: flex;
+  width: fit-content;
+  height: 36px;
+  margin: 8px 0 0 auto;
+}
+.st-soundchip--row::before {
+  top: -4px;
+  bottom: -4px;
+}
+
+/* ---------------------------- the toggle (I.5.2) ---------------------------- */
+.st-sound {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  flex: none;
+  display: grid;
+  place-items: center;
+}
+.st-sound-btn {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  color: var(--text-tertiary, #8a949a);
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  isolation: isolate;
+  touch-action: manipulation;
+}
+.st-sound-btn::before {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  z-index: -1;
+  border-radius: 8px;
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  transition:
+    border-color 160ms,
+    box-shadow 160ms;
+}
+.st-sound-btn:hover {
+  color: var(--st-sound-on, #91c640);
+}
+.st-sound-btn:hover::before {
+  border-color: rgba(var(--st-sound-on-rgb, 145, 198, 64), 0.4);
+}
+.st-sound-btn:focus-visible {
+  outline: 2px solid var(--st-sound-on, #91c640);
+  outline-offset: 2px;
+  border-radius: 10px;
+}
+.st-sound[data-state='on'] .st-sound-btn,
+.st-sound[data-state='waiting'] .st-sound-btn {
+  color: var(--st-sound-on, #91c640);
+}
+:root[data-theme='light'] .st-sound[data-state='on'] .st-sound-btn,
+:root[data-theme='light'] .st-sound[data-state='waiting'] .st-sound-btn {
+  color: var(--st-sound-on-light, #019644);
+}
+.st-sound[data-state='waiting'] .st-snd-ic {
+  opacity: 0.55;
+}
+.st-sound-dot {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--st-sound-on, #91c640);
+}
+/* the light theme's lime for chrome, as the icon (fix round 2: var(--st-sound-on, #91c640) is about 1.9:1 on the white panel) */
+:root[data-theme='light'] .st-sound-dot {
+  background: var(--st-sound-on-light, #019644);
+}
+.st-sound.is-ring .st-sound-btn::before {
+  animation: st-sound-ring 600ms var(--ease-settle) 1;
+}
+@keyframes st-sound-ring {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(var(--st-sound-on-rgb, 145, 198, 64), 0.4);
+  }
+  45% {
+    box-shadow: 0 0 0 5px rgba(var(--st-sound-on-rgb, 145, 198, 64), 0.4);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .st-soundchip,
+  .st-soundchip.is-ring {
+    animation: none;
+  }
+  .st-sound.is-ring .st-sound-btn::before {
+    animation: none;
+  }
+  .st-snd-ic.is-draw .st-snd-wave {
+    animation-duration: 1ms;
+  }
+}

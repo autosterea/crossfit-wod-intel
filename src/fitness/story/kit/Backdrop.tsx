@@ -16,6 +16,7 @@ export const backdropState = { boost: 1 }
 
 export function Backdrop() {
   const view = useStoryStore((s) => s.view)
+  const brand = useStoryStore((s) => s.def?.brand)
   const material = useMemo(() => makeBackdropMaterial(), [])
   const mesh = useMemo(() => {
     const g = new THREE.BufferGeometry()
@@ -33,10 +34,14 @@ export function Backdrop() {
     [mesh, material],
   )
   useEffect(() => {
+    // a branded lab story (H.65) brings its own slate and glow; every fitness chapter keeps the defaults
+    const bd = brand?.backdrop
+    ;(material.uniforms.uTop.value as THREE.Vector3).copy(srgb(bd?.top ?? '#0c1511'))
+    ;(material.uniforms.uBottom.value as THREE.Vector3).copy(srgb(bd?.bottom ?? '#060809'))
     // --st-glow mixed 15% toward the chapter accent, in display space (like CSS color-mix)
-    const accent = MODULES.find((m) => m.key === view)?.accent ?? '#91c640'
-    ;(material.uniforms.uGlow.value as THREE.Vector3).copy(srgb('#0f2a1a').lerp(srgb(accent), 0.15))
-  }, [view, material])
+    const accent = brand?.accent ?? MODULES.find((m) => m.key === view)?.accent ?? '#91c640'
+    ;(material.uniforms.uGlow.value as THREE.Vector3).copy(srgb(bd?.glow ?? '#0f2a1a').lerp(srgb(accent), 0.15))
+  }, [view, brand, material])
   useFrame(() => {
     const u = material.uniforms
     const cx = ((focusRect.x + focusRect.w / 2) / focusRect.W) * 2 - 1

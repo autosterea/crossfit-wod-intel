@@ -1528,7 +1528,11 @@
   bottom: 0;
   z-index: 60;
   max-height: 86vh;
+  /* the VISIBLE viewport on iOS Safari (vh is the toolbar-less one, so the list ran under the toolbar) */
+  max-height: min(86vh, 86dvh);
   overflow: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
   margin: 0 auto;
   max-width: 560px;
   padding: 6px 0 calc(10px + env(safe-area-inset-bottom));
@@ -1615,6 +1619,19 @@
 .st-sheet-check {
   color: #019644;
   flex: none;
+}
+/* Eight chapters and the overview (H.79, H.80): on a short phone (390 x 664, 375 x 667) the 64 px rows ran the
+   last chapter off the screen with no hint that the list scrolls. Compact rows keep all nine on screen. */
+@media (max-height: 760px) {
+  .st-sheet-row {
+    min-height: 52px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+  .st-sheet-glyph {
+    width: 32px;
+    height: 32px;
+  }
 }
 
 /* ------------------------------ notes (theme-aware) -------------------- */
@@ -1856,4 +1873,23 @@
 :root[data-theme='light'] .st-sheet-num,
 :root[data-theme='light'] .st-sheet-glyph {
   filter: brightness(0.68) saturate(1.25);
+}
+
+/* [audio] I.5.2: the top bar with the sound toggle (only while it is present, .has-sound).
+   Under 412 px the toggle and the theme box touch (their visible 32 px squares stay 12 px apart);
+   under 390 px the wordmark hides (it hid under 375 px before); 390 to 411 px it drops to 14 px. */
+@media (max-width: 411px) {
+  .st-topbar.has-sound .st-topbar-right {
+    gap: 0;
+  }
+}
+@media (max-width: 389px) {
+  .st-topbar.has-sound .st-wordmark {
+    display: none;
+  }
+}
+@media (min-width: 390px) and (max-width: 411px) {
+  .st-topbar.has-sound .st-wordmark {
+    font-size: 14px;
+  }
 }

@@ -204,6 +204,8 @@ const FITNESS = {
   definition: ['Work Capacity, Fitness Defined | Persistence Athletics', 'CrossFit defines fitness as work capacity across broad time and modal domains. Plot power against duration and measure the area under the curve.'],
   continuum: ['Sickness Wellness Fitness Continuum | Persistence Athletics', 'Nearly every health marker rides one continuum from sickness to fitness. Push them all toward fitness and health follows. Fitness is super-wellness.'],
   health: ['Work Capacity Across a Lifetime | Persistence Athletics', 'Add age to the fitness curve and the 3D solid is health. Sustaining high work capacity across a lifetime, not just living long, is true health.'],
+  crossfit: ['What Is CrossFit? The Prescription | Persistence Athletics', 'Constantly varied, high-intensity functional movement, animated: movements from life, intensity as power, variance, and the pyramid of development.'],
+  technique: ['Technique: Safety, Efficacy, Efficiency | Persistence Athletics', "Glassman's essay on technique, animated: the graph that defines it, what a deviation is, mechanics before intensity, and threshold training."],
 }
 
 /** Per-year curated copy (champions grounded in games-data.json). */

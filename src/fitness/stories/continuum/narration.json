@@ -1,0 +1,96 @@
+{
+  "_about": "Spoken narration for the /fitness chapter \"continuum\" (owner, 2026-10-01: \"our fitness one needs this too\", after hearing the MetFix Module 1 and 2 narration; amendment H.75). Its own script, not the captions: one paragraph per beat explaining what is on screen, in the order the picture builds, every sentence restating the lesson's own text (fitnessData.ts: INTRO_TEXT, DEFINITION_TEXT, POWER_CONCEPT, MODULE_COPY, SKILLS, ARCHETYPES, HOPPER_DOMAINS, ENERGY_SYSTEMS, ENERGY_BENCHMARKS, CONTINUUM_EXAMPLES) and the captions, no new facts or numbers; each beat names its passage. The voice is Charon. Edit a sentence and narration-check fails until its clip is regenerated (voice/ pipeline), copied into public/narration/fitness/continuum/ and node scripts/narration-manifest.mjs has run. Plain hyphens only.",
+  "clips": "narration/fitness/continuum",
+  "gates": {
+    "maxGap": 1.6,
+    "why": "Paragraph narration breathes between sentences (the owner-approved Charon audition pauses 0.82 s; Modules 1 and 2 measure up to 1.04 s). Every clip was generated with the 1.6 s inner-pause gate (voice/gen_chapter.py MAX_INNER), the MetFix Module 1 and 2 recipe the owner approved on 2026-10-01."
+  },
+  "_sync": "The picture follows the voice (amendment H.74): each anchor [t, at, offset] lands build t on a sentence (an index, 0 first) or a phrase of the paragraph, at its first word plus offset seconds. Reveals land on their words: the pen draws the one line through \"Nearly every measurable value of health\" and reaches its far end on \"a single line\", and SICKNESS, WELLNESS and FITNESS head their columns on their own words; the blood pressure scale lands on \"Take blood pressure\" and the bead holds on each station while its reading is spoken (160/95, 120/70, 105/55), sliding between readings; the body fat row draws on \"Body fat works the same way\", its bead holds on 40%, 20% and 10% as each is spoken and LOWER IS BETTER lands on \"is fit\"; the eight rows cascade in on \"The same ordering holds\", their values land on \"bone density, triglycerides\" and the table holds through \"HDL, and dozens more\", the rows swing into spokes on \"Now turn every line into a spoke\" and SICKNESS, WELL, FIT and FITNESS fade in through \"Sickness sits at the center, and fitness at the rim\"; the camera tilts on \"Tilt it\" to show the pit, the average profile appears on \"plot\" and climbs on \"Their markers climb out of the pit\", and WELL rises on \"That is wellness\"; the dashed ghost forms on \"The dashed ghost\", the athlete's markers climb from \"every marker climbs\" and the word turns FIT as they climb \"past it\"; the band lights on \"The band that lights up\", Preventive medicine lands on \"preventive medicine\" and the pit darkens through \"a regimen that does not support health\".",
+  "beats": {
+    "one-line": {
+      "source": "MODULE_COPY continuum s1",
+      "text": "Here is the fourth model, from the Level 1 Training Guide. Nearly every measurable value of health sits on one continuum, a single line. At one end is sickness. In the middle, wellness. And at the far end, fitness.",
+      "sync": [
+        [0.31, "health", -0.2],
+        [0.58, "line.", 0.2],
+        [0.62, "sickness.", -0.2],
+        [0.7, "wellness.", -0.2],
+        [0.78, "fitness.", -0.2],
+        [1, "fitness.", 0.45]
+      ]
+    },
+    "bp": {
+      "source": "CONTINUUM_EXAMPLES 1",
+      "text": "Take blood pressure. One hundred sixty over ninety-five is pathological. One hundred twenty over seventy is healthy. And one hundred five over fifty-five is an athlete. One measure, three places on one line.",
+      "sync": [
+        [0.2, "pressure.", 0.2],
+        [0.34, "sixty", 0],
+        [0.4, "pathological.", 0.1],
+        [0.58, "twenty", -0.1],
+        [0.68, "healthy.", 0.2],
+        [0.86, "five", 0],
+        [0.9, "fifty-five", 0.2],
+        [1, 4, 0]
+      ]
+    },
+    "bodyfat": {
+      "source": "CONTINUUM_EXAMPLES 2",
+      "text": "Body fat works the same way. Forty percent is pathological, twenty percent is healthy, and ten percent is fit. A second marker, a second line, in the same order, from sickness to fitness.",
+      "sync": [
+        [0.4, "way.", 0],
+        [0.5, "Forty", 0],
+        [0.55, "pathological,", 0.3],
+        [0.67, "twenty", 0],
+        [0.74, "healthy,", 0.2],
+        [0.88, "ten", 0],
+        [1, 2, 0]
+      ]
+    },
+    "dial": {
+      "source": "CONTINUUM_EXAMPLES 3; caption (Center is sickness, the rim is fitness)",
+      "text": "The same ordering holds for bone density, triglycerides, HDL, and dozens more. Now turn every line into a spoke. Sickness sits at the center, and fitness at the rim. Every marker, on one dial.",
+      "sync": [
+        [0.27, "bone", -0.2],
+        [0.33, "triglycerides,", 0],
+        [0.56, "more.", 0.3],
+        [0.62, "Now", -0.2],
+        [0.85, "spoke.", 0.2],
+        [0.92, "Sickness", -0.2],
+        [1, "rim.", 0.2]
+      ]
+    },
+    "well": {
+      "source": "MODULE_COPY continuum keyPoints 2; CONTINUUM_PROFILES Average / well",
+      "text": "Tilt it, and the center becomes a pit: sickness. Now plot an average, healthy person. Their markers climb out of the pit, to the middle. That is wellness. But wellness is the midpoint, not the goal.",
+      "sync": [
+        [0.32, "a pit:", 0.36],
+        [0.42, "plot", -0.1],
+        [0.45, "Their", -0.1],
+        [0.74, "middle.", 0.2],
+        [0.86, "That", 0],
+        [1, "midpoint,", 0]
+      ]
+    },
+    "super": {
+      "source": "MODULE_COPY continuum s4; CONTINUUM_PROFILES CrossFit athlete",
+      "text": "Now a CrossFit athlete. The dashed ghost is where wellness stood, and every marker climbs past it, toward the rim. Sickness, wellness, and fitness are measures of the same thing. So fitness is super-wellness.",
+      "sync": [
+        [0.15, "ghost", 0],
+        [0.3, "every", -0.2],
+        [0.75, "thing.", 0],
+        [1, 3, 0]
+      ]
+    },
+    "hedge": {
+      "source": "MODULE_COPY continuum keyPoints 3 and 4; s5 (a regimen that does not support health is not CrossFit)",
+      "text": "Fitness pushes every marker as far from sickness as it goes. The band that lights up is everything beyond wellness. So pursuing fitness is a hedge against disease. It is preventive medicine, and a regimen that does not support health is not CrossFit.",
+      "sync": [
+        [0.1, "band", -0.3],
+        [0.32, "wellness.", 0],
+        [0.56, "preventive", -0.2],
+        [0.7, "medicine,", 0.3],
+        [1, "CrossFit.", 0]
+      ]
+    }
+  }
+}

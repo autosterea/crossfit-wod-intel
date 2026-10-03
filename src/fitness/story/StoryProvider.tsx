@@ -15,6 +15,9 @@ import { gestureBus } from './gestures'
 import { hotspotsSnapshot } from './hotspots'
 import { probeIds, runProbe } from './qa'
 import * as THREE from 'three'
+import { audio } from './audio/director' // [audio]
+import type { RenderOpts } from './audio/types' // [audio]
+import { audioTimeline, renderAudio, renderSfx } from './audio/render' // [audio]
 
 /* =========================================================================
    StoryProvider (DESIGN.md C.4b): resets the clock and store for a chapter,
@@ -113,7 +116,9 @@ export function StoryProvider({ def, children }: { def: StoryDef; children: Reac
     }
     setA(clock.T * 2.5)
     registerQA(def)
+    audio.setChapter(def) // [audio] I.6.3
     return () => {
+      audio.setChapter(null) // [audio]
       const w = window as unknown as { __story?: unknown }
       if (w.__story && (w.__story as { chapter?: string }).chapter === def.key) delete w.__story
       useStoryStore.setState({ def: null, playing: false, mode: 'story' })
@@ -222,6 +227,12 @@ function registerQA(def: StoryDef): void {
     get ready() {
       return isSettled()
     },
+    // [audio] I.6.7: the sound state, the reference mix and its plan
+    audio: () => audio.qaState(),
+    renderAudio: (from: number, to: number, opts?: RenderOpts) => renderAudio(from, to, opts),
+    audioTimeline: (from: number, to: number) => audioTimeline(from, to),
+    /** calibration only: one palette sound (or 'bed') alone through the real graph */
+    renderSfx: (sound: string, dur?: number, flat?: boolean) => renderSfx(def.key, sound, dur, flat),
   }
   ;(window as unknown as { __story: typeof api }).__story = api
 }

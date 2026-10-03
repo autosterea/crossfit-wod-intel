@@ -1,0 +1,97 @@
+{
+  "_about": "Spoken narration for the /fitness chapter \"hopper\" (owner, 2026-10-01: \"our fitness one needs this too\", after hearing the MetFix Module 1 and 2 narration; amendment H.75). Its own script, not the captions: one paragraph per beat explaining what is on screen, in the order the picture builds, every sentence restating the lesson's own text (fitnessData.ts: INTRO_TEXT, DEFINITION_TEXT, POWER_CONCEPT, MODULE_COPY, SKILLS, ARCHETYPES, HOPPER_DOMAINS, ENERGY_SYSTEMS, ENERGY_BENCHMARKS, CONTINUUM_EXAMPLES) and the captions, no new facts or numbers; each beat names its passage. The voice is Charon. Edit a sentence and narration-check fails until its clip is regenerated (voice/ pipeline), copied into public/narration/fitness/hopper/ and node scripts/narration-manifest.mjs has run. Plain hyphens only.",
+  "clips": "narration/fitness/hopper",
+  "gates": {
+    "maxGap": 1.6,
+    "why": "Paragraph narration breathes between sentences (the owner-approved Charon audition pauses 0.82 s; Modules 1 and 2 measure up to 1.04 s). Every clip was generated with the 1.6 s inner-pause gate (voice/gen_chapter.py MAX_INNER), the MetFix Module 1 and 2 recipe the owner approved on 2026-10-01."
+  },
+  "_sync": "The picture follows the voice (amendment H.74): each anchor [t, at, offset] lands build t on a sentence (an index, 0 first) or a phrase of the paragraph, at its first word plus offset seconds. Reveals land on their words: the drum's hoops draw through the opening sentence, it turns to steel and the balls pour in from \"Picture a hopper\" to \"selective mechanism\", and the five domain chips land on \"Weightlifting, gymnastics\"; the drum tumbles through \"drawn from it at random\", the camera turns to the ticket from \"say in what you get\", the ball drops on \"The first draw\", the ticket turns in on \"weightlifting: a back squat\" and the pen traces it on \"as heavy as you can lift\"; the board waits through \"Your fitness is your capacity at those tasks\", the rails draw from \"relative to others\" and are named on \"Here are six athletes\", the bricks fly on \"Every competitor scores\", the totals count on \"the totals accumulate\", the rails sort from \"On a heavy squat\", the weightlifter reaching P1 on \"the weightlifter\" and LEAD on \"takes the lead\"; draw 2 runs on \"Keep drawing\" and its tick grows on \"green tick\", the lead changes hands on \"changes hands: the strongman\" and draws 3 and 4 run through \"a specialist only leads while its own domain keeps coming up\"; the grey ball drops on \"the hopper serves something unknown\" and the ticket turns in on \"climb six flights\", the specialists score on \"combined in endless ways\", the generalist's brick lands with its tick on \"Here\", its rail climbs from \"generalist\", NEW LEADER lands on \"scores best\" and the impact on \"and takes the lead\"; the rain reaches draw 40 on \"forty draws\" and the bands assemble from \"Each rail\" to \"one for each domain\"; the bracket measures the lead on \"is that just luck\", the chart builds on \"Each line here\", this run's line draws on \"its own random hopper\", the 64 others on \"sixty-four of them\", and THIS RUN with the legend on \"plus the one you just watched, in green\".",
+  "beats": {
+    "hopper": {
+      "source": "MODULE_COPY hopper s1 to s2; HOPPER_DOMAINS",
+      "text": "The second model says fitness is performing well at any and every task imaginable. Picture a hopper loaded with an infinite number of physical challenges, with no selective mechanism. Weightlifting, gymnastics, monostructural, odd objects, and the unknown.",
+      "sync": [
+        [0.33, "Picture", 0],
+        [0.74, "Weightlifting,", -0.3],
+        [0.9, "gymnastics,", 0],
+        [1, "monostructural,", 0]
+      ]
+    },
+    "draw": {
+      "source": "MODULE_COPY hopper s2; keyPoints 1; HOPPER_DOMAINS weightlifting (1RM Back Squat)",
+      "text": "Now imagine being asked to perform feats drawn from it at random, with no say in what you get. The first draw is weightlifting: a back squat, as heavy as you can lift once.",
+      "sync": [
+        [0.005, "say", -0.2],
+        [0.45, "weightlifting:", 0],
+        [0.7, "squat,", 0],
+        [0.95, "lift", 0],
+        [1, "once.", 0]
+      ]
+    },
+    "score": {
+      "source": "MODULE_COPY hopper s3; caption (Every competitor scores; totals accumulate)",
+      "text": "Your fitness is your capacity at those tasks, relative to others. Here are six athletes, one rail each. Every competitor scores, and the totals accumulate. On a heavy squat, the weightlifter takes the lead.",
+      "sync": [
+        [0.02, "relative", -0.1],
+        [0.3, "Every", -0.2],
+        [0.54, "the totals", 0],
+        [0.66, "accumulate.", 0.3],
+        [0.68, "On", 0],
+        [0.82, "weightlifter", 0.1],
+        [0.9, "takes", 0],
+        [1, "lead.", 0.1]
+      ]
+    },
+    "specialists": {
+      "source": "caption (A specialist only leads while its own domain keeps coming up); hopperMath leader after draws 1 to 5",
+      "text": "Keep drawing. Each small green tick marks the top scorer of a draw. After the second draw, the lead changes hands: the strongman is in front. But a specialist only leads while its own domain keeps coming up.",
+      "sync": [
+        [0.05, "drawing.", 0],
+        [0.25, "green", 0],
+        [0.262, "tick", 0.2],
+        [0.262, "changes", 0],
+        [0.335, "strongman", 0.3],
+        [0.35, "front.", 0.3],
+        [1, "coming", 0]
+      ]
+    },
+    "unknown": {
+      "source": "MODULE_COPY hopper keyPoints 3; HOPPER_DOMAINS unknown (Climb 6 flights with bags); HOPPER_ROSTER unknown scores",
+      "text": "Then the hopper serves something unknown: climb six flights of stairs with bags. Fitness demands performing well even at unfamiliar tasks, combined in endless ways. Here, the generalist scores best, and takes the lead.",
+      "sync": [
+        [0.17, "unknown:", 0.3],
+        [0.215, "climb", -0.1],
+        [0.27, "flights", 0.2],
+        [0.27, "combined", -0.2],
+        [0.37, "ways.", 0.2],
+        [0.43, "Here,", 0],
+        [0.5, "generalist", 0.2],
+        [0.64, "and", -0.1],
+        [0.86, "lead.", 0],
+        [1, "lead.", 0.15]
+      ]
+    },
+    "many": {
+      "source": "MODULE_COPY hopper s4; caption (Across random draws, the generalist accumulates the most points)",
+      "text": "Now keep going, all the way to forty draws. Each rail becomes a stack of colored bands, one for each domain. Across random draws, the generalist accumulates the most points. This is why CrossFit prizes the generalist.",
+      "sync": [
+        [0.64, "forty draws.", 0.66],
+        [0.7, "Each rail", 0],
+        [0.84, "domain.", 0.2],
+        [1, "Across", 0]
+      ]
+    },
+    "every-run": {
+      "source": "MODULE_COPY hopper keyPoints 4; caption (Each line is its own random hopper)",
+      "text": "But is that just luck? Each line here is its own random hopper, sixty-four of them, plus the one you just watched, in green. Nature serves unforeseeable challenges, so the training stimulus must stay broad and varied.",
+      "sync": [
+        [0.2, "Each", -0.1],
+        [0.38, "its own", 0],
+        [0.58, "hopper,", 0.2],
+        [0.86, "plus", 0],
+        [0.96, "green.", 0],
+        [1, "Nature", 0]
+      ]
+    }
+  }
+}

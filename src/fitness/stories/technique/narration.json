@@ -1,0 +1,566 @@
+{
+  "_about": "Spoken narration for chapter 08, Technique (owner, 2026-10-01: Glassman's dedicated Technique article, 'a beautiful lecture'). One paragraph per beat in the order the picture builds, as drafted and verified in STORYBOARD-technique.md against the CrossFit Level 1 Training Guide pp. 40-44 and p. 77 (each beat names its source). The voice is Charon. Plain hyphens only.",
+  "clips": "narration/fitness/technique",
+  "gates": {
+    "maxGap": 1.6,
+    "why": "Paragraph narration breathes between sentences (the owner-approved Charon audition pauses 0.82 s). Every clip was generated with the 1.6 s inner-pause gate (voice/gen_chapter.py MAX_INNER), as for every narrated chapter since H.75."
+  },
+  "_sync": "The picture follows the voice (amendment H.74): the anchors are the storyboard's per-beat Sync lines, each reveal on the words that name it.",
+  "beats": {
+    "judge": {
+      "source": "`TECHNIQUE_SEE`, p. 40, paras 2-5",
+      "text": "Three things judge any fitness program. Efficacy is the return: for CrossFit, more work capacity. Efficiency is its time rate: fifty pull-ups in six months, or in nine years. Safety is how many people reach the finish line. Not knowing that is the real tragedy.",
+      "sync": [
+        [
+          0.1,
+          "program.",
+          0.1
+        ],
+        [
+          0.12,
+          "Efficacy",
+          -0.1
+        ],
+        [
+          0.2,
+          "return:",
+          0
+        ],
+        [
+          0.34,
+          "capacity.",
+          0.1
+        ],
+        [
+          0.38,
+          "Efficiency",
+          -0.1
+        ],
+        [
+          0.46,
+          "fifty",
+          -0.1
+        ],
+        [
+          0.52,
+          "six months,",
+          0.1
+        ],
+        [
+          0.62,
+          "nine years.",
+          0.2
+        ],
+        [
+          0.64,
+          "Safety",
+          -0.1
+        ],
+        [
+          0.68,
+          "reach",
+          -0.1
+        ],
+        [
+          0.9,
+          "line.",
+          0.3
+        ],
+        [
+          0.92,
+          "Not knowing",
+          -0.1
+        ],
+        [
+          1,
+          "tragedy.",
+          0.3
+        ]
+      ]
+    },
+    "vectors": {
+      "source": "`SEE_VECTORS.quote`, `TECHNIQUE_SEE`, p. 40, para 6",
+      "text": "These three vectors point in the same direction. Turn efficacy and efficiency down to zero, and safety soars. Turn up the intensity for efficiency, and you may compromise safety. Lose people, and you damage efficacy. Together, they assess any program.",
+      "sync": [
+        [
+          0.04,
+          "vectors",
+          -0.1
+        ],
+        [
+          0.2,
+          "same direction.",
+          0
+        ],
+        [
+          0.28,
+          "Turn efficacy",
+          -0.1
+        ],
+        [
+          0.36,
+          "zero,",
+          0
+        ],
+        [
+          0.46,
+          "soars.",
+          0.2
+        ],
+        [
+          0.5,
+          "Turn up",
+          -0.1
+        ],
+        [
+          0.68,
+          "compromise safety.",
+          0.2
+        ],
+        [
+          0.72,
+          "Lose people,",
+          -0.1
+        ],
+        [
+          0.88,
+          "damage efficacy.",
+          0.2
+        ],
+        [
+          1,
+          "any program.",
+          0.2
+        ]
+      ]
+    },
+    "quality": {
+      "source": "`TECHNIQUE_SEE` para 7, `TECHNIQUE_TERMS`, pp. 40-41",
+      "text": "Choosing work capacity as the standard makes quality of movement matter. Four terms describe it. Mechanics is the physics. Technique is the method to success. Form is the judgment: good or bad. Style is your signature, with no bearing on the rest.",
+      "sync": [
+        [
+          0.04,
+          "standard",
+          -0.1
+        ],
+        [
+          0.16,
+          "matter.",
+          0.1
+        ],
+        [
+          0.2,
+          "Four terms",
+          -0.1
+        ],
+        [
+          0.3,
+          "physics.",
+          0.1
+        ],
+        [
+          0.34,
+          "Technique",
+          -0.1
+        ],
+        [
+          0.5,
+          "success.",
+          0.1
+        ],
+        [
+          0.52,
+          "Form",
+          -0.1
+        ],
+        [
+          0.7,
+          "good or bad.",
+          0.2
+        ],
+        [
+          0.72,
+          "Style",
+          -0.1
+        ],
+        [
+          0.92,
+          "no bearing",
+          0
+        ],
+        [
+          1,
+          "rest.",
+          0.2
+        ]
+      ]
+    },
+    "graph": {
+      "source": "`TECHNIQUE_GRAPH`, p. 41; the last sentence is `CHARTER.why`, verbatim",
+      "text": "On a graph, put work completed along the bottom and energy expended up the side. Inefficient, you spend a lot of energy and do very little work. Ideally, little energy buys the most work. Technique is what maximizes the work completed for the energy expended.",
+      "sync": [
+        [
+          0.04,
+          "along the bottom",
+          -0.1
+        ],
+        [
+          0.14,
+          "up the side.",
+          -0.3
+        ],
+        [
+          0.24,
+          "side.",
+          0.1
+        ],
+        [
+          0.28,
+          "Inefficient,",
+          -0.1
+        ],
+        [
+          0.4,
+          "a lot of energy",
+          0
+        ],
+        [
+          0.48,
+          "very little work.",
+          0.2
+        ],
+        [
+          0.52,
+          "Ideally,",
+          -0.1
+        ],
+        [
+          0.68,
+          "most work.",
+          0.1
+        ],
+        [
+          0.74,
+          "Technique is what",
+          -0.1
+        ],
+        [
+          0.88,
+          "maximizes",
+          0.2
+        ],
+        [
+          1,
+          "for the energy",
+          0.46
+        ]
+      ]
+    },
+    "deviation": {
+      "source": "`TECHNIQUE_TERMS` form, `TECHNIQUE_GRAPH` p42_safety, pp. 41-42; the last sentence is verbatim",
+      "text": "A deviation is form judged bad. Two people lift a heavy object. One pops the hip and gets under it: a clean. The other starts to pull with a rounded back. If you want to stay safe, you better have good technique, good form.",
+      "sync": [
+        [
+          0.12,
+          "judged bad.",
+          0.1
+        ],
+        [
+          0.14,
+          "Two people",
+          -0.1
+        ],
+        [
+          0.26,
+          "One pops",
+          -0.1
+        ],
+        [
+          0.36,
+          "gets under",
+          -0.1
+        ],
+        [
+          0.56,
+          "a clean.",
+          0.3
+        ],
+        [
+          0.58,
+          "The other",
+          -0.1
+        ],
+        [
+          0.7,
+          "rounded back.",
+          0
+        ],
+        [
+          0.82,
+          "If you want",
+          -0.1
+        ],
+        [
+          1,
+          "good form.",
+          0.2
+        ]
+      ]
+    },
+    "charter": {
+      "source": "`CF_PILLARS[2].quote` (intensity is power, p. 2, chapter 07), `CHARTER.why`, `CHARTER.quote`, `MCI_SKIP_PENALTY`, `TECHNIQUE_SEE` p40_sidebar; pp. 2, 40, 41, 77",
+      "text": "Intensity is power, and technique gets the most work from your energy. So the charter for balancing safety, efficacy and efficiency is mechanics, then consistency, then, and only then, intensity. Ignore that order and you risk injury, especially when poor mechanics meet load.",
+      "sync": [
+        [
+          0.08,
+          "your energy.",
+          0
+        ],
+        [
+          0.16,
+          "is mechanics,",
+          0
+        ],
+        [
+          0.34,
+          "then consistency,",
+          0
+        ],
+        [
+          0.5,
+          "only then,",
+          -0.1
+        ],
+        [
+          0.7,
+          "then, intensity.",
+          0.62
+        ],
+        [
+          0.72,
+          "Ignore",
+          -0.1
+        ],
+        [
+          0.84,
+          "risk injury,",
+          0
+        ],
+        [
+          1,
+          "meet load.",
+          0.2
+        ]
+      ]
+    },
+    "odds": {
+      "source": "`TECHNIQUE_SPEED` p43_speed, `THRESHOLD.fran`, `THRESHOLD.illusion`, p. 43",
+      "text": "Typing, shooting, the violin, racing, CrossFit: in each, proficiency comes with speed. A typist who never errs at twenty words a minute never gets hired. A perfect Fran in thirty-two minutes is worthless. Technique and speed only seem at odds. It is an illusion.",
+      "sync": [
+        [
+          0.16,
+          "proficiency",
+          -0.1
+        ],
+        [
+          0.26,
+          "with speed.",
+          0.46
+        ],
+        [
+          0.3,
+          "twenty words",
+          -0.1
+        ],
+        [
+          0.44,
+          "hired.",
+          0.1
+        ],
+        [
+          0.5,
+          "thirty-two",
+          -0.1
+        ],
+        [
+          0.6,
+          "worthless.",
+          0.1
+        ],
+        [
+          0.62,
+          "only seem",
+          -0.2
+        ],
+        [
+          0.8,
+          "It is an",
+          -0.1
+        ],
+        [
+          0.92,
+          "illusion.",
+          0
+        ],
+        [
+          1,
+          "illusion.",
+          0.4
+        ]
+      ]
+    },
+    "threshold": {
+      "source": "`TECHNIQUE_SPEED` p44_coach and p43_errors, `THRESHOLD.errors`, `THRESHOLD.definition`, pp. 43-44",
+      "text": "Moving well? Pick up the speed, then again, until the movement starts falling apart. Do not slow down yet: fix it at that speed. The errors are an unavoidable consequence of development. Broaden them, then reduce them without slowing: threshold training.",
+      "sync": [
+        [
+          0.06,
+          "Moving well?",
+          0.2
+        ],
+        [
+          0.14,
+          "Pick up",
+          -0.1
+        ],
+        [
+          0.3,
+          "falling apart.",
+          0
+        ],
+        [
+          0.34,
+          "Do not slow",
+          -0.1
+        ],
+        [
+          0.46,
+          "that speed.",
+          0.2
+        ],
+        [
+          0.6,
+          "unavoidable",
+          0
+        ],
+        [
+          0.74,
+          "development.",
+          0.2
+        ],
+        [
+          0.76,
+          "Broaden",
+          -0.1
+        ],
+        [
+          0.88,
+          "threshold training.",
+          0
+        ],
+        [
+          1,
+          "threshold training.",
+          0.6
+        ]
+      ]
+    },
+    "margin": {
+      "source": "`THRESHOLD.mechanism`, `THRESHOLD.quote`, `TECHNIQUE_SPEED` p44_example, p. 44",
+      "text": "Say technique is perfect at ten thousand foot-pounds per minute, but falls apart at twelve thousand. Work that band until twelve thousand is great. Then fourteen thousand suffers, so narrow it in. Continuously advance the margins at which form falters.",
+      "sync": [
+        [
+          0.06,
+          "Say technique",
+          0
+        ],
+        [
+          0.12,
+          "perfect",
+          -0.1
+        ],
+        [
+          0.22,
+          "falls apart",
+          -0.1
+        ],
+        [
+          0.34,
+          "Work that band",
+          -0.1
+        ],
+        [
+          0.54,
+          "is great.",
+          0.1
+        ],
+        [
+          0.56,
+          "Then",
+          -0.1
+        ],
+        [
+          0.68,
+          "narrow",
+          -0.1
+        ],
+        [
+          0.8,
+          "Continuously",
+          -0.1
+        ],
+        [
+          0.94,
+          "falters.",
+          0
+        ],
+        [
+          1,
+          "falters.",
+          0.4
+        ]
+      ]
+    },
+    "everything": {
+      "source": "`TECHNIQUE_SPEED` p44_everything, `SEE_VECTORS.intimate`, pp. 43-44; \"Technique is everything\" is verbatim",
+      "text": "We are the technique people. We drill technique, and we push the speed. Without technique you will not express power in significant measure, or be safe in trying. Safety, efficacy and efficiency all depend on it. Technique is everything.",
+      "sync": [
+        [
+          0.12,
+          "technique people.",
+          0
+        ],
+        [
+          0.3,
+          "Without",
+          -0.1
+        ],
+        [
+          0.56,
+          "safe in trying.",
+          0.1
+        ],
+        [
+          0.58,
+          "Safety,",
+          -0.1
+        ],
+        [
+          0.78,
+          "depend on it.",
+          0.1
+        ],
+        [
+          0.8,
+          "Technique is everything.",
+          -0.1
+        ],
+        [
+          1,
+          "everything.",
+          0.3
+        ]
+      ]
+    }
+  }
+}

@@ -6,12 +6,13 @@ import { Segments } from './Segments'
 import { Transport } from './Transport'
 import { DEFINITION_TEXT, INTRO_TEXT, MODULES, MODULE_COPY, PAL, moduleByKey } from '../../fitnessData'
 import { useFitnessStore } from '../../fitnessStore'
-import type { Beat, StoryDef } from '../types'
+import type { Beat, StoryBrand, StoryDef, StoryKey } from '../types'
 import type { FitnessView, ModuleKey } from '../../lessonTypes'
 import { IconChevron } from './icons'
 import { useObservedCard } from '../camera/focusRect'
 import { pb } from '../playback'
 import { readDone } from './progress'
+import { SoundChip } from '../audio/SoundChip' // [audio]
 
 /* =========================================================================
    Caption card (DESIGN.md B.2, C.7). Phone: a glass card over the bottom of
@@ -25,12 +26,14 @@ const ORDER: FitnessView[] = ['intro', ...MODULES.map((m) => m.key as FitnessVie
 
 export function eyebrowFor(def: StoryDef, beat: Beat): string {
   if (beat.eyebrow) return beat.eyebrow
+  if (def.brand) return def.brand.eyebrow
   if (def.key === 'intro') return 'Overview'
   const m = moduleByKey(def.key as ModuleKey)
   return `${m.num} ${m.label}`
 }
 
-export function accentFor(view: FitnessView): string {
+export function accentFor(view: StoryKey, brand?: StoryBrand): string {
+  if (brand) return brand.accent
   if (view === 'intro') return PAL.yellowGreen
   return moduleByKey(view as ModuleKey).accent
 }
@@ -58,8 +61,9 @@ export function withTerms(body: string, terms?: Beat['terms']): ReactNode {
       break
     }
     if (best > 0) parts.push(rest.slice(0, best))
+    const c = terms[key]
     parts.push(
-      <span key={k++} className="st-term" style={{ color: PAL[terms[key]] }}>
+      <span key={k++} className="st-term" style={{ color: c.startsWith('#') ? c : PAL[c as keyof typeof PAL] }}>
         {key}
       </span>,
     )
@@ -74,14 +78,15 @@ export function withTerms(body: string, terms?: Beat['terms']): ReactNode {
  * its Read more is the essay's framing (INTRO_TEXT) and the definition
  * (DEFINITION_TEXT), the same copy its Notes hub opens with.
  */
-export function readMoreFor(view: FitnessView): { paras: readonly string[]; points: readonly string[] } {
+export function readMoreFor(view: StoryKey, brand?: StoryBrand): { paras: readonly string[]; points: readonly string[] } {
+  if (brand) return brand.readMore
   if (view === 'intro') return { paras: [INTRO_TEXT, DEFINITION_TEXT], points: [] }
   const c = MODULE_COPY[view as ModuleKey]
   return { paras: [c.body], points: c.keyPoints }
 }
 
-function ReadMoreBody({ view }: { view: FitnessView }) {
-  const { paras, points } = readMoreFor(view)
+function ReadMoreBody({ view, brand }: { view: StoryKey; brand?: StoryBrand }) {
+  const { paras, points } = readMoreFor(view, brand)
   return (
     <>
       {paras.map((p) => (
@@ -152,6 +157,23 @@ function NextChapterCta({ view }: { view: FitnessView }) {
         Next: {m.num} {m.mobileLabel ?? m.label}
       </span>
     </button>
+  )
+}
+
+/** A branded host's in-app next step (H.65): a real link, taken over by `go` on a plain click. */
+function BrandNext({ next, outline = false }: { next: NonNullable<StoryBrand['endNext']>; outline?: boolean }) {
+  return (
+    <a
+      className={`st-btn ${outline ? 'st-btn--outline' : 'st-btn--solid'}`}
+      href={next.href}
+      onClick={(e) => {
+        if (!next.go || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return
+        e.preventDefault()
+        next.go()
+      }}
+    >
+      <span className="st-btn-l">{next.label}</span>
+    </a>
   )
 }
 
@@ -245,10 +267,14 @@ export function CaptionCard({ cardRef, shell }: { cardRef: React.RefObject<HTMLD
   if (!def) return null
   const beat = def.beats[index]
   if (!beat) return null
-  const accent = accentFor(def.key)
+  const brand = def.brand
+  const accent = accentFor(def.key, brand)
   const last = index >= def.beats.length - 1
   const done = last && phase === 'done'
-  const lessonEnd = done && ORDER.indexOf(def.key) === ORDER.length - 1
+  const lessonEnd = done && !brand && (ORDER as readonly string[]).indexOf(def.key) === ORDER.length - 1
+  // H.77: a branded host may drop Explore from the end row; with no button left there is no row
+  const endExplore = !brand || brand.endExplore !== false
+  const endRow = endExplore || !!brand?.endCta || !!brand?.endNext
   const instant = clock.held
   const tIn = reduced ? { duration: 0.12 } : { duration: 0.22, ease: [0.22, 1, 0.36, 1] as const }
   const tOut = reduced ? { duration: 0.12 } : { duration: 0.16, ease: [0.4, 0, 1, 1] as const }
@@ -280,7 +306,7 @@ export function CaptionCard({ cardRef, shell }: { cardRef: React.RefObject<HTMLD
       <Segments accent={accent} />
       <div className="st-eyebrow-row">
         {lessonEnd ? (
-          <LessonEndEyebrow view={def.key} />
+          <LessonEndEyebrow view={def.key as FitnessView} />
         ) : (
           <span className="st-eyebrow" style={{ color: accent }}>
             {eyebrowFor(def, beat)}
@@ -324,7 +350,7 @@ export function CaptionCard({ cardRef, shell }: { cardRef: React.RefObject<HTMLD
       {phone && detent === 'expanded' && (
         <div className="st-more">
           <div className="st-more-h">Read more</div>
-          <ReadMoreBody view={def.key} />
+          <ReadMoreBody view={def.key} brand={brand} />
         </div>
       )}
       {!phone && (
@@ -341,10 +367,11 @@ export function CaptionCard({ cardRef, shell }: { cardRef: React.RefObject<HTMLD
           <summary>
             Read more <IconChevron />
           </summary>
-          <ReadMoreBody view={def.key} />
+          <ReadMoreBody view={def.key} brand={brand} />
         </details>
       )}
       <Transport />
+      <SoundChip shell={shell} /> {/* [audio] I.5.1: on the card's top edge (a row here in landscape) */}
       {done && beat.cta === 'begin' && (
         // [Explore][Begin the lesson]: on a phone the finished map's only other
         // way into explore is the transport pill, which hides on the finished
@@ -358,12 +385,28 @@ export function CaptionCard({ cardRef, shell }: { cardRef: React.RefObject<HTMLD
           </button>
         </div>
       )}
-      {done && beat.cta !== 'begin' && !lessonEnd && (
+      {done && beat.cta !== 'begin' && !lessonEnd && endRow && (
         <div className="st-cta-row">
-          <button type="button" className="st-btn st-btn--outline" onClick={() => useStoryStore.getState().setMode('explore')}>
-            Explore this model
-          </button>
-          <NextChapterCta view={def.key} />
+          {endExplore && (
+            <button type="button" className="st-btn st-btn--outline" onClick={() => useStoryStore.getState().setMode('explore')}>
+              Explore this model
+            </button>
+          )}
+          {brand ? (
+            <>
+              {brand.endCta &&
+                (brand.endCta.go ? (
+                  <BrandNext next={brand.endCta} outline={!!brand.endNext} />
+                ) : (
+                  <a className={`st-btn ${brand.endNext ? 'st-btn--outline' : 'st-btn--solid'}`} href={brand.endCta.href} target="_blank" rel="noopener noreferrer">
+                    <span className="st-btn-l">{brand.endCta.label}</span>
+                  </a>
+                ))}
+              {brand.endNext && <BrandNext next={brand.endNext} />}
+            </>
+          ) : (
+            <NextChapterCta view={def.key as FitnessView} />
+          )}
         </div>
       )}
       {lessonEnd && <LessonEndCtas />}

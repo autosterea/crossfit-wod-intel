@@ -1,4 +1,5 @@
 import { useStoryStore } from './store'
+import { audioHooks } from './audio/hooks' // [audio]
 
 /* =========================================================================
    Readiness (DESIGN.md C.4, amendment H.15). Two different things, kept apart:
@@ -134,6 +135,7 @@ export function readyTick(frame = true): void {
 
 /** A seek happened: QA settle restarts (no React state, no slate). */
 export function markSeek(): void {
+  audioHooks.seek() // [audio] every seek cuts the voice; nothing plays while held
   readyState.settled = 0
   writeAttr()
 }

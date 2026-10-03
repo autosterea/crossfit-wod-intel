@@ -3,7 +3,7 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { Environment, Lightformer } from '@react-three/drei'
 import * as THREE from 'three'
 import './threeConsole'
-import type { StoryDef } from './types'
+import type { StoryDef, StoryKey } from './types'
 import type { FitnessView } from '../lessonTypes'
 import { TIERS } from './quality/tiers'
 import { useStoryStore } from './store'
@@ -29,6 +29,7 @@ import { Slate } from './ui/Slate'
 import { markDone } from './ui/progress'
 import { reportOnce } from './safe'
 import { IconPause, IconPlay } from './ui/icons'
+import { isNarrated } from './audio/narration' // [audio]
 
 /* =========================================================================
    The persistent StoryStage (DESIGN.md C.1, B.2): one Canvas, lights,
@@ -200,7 +201,7 @@ function ReadyProbe() {
   return null
 }
 
-function SceneReady({ view }: { view: FitnessView }) {
+function SceneReady({ view }: { view: StoryKey }) {
   useEffect(() => {
     readyState.sceneKey = view
     return () => {
@@ -216,7 +217,7 @@ function ChapterFog({ fog }: { fog: NonNullable<StoryDef['fog']> }) {
   return null
 }
 
-function Env() {
+function Env({ accent = '#91c640' }: { accent?: string }) {
   const scene = useThree((s) => s.scene)
   useEffect(() => {
     scene.environmentIntensity = 0.9
@@ -225,7 +226,7 @@ function Env() {
     <>
       <Environment resolution={128} frames={1} background={false}>
         <Lightformer form="rect" intensity={2.2} color="#ffffff" scale={[10, 4, 1]} position={[0, 6, -4]} target={[0, 0, 0]} />
-        <Lightformer form="rect" intensity={1.2} color="#91c640" scale={[6, 0.4, 1]} position={[-6, 1, 3]} target={[0, 0, 0]} />
+        <Lightformer form="rect" intensity={1.2} color={accent} scale={[6, 0.4, 1]} position={[-6, 1, 3]} target={[0, 0, 0]} />
         <Lightformer form="rect" intensity={0.9} color="#38bdf8" scale={[6, 0.4, 1]} position={[6, 2, -3]} target={[0, 0, 0]} />
         <Lightformer form="ring" intensity={0.6} color="#eef3f6" scale={3} position={[0, -4, 2]} target={[0, 0, 0]} />
       </Environment>
@@ -269,7 +270,7 @@ function Engine({ def }: { def: StoryDef }) {
       <HotspotPlacer />
       <UiPump />
       <Quality />
-      <Env />
+      <Env accent={def.brand?.accent} />
       <Backdrop />
       {def.fog && <ChapterFog fog={def.fog} />}
       <SceneBoundary key={def.key}>
@@ -349,7 +350,7 @@ function TapFlash() {
   )
 }
 
-export function StoryStage({ def, view }: { def: StoryDef; view: FitnessView }) {
+export function StoryStage({ def, view }: { def: StoryDef; view: StoryKey }) {
   const stageRef = useRef<HTMLDivElement>(null)
   const cardRef = useRef<HTMLDivElement>(null)
   const mode = useStoryStore((s) => s.mode)
@@ -436,7 +437,8 @@ export function StoryStage({ def, view }: { def: StoryDef; view: FitnessView }) 
 
   // Completion (per-viewer convenience).
   useEffect(() => {
-    if (def && phase === 'done' && index >= def.beats.length - 1) markDone(def.key)
+    // a branded lab story (H.65) is not a lesson chapter: it never writes the lesson's progress
+    if (def && !def.brand && phase === 'done' && index >= def.beats.length - 1) markDone(def.key as FitnessView)
   }, [phase, index, def])
 
   useStageGestures(stageRef)
@@ -500,7 +502,8 @@ export function StoryStage({ def, view }: { def: StoryDef; view: FitnessView }) 
       <HotspotLayer />
       <HudSlot stageRef={stageRef} />
       {mode === 'story' ? <CaptionCard cardRef={cardRef} shell={shell} /> : <ExplorePanel cardRef={cardRef} shell={shell} />}
-      {shell === 'desktop' && mode === 'story' && <div className="st-keyhint">Left / Right to step - Space to play - E to explore</div>}
+      {/* [audio] M toggles sound (I.5.2) on a narrated story (H.72) */}
+      {shell === 'desktop' && mode === 'story' && <div className="st-keyhint">Left / Right to step - Space to play - E to explore{isNarrated(def) ? ' - M for sound' : ''}</div>}
       <TapFlash />
       <Slate view={view} pending={pending} />
     </div>

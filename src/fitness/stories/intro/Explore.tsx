@@ -1,4 +1,4 @@
-import { MODULES } from '../../fitnessData'
+import { MAP_MODULES as MODULES } from './models'
 import type { FitnessView, ModuleKey } from '../../lessonTypes'
 import { ChipRadio } from '../../story/ui/ChipRadio'
 import { useFitnessStore } from '../../fitnessStore'

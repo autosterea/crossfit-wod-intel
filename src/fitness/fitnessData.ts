@@ -122,6 +122,26 @@ export const MODULES: ModuleMeta[] = [
     blurb: 'Stack every age of your life into one surface. Health is the volume you keep under it.',
     accent: PAL.robust,
   },
+  {
+    key: 'crossfit',
+    slug: 'crossfit',
+    num: '07',
+    label: 'What Is CrossFit?',
+    mobileLabel: 'CrossFit',
+    title: 'What Is CrossFit? The Prescription and the Pyramid',
+    blurb: 'Constantly varied, high-intensity functional movement, part by part, and the pyramid it builds on.',
+    accent: PAL.gymnastics,
+  },
+  {
+    key: 'technique',
+    slug: 'technique',
+    num: '08',
+    label: 'Technique',
+    mobileLabel: 'Technique',
+    title: 'Technique: Safety, Efficacy, Efficiency and the Threshold',
+    blurb: "Glassman's essay: the graph that defines technique, mechanics before intensity, and the threshold that keeps moving.",
+    accent: PAL.weightlifting,
+  },
 ]
 
 export const moduleByKey = (k: ModuleKey): ModuleMeta => MODULES.find((m) => m.key === k)!
@@ -608,6 +628,27 @@ export const MODULE_COPY: Record<ModuleKey, ModuleCopy> = {
       'Resistance and power training reclaim capacity at any age, even into the 90s.',
     ],
   },
+  crossfit: {
+    eyebrow: 'The Prescription',
+    body: 'CrossFit\'s prescription is "constantly varied, high-intensity functional movement." It is built to prepare you for the unknown and the unknowable. Functional movements are the natural, multi-joint patterns of everyday life, recruited from core to extremity: squatting is standing from a seated position; deadlifting is picking any object off the ground. Their capacity to move large loads over long distances, quickly, makes them the movements of high power, and intensity is defined exactly as power: work divided by time. Because the breadth of the stimulus sets the breadth of the adaptation, the prescription is constantly varied; routine is the enemy. Development follows a theoretical hierarchy from nutrition to metabolic conditioning, gymnastics, weightlifting and throwing, and sport, and a deficiency at any level makes every level above it suffer.',
+    keyPoints: [
+      'Functional movements are natural and multi-joint, recruited from core to extremity.',
+      'Intensity is defined exactly as power, the variable most tied to the rate of adaptation.',
+      'Constant variance widens the margins of exposure: routine is the enemy.',
+      'The pyramid: nutrition, metabolic conditioning, gymnastics, weightlifting and throwing, sport.',
+      'It scales by degree, not kind: load and intensity change, the program does not.',
+    ],
+  },
+  technique: {
+    eyebrow: 'Technique, L1 Guide pp. 40-44',
+    body: "Greg Glassman's essay on technique starts from CrossFit's numbers. Fitness is measured as work capacity, and a program is judged on safety, efficacy and efficiency: three vectors that point the same way but trade off. Measuring work makes how you move matter. Technique is what maximizes the work completed for the energy expended, and it is the heart of safety, efficacy and efficiency, so the charter is mechanics, consistency, then and only then intensity. Technique and speed are not at odds: when form falters at speed, fix it at that speed and advance the margin. That is threshold training.",
+    keyPoints: [
+      'Safety, efficacy and efficiency judge a program; they point the same way but trade off.',
+      'Technique is what maximizes the work completed for the energy expended.',
+      'The charter: mechanics, consistency, then and only then intensity.',
+      'Threshold training: push the speed until form falters, fix it there, and advance the margin.',
+    ],
+  },
 }
 
 /* =========================================================================
@@ -787,6 +828,87 @@ export const CF_SCALING = {
   rule: 'We scale load and intensity; we do not change programs.',
 }
 
+/* ---- Module 07 research (2026-10-01, the rebuilt chapter, STORYBOARD-crossfit.md section 0):
+   every string verbatim from the L1 Guide (3rd ed., 2020; printed pages, string-matched against
+   the PDF text), the L2 Training Guide (2017) or crossfit.com, with its cite. ---- */
+
+/** The aim, the prescription and what it was found to do (Understanding CrossFit, L1 Guide pp. 2-3). */
+export const CF_PRESCRIPTION = {
+  quote: 'CrossFit is: "constantly varied, high-intensity functional movement." This is our prescription.',
+  cite: 'Understanding CrossFit, L1 Guide p. 2',
+  aim: 'We sought to build a program that would best prepare trainees for any physical contingency - prepare them not only for the unknown but for the unknowable.',
+  aimCite: 'Understanding CrossFit, L1 Guide p. 2',
+  result: 'What we have discovered is that CrossFit increases work capacity across broad time and modal domains.',
+  resultCite: 'Understanding CrossFit, L1 Guide p. 3',
+  principles: 'Every CrossFit workout, in every gym, on every continent, runs on the same three principles: constantly varied, functional movements, and high intensity.',
+  principlesCite: 'CrossFit Methodology, crossfit.com',
+  plain: 'The work is never the same for long enough to bore your body, the movements are the ones you already use daily, and the effort is hard enough to make you fitter.',
+  plainCite: 'CrossFit Methodology, crossfit.com',
+}
+
+/** What makes a movement functional (L1 Guide pp. 2, 8, 14-15, 28; crossfit.com). */
+export const CF_FUNCTIONAL_NOTES = {
+  natural: 'They are natural, effective, and efficient locomotors of body and external objects.',
+  power: 'But no aspect of functional movements is more important than their capacity to move large loads over long distances, and to do so quickly.',
+  powerCite: 'Understanding CrossFit, L1 Guide p. 2',
+  multiJoint: 'Natural movement typically involves the movement of multiple joints for every activity.',
+  isolation: 'The bulk of isolation movements are non-functional movements. By contrast the compound or multi-joint movements are functional.',
+  multiJointCite: 'Foundations, L1 Guide p. 14',
+  oneJoint: 'A distinctive feature of these relatively worthless movements is that they have no functional analog in everyday life and they work only one joint at a time.',
+  oneJointCite: 'What Is Fitness? (Part 1), L1 Guide p. 28',
+  core: 'At CrossFit we endeavor to develop our athletes from the inside out, from core to extremity, which is, by the way, how good functional movements recruit muscle, from the core to the extremities.',
+  coreCite: 'Foundations, L1 Guide p. 8',
+  safe: 'Functional movements are mechanically sound and therefore safe, and they also elicit a high neuroendocrine response.',
+  safeCite: 'Foundations, L1 Guide p. 15',
+  daily: 'The movements are the ones you already use daily to live: squatting, hinging, pushing, pulling, carrying.',
+  dailyCite: 'CrossFit Methodology, crossfit.com',
+}
+
+/** Why intensity (L1 Guide pp. 13-14, 148; crossfit.com). */
+export const CF_INTENSITY_NOTES = {
+  power: 'Power is defined as the "time rate of doing work."',
+  hardFast: 'Power is, in simplest terms, "hard and fast."',
+  results: 'Increases in strength, performance, muscle mass, and bone density all arise in proportion to the intensity of exercise.',
+  cite: 'Foundations, L1 Guide pp. 13-14',
+  limits: "Pushing one's limits drives new adaptation, and this cannot happen without intensity.",
+  limitsCite: 'Where Do I Go From Here?, L1 Guide p. 148',
+  relative: 'It means working hard relative to what your body can do right now.',
+  adaptation: 'Intensity is the variable that produces adaptation, which is the technical term for getting fitter.',
+  webCite: 'CrossFit Methodology, crossfit.com',
+}
+
+/** Why constantly varied (L1 Guide pp. 12, 14; L2 Training Guide p. 43; crossfit.com). */
+export const CF_VARIANCE_NOTES = {
+  noRoutine: 'There is no ideal routine! In fact, the chief value of any routine lies in abandoning it for another.',
+  omissions: 'Any routine, no matter how complete, contains within its omissions the parameters for which there will be no adaptation.',
+  breadth: 'The breadth of adaptation will exactly match the breadth of the stimulus.',
+  routineCite: 'Foundations, L1 Guide p. 12',
+  margins: 'Long ago, we noticed that athletes are weakest at the margins of their exposure for almost every measurable parameter.',
+  cycle: 'For instance, if you only cycle between 5 and 7 miles at each training effort you will test weak at less than 5 and greater than 7 miles.',
+  everything: 'This is true for range of motion, load, rest, intensity, power, etc.',
+  expand: 'CrossFit workouts are engineered to expand the margins of exposure as broad as function and capacity will allow.',
+  marginsCite: 'Foundations, L1 Guide p. 14',
+  variance: "Variance is the intended variation of functional movements, loads, repetition schemes, and time durations, within a single workout and across a series of workouts, to best maximize one's fitness.",
+  varianceCite: 'L2 Training Guide p. 43',
+  notRandom: 'But it\'s important to re-emphasize that "varied" does not mean "random."',
+  notRandomCite: 'What Is a CrossFit Workout?, crossfit.com, June 2023',
+}
+
+/** The hierarchy's logic (What Is Fitness? (Part 1), L1 Guide pp. 25, 28-29). */
+export const CF_HIERARCHY_NOTES = {
+  order: 'It starts with nutrition and moves to metabolic conditioning, gymnastics, weightlifting, and finally sport.',
+  reflects: 'This hierarchy largely reflects foundational dependence, skill, and to some degree, time ordering of development.',
+  flow: 'The logical flow is from molecular foundations to cardiovascular sufficiency, body control, external object control, and ultimately mastery and application.',
+  utility: "This model has greatest utility in analyzing athletes' shortcomings or difficulties.",
+  cite: 'What Is Fitness? (Part 1), L1 Guide p. 29',
+  nutrition: 'Proper nutrition can amplify or diminish the effect of your training efforts.',
+  nutritionCite: 'What Is Fitness? (Part 1), L1 Guide p. 28',
+  gymnastics: 'all activities like climbing, yoga, calisthenics, and dance, where the aim is body control',
+  gymnasticsCite: 'What Is Fitness? (Part 1), L1 Guide p. 25',
+  sport: 'Sport is the application of fitness in a fantastic atmosphere of competition and mastery.',
+  sportCite: 'What Is Fitness? (Part 1), L1 Guide p. 29',
+}
+
 /* =========================================================================
    Module 08 data - Technique + the nine foundational movements. Points of
    performance are verbatim bullets from the L1 Guide Movement Guide
@@ -907,19 +1029,92 @@ export const MOVEMENTS: Foundational[] = [
   },
 ]
 
+/* ---- Module 08 research (2026-10-01, the Technique chapter, STORYBOARD-technique.md section 8):
+   Greg Glassman's "Technique" (L1 Guide pp. 40-44, 3rd ed., 2020, printed pages), every sentence
+   string-matched against the PDF text; the original's em dashes appear as " - ". Keyed as the
+   chapter's captions and voice cite them. ---- */
+
+/** Measurement, the three components of a program and the qualification of movement (Technique, L1 Guide p. 40). */
+export const TECHNIQUE_SEE = {
+  quantification:
+    'In no small part, what is behind this program is the quantification of fitness. This means we put a number on fitness: work capacity across broad time and modal domains.',
+  evidence:
+    'We call it evidence-based fitness. This means measurable, observable, repeatable data is used in analyzing and assessing a fitness program. There are three meaningful components to analysis of a fitness program: safety, efficacy, and efficiency.',
+  efficacy:
+    'The efficacy of a program means, "What is the return?" For CrossFit, we want to increase your work capacity across broad time and modal domains. What is the adaptation that the program induces?',
+  efficiency:
+    'Efficiency is the time rate of that adaptation. Maybe the fitness program advertises that it can deliver 50 pull-ups. There is a big difference whether it takes six months versus nine years to achieve that.',
+  safety:
+    'Safety is how many people end up at the finish line. I start with 10 individuals: Two of them become the fittest human beings on Earth and the other eight die. The real tragedy comes in not knowing the safety numbers.',
+  tradeoffs:
+    'I can greatly increase the safety of a program by turning the efficacy and efficiency down to zero. I can increase the efficiency by turning up the intensity and then possibly compromising safety. Or I could damage the efficacy by losing people. Safety, efficacy and efficiency are the three meaningful aspects of a program. They give me all I need to assess it.',
+  qualification:
+    'This quantification of fitness, by choosing work capacity as our standard for the efficacy of the program, necessitates the qualification of movement. Our quantification of fitness introduces qualification of movement.',
+  p40_sidebar:
+    'Learn the mechanics of fundamental movements, establish a consistent pattern of practicing these same movements, and, only then, ratchet up the intensity of workouts incorporating these movements.',
+  cite: 'Technique, L1 Guide p. 40',
+}
+
+/** The four terms that qualify movement (Technique, L1 Guide p. 41). */
+export const TECHNIQUE_TERMS = {
+  terms: 'For the qualification of movement there are four common terms: mechanics, technique, form and style.',
+  mechanics:
+    'When I speak to the physics of movement, and especially the statics and less so the dynamics, I am looking at the mechanics.',
+  technique: 'Technique is the method to success for completion of a movement.',
+  form: 'Form is the normative value: This is good or this is bad - "you should" or "you shouldn\'t" applied to mechanics and technique.',
+  style:
+    'Style is essentially the signature to a movement; that is, that aspect of the movement that is fairly unique to you. To be truly just the signature, style elements have no bearing on form, technique or mechanics.',
+  howYouMove:
+    'I want to speak generally to technique and form to include all of this, but what we are talking about here is the non-quantification of output; that is, how you move.',
+  cite: 'Technique, L1 Guide p. 41',
+}
+
+/** The graph that defines technique, and the article's safety example (Technique, L1 Guide pp. 41-42, Figure 1). */
+export const TECHNIQUE_GRAPH = {
+  graph:
+    'We end up where power is the successful completion of functional movement. On a graph, you could put work completed on the X-axis and energy expended on the Y-axis. Someone could potentially expend a lot of energy and do very little work by being inefficient. Ideally, what that individual would do would see little energy expended for the maximum amount of work. Technique is what maximizes the work completed for the energy expended (Figure 1).',
+  figure: 'Technique Maximizes the Work Accomplished for the Energy Expended.',
+  axes: ['Work Accomplished', 'Energy Expended'] as const,
+  figureCite: 'Technique, L1 Guide p. 42, Figure 1',
+  p42_safety:
+    'Two individuals attempt to lift a heavy object; one knows how to pop a hip and get under it (clean), and the other guy starts to pull with a rounded back. If you want to stay safe, you better have good technique, good form. This is related to safety, efficacy and efficiency because technique (quality of movement) is the heart of maximizing each of these.',
+  cite: 'Technique, L1 Guide pp. 41-42',
+}
+
+/** Speed, threshold training and the worked example (Technique, L1 Guide pp. 43-44). */
+export const TECHNIQUE_SPEED = {
+  p43_speed:
+    'Technique is an intimate part of safety, efficacy, and efficiency. What these domains have in common is that a marked proficiency is associated with speed. Being able to shoot accurately and quickly is better than quickly or accurately. However, for this perfection, you type at a rate of 20 words a minute and only use two fingers. And yet, it is presented to CrossFit coaches as, "Should I use good form or should I do it quickly?" One is impossible without the other. In CrossFit, if your technique is perfect, your intensity is always low.',
+  p43_errors:
+    'The errors are an unavoidable consequence of development. This iterative process of letting this scope of errors broaden then reducing them without reducing the speed is called "threshold training."',
+  p44_coach:
+    'In a CrossFit workout, if you are moving well, I will tell you to pick up the speed. Now the movement starts falling apart. I do not want you to slow down yet. First, at that speed I want you to fix your technique.',
+  p44_example:
+    'What you need to do is continuously and constantly advance the margins at which form falters. It may be that initially at 10,000 foot-pounds per minute my technique is perfect, but it falls apart at 12,000 foot-pounds per minute. Work at that 10,000 to 12,000 foot-pounds per minute mark to fix the form, and soon enough you will have great technique at 12,000 foot-pounds per minute. The next step is to achieve that technique at 14,000 foot-pounds per minute. At first, the technique at 14,000 foot-pounds per minute will suffer. Then you must narrow it in.',
+  p44_everything:
+    'We are the technique people. We drill technique incessantly, but simultaneously I want you to go faster. Technique is everything. You will not express power in significant measure without technique. You might expend a lot of energy, but you will not see the productive application of force. You will not be able to complete functional tasks efficiently or effectively. You will not be safe in trying.',
+  cite: 'Technique, L1 Guide pp. 43-44',
+}
+
 export interface Source {
   title: string
   url: string
   for: ModuleKey[]
 }
 
-const ALL: ModuleKey[] = ['skills', 'hopper', 'pathways', 'definition', 'continuum', 'health']
+const ALL: ModuleKey[] = ['skills', 'hopper', 'pathways', 'definition', 'continuum', 'health', 'crossfit']
 
 /** Verified citations (all resolved 200 OK in research). */
 export const SOURCES: Source[] = [
+  { title: 'Greg Glassman, "Understanding CrossFit," CrossFit Journal, April 2007 (L1 Guide pp. 2-4)', url: 'https://library.crossfit.com/free/pdf/56-07_Understanding_CF.pdf', for: ['crossfit'] },
+  { title: 'Greg Glassman, "Foundations," CrossFit Journal, April 2002 (L1 Guide pp. 5-16)', url: 'https://library.crossfit.com/free/pdf/Foundations.pdf', for: ['crossfit'] },
+  { title: 'CrossFit Level 2 Training Guide (variance, core-to-extremity movement)', url: 'https://assets.crossfit.com/pdfs/seminars/CFJ_level2_trainingguide.pdf', for: ['crossfit'] },
+  { title: '"CrossFit Methodology," crossfit.com', url: 'https://www.crossfit.com/crossfit-methodology', for: ['crossfit'] },
+  { title: '"What Is a CrossFit Workout?" crossfit.com Essentials, June 2023', url: 'https://www.crossfit.com/essentials/what-is-a-crossfit-workout', for: ['crossfit'] },
+  { title: 'Greg Glassman, "Technique, Part 1," CrossFit Journal, February 1, 2008 (L1 Guide pp. 40-44)', url: 'https://www.crossfit.com/essentials/technique-part-1-by-greg-glassman', for: ['technique'] },
   { title: 'Greg Glassman, "What Is Fitness?" CrossFit Journal, Issue 2, October 2002', url: 'https://library.crossfit.com/free/pdf/CFJ-trial.pdf', for: ALL },
   { title: '"What Is Fitness?" CrossFit Journal article page', url: 'https://journal.crossfit.com/article/what-is-fitness', for: ALL },
-  { title: 'CrossFit Level 1 Training Guide (official L1 book)', url: 'https://library.crossfit.com/free/pdf/CFJ_English_Level1_TrainingGuide.pdf', for: ALL },
+  { title: 'CrossFit Level 1 Training Guide (official L1 book)', url: 'https://library.crossfit.com/free/pdf/CFJ_English_Level1_TrainingGuide.pdf', for: [...ALL, 'technique'] },
   { title: '"What Is Fitness?" Part 4: The Sickness-Wellness-Fitness Continuum', url: 'https://www.crossfit.com/essentials/what-is-fitness-part-4-sickness-wellness-fitness-continuum', for: ['continuum'] },
   { title: 'Gastin, "Energy System Interaction and Relative Contribution During Maximal Exercise," Sports Med 2001', url: 'https://pubmed.ncbi.nlm.nih.gov/11475319/', for: ['pathways', 'definition'] },
   { title: 'Vanhatalo et al., "Critical Power: An Important Fatigue Threshold," MSSE 2016', url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC5070974/', for: ['definition'] },
@@ -953,4 +1148,9 @@ export const CROSS_LINKS: Record<ModuleKey, CrossLink[]> = {
   ],
   continuum: [{ label: 'Methodology and Sources', href: '/', note: 'How the app grounds its claims in evidence.' }],
   health: [{ label: 'Capacity Lab', href: '/games/capacity', note: 'Capacity across broad time and modal domains, measured.' }],
+  crossfit: [
+    { label: 'Daily WOD Intelligence', href: '/', note: 'Constantly varied, measured: years of crossfit.com programming analyzed.' },
+    { label: 'Games Almanac', href: '/games', note: 'The top of the pyramid: the Sport of Fitness, every year.' },
+  ],
+  technique: [{ label: 'Capacity Lab', href: '/games/capacity', note: 'Power across broad time and modal domains, fit to real Games results.' }],
 }

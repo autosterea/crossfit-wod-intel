@@ -1,0 +1,5 @@
+{
+  "_about": "Pronunciation renderings only (DESIGN.md I.6.5 a): how a caption with digits or symbols is spoken, same content, never reworded. Keyed by view/beat. voice/gen_*.py and scripts/narration-check.mjs both read this file.",
+  "continuum/bp": "A blood pressure of 160 over 95 is pathological, 120 over 70 is healthy, and 105 over 55 is an athlete.",
+  "health/any-age": "Start at any age and it lifts. Resistance and power training reclaim capacity, even into the nineties."
+}

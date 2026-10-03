@@ -35,7 +35,7 @@ export function ExplorePanel({ cardRef, shell }: { cardRef: React.RefObject<HTML
   const observe = useObservedCard(cardRef)
   if (!def) return null
   const Explore = def.Explore
-  const accent = accentFor(def.key)
+  const accent = accentFor(def.key, def.brand)
   return (
     <div
       ref={observe}

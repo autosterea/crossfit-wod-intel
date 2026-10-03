@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from 'react'
-import { MODULES, PAL } from '../../fitnessData'
+import { PAL } from '../../fitnessData'
+import { MAP_MODULES as MODULES } from './models'
 import type { FitnessView } from '../../lessonTypes'
 import { Plates, type PlateSpec } from '../../story/kit/Plates'
 import { useStageHotspot } from '../../story/hotspots'
